@@ -210,7 +210,7 @@ release_spark:
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
-	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
+	cp -p $(buildprefix)/root/bin/lircd $(prefix)/release/usr/bin/
 
 	$(INSTALL_DIR) $(prefix)/release/usr/local/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/local/share/fonts/
