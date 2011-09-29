@@ -2,10 +2,10 @@
 
 MODDIR=/lib/modules
 echo "init frontpanel"
-insmod $MODDIR/vfd.ko
+#insmod $MODDIR/vfd.ko
 insmod $MODDIR/aotom.ko
 insmod $MODDIR/simu_button.ko
-insmod $MODDIR/encrypt.ko
+#insmod $MODDIR/encrypt.ko
 
 if [ -e /var/etc/.firstboot ]; then
    echo "WAIT 1 min" >/dev/vfd
@@ -36,7 +36,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/stmcore-display-sti7111.ko
    insmod $MODDIR/stmfb.ko display0=1280x720-32@50:15m:pal:yuv:yuv
 
-   echo "LOADING MODULES"   
+   echo "LOADING MODULES"
    echo "LOAD" > /dev/vfd
 
    if [ ! -e /boot/audio.elf ]; then
@@ -57,31 +57,24 @@ if [ ! -e /var/etc/.firstboot ]; then
    echo "init AVS"
    insmod $MODDIR/avs.ko type=avs_pio
 
-   player=`cat /proc/stb/player/version`
-   player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
-   echo "init player $player"
+#   player=`cat /proc/stb/player/version`
+#   player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
+#   echo "init player $player"
 
+   echo "init player"
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
    insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
-   if [ $player -gt 131 ]; then
 	insmod $MODDIR/stmvout.ko
 	insmod $MODDIR/stmvbi.ko
-   fi
    insmod $MODDIR/pseudocard.ko
 
    insmod $MODDIR/stv090x.ko
-   if [ $player -gt 131 ]; then
 	insmod $MODDIR/pti.ko waitMS=20 videoMem=4096
 	insmod $MODDIR/stm_monitor.ko
 	insmod $MODDIR/stmsysfs.ko
 	insmod $MODDIR/stmdvb.ko
-   else
-	insmod $MODDIR/pti.ko
-	insmod $MODDIR/stmdvb.ko
-	insmod $MODDIR/stm_monitor.ko
-   fi	
    insmod $MODDIR/player2.ko
    insmod $MODDIR/sth264pp.ko
    insmod $MODDIR/stmalloc.ko
@@ -90,19 +83,17 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/smartcard.ko
 
    insmod $MODDIR/bpamem.ko
-   mknod /dev/bpamem c 153 0 
 
    echo "init lircd"
    /usr/bin/lircd
 
-   mknod /dev/rc c 147 1 
+   mknod /dev/rc c 147 1
    mknod /dev/sci0 c 169 0
-   mknod /dev/sci1 c 169 1
-   major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
-   rm -f /dev/sparkid
-   mknod /dev/sparkid c $major 0 
+#   major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
+#   rm -f /dev/sparkid
+#   mknod /dev/sparkid c $major 0
 
-   /bin/evremote2 spark &
+   /bin/evremote2 &
 
    /etc/init.d/mountall start
    /etc/init.d/hostname start
@@ -113,19 +104,19 @@ if [ ! -e /var/etc/.firstboot ]; then
    /usr/sbin/inetd
 
    NFS=`grep -c nfs /proc/cmdline`
-   if [ "$NFS" -eq "1" ]; then 
-      echo "Booting from nfs, don't set network" 
-   else 
-      if [ -e /etc/network/interfaces ]; then 
-	 ip addr flush eth0 
-	 /etc/init.d/networking stop 
+   if [ "$NFS" -eq "1" ]; then
+      echo "Booting from nfs, don't set network"
+   else
+      if [ -e /etc/network/interfaces ]; then
+	 ip addr flush eth0
+	 /etc/init.d/networking stop
 	 DHCP=`grep -c dhcp /etc/network/interfaces`
-	 if [ "$DHCP" -eq "1" ]; then 
+	 if [ "$DHCP" -eq "1" ]; then
 	    echo "Starting dhcp"
-            /etc/init.d/udhcpc start 
-	 fi 
-	 /etc/init.d/networking start 
-      fi 
+            /etc/init.d/udhcpc start
+	 fi
+	 /etc/init.d/networking start
+      fi
    fi
 
    echo "run" > /dev/vfd
@@ -138,28 +129,22 @@ if [ ! -e /var/etc/.firstboot ]; then
       rtv=$?
       echo "neutrino ended <- RTV: " $rtv
       case "$rtv" in
-		0) echo "0"
-		   echo "ERROR"
-      	   init 6;;
-		1) echo "1"
+		0|1) echo "$rtv"
 		   echo "SHUTDOWN"
+		   sync
 		   init 0;;
-		2) echo "2"
+		2) echo "$rtv"
 		   echo "REBOOT"
+		   sync
 		   init 6;;
-		3) echo "3"
-		   echo "RESTART"
-		   echo "0" > /proc/progress
-		   showiframe -p /boot/bootlogo.mvi &;;
-		*) echo "*"
+		*) echo "$rtv"
 		   echo "ERROR"
-           init 6;;
+		   init 6;;
       esac
-   done 
+   done
 fi
 
 #never reached
-echo "REBOOT SPARK" > /dev/vfd
-echo "REBOOT SPARK"
+echo "REBOOT PINGULUX" > /dev/vfd
+echo "REBOOT PINGULUX"
 reboot -f
-
