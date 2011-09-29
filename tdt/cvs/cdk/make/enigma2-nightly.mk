@@ -82,6 +82,7 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	$(if $(IPBOX9900),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-ipbox.diff" )
 	$(if $(IPBOX99),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-ipbox.diff" )
 	$(if $(IPBOX55),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-ipbox.diff" )
+	$(if $(SPARK),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/DVDPlayer.patch" )
 	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.patched; \
 	touch $@
 
