@@ -204,16 +204,17 @@ release_spark:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release/boot/video.elf
 	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release/boot/audio.elf
-	cp $(buildprefix)/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
+	cp $(buildprefix)/root/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
-	cp -p $(buildprefix)/root/bin/lircd $(prefix)/release/usr/bin/
+#	cp -p $(buildprefix)/root/bin/lircd $(prefix)/release/usr/bin/
+	cp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
 
-	$(INSTALL_DIR) $(prefix)/release/usr/local/share/fonts
-	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/local/share/fonts/
+	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
+	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
 
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi.ko
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
@@ -1090,21 +1091,21 @@ endif
 
 	ln -s /usr/local/share/enigma2 $(prefix)/release/usr/share/enigma2
 
-	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
-	cp $(targetprefix)/usr/share/fonts/ae_AlMateen.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/lcd.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/md_khmurabi_10.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/nmsbd.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/tuxtxt.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/goodtime.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/valis_enigma.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/valis_lcd.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/seg.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/seg_internat.ttf $(prefix)/release/usr/share/fonts/
-	cp $(targetprefix)/usr/share/fonts/Symbols.ttf $(prefix)/release/usr/share/fonts/
+#	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
+#	cp $(targetprefix)/usr/share/fonts/ae_AlMateen.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/lcd.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/md_khmurabi_10.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/nmsbd.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/tuxtxt.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/goodtime.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/valis_enigma.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/valis_lcd.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/seg.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/seg_internat.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(targetprefix)/usr/share/fonts/Symbols.ttf $(prefix)/release/usr/share/fonts/
 
 #       Font libass
-	cp $(buildprefix)/root/usr/share/fonts/FreeSans.ttf $(prefix)/release/usr/share/fonts/
+#	cp $(buildprefix)/root/usr/share/fonts/FreeSans.ttf $(prefix)/release/usr/share/fonts/
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/zoneinfo
 	cp -aR $(buildprefix)/root/usr/share/zoneinfo/* $(prefix)/release/usr/share/zoneinfo/
@@ -1147,6 +1148,7 @@ endif
 	rm -f $(prefix)/release/usr/lib/*.a
 	rm -f $(prefix)/release/usr/lib/*.o
 	rm -f $(prefix)/release/usr/lib/*.la
+	chmod 755 -R $(prefix)/release/usr/lib/
 	find $(prefix)/release/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	$(INSTALL_DIR) $(prefix)/release/usr/lib/enigma2
