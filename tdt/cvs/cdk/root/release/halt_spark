@@ -47,6 +47,9 @@ then
 	poweroff=""
 fi
 
-halt -d -f -n -i $poweroff $hddown
+#halt -d -f -n -i $poweroff $hddown
+/bin/fp_control -e
+echo "0" > /proc/progress
+halt -f
 
 : exit 0
