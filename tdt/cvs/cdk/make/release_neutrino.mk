@@ -309,6 +309,26 @@ else
 if ENABLE_SPARK
 
 	echo "pingulux" > $(prefix)/release_neutrino/etc/hostname
+
+	cp $(buildprefix)/root/release/umountfs $(prefix)/release_neutrino/etc/init.d/
+	cp $(buildprefix)/root/release/rc $(prefix)/release_neutrino/etc/init.d/
+	cp $(buildprefix)/root/release/sendsigs $(prefix)/release_neutrino/etc/init.d/
+	chmod 755 $(prefix)/release_neutrino/etc/init.d/umountfs
+	chmod 755 $(prefix)/release_neutrino/etc/init.d/rc
+	chmod 755 $(prefix)/release_neutrino/etc/init.d/sendsigs
+	chmod 755 $(prefix)/release_neutrino/etc/init.d/halt
+	mkdir -p $(prefix)/release_neutrino/etc/rc.d/rc0.d
+	ln -s ../init.d $(prefix)/release_neutrino/etc/rc.d
+	ln -fs halt $(prefix)/release_neutrino/sbin/reboot
+	ln -fs halt $(prefix)/release_neutrino/sbin/poweroff
+	ln -s ../init.d/sendsigs $(prefix)/release_neutrino/etc/rc.d/rc0.d/S20sendsigs
+	ln -s ../init.d/umountfs $(prefix)/release_neutrino/etc/rc.d/rc0.d/S40umountfs
+	ln -s ../init.d/halt $(prefix)/release_neutrino/etc/rc.d/rc0.d/S90halt
+	mkdir -p $(prefix)/release_neutrino/etc/rc.d/rc6.d
+	ln -s ../init.d/sendsigs $(prefix)/release_neutrino/etc/rc.d/rc6.d/S20sendsigs
+	ln -s ../init.d/umountfs $(prefix)/release_neutrino/etc/rc.d/rc6.d/S40umountfs
+	ln -s ../init.d/reboot $(prefix)/release_neutrino/etc/rc.d/rc6.d/S90reboot
+
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release_neutrino/boot/video.elf
