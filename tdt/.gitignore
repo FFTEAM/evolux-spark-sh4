@@ -129,7 +129,6 @@ cvs/apps/misc/tools/libmmeimage/Makefile
 cvs/apps/misc/tools/vfdctl/Makefile
 cvs/apps/misc/tools/vfdctl/vfdctl
 
-
 cvs/cdk/Makefile
 cvs/cdk/Makefile-archive
 cvs/cdk/RPMS/
@@ -193,4 +192,3 @@ cvs/driver/include/stmfb
 cvs/driver/multicom
 cvs/driver/player2
 cvs/driver/stgfb/stmfb
-
