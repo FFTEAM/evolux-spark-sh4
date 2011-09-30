@@ -312,7 +312,8 @@ if ENABLE_SPARK
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release_neutrino/etc/init.d/
 	cp $(buildprefix)/root/release/rc $(prefix)/release_neutrino/etc/init.d/
 	cp $(buildprefix)/root/release/sendsigs $(prefix)/release_neutrino/etc/init.d/
-#	rm -f $(prefix)/release_neutrino/sbin/halt
+	rm -f $(prefix)/release_neutrino/sbin/halt
+	cp -f $(targetprefix)/sbin/halt $(prefix)/release_neutrino/sbin/
 	cp $(buildprefix)/root/release/halt_spark $(prefix)/release_neutrino/etc/init.d/halt
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/umountfs
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/rc
