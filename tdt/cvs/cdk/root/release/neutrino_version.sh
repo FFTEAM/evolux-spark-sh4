@@ -29,5 +29,4 @@ cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/v
 
 echo "version=$SNAPSHOT$BUILDREV$TIMESTAMP" >> $KATIDIR/cvs/cdk/root/var/etc/.version.new
 echo "git=$version" >> $KATIDIR/cvs/cdk/root/var/etc/.version.new
-mv $KATIDIR/cvs/cdk/root/var/etc/.version.new $KATIDIR/cvs/cdk/root/var/etc/.version
 exit
