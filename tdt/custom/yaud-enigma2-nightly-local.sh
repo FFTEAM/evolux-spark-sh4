@@ -1,6 +1,6 @@
 #!/bin/sh
 CURDIR=`pwd`
-NRELDIR='../../tufsbox/release_neutrino'
+NRELDIR='../../tufsbox/release'
 CHANGEDIR='../../tufsbox'
 TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
 
@@ -198,6 +198,6 @@ case $TARGET in
 #		make_devs
 	;;
 esac
-mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
+mv $CHANGEDIR/release $CHANGEDIR/release_with_dev
 echo "--- Erledigt ---"
 exit
