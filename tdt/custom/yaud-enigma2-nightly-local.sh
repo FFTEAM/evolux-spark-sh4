@@ -198,6 +198,9 @@ case $TARGET in
 #		make_devs
 	;;
 esac
+if [ -e $CHANGEDIR/release_with_dev ]; then
+	$USERS rm -rf $CHANGEDIR/release_with_dev
+fi
 mv $CHANGEDIR/release $CHANGEDIR/release_with_dev
 echo "--- Erledigt ---"
 exit
