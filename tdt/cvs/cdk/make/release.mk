@@ -176,7 +176,7 @@ release_ufs912:
 	rm $(prefix)/release/lib/firmware/component_7105_pdk7105.fw
 
 release_spark:
-	echo "spark" > $(prefix)/release/etc/hostname
+	echo "PinguLux" > $(prefix)/release/etc/hostname
 	rm -f $(prefix)/release/sbin/halt
 	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
 	chmod 777 $(prefix)/release/etc/init.d/halt
