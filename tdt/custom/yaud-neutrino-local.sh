@@ -3,6 +3,32 @@ CURDIR=`pwd`
 NRELDIR='../../tufsbox/release_neutrino'
 CHANGEDIR='../../tufsbox'
 TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
+BUILDDIR='../../cvs/cdk'
+# originally created by schischu and konfetti
+# fedora parts prepared by lareq
+# fedora/suse/ubuntu scripts merged by kire pudsje (kpc)
+
+# make sure defines have not already been defined
+UBUNTU=
+FEDORA=
+SUSE=
+# Try to detect the distribution
+if `which lsb_release > /dev/null 2>&1`; then 
+	case `lsb_release -s -i` in
+		Debian*) UBUNTU=1; USERS="su -c";;
+		Fedora*) FEDORA=1; USERS="sudo";;
+		SUSE*)   SUSE=1;   USERS="su";;
+		Ubuntu*) UBUNTU=1; USERS="sudo";;
+	esac
+fi
+# Not detected by lsb_release, try release files
+if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
+	if   [ -f /etc/redhat-release ]; then FEDORA=1; USERS="sudo"; 
+	elif [ -f /etc/fedora-release ]; then FEDORA=1; USERS="sudo"; 
+	elif [ -f /etc/SuSE-release ];   then SUSE=1; USERS="su";
+	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="su -c";
+	fi
+fi
 
 function make_default() {
 	echo "Erstelle Standard /dev für alle Boxen..."
@@ -202,5 +228,8 @@ if [ -e $CHANGEDIR/release_neutrino_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_neutrino_with_dev
 fi
 mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
+if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/startup.mp4 ]; then
+	cp -RP $BUILDDIR/own_build/enigma2/boot/* $CHANGEDIR/release_with_dev/boot/
+fi
 echo "--- Erledigt ---"
 exit
