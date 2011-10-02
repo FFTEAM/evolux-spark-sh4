@@ -1,3 +1,8 @@
+if STM22
+kernelpath="linux"
+else
+kernelpath="linux-sh4"
+endif
 # auxiliary targets for model-specific builds
 release_common_utils:
 #       remove the slink to busybox
@@ -177,13 +182,13 @@ release_ufs912:
 
 release_spark:
 	echo "PinguLux" > $(prefix)/release/etc/hostname
-	rm -f $(prefix)/release/sbin/halt
-	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
-	chmod 777 $(prefix)/release/etc/init.d/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/release/sbin/
+
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release/etc/init.d/
 	cp $(buildprefix)/root/release/rc $(prefix)/release/etc/init.d/
 	cp $(buildprefix)/root/release/sendsigs $(prefix)/release/etc/init.d/
+	rm -f $(prefix)/release/sbin/halt
+	cp -f $(targetprefix)/sbin/halt $(prefix)/release/sbin/
+	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/umountfs
 	chmod 755 $(prefix)/release/etc/init.d/rc
 	chmod 755 $(prefix)/release/etc/init.d/sendsigs
@@ -199,6 +204,8 @@ release_spark:
 	ln -s ../init.d/sendsigs $(prefix)/release/etc/rc.d/rc6.d/S20sendsigs
 	ln -s ../init.d/umountfs $(prefix)/release/etc/rc.d/rc6.d/S40umountfs
 	ln -s ../init.d/reboot $(prefix)/release/etc/rc.d/rc6.d/S90reboot
+	ln -fs init $(prefix)/release/sbin/telinit
+
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
@@ -206,13 +213,13 @@ release_spark:
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release/boot/video.elf
 	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release/boot/audio.elf
 	cp $(buildprefix)/root/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
+
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
-#	cp -p $(buildprefix)/root/bin/lircd $(prefix)/release/usr/bin/
-	cp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
+	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
