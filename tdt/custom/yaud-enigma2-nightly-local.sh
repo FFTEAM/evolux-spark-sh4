@@ -63,7 +63,7 @@ function make_devs() {
 	chmod 755 $CURDIR/.fakeroot && fakeroot -- $CURDIR/.fakeroot && rm -f $CURDIR/.fakeroot
 	cd ..
 	rm -rf $CURDIR/tmpdev
-	sudo tar -xzf $CURDIR/tempdevs.tar.gz -C $NRELDIR/dev/ && rm $CURDIR/tempdevs.tar.gz
+	$USERS tar -xzf $CURDIR/tempdevs.tar.gz -C $NRELDIR/dev/ && rm $CURDIR/tempdevs.tar.gz
 }
 
 [ -e $NRELDIR/dev/ ] && [ -e $NRELDIR/dev/vfd ] && exit;
