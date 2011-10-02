@@ -24,8 +24,8 @@ if `which lsb_release > /dev/null 2>&1`; then
 fi
 # Not detected by lsb_release, try release files
 if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
-	if   [ -f /etc/redhat-release ]; then FEDORA=1; USERS="sudo"; 
-	elif [ -f /etc/fedora-release ]; then FEDORA=1; USERS="sudo"; 
+	if   [ -f /etc/redhat-release ]; then FEDORA=1; USERS="sudo";
+	elif [ -f /etc/fedora-release ]; then FEDORA=1; USERS="sudo";
 	elif [ -f /etc/SuSE-release ];   then SUSE=1; USERS="su";
 	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="su -c";
 	fi
