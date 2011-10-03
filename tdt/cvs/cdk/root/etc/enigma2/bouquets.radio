@@ -1,1 +1,4 @@
-#NAME Bouquets (Radio)
+#NAME User - bouquets (Radio)
+#SERVICE: 1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "userbouquet.radio_deutsch.tv" ORDER BY bouquet
+#SERVICE: 1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "userbouquet.radio_premiere.tv" ORDER BY bouquet
+#SERVICE: 1:7:1:0:0:0:0:0:0:0:FROM BOUQUET "userbouquet.favourites.radio" ORDER BY bouquet
