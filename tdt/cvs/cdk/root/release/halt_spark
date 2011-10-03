@@ -48,8 +48,8 @@ then
 fi
 
 #/bin/fp_control -e
-echo "0" > /proc/progress
-halt -d -f -i $poweroff $hddown
+
+
 #green led off
 /bin/fp_control -l 1 0
 
@@ -57,5 +57,6 @@ halt -d -f -i $poweroff $hddown
 /bin/fp_control -l 0 1
 
 /bin/fp_control -e
-
+echo "0" > /proc/progress
+halt -d -f -i $poweroff $hddown
 : exit 0
