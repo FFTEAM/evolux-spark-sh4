@@ -1,2 +1,4 @@
 config.Nims.0.diseqcMode=single
 config.Nims.0.configMode=simple
+config.usage.multibouquet=true
+config.usage.setup_level=expert
