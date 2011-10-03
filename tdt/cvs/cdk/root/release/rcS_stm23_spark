@@ -40,19 +40,25 @@ if [ ! -e /var/etc/.firstboot ]; then
    echo "LOAD" > /dev/vfd
 
    echo "load a firmware"
-   /bin/ustslave /dev/st231-1 /boot/audio_dts.elf
+echo 1
+   /bin/ustslave /dev/st231-1 /boot/audio.elf
    echo "load v firmware"
+echo 2
    /bin/ustslave /dev/st231-0 /boot/video.elf
 
    echo "init embx"
+echo 3
    insmod $MODDIR/embxshell.ko
+echo 4
    insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
+echo 5
    insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
+echo 6
    insmod $MODDIR/mme_host.ko transport0=shm
-
+echo 7
    echo "init AVS"
-   insmod $MODDIR/avs.ko type=spark_avs
-
+#   insmod $MODDIR/avs.ko type=spark_avs
+   insmod $MODDIR/avs.ko type=avs_pio
    player=`cat /proc/stb/player/version`
    echo "init player $player"
 
@@ -68,6 +74,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/stm_monitor.ko
    insmod $MODDIR/stmsysfs.ko
    insmod $MODDIR/stmdvb.ko
+#   insmod $MODDIR/player2.ko
    insmod $MODDIR/player2.ko discardlateframe=0
    insmod $MODDIR/sth264pp.ko
    insmod $MODDIR/stmalloc.ko
@@ -75,19 +82,20 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/silencegen.ko
    insmod $MODDIR/bpamem.ko
    mknod /dev/bpamem c 153 0 
-
+   eplayer3 /boot/startup.mp4 &
    stfbcontrol a 0
 
    echo "init lircd"
    /usr/bin/lircd
 
-   mknod /dev/rc c 147 1 
+   mknod /dev/rc c 147 1
+   mknod /dev/sci0 c 169 0 
    major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
    rm -f /dev/sparkid
    mknod /dev/sparkid c $major 0 
 
-   /bin/evremote2 spark &
-
+   /bin/evremote2 10 120 &
+   /bin/irexec -d /etc/lircrc &
    stfbcontrol a 255
 
    /etc/init.d/mountall start
@@ -98,31 +106,51 @@ if [ ! -e /var/etc/.firstboot ]; then
    /etc/init.d/vsftpd start
    /usr/sbin/inetd
 
-   /etc/init.d/networking start 
+   NFS=`grep -c nfs /proc/cmdline`
+   if [ "$NFS" -eq "1" ]; then
+      echo "Booting from nfs, don't set network"
+   else
+      if [ -e /etc/network/interfaces ]; then
+	 ip addr flush eth0
+	 /etc/init.d/networking stop
+	 DHCP=`grep -c dhcp /etc/network/interfaces`
+	 if [ "$DHCP" -eq "1" ]; then
+	    echo "Starting dhcp"
+            /etc/init.d/udhcpc start
+	 fi
+	 /etc/init.d/networking start
+      fi
+   fi
 
    echo "run" > /dev/vfd
    echo "LOADING E2"
 
    until false
    do
+   if [ -e /usr/local/bin/enigma2 ]; then
       echo "starting e2->"
       /usr/local/bin/enigma2
+   else
+      echo "starting neutrino ->"
+      /usr/local/bin/neutrino -f -u
+   fi
       rtv=$?
       echo "e2 ended <- RTV: " $rtv
       case "$rtv" in
-		0) echo "0"
+		0) echo "$rtv"
 		   echo "E2 ERROR"
-      		   reboot;;
-		1) echo "1"
+      		   init 6;;
+		1) echo "$rtv"
 		   echo "SHUTDOWN"
                    sync
-                   umount -a;;
-		2) echo "2"
+                   init 0;;
+		2) echo "$rtv"
 		   echo "REBOOT"
-		   reboot;;
-		3) echo "3"
-		   echo "E2 RESTART"
-		   echo "0" > /proc/progress;;
+		   init 6;;
+		3) echo "$rtv"
+		      echo "E2 RESTART"
+		      #echo "0" > /proc/progress;;
+		      init 6;;
 		*) echo "*"
 		   echo "ERROR"
 		   echo "0" > /proc/progress;;
