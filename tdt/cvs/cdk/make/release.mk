@@ -1232,7 +1232,7 @@ endif
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
-	cp $(buildprefix)/root//usr/lib/enigma2/python/Plugins/Extensions $(prefix)/release/usr/lib/enigma2/python/Plugins/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions $(prefix)/release/usr/lib/enigma2/python/Plugins/
 	rm $(prefix)/release/usr/local/share/enigma2/keymap_*.xml
 	rm $(prefix)/release/etc/enigma2/*.tv
 	rm $(prefix)/release/etc/enigma2/*.tv_org
@@ -1241,7 +1241,9 @@ endif
 	rm $(prefix)/release/etc/enigma2/extended_satellites.xml
 	rm $(prefix)/release/etc/tuxbox/cables.xml
 	rm $(prefix)/release/etc/tuxbox/terrestrial.xml
+	rm $(prefix)/release/etc/tuxbox/satellites.xml
 	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
+	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
 
 if STM22
