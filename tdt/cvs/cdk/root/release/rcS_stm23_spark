@@ -93,7 +93,6 @@ fi
    mknod /dev/sparkid c $major 0 
 
    /bin/evremote2 10 120 &
-   /bin/irexec -d /etc/lircrc &
    stfbcontrol a 255
 
    /etc/init.d/mountall start
