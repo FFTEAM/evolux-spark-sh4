@@ -46,7 +46,9 @@ if [ ! -e /var/etc/.firstboot ]; then
    else
 	echo "FIRMWARE MISSING (*.elf) !!!"
    fi
-
+if [ -e $MODDIR/cpu_frequ.ko ]; then
+   insmod $MODDIR/cpu_frequ.ko
+fi
    echo "init embx"
    insmod $MODDIR/embxshell.ko
    insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
