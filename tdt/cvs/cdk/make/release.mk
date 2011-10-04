@@ -227,8 +227,10 @@ release_spark:
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi.ko
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
-	cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
-
+#	cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
+if STM23
+	cp $(buildprefix)/root/release/cpu_frequ_spark_stm23.ko $(prefix)/release/lib/modules/cpu_frequ.ko
+endif
 #	install autofs
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
@@ -1167,6 +1169,7 @@ endif
 
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.o' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.la' -exec rm -f {} \;
@@ -1226,6 +1229,7 @@ endif
 
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyc' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyo' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.o' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
