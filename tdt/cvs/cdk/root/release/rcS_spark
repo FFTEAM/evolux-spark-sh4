@@ -59,8 +59,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    player=`cat /proc/stb/player/version`
    player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
+if [ -e $MODDIR/cpu_frequ.ko ]; then
+   insmod $MODDIR/cpu_frequ.ko
+fi
    echo "init player $player"
-
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
    insmod $MODDIR/p2div64.ko
