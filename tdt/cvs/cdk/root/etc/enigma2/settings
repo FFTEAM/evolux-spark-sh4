@@ -2,3 +2,7 @@ config.Nims.0.diseqcMode=single
 config.Nims.0.configMode=simple
 config.usage.multibouquet=true
 config.usage.setup_level=expert
+config.audio.volume=45
+config.usage.on_long_powerpress=shutdown
+config.usage.e1like_radio_mode=true
+config.plugins.Webinterface.https.enabled=false
