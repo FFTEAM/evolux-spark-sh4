@@ -276,6 +276,7 @@ if ENABLE_SPARK
 	echo "spark" > $(prefix)/$(release_dir)/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/$(release_dir)/lib/modules/
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/$(release_dir)/boot/video.elf
 	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/$(release_dir)/boot/audio.elf
 	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
