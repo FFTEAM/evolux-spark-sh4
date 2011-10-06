@@ -231,6 +231,9 @@ fi
 mv $CHANGEDIR/release $CHANGEDIR/release_with_dev
 if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/startup.mp4 ]; then
 	cp -RP $BUILDDIR/own_build/enigma2/boot/* $CHANGEDIR/release_with_dev/boot/
+else
+	echo "FW NOT FOUND!!!"
+	exit
 fi
 if [ -e $PATCHDIR/custom/myPatches_E2.diff ]; then
 	cd $CHANGEDIR/release_with_dev && patch -p1 < "../../custom/myPatches_E2.diff"
