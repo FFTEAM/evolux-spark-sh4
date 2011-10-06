@@ -1,8 +1,0 @@
-TREE_ROOT?=../
-CFLAGS += -I$(TREE_ROOT)/include 
-CFLAGS += -I$(TREE_ROOT)/player2/linux/include 
-CFLAGS += -I$(KERNEL_LOCATION)/include 
-
-pti-objs:= ptiall.o
-
-obj-m += pti.o
