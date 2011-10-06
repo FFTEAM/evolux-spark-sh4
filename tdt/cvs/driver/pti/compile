@@ -1,0 +1,8 @@
+#!/bin/sh 
+
+DIR=($PWD)
+#KERNELDIR=/path/to/your/kernel/
+KERNELDIR=../../cdk/linux/
+
+make -C $KERNELDIR ARCH=sh CROSS_COMPILE=sh4-linux- M=$DIR modules
+

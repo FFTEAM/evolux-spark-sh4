@@ -184,6 +184,7 @@ endif
 
 ifdef SPARK
 obj-y	+= smartcard/
+obj-y   += cpu_frequ/
 endif
 
 ifdef OCTAGON1008
