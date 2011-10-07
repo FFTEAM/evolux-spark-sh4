@@ -49,6 +49,10 @@ ifdef VIP2_V1
 obj-y   += aotom/
 endif
 
+ifdef ADB_BOX
+obj-y   += adb_box_vfd/
+endif
+
 ifdef UFS912
 obj-y	+= micom/
 endif
@@ -100,5 +104,4 @@ obj-y	+= ipbox/
 else ifdef CUBEREVO_MINI_FTA
 obj-y	+= ipbox/
 endif
-
 

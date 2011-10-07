@@ -92,6 +92,9 @@ endif
 ifdef HOMECAST5101
 CCFLAGSY += -DHOMECAST5101
 endif
+ifdef ADB_BOX
+CCFLAGSY += -DADB_BOX
+endif
 ifdef IPBOX9900
 CCFLAGSY += -DIPBOX9900
 endif
@@ -137,6 +140,11 @@ endif
 ifdef  HL101
 obj-y	+= smartcard/
 endif
+ifdef  ADB_BOX
+obj-y	+= smartcard/
+#obj-y	+= stsci/
+obj-y	+= adb_box_fan/
+endif
 
 ifndef VIP2_V1
 ifndef SPARK
@@ -170,11 +178,13 @@ endif
 
 ifdef UFS912
 obj-y	+= cec/
+obj-y	+= cpu_frequ/
 endif
 
 ifdef ATEVIO7500
 obj-y	+= cec/
 obj-y	+= smartcard/
+obj-y	+= cpu_frequ/
 endif
 
 ifdef HS7810A
@@ -184,7 +194,6 @@ endif
 
 ifdef SPARK
 obj-y	+= smartcard/
-obj-y   += cpu_frequ/
 endif
 
 ifdef OCTAGON1008
