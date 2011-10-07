@@ -42,13 +42,13 @@
 
 /***********************
  GENERAL
- ***********************/
+ **********************
 	.black{
 		background: #FFD700;
-	}
+	}*/
 	
 	.odd{
-		background-color: #FFF;
+		background-color: #FFD700;
 	}
 	
 	.even{
@@ -118,12 +118,12 @@
 	}
 	
 	#current a{
-		color: #FFF;
+		color: #000;
 	}
 	
 	#current{
 		width: 999px;
-		background: #485052;
+		background: #FFD700;
 		padding-left: 3px;
 		padding-right: 3px;
 		padding-bottom: 1px;
@@ -148,6 +148,7 @@
 	
 	#currentDuration{
 		text-align: right;
+		color: #000;
 	}
 	
 	#mainMenu{
