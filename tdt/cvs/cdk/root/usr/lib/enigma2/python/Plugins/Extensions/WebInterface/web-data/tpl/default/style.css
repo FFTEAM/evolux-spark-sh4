@@ -2,7 +2,7 @@
 		font-family: Tahoma, Sans-Serif;
 		font-size: 14px;
 		font-weight: bold;
-		color: #fff;
+		color: #FFD700;
 		text-align: center;
 		background: #555
 	}
@@ -22,12 +22,12 @@
 	}
 
 	#notification{		
-		color: #000;
-		width: 50%;
+		color: #FFD700;
+		width: 600;
 		height: 32px;
 		position: absolute;
 		top: 0px;
-		left: 25%;		
+		left: 200;		
 		text-align: center;
 		vertical-align: bottom;
 		z-index: 2;		
@@ -44,7 +44,7 @@
  GENERAL
  ***********************/
 	.black{
-		background: #000;
+		background: #FFD700;
 	}
 	
 	.odd{
@@ -71,7 +71,7 @@
 	#banner{
 		width: 1000px;
 		height: 67px;
-		background: #000;
+		background: #FFD700;
 		padding-left: 5px;
 		margin-bottom: 8px;
 
@@ -123,7 +123,7 @@
 	
 	#current{
 		width: 999px;
-		background: #000;
+		background: #485052;
 		padding-left: 3px;
 		padding-right: 3px;
 		padding-bottom: 1px;
@@ -154,7 +154,7 @@
 		background-color: #485052;
 		text-align: center;
 		overflow:hidden;
-		background: #000; 
+		background: #FFD700; 
 		margin: 0;
 		padding: 0;
 		width: 940px;
@@ -201,10 +201,10 @@
 	#nav{
 		width: 100%;
 		height: 250px;
-		background: #000;
+		background: #FFD700;
 		padding-left: 5px;
 				
-		border: 2px solid #000;
+		border: 2px solid #FFD700;
 		border-radius: 5px;
     	-webkit-border-radius: 5px;
     	-moz-border-radius: 5px;
@@ -222,7 +222,7 @@
 	}
 
 	#navHd{
-		background: #000;
+		background: #FFD700;
 		text-align: center;		
 		width: 153px;
 	}
@@ -238,14 +238,14 @@
 		background: #FFF;
 		margin-top: 8px;
 		
-		border: 2px solid #000;
+		border: 2px solid #FFD700;
 		border-radius: 5px;
     	-webkit-border-radius: 5px;
     	-moz-border-radius: 5px;
 	}
 
 	#searchHd{
-		background: #000;
+		background: #FFD700;
 		text-align: center;
 		width: 153px;
 	}
@@ -257,14 +257,14 @@
 		background: #FFF;
 		margin-top: 8px;
 		
-		border: 2px solid #000;
+		border: 2px solid #FFD700;
 		border-radius: 5px;
     	-webkit-border-radius: 5px;
     	-moz-border-radius: 5px;
 	}
 
 	#volHd{
-		background: #000;
+		background: #FFD700;
 		text-align: center;
 		width: 153px;
 	}
@@ -281,17 +281,17 @@
 		min-height: 308px;
 		margin-left: 8px;
 		
-		border: 2px solid #000;		
+		border: 2px solid #FFD700;		
 		border-radius: 5px;
     	-webkit-border-radius: 5px;
     	-moz-border-radius: 5px;
 	}
 	#contentHd{
-		background: #000;
+		background: #FFD700;
 		width: 527px;
 	}
 	#contentHdExt{
-		background: #000;		
+		background: #FFD700;		
 		dipslay:block;
 	}
 	
@@ -473,7 +473,7 @@
 	.toolsHeader {
 		color:#FFF;
 		font-weight:bold;
-		background-color:#000;
+		background-color:#FFD700;
 	}
 
 	.tools {
@@ -525,7 +525,7 @@
 		width:100%;
 		color:#FFF;
 		font-weight:bold;
-		background-color:#000;
+		background-color:#FFD700;
 	}
 
 	.about {
@@ -685,7 +685,7 @@
 	* html #nav{
 		width: 99%;
 		height: 250px;
-		background: #000;
+		background: #FFD700;
 		padding-left: 5px;
 	}
 	
