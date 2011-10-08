@@ -251,6 +251,8 @@ endif
 	mv $(prefix)/release/lib/firmware/component_7111_mb618.fw $(prefix)/release/lib/firmware/component.fw
 	rm $(prefix)/release/lib/firmware/component_7105_pdk7105.fw
 
+	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
+
 release_spark7162:
 	echo "spark7162" > $(prefix)/release/etc/hostname
 	rm -f $(prefix)/release/sbin/halt
