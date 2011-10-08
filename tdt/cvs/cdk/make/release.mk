@@ -252,6 +252,8 @@ endif
 	rm $(prefix)/release/lib/firmware/component_7105_pdk7105.fw
 
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
+	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release/usr/bin/
+	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/ 
 
 release_spark7162:
 	echo "spark7162" > $(prefix)/release/etc/hostname
