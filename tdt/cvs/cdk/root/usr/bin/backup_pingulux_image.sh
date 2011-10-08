@@ -1,6 +1,6 @@
 #!/bin/sh
-
-DIRECTORY="/media/hdd"
+DIRECTORY=$1
+#DIRECTORY="/media/hdd"
 MTDBOOT=5
 MTDROOT=6
 IMAGENAME="Evolution"
