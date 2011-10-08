@@ -808,10 +808,10 @@ release_base:
 	$(INSTALL_DIR) $(prefix)/release/etc/network/if-up.d && \
 	$(INSTALL_DIR) $(prefix)/release/etc/tuxbox && \
 	$(INSTALL_DIR) $(prefix)/release/etc/enigma2 && \
-	$(INSTALL_DIR) $(prefix)/release/hdd && \
-	$(INSTALL_DIR) $(prefix)/release/hdd/movie && \
-	$(INSTALL_DIR) $(prefix)/release/hdd/music && \
-	$(INSTALL_DIR) $(prefix)/release/hdd/picture && \
+	$(INSTALL_DIR) $(prefix)/release/media/hdd && \
+	$(INSTALL_DIR) $(prefix)/release/media/hdd/movie && \
+	$(INSTALL_DIR) $(prefix)/release/media/hdd/music && \
+	$(INSTALL_DIR) $(prefix)/release/media/hdd/picture && \
 	$(INSTALL_DIR) $(prefix)/release/lib && \
 	$(INSTALL_DIR) $(prefix)/release/lib/modules && \
 	$(INSTALL_DIR) $(prefix)/release/ram && \
@@ -1075,7 +1075,7 @@ endif
 	rm -rf $(prefix)/release/lib/modules/$(KERNELVERSION)
 
 	$(INSTALL_DIR) $(prefix)/release/media
-	ln -s /hdd $(prefix)/release/media/hdd
+	ln -s /media/hdd $(prefix)/release/hdd
 	$(INSTALL_DIR) $(prefix)/release/media/dvd
 
 	$(INSTALL_DIR) $(prefix)/release/mnt
