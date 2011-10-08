@@ -4,8 +4,8 @@ DIRECTORY=$1
 MTDBOOT=5
 MTDROOT=6
 IMAGENAME="Evolution"
-ISAVAILABLE=`mount | grep sda1`
-if [ ! -z "$ISAVAILABLE" ]; then
+#ISAVAILABLE=`mount | grep sda1`
+#if [ ! -z "$ISAVAILABLE" ]; then
 	if grep -qs 'spark' /proc/stb/info/model ; then
 		BOXTYPE=spark
 		OPTIONS="-e 0x20000 -n"
@@ -52,8 +52,8 @@ if [ ! -z "$ISAVAILABLE" ]; then
 	echo "and Dreamy2010"
 	umount "$DIRECTORY/tmp/root"
 	rm -rf "$DIRECTORY/tmp/root"
-else
-	echo "no hdd/stick found!"
-	exit 0
-fi
+#else
+#	echo "no hdd/stick found!"
+#	exit 0
+#fi
 exit
