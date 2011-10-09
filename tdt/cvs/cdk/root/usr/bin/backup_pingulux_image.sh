@@ -35,7 +35,7 @@ IMAGENAME="Evolution"
 	mount -t jffs2 /dev/mtdblock$MTDROOT "$DIRECTORY/tmp/root"
 
 	echo "Copying uImage"
-	dd if=/dev/mtdblock$MTDBOOT of="/tmp/uImage"
+	dd if=/dev/mtdblock$MTDBOOT of="/tmp/uImage" bs=1024 count=2560
 
 	echo "create root.jffs2"
 	$MKFS --root="$DIRECTORY/tmp/root" --faketime --output="$DIRECTORY/tmp/$BACKUPIMAGE" $OPTIONS
