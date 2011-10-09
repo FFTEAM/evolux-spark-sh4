@@ -103,6 +103,10 @@ fi
    /etc/init.d/vsftpd start
    /usr/sbin/inetd
 
+   if [ -e /usr/script/user_script.sh ]; then
+	/usr/script/user_script.sh &
+   fi
+
    NFS=`grep -c nfs /proc/cmdline`
    if [ "$NFS" -eq "1" ]; then
       echo "Booting from nfs, don't set network"
