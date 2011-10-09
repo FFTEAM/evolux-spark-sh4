@@ -144,6 +144,13 @@ fi
 		1) echo "$rtv"
 		   echo "SHUTDOWN"
                    sync
+		   HDDON=`mount | grep sda1 | cut -d " " -f5`
+		   if [ ! -z "$HDDON" ]; then
+			echo "hdd-check"
+			echo "FSCK" > /dev/vfd
+			umount /dev/sda1
+			fsck.$HDDON -y /dev/sda1
+		   fi
                    init 0;;
 		2) echo "$rtv"
 		   echo "REBOOT"
