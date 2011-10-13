@@ -30,12 +30,34 @@
 
 /* #define E2TIMERSXML "/usr/local/share/enigma2/timers.xml" */
 #define E2TIMERSXML "/etc/enigma2/timers.xml"
+#define E2WAKEUPTIME "/proc/stb/fp/wakeup_time"
 
 #define NEUTRINO_TIMERS "/usr/local/share/config/timerd.conf"
 
 #define CONFIG "/etc/vdstandby.cfg"
 char * sDisplayStd = "%a %d %H:%M:%S";
 
+#define E2_WAKEUP_TIME_PROC
+#ifdef E2_WAKEUP_TIME_PROC
+unsigned long int read_e2_timers(time_t curTime)
+{
+	unsigned long int recordTime = 3000000000ul;
+	char              line[12];
+	FILE              *fd = fopen (E2WAKEUPTIME, "r");
+
+	if (fd > 0)
+	{
+		fgets(line, 11, fd);
+		sscanf(line, "%lu", &recordTime);
+		printf("parsed wakeup_time \"%s\"=%lu\n", line, recordTime);
+	} else
+	{
+		printf("error reading %s\n", E2WAKEUPTIME);
+	}
+
+	return recordTime;
+}
+#else
 unsigned long int read_e2_timers(time_t curTime)
 {
 	unsigned long int recordTime = 3000000000ul;
@@ -52,31 +74,27 @@ unsigned long int read_e2_timers(time_t curTime)
 			{
 				unsigned long int tmp = 0;
 				strncpy(recordString, line+14, 10);
-/* konfetti: decrease array index from 11 to 10:
- * ->the array is defined as 11 characters which are addressed by 0-10 not 11!
- */
-				recordString[10] = '\0';
+				recordString[11] = '\0';
 				tmp = atol(recordString);
 				recordTime = (tmp < recordTime && tmp > curTime ? tmp : recordTime);
 			}
 		}
 	} else
-	{
-	    printf("error reading %s\n", E2TIMERSXML);
-	}
+		printf("error reading %s\n", E2TIMERSXML);
 
 	return recordTime;
 }
+#endif
 
 unsigned long int read_neutrino_timers(time_t curTime)
 {
 	unsigned long int recordTime = 3000000000ul;
-	char*             line = malloc(1000);
+	char              line[1000];
 	FILE              *fd = fopen (NEUTRINO_TIMERS, "r");
 
 	if (fd > 0)
 	{
-	        printf("opening %s\n", NEUTRINO_TIMERS);
+		printf("opening %s\n", NEUTRINO_TIMERS);
 		
 		while(fgets(line, 999, fd) != NULL)
 		{
@@ -91,36 +109,14 @@ unsigned long int read_neutrino_timers(time_t curTime)
 
 				if (str != NULL)
 				{
-				   tmp = atol(str + 1);
-
-				   recordTime = (tmp < recordTime && tmp > curTime ? tmp : recordTime);
+					tmp = atol(str + 1);
+					recordTime = (tmp < recordTime && tmp > curTime ? tmp : recordTime);
 				}
 			}
 		}
 	} else
-	{
-	    printf("error reading %s\n", NEUTRINO_TIMERS);
-	}
+		printf("error reading %s\n", NEUTRINO_TIMERS);
 
-        free(line);
-
-	if (recordTime == 3000000000ul)
-        {
-	   struct tm tsWake;
-	   struct tm *ts;
-
-           ts = localtime (&curTime);
-
-	   tsWake.tm_hour = ts->tm_hour;
-	   tsWake.tm_min  = ts->tm_min;
-	   tsWake.tm_sec  = ts->tm_sec;
-	   tsWake.tm_mday = ts->tm_mday;
-	   tsWake.tm_mon  = ts->tm_mon;
-	   tsWake.tm_year = ts->tm_year + 1;
-
-	   recordTime = mktime(&tsWake);
-	} 
-    printf("recordTime %ld\n", recordTime);
 	return recordTime;
 }
 
@@ -159,7 +155,7 @@ int searchModel(Context_t  *context, eBoxType type) {
     for (i = 0; AvailableModels[i] != NULL; i++)
 
         if (AvailableModels[i]->Type == type) {
-            context->m = (void*) AvailableModels[i];
+            context->m = AvailableModels[i];
             return 0;
         }
 
