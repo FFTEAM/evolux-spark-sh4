@@ -42,7 +42,7 @@ IMAGENAME="Evolution"
 	$MKFS --root="$DIRECTORY/tmp/root" --faketime --output="$DIRECTORY/tmp/$BACKUPIMAGE" $OPTIONS
 
 	mv "$DIRECTORY/tmp/$BACKUPIMAGE" "$DIRECTORY/myBU/"
-	mv "/tmp/uImage" "$DIRECTORY/myBU/uImage"
+#	mv "/tmp/uImage" "$DIRECTORY/myBU/uImage"
 	if [ -f "$DIRECTORY/myBU/$BACKUPIMAGE" ] ; then
 		echo "$BACKUPIMAGE can be found in: $DIRECTORY/myBU"
 	else
