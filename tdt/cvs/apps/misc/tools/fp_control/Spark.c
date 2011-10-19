@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <limits.h>
 #include <sys/ioctl.h>
 
 #include "global.h"
@@ -188,14 +189,14 @@ static int Spark_setTimer(Context_t* context)
    /* failed to read e2 timers so lets take a look if
     * we are running on neutrino
     */
-   if (wakeupTime == 3000000000ul)
+   if (wakeupTime == LONG_MAX)
    {
       wakeupTime = read_neutrino_timers(curTime);
    }
 
    wakeupTime -= private->wakeupDecrement;
 
-   if ((wakeupTime == 0) || (curTime > wakeupTime))
+   if ((wakeupTime == 0) || (curTime > LONG_MAX))
    {
        /* nothing to do for e2 */
        fprintf(stderr, "no e2 timer found clearing fp wakeup time ... good bye ...\n");

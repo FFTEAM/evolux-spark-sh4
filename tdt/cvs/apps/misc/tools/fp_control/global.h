@@ -26,19 +26,13 @@
 #define VFDLEDBRIGHTNESS	0xc0425af8
 #define VFDGETWAKEUPMODE	0xc0425af9
 
-/* cuberevo */
-#define VFDSETRF              0xc0425af7
-#define VFDSETFAN             0xc0425af8
-#define VFDGETWAKEUPTIME      0xc0425b00
-
-
 struct vfd_ioctl_data {
 	unsigned char start;
 	unsigned char data[64];
 	unsigned char length;
 };
 
-typedef enum {Unknown, Ufs910_1W, Ufs910_14W, Ufs922, Tf7700, Hl101, Vip2, HdBox, Hs5101, Ufs912, Spark, Cuberevo} eBoxType;
+typedef enum {Unknown, Ufs910_1W, Ufs910_14W, Ufs922, Tf7700, Hl101, Vip2, HdBox, Hs5101, Ufs912, Spark, Cuberevo, Adb_Box} eBoxType;
 
 typedef struct Context_s {
 	void* /* Model_t */  *m; /* instance data */
@@ -75,6 +69,8 @@ typedef struct Model_s {
 	int     (* SetRF)          (Context_t* context, int on);
 	int     (* SetFan)         (Context_t* context, int on);
 	int     (* GetWakeupTime)  (Context_t* context, time_t* theGMTTime);
+	int     (* SetDisplayTime) (Context_t* context, int on);
+	int     (* SetTimeMode)    (Context_t* context, int twentyFour);
     void* private;
 } Model_t;
 
@@ -87,6 +83,7 @@ extern Model_t HL101_model;
 extern Model_t VIP2_model;
 extern Model_t Hs5101_model;
 extern Model_t Spark_model;
+extern Model_t Adb_Box_model;
 extern Model_t Cuberevo_model;
 
 static Model_t * AvailableModels[] = {
@@ -99,14 +96,15 @@ static Model_t * AvailableModels[] = {
 	&Hs5101_model,
 	&UFS912_model,
 	&Spark_model,
+	&Adb_Box_model,
 	&Cuberevo_model,
 	NULL
 };
 
 double modJulianDate(struct tm *theTime);
-unsigned long int read_e2_timers(time_t curTime);
+time_t read_e2_timers(time_t curTime);
+time_t read_neutrino_timers(time_t curTime);
 int searchModel(Context_t  *context, eBoxType type);
 int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeup);
-unsigned long int read_neutrino_timers(time_t curTime);
 
 #endif
