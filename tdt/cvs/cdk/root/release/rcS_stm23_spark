@@ -140,7 +140,7 @@ fi
       case "$rtv" in
 		0) echo "$rtv"
 		   echo "E2 ERROR"
-      		   init 6;;
+      		   killall -9 enigma2;;
 		1) echo "$rtv"
 		   echo "SHUTDOWN"
                    sync
@@ -158,7 +158,7 @@ fi
 		3) echo "$rtv"
 		      echo "E2 RESTART"
 		      #echo "0" > /proc/progress;;
-		      init 6;;
+      		      killall -9 enigma2;;
 		*) echo "*"
 		   echo "ERROR"
 		   echo "0" > /proc/progress;;
