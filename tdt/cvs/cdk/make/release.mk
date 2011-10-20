@@ -259,6 +259,8 @@ endif
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
 	rm -f $(prefix)/release/lib/libeplayer2*
+# copy evo mc files ####
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default/* $(prefix)/release/usr/local/share/enigma2/skin_default/
 
 release_spark7162:
 	echo "spark7162" > $(prefix)/release/etc/hostname
@@ -984,9 +986,6 @@ if ENABLE_PLAYER191
 		stm/monitor/stm_monitor.ko \
 		media/dvb/stm/dvb/stmdvb.ko \
 		sound/ksound/ksound.ko \
-		sound/kreplay/kreplay.ko \
-		sound/kreplay/kreplay-fdma.ko \
-		sound/ksound/ktone.ko \
 		media/dvb/stm/mpeg2_hard_host_transformer/mpeg2hw.ko \
 		media/dvb/stm/backend/player2.ko \
 		media/dvb/stm/h264_preprocessor/sth264pp.ko \
