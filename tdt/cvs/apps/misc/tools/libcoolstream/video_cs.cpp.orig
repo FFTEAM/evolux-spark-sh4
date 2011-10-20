@@ -291,7 +291,7 @@ int cVideo::Stop(bool blank)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 
-	if (ioctl(privateData->m_fd, VIDEO_STOP, blank ? 0:0) < 0)
+	if (ioctl(privateData->m_fd, VIDEO_STOP, blank ? 1:0) < 0)
 		printf("VIDEO_STOP failed(%m)");
 	
 	return true;
@@ -301,7 +301,7 @@ bool cVideo::Pause(void)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 	
-	if (ioctl(privateData->m_fd, VIDEO_FREEZE, 0) < 0)
+	if (ioctl(privateData->m_fd, VIDEO_FREEZE, 1) < 0)
 		printf("VIDEO_FREEZE failed(%m)");
 		
 	return true;
@@ -311,7 +311,7 @@ bool cVideo::Resume(void)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 	
-	if (ioctl(privateData->m_fd, VIDEO_CONTINUE, 0) < 0)
+	if (ioctl(privateData->m_fd, VIDEO_CONTINUE, 1) < 0)
 		printf("VIDEO_CONTINUE failed(%m)");
 		
 	return true;
@@ -326,7 +326,7 @@ int cVideo::Flush(void)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 
-	if (ioctl(privateData->m_fd, VIDEO_CLEAR_BUFFER, 0) < 0)
+	if (ioctl(privateData->m_fd, VIDEO_CLEAR_BUFFER, 1) < 0)
 		printf("VIDEO_CLEAR_BUFFER failed(%m)");
 	
 	return 0;
