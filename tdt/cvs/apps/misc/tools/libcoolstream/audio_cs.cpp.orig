@@ -227,7 +227,7 @@ int cAudio::Start(void)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 
-	if (ioctl(privateData->m_fd, AUDIO_PLAY, 0) < 0)
+	if (ioctl(privateData->m_fd, AUDIO_PLAY, 1) < 0)
 		printf("AUDIO_PLAY failed(%m)");
 
 	return 0;
@@ -237,7 +237,7 @@ int cAudio::Stop(void)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 	
-	if (ioctl(privateData->m_fd, AUDIO_STOP, 0) < 0)
+	if (ioctl(privateData->m_fd, AUDIO_STOP, 1) < 0)
 		printf("AUDIO_STOP failed(%m)");
 
 	return 0;
@@ -247,7 +247,7 @@ bool cAudio::Pause(bool Pcm)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 
-	if (ioctl(privateData->m_fd, AUDIO_PAUSE, 0) < 0)
+	if (ioctl(privateData->m_fd, AUDIO_PAUSE, 1) < 0)
 		printf("AUDIO_PAUSE failed(%m)");
 
 	return true;
@@ -257,7 +257,7 @@ bool cAudio::Resume(bool Pcm)
 {
 	printf("%s:%s\n", FILENAME, __FUNCTION__);
 
-	if (ioctl(privateData->m_fd, AUDIO_CONTINUE, 0) < 0)
+	if (ioctl(privateData->m_fd, AUDIO_CONTINUE, 1) < 0)
 		printf("AUDIO_CONTINUE failed(%m)");
 	
 	return true;
