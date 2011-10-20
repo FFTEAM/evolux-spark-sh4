@@ -196,7 +196,7 @@ static int Spark_setTimer(Context_t* context)
 
    wakeupTime -= private->wakeupDecrement;
 
-   if ((wakeupTime == 0) || (curTime > LONG_MAX))
+   if ((wakeupTime == 0) || (curTime == LONG_MAX))
    {
        /* nothing to do for e2 */
        fprintf(stderr, "no e2 timer found clearing fp wakeup time ... good bye ...\n");
