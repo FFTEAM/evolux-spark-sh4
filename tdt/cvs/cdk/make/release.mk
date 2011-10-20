@@ -256,6 +256,8 @@ endif
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release/usr/bin/
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/ 
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release/usr/bin/
+### del libcoolstream stuff as not needed for pingulux-E2 ###
+	rm -f $(prefix)/release/lib/libcool*
 
 release_spark7162:
 	echo "spark7162" > $(prefix)/release/etc/hostname
