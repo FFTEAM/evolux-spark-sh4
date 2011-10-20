@@ -1,0 +1,291 @@
+diff -Nur linux-sh4-2.6.32.28_stm24_0207_orig/arch/sh/boards/mach-mb442/setup.c linux-sh4/arch/sh/boards/mach-mb442/setup.c
+--- linux-sh4-2.6.32.28_stm24_0207_orig/arch/sh/boards/mach-mb442/setup.c	2011-09-08 14:15:40.000000000 +0200
++++ linux-sh4/arch/sh/boards/mach-mb442/setup.c	2011-09-09 14:22:43.000000000 +0200
+@@ -22,13 +22,28 @@
+ #include <linux/stm/platform.h>
+ #include <linux/stm/stx7100.h>
+ #include <asm/irl.h>
+-
+-
+-
+-#define MB442_PIO_STE100P_RESET stm_gpio(2, 4)
+-#define MB442_PIO_SMC91X_RESET stm_gpio(2, 6)
+-#define MB442_PIO_FLASH_VPP stm_gpio(2, 7)
+-
++#include <linux/bpa2.h>
++
++const char *LMI_VID_partalias[] = { "BPA2_Region1", "coredisplay-video", "gfx-memory", "v4l2-video-buffers", "v4l2-coded-video-buffers", NULL };
++
++const char *LMI_SYS_partalias[] = { "BPA2_Region0", "bigphysarea", NULL };
++
++static struct bpa2_partition_desc bpa2_parts_table[] = {
++      {
++                .name  = "LMI_VID",
++                .start = 0x10800000,
++                .size  = 0x03800000,
++                .flags = 0,
++                .aka   = LMI_VID_partalias
++            },
++            {
++                .name  = "LMI_SYS",
++                .start = 0,
++                .size  = 0x01C00000,
++                .flags = 0,
++                .aka   = LMI_SYS_partalias
++            }
++        };
+ 
+ 
+ void __init mb442_setup(char** cmdline_p)
+@@ -43,17 +58,18 @@
+ 	stx7100_configure_asc(3, &(struct stx7100_asc_config) {
+ 			.hw_flow_control = 0,
+ 			.is_console = 0, });
++	bpa2_init(bpa2_parts_table, ARRAY_SIZE(bpa2_parts_table));
+ }
+ 
+ static struct resource mb442_smc91x_resources[] = {
+ 	[0] = {
+-		.start	= 0x02000300,
+-		.end	= 0x02000300 + 0xff,
++		.start	= 0x00c00000,
++		.end	= 0x00c3ffff,
+ 		.flags	= IORESOURCE_MEM,
+ 	},
+ 	[1] = {
+-		.start	= IRL0_IRQ,
+-		.end	= IRL0_IRQ,
++		.start	= IRL1_IRQ,
++		.end	= IRL1_IRQ,
+ 		.flags	= IORESOURCE_IRQ,
+ 	},
+ };
+@@ -65,50 +81,11 @@
+ 	.resource	= mb442_smc91x_resources,
+ };
+ 
+-static void mb442_set_vpp(struct map_info *info, int enable)
+-{
+-	gpio_set_value(MB442_PIO_FLASH_VPP, enable);
+-}
+-
+-static struct platform_device mb442_physmap_flash = {
+-	.name		= "physmap-flash",
+-	.id		= -1,
+-	.num_resources	= 1,
+-	.resource	= (struct resource[]) {
+-		STM_PLAT_RESOURCE_MEM(0, 8*1024*1024),
+-	},
+-	.dev.platform_data = &(struct physmap_flash_data) {
+-		.width		= 2,
+-		.set_vpp	= mb442_set_vpp,
+-	},
+-};
+ 
+ 
+-static int mb442_phy_reset(void* bus)
+-{
+-	gpio_set_value(MB442_PIO_STE100P_RESET, 1);
+-	udelay(1);
+-	gpio_set_value(MB442_PIO_STE100P_RESET, 0);
+-	udelay(1);
+-	gpio_set_value(MB442_PIO_STE100P_RESET, 1);
+-
+-	return 1;
+-}
+-
+-#define STMMAC_PHY_ADDR 14
+-static int stmmac_phy_irqs[PHY_MAX_ADDR] = {
+-	[STMMAC_PHY_ADDR] = IRL3_IRQ,
+-};
+-static struct stmmac_mdio_bus_data stmmac_mdio_bus = {
+-	.bus_id = 0,
+-	.phy_reset = mb442_phy_reset,
+-	.phy_mask = 1,
+-	.irqs = stmmac_phy_irqs,
+-};
+-
+ static struct platform_device *mb442_devices[] __initdata = {
+ 	&mb442_smc91x_device,
+-	&mb442_physmap_flash,
++
+ };
+ 
+ static int __init mb442_device_init(void)
+@@ -120,8 +97,7 @@
+ 			.out1_enabled = 1, });
+ 
+ 	stx7100_configure_ssc_i2c(0);
+-	stx7100_configure_ssc_spi(1, NULL);
+-	stx7100_configure_ssc_i2c(2);
++	stx7100_configure_ssc_i2c(1);
+ 
+ 	stx7100_configure_usb();
+ 
+@@ -130,32 +106,7 @@
+ 			.tx_enabled = 0,
+ 			.tx_od_enabled = 0, });
+ 
+-	stx7100_configure_pata(&(struct stx7100_pata_config) {
+-			.emi_bank = 3,
+-			.pc_mode = 1,
+-			.irq = IRL1_IRQ, });
+-
+-	gpio_request(MB442_PIO_FLASH_VPP, "Flash VPP");
+-	gpio_direction_output(MB442_PIO_FLASH_VPP, 0);
+-
+-	gpio_request(MB442_PIO_STE100P_RESET, "STE100P reset");
+-	gpio_direction_output(MB442_PIO_STE100P_RESET, 1);
+-
+-	stx7100_configure_ethernet(&(struct stx7100_ethernet_config) {
+-			.mode = stx7100_ethernet_mode_mii,
+-			.ext_clk = 0,
+-			.phy_bus = 0,
+-			.phy_addr = STMMAC_PHY_ADDR,
+-			.mdio_bus_data = &stmmac_mdio_bus,
+-		});
+-
+-	/* Reset the SMSC 91C111 Ethernet chip */
+-	gpio_request(MB442_PIO_SMC91X_RESET, "SMC91x reset");
+-	gpio_direction_output(MB442_PIO_SMC91X_RESET, 0);
+-	udelay(1);
+-	gpio_set_value(MB442_PIO_SMC91X_RESET, 1);
+-	udelay(1);
+-	gpio_set_value(MB442_PIO_SMC91X_RESET, 0);
++
+ 
+ 	return platform_add_devices(mb442_devices,
+ 			ARRAY_SIZE(mb442_devices));
+diff -Nur linux-sh4-2.6.32.28_stm24_0207_orig/drivers/net/smc91x.c linux-sh4/drivers/net/smc91x.c
+--- linux-sh4-2.6.32.28_stm24_0207_orig/drivers/net/smc91x.c	2011-09-20 19:49:00.000000000 +0200
++++ linux-sh4/drivers/net/smc91x.c	2011-10-09 11:51:23.000000000 +0200
+@@ -234,7 +234,6 @@
+ 	}								\
+ } while (0)
+ 
+-
+ /*
+  * this does a soft reset on the device
+  */
+@@ -269,6 +268,10 @@
+ 	SMC_SELECT_BANK(lp, 0);
+ 	SMC_SET_RCR(lp, RCR_SOFTRST);
+ 
++    	msleep(100); // d-mon
++    	SMC_SET_RCR(lp, RCR_CLEAR);
++    	msleep(60);
++
+ 	/*
+ 	 * Setup the Configuration Register
+ 	 * This is necessary because the CONFIG_REG is not affected
+@@ -309,6 +312,8 @@
+ 	SMC_SET_RCR(lp, RCR_CLEAR);
+ 	SMC_SET_TCR(lp, TCR_CLEAR);
+ 
++    	udelay(5); // d-mon
++
+ 	SMC_SELECT_BANK(lp, 1);
+ 	ctl = SMC_GET_CTL(lp) | CTL_LE_ENABLE;
+ 
+@@ -325,6 +330,8 @@
+ 
+ 	/* Reset the MMU */
+ 	SMC_SELECT_BANK(lp, 2);
++	udelay(5); // d-mon
++
+ 	SMC_SET_MMU_CMD(lp, MC_RESET);
+ 	SMC_WAIT_MMU_BUSY(lp);
+ }
+@@ -349,7 +356,9 @@
+ 	SMC_SET_MAC_ADDR(lp, dev->dev_addr);
+ 
+ 	/* now, enable interrupts */
+-	mask = IM_EPH_INT|IM_RX_OVRN_INT|IM_RCV_INT;
++	//mask = IM_EPH_INT|IM_RX_OVRN_INT|IM_RCV_INT;
++	mask = IM_ERCV_INT|IM_ALLOC_INT|IM_RCV_INT | IM_MDINT; // d-mon
++
+ 	if (lp->version >= (CHIP_91100 << 4))
+ 		mask |= IM_MDINT;
+ 	SMC_SELECT_BANK(lp, 2);
+@@ -1117,10 +1126,14 @@
+ 	 * Enable PHY Interrupts (for register 18)
+ 	 * Interrupts listed here are disabled
+ 	 */
++	smc_phy_read(dev, phyaddr, PHY_INT_REG); // d-mon
++
+ 	smc_phy_write(dev, phyaddr, PHY_MASK_REG,
+ 		PHY_INT_LOSSSYNC | PHY_INT_CWRD | PHY_INT_SSD |
+ 		PHY_INT_ESD | PHY_INT_RPOL | PHY_INT_JAB |
+ 		PHY_INT_SPDDET | PHY_INT_DPLXDET);
++	smc_phy_read(dev, phyaddr, PHY_INT_REG); // d-mon
++	smc_phy_read(dev, phyaddr, PHY_INT_REG); // d-mon
+ 
+ 	/* Configure the Receive/Phy Control register */
+ 	SMC_SELECT_BANK(lp, 0);
+@@ -2354,7 +2367,11 @@
+ 		ret = -ENOMEM;
+ 		goto out_release_attrib;
+ 	}
+-
++	
++	
++	platform_set_drvdata(pdev, ndev);
++	//ret = smc_probe(ndev, addr);
++	
+ #ifdef CONFIG_ARCH_PXA
+ 	{
+ 		struct smc_local *lp = netdev_priv(ndev);
+diff -Nur linux-sh4-2.6.32.28_stm24_0207_orig/drivers/net/smc91x.h linux-sh4/drivers/net/smc91x.h
+--- linux-sh4-2.6.32.28_stm24_0207_orig/drivers/net/smc91x.h	2011-09-20 19:48:58.000000000 +0200
++++ linux-sh4/drivers/net/smc91x.h	2011-10-03 16:24:15.000000000 +0200
+@@ -250,16 +250,19 @@
+  * to do a SMC_outl, which on a 16 bit bus translates into two 16 bit writes.
+  * This bypasses the special logic which would prevent this also updating
+  * this interrupt mask register. */
+-#define SMC_CAN_USE_8BIT	1
++#define SMC_CAN_USE_8BIT	0
+ #define SMC_CAN_USE_16BIT	1
+ #define SMC_CAN_USE_32BIT	0
+ #define SMC_CAN_USE_32BIT_DATA	1
+-#define SMC_IO_SHIFT		0
++#define SMC_IO_SHIFT		14
++    
++    #undef  SMC_USE_PXA_DMA
++     
+ #else
+ #error Unknown board
+ #endif
+ 
+-#define SMC_NOWAIT		0
++#define SMC_NOWAIT		1
+ #define SMC_IRQ_FLAGS		0
+ 
+ #ifdef SMC_STEM_BS_MASK
+diff -Nur linux-sh4-2.6.32.28_stm24_0207_orig/drivers/stm/stx7100_comms.c linux-sh4/drivers/stm/stx7100_comms.c
+--- linux-sh4-2.6.32.28_stm24_0207_orig/drivers/stm/stx7100_comms.c	2011-09-08 14:15:42.000000000 +0200
++++ linux-sh4/drivers/stm/stx7100_comms.c	2011-09-09 13:14:14.000000000 +0200
+@@ -226,12 +226,12 @@
+ 			STM_PAD_PIO_BIDIR_NAMED(2, 0, 1, "SCL"),
+ 			STM_PAD_PIO_BIDIR_NAMED(2, 1, 1, "SDA"),
+ 		},
+-		.sysconfs_num = 2,
++		.sysconfs_num = 1,
+ 		.sysconfs = (struct stm_pad_sysconf []) {
+ 			/* SSC0_MUX_SEL = 0 (default assignment) */
+ 			STM_PAD_SYS_CFG(7, 1, 1, 0),
+-			/* DVO_OUT_ON = 0 (SSC not DVO) */
+-			STM_PAD_SYS_CFG(7, 10, 10, 0),
++		//	/* DVO_OUT_ON = 0 (SSC not DVO) */
++		//	STM_PAD_SYS_CFG(7, 10, 10, 0),
+ 		},
+ 	},
+ 	[1] = {
+@@ -344,7 +344,7 @@
+ 	BUG_ON(stx7100_ssc_configured[ssc]);
+ 	stx7100_ssc_configured[ssc] = 1;
+ 
+-	stx7100_ssc_devices[ssc].name = "i2c-stm";
++	stx7100_ssc_devices[ssc].name = "i2c-st40";
+ 	stx7100_ssc_devices[ssc].id = i2c_busnum;
+ 
+ 	plat_data = stx7100_ssc_devices[ssc].dev.platform_data;
