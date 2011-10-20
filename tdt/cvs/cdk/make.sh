@@ -6,6 +6,7 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 3: debug (Y/N)"
  echo "Parameter 4: player(1-2)"
  echo "Parameter 5: Multicom(1-2)"
+ echo "Parameter 6: Media Framwork(1-2)"
  exit
 fi
 
@@ -80,13 +81,14 @@ echo "21) IPBOX9900"
 echo "22) IPBOX99"
 echo "23) IPBOX55"
 echo "24) Fortis HS7810A"
+echo "25) B4Team ADB 5800S"
 
 case $1 in
 	[1-9] | 1[0-9] | 2[0-9]) REPLY=$1
 	echo -e "\nSelected target: $REPLY\n"
 	;;
 	*)
-	read -p "Select target (1-24)? ";;
+	read -p "Select target (1-25)? ";;
 esac
 
 case "$REPLY" in
@@ -114,6 +116,7 @@ case "$REPLY" in
 	22) TARGET="--enable-ipbox99";;
 	23) TARGET="--enable-ipbox55";;
 	24) TARGET="--enable-hs7810a --with-rootpartitionsize=0xa00000 --with-datapartitionsize=0x13C0000";;
+	25) TARGET="--enable-adb_box";;
 	 *) TARGET="--enable-ufs910";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET"
@@ -149,6 +152,7 @@ echo " Experimental:"
 echo "   9) HAVANA P0207-5 (experimental)"
 echo " Deprecated (Not maintained):"
 echo "   1) STM 22 P0041"
+echo "   2) STM 23 P0119"
 case $2 in
         [1-9]) REPLY=$2
         echo -e "\nSelected kernel: $REPLY\n"
@@ -194,6 +198,7 @@ cd -
 ##############################################
 
 echo -e "\nPlayer:"
+echo "   1) Player 131 (Deprecated)"
 echo "   2) Player 179"
 echo "   3) Player 191 (Recommended)"
 case $4 in
@@ -363,7 +368,26 @@ esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM"
+echo -e "\nMedia Framework:"
+echo "   1) eplayer3  (Recommended)"
+echo "   2) gstreamer (Only working with enigma2 diff0 at the moment)"
+case $5 in
+        [1-2]) REPLY=$6
+        echo -e "\nSelected media framwork: $REPLY\n"
+        ;;
+        *)
+        read -p "Select media framwork (1-2)? ";;
+esac
+
+case "$REPLY" in
+	1) MEDIAFW="";;
+	2) MEDIAFW="--enable-mediafwgstreamer";;
+	*) MEDIAFW="";;
+esac
+
+##############################################
+
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW"
 
 ##############################################
 
