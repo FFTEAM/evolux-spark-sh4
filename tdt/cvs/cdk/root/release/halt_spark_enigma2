@@ -53,8 +53,11 @@ fi
 #green led off
 /bin/fp_control -l 1 0
 
-#red led on
-/bin/fp_control -l 0 1
+DPTIMEON=`cat /etc/enigma2/settings | grep config.VFD.ShowDeepTime= | cut -d = -f2`
+if [ $DPTIMEON == "true" ]; then
+	#red led on
+	/bin/fp_control -l 0 1
+fi
 fp_control -s `date +"%H:%M:%S %d-%m-%Y"`
 fp_control -e
 echo "0" > /proc/progress

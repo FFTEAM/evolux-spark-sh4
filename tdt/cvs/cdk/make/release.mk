@@ -188,7 +188,7 @@ release_spark:
 	cp $(buildprefix)/root/release/sendsigs $(prefix)/release/etc/init.d/
 	rm -f $(prefix)/release/sbin/halt
 	cp -f $(targetprefix)/sbin/halt $(prefix)/release/sbin/
-	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
+	cp $(buildprefix)/root/release/halt_spark_enigma2 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/umountfs
 	chmod 755 $(prefix)/release/etc/init.d/rc
 	chmod 755 $(prefix)/release/etc/init.d/sendsigs

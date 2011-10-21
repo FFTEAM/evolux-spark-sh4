@@ -13,22 +13,23 @@ import os
 from time import *
 config.VFD  = ConfigSubsection()
 config.VFD.ShowTime = ConfigYesNo(default=True)
+config.VFD.RedLedDeep = ConfigYesNo(default=False)
 
 class PPDisplayTimeConfigScreen(ConfigListScreen, Screen):
 	Skin = """
 	<screen position="160,110" size="400,350" title="  PPDisplayTime" >
-		<widget name="config" position="55,36" size="320,310" scrollbarMode="showOnDemand" />
+		<widget name="config" position="15,36" size="360,310" scrollbarMode="showOnDemand" />
 		<eLabel text="PPDisplayTime" position="190,320" size="420,25" font="Regular;16" transparent="1" />
 		<ePixmap position="10,250" size="350,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime/dmm_logo.png" zPosition="1" alphatest="blend" />
 	</screen>"""
 	SkinHD = """
 	<screen position="440,180" size="400,330" title="  PPDisplayTime" >
-		<widget name="config" position="50,36" size="330,310" scrollbarMode="showOnDemand" />
+		<widget name="config" position="15,36" size="360,310" scrollbarMode="showOnDemand" />
 		<ePixmap position="10,230" size="300,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime/dmm_logo.png" zPosition="1" alphatest="blend" />
 	</screen>"""
 	SkinMD = """
 	<screen position="300,150" size="400,330" title="  PPDisplayTime" >
-		<widget name="config" position="50,36" size="330,310" scrollbarMode="showOnDemand" />
+		<widget name="config" position="15,36" size="360,310" scrollbarMode="showOnDemand" />
 		<eLabel text="PPDisplayTime" position="155,295" size="420,25" font="Regular;20" transparent="1" />
 		<ePixmap position="10,230" size="345,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime/dmm_logo.png" zPosition="1" alphatest="blend" />
 	</screen>"""
@@ -65,6 +66,7 @@ class PPDisplayTimeConfigScreen(ConfigListScreen, Screen):
 
 		self.Clist = []
 		self.Clist.append(getConfigListEntry(_("Show Time on Display"), Stime))
+		self.Clist.append(getConfigListEntry(_("Turn red-LED on (Deepstandby)"), config.VFD.RedLedDeep))
 		self.Load_settings()
 		ConfigListScreen.__init__(self, self.Clist)
 		self["actions"] = ActionMap(["OkCancelActions", "DirectionActions", "ColorActions"],
