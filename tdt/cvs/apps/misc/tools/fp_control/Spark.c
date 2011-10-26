@@ -185,13 +185,12 @@ static int Spark_setTimer(Context_t* context, time_t* theGMTTime)
 	   ts->tm_hour, ts->tm_min, ts->tm_sec, ts->tm_mday, ts->tm_mon+1, ts->tm_year+1900);
 
    if (theGMTTime == NULL)
-	wakeupTime = read_timers_utc(curTime);
+      wakeupTime = read_timers_utc(curTime);
    else
-	wakeupTime = *theGMTTime;
+      wakeupTime = *theGMTTime;
 
-   /* failed to read e2 timers so lets take a look if
-    * we are running on neutrino
-    */
+   wakeupTime -= private->wakeupDecrement;
+
    if ((wakeupTime <= 0) || (wakeupTime == LONG_MAX))
    {
        /* nothing to do for e2 */
