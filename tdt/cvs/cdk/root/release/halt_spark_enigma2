@@ -53,7 +53,7 @@ fi
 #green led off
 /bin/fp_control -l 1 0
 
-DPTIMEON=`cat /etc/enigma2/settings | grep config.VFD.ShowDeepTime= | cut -d = -f2`
+DPTIMEON=`cat /etc/enigma2/settings | grep config.VFD.RedLedDeep= | cut -d = -f2`
 if [ $DPTIMEON == "true" ]; then
 	#red led on
 	/bin/fp_control -l 0 1
