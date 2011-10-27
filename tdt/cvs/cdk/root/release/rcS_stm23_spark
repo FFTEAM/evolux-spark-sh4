@@ -14,6 +14,36 @@ if [ -e /var/etc/.firstboot ]; then
    touch /dev/.devfsd
 fi
 
+contrast=`grep -m1 config.psi.contrast /etc/enigma2/settings | cut -d = -f2`
+saturation=`grep -m1 config.psi.saturation /etc/enigma2/settings | cut -d = -f2`
+brightness=`grep -m1 config.psi.brightness /etc/enigma2/settings | cut -d = -f2`
+tint=`grep -m1 config.psi.hue /etc/enigma2/settings | cut -d = -f2`
+startVideoTuneEnhanced() {
+	while ! pidof "HostRec40800003" ; do
+		sleep 1
+	done
+	if [ ! -z "$contrast" ]; then
+		echo "$contrast" > /proc/stb/video/plane/psi_contrast
+	else
+		echo "128" > /proc/stb/video/plane/psi_contrast
+	fi
+	if [ ! -z "$saturation" ]; then
+		echo "$saturation" > /proc/stb/video/plane/psi_saturation
+	else
+		echo "128" > /proc/stb/video/plane/psi_saturation
+	fi
+	if [ ! -z "$brightness" ]; then
+		echo "$brightness" > /proc/stb/video/plane/psi_brightness
+	else
+		echo "128" > /proc/stb/video/plane/psi_brightness
+	fi
+	if [ ! -z "$tint" ]; then
+		echo "$tint" > /proc/stb/video/plane/psi_hue
+	else
+		echo "128" > /proc/stb/video/plane/psi_hue
+	fi
+}
+
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 
@@ -123,6 +153,7 @@ fi
       fi
    fi
 
+   startVideoTuneEnhanced &
    echo "run" > /dev/vfd
    echo "LOADING E2"
 
