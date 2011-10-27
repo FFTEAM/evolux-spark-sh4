@@ -1242,19 +1242,21 @@ endif
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions $(prefix)/release/usr/lib/enigma2/python/Plugins/
+	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
+	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
+######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 	rm $(prefix)/release/usr/local/share/enigma2/keymap_*.xml
-	rm $(prefix)/release/etc/enigma2/*.tv
+if ENABLE_SPARK
+	rm $(prefix)/release/etc/enigma2/*dbe*.tv
 	rm $(prefix)/release/etc/enigma2/*.tv_org
-	rm $(prefix)/release/etc/enigma2/blacklist
-	rm $(prefix)/release/etc/enigma2/lamedb
+	rm $(prefix)/release/etc/enigma2/*_org
+	rm $(prefix)/release/etc/enigma2/*_tv_.tv
+	rm $(prefix)/release/etc/enigma2/skin_user.xml
 	rm $(prefix)/release/etc/enigma2/extended_satellites.xml
 	rm $(prefix)/release/etc/tuxbox/cables.xml
 	rm $(prefix)/release/etc/tuxbox/terrestrial.xml
-	rm $(prefix)/release/etc/tuxbox/satellites.xml
-	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
-	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
+endif
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
 
 if STM22
