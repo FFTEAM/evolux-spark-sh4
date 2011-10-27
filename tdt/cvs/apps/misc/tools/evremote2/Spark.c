@@ -92,7 +92,7 @@ static tButton cButtonsEdisionSpark[] = {
     {"YELLOW"         , "3f", KEY_YELLOW},
     {"BLUE"           , "bf", KEY_BLUE},
 
-    {"REWIND"         , "1f", KEY_REWIND},
+    {"REWIND"         , "17", KEY_REWIND},
     {"PAUSE"          , "37", KEY_PAUSE},
     {"PLAY"           , "b7", KEY_PLAY},
     {"FASTFORWARD"    , "97", KEY_FASTFORWARD},
