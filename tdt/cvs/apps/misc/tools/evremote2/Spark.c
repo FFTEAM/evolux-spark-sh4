@@ -74,8 +74,8 @@ static tButton cButtonsEdisionSpark[] = {
 //Pingulux
     {"VOL+"           , "C7", KEY_VOLUMEUP},
     {"VOL-"           , "DD", KEY_VOLUMEDOWN},
-    {"PAGE+"          , "07", KEY_PAGEUP},
-    {"PAGE-"          , "5F", KEY_PAGEDOWN},
+    {"PAGE+"          , "5F", KEY_PAGEUP},
+    {"PAGE-"          , "07", KEY_PAGEDOWN},
 //Pingulux
     {"DOWN"           , "0f", KEY_DOWN},
     {"UP   "          , "27", KEY_UP},
