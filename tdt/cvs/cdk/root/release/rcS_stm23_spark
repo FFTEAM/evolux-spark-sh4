@@ -122,7 +122,7 @@ fi
    rm -f /dev/sparkid
    mknod /dev/sparkid c $major 0 
 
-   /bin/evremote2 10 120 &
+   /bin/evremote2 05 30 &
    stfbcontrol a 255
 
    /etc/init.d/mountall start
