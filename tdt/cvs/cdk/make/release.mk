@@ -1265,6 +1265,8 @@ if ENABLE_SPARK
 	rm $(prefix)/release/etc/enigma2/extended_satellites.xml
 	rm $(prefix)/release/etc/tuxbox/cables.xml
 	rm $(prefix)/release/etc/tuxbox/terrestrial.xml
+	rm $(prefix)/release/bin/showiframe
+	rm $(prefix)/release/bin/stslave
 endif
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
 
