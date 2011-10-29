@@ -35,6 +35,8 @@ readable="  root root   0444"
   st231="  root root   0644"
     mme="  root root   0644"
  bpamem="  root root   0644"
+ramzswap="  root root   0644"
+     rc="  root root   0644"
  tundev="  root root   0644"
  ttyusb="  root root   0644"
 
@@ -135,11 +137,14 @@ makedev () {	# usage: makedev name [bcu] major minor owner group mode
 				g=`awk -F: '$1=="'$6'" {print $3}' $opt_g`
 				[ -z "$g" ] && echo "Cannot find group $6"
 			fi
-			rm -f $1-
-			if mknod $1- $2 $3 $4 &&
-			   chown ${p:-$5}:${g:-$6} $1- &&
-			   chmod $7 $1- &&
-			   mv $1- $1
+#			rm -f $1-
+#			if mknod $1- $2 $3 $4 &&
+#			   chown ${p:-$5}:${g:-$6} $1- &&
+#			   chmod $7 $1- &&
+#			   mv $1- $1
+			rm -f $1
+			if mknod $1 $2 $3 $4 &&
+			   chmod $7 $1
 			then
 				:	# it worked
 			else
@@ -290,8 +295,10 @@ cvt () {
 			st200)  echo st220 st231;;
 			mme)    echo mme ;;
 			bpamem) echo bpamem ;;
+			ramzswap) echo ramzswap ;;
 			ttyusb) echo ttyusb ;;
 			tundev) echo tundev ;;
+			rc) echo rc ;;
 			*)	echo "$1" ;;
 		esac
 		shift
@@ -516,6 +523,8 @@ do
 		$0 $opts st200
 		$0 $opts mme
 		$0 $opts bpamem
+		$0 $opts ramzswap
+		$0 $opts rc
 		$0 $opts ttyusb
 		$0 $opts tundev
 		$0 $opts alsasnd
@@ -1732,11 +1741,35 @@ do
 		;;
 	audio)
 		major=`Major sound 14`
-		makedev adsp       c $major 12 $audio
+		makedev mixer      c $major  0 $audio
+		makedev mixer1     c $major 16 $audio
+		makedev mixer2     c $major 32 $audio
+		makedev mixer3     c $major 48 $audio
+		makedev sequencer  c $major  1 $audio
+		makedev midi00     c $major  2 $audio
+		makedev midi01     c $major 18 $audio
+		makedev midi02     c $major 34 $audio
+		makedev midi03     c $major 50 $audio
 		makedev dsp        c $major  3 $audio
 		makedev dsp1       c $major 19 $audio
+		makedev dsp2       c $major 35 $audio
+		makedev dsp3       c $major 51 $audio
 		makedev audio      c $major  4 $audio
 		makedev audio1     c $major 20 $audio
+		makedev audio2     c $major 36 $audio
+		makedev audio3     c $major 52 $audio
+		makedev sndstat    c $major  6 $audio
+		makedev audioctl   c $major  7 $audio
+		major=31
+		makedev mpu401data c $major 0  $audio
+		makedev mpu401stat c $major 1  $audio
+		major=35
+		for i in 0 1 2 3
+		do
+			makedev midi$i  c $major $i $audio
+			makedev rmidi$i c $major `math $i + 64` $audio
+			makedev smpte$i c $major `math $i + 128` $audio
+		done
 		;;
 	pcaudio)
 		major=`Major pcsp 13` || continue
@@ -1747,14 +1780,19 @@ do
 	alsasnd)
 		major=`Major alsasnd 116` || continue
 		mkdir -p snd
-		makedev snd/controlC0 c $major 7 $audio
-		makedev snd/controlC1 c $major 9 $audio
-		makedev snd/pcmC0D0p c $major 6 $audio
-		makedev snd/pcmC0D1p c $major 5 $audio
-		makedev snd/pcmC0D2p c $major 3 $audio
-		makedev snd/pcmC0D3c c $major 4 $audio
-		makedev snd/pcmC1D0p c $major 8 $audio
-		makedev snd/timer c $major 2 $audio
+		for i in 0 1 2 3 4 5 6 7; do
+		  makedev snd/controlC$i c $major `math 32 \* $i` $audio
+		  for j in 0 1 2 3 4 5 6 7; do
+		    makedev snd/hwC${i}D${j} c $major `math 32 \* $i + 4 + $j` $audio
+		  done
+		  for j in 0 1 2 3 4 5 6 7; do
+		    makedev snd/midiC${i}D${j} c $major `math 32 \* $i + 8 + $j` $audio
+		    makedev snd/pcmC${i}D${j}p c $major `math 32 \* $i + 16 + $j` $audio
+		    makedev snd/pcmC${i}D${j}c c $major `math 32 \* $i + 24 + $j` $audio
+		  done
+		done
+		makedev snd/seq c $major 1 $audio
+		makedev snd/timer c $major 33 $audio
 		;;
 
 	video|video4linux|v4l|radio)
@@ -1938,6 +1976,12 @@ do
 			makedev bpamem$i c 153 $i $bpamem
 		done
 		;;
+	ramzswap)
+		makedev ramzswap0 b 253 0 $ramzswap
+		;;
+	rc)
+		makedev rc c 147 1 $rc
+		;;
 	comedi)
 		major=98
 		for minor in 0 1 2 3
@@ -1969,8 +2013,11 @@ do
 			makedev dvb/adapter$i/dvr0      c 212 `math 64 \* $i + 5` $video
 			makedev dvb/adapter$i/dvr1      c 212 `math 64 \* $i + 21` $video
 			makedev dvb/adapter$i/ca0       c 212 `math 64 \* $i + 6` $video
+			makedev dvb/adapter$i/ca1       c 212 `math 64 \* $i + 22` $video
 			makedev dvb/adapter$i/net0      c 212 `math 64 \* $i + 7` $video
 			makedev dvb/adapter$i/osd0      c 212 `math 64 \* $i + 8` $video
+			makedev dvb/adapter$i/ci0      c 212 `math 64 \* $i + 9` $video
+			makedev dvb/adapter$i/ci1      c 212 `math 64 \* $i + 25` $video
 		done
 		;;
 	usb)
@@ -2001,7 +2048,7 @@ do
 		mkdir -p net
 		major=10
 		i=200
-		makedev net/tun c $major $i $tundev
+		makedev net/tun c $major $i $tundev	
 		;;
 	bluetooth)
 		major=216

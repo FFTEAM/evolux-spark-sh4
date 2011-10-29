@@ -179,6 +179,12 @@ AC_ARG_WITH(assume-kernelsources-old,
 	[assume_kernelsources_old="yes"],[assume_kernelsources_old="no"])
 AM_CONDITIONAL(ASSUME_KERNELSOURCES_OLD,test "$assume_kernelsources_old" = "yes")
 
+AC_ARG_ENABLE(mediafwgstreamer,
+	AS_HELP_STRING(--enable-mediafwgstreamer,	set up the CDK to use mediafw gstreamer),
+	,[enable_mediafwgstreamer=no])
+AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
+AC_SUBST(MEDIAFWGSTREAMER)
+
 AC_ARG_ENABLE(flashrules,
 	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
 	,[enable_flashrules=yes])
@@ -354,6 +360,13 @@ AC_ARG_ENABLE(spark7162,
 AM_CONDITIONAL(ENABLE_SPARK7162,test "$enable_spark7162" = "yes")
 AC_SUBST(SPARK7162)
 
+AC_ARG_ENABLE(adb_box,
+	AS_HELP_STRING(--enable-adb_box,    enable adb_box stuff),
+	[case "${enableval}" in
+		yes) ADB_BOX=adb_box ;;
+	esac],[enable_adb_box=no])
+AM_CONDITIONAL(ENABLE_ADB_BOX,test "$enable_adb_box" = "yes")
+AC_SUBST(ADB_BOX)
 AC_ARG_ENABLE(ufs922,
 	AS_HELP_STRING(--enable-ufs922,    enable kathrein ufs922 stuff),
 	[case "${enableval}" in
@@ -481,6 +494,7 @@ AC_ARG_ENABLE(ipbox55,
 	esac],[enable_ipbox55=no])
 AM_CONDITIONAL(ENABLE_IPBOX55,test "$enable_ipbox55" = "yes")
 AC_SUBST(IPBOX55)
+
 
 
 AC_SUBST(CFLAGS)
@@ -637,7 +651,7 @@ AC_MSG_CHECKING([for apps directory])
 #if test ! -f "$appsdir/dvb/zapit/configure.ac" ; then
 if test ! -f "$appsdir/enigma2/configure.ac" ; then
 	AC_MSG_WARN([appsdir $appsdir not found])
-	appsdir="missing_appsdir"
+	appsdir="missing_appsir"
 	dircheck="fail"
 else
 	AC_MSG_RESULT([yes])
@@ -826,6 +840,17 @@ else
 fi
 fi
 
+AC_SUBST(MEDIAFW)
+AC_SUBST(MEDIAFW_DEP)
+
+if test "$enable_mediafwgstreamer" == "yes"; then
+	MEDIAFW="gstreamer"
+	MEDIAFW_DEP="gst_plugins_dvbmediasink"
+else
+	MEDIAFW="eplayer3"
+	MEDIAFW_DEP="ffmpeg"
+fi
+
 #TUXBOX_RULES_MAKE_EXDIR(binutils)
 #TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
 #TUXBOX_RULES_MAKE_EXDIR(glibc)
@@ -959,6 +984,7 @@ TUXBOX_RULES_MAKE(gst_plugins_bad)
 TUXBOX_RULES_MAKE(gst_plugins_ugly)
 TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
+TUXBOX_RULES_MAKE(libalsa)
 
 #
 # GUI
@@ -1154,6 +1180,7 @@ edision argus vip1 v2 stuff : $enable_vip1_v2
 edision argus vip2 v1 stuff : $enable_vip2_v1
 spark box stuff             : $enable_spark
 spark7162 box stuff         : $enable_spark7162
+adb_box stuff               : $enable_adb_box
 ufs910 stuff                : $enable_ufs910
 ufs910 flash                : $enable_flash_ufs910
 ufs912 stuff                : $enable_ufs912
@@ -1180,6 +1207,9 @@ Player179                   : $enable_player179
 Player191                   : $enable_player191
 Multicom322                 : $enable_multicom322
 Multicom324                 : $enable_multicom324
+MediaFw Gstreamer           : $enable_mediafwgstreamer
+MediaFw                     : $MEDIAFW
+MediaFw Dep                 : $MEDIAFW_DEP
 ])
 
 if test "$dircheck" = "fail"; then
