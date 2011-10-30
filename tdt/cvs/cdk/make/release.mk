@@ -1205,6 +1205,7 @@ endif
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/TempFanControl
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/DefaultServicesScanner
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/DiseqcTester
+	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/CommonInterfaceAssignment
 
 	$(INSTALL_DIR) $(prefix)/release/usr/lib/python2.6
 	cp -a $(targetprefix)/usr/lib/python2.6/* $(prefix)/release/usr/lib/python2.6/
