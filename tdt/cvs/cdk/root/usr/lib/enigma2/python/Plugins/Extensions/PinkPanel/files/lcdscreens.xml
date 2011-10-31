@@ -1,0 +1,231 @@
+<skin>
+	<screen name="InfoBarSummaryPiconOnly" position="0,0" size="132,64">
+		<widget source="session.CurrentService" render="Picon" position="6,9" size="120,46" zPosition="2" path="piconlcd" >
+			<convert type="ServiceName">Reference</convert>
+		</widget>	
+		<widget source="session.CurrentService" render="Label" position="6,9" size="120,46" font="LCD_NN;20" halign="center" valign="left">
+			<convert type="ServiceName">Name</convert>
+		</widget>
+	</screen>
+	
+	<screen name="InfoBarSummaryCustomized" position="0,0" size="132,64">
+		<widget source="global.CurrentTime" render="Label" position="0,0" size="132,64" font="LCD_NN;54" halign="center" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text="     A U F N A H M E" position="6,50" zPosition="1" size="122,14">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		<widget source="session.Event_Now" render="Progress" position="6,54" size="122,10" borderWidth="1" >
+			<convert type="EventTime">Progress</convert>
+		</widget>
+	</screen>
+
+	<screen name="InfoBarSummaryNewNigma2" position="0,0" size="132,64">
+		<widget source="session.CurrentService" render="Label" position="6,0" size="120,46" font="LCD_NN;20" halign="center" valign="left">
+			<convert type="ServiceName">Name</convert>
+		</widget>
+		<widget source="session.Event_Now" render="Progress" position="15,46" size="100,4" borderWidth="1" >
+			<convert type="EventTime">Progress</convert>
+		</widget>
+		<widget source="global.CurrentTime" render="Label" position="6,50" size="72,18" font="LCD_NN;18" halign="right" valign="top">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="global.CurrentTime" render="Label" position="80,51" zPosition="1" size="26,13" font="LCD_NN;13" valign="top">
+			<convert type="ClockToText">Format:%S</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="6,50" zPosition="1" size="120,34">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		<widget source="session.CurrentService" render="Picon" position="6,0" size="132,46" zPosition="2" path="piconlcd" >
+			<convert type="ServiceName">Reference</convert>
+		</widget>
+		
+		
+		
+	</screen>
+	
+	
+<!-- LCD screen (channelselection) -->
+	<screen name="ChannelSelectionSummaryPiconOnly" position="0,0" size="132,64">
+		<widget source="parent.ServiceEvent" render="Picon" position="6,9" size="120,46" zPosition="2" path="piconlcd" >
+			<convert type="ServiceName">Name</convert>
+		</widget>	
+		<widget source="parent.ServiceEvent" render="Label" position="6,9" size="120,46" font="LCD_NN;18" >
+			<convert type="ServiceName">Name</convert>
+		</widget>
+	</screen>
+
+	<screen name="ChannelSelectionSummaryNewNigma2" position="0,0" size="132,64">
+		<widget source="parent.ServiceEvent" render="Label" position="6,0" size="120,46" font="LCD_NN;20" halign="center" valign="left">
+			<convert type="ServiceName">Name</convert>
+		</widget>
+		<widget source="parent.ServiceEvent" render="Progress" position="15,46" size="100,4" borderWidth="1" >
+			<convert type="EventTime">Progress</convert>
+		</widget>
+		<widget source="global.CurrentTime" render="Label" position="6,50" size="72,18" font="LCD_NN;18" halign="right" valign="top">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="global.CurrentTime" render="Label" position="80,51" zPosition="1" size="26,13" font="LCD_NN;13" valign="top">
+			<convert type="ClockToText">Format:%S</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="6,50" zPosition="1" size="120,34">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		<widget source="parent.ServiceEvent" render="Picon" position="6,0" size="132,46" zPosition="2" path="piconlcd" >
+			<convert type="ServiceName">Name</convert>
+		</widget>
+	</screen>
+
+	<screen name="ChannelSelectionSummaryCustomized" position="0,0" size="132,64">
+		<widget source="global.CurrentTime" render="Label" position="6,8" size="132,64" font="LCD_NN;45" halign="left" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="50,20" zPosition="1" size="15,25">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+	</screen>
+	
+<!-- LCD screen (standby) -->	
+	<screen name="ourStandBySummary_SummaryNewNigma2" position="0,0" size="132,64">
+		<widget source="global.CurrentTime" render="Label" position="1,1" size="130,20" font="LCD_NN;16" halign="center">
+			<convert type="ClockToText">Format:%a %d %b</convert>
+		</widget>	
+		<widget source="global.CurrentTime" render="Label" position="20,19" size="120,38" font="LCD_NN;38" halign="leftt">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="session.RecordState" render="Picon" position="1,1" zPosition="2" pixmap="/usr/share/enigma2/newnigma2Skin.new/defaults/lcd_stby_rec.png" alphatest="off" size="130,21">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget>	
+	</screen>
+	
+	<screen name="ourStandBySummary_SummaryCustomized" position="0,0" size="132,64">
+		<widget source="global.CurrentTime" render="Label" position="6,8" size="132,64" font="LCD_NN;45" halign="left" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="50,20" zPosition="1" size="15,25">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+	</screen>		
+
+	<screen name="ourStandBySummary_off" position="0,0" size="132,64">
+		<!-- leeres Standby LCD -->	
+	</screen>	
+
+<!-- LCD Screen (Movieplayer) -->
+	<screen name="ourMoviePlayerSummary_SummaryNewNigma2" position="0,0" size="132,64">
+		
+		<ePixmap pixmap="/usr/share/enigma2/newnigma2Skin.new/defaults/LCD_video.png" position="0,0" zPosition="0" size="140,40" alphatest="on" />
+		<widget source="session.CurrentService" render="Progress" position="15,41" size="100,4" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		
+		<widget source="global.CurrentTime" render="Label" position="6,45" size="72,23" font="LCD_NN;23" halign="right" valign="top">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		
+		<widget source="global.CurrentTime" render="Label" position="80,46" zPosition="1" size="26,18" font="LCD_NN;18" valign="top">
+			<convert type="ClockToText">Format:%S</convert>
+		</widget>
+		
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="6,45" zPosition="1" size="106,23">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget>
+		
+	</screen>
+	
+	<screen name="ourMoviePlayerSummary_SummaryCustomized" position="0,0" size="132,64">
+
+		<widget source="global.CurrentTime" render="Label" position="0,0" size="132,64" font="LCD_NN;54" halign="center" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+
+		<widget source="session.RecordState" render="FixedLabel" text="     A U F N A H M E" position="6,50" zPosition="1" size="122,14">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+
+		<widget source="session.CurrentService" render="Progress" position="6,54" size="122,10" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+
+	</screen>
+	
+	<screen name="ourMoviePlayerSummary_SummaryPiconOnly" position="0,0" size="132,64">
+		
+		<ePixmap pixmap="/usr/share/enigma2/newnigma2Skin.new/defaults/LCD_video.png" position="0,0" zPosition="0" size="140,40" alphatest="on" />
+		
+		<widget source="session.CurrentService" render="Progress" position="5,43" size="107,20" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="5,43" zPosition="1" size="107,20">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		
+	</screen>	
+	
+<!-- LCD Screen (MediaPlayer) -->
+	<screen name="ourMediaPlayerSummary_SummaryNewNigma2" position="0,0" size="132,64">
+		
+		<ePixmap pixmap="/usr/share/enigma2/newnigma2Skin.new/defaults/LCD_media.png" position="0,0" zPosition="0" size="140,40" alphatest="on" />
+		
+		<widget source="session.CurrentService" render="Progress" position="15,41" size="100,4" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		
+		<widget source="global.CurrentTime" render="Label" position="6,45" size="72,23" font="LCD_NN;23" halign="right" valign="top">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		
+		<widget source="global.CurrentTime" render="Label" position="80,46" zPosition="1" size="26,18" font="LCD_NN;18" valign="top">
+			<convert type="ClockToText">Format:%S</convert>
+		</widget>
+		
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="6,45" zPosition="1" size="106,23">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		
+	</screen>
+	
+	<screen name="ourMediaPlayerSummary_SummaryCustomized" position="0,0" size="132,64">
+
+		<widget source="global.CurrentTime" render="Label" position="0,0" size="132,64" font="LCD_NN;54" halign="center" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+
+		<widget source="session.RecordState" render="FixedLabel" text="     A U F N A H M E" position="6,50" zPosition="1" size="122,14">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+
+		<widget source="session.CurrentService" render="Progress" position="6,54" size="122,10" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+
+	</screen>
+	
+	<screen name="ourMediaPlayerSummary_SummaryPiconOnly" position="0,0" size="132,64">
+		
+		<ePixmap pixmap="/usr/share/enigma2/newnigma2Skin.new/defaults/LCD_media.png" position="0,0" zPosition="0" size="140,40" alphatest="on" />
+		
+		<widget source="session.CurrentService" render="Progress" position="5,43" size="107,20" borderWidth="1">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		
+		<widget source="session.RecordState" render="FixedLabel" text=" " position="5,43" zPosition="1" size="107,20">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		
+	</screen>			
+
+</skin>

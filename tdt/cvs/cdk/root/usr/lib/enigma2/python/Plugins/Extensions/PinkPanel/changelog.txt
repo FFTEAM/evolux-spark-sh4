@@ -1,0 +1,57 @@
+P I N K - P A N E L - CHANGELOG...
+####################################################
+CHANGELOG:
+v0.6-r7
+- local oscam restart option hinzugefügt, somit ist es nun möglich oscaminfo via quickbutton auf lang-rot zu legen und man drückt erneut rot und schon (re)startet lokale oscam Augenzwinkern
+- readme.txt option entfernt da es eh keine readme gibt/gab da plugin selbsterklärend !
+v.0.6-r8
+- local restart oscam code changed from killall -9 to kill pidof
+v.0.6-r9
+- ssl fixxed
+- new config-option setup local oscam-binary/configpath
+- also add plugin to "extensions" (blue-button)
+- polnish language add
+v.0.7
+- add new cams
+- revert name to CamInfo
+- do code for dm**** bootup (for sh4 + co please tell correct ones!) 
+v.0.7-r1
+- many code fixxes
+v.0.7-r2
+- lang-folder fixxed (po changed to pl)
+- menues recreated for better setup
+v.0.8
+- plugin-session-autostart now!
+- no scripts or other panels needed now for start you fav cam also on bootup!
+- put binary in binaryfolder, configfiles in configfolder, activate cam and if cam should autostart@bootup activate
+- work for all kind of boxtypes and all E2 images
+v.1.0
+- add more menues like skinselector, ipk temp install and many more!
+v.1.1
+- dmm only: oled*.xml integrated in PinkPanel
+- small language.mo fix
+v.1.2
+- Download-Manager add, please select on PP-System-Tools your prefered addon-site!
+  (2 Sites selectable), thx mfaraj57 
+- some small code fixes
+- PP-online-Update added: PP-System-Tools-BlueButton
+v1.3
+- DL-Manager opened for all STB, warning integrated for NON-DMM-User: USE IT CAREFULL
+v.1.4
+- add *.pyc for non-dmm-boxes!
+v1.5
+- Non-DMM-Boxes: SkinSelector check (if no SkinSelector is found now only info-popup, no GS anymore!)
+- polnish language file update, thx kosmazc
+v1.6
+- PP-Skin missing pyo added
+- Panels ALL: wget/install fixxed
+v1.7
+- SH4-Spark/PingLux support add
+- Spark overclock support add (thx neipe)
+- Spark no-sound-bootlogo option add (EOS Only)
+v1.8
+- SH4-Spark Cam-start/restart fixxed (dirty)
+- SH4-Spark-PP-MD-Skin fixxed
+v1.9
+- Spark RC delay add
+####################################################

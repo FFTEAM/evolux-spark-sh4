@@ -1,0 +1,1321 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+<!--List of Tunisiasat plugins -->
+<xml>
+    <plugins cont = "TSpanel_3.5">
+        <plugin name = "Tspanel_3.5-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/TSpanel/enigma2-plugin-tspanel_3.5_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Livefootball">
+        <plugin name = "Livefootball_3.2-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball_3.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Livefootball-antifilter_3.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball-antifilter_3.2_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Plugins-new">
+        <plugin name = "devicemanager_0.2-r3-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/merlin-devicemanager_0.2-r3_mipsel/enigma2-plugin-systemplugins-devicemanager_0.2-r3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "E2fsprogs-blkid_1.41.9-r0-(lib needed for devicemanager plugin)">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/merlin-devicemanager_0.2-r3_mipsel/e2fsprogs-blkid_1.41.9-r0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Plugins">
+        <plugin name = "devicemanager_0.2-r3-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/merlin-devicemanager_0.2-r3_mipsel/enigma2-plugin-systemplugins-devicemanager_0.2-r3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Anaquickclock_0.2-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Analoge-clock/enigma2-plugin-extensions-anaquickclock_0.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Livefootball_3.2-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball_3.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Livefootball-antifilter_3.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball-antifilter_3.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "E2-Samba-Mount_3.0.20_070730.tar.gz-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/mipsel_Samba-Mount-3.0.20/e2-Samba-Mount_3.0.20_070730.tar.gz</url>
+        </plugin>
+        <plugin name = "DBSwitch_0.2_111405.tar.gz-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/mipsel_DBSwitch-0.2/DBSwitch_0.2_111405.tar.gz</url>
+        </plugin>
+        <plugin name = "Dreamexplorer_7.1-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-dreamexplorer_7.1_mipsel/enigma2-plugin-extensions-dreamexplorer_7.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "SpinnerSelector_2.0-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/SpinnerSelector_2.0/SpinnerSelector_2.0.ipk</url>
+        </plugin>
+        <plugin name = "VPS_0.5-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/vps_0.5/enigma2-plugin-systemplugins-vps_0.5.ipk</url>
+        </plugin>
+        <plugin name = "Webtextreader_1.0-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/WebTextReader/enigma2-plugin-webtextreader_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Swapmanager_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/SwapManager/enigma2-plugin-swapmanager_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Project-valerie(OE1.5)-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Project-valerie_OE1.5/project-valerie_rev867_mipsel_oe15.ipk</url>
+        </plugin>
+        <plugin name = "Project-valerie(OE1.6)-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Project-valerie_OE1.6/project-valerie_rev867_mipsel_oe16.ipk</url>
+        </plugin>
+        <plugin name = "Language-manager_2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/LanguageManager/enigma2-plugin-language-manager_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "GSF-Subtitles-Downloader-1_6_1.6.0-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/GSF-Subtitles-Downloader/enigma2-plugin-extensions-gsfsubs1_6_1.6.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Satelliteloader-editor_1.0-r0-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/SatelliteLoader-Editor/enigma2-plugin-systemplugins-satelliteloader-editor_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Virtualzap_experimental-git20110325-r0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/virtualzap/enigma2-plugin-extensions-virtualzap_experimental-git20110325-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Satloader_1.2-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/satloader_1.2-r0_mipsel/satloader_1.2-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Satelliteeditor_1.0-r0-systemplugin">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-systemplugins-satelliteeditor_1.0-r0_mipsel/enigma2-plugin-systemplugins-satelliteeditor_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Timeupdate_0.1.0-r0_linux-sat">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-timeupdate_0.1.0-r0_linux-sat_mipsel/enigma2-plugin-extensions-timeupdate_0.1.0-r0_linux-sat_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Webmedia_0.1-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/webmedia/enigma2-plugin-extensions-webmedia_0.1-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gst-flv_0.10.27-r0.0-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/gst-plugin-flv/gst-plugin-flv_0.10.27-r0.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Primetimemanager_0.9.8-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-primetimemanager_0.9.8-r0_mipsel/enigma2-plugin-extensions-primetimemanager_0.9.8-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "PlanerFS_3.05-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/PlanerFS_3.05/enigma2-plugin-extensions-planerfs_3.05_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Greeknetradio_V1.4-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Greek-net-Radio-E2-bykastorasgr-1-4/enigma2-plugin-extensions-greeknetradio_1.4_all.ipk</url>
+        </plugin>
+        <plugin name = "Mytube">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/mytube/enigma2-plugin-extensions-mytube_experimental-git20110129-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Vlcplayer">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/vlc-player/enigma2-plugin-extensions-vlcplayer_experimental-git20110310-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Webbouqueteditor_experimental-git20110304-r0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/webbouquetteditor-DM800/enigma2-plugin-extensions-webbouqueteditor_experimental-git20110304-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Bermooda-ppanelfull_5.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-bermooda-unleashofficialdreamboxhd_5.0_mipsel.ipk/enigma2-plugin-bermooda-ppanelfull_5.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Crash-Dump-Reader_0.7">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-dumbo_0.7_mipsel/enigma2-plugin-extensions-dumbo_0.7_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "John-password-cracker_1.7.2-3-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-john_1.7.2-3_mipsel/enigma2-plugin-extensions-john_1.7.2-3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Satan-techsat-hacksat-keyupdate_1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/satankey-tecksatkey-keysupdater/satan-techsat-hacksat-keyupdate_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Flashexpander_0.13-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/flashexpander_0.13-r1_mipsel/flashexpander_0.13-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Multimediathek_3.1-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-multimediathek_0.5_mipsel/enigma2-plugin-extensions-multimediathek_3.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Satangels-keyupdater-e2_1.3-20091227">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/SatAngels_KeyUpdater_E2_1.3/satangels-keyupdater-e2_1.3-20091227_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "EasyMedia-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/EasyMedia/enigma2-plugin-extensions-easymedia_experimental-git20101209-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Gp2flashbackup-sim201-images">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/gp2flashbackup-sim201-images/enigma2-plugin-gp2flashbackup-edited2-by-sim201_SSL76D_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_Info_V1.3C">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-plugins/Cccam_Info_V1.3C/enigma2-plugin-extensions-cccaminfo_svn-3385-r0_all.ipk</url>
+        </plugin>
+        <plugin name = "Cool_TV_Guide_V2.2.2-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Cool_TV_Guide_V2.2.2/enigma2-plugin-extensions-cooltvguide_Coolman_V2.2.2_all.ipk</url>
+        </plugin>
+        <plugin name = "Cool_TV_Guide_V4.0.0(OE1.6)-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Cool_TV_Guide_V4.0.0/enigma2-plugin-extensions-cooltvguide_Coolman_V4.0.0_all.ipk</url>
+        </plugin>
+        <plugin name = "Cool_TV_Guide_Skin_V4.0(OE1.6)">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Cool_TV_Guide_V4.0.0/enigma2-plugin-extensions-cooltvguideskin_Coolman_V4.0_all.ipk</url>
+        </plugin>
+        <plugin name = "Crossepg-oe1.6_0.6.2-svn-305-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/crossepg_0.6.2_svn_305/enigma2-plugin-systemplugins-crossepg_0.6.2-svn-305-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Sport_Portal_Plugin_1.4-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Sport_Portal_Plugin_1.4/enigma2-plugin-extensions-sportportal_1.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Fancontrol2_2.4-20110116-r6">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/fancontrol2_2.4_r6/enigma2-plugin-extensions-fancontrol2_2.4-20110116-r6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Font_Magnifier_V0.5.2b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Font_Magnifier_V0.5.2b/enigma2-plugin-extensions-fontmagnifier_0.5.2b_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Glass_System_Utility_V3.75-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Glass_System_Utility_V3.75/enigma2-plugin-glasssysutil_3.75_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Glass_System_Utility_light_V1.18-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Glass_System_Utility_light_V1.18/enigma2-plugin-glasssysutillight_1.18_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Easyinfo2_zombi_mod_V1.1-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Easyinfo_zombi_mod_V1.1/enigma2-plugin-extensions-easyinfo2_1.1_all.ipk</url>
+        </plugin>
+        <plugin name = "Keymapmanager_0.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/keymapmanager_0.2/enigma2-plugin-systemplugins-keymapmanager_0.2-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Mosaic_2.6">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Mosaic_2.6/enigma2-plugin-extensions-mosaic_2.6cvs20090812-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Multiquickbutton_V2.7">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Multiquickbutton_V2.7/enigma2-plugin-extensions-multiquickbutton_2.7_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Newmenu_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Newmenu_3.0/enigma2-plugin-extensions-newmenu_3.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Pauli_Neutrino_Keymap">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Pauli_Neutrino_Keymap/enigma2-plugin-extensions-pauli_7.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "SGC_Menu_V4.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/SGC_Menu_V4.1/enigma2_plugin_sgc_menu_v.4.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Libvorbis0_1.2.3-r2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/libvorbis0_1.2.3-r2.0/libvorbis0_1.2.3-r2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Streamripper_1.64.6-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Streamripper_1.64.6-r0/streamripper_1.64.6-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dreambox_ipkg_tools-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/dreambox_ipkg_tools/dreambox-ipkg-tools-mips_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dreambuddy_0.2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/dreambuddy_0.2.0/enigma2-plugin-extensions-dreambuddy_0.2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Googlemaps_dm8000">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/googlemaps_dm8000/enigma2-plugin-extensions-googlemaps_experimental-cvs20100820-r0_dm8000.ipk</url>
+        </plugin>
+        <plugin name = "Ledmanager_0.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/ledmanager_0.1/enigma2-plugin-systemplugins-ledmanager_0.1-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Openpanel_0.1.3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/openpanel_0.1.3/enigma2-plugin-extensions-openpanel_0.1.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Passwordchanger">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/passwordchanger/enigma2-plugin-extensions-passwordchanger_experimental-cvs20100725-r0_all.ipk</url>
+        </plugin>
+        <plugin name = "Shoutcast">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/shoutcast/enigma2-plugin-extensions-shoutcast_experimental-cvs20100413-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Standbild_0.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/standbild_0.1/enigma2-plugin-extensions-standbild_0.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Startupservice">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/startupservice/enigma2-plugin-systemplugins-startupservice_experimental-cvs20091129-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Thewebsiteparser_0.6">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/thewebsiteparser_0.5b_mipsel/thewebsiteparser_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Weatherplugin_2.6cvs20091110">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/weatherplugin_2.6cvs20091110/enigma2-plugin-extensions-weatherplugin_2.6cvs20091110-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Autotimeshift">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/autotimeshift/enigma2-plugin-extensions-autotimeshift_0.20_all.ipk</url>
+        </plugin>
+        <plugin name = "Dreamtuner_1.0svn63-r3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/dreamtuner_1.0svn63-r3/dreamtuner_1.0svn63-r3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Drtic_2.3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/drtic_2.3/drtic_2.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Quick_Signal_Info-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Quick_Signal_Info/enigma2-plugin-extensions-quiksignalinfo_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dyndns_experimental-cvs20100826-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/dyndns_experimental-cvs20100826-r0/enigma2-plugin-extensions-dyndns_experimental-cvs20100826-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Eektro_experimental-cvs20100727">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/elektro_experimental-cvs20100727/enigma2-plugin-extensions-elektro_experimental-cvs20100727-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Lancontrol2_1.0-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/lancontrol2_1.0-r1/enigma2-plugin-extensions-lancontrol2_1.0-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Livescore_0.7.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/livescore_0.7.1/enigma2-plugin-extensions-livescore_0.7.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Permanentclock_experimental-cvs20100725">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/permanentclock_experimental-cvs20100725/enigma2-plugin-extensions-permanentclock_experimental-cvs20100725-r0_all.ipk</url>
+        </plugin>
+        <plugin name = "Tuxterm_0.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/tuxterm_0.4/enigma2-plugin-extensions-tuxterm_0.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "DDamir_Subtitle_Player_3.01(OE1.6)">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/subtitleplayer_3.01(OE1.6)/enigma2-plugin-extensions-subtitleplayer_3.01_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "DDamir_Subtitle_Player_3.02(OE1.6)">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/DDamir_Subtitle_Player_3.02_OE1.6/enigma2-plugin-extensions-subtitleplayer_3.02_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "DDamir_Subtitle_Player_3.05(OE1.6)">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/DDamir_Subtitle_Player_3.05_OE1.6/enigma2-plugin-extensions-subtitleplayer_3.05_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Softcammanager_0.1-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/enigma2-plugin-extensions-softcammanager_0.1-r0_mipsel/enigma2-plugin-extensions-softcammanager_0.1-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Sysinfo_0.1-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/enigma2-plugin-extensions-sysinfo_0.1-r0_mipsel/enigma2-plugin-extensions-sysinfo_0.1-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Swap_Device_Control_V0.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Swap_Device_Control_V0.4/enigma2-plugin-swapdevice_0.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Second_Infobar_V2.7">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/secondinfobar_2.7/enigma2-plugin-extensions-secondinfobar_2.7_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "WebradioFS_5.57-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/webradioFS_5.57/enigma2-plugin-extensions-webradiofs_5.57_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Fstabeditor_1.1-r2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/enigma2-plugin-extensions-fstabeditor_1.1-r2_mipsel/enigma2-plugin-extensions-fstabeditor_1.1-r2_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Tunisiasat plugins">
+        <plugin name = "Livefootball_3.2-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball_3.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Livefootball-antifilter_3.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/Livefootball/enigma2-plugin-extensions-livefootball-antifilter_3.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Mediaplayer-patch-crille-mfaraj_1.0-test">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/LanguageManager/mediaplayer-patch-crille-mfaraj_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Netradiospanish-80_2.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/NetradioSpanish/netradiospanish-80_2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Netradiobollywood_2.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/NetRadiooBollywood/netradiobollywood_2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Netradioturk_2.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/NetRadioTurk/netradioturk_2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Netradioclassic_2.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/NetRadioClassic/netradioclassic_2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Netradioarabic_2.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/NetRadioArabic/netradioarabic_2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Tspanel_3.5-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/TSpanel/enigma2-plugin-tspanel_3.5_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Webtextreader_1.0-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/WebTextReader/enigma2-plugin-webtextreader_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Swapmanager_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/SwapManager/enigma2-plugin-swapmanager_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Language-manager_2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/LanguageManager/enigma2-plugin-language-manager_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Satelliteloader-editor_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/SatelliteLoader-Editor/enigma2-plugin-systemplugins-satelliteloader-editor_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemininetradioturk_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiRadioTurk_Bp/gemininetradioturk_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemininetradioarabic_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiNetradioArabic/gemininetradioarabic_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemininetradioclassic_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiNetradioClassic/gemininetradioclassic_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Tunisiasat-addons-manager_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/TunisiasatAddOnManager/tunisiasat-addons-manager_3.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasat-addons-manager_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiTunisiaSatAddonsManger_Bp/geminitunisiasat-addons-manager_3.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasat-useraddons_1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiTunisiaSatUseraddons_Bp/geminitunisiasat-useraddons_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasatweather_1.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiWeatherForecast/geminitunisiasatweather_1.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Prayertimes-tunisiasat_1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/prayertimes-tunisiasat_1.1/prayertimes-tunisiasat_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Tunisiasat-gemini2-server-setup">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins-2/tunisiasat-gemini-server-setup/tunisiasat-gemini-e2-server_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Tunisiasat-tools_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/Enigma2-tunisiasat-tools_1.0/enigma2-tunisiasat-tools_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Weather-forecast_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/WeatherForecast/weather-forecast_1.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "GP3-Plugins">
+        <plugin name = "Gemininetradioturk_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiRadioTurk_Bp/gemininetradioturk_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemininetradioarabic_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiNetradioArabic/gemininetradioarabic_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemininetradioclassic_2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiNetradioClassic/gemininetradioclassic_2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasat-addons-manager_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiTunisiaSatAddonsManger_Bp/geminitunisiasat-addons-manager_3.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasat-useraddons_1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiTunisiaSatUseraddons_Bp/geminitunisiasat-useraddons_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitunisiasatweather_1.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tunisiasat-plugins/GeminiWeatherForecast/geminitunisiasatweather_1.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminicccaminfo_1.01-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Plugins/geminicccaminfo_1.01-r0_mipsel/geminicccaminfo_1.01-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminispinner_0.11-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Bp_Plugins/geminispinner_0.11-r0_mipsel/geminispinner_0.11-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminijukebox_0.12-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Bp_Plugins/geminijukebox_0.12-r1_mipsel/geminijukebox_0.12-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gemini3_0.38-r8">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Plugins/Gemini3_0.38-r8/geminiplugin_0.37-r8_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminitools_0.20-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Plugins/geminitools_0.20-r0_mipsel/geminitools_0.20-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3settingsmanager_2.8-20101210-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Plugins/gp3settingsmanager/enigma2-plugin-extensions-gp3settingsmanager_2.8-20101210-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3flashbackup_1.4.8-20101210-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/GP3_Plugins/GP3_FlashBackup_V1.4.8/enigma2-plugin-extensions-gp3flashbackup_1.4.8-20101210-r2_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Panels">
+        <plugin name = "Tspanel_3.5-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/TSpanel/enigma2-plugin-tspanel_3.5_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Bermooda-ppanelfull_5.3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/enigma2-plugin-bermooda-ppanelfull_5.3_mipsel.ipk/enigma2-plugin-bermooda-ppanelfull_5.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Vtipanel_1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/vtipanel/enigma2-plugin-vtipanel_1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Prince-Panel-Full_7.1(OE 1.6)-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/Prince-Panel-Full_7.1/enigma2-plugin-persianpros-princepanel-full_7.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Prince-Panel-Clean_7.1(OE 1.6)-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Panels/Prince-Panel-Clean_7.1/enigma2-plugin-persianpros-princepanel-clean_7.1_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Skins">
+        <plugin name = "Skin-ramimaher_b15hd-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/ramimaher/enigma2-skin-hd-ramimaher_15b_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Pli-Skin-army_0.6-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/pli-army/enigma2-skin-army-pli_0.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "CVS-skin-Blackbeauty-hd_3.1.0_2011-06-19_all-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-plugin-skins-blackbeauty-hd_3.1.0_2011-06-19_all_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Newgato-hd_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/newgato-hd_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "GP-Modern-mstone2-xd_2.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/modern-mstone2-xd_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Merlin-skin-Glassframe-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/glassframe.tar.bz2</url>
+        </plugin>
+        <plugin name = "MerlinSkin-valihdwarpme_1.5-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-skin-valihdwarpme_1.5_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Merlin-Skin-onekeyblue_1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-skin-onekeyblue-me_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Merlin-skin-nebulaxd_1.6-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-skin-nebulaxd_1.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Merlin-skin-xmashd_1.1-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-skin-merlinxmashd_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Newnigma-hd-skin--scarlett_1.1-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skins-collection/enigma2-skin-hd-skin-newnigma2scarlett_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Nemesis_Evil_2.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/Skin_Evil_Nemesis_2.2/Skin_Evil_Nemesis_2.2.tbz2</url>
+        </plugin>
+        <plugin name = "Gp-skin-glassline-swiss-mad_0.0.1_all">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-glassline-swiss-mad_0.0.1_all/gp-skin-glassline-swiss-mad_0.0.1_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-brushedalu-hd-soliver.mod_V2.41_r2-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-brushedalu-hd-soliver.mod_2.41/gp-skin-brushedalu-hd-soliver.mod_2.41-20110810-r2_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-Skin-sd-an44.d-box1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-sd-an44.d-box1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Skin-ramimaher_9.0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-hd-ramimaher_9.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-Skin-onekeyblue-hd_1.1-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-plugin-skin-onekeyblue-hd_1.1-r0_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-blue-shadow-zbigzbig20.mod_0.3.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-blue-shadow_0.3.0_all/gp-skin-blue-shadow_0.3.0_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-DMConcinnity-HD-zbigzbig20.mod_0.3.0a-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-dreamconcinnity-zbigzbig20.mod/gp-skin-dreamconcinnity-hd_0.3.0a_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-LT6-HD-zbigzbig20.mod_0.3.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-dreamconcinnity-zbigzbig20.mod/gp-skin-dreamconcinnity-hd_0.3.0a_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-rue-infinity-HD-zbigzbig20.mod_0.3.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-rue-infinity-zbigzbig20.mod/gp-skin-ru-infinity-hd_0.3.0_all.ipk</url>
+        </plugin>
+        <plugin name = "Skin-ramimaher-b7_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-hd-ramimaher-b7-gp3_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-Skin-army-ghosthd-vu-mod4_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-army-ghosthd-vu-mod4-gp3_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Skin-ramimaher-mod1-sari_b6.0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-hd-ramimaher-mod1-sari_b6.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Edg-nemesis21-Skin-elgato-hd-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/skin-elgato-hd_nemesis21/enigma2-skin-elgato-hd_nemesis21_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-classicblackhd_icvs-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/gp3-skin-classicblackhd_icvs_gp3-r1_mipsel/gp-skin-classicblackhd_icvs_gp3-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Skin-ramimaher_6.0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/skin-b-ramimaher_6.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Skin-ramimaher_b4.0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/ramiMAHER_skin/enigma2-skin-hd-ramimaher_b4.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-Skin-modern-stone2-xd_v2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/Modern_Stone2_XD/Modern_Stone2_XD.tar.gz</url>
+        </plugin>
+        <plugin name = "Gp3-Skin-modern-stone2-xd_v1.1-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/skin_moder_stones/enigma2-skin-modern-stone2-xd_v1.1-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "HD_Glass_14_V4.08 ( compatible with GP3 GP2 5.10 not included )">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/HD_Glass_14_V4.08/enigma2-skin-hd-glass14_4.08_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Edg-nemesis2.2-HD_Glass_14_V5.01-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/HD_Glass_14_V5.01_nemesis_only/enigma2-skin-hd-glass14_5.01_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "HD_Glass_16_V3.13-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/HD_Glass_16_V3.13/enigma2-skin-hdglass16_3.13_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "HD_Glass_14_V2.99 ( GP2 5.10 included )">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Skins/HD_Glass_14_V2.99/enigma2-skin-hd-glass14_2.99_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Basic-hd_1.4.5-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/enigma2-plugin-skin-basic-hd_1.4.5-r0_mipsel/enigma2-plugin-skin-basic-hd_1.4.5-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Vali-xd_experimental-cvs20100531-rs20100531-r0_all-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/skins/enigma2-skin-vali-xd_experimental-cvs20100531-r0_all/enigma2-skin-vali-xd_experimental-cvs20100531-r0_all.ipk</url>
+        </plugin>
+        <plugin name = "Gp3-skin-nemesis.glassline_v2.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/Skins/gp-skin-nemesis.glassline/gp-skin-nemesis.glassline_v2.0_20110203-r0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Bootlogos">
+        <plugin name = "Logo-pli-city_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/enigma2-logos/enigma2-logo-pli-city_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-gp3-rocks_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/enigma2-logos/enigma2-logo-gp3-rocks_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-newnigma_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-newnigma_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-gp3-hand_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-gp3-hand_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-skeleton_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-skeleton_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Sleeping-beauty-hd_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-sleeping-beauty-hd_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-tunisiasat_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-tunisiasat_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Logo-edg-nemesis-hd4_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-edg-nemesis-hd4_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dreambox-logo-butterfly2_2.0_dm800-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/dreambox-logo-butterfly2_2.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Logo-eagle_2.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/enigma2-logo-eagle_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dreambox-logo-avatar-gp3_2.0_dm800-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/logos/logo-new/dreambox-logo-avatar-gp3_2.0_dm800.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Spinners">
+        <plugin name = "Spinner-manutd_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/spinner-manutd_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-domica-eagle_1.0_dm800-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-domica-eagle_1.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-white-bird_1.0_dm800-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-white-bird_1.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-switch-off_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-switch-off_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-porto-invader_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-porto-invader_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-homer_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-homer_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-hallaween_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-hallaween_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-fledarmause-bat_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-fledarmause-bat_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-christmas1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-christmas1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-christmas10_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-christmas10_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-blitz-flash_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-blitz-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-bart_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-bart_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-baby1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-baby1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-abschalten-switch-off_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-abschalten-switch-off_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-penguine1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-penguine1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-nabilo_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-nabilo_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-moneky_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-moneky_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-matrix_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-matrix_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-fan_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-fan_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-elephant_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-elephant_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-dino_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-dino_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-coupe1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-coupe1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-clown_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-clown_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-cat_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-cat_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-ball_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-ball_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-baby2_06.05.2011-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-baby2_06.05.2011_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-gear_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-gear_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-dolphin1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-dolphin1_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Spinner-baby1_1.0-p">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Spinners/spinners_collection/enigma2-spinner-baby1_1.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Picon_HD">
+        <plugin name = "piconHD_Astra_19.2E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-astra-19.2e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Astra_23.5E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-astra-23.5e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Astra_28.2E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-astra-28.2e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Badr_26E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-badr-26e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Eurobird_16E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-eurobird-16e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Eutelsat_W3A_7.0E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-eutelsat-w3e-7e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_HellasSat2_39E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-hellasat2-39e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Hispasat_30W_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-hispasat-30w-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Hotbird_13E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-hotbird-13e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Nilesat_7W_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-nilesat-7w-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Sirius_4.8E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-sirius-4.8e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Thor_0.8W_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-thor-0.8w-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Turksat_42E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Flash/picon-hd-turksat-42e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Astra_19.2E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-astra-19.2e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Astra_23.5E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-astra-23.5e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Astra_28.2E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-astra-28.2e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Eurobird_9E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-eurobird-9e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Eutelsat_W3A_7.0E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-eutelsat-w3a-7.0e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Hispasat_30W_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-hispasat-30w-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Hotbird_13E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-hotbird-13e-flash_1.1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Sirius_4.8E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-sirius-4.8e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Thor_0.8W_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-thor-0.8w-flash_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "piconHD_Golden_Nugget_Turksat_42.0E_Flash">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Picon/piconHD_100x60_Golden_Nugget_Flash/picon-hd-golden-nugget-turksat-42e-flash_1.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Tools">
+        <plugin name = "Dmm-dreamelite2-extra-downloader-setup-working_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Dreamelite/extra/ddm-dreamelite2-extra-downloader-setup-working_3.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Fix-mediaplayer-mfaraj_2.0-pli-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tools/mediaplayer-fix/fix-mediaplayer-mfaraj_2.0_mipsel-pli.ipk</url>
+        </plugin>
+        <plugin name = "Fix-mediaplayer-avi-all_2.0-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tools/mediaplayer-fix/fix-mediaplayer-avi-all_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Wirelesslan_1.0_fix_dm800-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tools/wlan-fix/enigma2-plugin-systemplugins-wirelesslan_1.0_fix_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Webinterface-patch-mfaraj_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Others/webinterface-patch/webinterface-patch-mfaraj_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Softwaremanager-fix_1.0-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tools/softwareManager-fix/enigma2-tool-softwaremanager-fix_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Vlcplayer-fixed-mfaraj_2.0-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/plugins/vlc-player/vlcplayer-fixed-mfaraj_2.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Edg-nemesis-extra-downloader-setup_2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/extra-url/edg-nemesis-extra-downloader-setup_2.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-feed_0.3">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-feed_0.3_mipsel/gp-cam-feed_0.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Blackhole-feed-configs_1.0-r0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/dreambox-feed-configs_1.0-r0_dm800/dreambox-feed-configs_1.0-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Sifteam-cams-server-mfaraj_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Sifteam/sifteam-cams-server/sifteam-cams-server-mfaraj_1.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Settings">
+        <plugin name = "Isettings_Vhannibal_OE1.6-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Plugins/Isettings_Vhannibal_OE1.6/enigma2-plugins-isettings-vhannibal-oe16.ipk</url>
+        </plugin>
+        <plugin name = "Settings-Nilesat-16-6-2011-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Settings/settings-files/mah.tar.bz2</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Language">
+        <plugin name = "Language-pack-english_1.0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Language/language-pack-english/enigma2-language-pack-english_1.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Language-pack_2_default-persian">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Language/enigma2-language-pack_1-default-persian/enigma2-language-pack_2-dm800-20110417_persian.ipk</url>
+        </plugin>
+        <plugin name = "Language-pack_1_default">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Language/language-pack_1-default/enigma2-language-pack_1-dm800-20110326_dm800.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Gemini3-Cams">
+        <plugin name = "Gp-cam-feed_0.3">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-feed_0.3_mipsel/gp-cam-feed_0.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-newcs_1.62-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-newcs_1.62-r0_mipsel/gp-conf-newcs_1.62-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-newcs_1.67-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-newcs_1.67-r1_mipsel/gp-cam-newcs_1.67-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-mgcamd_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-mgcamd_1.0-r0_mipsel/gp-conf-mgcamd_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-cccam_2.2.0-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-cccam_2.2.0-r1_mipsel/gp-conf-cccam_2.2.0-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-cccam-deutsch_3.1-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-cccam-deutsch_3.1-r1_mipsel/gp-conf-cccam-deutsch_3.1-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-mgcamd_1.35a-r3">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-mgcamd_1.35a-r3_mipsel/gp-cam-mgcamd_1.35a-r3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-mgcamd_1.35a-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-mgcamd_1.35a-r2_mipsel/gp-cam-mgcamd_1.35a-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-cccam_2.2.1-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-cccam_2.2.1-r1_mipsel/gp-cam-cccam_2.2.1-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-cccam_2.1.4-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-cccam_2.1.4-r2_mipsel/gp-cam-cccam_2.1.4-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-cccam_2.1.3-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-cccam_2.1.3-r2_mipsel/gp-cam-cccam_2.1.3-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-cccam_2.0.11-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-cccam_2.0.11-r2_mipsel/gp-cam-cccam_2.0.11-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Geminicccaminfo_1.01-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/geminicccaminfo_1.01-r0_mipsel/geminicccaminfo_1.01-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-scam_3.5-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-scam_3.5-r0_mipsel.ipk/gp-conf-scam_3.5-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-conf-oscam_0.99.4-r1">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-conf-oscam_0.99.4-r1_mipsel.ipk/gp-conf-oscam_0.99.4-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-scam_3.59-r2">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-scam_3.59-r2_mipsel/gp-cam-scam_3.59-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Gp-cam-oscam_1.00-svn4066-r0">
+            <url>http://www.tunisia-dreambox.info/e2-gp3-addons/cams/gp-cam-oscam_1.00-svn4066-r0_mipsel.ipk/gp-cam-oscam_1.00-svn4066-r0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Blackhole-Cams">
+        <plugin name = "Nabiloblackhole-addons_1.0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/Blackhole-addons/nabiloblackhole-addons_1.0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-gbox-config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-gbox-config/DE-enigma2-plugin-softcam-gbox-config.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-gbox-2.25">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-gbox-2.25/DE-enigma2-plugin-softcam-gbox-2.25.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-mgcamd-config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-mgcamd-config/DE-enigma2-plugin-softcam-mgcamd-config.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-mgcamd-1.35a">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-mgcamd-1.35a/DE-enigma2-plugin-softcam-mgcamd-1.35.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-cccam-config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-cccam-config/DE-enigma2-plugin-softcam-cccam-config.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-cccam-2.1.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-cccam-2.1.4/DE-enigma2-plugin-softcam-cccam-2.1.4.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-cccam-2.1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/DE-enigma2-plugin-softcam-cccam-2.1.1/DE-enigma2-plugin-softcam-cccam-2.1.1.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-cccam_2.21">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/De-enigma2-camd-cccam_2.21/enigma2-camd-cccam_2.21.ipk</url>
+        </plugin>
+        <plugin name = "DE-enigma2-plugin-softcam-cccam_2.20">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/De-enigma2-camd-cccam_2.20/enigma2-camd-cccam_2.20.ipk</url>
+        </plugin>
+        <plugin name = "Deamelite-wrong-image-in-flash-fix-mfaraj">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/dreamelite-wrong-image-in-flash-fix-mfaraj/dreamelite-wrong-image-in-flash-fix-mfaraj_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Blackhole-feed-configs_1.0-r0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Dreamelite/dreambox-feed-configs_1.0-r0_dm800/dreambox-feed-configs_1.0-r0_dm800.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Merlin-Excalibur-Cams">
+        <plugin name = "Cams-scam-3.55_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-scam-3.55_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cams-scam-3.54_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-scam-3.54_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cams-mgcamd-1.31_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-mgcamd-1.31_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cams-mbox-0.6_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-mbox-0.6_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cams-cccamd-2.1.3_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-cccamd-2.1.3_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cams-cccamd-2.0.11_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/other-cams/enigma2-cams-cccamd-2.0.11_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "enigma2-cams-mbox-0.6_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-mbox-0.6_1.0-r0/enigma2-cams-mbox-0.6_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "enigma2-cams-scam-3.59_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-scam-3.59_1.0-r0/enigma2-cams-scam-3.59_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "enigma2-cams-mgcamd-1.35a-oe1.6_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-mgcamd-1.35a-oe1.6_1.0-r0/enigma2-cams-mgcamd-1.35a-oe1.6_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "enigma2-cams-cccamd-2.1.4_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-cccamd-2.1.4_1.0-r0/enigma2-cams-cccamd-2.1.4_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "cams-cccamd-2.2.0_1.0-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-cccamd-2.2.0/enigma2-cams-cccamd-2.2.0_1.0-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "cams-cccamd-2.2.1_1.0-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Merlin-Excalibur/enigma2-cams-cccamd-2.2.1/enigma2-cams-cccamd-2.2.1_1.0-r1_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "OoZoon-Cams">
+        <plugin name = "Camd-cccam.2.011_2.3-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.011_2.3-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-oscam.config_1.0-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-oscam.config_1.0-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-oscam.0.99.4_2.4-r4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-oscam.0.99.4_2.4-r4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-mgcamd.config_1.1-r2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-mgcamd.config_1.1-r2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-mgcamd.1.35_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-mgcamd.1.35_2.4-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-mgcamd.1.31_2.4-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-mgcamd.1.31_2.4-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-mbox.config_1.0-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-mbox.config_1.0-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-mbox.0.4_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-mbox.0.4_2.4-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.config_1.1-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.config_1.1-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.1.4_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.1.4_2.4-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.1.3_2.4-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.1.3_2.4-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.1.2_2.3-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.1.2_2.3-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.1.1_2.3-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.1.1_2.3-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.1.0_2.3-r1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.1.0_2.3-r1_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.2.0_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.2.0_2.4-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-cccam.2.2.1_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-cccam.2.2.1_2.4-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "camd-scam.3.59_2.4-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Oozoon/oozoon-cams/enigma2-plugin-camd-scam.3.59_2.4-r0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Sifteam-Cams">
+        <plugin name = "Sifteam-cams-server-mfaraj_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Sifteam/sifteam-cams-server/sifteam-cams-server-mfaraj_1.0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_213-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Sifteam/cccam_213-r0/cccam_213-r0_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "oscam-93b_001-r5">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Sifteam/oscam-93b_001-r5/oscam-93b_001-r5_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Mgcamd_135-r0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-Sifteam/mgcamd_135-r0/mgcamd_135-r0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Dreamelite">
+        <plugin name = "New-dreamelite-extra-downloader-setup_1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Dreamelite/e2MGcamd_1.35a/e2MGcamd_1.35a.tbz2</url>
+        </plugin>
+        <plugin name = "Dmm-dreamelite2-extra-downloader-setup-working_3.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Dreamelite/extra/ddm-dreamelite2-extra-downloader-setup-working_3.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Edg-nemesis-cams">
+        <plugin name = "E2Scam_3.60.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Scam_3.60.tbz2</url>
+        </plugin>
+        <plugin name = "E2Scam_3.59.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Scam_3.59.tbz2</url>
+        </plugin>
+        <plugin name = "E2Sbox_0.0.4.8.2.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Sbox_0.0.4.8.2.tbz2</url>
+        </plugin>
+        <plugin name = "E2Sbox_0.0.4.7.4.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Sbox_0.0.4.7.4.tbz2</url>
+        </plugin>
+        <plugin name = "E2Oscam_r2601.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Oscam_r2601.tbz2</url>
+        </plugin>
+        <plugin name = "E2Oscam_r2412.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Oscam_r2412.tbz2</url>
+        </plugin>
+        <plugin name = "E2Oscam_r2354.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Oscam_r2354.tbz2</url>
+        </plugin>
+        <plugin name = "E2NewCS_2-Slot_1.67.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2NewCS_2-Slot_1.67.tbz2</url>
+        </plugin>
+        <plugin name = "E2NewCS_1-Slot_1.67.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2NewCS_1-Slot_1.67.tbz2</url>
+        </plugin>
+        <plugin name = "E2MGcamd_1.35a.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2MGcamd_1.35a.tbz2</url>
+        </plugin>
+        <plugin name = "E2Hypercam_2.09.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Hypercam_2.09.tbz2</url>
+        </plugin>
+        <plugin name = "E2GBox_2.25.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2GBox_2.25.tbz2</url>
+        </plugin>
+        <plugin name = "E2Camd3_3.902.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2Camd3_3.902.tbz2</url>
+        </plugin>
+        <plugin name = "E2CCcam_2.2.1.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2CCcam_2.2.1.tbz2</url>
+        </plugin>
+        <plugin name = "E2CCcam_2.1.3.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2CCcam_2.1.3.tbz2</url>
+        </plugin>
+        <plugin name = "CCcamInfo_1.3c.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/CCcamInfo_1.3c.tbz2</url>
+        </plugin>
+        <plugin name = "E2CCcam_2.1.2.tbz2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams/e2CCcam_2.1.2.tbz2</url>
+        </plugin>
+        <plugin name = "Scam.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Scam.tbz2</url>
+        </plugin>
+        <plugin name = "Sbox-2-Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Sbox-2-Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Sbox-1-Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Sbox-1-Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Oscam_v093B_2Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Oscam_v093B_2Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Oscam_v093B_1Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Oscam_v093B_1Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Oscam_v0919_2Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Oscam_v0919_2Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Oscam_v0919_1Slot.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Oscam_v0919_1Slot.tbz2</url>
+        </plugin>
+        <plugin name = "Mbox_v05.0xx.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Mbox_v05.0xx.tbz2</url>
+        </plugin>
+        <plugin name = "MGcamd_e2_v1.35_CS.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/MGcamd_e2_v1.35_CS.tbz2</url>
+        </plugin>
+        <plugin name = "G-Box_e2.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/G-Box_e2.tbz2</url>
+        </plugin>
+        <plugin name = "Camd3_All.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/Camd3_All.tbz2</url>
+        </plugin>
+        <plugin name = "CCcam_v2.2.1.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/CCcam_v2.2.1.tbz2</url>
+        </plugin>
+        <plugin name = "CCcam_v2.1.x-NewCS.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/CCcam_v2.1.x-NewCS.tbz2</url>
+        </plugin>
+        <plugin name = "CCcam_v2.1.x-NewCS-Smargo.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/CCcam_v2.1.x-NewCS-Smargo.tbz2</url>
+        </plugin>
+        <plugin name = "CCcam_v2.1.3.config">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/cams-config/CCcam_v2.1.3.tbz2</url>
+        </plugin>
+        <plugin name = "Edg-nemesis-extra-downloader-setup_2.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/edg-nemesis/extra-url/edg-nemesis-extra-downloader-setup_2.0_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Gemini2--cams-">
+        <plugin name = "E2-mipsel-scam_3.56_091207.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_Scam-3.56/e2-mipsel-scam_3.56_091207.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-opencam_2.1.1_091030.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_OpenCam-2.1.1/e2-mipsel-opencam_2.1.1_091030.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-oscam_0.99.4_svn818_091213.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_OSCam-0.99.4_rev.541/e2-mipsel-oscam_0.99.4_svn818_091213.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-newcs_1.67_091030.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_NewCS-1.67/e2-mipsel-newcs_1.67_091030.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-mgcamd_1.35a_100126.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_MgCamd-1.35a/e2-mipsel-mgcamd_1.35a_100126.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-mgcamd_1.31_091115.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_MgCamd-1.31/e2-mipsel-mgcamd_1.31_091115.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-mbox_0.6.0006_091030.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_Mbox-0.6.0006/e2-mipsel-mbox_0.6.0006_091030.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-evocamd_2.17_091030.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_Evocamd-2.17/e2-mipsel-evocamd_2.17_091030.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-camd3.908L_091030.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_Camd3.908L/e2-mipsel-camd3.908L_091030.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-CCcam_2.1.3_091123.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_CCcam-2.1.3/e2-mipsel-CCcam_2.1.3_091123.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-mipsel-CCcam_2.0.11_090526.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/new_mipsel_CCcam-2.0.11/e2-mipsel-CCcam_2.0.11_090526.tar.gz</url>
+        </plugin>
+        <plugin name = "Scam_3.59.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Scam-3.59/scam_3.59.tar.gz</url>
+        </plugin>
+        <plugin name = "Mgcamd_1.35a.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/MgCamd-1.35a/mgcamd_1.35a.tar.gz</url>
+        </plugin>
+        <plugin name = "E2_hypercam_2.09.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Hypercam_2.09/E2_hypercam_2.09.tar.gz</url>
+        </plugin>
+        <plugin name = "E2_hypercam_2.07.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Hypercam_2.07/E2_hypercam_2.07.tar.gz</url>
+        </plugin>
+        <plugin name = "E2_hypercam_2.06.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Hypercam_2.06/E2_hypercam_2.06.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-CCcam_2.2.1.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Cccam_2.2.1/e2-CCcam_2.2.1.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-CCcam_2.2.0.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Cccam_2.2.0/e2-CCcam_2.2.0.tar.gz</url>
+        </plugin>
+        <plugin name = "E2-CCcam_2.1.4.tar.gz">
+            <url>http://www.tunisia-dreambox.info/e2-addons/Cam/Cccam_2.1.4/e2-CCcam_2.1.4.tar.gz</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "LT-Cams">
+        <plugin name = "Cccam_2.0.11">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-2011_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-210_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-211_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-212_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-213_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-214_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.2.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-cccam-221_r1_all.ipk</url>
+        </plugin>
+        <plugin name = "Mgcamd_1.35a_Newcs_1.67">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LT/enigma2-ltcam-newcs1.67-mgcamd1.35a_r1_all.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "LS-Cams">
+        <plugin name = "Cccam_2.0.9">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LS/LS-cccam_r209.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.0.11">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LS/LS-cccam_r2.0.11.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.0">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LS/LS-cccam_r2.1.0.ipk</url>
+        </plugin>
+        <plugin name = "Cccam_2.1.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Cam-LS/LS-cccam_r2.1.1.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Barry-Allen">
+        <plugin name = "Barryallen_5.2.4">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.4/enigma2-plugin-extensions-barryallen_5.2.4_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.5">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.5/enigma2-plugin-extensions-barryallen_5.2.5_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.6">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.6/enigma2-plugin-extensions-barryallen_5.2.6_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.7">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.7/enigma2-plugin-extensions-barryallen_5.2.7_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.3">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.3/enigma2-plugin-extensions-barryallen_5.2.3_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.2">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barry-allen-5.2.2/enigma2-plugin-extensions-barryallen_5.2.2_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.1.54">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barryallen_5.1.54/enigma2-plugin-extensions-barryallen_5.1.54_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Barryallen_5.2.1">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Barry-Allen/barryallen_5.2.1/enigma2-plugin-extensions-barryallen_5.2.1_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "MeoBoot">
+        <plugin name = "Meoboot_096_dm8000">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Meoboot/meoboot_096_dm8000/meoboot_096_dm8000.ipk</url>
+        </plugin>
+        <plugin name = "Meoboot_096_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Meoboot/meoboot_096_dm800/meoboot_096_dm800.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Direct Flashing and Backup">
+        <plugin name = "Dflash_0.85">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.85_mipsel/enigma2-plugin-extensions-dflash_0.85_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.90">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.90_mipsel/enigma2-plugin-extensions-dflash_0.90_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.91">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.91_mipsel/enigma2-plugin-extensions-dflash_0.91_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.92">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.92_mipsel/enigma2-plugin-extensions-dflash_0.92_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.94">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.94_mipsel/enigma2-plugin-extensions-dflash_0.94_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.95">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.95_mipsel/enigma2-plugin-extensions-dflash_0.95_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.96">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.96_mipsel/enigma2-plugin-extensions-dflash_0.96_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.97">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.97_mipsel/enigma2-plugin-extensions-dflash_0.97_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.98">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.98_mipsel/enigma2-plugin-extensions-dflash_0.98_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.74">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.74/enigma2-plugin-extensions-dflash_0.74_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.66">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.66_mipsel/enigma2-plugin-extensions-dflash_0.66_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.59">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.59_mipsel/enigma2-plugin-extensions-dflash_0.59_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Dflash_0.61">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Direct-Flashing-Backup/enigma2-plugin-extensions-dflash_0.61_mipsel/enigma2-plugin-extensions-dflash_0.61_mipsel.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Drivers-original">
+        <plugin name = "ItalySatDTT-Downloader-Dreambox_0.5-b">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/general-drivers/ItalySatDTT-Downloader-Dreambox_0.5.ipk</url>
+        </plugin>
+        <plugin name = "Usbtuner_0.4.3b_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm800/usbtuner_0.4.3b_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Drivers_DM800se-06.05.2011-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm800se/dreambox-dvb-modules_2.6.18-7.4-dm800se-20110506-r0_dm800se.ipk</url>
+        </plugin>
+        <plugin name = "Drivers_DM8000HD-06.05.2011-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm8000/dreambox-dvb-modules_2.6.18-7.4-dm8000-20110506-r0_dm8000.ipk</url>
+        </plugin>
+        <plugin name = "Drivers_DM800HD-06.05.2011-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm800/dreambox-dvb-modules_2.6.18-7.4-dm800-20110506-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Drivers_DM500HD-06.05.2011-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm500hd/dreambox-dvb-modules_2.6.18-7.4-dm500hd-20110506-r0_dm500hd.ipk</url>
+        </plugin>
+        <plugin name = "Drivers_DM7025-06.05.2011-d">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-original/Dm7025/dreambox-dvb-modules_2.6.12.6-20110506-r0a_dm7025.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Drivers-sim201">
+        <plugin name = "Dreambox-dvb-modules-sim201-mfaraj_2.6.18-7.4-dm800-20110506-r0_dm800">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/dreambox-sim201-mfaraj_2.6.18-7.4-dm800-20110506-r0_dm800/dreambox-dvb-modules-sim201-mfaraj_2.6.18-7.4-dm800-20110506-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm800-sim201-20110504-mfaraj">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers-sim201-mfaraj_2.6.18-7.4-dm800-20110504-r0_dm800/dreambox-dvb-modules-sim201-mfaraj_2.6.18-7.4-dm800-20110504-r0_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm800-sim201-20110501-mfaraj">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers-sim201-dreambox-dvb-modules_2.6.18-7.4-dm800-20110501-r0-mfaraj57_dm800/sim201-dreambox-dvb-modules_2.6.18-7.4-dm800-20110501-r0-mfaraj57_dm800.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm800-sim201-20110309-rami">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers_2.6.18-7.4-dm800-20110309-ramiMAHER/drivers_2.6.18-7.4-dm800-20110309-ramiMAHER.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm80dm800-sim201-201103201-20110309-mfaraj">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers-sim201_2.6.18-7.4-dm800-20110309-r0_dm800/drivers-sim201_2.6.18-7.4-dm800-20110309-r0_mfaraj.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm800-sim201-20110215-rami">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers-ramimaher_2.6.18-7.4-dm800-20110215-r0_dm800_76d_mipsel/drivers-ramimaher_2.6.18-7.4-dm800-20110215-r0_dm800_76d_mipsel.ipk</url>
+        </plugin>
+        <plugin name = "Drivers-dm800-sim201-20110302-rami">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Drivers-sim201/drivers-ramimaher-sim201_2.6.18-7.4-dm800-20110302/drivers-ramimaher-sim201_2.6.18-7.4-dm800-20110302-r0_dm800.ipk</url>
+        </plugin>
+    </plugins>
+    <plugins cont = "Tutorials">
+        <plugin name = "Change-dm800-bootlogo">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tutorials/changelogo.txt</url>
+        </plugin>
+        <plugin name = "HowTo-install-ipkg">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tutorials/ipkinstall.txt</url>
+        </plugin>
+        <plugin name = "HowTo-build-ipkg-file">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tutorials/ipkmaker.txt</url>
+        </plugin>
+        <plugin name = "Solution-for-noisyfan">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tutorials/solution-for-noisyfan.txt</url>
+        </plugin>
+        <plugin name = "what-secondstage-i-have-in-my-dreambox">
+            <url>http://www.tunisia-dreambox.info/e2-addons-manager/Tutorials/what-secondstage-i-have-in-my-dreambox.txt</url>
+        </plugin>
+    </plugins>
+</xml>

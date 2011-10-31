@@ -1,0 +1,19 @@
+<skin>
+  <!-- LCD/OLED -->
+	<fonts>
+		<!-- pick a funky name for the font, so we don't conflict  -->
+		<font filename="md_khmurabi_10.ttf" name="md_khmurabi_10" scale="100"/>
+	</fonts>
+	<screen name="InfoBarSummary" position="0,0" size="132,64">
+		<widget source="global.CurrentTime" render="Label" position="0,0" size="132,64" font="md_khmurabi_10;44" halign="center" >
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget source="session.RecordState" render="FixedLabel" text="     A U F N A H M E" position="6,50" zPosition="1" size="122,14">
+			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget> 
+		<widget source="session.Event_Now" render="Progress" position="6,54" size="122,10" borderWidth="1" >
+			<convert type="EventTime">Progress</convert>
+		</widget>
+	</screen>
+</skin>
