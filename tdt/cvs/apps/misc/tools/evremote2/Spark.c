@@ -363,6 +363,16 @@ static int pInit(Context_t* context, int argc, char* argv[]) {
         return -1;
     }
 
+    if (argc >= 2)
+    {
+       cLongKeyPressSupport.period = atoi(argv[1]);
+    }
+    
+    if (argc >= 3)
+    {
+       cLongKeyPressSupport.delay = atoi(argv[2]);
+    }
+
     return vHandle;
 }
 
