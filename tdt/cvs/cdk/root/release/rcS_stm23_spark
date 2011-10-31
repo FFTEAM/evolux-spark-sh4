@@ -44,6 +44,20 @@ startVideoTuneEnhanced() {
 	fi
 }
 
+RCid=`grep -m1 config.plugins.PinkPanel.RCid /etc/enigma2/settings | cut -d = -f2`
+RCrd=`grep -m1 config.plugins.PinkPanel.RCrd /etc/enigma2/settings | cut -d = -f2`
+setEVREMOTE2() {
+	if [ ! -z "$RCid" ] && [ ! -z "$RCrd" ]; then
+		/bin/evremote2 $RCid $RCrd &
+	elif [ ! -z "$RCid" ] && [ -z "$RCrd" ]; then
+		/bin/evremote2 $RCid 120 &
+	elif [ -z "$RCid" ] && [ ! -z "$RCrd" ]; then
+		/bin/evremote2 10 $RCrd &
+	else
+		/bin/evremote2 10 120 &
+	fi
+}
+
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 
@@ -122,7 +136,8 @@ fi
    rm -f /dev/sparkid
    mknod /dev/sparkid c $major 0 
 
-   /bin/evremote2 05 30 &
+#   /bin/evremote2 05 30 &
+   setEVREMOTE2
    stfbcontrol a 255
 
    /etc/init.d/mountall start
