@@ -53,5 +53,5 @@ v1.8
 - SH4-Spark Cam-start/restart fixxed (dirty)
 - SH4-Spark-PP-MD-Skin fixxed
 v1.9
-- Spark RC delay add
+- Spark RC delay add (default 10 120)
 ####################################################
