@@ -12,24 +12,7 @@ $(DEPDIR)/min-misc-tools $(DEPDIR)/std-misc-tools $(DEPDIR)/max-misc-tools $(DEP
 $(DEPDIR)/%misc-tools: driver libstdc++-dev libdvdnav libdvdcss libpng jpeg ffmpeg $(appsdir)/misc/tools/config.status
 	$(MAKE) -C $(appsdir)/misc/tools all install DESTDIR=$(prefix)/$*cdkroot \
 	CPPFLAGS="\
-	$(if $(UFS910), -DPLATFORM_UFS910) \
-	$(if $(FLASH_UFS910), -DPLATFORM_FLASH_UFS910) \
-	$(if $(UFS912), -DPLATFORM_UFS912) \
-	$(if $(UFS922), -DPLATFORM_UFS922) \
-	$(if $(FORTIS_HDBOX), -DPLATFORM_FORTIS_HDBOX) \
-	$(if $(OCTAGON1008), -DPLATFORM_OCTAGON1008) \
-	$(if $(CUBEREVO), -DPLATFORM_CUBEREVO) \
-	$(if $(CUBEREVO_MINI), -DPLATFORM_CUBEREVO_MINI) \
-	$(if $(CUBEREVO_MINI2), -DPLATFORM_CUBEREVO_MINI2) \
-	$(if $(CUBEREVO_MINI_FTA), -DPLATFORM_CUBEREVO_MINI_FTA) \
-	$(if $(CUBEREVO_250HD), -DPLATFORM_CUBEREVO_250HD) \
-	$(if $(CUBEREVO_2000HD), -DPLATFORM_CUBEREVO_2000HD) \
-	$(if $(CUBEREVO_9500HD), -DPLATFORM_CUBEREVO_9500HD) \
-	$(if $(ATEVIO7500), -DPLATFORM_ATEVIO7500) \
-	$(if $(HS7810A), -DPLATFORM_HS7810A) \
-	$(if $(IPBOX9900), -DPLATFORM_IPBOX9900) \
-	$(if $(IPBOX99), -DPLATFORM_IPBOX99) \
-	$(if $(IPBOX55), -DPLATFORM_IPBOX55) \
+	$(if $(SPARK), -DPLATFORM_SPARK) \
 	$(if $(PLAYER131), -DPLAYER131) \
 	$(if $(PLAYER179), -DPLAYER179) \
 	$(if $(PLAYER191), -DPLAYER191) \
