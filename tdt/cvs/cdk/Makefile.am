@@ -20,11 +20,11 @@ include make/ipkg.mk
 include make/bootstrap.mk
 
 #  Include u-boot targets
-if ENABLE_TF7700
-include make/tf_u-boot.mk
-else
-include make/u-boot.mk
-endif
+#if ENABLE_TF7700
+#include make/tf_u-boot.mk
+#else
+#include make/u-boot.mk
+#endif
 
 # Include adapted etc files and etc read-write files
 include make/root-etc.mk
@@ -100,7 +100,7 @@ include make/record.mk
 include make/prog.mk
 
 # Include usb targets
-include make/flashybrid.mk
+#include make/flashybrid.mk
 
 # Include development targets
 include make/development.mk
