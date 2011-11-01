@@ -99,7 +99,6 @@ $(DEPDIR)/%release_neutrino:
 	cp $(buildprefix)/root/release/bootclean.sh $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/networking $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/getfb.awk $(prefix)/release_neutrino/etc/init.d/ && \
-	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/release_neutrino/boot/ && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release_neutrino/lib/ && \
 	rm -f $(prefix)/release_neutrino/lib/*.a && \
 	rm -f $(prefix)/release_neutrino/lib/*.o && \
@@ -418,39 +417,6 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino/
-
-#if ENABLE_FLASH_UFS910
-######### FOR FLASHBUILDING UFS-910 with mount -o bind /var/etc /etc #################
-#	rm $(prefix)/release_neutrino/boot/bootlogo.mvi
-#	cp -RP $(prefix)/release_neutrino/etc $(prefix)/release_neutrino/var/
-#	rm -rf $(prefix)/release_neutrino/etc
-#	mkdir -p $(prefix)/release_neutrino/etc/init.d
-#	cp -RP $(prefix)/release_neutrino/var/etc/init.d/{rcS,mountvirtfs} $(prefix)/release_neutrino/etc/init.d
-#	rm -rf $(prefix)/release_neutrino/var/etc/init.d/{rcS,mountvirtfs}
-#	mv $(prefix)/release_neutrino/var/etc/inittab $(prefix)/release_neutrino/etc/
-#	mkdir -p $(prefix)/release_neutrino/var/usr/local/share
-#	mv $(prefix)/release_neutrino/usr/local/share/config $(prefix)/release_neutrino/var/usr/local/share/
-#	mv $(prefix)/release_neutrino/usr/local/share/neutrino $(prefix)/release_neutrino/var/usr/local/share/
-#	( cd $(prefix)/release_neutrino/usr/local/share && ln -s /var/usr/local/share/config && ln -s /var/usr/local/share/neutrino && ln -s /var/usr/local/share/operations )
-#	rm -rf $(prefix)/release_neutrino/tuxbox
-#	( cd $(prefix)/release_neutrino/ && ln -s /var/tuxbox )
-#	rm -rf $(prefix)/release_neutrino/lib/tuxbox
-#	( cd $(prefix)/release_neutrino/lib && ln -s /var/tuxbox )
-#	rm -rf $(prefix)/release_neutrino/share/tuxbox
-#	( cd $(prefix)/release_neutrino/share && ln -s /var/tuxbox )
-#	mv $(prefix)/release_neutrino/media $(prefix)/release_neutrino/var/
-#	mv $(prefix)/release_neutrino/hdd $(prefix)/release_neutrino/var/
-#	mv $(prefix)/release_neutrino/mnt $(prefix)/release_neutrino/var/
-#	( cd $(prefix)/release_neutrino/ && ln -s /var/media && ln -s /var/mnt && ln -s /var/hdd )
-#	( cd $(prefix)/release_neutrino/dev && sudo tar -xzvf dev_neutrino.tar.gz && sudo chmod 777 -R $(prefix)/release_neutrino/dev )
-#	rm $(prefix)/release_neutrino/dev/dev_neutrino.tar.gz
-#	rm $(prefix)/release_neutrino/var/etc/.firstboot
-#	rm $(prefix)/release_neutrino/sbin/{fsck.nfs,fsck.ext2,fsck.ext3,killall5,sfdisk}
-#	rm $(prefix)/release_neutrino/bin/{showiframe,stslave,tfd2mtd,tffpctl}
-#	rm $(prefix)/release_neutrino/usr/bin/showiframe
-#	( cd $(prefix)/release_neutrino/sbin && ln -sf mke2fs mkfs.ext2 && ln -sf mke2fs mkfs.ext3 )
-#	( cd $(prefix)/release_neutrino/bin && ln -sf busybox pidof )
-#endif
 
 	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino/boot/
 

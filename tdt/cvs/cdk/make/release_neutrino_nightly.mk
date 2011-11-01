@@ -122,7 +122,6 @@ $(DEPDIR)/%release_neutrino_nightly:
 	cp $(buildprefix)/root/release/bootclean.sh $(prefix)/$(release_dir)/etc/init.d/ && \
 	cp $(buildprefix)/root/release/networking $(prefix)/$(release_dir)/etc/init.d/ && \
 	cp $(buildprefix)/root/release/getfb.awk $(prefix)/$(release_dir)/etc/init.d/ && \
-	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/$(release_dir)/boot/ && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/$(release_dir)/lib/
 #
 #

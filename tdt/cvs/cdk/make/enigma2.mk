@@ -65,7 +65,6 @@ $(DEPDIR)/enigma2-misc:
 	$(INSTALL_FILE) root/etc/tuxbox/terrestrial.xml $(targetprefix)/etc/tuxbox/ && \
 	$(INSTALL_FILE) root/etc/tuxbox/timezone.xml $(targetprefix)/etc/tuxbox/ && \
 	$(INSTALL_DIR) $(targetprefix)/boot && \
-	$(INSTALL_FILE) root/bootscreen/bootlogo.mvi $(targetprefix)/boot/ && \
 	$(INSTALL_DIR) $(targetprefix)/media/{hdd,dvd} && \
 	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
 	$(INSTALL_DIR) $(targetprefix)/usr/tuxtxt && \
