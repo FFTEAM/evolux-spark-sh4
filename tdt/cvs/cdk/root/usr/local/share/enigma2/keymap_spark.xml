@@ -104,6 +104,8 @@
 		<key id="KEY_REWIND" mapto="historyBack" flags="mr" />
 		<key id="KEY_FASTFORWARD" mapto="historyNext" flags="mr" />
 		<key id="KEY_OK" mapto="openServiceList" flags="m" />
+		<key id="KEY_RIGHT" mapto="nextBouquet" flags="m" />
+		<key id="KEY_LEFT" mapto="prevBouquet" flags="m" />
 	</map>
 	
 	<map context="MinuteInputActions">
@@ -173,7 +175,7 @@
 	<map context="InfobarActions">
 		<key id="KEY_PLAY" mapto="showMovies" flags="m" />
 		<key id="KEY_ARCHIVE" mapto="showMovies" flags="m" />
-		<key id="KEY_BLUE" mapto="toogleTvRadio" flags="m" />
+		<key id="KEY_BLUE" mapto="pinkpanel" flags="m" />
 		<key id="KEY_TV2" mapto="toogleTvRadio" flags="m" />
 
     <key id="KEY_RIGHT" mapto="volumeUp" flags="mr" />
@@ -195,6 +197,12 @@
 	<map context="InfobarAspectSelectionActions">
 		<key id="KEY_GREEN" mapto="aspectSelection" flags="m" />
 		<key id="KEY_SUBTITLE" mapto="aspectSelection" flags="m" />
+	</map>
+
+	<map context="InfobarSubserviceSelectionActions">
+		<key id="KEY_GREEN" mapto="subserviceSelection" flags="b" />
+		<key id="KEY_VOLUMEUP" mapto="volumeUp" flags="mr" />
+		<key id="KEY_VOLUMEDOWN" mapto="volumeDown" flags="mr" /> 
 	</map>
 
 	<map context="InfobarSubserviceQuickzapActions">
@@ -327,8 +335,8 @@
 		<key id="KEY_YELLOW" mapto="showProviders" flags="m" />
 		<key id="KEY_BLUE" mapto="showFavourites" flags="m" />
 		<key id="KEY_FAVORITES" mapto="showFavourites" flags="m" />
-		<key id="KEY_REWIND" mapto="prevBouquet" flags="m" />
-		<key id="KEY_FASTFORWARD" mapto="nextBouquet" flags="m" />
+		<key id="KEY_LEFT" mapto="prevBouquet" flags="m" />
+                <key id="KEY_RIGHT" mapto="nextBouquet" flags="m" />
 	</map>
 
 	<map context="ChannelSelectEPGActions">
