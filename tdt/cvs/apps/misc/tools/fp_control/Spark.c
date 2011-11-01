@@ -32,7 +32,7 @@
 #include <sys/ioctl.h>
 
 #include "global.h"
-#include "Vip2.h"
+#include "Spark.h"
 
 static int Spark_setText(Context_t* context, char* theText);
 
