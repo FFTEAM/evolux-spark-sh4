@@ -80,35 +80,14 @@ $(DEPDIR)/%release_neutrino_nightly:
 	cp -dp $(targetprefix)/sbin/sfdisk $(prefix)/$(release_dir)/sbin/ && \
 	cp -dp $(targetprefix)/sbin/tune2fs $(prefix)/$(release_dir)/sbin/ && \
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/$(release_dir)/sbin/ && \
-	cp -dp $(targetprefix)/sbin/MAKEDEV$(if $(TF7700),_dual_tuner)$(if $(FORTIS_HDBOX),_dual_tuner)$(if $(ATEVIO7500),_dual_tuner)$(if $(CUBEREVO),_dual_tuner)$(if $(CUBEREVO_9500HD),_dual_tuner)$(if $(UFS922),_dual_tuner)$(if $(CUBEREVO_MINI_FTA),_no_CI)$(if $(CUBEREVO_250HD),_no_CI)$(if $(CUBEREVO_2000HD),_no_CI) $(prefix)/$(release_dir)/sbin/MAKEDEV && \
 	cp -dp $(targetprefix)/usr/sbin/vsftpd $(prefix)/$(release_dir)/usr/bin/ && \
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/$(release_dir)/sbin/ && \
 	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/$(release_dir)/sbin/ && \
 	cp $(targetprefix)/boot/uImage $(prefix)/$(release_dir)/boot/ && \
 	cp $(targetprefix)/boot/video_7100.elf $(prefix)/$(release_dir)/boot/video.elf && \
-	$(if $(UFS910),cp -dp $(targetprefix)/etc/lircd.conf $(prefix)/$(release_dir)/etc/ &&) \
-	$(if $(TF7700),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(HL101),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(VIP1_V2),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(VIP2_V1),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(UFS912),cp $(targetprefix)/boot/video_7111.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(SPARK),cp $(targetprefix)/boot/video_7111.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(SPARK7162),cp $(targetprefix)/boot/video_7105.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(UFS922),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_MINI),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_MINI2),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_MINI_FTA),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_250HD),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_2000HD),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(CUBEREVO_9500HD),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(FORTIS_HDBOX),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(ATEVIO7500),cp $(targetprefix)/boot/video_7105.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
-	$(if $(OCTAGON1008),cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf &&) \
+	cp $(targetprefix)/boot/video_7111.elf $(prefix)/$(release_dir)/boot/video.elf && \
 	cp $(targetprefix)/boot/audio.elf $(prefix)/$(release_dir)/boot/audio.elf && \
-	$(if $(UFS912),cp $(targetprefix)/boot/audio_7111.elf $(prefix)/$(release_dir)/boot/audio.elf &&) \
-	$(if $(SPARK),cp $(targetprefix)/boot/audio_7111.elf $(prefix)/$(release_dir)/boot/audio.elf &&) \
-	$(if $(SPARK7162),cp $(targetprefix)/boot/audio_7105.elf $(prefix)/$(release_dir)/boot/audio.elf &&) \
+	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/$(release_dir)/boot/audio.elf && \
 	cp -a $(targetprefix)/dev/* $(prefix)/$(release_dir)/dev/ && \
 	cp -dp $(targetprefix)/etc/fstab $(prefix)/$(release_dir)/etc/ && \
 	cp -dp $(targetprefix)/etc/group $(prefix)/$(release_dir)/etc/ && \
@@ -148,12 +127,10 @@ $(DEPDIR)/%release_neutrino_nightly:
 #
 #
 #
-if !STM22
-	cp $(buildprefix)/root/release/rcS_stm23_neutrino$(if $(TF7700),_$(TF7700))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(UFS922),_$(UFS922))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(UFS912),_$(UFS912))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/$(release_dir)/etc/init.d/rcS
-else
-	cp $(buildprefix)/root/release/rcS_neutrino$(if $(TF7700),_$(TF7700))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(UFS922),_$(UFS922))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD)) $(prefix)/$(release_dir)/etc/init.d/rcS
-endif
+if STM23
+	cp $(buildprefix)/root/release/rcS_stm23_neutrino$(if $(SPARK),_$(SPARK)) $(prefix)/$(release_dir)/etc/init.d/rcS
 	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rcS
+endif
 #
 #
 #
@@ -162,114 +139,7 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/simu_button/simu_button.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/$(release_dir)/lib/modules
-	$(if $(UFS922),cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/ufs922_fan/fan_ctrl.ko $(prefix)/$(release_dir)/lib/modules/)
 
-if ENABLE_TF7700
-	echo "tf7700" > $(prefix)/$(release_dir)/etc/hostname
-#   remove the slink to busybox
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp -f $(targetprefix)/sbin/shutdown $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/halt_tf7700 $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/tffp/tffp.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-	cp -f $(buildprefix)/root/release/fstab_tf7700 $(prefix)/$(release_dir)/etc/fstab
-
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_UFS922
-	echo "ufs922" > $(prefix)/$(release_dir)/etc/hostname
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/halt_ufs $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/ftdi_sio.ko $(prefix)/$(release_dir)/lib/modules/ftdi.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/pl2303.ko $(prefix)/$(release_dir)/lib/modules
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/usbserial.ko $(prefix)/$(release_dir)/lib/modules
-
-else
-if ENABLE_UFS912
-	echo "ufs912" > $(prefix)/$(release_dir)/etc/hostname
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/boot/video_7111.elf $(prefix)/$(release_dir)/boot/video.elf
-	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/$(release_dir)/boot/audio.elf
-	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/$(release_dir)/usr/sbin/
-	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/$(release_dir)/etc/
-	mv $(prefix)/$(release_dir)/lib/firmware/component_7111_mb618.fw $(prefix)/$(release_dir)/lib/firmware/component.fw
-	rm $(prefix)/$(release_dir)/lib/firmware/component_7105_pdk7105.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
 if ENABLE_SPARK
 	echo "spark" > $(prefix)/$(release_dir)/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
@@ -283,187 +153,6 @@ if ENABLE_SPARK
 	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
 	rm -f $(prefix)/$(release_dir)/bin/evremote
 	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_SPARK7162
-	echo "spark7162" > $(prefix)/$(release_dir)/etc/hostname
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/boot/video_7105.elf $(prefix)/$(release_dir)/boot/video.elf
-	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/$(release_dir)/boot/audio.elf
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_HL101
-	echo "hl101" > $(prefix)/$(release_dir)/etc/hostname
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/proton/proton.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_VIP1_V2
-	echo "Edision" > $(prefix)/$(release_dir)/etc/hostname
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/proton/proton.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_VIP2_V1
-	echo "Edision" > $(prefix)/$(release_dir)/etc/hostname
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-	rm -f $(prefix)/$(release_dir)/bin/gotosleep
-else
-if ENABLE_FORTIS_HDBOX
-	echo "fortis" > $(prefix)/$(release_dir)/etc/hostname
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp $(buildprefix)/root/release/halt_fortis_hdbox $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 777 $(prefix)/$(release_dir)/etc/init.d/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/nuvoton/nuvoton.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-if STM23
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/ftdi_sio.ko $(prefix)/$(release_dir)/lib/modules/ftdi.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/pl2303.ko $(prefix)/$(release_dir)/lib/modules
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/usbserial.ko $(prefix)/$(release_dir)/lib/modules
-endif
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-else
-if ENABLE_ATEVIO7500
-	echo "atevio7500" > $(prefix)/$(release_dir)/etc/hostname
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp $(buildprefix)/root/release/halt_fortis_hdbox $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 777 $(prefix)/$(release_dir)/etc/init.d/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/nuvoton/nuvoton.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/boot/video_7105.elf $(prefix)/$(release_dir)/boot/video.elf
-	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/$(release_dir)/boot/audio.elf
-	mv $(prefix)/$(release_dir)/lib/firmware/component_7105_pdk7105.fw $(prefix)/$(release_dir)/lib/firmware/component.fw
-	rm $(prefix)/$(release_dir)/lib/firmware/component_7111_mb618.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-else
-if ENABLE_OCTAGON1008
-	echo "octagon1008" > $(prefix)/$(release_dir)/etc/hostname
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp $(buildprefix)/root/release/halt_octagon1008 $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 777 $(prefix)/$(release_dir)/etc/init.d/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/nuvoton/nuvoton.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/boot/video_7109.elf $(prefix)/$(release_dir)/boot/video.elf
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/$(release_dir)/bin/evremote
-else
-	rm -f $(prefix)/$(release_dir)/sbin/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/$(release_dir)/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/$(release_dir)/etc/init.d/
-	cp $(buildprefix)/root/release/halt_ufs $(prefix)/$(release_dir)/etc/init.d/halt
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/umountfs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/rc
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/sendsigs
-	chmod 755 $(prefix)/$(release_dir)/etc/init.d/halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/$(release_dir)/etc/rc.d
-	ln -fs halt $(prefix)/$(release_dir)/sbin/reboot
-	ln -fs halt $(prefix)/$(release_dir)/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/$(release_dir)/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/$(release_dir)/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/$(release_dir)/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/button/button.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/led/led.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd/vfd.ko $(prefix)/$(release_dir)/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7100.ko $(prefix)/$(release_dir)/lib/modules/
-	rm -f $(prefix)/$(release_dir)/lib/firmware/dvb-fe-cx21143.fw
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
 endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmfb.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko $(prefix)/$(release_dir)/lib/modules/
@@ -471,19 +160,13 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshm/embxshm.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/mme/mme_host.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/$(release_dir)/lib/modules/
-if !ENABLE_ATEVIO7500
+
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/$(release_dir)/lib/modules/
-else
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/$(release_dir)/lib/modules/
-endif
+
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_compress.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_decompress.ko $(prefix)/$(release_dir)/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/$(release_dir)/lib/modules/
-if !ENABLE_SPARK
-if !ENABLE_SPARK7162
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cic/*.ko $(prefix)/$(release_dir)/lib/modules/
-endif
-endif
+
 if ENABLE_PLAYER131
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti/pti.ko $(prefix)/$(release_dir)/lib/modules/
 #	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti_np/pti.ko $(prefix)/$(release_dir)/lib/modules/
@@ -577,37 +260,6 @@ if ENABLE_PLAYER191
 	done
 endif
 
-if ENABLE_TF7700
-#	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-	cp -p $(buildprefix)/root/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-endif
-
-if ENABLE_UFS910
-	cp -dp $(buildprefix)/root/etc/lircd.conf $(prefix)/$(release_dir)/etc/
-	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-	cp -dp $(targetprefix)/usr/lib/liblirc* $(prefix)/$(release_dir)/usr/lib/
-#	cp -p $(buildprefix)/root/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-endif
-
-if ENABLE_HL101
-	cp -dp $(buildprefix)/root/etc/lircd_hl101.conf $(prefix)/$(release_dir)/etc/lircd.conf
-	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-	cp -dp $(targetprefix)/usr/lib/liblirc* $(prefix)/$(release_dir)/usr/lib/
-#	cp -p $(buildprefix)/root/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-endif
-if ENABLE_VIP1_V2
-	cp -dp $(buildprefix)/root/etc/lircd_vip1_v2.conf $(prefix)/$(release_dir)/etc/lircd.conf
-	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-	cp -dp $(targetprefix)/usr/lib/liblirc* $(prefix)/$(release_dir)/usr/lib/
-#	cp -p $(buildprefix)/root/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-endif
-if ENABLE_VIP2_V1
-	cp -dp $(buildprefix)/root/etc/lircd_vip2_v1.conf $(prefix)/$(release_dir)/etc/lircd.conf
-	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-	cp -dp $(targetprefix)/usr/lib/liblirc* $(prefix)/$(release_dir)/usr/lib/
-#	cp -p $(buildprefix)/root/usr/bin/lircd $(prefix)/$(release_dir)/usr/bin/
-endif
-
 	cp -p $(targetprefix)/usr/bin/killall $(prefix)/$(release_dir)/usr/bin/
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/$(release_dir)/usr/sbin/
 
@@ -685,9 +337,7 @@ endif
 #
 # del/strip
 #
-if STM22
-	rm $(prefix)/$(release_dir)/lib/modules/p2div64.ko
-endif
+
 	rm -rf $(prefix)/$(release_dir)/lib/modules/$(KERNELVERSION)
 	rm -rf $(prefix)/$(release_dir)/usr/lib/alsa-lib
 	rm -rf $(prefix)/$(release_dir)/usr/lib/alsaplayer
