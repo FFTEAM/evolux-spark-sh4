@@ -11,12 +11,9 @@ SUBDIRS = \
 	streamproxy \
 	stfbcontrol \
 	ustslave \
-	tffpctl \
-	tfd2mtd \
 	gitVCInfo \
 	hotplug \
 	libcoolstream \
 	vfdctl \
 	libmme_host \
-	libmmeimage \
-	ipbox_eeprom
+	libmmeimage
