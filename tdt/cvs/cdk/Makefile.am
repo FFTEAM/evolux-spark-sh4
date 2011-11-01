@@ -23,7 +23,7 @@ include make/bootstrap.mk
 #if ENABLE_TF7700
 #include make/tf_u-boot.mk
 #else
-#include make/u-boot.mk
+include make/u-boot.mk
 #endif
 
 # Include adapted etc files and etc read-write files
