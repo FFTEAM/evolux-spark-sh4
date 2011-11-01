@@ -42,13 +42,10 @@ showiframe/Makefile
 stfbcontrol/Makefile
 streamproxy/Makefile
 ustslave/Makefile
-tffpctl/Makefile
-tfd2mtd/Makefile
 gitVCInfo/Makefile
 hotplug/Makefile
 libcoolstream/Makefile
 vfdctl/Makefile
 libmme_host/Makefile
 libmmeimage/Makefile
-ipbox_eeprom/Makefile
 ])
