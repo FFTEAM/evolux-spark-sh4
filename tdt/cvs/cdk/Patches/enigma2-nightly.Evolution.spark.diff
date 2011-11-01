@@ -1,0 +1,143 @@
+--- enigma2-nightly.org/data/menu.xml	2011-10-30 11:06:40.252808194 +0100
++++ enigma2-nightly/data/menu.xml	2011-10-30 11:06:28.448749659 +0100
+@@ -18,7 +18,7 @@
+ 		<!--<item text="CI"><screen module="Ci" screen="CiSelection" /></item>-->
+ 		<!--<item text="Radio"><code>print "radio mode"</code></item>-->
+ 		<item level="0" text="Timer" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
+-		<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
++		<!--<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>-->
+ 
+ 		<menu level="0" text="Information" entryID="info_screen">
+ 			<id val="information" />
+@@ -64,7 +64,7 @@
+ 				<item level="0" text="Network" entryID="network_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection" /></item>
+ 				<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection" /></item>
+ 				<item requires="Display"><setup level="1" id="lcd" /></item>
+-				<item text="Keyboard"><setup id="keyboard" /></item>
++				<!--<item text="Keyboard"><setup id="keyboard" /></item>-->
+ 				<!--<menu level="1" text="Network..." entryID="network_setup">
+ 					<id val="network" />
+ 					<item level="1" text="Device Setup..." entryID="device_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection"/></item>
+@@ -72,7 +72,7 @@
+ 				</menu>-->
+ 				<item level="2" text="Recording paths" entryId="RecordPaths"><screen module="RecordPaths" screen="RecordPathsSettings" /></item>
+ 			</menu>
+-			<item weight="10" level="1" text="Common Interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection" /></item>
++			<!--<item weight="10" level="1" text="Common Interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection" /></item>-->
+ 			<item weight="15" level="0" text="Parental control" entryID="parental_setup"><screen module="ParentalControlSetup" screen="ParentalControlSetup" /></item>
+ 			<!--item level="0" text="Startwizard" entryID="startwizzard"><screen module="StartWizard" screen="StartWizard" /></item-->
+ 			<item weight="25" level="0" text="Factory reset" entryID="factory_reset">
+
+--- enigma2-nightly.org/lib/python/Screens/About.py	2011-10-09 16:27:00.873040403 +0200
++++ enigma2-nightly/lib/python/Screens/About.py	2011-10-09 16:26:44.828960832 +0200
+@@ -12,7 +12,7 @@
+ 		Screen.__init__(self, session)
+ 
+ 		self["EnigmaVersion"] = StaticText("Enigma: " + about.getEnigmaVersionString())
+-		self["ImageVersion"] = StaticText("Image: " + about.getImageVersionString())
++		self["ImageVersion"] = StaticText("Evolution: " + about.getImageVersionString())
+ 
+ 		self["TunerHeader"] = StaticText(_("Detected NIMs:"))
+
+--- enigma2-nightly.org/lib/python/Components/Language.py	2011-10-07 19:08:57.371873384 +0200
++++ enigma2-nightly/lib/python/Components/Language.py	2011-10-07 19:09:07.563923919 +0200
+@@ -15,33 +15,9 @@
+ 		# also, see "precalcLanguageList" below on how to re-create the language cache after you added a language
+ 		self.addLanguage(_("English"), "en", "EN")
+ 		self.addLanguage(_("German"), "de", "DE")
+-		self.addLanguage(_("Arabic"), "ar", "AE")
+-		self.addLanguage(_("Catalan"), "ca", "AD")
+-		self.addLanguage(_("Croatian"), "hr", "HR")
+-		self.addLanguage(_("Czech"), "cs", "CZ")
+-		self.addLanguage(_("Danish"), "da", "DK")
+-		self.addLanguage(_("Dutch"), "nl", "NL")
+-		self.addLanguage(_("Estonian"), "et", "EE")
+-		self.addLanguage(_("Finnish"), "fi", "FI")
+-		self.addLanguage(_("French"), "fr", "FR")
+-		self.addLanguage(_("Greek"), "el", "GR")
+-		self.addLanguage(_("Hungarian"), "hu", "HU")
+-		self.addLanguage(_("Lithuanian"), "lt", "LT")
+-		self.addLanguage(_("Latvian"), "lv", "LV")
+-		self.addLanguage(_("Icelandic"), "is", "IS")
+-		self.addLanguage(_("Italian"), "it", "IT")
+ 		self.addLanguage(_("Norwegian"), "no", "NO")
+ 		self.addLanguage(_("Polish"), "pl", "PL")
+-		self.addLanguage(_("Portuguese"), "pt", "PT")
+ 		self.addLanguage(_("Russian"), "ru", "RU")
+-		self.addLanguage(_("Serbian"), "sr", "YU")
+-		self.addLanguage(_("Slovakian"), "sk", "SK")
+-		self.addLanguage(_("Slovenian"), "sl", "SI")
+-		self.addLanguage(_("Spanish"), "es", "ES")
+-		self.addLanguage(_("Swedish"), "sv", "SE")
+-		self.addLanguage(_("Turkish"), "tr", "TR")
+-		self.addLanguage(_("Ukrainian"), "uk", "UA")
+-		self.addLanguage(_("Frisian"), "fy", "x-FY") # there is no separate country for frisian
+ 
+ 		self.callbacks = []
+
+--- enigma2-nightly.org/lib/python/Screens/InfoBar.py	2011-10-03 23:01:44.000000000 +0200
++++ enigma2-nightly/lib/python/Screens/InfoBar.py	2011-10-04 15:26:13.818571915 +0200
+@@ -53,7 +53,10 @@
+ #+++>
+ 				"toogleTvRadio": (self.toogleTvRadio, _("toggels betwenn tv and radio...")), 
+ 				"volumeUp": (self._volUp, _("...")), 
+-				"volumeDown": (self._volDown, _("...")), 
++				"volumeDown": (self._volDown, _("...")),
++# ------------------ Extra-Menu Patch Blue----------------
++				"pinkpanel": (self.callPinkPanelBlue, _("view PinkPanel...")),
++# ------------------ Extra-Menu Patch Blue----------------
+ #+++<
+ 			}, prio=2)
+ 		
+@@ -91,7 +94,13 @@
+ 		from Components.config import config, ConfigSubsection, ConfigInteger
+ 		config.audio = ConfigSubsection()
+ 		config.audio.volume = ConfigInteger(default = 100, limits = (0, 100))
+-		
++# ------------------ Extra-Menu Patch Blue----------------
++	def callPinkPanelBlue(self):
++                from Plugins.Extensions.PinkPanel.plugin import PinkPanelMenu, PinkPanelButton
++	        PinkPanelButton(self,"blue")
++		self.session.open(PinkPanelMenu)
++                PinkPanelButton(self,"")
++# ------------------ Extra-Menu Patch Blue----------------		
+ 	def volHide(self):
+ 		self.volumeDialog.hide()
+
+--- enigma2-nightly.org/lib/python/Screens/InfoBarGenerics.py	2011-10-03 23:01:44.000000000 +0200
++++ enigma2-nightly/lib/python/Screens/InfoBarGenerics.py	2011-10-04 20:39:10.978171232 +0200
+@@ -328,6 +328,8 @@
+ 				"zapDown": (self.zapDown, _("next channel")),
+ 				"historyBack": (self.historyBack, _("previous channel in history")),
+ 				"historyNext": (self.historyNext, _("next channel in history")),
++				"prevBouquet": (self.prevBouquet, _("previous bouquet")),
++				"nextBouquet": (self.nextBouquet, _("next bouquet")),
+ 				"openServiceList": (self.openServiceList, _("open servicelist")),
+ 			})
+ 
+@@ -366,6 +368,16 @@
+ 	def openServiceList(self):
+ 		self.session.execDialog(self.servicelist)
+ 
++	def prevBouquet(self):
++		if self.servicelist.inBouquet():
++			self.servicelist.prevBouquet()
++			self.servicelist.zap()
++
++	def nextBouquet(self):
++		if self.servicelist.inBouquet():
++			self.servicelist.nextBouquet()
++			self.servicelist.zap()
++
+ 	def zapUp(self):
+ 		if self.servicelist.inBouquet():
+ 			prev = self.servicelist.getCurrentSelection()
+@@ -2290,7 +2302,6 @@
+ 			eDVBServicePMTHandler.eventNoResources: _("No free tuner!"),
+ 			eDVBServicePMTHandler.eventTuneFailed: _("Tune failed!"),
+ 			eDVBServicePMTHandler.eventNoPAT: _("No data on transponder!\n(Timeout reading PAT)"),
+-			eDVBServicePMTHandler.eventNoPATEntry: _("Service not found!\n(SID not found in PAT)"),
+ 			eDVBServicePMTHandler.eventNoPMT: _("Service invalid!\n(Timeout reading PMT)"),
+ 			eDVBServicePMTHandler.eventNewProgramInfo: None,
+ 			eDVBServicePMTHandler.eventTuned: None,
+
