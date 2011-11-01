@@ -66,7 +66,7 @@ include make/plugins.mk
 include make/stock.mk
 
 # Include enigma gui targets
-include make/enigma.mk
+#include make/enigma.mk
 
 # Include enigma2 gui targets
 include make/enigma2.mk
@@ -78,11 +78,11 @@ include make/enigma2-nightly.mk
 include make/neutrino.mk
 
 # Include vdr gui targets
-include make/vdr.mk
-include make/vdrdev.mk
+#include make/vdr.mk
+#include make/vdrdev.mk
 
 # Include enigma1-hd gui targets
-include make/enigma1-hd.mk
+#include make/enigma1-hd.mk
 
 # Essential, and some less essential, libraries
 #include make/tuxbox_libs.mk
@@ -115,32 +115,32 @@ include make/misc-specs.mk
 
 # flash_parts-[root]-[cramfs,squashfs,jffs2,all]
 # Expand all flash targets containg the word "all"
-include make/flash-expand-targets.mk
+#include make/flash-expand-targets.mk
 
 # Create complete images ("without u-boot bootloader stuff")
-include make/fullimages.mk
+#include make/fullimages.mk
 
 # Create update images
-include make/partition-update-images.mk
+#include make/partition-update-images.mk
 
 # Create images of the root and var file systems
-include make/partition-images.mk
+#include make/partition-images.mk
 
 # Create root and var filesystems, ready for image creation
-include make/flashable-dirs.mk
+#include make/flashable-dirs.mk
 
 # Strip libraries of symbols not needed.
 include make/reduce-libs.mk
 
 # Create the root file systems for jffs2-only, cramfs, and squashfs
 # images (containing kernel modules but not GUI)
-include make/flashroot-fs.mk
+#include make/flashroot-fs.mk
 
 # Create the root file system, without kernel and GUI (be aware of RW_FILES)
-include make/flashroot.mk
+#include make/flashroot.mk
 
 # Create partition und update partition images from given directories
-include make/helper-images.mk
+#include make/helper-images.mk
 
 # A number of cleaning targets
 include make/cleantargets.mk
@@ -161,9 +161,9 @@ include make/release_neutrino.mk
 
 include make/release_neutrino_nightly.mk
 
-include make/release_vdr.mk
+#include make/release_vdr.mk
 
-include make/release_enigma1_hd.mk
+#include make/release_enigma1_hd.mk
 
 # New static folder
 include make/release_neutrino_static.mk
@@ -174,4 +174,4 @@ include make/release_neutrino_static.mk
 -include ./Makefile.local
 
 # installer image for TF7700
-include make/tfinstaller.mk
+#include make/tfinstaller.mk
