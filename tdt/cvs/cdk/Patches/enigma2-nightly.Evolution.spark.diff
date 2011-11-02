@@ -141,3 +141,39 @@
  			eDVBServicePMTHandler.eventNewProgramInfo: None,
  			eDVBServicePMTHandler.eventTuned: None,
 
+--- enigma2-nightly.org/lib/python/Components/Harddisk.py	2011-11-02 14:06:14.129546161 +0100
++++ enigma2-nightly/lib/python/Components/Harddisk.py	2011-11-02 14:05:59.077471517 +0100
+@@ -471,18 +471,12 @@
+ #---<
+ #+++>
+ DEVICEDB =  \
+-	{"ufs910":
++	{"spark":
+ 		{
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.4/1-1.4:1.0": "Front USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0": "Back, lower USB Slot",
+-		},
+-	"UFS922":
+-		{
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.1/1-1.1:1.0/": "Back, upper USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0/": "Back, lower USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0/": "Front USB Slot",
+-		}	
++			"/devices/platform/st-usb.0/stm-ehci.0/usb1/1-1/1-1:1.0": "USB Slot"
++#			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
++#			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0": "Back, lower USB Slot",
++		}
+ 	}
+ #+++<
+ 
+@@ -609,7 +603,7 @@
+ 		l = len(device)
+ 		if l and not device[l-1].isdigit():
+ 			error, blacklisted, removable, is_cdrom, partitions, medium_found = self.getBlockDevInfo(device)
+-			if not blacklisted and not removable and not is_cdrom and medium_found:
++			if not blacklisted and not is_cdrom and medium_found:
+ 				self.hdd.append(Harddisk(device))
+ 				self.hdd.sort()
+ 				SystemInfo["Harddisk"] = len(self.hdd) > 0
+
