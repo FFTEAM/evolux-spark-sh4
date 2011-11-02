@@ -117,7 +117,7 @@
 		<widget backgroundColor="background" font="Regular;22" foregroundColor="foreground" valign="center" halign="center" position="180,394" render="Label" size="600,28" source="session.CurrentService" transparent="1" zPosition="3">
 			<convert type="PPInfoBar">AllInc</convert>
 		</widget>
-		<widget backgroundColor="background" font="Regular;12" foregroundColor="foreground" valign="center" halign="right" position="760,399" render="Label" size="185,14" source="global.CurrentTime" transparent="1" zPosition="3">
+		<widget backgroundColor="background" font="Regular;12" foregroundColor="foreground" valign="center" halign="right" position="740,399" render="Label" size="205,14" source="global.CurrentTime" transparent="1" zPosition="3">
 			<convert type="ClockToText">Date</convert>
 		</widget>
 		<widget backgroundColor="background" font="Regular;22" foregroundColor="foreground" valign="center" halign="center" position="800,419" render="Label" size="145,24" source="global.CurrentTime" transparent="1" zPosition="3">
