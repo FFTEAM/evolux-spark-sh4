@@ -400,7 +400,7 @@ self.instance.move(ePoint((1024-wsizex)/2, (576-wsizey)/(count &gt; 7 and 2 or 3
 	
 	<!-- ########## Setup ########## -->
 	<screen name="Console" position="62,76" size="900,450" title="Command execution...">
-		<widget font="Console;16" name="text" position="5,12" size="890,440"/>
+		<widget font="Regular;16" name="text" position="5,12" size="890,440"/>
 	</screen>
 	
 	<screen name="Setup" backgroundColor="background" flags="wfNoBorder" position="62,76" size="900,450" title="Setup">
