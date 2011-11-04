@@ -625,3 +625,15 @@
  	}
  	cleanTimer->start(CLEAN_INTERVAL,true);
  }
+
+--- enigma2-nightly.org/timer.py	2011-11-04 21:21:56.894924727 +0100
++++ enigma2-nightly/timer.py	2011-11-05 00:11:57.722043611 +0100
+@@ -201,7 +201,7 @@
+ 	
+ 	def setNextActivation(self, when):
+ 		delay = int((when - time()) * 1000)
+-		print "[timer.py] next activation: %d (in %d ms)" % (when, delay)
++		#print "[timer.py] next activation: %d (in %d ms)" % (when, delay)
+ 		
+ 		self.timer.start(delay, 1)
+ 		self.next = when
