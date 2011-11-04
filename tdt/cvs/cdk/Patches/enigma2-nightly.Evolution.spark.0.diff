@@ -143,46 +143,23 @@
 
 --- enigma2-nightly.org/lib/python/Components/Harddisk.py	2011-11-02 14:06:14.129546161 +0100
 +++ enigma2-nightly/lib/python/Components/Harddisk.py	2011-11-02 14:05:59.077471517 +0100
-@@ -1,13 +1,26 @@
--from os import system, listdir, statvfs, popen, makedirs, stat, major, minor, path, access
--from Tools.Directories import SCOPE_HDD, resolveFilename
-+#--->
-+#-from os import system, listdir, statvfs, popen, makedirs, stat, major, minor, path, access
-+#-from Tools.Directories import SCOPE_HDD, resolveFilename
-+#---<
-+#+++>
-+from os import system, listdir, statvfs, popen, makedirs, stat, major, minor, path, access, readlink, remove, path as os_path
-+from Tools.Directories import SCOPE_HDD, resolveFilename, removeDir
-+#+++<
- from Tools.CList import CList
- from SystemInfo import SystemInfo
- import time
- from Components.Console import Console
--
+@@ -22,30 +22,29 @@
+ 	return procFile
+ #+++<
+ 
 -def MajorMinor(path):
 -	rdev = stat(path).st_rdev
 -	return (major(rdev),minor(rdev))
-+#+++>
-+from enigma import eConsoleAppContainer, evfd
-+import os
-+
-+def tryOpen(filename):
-+	try:
-+		procFile = open(filename)
-+	except IOError:
-+		return ""
-+	return procFile
-+#+++<
- 
+-
  def readFile(filename):
  	file = open(filename)
-@@ -15,20 +28,23 @@
+ 	data = file.read().strip()
  	file.close()
  	return data
  
 -DEVTYPE_UDEV = 0
 -DEVTYPE_DEVFS = 1
--
+-	
  class Harddisk:
 +	DEVTYPE_UDEV = 0
 +	DEVTYPE_DEVFS = 1
@@ -210,7 +187,7 @@
  		self.max_idle_time = 0
  		self.idle_running = False
  		self.timer = None
-@@ -37,11 +53,11 @@
+@@ -54,11 +53,11 @@
  		self.disk_path = ''
  		self.phys_path = path.realpath(self.sysfsPath('device'))
  
@@ -224,7 +201,7 @@
  			tmp = readFile(self.sysfsPath('dev')).split(':')
  			s_major = int(tmp[0])
  			s_minor = int(tmp[1])
-@@ -64,9 +80,9 @@
+@@ -81,9 +80,9 @@
  		return self.device < ob.device
  
  	def partitionPath(self, n):
@@ -236,7 +213,7 @@
  			return self.dev_path + '/part' + n
  
  	def sysfsPath(self, filename):
-@@ -79,9 +95,9 @@
+@@ -96,9 +95,9 @@
  
  	def bus(self):
  		# CF (7025 specific)
@@ -248,7 +225,7 @@
  			ide_cf = self.device[:2] == "hd" and "host0" not in self.dev_path
  
  		internal = "pci" in self.phys_path
-@@ -129,20 +145,18 @@
+@@ -146,20 +145,18 @@
  
  		for line in lines:
  			parts = line.strip().split(" ")
@@ -276,7 +253,7 @@
  			try:
  				devdir = listdir('/dev')
  			except OSError:
-@@ -151,7 +165,7 @@
+@@ -168,7 +165,7 @@
  				if filename.startswith(self.device):
  					numPart += 1
  
@@ -285,7 +262,7 @@
  			try:
  				idedir = listdir(self.dev_path)
  			except OSError:
-@@ -174,23 +188,25 @@
+@@ -191,28 +188,25 @@
  
  		cmd = "umount"
  
@@ -296,55 +273,35 @@
 -                                continue                                                                    
 -                        try:                                                                                
 -                                if MajorMinor(real_path) == MajorMinor(self.partitionPath(real_path[-1])):
--					cmd = ' ' . join([cmd, parts[1]])
++		for line in lines:
++			parts = line.strip().split(" ")
++			if path.realpath(parts[0]).startswith(self.dev_path):
+ #--->			
+-#-					cmd = ' ' . join([cmd, parts[1]])
++#-				cmd = ' ' . join([cmd, parts[1]])
+ #---<
+ #+++>
+-					cmd = ' -fl ' . join([cmd, parts[1]])
++				cmd = ' -fl ' . join([cmd, parts[1]])
+ #+++<
 -					break
 -			except OSError:
 -				pass
 -
-+		for line in lines:
-+			parts = line.strip().split(" ")
-+			if path.realpath(parts[0]).startswith(self.dev_path):
-+#--->			
-+#-				cmd = ' ' . join([cmd, parts[1]])
-+#---<
-+#+++>
-+				cmd = ' -fl ' . join([cmd, parts[1]])
-+#+++<
  		res = system(cmd)
  		return (res >> 8)
  
  	def createPartition(self):
--		cmd = 'printf "8,\n;0,0\n;0,0\n;0,0\ny\n" | sfdisk -f -uS ' + self.disk_path
 +#--->
 +#-		cmd = 'printf "0,\n;\n;\n;\ny\n" | sfdisk -f ' + self.disk_path
 +#---<
 +#+++>
-+		cmd = 'echo "0,\n;\n;\n;\ny\n" | sfdisk -f ' + self.disk_path
+ 		cmd = 'echo "0,\n;\n;\n;\ny\n" | sfdisk -f ' + self.disk_path
 +#+++<
  		res = system(cmd)
  		return (res >> 8)
  
-@@ -199,7 +215,18 @@
- 		if self.diskSize() > 4 * 1024:
- 			cmd += "-T largefile "
- 		cmd += "-m0 -O dir_index " + self.partitionPath("1")
--		res = system(cmd)
-+#--->
-+#-		res = system(cmd)
-+#---<
-+#+++>
-+		print "[Harddisk] mkfs: ", cmd
-+		if os.path.exists("/sbin/cmd") is True:
-+			self.container = eConsoleAppContainer()
-+			self.container.execute("/sbin/cmd " + cmd)
-+			res = 0
-+		else:	
-+			res = system(cmd)
-+#+++<
- 		return (res >> 8)
- 
- 	def mount(self):
-@@ -214,16 +241,10 @@
+@@ -247,16 +241,10 @@
  		res = -1
  		for line in lines:
  			parts = line.strip().split(" ")
@@ -365,32 +322,27 @@
  
  		return (res >> 8)
  
-@@ -238,7 +259,18 @@
- 		# We autocorrect any failures
- 		# TODO: we could check if the fs is actually ext3
- 		cmd = "fsck.ext3 -f -p " + self.partitionPath("1")
--		res = system(cmd)
-+#--->
-+#-		res = system(cmd)
-+#---<
-+#+++>		
-+		print "[Harddisk] fsck: ", cmd
-+		if os.path.exists("/sbin/cmd") is True:
-+			self.container = eConsoleAppContainer()
-+			self.container.execute("/sbin/cmd " + cmd)
-+			res = 0
-+		else:	
-+			res = system(cmd)
-+#+++<
- 		return (res >> 8)
- 
- 	def killPartition(self, n):
-@@ -413,49 +445,46 @@
+@@ -457,52 +445,46 @@
  				return True
  		return False
  
 -DEVICEDB_SR = \
 -	{"dm8000":
+-		{
+-			"/devices/pci0000:01/0000:01:00.0/host0/target0:0:0/0:0:0:0": _("DVD Drive"),
+-			"/devices/pci0000:01/0000:01:00.0/host1/target1:0:0/1:0:0:0": _("DVD Drive"),
+-			"/devices/platform/brcm-ehci-1.1/usb2/2-1/2-1:1.0/host3/target3:0:0/3:0:0:0": _("DVD Drive"),
+-		},
+-	"dm800":
+-	{
+-	},
+-	"dm7025":
+-	{
+-	}
+-	}
+-
+-DEVICEDB = \
+-	{"ufs910":
 +#--->
 +#-DEVICEDB =  \
 +#-	{"dm8000":
@@ -419,27 +371,9 @@
 +DEVICEDB =  \
 +	{"spark":
  		{
--			"/devices/pci0000:01/0000:01:00.0/host0/target0:0:0/0:0:0:0": _("DVD Drive"),
--			"/devices/pci0000:01/0000:01:00.0/host1/target1:0:0/1:0:0:0": _("DVD Drive"),
--			"/devices/platform/brcm-ehci-1.1/usb2/2-1/2-1:1.0/host3/target3:0:0/3:0:0:0": _("DVD Drive"),
--		},
--	"dm800":
--	{
--	},
--	"dm7025":
--	{
--	}
--	}
--
--DEVICEDB = \
--	{"dm8000":
--		{
--			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.1/1-1.1:1.0": _("Front USB Slot"),
--			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.2/1-1.2:1.0": _("Back, upper USB Slot"),
--			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.3/1-1.3:1.0": _("Back, lower USB Slot"),
--			"/devices/platform/brcm-ehci.0/usb1/1-1/1-1.1/1-1.1:1.0": _("Front USB Slot"),
--			"/devices/platform/brcm-ehci-1.1/usb2/2-1/2-1:1.0/": _("Internal USB Slot"),
--			"/devices/platform/brcm-ohci-1.1/usb4/4-1/4-1:1.0/": _("Internal USB Slot"),
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.4/1-1.4:1.0": "Front USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0": "Back, lower USB Slot",
 -		},
 -	"dm800":
 -	{
@@ -449,7 +383,13 @@
 -	"dm7025":
 -	{
 -		"/devices/pci0000:00/0000:00:14.1/ide1/1.0": "CF Card Slot", #hdc
--		"/devices/pci0000:00/0000:00:14.1/ide0/0.0": "Internal Harddisk"
+-		"/devices/pci0000:00/0000:00:14.1/ide0/0.0": "Internal Harddisk",
+-	},
+-	"UFS922":
+-	{
+-		"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.1/1-1.1:1.0/": "Back, upper USB Slot",
+-		"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0/": "Back, lower USB Slot",
+-		"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0/": "Front USB Slot",
 -	}
 +			"/devices/platform/st-usb.0/stm-ehci.0/usb1/1-1/1-1:1.0": "USB Slot"
 +#			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
@@ -467,21 +407,7 @@
  
  		self.on_partition_list_change = CList()
  
-@@ -489,7 +518,12 @@
- 		try:
- 			removable = bool(int(readFile(devpath + "/removable")))
- 			dev = int(readFile(devpath + "/dev").split(':')[0])
--			if dev in (7, 31): # loop, mtdblock
-+#--->
-+#-			if dev in (7, 31): # loop, mtdblock
-+#---<
-+#+++>
-+			if dev in [1, 7, 31, 253]: # ram, loop, mtdblock, ramzswap
-+#+++<
- 				blacklisted = True
- 			if blockdev[0:2] == 'sr':
- 				is_cdrom = True
-@@ -523,23 +557,24 @@
+@@ -575,23 +557,24 @@
  	def enumerateBlockDevices(self):
  		print "enumerating block devices..."
  		for blockdev in listdir("/sys/block"):
@@ -519,18 +445,16 @@
  	def addHotplugPartition(self, device, physdev = None):
  		if not physdev:
  			dev, part = self.splitDeviceName(device)
-@@ -548,37 +583,30 @@
- 			except OSError:
- 				physdev = dev
- 				print "couldn't determine blockdev physdev for device", device
--
+@@ -608,36 +591,22 @@
+ 			#Automount(device,"mount")
+ #+++<		
+ 
 -		error, blacklisted, removable, is_cdrom, partitions, medium_found = self.getBlockDevInfo(device)
 -		print "found block device '%s':" % device,
 -
 -		if blacklisted:
 -			print "blacklisted"
-+#+++>		
- 		else:
+-		else:
 -			if error:
 -				print "error querying properties"
 -			elif not medium_found:
@@ -553,12 +477,6 @@
 -					p = Partition(mountpoint = self.getAutofsMountpoint(device), description = description, force_mounted = True, device = device)
 -					self.partitions.append(p)
 -					self.on_partition_list_change("add", p)
-+			dev, part = self.splitDeviceName(device)
-+		if part is not 0:
-+			print "[Harddisk] start automount"
-+			#Automount(device,"mount")
-+#+++<		
-+
 +		# device is the device name, without /dev
 +		# physdev is the physical device path, which we (might) use to determine the userfriendly name
 +		description = self.getUserfriendlyDeviceName(device, physdev)
@@ -579,20 +497,7 @@
  
  	def removeHotplugPartition(self, device):
  		mountpoint = self.getAutofsMountpoint(device)
-@@ -594,6 +622,12 @@
- 					self.hdd.remove(hdd)
- 					break
- 			SystemInfo["Harddisk"] = len(self.hdd) > 0
-+#+++>
-+		dev, part = self.splitDeviceName(device)
-+		if part is not 0:
-+			print "[Harddisk] start auto umount"
-+			#Automount(device,"umount")
-+#+++<
- 
- 	def HDDCount(self):
- 		return len(self.hdd)
-@@ -636,23 +670,15 @@
+@@ -701,23 +670,15 @@
  	def getUserfriendlyDeviceName(self, dev, phys):
  		dev, part = self.splitDeviceName(dev)
  		description = "External Storage %s" % dev
