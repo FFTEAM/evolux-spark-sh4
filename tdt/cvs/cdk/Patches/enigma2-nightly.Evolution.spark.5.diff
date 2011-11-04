@@ -177,3 +177,15 @@
  				self.hdd.sort()
  				SystemInfo["Harddisk"] = len(self.hdd) > 0
 
+--- enigma2-nightly.org/lib/python/Components/InputDevice.py	2011-11-04 23:16:03.373410299 +0100
++++ enigma2-nightly/lib/python/Components/InputDevice.py	2011-11-04 23:16:14.133463678 +0100
+@@ -40,7 +40,7 @@
+ 				self.name = self.name[:self.name.find("\0")]
+ 				os_close(self.fd)
+ 			except (IOError,OSError), err:
+-				print '[iInputDevices] getInputDevices  <ERROR: ioctl(EVIOCGNAME): ' + str(err) + ' >'
++				#print '[iInputDevices] getInputDevices  <ERROR: ioctl(EVIOCGNAME): ' + str(err) + ' >'
+ 				self.name = None
+ 			
+ 			if self.name:
+
