@@ -254,3 +254,26 @@
  		eDVBChannelID chid;
  		m_service.getChannelID(chid);
  		channel_data *data = getChannelData(chid);
+
+--- enigma2-nightly.org/lib/dvb/epgcache.cpp	2011-11-04 21:21:58.822934284 +0100
++++ enigma2-nightly/lib/dvb/epgcache.cpp	2011-11-04 23:54:06.868733562 +0100
+@@ -817,7 +817,7 @@
+ 	singleLock s(cache_lock);
+ 	if (!eventDB.empty())
+ 	{
+-		eDebug("[EPGC] start cleanloop");
++		//eDebug("[EPGC] start cleanloop");
+ 
+ 		time_t now = ::time(0);
+ 
+@@ -874,8 +874,8 @@
+ 			}
+ #endif
+ 		}
+-		eDebug("[EPGC] stop cleanloop");
+-		eDebug("[EPGC] %i bytes for cache used", eventData::CacheSize);
++		//eDebug("[EPGC] stop cleanloop");
++		//eDebug("[EPGC] %i bytes for cache used", eventData::CacheSize);
+ 	}
+ 	cleanTimer->start(CLEAN_INTERVAL,true);
+ }
