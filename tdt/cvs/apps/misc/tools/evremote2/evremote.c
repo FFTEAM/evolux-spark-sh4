@@ -379,10 +379,10 @@ int main (int argc, char* argv[])
 
     printf("Selected Remote: %s\n", ((RemoteControl_t*)context.r)->Name);
 
-    if(((RemoteControl_t*)context.r)->RemoteControl != NULL) {
+/*    if(((RemoteControl_t*)context.r)->RemoteControl != NULL) {
         printf("RemoteControl Map:\n");
         printKeyMap((tButton*)((RemoteControl_t*)context.r)->RemoteControl);
-    }
+    }*/
 
     if(((RemoteControl_t*)context.r)->Frontpanel != NULL) {
         printf("Frontpanel Map:\n");
