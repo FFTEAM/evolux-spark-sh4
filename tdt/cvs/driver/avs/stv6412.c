@@ -217,7 +217,7 @@ int stv6412_set_volume( struct i2c_client *client, int vol )
 //	{
 //		c--;
 //	}
-
+#if !defined(ADB_BOX)
 	if(c==63)
 		c=62;
 	if(c==0)
@@ -229,7 +229,7 @@ int stv6412_set_volume( struct i2c_client *client, int vol )
 	c /= 2;
 
 	stv6412_data.t_vol_c = c;
-
+#endif
 	return stv6412_set(client);
 }
 
@@ -555,11 +555,13 @@ int stv6412_src_sel( struct i2c_client *client, int src )
 	}
 	else if(src == SAA_SRC_SCART)
 	{
+	 #if !defined(ADB_BOX)
 	   stv6412_s_old_src = stv6412_data.t_vsc;
 	   stv6412_data.t_vsc = 4;
 	   stv6412_data.v_vsc = 0;
 	   stv6412_data.tc_asc = 2;
 	   stv6412_data.v_asc = 0;
+	#endif
   	}
   	else
 	{
