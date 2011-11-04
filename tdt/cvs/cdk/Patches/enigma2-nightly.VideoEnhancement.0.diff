@@ -1,0 +1,641 @@
+--- enigma2-nightly.org/lib/python/Plugins/SystemPlugins/VideoEnhancement/plugin.py	2011-10-07 20:15:05.000000000 +0200
++++ enigma2-nightly/lib/python/Plugins/SystemPlugins/VideoEnhancement/plugin.py	2011-10-27 07:32:28.000000000 +0200
+@@ -58,20 +58,20 @@
+ 		self.setTitle(_("Video enhancement setup"))
+ 
+ 	def rememberOldSettings(self):
+-		self.oldContrast = config.pep.contrast.value
+-		self.oldSaturation = config.pep.saturation.value
+-		self.oldHue = config.pep.hue.value
+-		self.oldBrightness = config.pep.brightness.value
+-		self.oldBlock_noise = config.pep.block_noise_reduction.value
+-		self.oldMosquito_noise = config.pep.mosquito_noise_reduction.value
+-		self.oldDigital_contour = config.pep.digital_contour_removal.value
++		self.oldContrast = config.psi.contrast.value
++		self.oldSaturation = config.psi.saturation.value
++		self.oldHue = config.psi.hue.value
++		self.oldBrightness = config.psi.brightness.value
++		self.oldBlock_noise = config.psi.block_noise_reduction.value
++		self.oldMosquito_noise = config.psi.mosquito_noise_reduction.value
++		self.oldDigital_contour = config.psi.digital_contour_removal.value
+ 		self.oldScaler_sharpness = config.av.scaler_sharpness.value
+-		self.oldSplit = config.pep.split.value
+-		self.oldSharpness = config.pep.sharpness.value
+-		self.oldAuto_flesh = config.pep.auto_flesh.value
+-		self.oldGreen_boost = config.pep.green_boost.value
+-		self.oldBlue_boost = config.pep.blue_boost.value
+-		self.oldDynamic_contrast = config.pep.dynamic_contrast.value
++		self.oldSplit = config.psi.split.value
++		self.oldSharpness = config.psi.sharpness.value
++		self.oldAuto_flesh = config.psi.auto_flesh.value
++		self.oldGreen_boost = config.psi.green_boost.value
++		self.oldBlue_boost = config.psi.blue_boost.value
++		self.oldDynamic_contrast = config.psi.dynamic_contrast.value
+ 
+ 	def addToConfigList(self, description, configEntry, add_to_xtdlist=False):
+ 		if isinstance(configEntry, ConfigNothing):
+@@ -86,21 +86,21 @@
+ 		self.list = []
+ 		self.xtdlist = []
+ 		addToConfigList = self.addToConfigList
+-		self.contrastEntry = addToConfigList(_("Contrast"), config.pep.contrast)
+-		self.saturationEntry = addToConfigList(_("Saturation"), config.pep.saturation)
+-		self.hueEntry = addToConfigList(_("Hue"), config.pep.hue)
+-		self.brightnessEntry = addToConfigList(_("Brightness"), config.pep.brightness)
++		self.contrastEntry = addToConfigList(_("Contrast"), config.psi.contrast)
++		self.saturationEntry = addToConfigList(_("Saturation"), config.psi.saturation)
++		self.hueEntry = addToConfigList(_("Hue"), config.psi.hue)
++		self.brightnessEntry = addToConfigList(_("Brightness"), config.psi.brightness)
+ 		self.scaler_sharpnessEntry = addToConfigList(_("Scaler sharpness"), config.av.scaler_sharpness)
+-		self.splitEntry = addToConfigList(_("Split preview mode"), config.pep.split, True)
++		self.splitEntry = addToConfigList(_("Split preview mode"), config.psi.split, True)
+ 		add_to_xtdlist = self.splitEntry is not None
+-		self.sharpnessEntry = addToConfigList(_("Sharpness"), config.pep.sharpness, add_to_xtdlist)
+-		self.auto_fleshEntry = addToConfigList(_("Auto flesh"), config.pep.auto_flesh, add_to_xtdlist)
+-		self.green_boostEntry = addToConfigList(_("Green boost"), config.pep.green_boost, add_to_xtdlist)
+-		self.blue_boostEntry = addToConfigList(_("Blue boost"), config.pep.blue_boost, add_to_xtdlist)
+-		self.dynamic_contrastEntry = addToConfigList(_("Dynamic contrast"), config.pep.dynamic_contrast, add_to_xtdlist)
+-		self.block_noise_reductionEntry = addToConfigList(_("Block noise reduction"), config.pep.block_noise_reduction, add_to_xtdlist)
+-		self.mosquito_noise_reductionEntry = addToConfigList(_("Mosquito noise reduction"), config.pep.mosquito_noise_reduction, add_to_xtdlist)
+-		self.digital_contour_removalEntry = addToConfigList(_("Digital contour removal"), config.pep.digital_contour_removal, add_to_xtdlist)
++		self.sharpnessEntry = addToConfigList(_("Sharpness"), config.psi.sharpness, add_to_xtdlist)
++		self.auto_fleshEntry = addToConfigList(_("Auto flesh"), config.psi.auto_flesh, add_to_xtdlist)
++		self.green_boostEntry = addToConfigList(_("Green boost"), config.psi.green_boost, add_to_xtdlist)
++		self.blue_boostEntry = addToConfigList(_("Blue boost"), config.psi.blue_boost, add_to_xtdlist)
++		self.dynamic_contrastEntry = addToConfigList(_("Dynamic contrast"), config.psi.dynamic_contrast, add_to_xtdlist)
++		self.block_noise_reductionEntry = addToConfigList(_("Block noise reduction"), config.psi.block_noise_reduction, add_to_xtdlist)
++		self.mosquito_noise_reductionEntry = addToConfigList(_("Mosquito noise reduction"), config.psi.mosquito_noise_reduction, add_to_xtdlist)
++		self.digital_contour_removalEntry = addToConfigList(_("Digital contour removal"), config.psi.digital_contour_removal, add_to_xtdlist)
+ 
+ 		self["config"].list = self.list
+ 		self["config"].l.setSeperation(300)
+@@ -126,7 +126,7 @@
+ 				self.splitEntry
+ 			]
+ 			maxvalue = current[1].max
+-			self.session.openWithCallback(self.PreviewClosed, VideoEnhancementPreview, configEntry = self.previewlist, oldSplitMode = config.pep.split.value, maxValue = maxvalue)
++			self.session.openWithCallback(self.PreviewClosed, VideoEnhancementPreview, configEntry = self.previewlist, oldSplitMode = config.psi.split.value, maxValue = maxvalue)
+ 		else:
+ 			self.previewlist = [
+ 				current
+@@ -144,7 +144,7 @@
+ 				self.splitEntry
+ 			]
+ 			maxvalue = current[1].max
+-			self.session.openWithCallback(self.PreviewClosed, VideoEnhancementPreview, configEntry = self.previewlist, oldSplitMode = config.pep.split.value, maxValue = maxvalue )
++			self.session.openWithCallback(self.PreviewClosed, VideoEnhancementPreview, configEntry = self.previewlist, oldSplitMode = config.psi.split.value, maxValue = maxvalue )
+ 		else:
+ 			self.previewlist = [
+ 				current
+@@ -157,7 +157,7 @@
+ 			print "not confirmed"
+ 		else:
+ 			if self.splitEntry is not None:
+-				config.pep.split.setValue('off')
++				config.psi.split.setValue('off')
+ 			self.keySave()
+ 
+ 	def apply(self):
+@@ -180,33 +180,33 @@
+ 			print "not confirmed"
+ 		else:
+ 			if self.contrastEntry is not None:
+-				config.pep.contrast.setValue(self.oldContrast)
++				config.psi.contrast.setValue(self.oldContrast)
+ 			if self.saturationEntry is not None:
+-				config.pep.saturation.setValue(self.oldSaturation)
++				config.psi.saturation.setValue(self.oldSaturation)
+ 			if self.hueEntry is not None:
+-				config.pep.hue.setValue(self.oldHue)
++				config.psi.hue.setValue(self.oldHue)
+ 			if self.brightnessEntry is not None:
+-				config.pep.brightness.setValue(self.oldBrightness)
++				config.psi.brightness.setValue(self.oldBrightness)
+ 			if self.block_noise_reductionEntry is not None:
+-				config.pep.block_noise_reduction.setValue(self.oldBlock_noise)
++				config.psi.block_noise_reduction.setValue(self.oldBlock_noise)
+ 			if self.mosquito_noise_reductionEntry is not None:
+-				config.pep.mosquito_noise_reduction.setValue(self.oldMosquito_noise)
++				config.psi.mosquito_noise_reduction.setValue(self.oldMosquito_noise)
+ 			if self.digital_contour_removalEntry is not None:
+-				config.pep.digital_contour_removal.setValue(self.oldDigital_contour)
++				config.psi.digital_contour_removal.setValue(self.oldDigital_contour)
+ 			if self.scaler_sharpnessEntry is not None:
+ 				config.av.scaler_sharpness.setValue(self.oldScaler_sharpness)
+ 			if self.splitEntry is not None:
+-				config.pep.split.setValue('off')
++				config.psi.split.setValue('off')
+ 			if self.sharpnessEntry is not None:
+-				config.pep.sharpness.setValue(self.oldSharpness)
++				config.psi.sharpness.setValue(self.oldSharpness)
+ 			if self.auto_fleshEntry is not None:
+-				config.pep.auto_flesh.setValue(self.oldAuto_flesh)
++				config.psi.auto_flesh.setValue(self.oldAuto_flesh)
+ 			if self.green_boostEntry is not None:
+-				config.pep.green_boost.setValue(self.oldGreen_boost)
++				config.psi.green_boost.setValue(self.oldGreen_boost)
+ 			if self.blue_boostEntry is not None:
+-				config.pep.blue_boost.setValue(self.oldBlue_boost)
++				config.psi.blue_boost.setValue(self.oldBlue_boost)
+ 			if self.dynamic_contrastEntry is not None:
+-				config.pep.dynamic_contrast.setValue(self.oldDynamic_contrast)
++				config.psi.dynamic_contrast.setValue(self.oldDynamic_contrast)
+ 			self.keySave()
+ 
+ 	def keyYellow(self):
+@@ -217,33 +217,33 @@
+ 			print "not confirmed"
+ 		else:
+ 			if self.contrastEntry is not None:
+-				config.pep.contrast.setValue(128)
++				config.psi.contrast.setValue(128)
+ 			if self.saturationEntry is not None:
+-				config.pep.saturation.setValue(128)
++				config.psi.saturation.setValue(128)
+ 			if self.hueEntry is not None:
+-				config.pep.hue.setValue(128)
++				config.psi.hue.setValue(128)
+ 			if self.brightnessEntry is not None:
+-				config.pep.brightness.setValue(128)
++				config.psi.brightness.setValue(128)
+ 			if self.block_noise_reductionEntry is not None:
+-				config.pep.block_noise_reduction.setValue(0)
++				config.psi.block_noise_reduction.setValue(0)
+ 			if self.mosquito_noise_reductionEntry is not None:
+-				config.pep.mosquito_noise_reduction.setValue(0)
++				config.psi.mosquito_noise_reduction.setValue(0)
+ 			if self.digital_contour_removalEntry is not None:
+-				config.pep.digital_contour_removal.setValue(0)
++				config.psi.digital_contour_removal.setValue(0)
+ 			if self.scaler_sharpnessEntry is not None:
+ 				config.av.scaler_sharpness.setValue(13)
+ 			if self.splitEntry is not None:
+-				config.pep.split.setValue('off')
++				config.psi.split.setValue('off')
+ 			if self.sharpnessEntry is not None:
+-				config.pep.sharpness.setValue(0)
++				config.psi.sharpness.setValue(0)
+ 			if self.auto_fleshEntry is not None:
+-				config.pep.auto_flesh.setValue(0)
++				config.psi.auto_flesh.setValue(0)
+ 			if self.green_boostEntry is not None:
+-				config.pep.green_boost.setValue(0)
++				config.psi.green_boost.setValue(0)
+ 			if self.blue_boostEntry is not None:
+-				config.pep.blue_boost.setValue(0)
++				config.psi.blue_boost.setValue(0)
+ 			if self.dynamic_contrastEntry is not None:
+-				config.pep.dynamic_contrast.setValue(0)
++				config.psi.dynamic_contrast.setValue(0)
+ 			self.keySave()
+ 
+ 	def keyBlue(self):
+@@ -312,7 +312,7 @@
+ 	def createSetup(self):
+ 		self.list = [ ]
+ 		if self.maxValue == 256:
+-			self.configStepsEntry = getConfigListEntry(_("Change step size"), config.pep.configsteps)
++			self.configStepsEntry = getConfigListEntry(_("Change step size"), config.psi.configsteps)
+ 
+ 		if self.configEntry is not None:
+ 			self.list = self.configEntry
+@@ -339,19 +339,19 @@
+ 
+ 	def keyLeft(self):
+ 		if self.isStepSlider is True:
+-			self["config"].getCurrent()[1].increment = config.pep.configsteps.value
++			self["config"].getCurrent()[1].increment = config.psi.configsteps.value
+ 		ConfigListScreen.keyLeft(self)
+ 
+ 	def keyRight(self):
+ 		if self.isStepSlider is True:
+-			self["config"].getCurrent()[1].increment = config.pep.configsteps.value
++			self["config"].getCurrent()[1].increment = config.psi.configsteps.value
+ 		ConfigListScreen.keyRight(self)
+ 
+ 	def keySave(self):
+ 		if self.oldSplitMode is not None:
+-			currentSplitMode = config.pep.split.value
++			currentSplitMode = config.psi.split.value
+ 			if self.oldSplitMode == 'off' and currentSplitMode != 'off':
+-				config.pep.split.setValue('off')
++				config.psi.split.setValue('off')
+ 			else:
+ 				pass
+ 		self.close()
+@@ -360,9 +360,9 @@
+ 		for x in self["config"].list:
+ 			x[1].cancel()
+ 		if self.oldSplitMode is not None:
+-			currentSplitMode = config.pep.split.value
++			currentSplitMode = config.psi.split.value
+ 			if self.oldSplitMode == 'off' and currentSplitMode != 'off':
+-				config.pep.split.setValue('off')
++				config.psi.split.setValue('off')
+ 			else:
+ 				pass
+ 		self.close()
+@@ -393,6 +393,6 @@
+ 
+ def Plugins(**kwargs):
+ 	list = []
+-	if config.usage.setup_level.index >= 2 and os_path.exists("/proc/stb/vmpeg/0/pep_apply"):
++	if config.usage.setup_level.index >= 2 and os_path.exists("/proc/stb/video/plane/psi_apply"):
+ 		list.append(PluginDescriptor(name=_("Videoenhancement Setup"), description=_("Advanced Video Enhancement Setup"), where = PluginDescriptor.WHERE_MENU, needsRestart = False, fnc=startSetup))
+ 	return list
+
+--- enigma2-nightly.org/lib/python/Plugins/SystemPlugins/VideoEnhancement/VideoEnhancement.py	2011-10-07 20:15:03.000000000 +0200
++++ enigma2-nightly/lib/python/Plugins/SystemPlugins/VideoEnhancement/VideoEnhancement.py	2011-10-27 07:32:24.000000000 +0200
+@@ -1,6 +1,6 @@
+ from Components.config import config, ConfigSubsection, ConfigSlider, ConfigSelection, ConfigNothing, NoSave
+ from Tools.CList import CList
+-from os import path as os_path
++from os import path as os_path, system
+ # The "VideoEnhancement" is the interface to /proc/stb/vmpeg/0.
+ 
+ class VideoEnhancement:
+@@ -11,244 +11,270 @@
+ 		self.createConfig()
+ 
+ 	def createConfig(self, *args):
+-		config.pep = ConfigSubsection()
+-		config.pep.configsteps = NoSave(ConfigSelection(choices=[1, 5, 10, 25], default = 1))
++		config.psi = ConfigSubsection()
++		config.psi.configsteps = NoSave(ConfigSelection(choices=[1, 5, 10, 25], default = 1))
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_contrast"):
++		if os_path.exists("/proc/stb/video/plane/psi_contrast"):
+ 			def setContrast(config):
+-				myval = int(config.value*256)
++				myval = int(config.value)
+ 				try:
+-					print "--> setting contrast to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_contrast", "w").write("%0.8X" % myval)
++					print "--> setting contrast to: %d" % myval
++					#open("/proc/stb/video/plane/psi_contrast", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_contrast) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_contrast."
++					print "couldn't write psi_contrast."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.contrast = ConfigSlider(default=128, limits=(0,256))
+-			config.pep.contrast.addNotifier(setContrast)
++			config.psi.contrast = ConfigSlider(default=128, limits=(0,256))
++			config.psi.contrast.addNotifier(setContrast)
+ 		else:
+-			config.pep.contrast = NoSave(ConfigNothing())
++			config.psi.contrast = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_saturation"):
++		if os_path.exists("/proc/stb/video/plane/psi_saturation"):
+ 			def setSaturation(config):
+-				myval = int(config.value*256)
++				myval = int(config.value)
+ 				try:
+-					print "--> setting saturation to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_saturation", "w").write("%0.8X" % myval)
++					print "--> setting saturation to: %d" % myval
++					#open("/proc/stb/video/plane/psi_saturation", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_saturation) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_saturaion."
++					print "couldn't write psi_saturaion."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.saturation = ConfigSlider(default=128, limits=(0,256))
+-			config.pep.saturation.addNotifier(setSaturation)
++			config.psi.saturation = ConfigSlider(default=128, limits=(0,256))
++			config.psi.saturation.addNotifier(setSaturation)
+ 		else:
+-			config.pep.saturation = NoSave(ConfigNothing())
++			config.psi.saturation = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_hue"):
++		if os_path.exists("/proc/stb/video/plane/psi_tint"):
+ 			def setHue(config):
+-				myval = int(config.value*256)
++				myval = int(config.value)
+ 				try:
+-					print "--> setting hue to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_hue", "w").write("%0.8X" % myval)
++					print "--> setting tint to: %d" % myval
++					#open("/proc/stb/video/plane/psi_hue", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_tint) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_hue."
++					print "couldn't write psi_tint."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.hue = ConfigSlider(default=128, limits=(0,256))
+-			config.pep.hue.addNotifier(setHue)
++			config.psi.hue = ConfigSlider(default=128, limits=(0,256))
++			config.psi.hue.addNotifier(setHue)
+ 		else:
+-			config.pep.hue = NoSave(ConfigNothing())
++			config.psi.hue = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_brightness"):
++		if os_path.exists("/proc/stb/video/plane/psi_brightness"):
+ 			def setBrightness(config):
+-				myval = int(config.value*256)
++				myval = int(config.value)
+ 				try:
+-					print "--> setting brightness to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_brightness", "w").write("%0.8X" % myval)
++					print "--> setting brightness to: %d" % myval
++					#open("/proc/stb/video/plane/psi_brightness", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_brightness) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_brightness."
++					print "couldn't write psi_brightness."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.brightness = ConfigSlider(default=128, limits=(0,256))
+-			config.pep.brightness.addNotifier(setBrightness)
++			config.psi.brightness = ConfigSlider(default=128, limits=(0,256))
++			config.psi.brightness.addNotifier(setBrightness)
+ 		else:
+-			config.pep.brightness = NoSave(ConfigNothing())
++			config.psi.brightness = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_block_noise_reduction"):
++		if os_path.exists("/proc/stb/video/plane/psi_block_noise_reduction"):
+ 			def setBlock_noise_reduction(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting block_noise_reduction to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_block_noise_reduction", "w").write("%0.8X" % myval)
++					print "--> setting block_noise_reduction to: %d" % myval
++					#open("/proc/stb/video/plane/psi_block_noise_reduction", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_block_noise_reduction) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_block_noise_reduction."
++					print "couldn't write psi_block_noise_reduction."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.block_noise_reduction = ConfigSlider(default=0, limits=(0,5))
+-			config.pep.block_noise_reduction.addNotifier(setBlock_noise_reduction)
++			config.psi.block_noise_reduction = ConfigSlider(default=0, limits=(0,5))
++			config.psi.block_noise_reduction.addNotifier(setBlock_noise_reduction)
+ 		else:
+-			config.pep.block_noise_reduction = NoSave(ConfigNothing())
++			config.psi.block_noise_reduction = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_mosquito_noise_reduction"):
++		if os_path.exists("/proc/stb/video/plane/psi_mosquito_noise_reduction"):
+ 			def setMosquito_noise_reduction(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting mosquito_noise_reduction to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_mosquito_noise_reduction", "w").write("%0.8X" % myval)
++					print "--> setting mosquito_noise_reduction to: %d" % myval
++					#open("/proc/stb/video/plane/psi_mosquito_noise_reduction", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_mosquito_noise_reduction) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_mosquito_noise_reduction."
++					print "couldn't write psi_mosquito_noise_reduction."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.mosquito_noise_reduction = ConfigSlider(default=0, limits=(0,5))
+-			config.pep.mosquito_noise_reduction.addNotifier(setMosquito_noise_reduction)
++			config.psi.mosquito_noise_reduction = ConfigSlider(default=0, limits=(0,5))
++			config.psi.mosquito_noise_reduction.addNotifier(setMosquito_noise_reduction)
+ 		else:
+-			config.pep.mosquito_noise_reduction = NoSave(ConfigNothing())
++			config.psi.mosquito_noise_reduction = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_digital_contour_removal"):
++		if os_path.exists("/proc/stb/video/plane/psi_digital_contour_removal"):
+ 			def setDigital_contour_removal(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting digital_contour_removal to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_digital_contour_removal", "w").write("%0.8X" % myval)
++					print "--> setting digital_contour_removal to: %d" % myval
++					#open("/proc/stb/video/plane/psi_digital_contour_removal", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_digital_contour_removal) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_digital_contour_removal."
++					print "couldn't write psi_digital_contour_removal."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.digital_contour_removal = ConfigSlider(default=0, limits=(0,5))
+-			config.pep.digital_contour_removal.addNotifier(setDigital_contour_removal)
++			config.psi.digital_contour_removal = ConfigSlider(default=0, limits=(0,5))
++			config.psi.digital_contour_removal.addNotifier(setDigital_contour_removal)
+ 		else:
+-			config.pep.digital_contour_removal = NoSave(ConfigNothing())
++			config.psi.digital_contour_removal = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_split"):
++		if os_path.exists("/proc/stb/video/plane/psi_split"):
+ 			def setSplitMode(config):
+ 				try:
+ 					print "--> setting splitmode to:",str(config.value)
+-					open("/proc/stb/vmpeg/0/pep_split", "w").write(str(config.value))
++					#open("/proc/stb/video/plane/psi_split", "w").write(str(config.value))
+ 				except IOError:
+-					print "couldn't write pep_split."
++					print "couldn't write psi_split."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.split = ConfigSelection(choices={
++			config.psi.split = ConfigSelection(choices={
+ 					"off": _("Off"),
+ 					"left": _("Left"),
+ 					"right": _("Right")},
+ 					default = "off")
+-			config.pep.split.addNotifier(setSplitMode)
++			config.psi.split.addNotifier(setSplitMode)
+ 		else:
+-			config.pep.split = NoSave(ConfigNothing())
++			config.psi.split = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_sharpness"):
++		if os_path.exists("/proc/stb/video/plane/psi_sharpness"):
+ 			def setSharpness(config):
+-				myval = int(config.value*256)
++				myval = int(config.value)
+ 				try:
+-					print "--> setting sharpness to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_sharpness", "w").write("%0.8X" % myval)
++					print "--> setting sharpness to: %d" % myval
++					#open("/proc/stb/video/plane/psi_sharpness", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_sharpness) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_sharpness."
++					print "couldn't write psi_sharpness."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.sharpness = ConfigSlider(default=0, limits=(0,256))
+-			config.pep.sharpness.addNotifier(setSharpness)
++			config.psi.sharpness = ConfigSlider(default=0, limits=(0,256))
++			config.psi.sharpness.addNotifier(setSharpness)
+ 		else:
+-			config.pep.sharpness = NoSave(ConfigNothing())
++			config.psi.sharpness = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_auto_flesh"):
++		if os_path.exists("/proc/stb/video/plane/psi_auto_flesh"):
+ 			def setAutoflesh(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting auto_flesh to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_auto_flesh", "w").write("%0.8X" % myval)
++					print "--> setting auto_flesh to: %d" % myval
++					#open("/proc/stb/video/plane/psi_auto_flesh", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_auto_flesh) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_auto_flesh."
++					print "couldn't write psi_auto_flesh."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.auto_flesh = ConfigSlider(default=0, limits=(0,4))
+-			config.pep.auto_flesh.addNotifier(setAutoflesh)
++			config.psi.auto_flesh = ConfigSlider(default=0, limits=(0,4))
++			config.psi.auto_flesh.addNotifier(setAutoflesh)
+ 		else:
+-			config.pep.auto_flesh = NoSave(ConfigNothing())
++			config.psi.auto_flesh = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_green_boost"):
++		if os_path.exists("/proc/stb/video/plane/psi_green_boost"):
+ 			def setGreenboost(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting green_boost to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_green_boost", "w").write("%0.8X" % myval)
++					print "--> setting green_boost to: %d" % myval
++					#open("/proc/stb/video/plane/psi_green_boost", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_green_boost) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_green_boost."
++					print "couldn't write psi_green_boost."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.green_boost = ConfigSlider(default=0, limits=(0,4))
+-			config.pep.green_boost.addNotifier(setGreenboost)
++			config.psi.green_boost = ConfigSlider(default=0, limits=(0,4))
++			config.psi.green_boost.addNotifier(setGreenboost)
+ 		else:
+-			config.pep.green_boost = NoSave(ConfigNothing())
++			config.psi.green_boost = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_blue_boost"):
++		if os_path.exists("/proc/stb/video/plane/psi_blue_boost"):
+ 			def setBlueboost(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting blue_boost to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_blue_boost", "w").write("%0.8X" % myval)
++					print "--> setting blue_boost to: %d" % myval
++					#open("/proc/stb/video/plane/psi_blue_boost", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_blue_boost) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_blue_boost."
++					print "couldn't write psi_blue_boost."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.blue_boost = ConfigSlider(default=0, limits=(0,4))
+-			config.pep.blue_boost.addNotifier(setBlueboost)
++			config.psi.blue_boost = ConfigSlider(default=0, limits=(0,4))
++			config.psi.blue_boost.addNotifier(setBlueboost)
+ 		else:
+-			config.pep.blue_boost = NoSave(ConfigNothing())
++			config.psi.blue_boost = NoSave(ConfigNothing())
+ 
+-		if os_path.exists("/proc/stb/vmpeg/0/pep_dynamic_contrast"):
++		if os_path.exists("/proc/stb/video/plane/psi_dynamic_contrast"):
+ 			def setDynamic_contrast(config):
+ 				myval = int(config.value)
+ 				try:
+-					print "--> setting dynamic_contrast to: %0.8X" % myval
+-					open("/proc/stb/vmpeg/0/pep_dynamic_contrast", "w").write("%0.8X" % myval)
++					print "--> setting dynamic_contrast to: %d" % myval
++					#open("/proc/stb/video/plane/psi_dynamic_contrast", "w").write("%d" % myval)
++					cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_dynamic_contrast) &" % myval
++					system(cmd)
+ 				except IOError:
+-					print "couldn't write pep_dynamic_contrast."
++					print "couldn't write psi_dynamic_contrast."
+ 
+ 				if not VideoEnhancement.firstRun:
+ 					self.setConfiguredValues()
+ 
+-			config.pep.dynamic_contrast = ConfigSlider(default=0, limits=(0,256))
+-			config.pep.dynamic_contrast.addNotifier(setDynamic_contrast)
++			config.psi.dynamic_contrast = ConfigSlider(default=0, limits=(0,256))
++			config.psi.dynamic_contrast.addNotifier(setDynamic_contrast)
+ 		else:
+-			config.pep.dynamic_contrast = NoSave(ConfigNothing())
++			config.psi.dynamic_contrast = NoSave(ConfigNothing())
+ 
+ 		try:
+ 			x = config.av.scaler_sharpness.value
+ 		except KeyError:
+-			if os_path.exists("/proc/stb/vmpeg/0/pep_scaler_sharpness"):
++			if os_path.exists("/proc/stb/video/plane/psi_scaler_sharpness"):
+ 				def setScaler_sharpness(config):
+ 					myval = int(config.value)
+ 					try:
+-						print "--> setting scaler_sharpness to: %0.8X" % myval
+-						open("/proc/stb/vmpeg/0/pep_scaler_sharpness", "w").write("%0.8X" % myval)
++						print "--> setting scaler_sharpness to: %d" % myval
++						#open("/proc/stb/video/plane/psi_scaler_sharpness", "w").write("%d" % myval)
++						cmd = "(sleep 2;echo %d > /proc/stb/video/plane/psi_scaler_sharpness) &" % myval
++						system(cmd)
+ 					except IOError:
+-						print "couldn't write pep_scaler_sharpness."
++						print "couldn't write psi_scaler_sharpness."
+ 
+ 					if not VideoEnhancement.firstRun:
+ 						self.setConfiguredValues()
+@@ -265,9 +291,9 @@
+ 
+ 	def setConfiguredValues(self):
+ 		try:
+-			print "--> applying pep values"
+-			open("/proc/stb/vmpeg/0/pep_apply", "w").write("1")
++			print "--> applying psi values"
++			open("/proc/stb/video/plane/psi_apply", "w").write("1")
+ 		except IOError:
+-			print "couldn't apply pep values."
++			print "couldn't apply psi values."
+ 
+ VideoEnhancement()
