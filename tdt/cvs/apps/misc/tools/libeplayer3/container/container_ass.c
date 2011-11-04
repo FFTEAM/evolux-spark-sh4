@@ -197,7 +197,7 @@ void releaseRegions()
              WriterFBCallData_t out;
                     
              //ass_printf(100, "release: w %d h %d x %d y %d\n", 
-                                 next->w, next->h, next->x, next->y);
+              //                   next->w, next->h, next->x, next->y);
 
              out.fd            = framebufferFD;
              out.data          = NULL;
@@ -262,7 +262,7 @@ void checkRegions()
                 WriterFBCallData_t out;
 
                 //ass_printf(100, "release: w %d h %d x %d y %d\n", 
-                                    next->w, next->h, next->x, next->y);
+                //                    next->w, next->h, next->x, next->y);
 
                 out.fd            = framebufferFD;
                 out.data          = NULL;
@@ -416,10 +416,10 @@ static void ASSThread(Context_t *context) {
                         undisplay = now + ass_track->events->Duration / 1000 + 0.5;
                     }
 
-                    //ass_printf(100, "w %d h %d s %d x %d y %d c %d chg %d now %ld und %ld\n", 
+                    /*ass_printf(100, "w %d h %d s %d x %d y %d c %d chg %d now %ld und %ld\n", 
                                  img->w, img->h, img->stride, 
                                  img->dst_x, img->dst_y, img->color, 
-                                 change, now, undisplay);
+                                 change, now, undisplay);*/
 
                     /* api docu said w and h can be zero which
                      * means image should not be rendered
@@ -569,8 +569,8 @@ int container_ass_init(Context_t *context)
     destination      = output.destination;
     destStride       = output.destStride;
     
-    //ass_printf(10, "width %d, height %d, share %d, fd %d, 3D %d\n", 
-              screen_width, screen_height, shareFramebuffer, framebufferFD, threeDMode);
+    /*ass_printf(10, "width %d, height %d, share %d, fd %d, 3D %d\n", 
+              screen_width, screen_height, shareFramebuffer, framebufferFD, threeDMode);*/
 
     if(threeDMode == 0){
         ass_set_frame_size(ass_renderer, screen_width, screen_height);
