@@ -38,9 +38,9 @@ startVideoTuneEnhanced() {
 		echo "128" > /proc/stb/video/plane/psi_brightness
 	fi
 	if [ ! -z "$tint" ]; then
-		echo "$tint" > /proc/stb/video/plane/psi_hue
+		echo "$tint" > /proc/stb/video/plane/psi_tint
 	else
-		echo "128" > /proc/stb/video/plane/psi_hue
+		echo "128" > /proc/stb/video/plane/psi_tint
 	fi
 }
 
