@@ -548,3 +548,57 @@
  					c = converter_class(parms)
  					c.connect(source)
  				else:
+
+--- enigma2-nightly.org/lib/dvb/pmt.cpp	2011-11-04 23:47:00.034616978 +0100
++++ enigma2-nightly/lib/dvb/pmt.cpp	2011-11-04 23:47:08.590659408 +0100
+@@ -815,7 +815,7 @@
+ 
+ eDVBCAService::~eDVBCAService()
+ {
+-	eDebug("[eDVBCAService] free service %s", m_service.toString().c_str());
++	//eDebug("[eDVBCAService] free service %s", m_service.toString().c_str());
+ 	::close(m_sock);
+ }
+ 
+@@ -879,7 +879,7 @@
+ 				{
+ 					if ( !freed && caservice->m_used_demux[iter] == demux_nums[i] )
+ 					{
+-						eDebug("[eDVBCAService] free slot %d demux %d for service %s", iter, caservice->m_used_demux[iter], caservice->m_service.toString().c_str() );
++						//eDebug("[eDVBCAService] free slot %d demux %d for service %s", iter, caservice->m_used_demux[iter], caservice->m_service.toString().c_str() );
+ 						caservice->m_used_demux[iter] = 0xFF;
+ 						freed=true;
+ 					}
+@@ -919,7 +919,7 @@
+ {
+ 	if ( chan )
+ 	{
+-		eDebug("[eDVBCAService] new channel %p!", chan);
++		//eDebug("[eDVBCAService] new channel %p!", chan);
+ 		channel_data *data = new channel_data();
+ 		data->m_channel = chan;
+ 		data->m_prevChannelState = -1;
+@@ -943,12 +943,12 @@
+ 			{
+ 				case iDVBChannel::state_ok:
+ 				{
+-					eDebug("[eDVBCAService] channel %p running", chan);
++					//eDebug("[eDVBCAService] channel %p running", chan);
+ 					break;
+ 				}
+ 				case iDVBChannel::state_release:
+ 				{
+-					eDebug("[eDVBCAService] remove channel %p", chan);
++					//eDebug("[eDVBCAService] remove channel %p", chan);
+ 					unsigned char msg[8] = { 0x9f,0x80,0x3f,0x04,0x83,0x02,0x00,0x00 };
+ 					msg[7] = it->second->m_dataDemux & 0xFF;
+ 					int sock, clilen;
+@@ -1235,7 +1235,7 @@
+ 	if ( write(m_sock, m_capmt, wp) == wp )
+ 	{
+ 		m_sendstate=0xFFFFFFFF;
+-		eDebug("[eDVBCAService] send %d bytes",wp);
++		//eDebug("[eDVBCAService] send %d bytes",wp);
+ 		eDVBChannelID chid;
+ 		m_service.getChannelID(chid);
+ 		channel_data *data = getChannelData(chid);
