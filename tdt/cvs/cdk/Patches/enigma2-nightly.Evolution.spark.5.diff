@@ -189,3 +189,14 @@
  			
  			if self.name:
 
+--- enigma2-nightly.org/skin.py	2011-11-04 23:26:21.596475897 +0100
++++ enigma2-nightly/skin.py	2011-11-04 23:26:29.040512808 +0100
+@@ -550,7 +550,7 @@
+ 						c = i
+ 
+ 				if c is None:
+-					print "allocating new converter!"
++					#print "allocating new converter!"
+ 					c = converter_class(parms)
+ 					c.connect(source)
+ 				else:
