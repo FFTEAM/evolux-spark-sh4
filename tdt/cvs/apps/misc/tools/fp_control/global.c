@@ -299,7 +299,7 @@ int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeu
 	*timeFormat = NULL;
 	*wakeup = 5*60;
 	
-	FILE *fd_config = fopen(CONFIG, "r");
+/*	FILE *fd_config = fopen(CONFIG, "r");
 
 	printf("%s\n", __func__);
 
@@ -326,13 +326,13 @@ int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeu
 			*wakeup = atoi(option);
 		}
 	}
-	
+*/	
 	if (*timeFormat == NULL)
 		*timeFormat = sDisplayStd;
 	
 	//printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", *display, *display_custom, *timeFormat, *wakeup);
 	
-	fclose(fd_config);
+//	fclose(fd_config);
 	
 	return 0;
 }
