@@ -303,3 +303,25 @@
  	</screen>
  	<!-- Movieplayer infobar -->
  	<screen name="MoviePlayer" flags="wfNoBorder" position="0,380" size="720,160" title="InfoBar" backgroundColor="transparent">
+
+--- enigma2-nightly.org/lib/python/Screens/Volume.py	2011-11-05 20:00:30.923019944 +0100
++++ enigma2-nightly/lib/python/Screens/Volume.py	2011-11-05 20:00:41.715073445 +0100
+@@ -1,14 +1,13 @@
+ from Screen import Screen
+ from Components.VolumeBar import VolumeBar
+-		
++from Components.Label import Label #NEW LINE		
+ class Volume(Screen):
+ 	def __init__(self, session):
+ 		Screen.__init__(self, session)
+-		
+ 		self.volumeBar = VolumeBar()
+-		
+ 		self["Volume"] = self.volumeBar
+-		
++		self["VolumeText"] = Label("") #NEW LINE
++
+ 	def setValue(self, vol):
+-		print "setValue", vol
+ 		self.volumeBar.setValue(vol)
++		self["VolumeText"].setText(str(vol)) #NEW LINE
