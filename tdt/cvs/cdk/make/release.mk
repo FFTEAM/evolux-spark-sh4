@@ -107,6 +107,7 @@ endif
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/dropbear $(prefix)/release/etc/init.d/
+	mkdir -p $(prefix)/release/etc/dropbear
 	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release/usr/lib/python2.6/site-packages/
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release/usr/bin/
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
