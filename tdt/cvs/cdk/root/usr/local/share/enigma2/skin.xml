@@ -1,0 +1,323 @@
+<skin>
+<!-- skin_default_default Skin -->
+	<output id="0">
+		<resolution xres="720" yres="576" bpp="32" />
+	</output>
+	<!-- Colors (#AARRGGBB) -->
+	<colors>
+		<color name="white" value="#f0f0f0"/>
+		<color name="black" value="#080808"/>
+		<color name="dark" value="#25062748"/>
+		<color name="menu" value="#25062748"/>
+		<color name="red" value="#f23d21"/>
+		<color name="green" value="#389416"/>
+		<color name="grey" value="#666666"/>
+		<color name="lightgrey" value="#d0d0d0"/>
+		<color name="orange" value="#ffa323"/>
+		<color name="darkgrey" value="#999999"/>
+		<color name="lightgreen" value="#51e51e"/> 
+		<color name="lightblue" value="#1885f4"/> 
+		<color name="blue" value="#0064c7"/>
+		<color name="yellow" value="#bab329"/>		
+		<color name="transparent" value="#ff000000"/>
+		<color name="transpBlack" value="#ff000000"/>
+		<color name="transpWhite" value="#ff000000"/>
+		<color name="background" value="#251f1f1f"/>
+		<color name="foreground" value="#f0f0f0"/>
+		<color name="clBack" value="#331f1f1f"/>
+		<color name="clBack2" value="#771f1f1f"/>
+		<color name="clText" value="#f0f0f0"/>
+		<color name="clBackSel" value="#20d2d2d2"/>
+		<color name="clTextSel" value="#040404"/>
+		<color name="clGrau" value="#153f3f3f"/>
+		<color name="clGelb" value="#fdc000"/>
+		<color name="clBorder" value="#777777"/>
+	</colors>
+	<!-- Main screen colors (id=0 Framebuffer) -->
+	<windowstyle type="skinned" id="0">
+		<title offset="15,3" font="Regular;18" color="black"/>
+		<color name="Background" color="clBack"/>
+		<color name="LabelForeground" color="white"/>
+		<color name="ListboxBackground" color="clBack"/>
+		<color name="ListboxForeground" color="clText"/>
+		<color name="ListboxSelectedBackground" color="clBackSel"/>
+		<color name="ListboxSelectedForeground" color="clTextSel"/>
+		<color name="ListboxMarkedBackground" color="#25fc0000"/>
+		<color name="ListboxMarkedForeground" color="#f0f0f0"/>
+		<color name="ListboxMarkedAndSelectedBackground" color="#25800000"/>
+		<color name="ListboxMarkedAndSelectedForeground" color="#f0f0f0"/>
+		<color name="WindowTitleForeground" color="grey"/>
+		<color name="WindowTitleBackground" color="white"/>
+		<!-- Main screen border png's -->
+		<borderset name="bsWindow">
+			<pixmap filename="skin_default/window/oben_links.png" pos="bpTopLeft"/>
+			<pixmap filename="skin_default/window/oben.png" pos="bpTop"/>
+			<pixmap filename="skin_default/window/oben_rechts.png" pos="bpTopRight"/>
+			<pixmap filename="skin_default/window/links.png" pos="bpLeft"/>
+			<pixmap filename="skin_default/window/rechts.png" pos="bpRight"/>
+			<pixmap filename="skin_default/window/unten_links.png" pos="bpBottomLeft"/>
+			<pixmap filename="skin_default/window/unten.png" pos="bpBottom"/>
+			<pixmap filename="skin_default/window/unten_rechts.png" pos="bpBottomRight"/>
+		</borderset>
+	</windowstyle>
+	<!-- Main screen colors (id=1 LCD) -->
+	<windowstyle type="skinned" id="1">
+		<color name="Background" color="#000000"/>
+		<color name="LabelForeground" color="#ffffff"/>
+		<color name="ListboxBackground" color="#000000"/>
+		<color name="ListboxForeground" color="#ffffff"/>
+		<color name="ListboxSelectedBackground" color="#000000"/>
+		<color name="ListboxSelectedForeground" color="#ffffff"/>
+		<color name="ListboxMarkedBackground" color="#000000"/>
+		<color name="ListboxMarkedForeground" color="#ffffff"/>
+		<color name="ListboxMarkedAndSelectedBackground" color="#000000"/>
+		<color name="ListboxMarkedAndSelectedForeground" color="#ffffff"/>
+		<color name="WindowTitleForeground" color="#ffffff"/>
+		<color name="WindowTitleBackground" color="#000000"/>
+	</windowstyle>
+	<!-- Fonts -->
+	<fonts>
+		<font filename="valis_enigma.ttf" name="Regular" scale="90" />
+		<font filename="lcd.ttf" name="LCD" scale="100" />
+		<font filename="valis_enigma.ttf" name="Replacement" scale="90" replacement="1" />
+		<font filename="tuxtxt.ttf" name="Console" scale="100" />
+	</fonts>
+	<screen backgroundColor="#FF000000" flags="wfNoBorder" name="InfoBar" position="-4,28" size="720,576" title="InfoBar">
+		<widget backgroundColor="#003399" pixmap="skin_default/window/progress_bar.png" position="240,437" render="Progress" size="430,22" source="session.Event_Now" transparent="1" zPosition="3">
+			<convert type="EventTime">Progress</convert>
+		</widget>
+		<ePixmap alphatest="on" name="OSD" pixmap="skin_default/window/infobar.png" position="47,395" size="634,134" transparent="1" zPosition="0"/>
+		<widget backgroundColor="clBack" font="Regular;22" foregroundColor="clText" halign="right" position="605,407" render="Label" size="60,27" source="global.CurrentTime" transparent="1" zPosition="3">
+			<convert type="ClockToText">Format:%H:%M</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;25" foregroundColor="clText" position="186,405" render="Label" size="405,28" source="session.CurrentService" transparent="1" zPosition="3">
+			<convert type="PPInfoBar">AllInc</convert>
+		</widget>
+		<widget pixmap="skin_default/picon_default.png" position="69,421" render="Picon" size="100,60" source="session.CurrentService" zPosition="7">
+			<convert type="ServiceName">Reference</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;20" foregroundColor="clText" position="185,435" render="Label" size="52,26" source="session.Event_Now" transparent="1" zPosition="3">
+			<convert type="EventTime">StartTime</convert>
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,435" render="Label" size="371,26" source="session.Event_Now" transparent="1" zPosition="3">
+			<convert type="EventName">Name</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;17" foregroundColor="clText" halign="right" position="590,437" render="Label" size="76,22" source="session.Event_Now" transparent="1" zPosition="3">
+			<convert type="EventTime">Remaining</convert>
+			<convert type="RemainingToText">InMinutes</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;20" foregroundColor="clText" position="185,462" render="Label" size="55,26" source="session.Event_Next" transparent="1" zPosition="3">
+			<convert type="EventTime">StartTime</convert>
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,462" render="Label" size="372,26" source="session.Event_Next" transparent="1" zPosition="3">
+			<convert type="EventName">Name</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;17" foregroundColor="clText" halign="right" position="606,462" render="Label" size="59,26" source="session.Event_Next" transparent="1" zPosition="3">
+			<convert type="EventTime">Duration</convert>
+			<convert type="ClockToText">InMinutes</convert>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_nim_a.png" position="68,509" render="Pixmap" size="13,13" source="session.TunerInfo" zPosition="3">
+			<convert type="TunerInfo">TunerUseMask</convert>
+			<convert type="ValueBitTest">1</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_nim_b.png" position="83,509" render="Pixmap" size="13,13" source="session.TunerInfo" zPosition="3">
+			<convert type="TunerInfo">TunerUseMask</convert>
+			<convert type="ValueBitTest">2</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_crypt.png" position="101,509" render="Pixmap" size="18,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">IsCrypted</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_txt.png" position="124,509" render="Pixmap" size="18,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">HasTelext</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_dolby.png" position="147,509" render="Pixmap" size="18,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">IsMultichannel</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_format.png" position="170,509" render="Pixmap" size="18,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">IsWidescreen</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_subchannels.png" position="193,509" render="Pixmap" size="18,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">SubservicesAvailable</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/icon_hdtv.png" position="215,509" render="Pixmap" size="28,13" source="session.CurrentService" zPosition="3">
+			<convert type="ServiceInfo">VideoWidth</convert>
+			<convert type="ValueRange">721,1980</convert>
+			<convert type="ConditionalShowHide" />
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/rec.png" position="244,509" render="Pixmap" size="40,13" source="session.RecordState" transparent="1" zPosition="3">
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget>
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="540,506" size="15,20" text="I" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="540,506" render="Label" size="15,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">Irdeto</convert>
+		</widget>
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="555,506" size="15,20" text="S" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="555,506" render="Label" size="15,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">Seca</convert>
+		</widget>
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="585,506" size="15,20" text="N" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="585,506" render="Label" size="15,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">Nagra</convert>
+		</widget> 
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="600,506" size="15,20" text="V" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="600,506" render="Label" size="15,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">Via</convert>
+		</widget>
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="570,506" size="15,20" text="C" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="570,506" render="Label" size="15,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">Conax</convert>
+		</widget>
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="515,506" size="25,20" text="TN" transparent="1" valign="center" zPosition="1"/>
+
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="515,506" render="Label" size="25,20" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="CryptoInfo">TunneldNagra</convert>
+		</widget>
+
+		<eLabel backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="white" halign="center" position="615,506" size="26,20" text="CW" transparent="1" valign="center" zPosition="1"/>
+		<widget backgroundColor="#b3b3b3" font="Regular;16" foregroundColor="#00d100" halign="center" position="615,506" render="Label" size="26,20" source="session.CurrentService" transparent="1" valign="center" zPosition="2">
+			<convert type="CryptoInfo">Crypto</convert>
+		</widget>
+
+
+		<widget backgroundColor="clBack" font="Regular;16" foregroundColor="grey" halign="center" position="285,486" render="Label" size="158,20" source="session.CurrentService" transparent="1" zPosition="1">
+			<convert type="PPInfoBar">CsServer</convert>
+		</widget>
+		<widget backgroundColor="#bebebe" font="Regular;14" foregroundColor="#00d100" halign="center" position="448,505" render="Label" size="67,20" source="session.CurrentService" transparent="1" valign="center" zPosition="1">
+			<convert type="PPInfoBar">Emu</convert> 
+		</widget>
+	<widget backgroundColor="#bebebe" font="Regular;14" foregroundColor="grey" halign="center" position="270,509" render="Label" size="205,16" source="session.CurrentService" transparent="1" zPosition="1">
+		<convert type="PPInfoBar">TunerInfo</convert>
+	</widget>
+	</screen>
+	<!-- Main Menu -->
+	<screen backgroundColor="#FF000000" flags="wfNoBorder" name="menu_mainmenu" position="141,128" size="438,320" title="Main menu">
+		<ePixmap alphatest="on" pixmap="skin_default/window/menu.png" position="0,0" size="438,320" zPosition="0"/>
+		<widget backgroundColor="white" font="Regular;20" foregroundColor="grey" position="20,290" render="Label" size="227,28" source="title" transparent="1" zPosition="3"/>
+		<widget enableWrapAround="1" position="190,48" render="Listbox" scrollbarMode="showOnDemand" size="227,254" source="menu" transparent="1" zPosition="1">
+			<convert type="StringList"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/shutdown.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">standby_restart_list</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/setup.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">setup_selection</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/plugins.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">plugin_selection</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/information.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">info_screen</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/timer.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">timer_edit</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/media_player.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">media_player</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/dvd_player.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">dvd_player</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/menu/subtitles.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+			<convert type="MenuEntryCompare">subtitle_selection</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+ 		<widget alphatest="on" pixmap="skin_default/menu/evomc.png" position="30,90" render="Pixmap" size="140,140" source="menu" zPosition="1">
+  			<convert type="MenuEntryCompare">EVO_MC</convert>
+  			<convert type="ConditionalShowHide"/>
+ 		</widget>
+	</screen>
+	<!-- Movieplayer infobar -->
+	<screen backgroundColor="transparent" flags="wfNoBorder" name="MoviePlayer" position="1,20" size="720,576" title="InfoBar">
+		<ePixmap alphatest="off" pixmap="skin_default/window/infobar_movie.png" position="41,408" size="630,130" transparent="1" zPosition="-1"/>
+		<eLabel backgroundColor="clBack" position="52,419" size="608,98" zPosition="1"/>
+		<ePixmap alphatest="on" pixmap="skin_default/window/dvr.png" position="480,435" size="170,24" zPosition="2"/>
+		<ePixmap alphatest="on" pixmap="skin_default/window/scale.png" position="64,474" size="584,8" zPosition="2"/>
+		<widget backgroundColor="clBack" font="Regular;22" foregroundColor="clText" halign="left" position="57,422" render="Label" size="420,52" source="session.CurrentService" transparent="1" valign="center" zPosition="3">
+			<convert type="ServiceName">Name</convert>
+		</widget>
+		<widget pixmap="skin_default/window/movie_bar.png" position="64,484" render="Progress" size="584,3" source="session.CurrentService" zPosition="3">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;22" foregroundColor="clText" halign="left" position="78,488" render="Label" size="196,26" source="session.CurrentService" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Length</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="LCD;26" foregroundColor="clGelb" halign="left" position="310,487" render="Label" size="154,30" source="session.CurrentService" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Position</convert>
+		</widget>
+		<widget backgroundColor="clBack" font="Regular;22" foregroundColor="clText" halign="right" position="506,488" render="Label" size="139,26" source="session.CurrentService" transparent="1" zPosition="3">
+			<convert type="ServicePosition">Remaining</convert>
+		</widget>
+	</screen>
+	<!-- Radio infobar -->
+	<screen name="RadioInfoBar" position="85,420" size="560,120" title="Radio" zPosition="-1">
+		<widget font="Regular;20" noWrap="1" position="5,1" render="Label" size="325,26" source="session.CurrentService" transparent="1">
+			<convert type="ServiceName">Name</convert>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/rass.png" position="330,1" render="Pixmap" size="50,21" source="RdsDecoder">
+			<convert type="RdsInfo">RasInteractiveAvailable</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget alphatest="on" pixmap="skin_default/icons/rec.png" position="480,3" render="Pixmap" size="12,12" source="session.RecordState" zPosition="2">
+			<convert type="ConditionalShowHide">Blink</convert>
+		</widget>
+		<widget borderColor="#777777" borderWidth="1" pixmap="skin_default/window/radio_p_bar.png" position="395,5" render="Progress" size="71,11" source="session.Event_Now" transparent="1" zPosition="2">
+			<convert type="EventTime">Progress</convert>
+		</widget>
+		<widget font="Regular;20" halign="right" position="500,1" render="Label" size="55,28" source="global.CurrentTime" transparent="1">
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget font="Regular;20" position="5,25" render="Label" size="60,22" source="session.Event_Now" transparent="1">
+			<convert type="EventTime">StartTime</convert>
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget font="Regular;20" noWrap="1" position="73,25" render="Label" size="390,22" source="session.Event_Now" transparent="1" valign="top">
+			<convert type="EventName">Name</convert>
+		</widget>
+		<widget font="Regular;20" halign="right" position="465,25" render="Label" size="90,22" source="session.Event_Now" transparent="1">
+			<convert type="EventTime">Remaining</convert>
+			<convert type="RemainingToText">InMinutes</convert>
+		</widget>
+		<widget font="Regular;20" position="5,47" render="Label" size="60,22" source="session.Event_Next" transparent="1">
+			<convert type="EventTime">StartTime</convert>
+			<convert type="ClockToText">Default</convert>
+		</widget>
+		<widget font="Regular;20" noWrap="1" position="73,47" render="Label" size="390,22" source="session.Event_Next" transparent="1" valign="top">
+			<convert type="EventName">Name</convert>
+		</widget>
+		<widget font="Regular;20" halign="right" position="465,47" render="Label" size="90,22" source="session.Event_Next" transparent="1">
+			<convert type="EventTime">Duration</convert>
+			<convert type="ClockToText">InMinutes</convert>
+		</widget>
+		<eLabel backgroundColor="clBorder" position="5,68" size="550,1"/>
+		<eLabel backgroundColor="clBorder" position="5,69" size="550,1"/>
+		<widget font="Regular;20" foregroundColor="clGelb" position="5,71" render="Label" size="550,50" source="RdsDecoder">
+			<convert type="RdsInfo">RadioText</convert>
+		</widget>
+	</screen>
+</skin>
