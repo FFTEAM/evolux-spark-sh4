@@ -116,7 +116,11 @@ endif
 	rm -f $(prefix)/release/lib/libcool*
 	rm -f $(prefix)/release/lib/libeplayer2*
 # copy evo mc files ####
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default/* $(prefix)/release/usr/local/share/enigma2/skin_default/
+	rm -rf $(prefix)/release/usr/local/share/enigma2/skin_default
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default $(prefix)/release/usr/local/share/enigma2/
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default.xml $(prefix)/release/usr/local/share/enigma2/
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin.xml $(prefix)/release/usr/local/share/enigma2/
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/EVO-blackGlass-HD $(prefix)/release/usr/local/share/enigma2/
 
 #
 # The main target depends on the model.
