@@ -103,8 +103,9 @@ endif
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release/usr/bin/
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/
-	cp -RP $(buildprefix)/root/usr/lib/libproc* $(prefix)/release/lib/
+	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release/bin/
+	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release/usr/lib/python2.6/site-packages/
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release/usr/bin/
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
