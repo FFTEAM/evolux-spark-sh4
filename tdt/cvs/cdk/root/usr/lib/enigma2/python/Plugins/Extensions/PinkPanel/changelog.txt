@@ -56,4 +56,6 @@ v1.9
 - Spark RC delay add (default 10 120)
 v.2.0
 - Spark: Configsaving/restore add to pp-system-settings-menu
+v.2.1
+- spark: OC 500+550mhz add (thx nit)
 ####################################################
