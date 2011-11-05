@@ -305,9 +305,8 @@ int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeu
 
 	if (fd_config == NULL)
 	{
-		printf("config file (%s) not found, use standard config", CONFIG);
-		printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", 
-			*display, *display_custom, *timeFormat, *wakeup);
+		//printf("config file (%s) not found, use standard config", CONFIG);
+		//printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", *display, *display_custom, *timeFormat, *wakeup);
 		return -1;
 	}
 	
@@ -331,8 +330,7 @@ int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeu
 	if (*timeFormat == NULL)
 		*timeFormat = sDisplayStd;
 	
-	printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", 
-		*display, *display_custom, *timeFormat, *wakeup);
+	//printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", *display, *display_custom, *timeFormat, *wakeup);
 	
 	fclose(fd_config);
 	
