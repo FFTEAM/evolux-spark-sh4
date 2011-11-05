@@ -104,6 +104,7 @@ endif
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release/usr/bin/
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
+	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release/bin/
