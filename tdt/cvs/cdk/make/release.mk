@@ -120,6 +120,7 @@ endif
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default $(prefix)/release/usr/local/share/enigma2/
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default.xml $(prefix)/release/usr/local/share/enigma2/
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin.xml $(prefix)/release/usr/local/share/enigma2/
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/prev.png $(prefix)/release/usr/local/share/enigma2/
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/EVO-blackGlass-HD $(prefix)/release/usr/local/share/enigma2/
 
 #
