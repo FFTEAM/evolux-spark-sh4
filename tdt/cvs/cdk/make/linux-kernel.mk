@@ -23,6 +23,7 @@ SPARKPATCHES_23 = $(COMMONPATCHES_23) \
 		$(if $(P0119),linux-sh4-spark_sound_stm23$(PATCH_STR).patch) \
 		$(if $(P0123),linux-sh4-spark_setup_stm23$(PATCH_STR).patch) \
 		$(if $(P0123),linux-sh4-spark_sound_stm23$(PATCH_STR).patch) \
+		$(if $(P0123),linux-sh4-spark_traps_stm23$(PATCH_STR).patch) \
 		fortis_hdbox_dvb_core_stm23.patch
 
 KERNELPATCHES_23 = $(if $(TF7700),$(TF7700PATCHES_23)) \
