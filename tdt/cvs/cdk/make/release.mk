@@ -207,7 +207,6 @@ release_base:
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/image-version $(prefix)/release/etc/ && \
-	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release/etc/network/ && \
 	cp -dp $(targetprefix)/etc/network/options $(prefix)/release/etc/network/ && \
 	cp -dp $(targetprefix)/etc/init.d/umountfs $(prefix)/release/etc/init.d/ && \
