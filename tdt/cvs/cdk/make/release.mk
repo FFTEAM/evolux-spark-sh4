@@ -106,6 +106,7 @@ endif
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release/bin/
+	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/dropbear $(prefix)/release/etc/init.d/
 	mkdir -p $(prefix)/release/etc/dropbear
 	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release/usr/lib/python2.6/site-packages/
