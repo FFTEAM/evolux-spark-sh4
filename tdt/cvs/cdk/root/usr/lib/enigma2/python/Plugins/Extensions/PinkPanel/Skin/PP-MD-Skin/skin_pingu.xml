@@ -106,21 +106,21 @@
 	<screen flags="wfNoBorder" name="InfoBar" position="0,0" size="1024,576" title="InfoBar" backgroundColor="#FF000000">
 		<eLabel backgroundColor="background" font="Regular;20" position="140,493" size="20,22" text="-" zPosition="3"/>
 		<eLabel backgroundColor="background" font="Regular;20" position="140,455" size="20,22" text="-" zPosition="3"/>
-		<eLabel backgroundColor="background" position="60,450" size="900,70" zPosition="0"/>
+		<eLabel backgroundColor="secondBG" position="60,377" size="900,72" zPosition="1"/>
 		<eLabel backgroundColor="deko" position="60,449" size="900,1" zPosition="0"/>
-		<eLabel backgroundColor="secondBG" position="60,387" size="900,62" zPosition="1"/>
+		<eLabel backgroundColor="background" position="60,450" size="900,70" zPosition="0"/>
 		<eLabel backgroundColor="deko" position="60,520" size="900,1" zPosition="0"/>
 		<eLabel backgroundColor="secondBG" position="60,521" size="900,38" zPosition="0"/>
-		<widget source="session.CurrentService" render="Picon" position="80,390" size=" 100,60" transparent="1" alphatest="blend" zPosition="3">
+		<widget source="session.CurrentService" render="Picon" position="80,385" size=" 100,60" transparent="1" alphatest="blend" zPosition="3">
 			<convert type="ServiceName">Reference</convert>
 		</widget>
 		<widget backgroundColor="background" font="Regular;22" foregroundColor="foreground" valign="center" halign="center" position="180,394" render="Label" size="600,28" source="session.CurrentService" transparent="1" zPosition="3">
 			<convert type="PPInfoBar">AllInc</convert>
 		</widget>
-		<widget backgroundColor="background" font="Regular;12" foregroundColor="foreground" valign="center" halign="right" position="740,399" render="Label" size="205,14" source="global.CurrentTime" transparent="1" zPosition="3">
+		<widget backgroundColor="background" font="Regular;12" foregroundColor="foreground" valign="center" halign="right" position="740,391" render="Label" size="205,14" source="global.CurrentTime" transparent="1" zPosition="3">
 			<convert type="ClockToText">Date</convert>
 		</widget>
-		<widget backgroundColor="background" font="Regular;22" foregroundColor="foreground" valign="center" halign="center" position="800,419" render="Label" size="145,24" source="global.CurrentTime" transparent="1" zPosition="3">
+		<widget backgroundColor="background" font="Regular;22" foregroundColor="foreground" valign="center" halign="center" position="800,414" render="Label" size="145,24" source="global.CurrentTime" transparent="1" zPosition="3">
 			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget font="Regular;20" position="80,455" render="Label" size="60,28" source="session.Event_Now" transparent="1" zPosition="3">
