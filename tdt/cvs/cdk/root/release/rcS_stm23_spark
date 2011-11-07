@@ -1,6 +1,7 @@
 #!/bin/sh
 
 MODDIR=/lib/modules
+PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
 echo "init frontpanel"
 insmod $MODDIR/vfd.ko
 insmod $MODDIR/aotom.ko
@@ -169,6 +170,9 @@ fi
    fi
 
    startVideoTuneEnhanced &
+   if [ -e $PinkPanelPath/files/Swap.sh ]; then
+      $PinkPanelPath/files/Swap.sh &
+   fi
    echo "run" > /dev/vfd
    echo "LOADING E2"
 
