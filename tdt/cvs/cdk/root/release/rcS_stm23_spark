@@ -63,20 +63,17 @@ setEVREMOTE2() {
 /etc/init.d/portmap start
 
 insmod $MODDIR/e2_proc.ko
-
-# start automounter with umount timeout of 5 seconds
 insmod $MODDIR/autofs4.ko
-/usr/sbin/automount --timeout=5 /autofs file /etc/auto.usb
 
 if [ ! -e /var/etc/.firstboot ]; then
 
    echo "Starting DEBUG Interface"
    /etc/init.d/mountall start
    /etc/init.d/hostname start
-
-   echo "starting telnetd"
+#   echo "starting telnetd vsftpd inetd mountall"
    /usr/sbin/telnetd -l /bin/login
-
+   /etc/init.d/vsftpd start
+   /usr/sbin/inetd
    echo "init stmfb"
    insmod $MODDIR/stmcore-display-sti7111.ko
    insmod $MODDIR/stmfb.ko display0=1280x720-32@50:12m:pal:yuv:yuv
@@ -137,17 +134,11 @@ fi
    rm -f /dev/sparkid
    mknod /dev/sparkid c $major 0 
 
+   /usr/sbin/automount --timeout=60 /autofs file /etc/auto.usb
+   (sleep 10; if [ -e /autofs/sda1 ]; then mount -o bind /autofs/sda1 /media/hdd; stdFolders="movie music picture"; for i in $stdFolders; do mkdir -p /media/hdd/$i; done; fi) &
 #   /bin/evremote2 05 30 &
    setEVREMOTE2
    stfbcontrol a 255
-
-   /etc/init.d/mountall start
-   /etc/init.d/hostname start
-
-   echo "starting telnetd"
-   /usr/sbin/telnetd -l /bin/login
-   /etc/init.d/vsftpd start
-   /usr/sbin/inetd
 
    if [ -e /usr/script/user_script.sh ]; then
 	/usr/script/user_script.sh &
