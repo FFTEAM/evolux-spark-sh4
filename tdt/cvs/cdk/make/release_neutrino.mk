@@ -1,5 +1,5 @@
 if STM22
-kernelpath="linux"
+kernelpath="linux-sh4"
 else
 kernelpath="linux-sh4"
 endif
