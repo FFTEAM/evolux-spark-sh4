@@ -106,6 +106,8 @@ endif
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
+	mkdir -p $(prefix)/release/usr/lib/opkg/info
+	touch $(prefix)/release/usr/lib/opkg/info/opkg.list
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release/bin/
 	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release/bin/
