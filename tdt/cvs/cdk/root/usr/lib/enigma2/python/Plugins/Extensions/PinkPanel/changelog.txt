@@ -58,4 +58,6 @@ v.2.0
 - Spark: Configsaving/restore add to pp-system-settings-menu
 v.2.1
 - spark: OC 500+550mhz add (thx nit)
+v.2.2
+- add swap-options (swap-ram/part/file, swapram default on!)
 ####################################################
