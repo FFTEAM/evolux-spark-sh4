@@ -16,22 +16,24 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 		echo "SWP" > /dev/vfd
 	fi
 	if [ -z $isactive ]; then
-		alwaysthere=`lsmod | grep -m2 ramzswap0`
-		if [ -z $alwaysthere ]; then
-			insmod /lib/modules/lzo1x_compress.ko
-			insmod /lib/modules/lzo1x_decompress.ko
-			insmod /lib/modules/ramzswap.ko disksize_kb=32768
-			mknod /dev/ramzswap0 b 253 0 >/dev/null 2>&1
-			echo "SWAPRAM ON"
-			echo "SWR" > /dev/vfd
-			loopswap=`cat /proc/swaps | grep loop -m1 | cut -d " " -f1`
-			if [ ! -z $loopswap ];then
-				swapoff -a
-				swapoff $loopswap
-				swapon /dev/ramzswap0
-			else
-				(swapoff -a;swapon /dev/ramzswap0)
-			fi 
+		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
+			alwaysthere=`lsmod | grep -m2 ramzswap0`
+			if [ -z $alwaysthere ]; then
+				insmod /lib/modules/lzo1x_compress.ko
+				insmod /lib/modules/lzo1x_decompress.ko
+				insmod /lib/modules/ramzswap.ko disksize_kb=32768
+				mknod /dev/ramzswap0 b 253 0 >/dev/null 2>&1
+				echo "SWAPRAM ON"
+				echo "SWR" > /dev/vfd
+				loopswap=`cat /proc/swaps | grep loop -m1 | cut -d " " -f1`
+				if [ ! -z $loopswap ];then
+					swapoff -a
+					swapoff $loopswap
+					swapon /dev/ramzswap0
+				else
+					(swapoff -a;swapon /dev/ramzswap0)
+				fi 
+			fi
 		fi
 	fi
 	if [ "$isactive" = swapfile ]; then
@@ -103,7 +105,5 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 		fi
 	fi
 	swapon -a
-else
-	echo "SWAPpart or file OFF"
 fi
 exit
