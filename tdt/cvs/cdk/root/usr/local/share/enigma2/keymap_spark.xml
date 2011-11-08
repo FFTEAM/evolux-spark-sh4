@@ -7,8 +7,8 @@
 		<key id="KEY_UP" mapto="moveUp" flags="mr" />
 		<key id="KEY_DOWN" mapto="moveDown" flags="mr" />
 		<key id="KEY_HOME" mapto="back" flags="mr" />
-		<key id="KEY_PAGEUP" mapto="pageDown" flags="mr" />
-		<key id="KEY_PAGEDOWN" mapto="pageUp" flags="mr" />
+		<key id="KEY_PAGEUP" mapto="pageUp" flags="mr" />
+		<key id="KEY_PAGEDOWN" mapto="pageDown" flags="mr" />
 		<key id="KEY_PREVIOUS" mapto="pageUp" flags="mr" />
 		<key id="KEY_NEXT" mapto="pageDown" flags="mr" />
 		<key id="KEY_1" mapto="moveUp" flags="mr" />
@@ -313,7 +313,7 @@
 	</map>
 	
 	<map context="InfobarTeletextActions">
-		<key id="KEY_TEXT" mapto="startTeletext" flags="m" />
+		<key id="KEY_SAT" mapto="startTeletext" flags="m" />
 	</map>
 
 	<map context="InfobarRdsActions">

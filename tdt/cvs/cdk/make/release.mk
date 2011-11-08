@@ -201,7 +201,6 @@ release_base:
 	cp -dp $(targetprefix)/sbin/tune2fs $(prefix)/release/sbin/ && \
 	cp -dp $(targetprefix)/etc/init.d/portmap $(prefix)/release/etc/init.d/ && \
 	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release/etc/init.d/ && \
-	cp $(targetprefix)/boot/audio.elf $(prefix)/release/boot/audio.elf && \
 	cp -a $(targetprefix)/dev/* $(prefix)/release/dev/ && \
 	cp -dp $(targetprefix)/etc/fstab $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/group $(prefix)/release/etc/ && \
@@ -232,7 +231,6 @@ release_base:
 	cp $(targetprefix)/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/cables.xml $(prefix)/release/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release/etc/tuxbox/ && \
-	cp $(targetprefix)/etc/tuxbox/tuxtxt2.conf $(prefix)/release/etc/tuxbox/ && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
 	cp $(buildprefix)/root/release/rcS$(if $(SPARK),_$(SPARK)) $(prefix)/release/etc/init.d/rcS && \
@@ -519,6 +517,8 @@ endif
 	if test -d $(targetprefix)/usr/local/lib/enigma2; then \
 		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release/usr/lib/enigma2/; fi
 
+	cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/
+
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
@@ -588,7 +588,6 @@ endif
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions $(prefix)/release/usr/lib/enigma2/python/Plugins/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
 	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
