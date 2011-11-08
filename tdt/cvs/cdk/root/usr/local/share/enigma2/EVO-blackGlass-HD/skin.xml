@@ -324,9 +324,6 @@
  <widget font="Regular;18" foregroundColor="yellow" halign="center" name="yellow" position="300,325" size="150,25" valign="center"/>
  <widget font="Regular;18" foregroundColor="blue" halign="center" name="blue" position="450,325" size="150,25" valign="center"/>
  </screen>
- <screen name="AudioSelection" position="center,center" size="600,300" title="Audio">
- <widget name="tracks" position="20,20" scrollbarMode="showOnDemand" size="560,260"/>
- </screen>
  <screen name="BouquetSelector" position="center,center" size="600,300" title="Choose bouquet">
  <widget name="menu" position="20,20" scrollbarMode="showOnDemand" size="560,260"/>
  </screen>
