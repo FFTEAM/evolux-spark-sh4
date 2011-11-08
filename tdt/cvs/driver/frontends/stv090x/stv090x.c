@@ -42,6 +42,7 @@
 #include "stv090x.h"
 #include "stv090x_priv.h"
 
+extern int _12v_isON; //defined in e2_proc ->I will implement a better mechanism later
 extern int bbgain;
 extern short paramDebug;
 #define TAGDEBUG "[stv090x] "
@@ -6464,10 +6465,12 @@ static int hdbox_set_voltage(struct dvb_frontend *fe, enum fe_sec_voltage voltag
        switch (voltage) {
        case SEC_VOLTAGE_OFF:
           dprintk(10, "set_voltage_off\n");
-          if (state->tuner == STV090x_TUNER1)
-               res |= 0x10;
-          else
-               res |= 0x20;
+
+          if(_12v_isON == 0)
+             if (state->tuner == STV090x_TUNER1)
+                  res |= 0x10;
+             else
+                  res |= 0x20;
        break;
 
        case SEC_VOLTAGE_13: /* vertical */
@@ -6591,7 +6594,8 @@ static int lnbh23_set_voltage(struct dvb_frontend *fe, enum fe_sec_voltage volta
    {
       case SEC_VOLTAGE_OFF:
 	 dprintk(10, "set_voltage_off\n");
-	 writereg_lnb_supply(state, 0xd0);
+     if(_12v_isON == 0)
+	    writereg_lnb_supply(state, 0xd0);
       break;
 
       case SEC_VOLTAGE_13: /* vertical */
