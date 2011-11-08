@@ -66,7 +66,7 @@ class PPInfoBar(Converter, object):
 		elif self.type == self.ALLINC:
 			text = "%s.  %s  (%s  %s)" % (number, name, orbital, provider)
 		elif self.type == self.SERVICENUMBER:
-			text = number
+			text = "%s." % number
 		elif self.type == self.ORBITALPOSITION:
 			text = orbital
 		elif self.type == self.TUNERINFO:
