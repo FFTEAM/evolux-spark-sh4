@@ -63,7 +63,7 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release/usr/sbin/
-	cp -f $(buildprefix)/root/etc/Wireless $(prefix)/release/etc/
+	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
