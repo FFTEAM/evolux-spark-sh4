@@ -66,6 +66,7 @@ release_spark:
 	cp -f $(buildprefix)/root/etc/Wireless $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release/usr/lib/
+	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
 if STM23
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
