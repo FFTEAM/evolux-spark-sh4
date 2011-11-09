@@ -61,6 +61,8 @@ release_spark:
 	cp $(buildprefix)/root/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
 
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
+	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release/usr/sbin/
 if STM23
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
