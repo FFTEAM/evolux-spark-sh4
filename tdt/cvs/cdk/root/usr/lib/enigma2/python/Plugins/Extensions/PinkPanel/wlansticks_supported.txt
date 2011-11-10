@@ -1,0 +1,168 @@
+NO WARRANTY IF CORRECT!!!
+
+Supported Sticks by name:
+    Asus WL-167G
+    Belkin F5D7050EF
+    Belkin F5D7050ES
+    Conceptronic C54RU Ver2
+    D-Link DWL-G122 H/W Ver.:C1
+    Edimax EW7318UG
+    Linksys WUSB54GC
+    Sitecom WL-113
+    Sitecom WL-172
+    Surecom EP-9001-g
+    PLanex GW-US54HP
+    Digitus DN-7003GR VPR 1.0
+    TPLINK TL-WN727N
+
+Supported Sticks by ID:
+usb:v0789p0166d rt3070sta
+usb:v07FAp7712d rt3070sta
+usb:v13D3p3321d rt3070sta
+usb:v13D3p3307d rt3070sta
+usb:v083ApA703d rt3070sta
+usb:v5A57p0282d rt3070sta
+usb:v0DB0p821Ad rt3070sta
+usb:v0DB0p3821d rt3070sta
+usb:v0DB0p822Ad rt3070sta
+usb:v0DB0p871Ad rt3070sta
+usb:v0DB0p3871d rt3070sta
+usb:v0DB0p3822d rt3070sta
+usb:v0DB0p6899d rt3070sta
+usb:v0DB0p870Ad rt3070sta
+usb:v0DB0p3870d rt3070sta
+usb:v0DB0p899Ad rt3070sta
+usb:v203Dp14A9d rt3070sta
+usb:v0B05p1784d rt3070sta
+usb:v20B8p8888d rt3070sta
+usb:v203Dp1480d rt3070sta
+usb:v04BBp0948d rt3070sta
+usb:v04BBp0947d rt3070sta
+usb:v04BBp0945d rt3070sta
+usb:v5A57p0283d rt3070sta
+usb:v5A57p5257d rt3070sta
+usb:v1D4Dp0011d rt3070sta
+usb:v1D4Dp000Ed rt3070sta
+usb:v1D4Dp000Cd rt3070sta
+usb:v07D1p3C17d rt3070sta
+usb:v07D1p3C16d rt3070sta
+usb:v07D1p3C0Fd rt3070sta
+usb:v07D1p3C0Ed rt3070sta
+usb:v07D1p3C0Dd rt3070sta
+usb:v07D1p3C0Ad rt3070sta
+usb:v1EDAp2310d rt3070sta
+usb:v1A32p0304d rt3070sta
+usb:v7392p4085d rt3070sta
+usb:v7392p7711d rt3070sta
+usb:v07B8p3072d rt3070sta
+usb:v07B8p3071d rt3070sta
+usb:v07B8p3070d rt3070sta
+usb:v2019p5201d rt3070sta
+usb:v2019pAB25d rt3070sta
+usb:v1044p800Dd rt3070sta
+usb:v13D3p3305d rt3070sta
+usb:v13D3p3273d rt3070sta
+usb:v1740p9709d rt3070sta
+usb:v1740p9708d rt3070sta
+usb:v1740p9707d rt3070sta
+usb:v1740p9706d rt3070sta
+usb:v1740p9705d rt3070sta
+usb:v1740p9703d rt3070sta
+usb:v083ApA702d rt3070sta
+usb:v083ApA701d rt3070sta
+usb:v083Ap7511d rt3070sta
+usb:v18C5p0012d rt3070sta
+usb:v14B2p3C12d rt3070sta
+usb:v0DF6p0047d rt3070sta
+usb:v0DF6p0048d rt3070sta
+usb:v0DF6p0042d rt3070sta
+usb:v0DF6p003Ed rt3070sta
+usb:v0DB0p822Bd rt3070sta
+usb:v0DB0p871Bd rt3070sta
+usb:v0DB0p822Cd rt3070sta
+usb:v0DB0p871Cd rt3070sta
+usb:v0DB0p3820d rt3070sta
+usb:v148Fp3072d rt3070sta
+usb:v148Fp3071d rt3070sta
+usb:v148Fp3070d rt3070sta
+usb:v1582p6003d zd1211b
+usb:v1233p0471d zd1211b
+usb:v0F88p3014d zd1211b
+usb:v0DF6p9075d zd1211b
+usb:v0CDEp001Ad zd1211b
+usb:v0BAFp0121d zd1211b
+usb:v083ApE501d zd1211b
+usb:v083Ap4505d zd1211b
+usb:v079Bp0062d zd1211b
+usb:v0586p340Fd zd1211b
+usb:v050Dp705Cd zd1211b
+usb:v050Dp4050d zd1211b
+usb:v2019p5303d zd1211b
+usb:v0053p5302d zd1211b
+usb:v0053p5301d zd1211b
+usb:v0ACEpA215d zd1211b
+usb:v0ACEp1215d zd1211b
+usb:v13B1p0020d rt73
+usb:v13B1p0023d rt73
+usb:v07D1p3C03d rt73
+usb:v050Dp705Ad rt73
+usb:v0B05p1724d rt73
+usb:v0B05p1723d rt73
+usb:v0586p3415d rt73
+usb:v0411p00D8d rt73
+usb:v0EB0p9021d rt73
+usb:v148Fp9021d rt73
+usb:v0DF6p90ACd rt73
+usb:v0DF6p9712d rt73
+usb:v1690p0722d rt73
+usb:v1044p800Ad rt73
+usb:v1631pC019d rt73
+usb:v1371p9032d rt73
+usb:v1371p9022d rt73
+usb:v1472p0009d rt73
+usb:v0769p31F3d rt73
+usb:v07B8pB21Dd rt73
+usb:v0DB0pA861d rt73
+usb:v0DB0pA874d rt73
+usb:v0DB0p6877d rt73
+usb:v14B2p3C22d rt73
+usb:v1044p8008d rt73
+usb:v18E8p6238d rt73
+usb:v18E8p6229d rt73
+usb:v18E8p6196d rt73
+usb:v14B2p3C10d rt73
+usb:v050Dp905Bd rt73
+usb:v7392p7618d rt73
+usb:v7392p7318d rt73
+usb:v148Fp2671d rt73
+usb:v148Fp2573d rt73
+
+USB: 0411:00E8 BUFFALO INC. (formerly MelCo., Inc.) WLI-UC-G300N Wireless LAN Adapter [Ralink RT2870]
+USB: 050D:8053 Belkin Components F5D8053 N Wireless USB Adapter v1000/v4000 [Ralink RT2870]
+USB: 050D:805C Belkin Components F5D8053 N Wireless Adapter v3000 [Ralink RT2870]
+USB: 050D:815C Belkin Components F5D8053 N Wireless USB Adapter v3000 [Ralink RT2870]
+USB: 050D:825B Belkin Components F5D8055 N+ Wireless Adapter v2000 [Ralink RT3070]
+USB: 050D:935B Belkin Components F6D4050 N150 Enhanced Wireless Network Adapter v2000 [Ralink RT3070]
+USB: 07D1:3C09 D-Link System DWA-140 RangeBooster N Adapter(rev.B1) [Ralink RT2870]
+USB: 07D1:3C0A D-Link System DWA-140 RangeBooster N Adapter(rev.B2) [Ralink RT2870]
+USB: 07D1:3C0D D-Link System DWA-125 Wireless N 150 Adapter(rev.A1) [Ralink RT3070]
+USB: 07D1:3C0E D-Link System WUA-2340 RangeBooster G Adapter(rev.B) [Ralink RT2070]
+USB: 07D1:3C0F D-Link System AirPlus G DWL-G122 Wireless Adapter(rev.E) [Ralink RT2870]
+USB: 07D1:3C11 D-Link System DWA-160 Xtreme N Dual Band USB Adapter(rev.B) [Ralink RT2870]
+USB: 07D1:3C16 D-Link System DWA-125 Wireless N 150 Adapter(rev.A2) [Ralink RT3070]
+USB: 083A:A618 Accton Technology Corp. SMCWUSBS-N EZ Connect N Draft 11n Wireless Adapter [Ralink RT2870]
+USB: 083A:A701 Accton Technology Corp. SMCWUSBS-N3 EZ Connect N Wireless Adapter [Ralink RT3070]
+USB: 083A:B522 Accton Technology Corp. SMCWUSBS-N2 EZ Connect N Wireless Adapter [Ralink RT2870]
+USB: 0DF6:0048 Sitecom Europe B.V. WL-349v1 Wireless Adapter 150N 002 [Ralink RT3070]
+USB: 0E66:0001 Hawking Technologies HWUN1 Hi-Gain Wireless-300N Adapter w/ Upgradable Antenna [Ralink RT2870]
+USB: 0E66:0003 Hawking Technologies HWDN1 Hi-Gain Wireless-300N Dish Adapter [Ralink RT2870]
+USB: 148F:2870 Ralink Technology, Corp. RT2870 Wireless Adapter
+USB: 148F:3070 Ralink Technology, Corp. RT2870/RT3070 Wireless Adapter
+USB: 14B2:3C23 Ralink Technology, Corp. Airlink101 AWLL6080 802.11bgn Wireless Adapter [Ralink RT2870]
+USB: 14B2:3C25 Ralink Technology, Corp. DrayTek Vigor N61 802.11bgn Wireless Adapter [Ralink RT2870]
+USB: 1737:0070 Linksys WUSB100 v1 RangePlus Wireless Network Adapter [Ralink RT2870]
+USB: 1737:0071 Linksys WUSB600N v1 Dual-Band Wireless-N Network Adapter [Ralink RT2870]
+USB: 2019:AB25 PLANEX GW-USMini2N 802.11n Wireless Adapter [Ralink RT2870]
+USB: 7392:7711 Edimax Technology Co., Ltd EW-7711UTn nLite Wireless Adapter [Ralink RT2870]
+USB: 7392:7717 Edimax Technology Co., Ltd EW-7717UN 802.11n Wireless Adapter [Ralink RT2870]
+USB: 7392:7718 Edimax Technology Co., Ltd EW-7718UN 802.11n Wireless Adapter [Ralink RT2870]

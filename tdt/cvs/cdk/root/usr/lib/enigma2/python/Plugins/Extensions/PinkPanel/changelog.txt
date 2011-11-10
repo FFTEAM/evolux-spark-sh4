@@ -62,5 +62,6 @@ v.2.2
 - add swap-options (swap-ram/part/file, swapram default on!)
 - Spark: addon dl deactivated (not working imho)
 - PP-MD-Skin fix
-- Wlan support add
+v.2.2.3
+- spark: wlan support add
 ####################################################
