@@ -68,7 +68,7 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release/usr/lib/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/SystemPlugins/WirelessLan $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/
+	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
 if STM23
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
