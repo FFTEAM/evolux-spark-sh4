@@ -16,7 +16,7 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	clear; \
 	echo "Media Framwork: $(MEDIAFW)"; \
 	echo "Choose between the following revisions:"; \
-	echo " 0) inactive"; \
+	echo " 0) Latest public E2-2011-11-07"; \
 	echo "---- REVISIONS ----"; \
 	echo "1) inactive"; \
 	echo "2) inactive"; \
@@ -38,7 +38,8 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	[ -d "$(appsdir)/enigma2-nightly" ] && \
 	git pull $(appsdir)/enigma2-nightly $$HEAD;\
 	[ -d "$(appsdir)/enigma2-nightly" ] || \
-	git clone git://gitorious.org/sh4/enigma2.git $(appsdir)/enigma2-nightly; \
+	[ "$$REPLY" == "0" ] && git clone git://gitorious.org/sh40/enigma2-0.git $(appsdir)/enigma2-nightly; \
+	[ "$$REPLY" == "5" ] && git clone git://gitorious.org/sh4/enigma2.git $(appsdir)/enigma2-nightly; \
 	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.newest; \
 	[ "$$REVISION" == "" ] || (cd $(appsdir)/enigma2-nightly; git checkout "$$REVISION"; cd "$(buildprefix)";); \
 	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.org; \
