@@ -16,7 +16,7 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	clear; \
 	echo "Media Framwork: $(MEDIAFW)"; \
 	echo "Choose between the following revisions:"; \
-	echo " 0) Newest (Can fail due to outdated patch)"; \
+	echo " 0) Latest Mo,  7 Nov 2011"; \
 	echo "---- REVISIONS ----"; \
 	echo "1) Sat, 29 Mar 2011 13:49 - E2 V3.0 e013d09af0e010f15e225a12dcc217abc052ee19"; \
 	echo "2) inactive"; \
