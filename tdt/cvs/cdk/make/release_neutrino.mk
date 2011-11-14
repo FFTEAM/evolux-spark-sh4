@@ -89,7 +89,7 @@ $(DEPDIR)/%release_neutrino:
 	cp $(buildprefix)/root/etc/tuxbox/tuxtxt2.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
 	cp $(buildprefix)/root/release/reboot $(prefix)/release_neutrino/etc/init.d/ && \
 	echo "576i50" > $(prefix)/release_neutrino/etc/videomode && \
-	cp $(buildprefix)/root/release/rcS_neutrino$(if $(SPARK),_$(SPARK)) $(prefix)/release_neutrino/etc/init.d/rcS && \
+	cp $(buildprefix)/root/release/rcS_stm23_neutrino$(if $(SPARK),_$(SPARK)) $(prefix)/release_neutrino/etc/init.d/rcS && \
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release_neutrino/etc/init.d/ && \
@@ -152,6 +152,8 @@ if ENABLE_SPARK
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-stv6306.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-cx24116.fw
 	rm -f $(prefix)/release_neutrino/lib/firmware/dvb-fe-cx21143.fw
+	rm -f $(prefix)/release_neutrino/lib/firmware/component_7105_pdk7105.fw
+	mv $(prefix)/release_neutrino/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino/lib/firmware/component.fw
 	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
 
