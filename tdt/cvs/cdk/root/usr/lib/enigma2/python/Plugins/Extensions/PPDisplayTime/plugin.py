@@ -97,13 +97,13 @@ class PPDisplayTimeConfigScreen(ConfigListScreen, Screen):
 		self.Save_settings()
 		self.close()
 	def Show_current_channel(self):
-		if config.VFD.ShowTime.value is not False:
-			tm=localtime()
-			servicename=strftime("%H%M",tm)
-		else:
-			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
-			service = self.service.toCompareString()
-			servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
+#		if config.VFD.ShowTime.value is not False:
+		tm=localtime()
+		servicename=strftime("%H%M",tm)
+#		else:
+#			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
+#			service = self.service.toCompareString()
+#			servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
 		evfd.getInstance().vfd_write_string( servicename )
 	def Save_settings(self):
 		global Stime
@@ -128,13 +128,9 @@ class DisplayTime:
 		self.session = session
 		self.timer = eTimer()
 		self.timer.timeout.get().append(self.timerEvent)
-		self.volctrl = eDVBVolumecontrol.getInstance()
 		self.service = None
 	def startTimer(self):
-		if self.timer.isActive():
-			print "timer still running"
-		else:
-			self.timer.startLongTimer(5)
+		self.timer.startLongTimer(30)
 	def StopTimer(self, result):
 		if result:
 			self.timer.stop()
@@ -142,10 +138,10 @@ class DisplayTime:
 	def timerEvent(self):
 		tm=localtime()
 		if config.VFD.ShowTime.value is True:
-			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
-			if not self.service is None:
-				servicename = strftime("%H%M",tm) 
-				evfd.getInstance().vfd_write_string(servicename[0:17])
+#			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
+#			if not self.service is None:
+			servicename = strftime("%H%M",tm) 
+			evfd.getInstance().vfd_write_string(servicename[0:17])
 		self.startTimer()
 timerInstance = None
 def main(session, **kwargs):
