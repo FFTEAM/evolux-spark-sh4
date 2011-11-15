@@ -110,7 +110,6 @@
 #include "gui/timerlist.h"
 #include "gui/alphasetup.h"
 #include "gui/audioplayer.h"
-#include "gui/extra_menu.h" // Emu Menu
 #include "gui/imageinfo.h"
 #include "gui/movieplayer.h"
 #include "gui/nfs.h"
@@ -2529,7 +2528,6 @@ int CNeutrinoApp::run(int argc, char **argv)
 	CMenuWidget    keySettings         (LOCALE_MAINSETTINGS_KEYBINDING           , "keybinding.raw"      , 400);
 	CMenuWidget    miscSettings        (LOCALE_MISCSETTINGS_HEAD             , NEUTRINO_ICON_SETTINGS);
 	CMenuWidget    audioplPicSettings  (LOCALE_AUDIOPLAYERPICSETTINGS_GENERAL, NEUTRINO_ICON_SETTINGS);
-	CMenuWidget ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings.raw" );
 	CMenuWidget    scanSettings        (LOCALE_SERVICEMENU_SCANTS            , NEUTRINO_ICON_SETTINGS);
 	CMenuWidget    service             (LOCALE_SERVICEMENU_HEAD              , NEUTRINO_ICON_SETTINGS);
 	CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming.raw"       );
@@ -2537,7 +2535,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 
 	InitMainMenu(mainMenu, mainSettings, audioSettings, parentallockSettings, networkSettings, recordingSettings,
 			colorSettings, lcdSettings, keySettings, languageSettings, miscSettings,
-			service, fontSettings, audioplPicSettings, streamingSettings, moviePlayer, ExtraMenu);
+			service, fontSettings, audioplPicSettings, streamingSettings, moviePlayer);
 
 	InitServiceSettings(service, scanSettings);
 	InitLanguageSettings(languageSettings);

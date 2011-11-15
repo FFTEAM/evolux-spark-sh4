@@ -200,7 +200,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		                  CMenuWidget &parentallockSettings, CMenuWidget &networkSettings1, CMenuWidget &networkSettings2,
 		                  CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings,
 		                  CMenuWidget &languageSettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &fontSettings,
-                        	  CMenuWidget &audioplPicSettings, CMenuWidget &streamingSettings, CMenuWidget &moviePlayer);
+                        	  CMenuWidget &audioplPicSettings, CMenuWidget &streamingSettings, CMenuWidget &moviePlayer, CMenuWidget &ExtraMenu);
 		void SetupFrameBuffer();
 		void SelectAPID();
 		void SelectNVOD();

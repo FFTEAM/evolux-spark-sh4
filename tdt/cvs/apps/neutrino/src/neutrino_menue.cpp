@@ -108,6 +108,7 @@
 #include "gui/timerlist.h"
 #include "gui/alphasetup.h"
 #include "gui/audioplayer.h"
+#include "gui/extra_menu.h" // Emu Menu
 #include "gui/imageinfo.h"
 #include "gui/movieplayer.h"
 #include "gui/nfs.h"
@@ -692,7 +693,7 @@ CMenuOptionStringChooser* tzSelect;
 void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings,  CMenuWidget &audioSettings, CMenuWidget &parentallockSettings,
 				CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings,
 				CMenuWidget &keySettings, CMenuWidget &languageSettings, CMenuWidget &miscSettings,
-				CMenuWidget &service, CMenuWidget &fontSettings, CMenuWidget &audiopl_picSettings, CMenuWidget &streamingSettings, CMenuWidget &moviePlayer)
+				CMenuWidget &service, CMenuWidget &fontSettings, CMenuWidget &audiopl_picSettings, CMenuWidget &streamingSettings, CMenuWidget &moviePlayer, CMenuWidget &ExtraMenu) 
 {
 
 #ifdef TEST_MENU
@@ -771,6 +772,39 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 										CRCInput::convertDigitToKey(shortcut++)));
 	mainMenu.addItem(new CLockedMenuForwarder(LOCALE_MAINMENU_SERVICE, g_settings.parentallock_pincode, false, true, NULL, &service, NULL,
 					  CRCInput::convertDigitToKey(shortcut++)));
+	mainMenu.addItem(GenericMenuSeparatorLine);
+//***************************************** Extra Menue 
+	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_EXTRAMENU, true, NULL, &ExtraMenu, NULL, CRCInput::convertDigitToKey(shortcut++)));
+	ExtraMenu.addItem(GenericMenuSeparator);
+	ExtraMenu.addItem(GenericMenuBack);
+	ExtraMenu.addItem(GenericMenuSeparatorLine);
+	FILE* fdcamd3_installed = fopen("/var/emu/camd3", "r");
+	FILE* fdmgcamd_installed = fopen("/var/emu/mgcamd", "r");
+	FILE* fdmbox_installed = fopen("/var/emu/mbox", "r");
+	FILE* fdincubuscamd_installed = fopen("/var/emu/incubusCamd", "r");
+	FILE* fdoscam_installed = fopen("/var/emu/oscam", "r");
+	FILE* fdnewcs_installed = fopen("/var/emu/newcs", "r");
+	if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
+	{
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, new EMU_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
+	}
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, new TUNERRESET_Menu(), NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
+	/*if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
+	{ */
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::RC_1)); // DisplayTime Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_3)); // SWAP Menu
+	/*}
+	else
+	{
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // CheckFS Menu
+	} */
+//*****************************************************************************************************************	
+//*****************************************************************************************************************
+
 	mainMenu.addItem(GenericMenuSeparatorLine);
 
 	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_SLEEPTIMER, true, NULL, new CSleepTimerWidget, NULL,

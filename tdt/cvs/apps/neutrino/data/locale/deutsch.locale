@@ -1363,3 +1363,58 @@ zapit.scantype.radio Nur Radio
 zapit.scantype.tv Nur TV
 zapit.scantype.tvradio Nur TV & Radio
 zaptotimer.announce In einer Minute wird umgeschaltet.
+mainmenu.extramenu Extras
+extramenu.emu Emu Menue
+extramenu.tunerreset Tuner Menue
+extramenu.tunerreset.select Tuner Reset
+extramenu.tunerreset.on Ein
+extramenu.tunerreset.off Aus
+extramenu.tunerreset.restart Tuner neu starten
+extramenu.correctvolume Volume Menue Ext.
+extramenu.correctvolume.select Correct Volume
+extramenu.correctvolume.on Ein
+extramenu.correctvolume.off Aus
+extramenu.amount Amount Menue
+extramenu.amount.select Amount
+extramenu.amount.on Ein
+extramenu.amount.off Aus
+extramenu.displaytime DisplayTime Menue
+extramenu.displaytime.select DisplayTime
+extramenu.displaytime.on Ein
+extramenu.displaytime.off Aus
+extramenu.wwwdate wwwDate Menue
+extramenu.wwwdate.select wwwDate
+extramenu.wwwdate.on Ein
+extramenu.wwwdate.off Aus
+extramenu.checkfs CheckFS Menue
+extramenu.checkfs.select CheckFS
+extramenu.checkfs.on Ein
+extramenu.checkfs.off Aus
+extramenu.emu.mgcamd MGCamd
+extramenu.emu.incubus IncubusCamd
+extramenu.emu.camd3 Camd3
+extramenu.emu.mbox Mbox
+extramenu.emu.oscam Oscam
+extramenu.emu.stopcamd Camd Stop
+extramenu.emu.select Emu Auswahl
+extramenu.emu.restart Emu Restart
+extramenu.emu.onoff Emu
+extramenu.emu.onoff.on Ein
+extramenu.emu.onoff.off Aus
+extramenu.emu.restart_on Ein
+extramenu.emu.restart_off Aus
+extramenu.emu.mgcamdversion MGCamd Version
+extramenu.emu.incubusversion Incubus Version
+extramenu.emu.camd3version Camd3 Version
+extramenu.emu.mboxversion Mbox Version
+extramenu.emu.oscamversion Oscam Version
+extramenu.emu.newcsversion NewCS Version
+extramenu.swap Swap Menue
+extramenu.swap.swapram SWAPRAM
+extramenu.swap.swappart SWAPPART
+extramenu.swap.swapfile SWAPFILE
+extramenu.swap.select Swap Auswahl
+extramenu.swap.onoff SWAP
+extramenu.swap.onoff.on Ein
+extramenu.swap.onoff.off Aus
+setting.saved Einstellungen Gespeichert
