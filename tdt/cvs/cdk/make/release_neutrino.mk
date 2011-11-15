@@ -160,8 +160,14 @@ if ENABLE_SPARK
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
+	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
+if STM23
+	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
+	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
+else
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/vfd.ko
-#	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
+endif
+	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
 
 endif
@@ -315,9 +321,12 @@ endif
 	mkdir -p $(prefix)/release_neutrino/var/tuxbox/config
 	mkdir -p $(prefix)/release_neutrino/share/tuxbox
 	mkdir -p $(prefix)/release_neutrino/var/share/icons
+	mkdir -p $(prefix)/release_neutrino/var/emu
 	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
+	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons
 	( cd $(prefix)/release_neutrino/share/tuxbox && ln -s /usr/local/share/neutrino )
 	( cd $(prefix)/release_neutrino/var/share/icons/ && ln -s /usr/local/share/neutrino/icons/logo )
+	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino/usr/local/share/neutrino/icons/
 	( cd $(prefix)/release_neutrino/ && ln -s /usr/local/share/neutrino/icons/logo logos )
 #	( cd $(prefix)/release_neutrino/lib && ln -s libcrypto.so.0.9.7 libcrypto.so.0.9.8 )
 	( cd $(prefix)/release_neutrino/lib/tuxbox && ln -s /var/plugins )
