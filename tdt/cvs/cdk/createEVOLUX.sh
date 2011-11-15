@@ -49,7 +49,7 @@ cp -RP ../release_EVOLUX_with_dev.tar.gz $DESTINATION/
 sudo rm -rf $DESTINATION/enigma2/*
 cd $DESTINATION && sudo tar -xzvf release_EVOLUX_with_dev.tar.gz -C $DESTINATION/enigma2/
 sudo chmod 777 -R $DESTINATION/enigma2
-cp -RP $SOURCE/boot/uImage $PINGUDIR/tufsbox/
+cp -RP $EVOLUXDIR/boot/uImage $PINGUDIR/tufsbox/
 myVERSION=`cat $EVOLUXDIR/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 $PINGUDIR/tufsbox/host/bin/mkfs.jffs2 -r $EVOLUXDIR -o $PINGUDIR/tufsbox/e2jffs2.img -e 0x20000 -n
 cd $PINGUDIR/tufsbox
