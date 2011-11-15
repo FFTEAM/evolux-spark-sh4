@@ -22,10 +22,10 @@ $(DEPDIR)/%release_neutrino:
 	$(INSTALL_DIR) $(prefix)/release_neutrino/etc/network/if-pre-up.d && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/etc/network/if-up.d && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/etc/tuxbox && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/hdd && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/hdd/movie && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/hdd/music && \
-	$(INSTALL_DIR) $(prefix)/release_neutrino/hdd/picture && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/media/hdd && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/media/hdd/movie && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/media/hdd/music && \
+	$(INSTALL_DIR) $(prefix)/release_neutrino/media/hdd/picture && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/lib && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/lib/modules && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/ram && \
@@ -33,7 +33,6 @@ $(DEPDIR)/%release_neutrino:
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/etc && \
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
-	touch $(prefix)/release_neutrino/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_neutrino/bin/ && \
 	ln -s /bin/showiframe $(prefix)/release_neutrino/usr/bin/showiframe && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release_neutrino/sbin/ && \
@@ -62,7 +61,7 @@ $(DEPDIR)/%release_neutrino:
 	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino/boot/audio.elf && \
 	\
 	cp -a $(targetprefix)/dev/* $(prefix)/release_neutrino/dev/ && \
-	cp -dp $(targetprefix)/etc/fstab $(prefix)/release_neutrino/etc/ && \
+	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release_neutrino/etc/fstab && \
 	cp -dp $(targetprefix)/etc/group $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
@@ -288,7 +287,7 @@ endif
 	rm -rf $(prefix)/release_neutrino/lib/modules/$(KERNELVERSION)
 
 	$(INSTALL_DIR) $(prefix)/release_neutrino/media
-	ln -s /hdd $(prefix)/release_neutrino/media/hdd
+	ln -sf /media/hdd $(prefix)/release_neutrino/hdd
 	$(INSTALL_DIR) $(prefix)/release_neutrino/media/dvd
 
 	$(INSTALL_DIR) $(prefix)/release_neutrino/mnt
@@ -318,20 +317,25 @@ endif
 	mkdir -p $(prefix)/release_neutrino/var/plugins
 	mkdir -p $(prefix)/release_neutrino/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/lib/tuxbox
+	mkdir -p $(prefix)/release_neutrino/usr/keys
 	mkdir -p $(prefix)/release_neutrino/var/tuxbox/config
 	mkdir -p $(prefix)/release_neutrino/share/tuxbox
 	mkdir -p $(prefix)/release_neutrino/var/share/icons
-	mkdir -p $(prefix)/release_neutrino/var/emu
 	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons
+	mkdir -p $(prefix)/release_neutrino/media/net
+#	( cd $(prefix)/release_neutrino/var && ln -s ../usr/bin emu )
+	( cd $(prefix)/release_neutrino/var && ln -s ../usr/keys keys )
+	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/neutrino.conf )
 	( cd $(prefix)/release_neutrino/share/tuxbox && ln -s /usr/local/share/neutrino )
 	( cd $(prefix)/release_neutrino/var/share/icons/ && ln -s /usr/local/share/neutrino/icons/logo )
-	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino/usr/local/share/neutrino/icons/
 	( cd $(prefix)/release_neutrino/ && ln -s /usr/local/share/neutrino/icons/logo logos )
-#	( cd $(prefix)/release_neutrino/lib && ln -s libcrypto.so.0.9.7 libcrypto.so.0.9.8 )
+	( cd $(prefix)/release_neutrino/usr/lib && ln -s libcrypto.so.0.9.8 libcrypto.so.0.9.7 )
 	( cd $(prefix)/release_neutrino/lib/tuxbox && ln -s /var/plugins )
 	( cd $(prefix)/release_neutrino/var/tuxbox && ln -s /var/plugins )
 	( cd $(prefix)/release_neutrino/usr/lib/tuxbox && ln -s /var/plugins )
+	rm -rf $(prefix)/release_neutrino/media/sda*
+	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino/usr/local/share/neutrino/icons/
 
 #######################################################################################
 #######################################################################################
@@ -398,8 +402,10 @@ endif
 	echo "duckbox-rev#: " > $(prefix)/release_neutrino/etc/imageinfo
 	git describe >> $(prefix)/release_neutrino/etc/imageinfo
 	$(buildprefix)/root/release/neutrino_version.sh
-	mv $(buildprefix)/root/var/etc/.version.new $(prefix)/release_neutrino/.version
-	ln -sf ../../.version $(prefix)/release_neutrino/var/etc/.version
+	rm -rf $(prefix)/release_neutrino/var/etc
+	mv $(buildprefix)/root/var/etc/.version.new $(prefix)/release_neutrino/etc/.version
+	ln -s ../etc $(prefix)/release_neutrino/var
+	ln -sf ../etc/.version $(prefix)/release_neutrino
 #######################################################################################
 
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/lib
