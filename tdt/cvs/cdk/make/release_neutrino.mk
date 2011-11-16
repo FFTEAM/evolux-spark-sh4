@@ -403,6 +403,13 @@ endif
 	git describe >> $(prefix)/release_neutrino/etc/imageinfo
 	$(buildprefix)/root/release/neutrino_version.sh
 	rm -rf $(prefix)/release_neutrino/var/etc
+#	fix img info
+	echo 'comment=created by pingulux-git' > $(buildprefix)/root/var/etc/.version.new
+	echo 'imagename=Neutrino for Pingulux' >> $(buildprefix)/root/var/etc/.version.new
+	echo 'homepage=http://gitorious.org/open-duckbox-project-sh4/pingulux-git' >> $(buildprefix)/root/var/etc/.version.new
+	echo 'creator=git-developer' >> $(buildprefix)/root/var/etc/.version.new
+	echo 'docs=http://gitorious.org/open-duckbox-project-sh4/pingulux-git/commits' >> $(buildprefix)/root/var/etc/.version.new
+	echo 'forum=http://kathif.vs120005.hl-users.com/index.php?sid=' >> $(buildprefix)/root/var/etc/.version.new
 	mv $(buildprefix)/root/var/etc/.version.new $(prefix)/release_neutrino/etc/.version
 	ln -s ../etc $(prefix)/release_neutrino/var
 	ln -sf ../etc/.version $(prefix)/release_neutrino
