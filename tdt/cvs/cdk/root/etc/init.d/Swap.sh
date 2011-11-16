@@ -37,7 +37,7 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 		fi
 	fi
 	if [ "$isactive" = swapfile ]; then
-		. /usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/files/swapsize.old
+		. /etc/init.d/swapsize.old
 		size=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapFileSize= | cut -d = -f2`
 		if [ -z "$size" ]; then
 			size=16384
@@ -72,7 +72,7 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 				swapoff -a
 				rm /media/hdd/swap/swapfile
 				dd if=/dev/zero of=/media/hdd/swap/swapfile bs=1024 count=$size
-				echo "swapsize=$size" > /usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/files/swapsize.old
+				echo "swapsize=$size" > /etc/init.d/swapsize.old
 				loopswapnew=$(($loopswap + 1))
 				losetup /dev/loop$loopswapnew /media/hdd/swap/swapfile
 				mkswap /dev/loop$loopswapnew
