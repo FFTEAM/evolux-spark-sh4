@@ -1452,9 +1452,9 @@ void BOOTE2_Menu::BOOTE2Settings()
 	//BOOTE2 STARTEN
 	system("touch /etc/.start_enigma2");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 Activated, please reboot!", 450, 2); // UTF-8("")
+	}
 	bootE2=0;
 	old_bootE2=0;
-	}
 	/*if (bootE2==0)
 	{
 	//BOOTE2 BEENDEN
