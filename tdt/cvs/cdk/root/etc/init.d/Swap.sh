@@ -6,7 +6,17 @@ loopswap=`cat /proc/swaps | cut -b10`
 if [ "$alwaysthere" = w ]; then
    sed -i '$d' /etc/fstab
 fi
-isactive=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapArt= | cut -d = -f2`
+if [ -e /etc/.start_enigma2 ]; then
+	isactive=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapArt= | cut -d = -f2`
+else
+	if [ -e /etc/.swappart ]; then
+		isactive = swappart
+	elif [ -e /etc/.swapfile ]; then
+		isactive = swapfile
+	else
+		isactive = swapram
+	fi
+fi
 if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ]; then
 	if [ "$isactive" = swappart ]; then
 		swappart=`fdisk -l | grep swap | cut -d / -f3 | cut -b1-4`
