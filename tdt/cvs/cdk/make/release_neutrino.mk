@@ -321,7 +321,7 @@ endif
 	mkdir -p $(prefix)/release_neutrino/var/tuxbox/config
 	mkdir -p $(prefix)/release_neutrino/share/tuxbox
 	mkdir -p $(prefix)/release_neutrino/var/share/icons
-	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
+#	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons
 	mkdir -p $(prefix)/release_neutrino/media/net
 #	( cd $(prefix)/release_neutrino/var && ln -s ../usr/bin emu )
