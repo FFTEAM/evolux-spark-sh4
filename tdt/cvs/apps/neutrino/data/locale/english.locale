@@ -342,7 +342,7 @@ favorites.chadded The current channel has been added to your favorites...\n
 favorites.chalreadyinbq The current channel is already in your favorites...\n
 favorites.copy Copy bouquet to Favorites
 favorites.finalhint \nUse the bouqueteditor to modify your favorites.\n
-favorites.menueadd add channel to favorites
+favorites.menueadd Add channel to Favorites
 favorites.nobouquets Favorites are available with activated Bouquets only.
 filebrowser.delete Delete
 filebrowser.denydirectoryleave Absolute start directory

@@ -1417,16 +1417,6 @@ printf("$Id: Volume-Menue Extended  Exp $\n");
 
 void BOOTE2_Menu::BOOTE2Settings()
 {
-	int bootE2=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB BOOTE2 SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.start_enigma2", "r");
-	if(fd1)
-	{
-	bootE2=1;
-	fclose(fd1);
-	}
-	int old_bootE2=bootE2;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTE2, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
@@ -1437,29 +1427,9 @@ void BOOTE2_Menu::BOOTE2Settings()
 	ExtraMenuSettings->exec (NULL, "");
 	ExtraMenuSettings->hide ();
 	delete ExtraMenuSettings;
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_bootE2!=bootE2)
-	{
-	save_value=1;
-	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (bootE2==1)
-	{
 	//BOOTE2 STARTEN
 	system("touch /etc/.start_enigma2");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 Activated, please reboot!", 450, 2); // UTF-8("")
-	bootE2=0;
-	}
-	/*if (bootE2==0)
-	{
-	//BOOTE2 BEENDEN
-	system("rm /etc/.bootE2");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "BOOTE2 Deactivated!", 450, 2); // UTF-8("")
-	}*/
 }
 //ENDE BOOTE2
 }
