@@ -41,6 +41,7 @@
 #define SWAP_OPTION_COUNT 3
 #define SWAP_ONOFF_OPTION_COUNT 2
 #define CHECKFS_OPTION_COUNT 2
+#define BOOTE2_OPTION_COUNT 2
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -97,7 +98,7 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 	int corrVol=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB CORRECTVOLUME SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.corrVol", "r");
+	FILE* fd1 = fopen("/etc/.corrVol", "r");
 	if(fd1)
 	{
 	corrVol=1;
@@ -127,14 +128,14 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 	if (corrVol==1)
 	{
 	//CORRECTVOLUME STARTEN
-	system("touch /var/etc/.corrVol");
+	system("touch /etc/.corrVol");
 	system("/etc/init.d/corrVol.sh &");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CORRECTVOLUME Activated!", 450, 2); // UTF-8("")
 	}
 	if (corrVol==0)
 	{
 	//CORRECTVOLUME BEENDEN
-	system("rm /var/etc/.corrVol");
+	system("rm /etc/.corrVol");
 	system("killall -9 corrVol.sh");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CORRECTVOLUME Deactivated!", 450, 2); // UTF-8("")
 	}
@@ -195,7 +196,7 @@ void TUNERRESET_Menu::TUNERRESETSettings()
 	int tuner=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB RESET SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.reset", "r");
+	FILE* fd1 = fopen("/etc/.reset", "r");
 	if(fd1)
 	{
 	tuner=1;
@@ -282,8 +283,8 @@ void AMOUNT_Menu::AMOUNTSettings()
 	int amount=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB AMOUNT SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.byLabel", "r");
-	FILE* fd2 = fopen("/var/etc/.byDev", "r");
+	FILE* fd1 = fopen("/etc/.byLabel", "r");
+	FILE* fd2 = fopen("/etc/.byDev", "r");
 	if(fd1)
 	{
 	amount=1;
@@ -318,15 +319,15 @@ void AMOUNT_Menu::AMOUNTSettings()
 	if (amount==1)
 	{
 	//AMOUNT STARTEN
-	system("touch /var/etc/.byLabel");
+	system("touch /etc/.byLabel");
 	system("/etc/init.d/amount.sh &");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "AMOUNT byLabel Activated!", 450, 2); // UTF-8("")
 	}
 	if (amount==0)
 	{
 	//AMOUNT BEENDEN
-	system("rm /var/etc/.byLabel");
-	system("rm /var/etc/.byDev");
+	system("rm /etc/.byLabel");
+	system("rm /etc/.byDev");
 //	system("killall -9 amount.sh");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "AMOUNT byLabel Deactivated!\nPlease REBOOT", 450, 2); // UTF-8("")
 	}
@@ -384,7 +385,7 @@ void CHECKFS_Menu::CHECKFSSettings()
 	int checkfs=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB CHECKFS SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.checkfs", "r");
+	FILE* fd1 = fopen("/etc/.checkfs", "r");
 	if(fd1)
 	{
 	checkfs=1;
@@ -414,13 +415,13 @@ void CHECKFS_Menu::CHECKFSSettings()
 	if (checkfs==1)
 	{
 	//CHECKFS STARTEN
-	system("touch /var/etc/.checkfs");
+	system("touch /etc/.checkfs");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Activated!", 450, 2); // UTF-8("")
 	}
 	if (checkfs==0)
 	{
 	//CHECKFS BEENDEN
-	system("rm /var/etc/.checkfs");
+	system("rm /etc/.checkfs");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Deactivated!", 450, 2); // UTF-8("")
 	}
 }
@@ -506,7 +507,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	int save_value=0;
 
 //UEBERPRUEFEN WELCHES EMU LAEUFT
-	FILE* fd1 = fopen("/var/etc/.mgcamd", "r");
+	FILE* fd1 = fopen("/etc/.mgcamd", "r");
 	if(fd1)
 	{
 	emu=0;
@@ -514,7 +515,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	mgcamd=1;
 	emu_onoff=1;
 	}
-	FILE* fd2 = fopen("/var/etc/.incubus", "r");
+	FILE* fd2 = fopen("/etc/.incubus", "r");
 	if(fd2)
 	{
 	emu=1;
@@ -522,7 +523,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	incubus=1;
 	emu_onoff=1;
 	}
-	FILE* fd3 = fopen("/var/etc/.camd3", "r");
+	FILE* fd3 = fopen("/etc/.camd3", "r");
 	if(fd3)
 	{
 	emu=2;
@@ -530,7 +531,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	camd3=1;
 	emu_onoff=1;
 	}
-	FILE* fd4 = fopen("/var/etc/.mbox", "r");
+	FILE* fd4 = fopen("/etc/.mbox", "r");
 	if(fd4)
 	{
 	emu=3;
@@ -538,7 +539,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	mbox=1;
 	emu_onoff=1;
 	}
-	FILE* fd5 = fopen("/var/etc/.oscam", "r");
+	FILE* fd5 = fopen("/etc/.oscam", "r");
 	if(fd5)
 	{
 	emu=4;
@@ -556,7 +557,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	char mboxversion[7] = "N/A";
 	char oscamversion[7] = "N/A";
 	char newcsversion[7] = "N/A";
-	FILE* fdemu = fopen("/var/emu/versions.txt", "r");
+	FILE* fdemu = fopen("/usr/bin/versions.txt", "r");
 	if(fdemu)
 	{
 	char buffer[120];
@@ -584,12 +585,12 @@ void EMU_Menu::EMU_Menu_Settings()
 	ExtraMenuSettings->addItem( oj2 );
 	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "camdreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	FILE* fdcamd3_installed = fopen("/var/emu/camd3", "r");
-	FILE* fdmgcamd_installed = fopen("/var/emu/mgcamd", "r");
-	FILE* fdmbox_installed = fopen("/var/emu/mbox", "r");
-	FILE* fdincubuscamd_installed = fopen("/var/emu/incubusCamd", "r");
-	FILE* fdoscam_installed = fopen("/var/emu/oscam", "r");
-	FILE* fdnewcs_installed = fopen("/var/emu/newcs", "r");
+	FILE* fdcamd3_installed = fopen("/usr/bin/camd3", "r");
+	FILE* fdmgcamd_installed = fopen("/usr/bin/mgcamd", "r");
+	FILE* fdmbox_installed = fopen("/usr/bin/mbox", "r");
+	FILE* fdincubuscamd_installed = fopen("/usr/bin/incubusCamd", "r");
+	FILE* fdoscam_installed = fopen("/usr/bin/oscam", "r");
+	FILE* fdnewcs_installed = fopen("/usr/bin/newcs", "r");
 	if(fdmgcamd_installed)
 	{
 	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_MGCAMDVERSION, false, mgcamdversion));
@@ -635,27 +636,27 @@ void EMU_Menu::EMU_Menu_Settings()
 	{
 	if (camd3==1)
 	{
-	system("rm /var/etc/.camd3");
+	system("rm /etc/.camd3");
 	system("kill $(pidof camd3)");
 	}
 	if (incubus==1)
 	{
-	system("rm /var/etc/.incubus");
+	system("rm /etc/.incubus");
 	system("kill $(pidof incubusCamd)");
 	}
 	if (mbox==1)
 	{
-	system("rm /var/etc/.mbox");
+	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	}
 	if (oscam==1)
 	{
-	system("rm /var/etc/.oscam");
+	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
-	system("touch /var/etc/.mgcamd");
+	system("touch /etc/.mgcamd");
 	system("rm /tmp/camd.socket");
-	system("/var/emu/mgcamd /var/keys/mg_cfg &");
+	system("/usr/bin/mgcamd /var/keys/mg_cfg &");
 //	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MGCAMD activated!", 450, 2); // UTF-8("")
 }
@@ -665,7 +666,7 @@ if (emu_onoff==0)
 {
 	if (emu==0)
 	{
-	system("rm /var/etc/.mgcamd");
+	system("rm /etc/.mgcamd");
 	system("kill $(pidof mgcamd)");
 	emu_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -681,27 +682,27 @@ if (emu_onoff==1)
 	{
 	if (camd3==1)
 	{
-	system("rm /var/etc/.camd3");
+	system("rm /etc/.camd3");
 	system("kill $(pidof camd3)");
 	}
 	if (mgcamd==1)
 	{
-	system("rm /var/etc/.mgcamd");
+	system("rm /etc/.mgcamd");
 	system("kill $(pidof mgcamd)");
 	}
 	if (mbox==1)
 	{
-	system("rm /var/etc/.mbox");
+	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	}
 	if (oscam==1)
 	{
-	system("rm /var/etc/.oscam");
+	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
-	system("touch /var/etc/.incubus");
+	system("touch /etc/.incubus");
 	system("rm /tmp/camd.socket");
-	system("/var/emu/incubusCamd &");
+	system("/usr/bin/incubusCamd &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " INCUBUS activated!", 450, 2); // UTF-8("")
 	}
@@ -711,7 +712,7 @@ if (emu_onoff==0)
 {
 	if (emu==1)
 	{
-	system("rm /var/etc/.incubus");
+	system("rm /etc/.incubus");
 	system("kill $(pidof incubusCamd)");
 	emu_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -727,26 +728,26 @@ if (emu_onoff==1)
 	{
 	if (mgcamd==1)
 	{
-	system("rm /var/etc/.mgcamd");
+	system("rm /etc/.mgcamd");
 	system("kill $(pidof mgcamd)");
 	}
 	if (incubus==1)
 	{
-	system("rm /var/etc/.incubus");
+	system("rm /etc/.incubus");
 	system("kill $(pidof incubusCamd)");
 	}
 	if (mbox==1)
 	{
-	system("rm /var/etc/.mbox");
+	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	}
 	if (oscam==1)
 	{
-	system("rm /var/etc/.oscam");
+	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
-	system("touch /var/etc/.camd3");
-	system("/var/emu/camd3 /var/keys/camd3.config &");
+	system("touch /etc/.camd3");
+	system("/usr/bin/camd3 /var/keys/camd3.config &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " CAMD3 activated!", 450, 2); // UTF-8("")
 	}
@@ -756,7 +757,7 @@ if (emu_onoff==0)
 {
 	if (emu==2)
 	{
-	system("rm /var/etc/.camd3");
+	system("rm /etc/.camd3");
 	system("kill $(pidof camd3)");
 	emu_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -772,26 +773,26 @@ if (emu_onoff==1)
 	{
 	if (mgcamd==1)
 	{
-	system("rm /var/etc/.mgcamd");
+	system("rm /etc/.mgcamd");
 	system("kill $(pidof mgcamd)");
 	}
 	if (incubus==1)
 	{
-	system("rm /var/etc/.incubus");
+	system("rm /etc/.incubus");
 	system("kill $(pidof incubusCamd)");
 	}
 	if (camd3==1)
 	{
-	system("rm /var/etc/.camd3");
+	system("rm /etc/.camd3");
 	system("kill $(pidof camd3)");
 	}
 	if (oscam==1)
 	{
-	system("rm /var/etc/.oscam");
+	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
-	system("touch /var/etc/.mbox");
-	system("/var/emu/mbox /var/keys/mbox.cfg &");
+	system("touch /etc/.mbox");
+	system("/usr/bin/mbox /var/keys/mbox.cfg &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MBOX activated!", 450, 2); // UTF-8("")
 	}
@@ -801,7 +802,7 @@ if (emu_onoff==0)
 	{
 	if (emu==3)
 	{
-	system("rm /var/etc/.mbox");
+	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	system("rm /tmp/share.*");
 	system("rm /tmp/mbox.ver");
@@ -820,26 +821,26 @@ if (emu_onoff==1)
 	{
 	if (mgcamd==1)
 	{
-	system("rm /var/etc/.mgcamd");
+	system("rm /etc/.mgcamd");
 	system("kill $(pidof mgcamd)");
 	}
 	if (incubus==1)
 	{
-	system("rm /var/etc/.incubus");
+	system("rm /etc/.incubus");
 	system("kill $(pidof incubusCamd)");
 	}
 	if (camd3==1)
 	{
-	system("rm /var/etc/.camd3");
+	system("rm /etc/.camd3");
 	system("kill $(pidof camd3)");
 	}
 	if (mbox==1)
 	{
-	system("rm /var/etc/.mbox");
+	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	}
-	system("touch /var/etc/.oscam");
-	system("/var/emu/oscam -c /var/keys &");
+	system("touch /etc/.oscam");
+	system("/usr/bin/oscam -c /var/keys &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " OSCAM activated!", 450, 2); // UTF-8("")
 	}
@@ -849,7 +850,7 @@ if (emu_onoff==0)
 {
 	if (emu==4)
 	{
-	system("rm /var/etc/.oscam");
+	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	emu_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -872,7 +873,7 @@ bool EMU_Menu::CamdReset()
 	bool oscam=0;
 	bool newcs=0;
 //UEBERPRUEFEN WELCHES EMU LAEUFT
-	FILE* fd1 = fopen("/var/etc/.mgcamd", "r");
+	FILE* fd1 = fopen("/etc/.mgcamd", "r");
 	if(fd1)
 	{
 	emu=0;
@@ -880,7 +881,7 @@ bool EMU_Menu::CamdReset()
 	mgcamd=1;
 	emu_onoff=1;
 	}
-	FILE* fd2 = fopen("/var/etc/.incubus", "r");
+	FILE* fd2 = fopen("/etc/.incubus", "r");
 	if(fd2)
 	{
 	emu=1;
@@ -888,7 +889,7 @@ bool EMU_Menu::CamdReset()
 	incubus=1;
 	emu_onoff=1;
 	}
-	FILE* fd3 = fopen("/var/etc/.camd3", "r");
+	FILE* fd3 = fopen("/etc/.camd3", "r");
 	if(fd3)
 	{
 	emu=2;
@@ -896,7 +897,7 @@ bool EMU_Menu::CamdReset()
 	camd3=1;
 	emu_onoff=1;
 	}
-	FILE* fd4 = fopen("/var/etc/.mbox", "r");
+	FILE* fd4 = fopen("/etc/.mbox", "r");
 	if(fd4)
 	{
 	emu=3;
@@ -904,7 +905,7 @@ bool EMU_Menu::CamdReset()
 	mbox=1;
 	emu_onoff=1;
 	}
-	FILE* fd5 = fopen("/var/etc/.oscam", "r");
+	FILE* fd5 = fopen("/etc/.oscam", "r");
 	if(fd5)
 	{
 	emu=4;
@@ -921,35 +922,35 @@ bool EMU_Menu::CamdReset()
 	{
 	system("kill $(pidof mgcamd)");
 	system("sleep 2");
-	system("/var/emu/mgcamd /var/keys/mg_cfg &");
+	system("/usr/bin/mgcamd /var/keys/mg_cfg &");
 	}
 	//incubus
 	if (emu==1)
 	{
 	system("kill $(pidof incubusCamd)");
 	system("sleep 2");
-	system("/var/emu/incubusCamd &");
+	system("/usr/bin/incubusCamd &");
 	}
 	//camd3
 	if (emu==2)
 	{
 	system("kill $(pidof camd3)");
 	system("sleep 2");
-	system("/var/emu/camd3 /var/keys/camd3.config &");
+	system("/usr/bin/camd3 /var/keys/camd3.config &");
 	}
 	//mbox
 	if (emu==3)
 	{
 	system("kill $(pidof mbox)");
 	system("sleep 2");
-	system("/var/emu/mbox &");
+	system("/usr/bin/mbox &");
 	}
 	//oscam
 	if (emu==4)
 	{
 	system("kill $(pidof oscam)");
 	system("sleep 2");
-	system("/var/emu/oscam -c /var/keys &");
+	system("/usr/bin/oscam -c /var/keys &");
 	}
 	system("sleep 5");
 	system("/usr/local/bin/pzapit -rz");
@@ -1007,7 +1008,7 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	int displaytime=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB DISPLAYTIME SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.time", "r");
+	FILE* fd1 = fopen("/etc/.time", "r");
 	if(fd1)
 	{
 	displaytime=1;
@@ -1037,16 +1038,16 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	if (displaytime==1)
 	{
 	//DisplayTime STARTEN
-	system("touch /var/etc/.time");
-	system("touch /var/etc/.scroll");
+	system("touch /etc/.time");
+	system("touch /etc/.scroll");
 //	system("/etc/init.d/DisplayTime.sh &");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!\nPlease REBOOT", 450, 2); // UTF-8("")
 	}
 	if (displaytime==0)
 	{
 	//DisplayTime BEENDEN
-	system("rm /var/etc/.time");
-	system("rm /var/etc/.scroll");
+	system("rm /etc/.time");
+	system("rm /etc/.scroll");
 //	system("killall -9 DisplayTime.sh");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!\nPlease REBOOT", 450, 2); // UTF-8("")
 	}
@@ -1103,7 +1104,7 @@ void WWWDATE_Menu::WWWDATESettings()
 	int wwwdate=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB WWWDATE SCHON LAEUFT
-	FILE* fd1 = fopen("/var/etc/.wwwdate", "r");
+	FILE* fd1 = fopen("/etc/.wwwdate", "r");
 	if(fd1)
 	{
 	wwwdate=1;
@@ -1133,13 +1134,13 @@ void WWWDATE_Menu::WWWDATESettings()
 	if (wwwdate==1)
 	{
 	//WWWDATE STARTEN
-	system("touch /var/etc/.wwwdate");
+	system("touch /etc/.wwwdate");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WWWDATE Activated!", 450, 2); // UTF-8("")
 	}
 	if (wwwdate==0)
 	{
 	//WWWDATE BEENDEN
-	system("rm /var/etc/.wwwdate");
+	system("rm /etc/.wwwdate");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WWWDATE Deactivated!", 450, 2); // UTF-8("")
 	}
 }
@@ -1208,7 +1209,7 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	int save_value=0;
 
 //UEBERPRUEFEN WELCHES SWAP LAEUFT
-	FILE* fd1 = fopen("/var/etc/.swapram", "r");
+	FILE* fd1 = fopen("/etc/.swapram", "r");
 	if(fd1)
 	{
 	swap=0;
@@ -1216,7 +1217,7 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	swapram=1;
 	swap_onoff=1;
 	}
-	FILE* fd2 = fopen("/var/etc/.swappart", "r");
+	FILE* fd2 = fopen("/etc/.swappart", "r");
 	if(fd2)
 	{
 	swap=1;
@@ -1224,7 +1225,7 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	swappart=1;
 	swap_onoff=1;
 	}
-	FILE* fd3 = fopen("/var/etc/.swapfile", "r");
+	FILE* fd3 = fopen("/etc/.swapfile", "r");
 	if(fd3)
 	{
 	swap=2;
@@ -1267,15 +1268,15 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	{
 	if (swapfile==1)
 	{
-	system("rm /var/etc/.swapfile");
+	system("rm /etc/.swapfile");
 	}
 	if (swappart==1)
 	{
-	system("rm /var/etc/.swappart");
+	system("rm /etc/.swappart");
 	}
-	system("touch /var/etc/.swapram");
-	system("touch /var/etc/.swapon");
-	system("/var/etc/init.d/Swap.sh &");
+	system("touch /etc/.swapram");
+	system("touch /etc/.swapon");
+	system("/etc/init.d/Swap.sh &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPRAM activated!", 450, 2); // UTF-8("")
 	}
@@ -1285,8 +1286,8 @@ if (swap_onoff==0)
 {
 	if (swap==0)
 	{
-	system("rm /var/etc/.swapram");
-	system("rm /var/etc/.swapon");
+	system("rm /etc/.swapram");
+	system("rm /etc/.swapon");
 	system("swapoff -a");
 	swap_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -1302,15 +1303,15 @@ if (swap_onoff==1)
 	{
 	if (swapfile==1)
 	{
-	system("rm /var/etc/.swapfile");
+	system("rm /etc/.swapfile");
 	}
 	if (swapram==1)
 	{
-	system("rm /var/etc/.swapram");
+	system("rm /etc/.swapram");
 	}
-	system("touch /var/etc/.swappart");
-	system("touch /var/etc/.swapon");
-	system("/var/etc/init.d/Swap.sh &");
+	system("touch /etc/.swappart");
+	system("touch /etc/.swapon");
+	system("/etc/init.d/Swap.sh &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPPART activated!", 450, 2); // UTF-8("")
 	}
@@ -1320,8 +1321,8 @@ if (swap_onoff==0)
 {
 	if (swap==1)
 	{
-	system("rm /var/etc/.swappart");
-	system("rm /var/etc/.swapon");
+	system("rm /etc/.swappart");
+	system("rm /etc/.swapon");
 	system("swapoff -a");
 	swap_onoff=0;
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -1337,15 +1338,15 @@ if (swap_onoff==1)
 	{
 	if (swapram==1)
 	{
-	system("rm /var/etc/.swapram");
+	system("rm /etc/.swapram");
 	}
 	if (swappart==1)
 	{
-	system("rm /var/etc/.swappart");
+	system("rm /etc/.swappart");
 	}
-	system("touch /var/etc/.swapfile");
-	system("touch /var/etc/.swapon");
-	system("/var/etc/init.d/Swap.sh &");
+	system("touch /etc/.swapfile");
+	system("touch /etc/.swapon");
+	system("/etc/init.d/Swap.sh &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPFILE activated!", 450, 2); // UTF-8("")
 	}
@@ -1355,8 +1356,8 @@ if (swap_onoff==0)
 {
 	if (swap==2)
 	{
-	system("rm /var/etc/.swapfile");
-	system("rm /var/etc/.swapon");
+	system("rm /etc/.swapfile");
+	system("rm /etc/.swapon");
 	system("swapoff /dev/loop0");
 	system("losetup -d /dev/loop0");
 	system("swapoff -a");
@@ -1370,3 +1371,96 @@ if (swap_onoff==0)
 }
 
 ////////////////////////////// SWAP Menu ENDE //////////////////////////////////////
+
+////////////////////////////// BOOTE2 Menu ANFANG ////////////////////////////////////
+const CMenuOptionChooser::keyval BOOTE2_OPTIONS[BOOTE2_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_BOOTE2_OFF },
+	{ 1, LOCALE_EXTRAMENU_BOOTE2_ON }
+};
+
+BOOTE2_Menu::BOOTE2_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+	{
+	parent->hide();
+	}
+	paint();
+
+	BOOTE2Settings();
+
+	return res;
+}
+
+void BOOTE2_Menu::hide()
+{
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void BOOTE2_Menu::paint()
+{
+printf("$Id: Volume-Menue Extended  Exp $\n");
+}
+
+void BOOTE2_Menu::BOOTE2Settings()
+{
+	int bootE2=0;
+	int save_value=0;
+	//UEBERPRUEFEN OB BOOTE2 SCHON LAEUFT
+	FILE* fd1 = fopen("/etc/.start_enigma2", "r");
+	if(fd1)
+	{
+	bootE2=1;
+	fclose(fd1);
+	}
+	int old_bootE2=bootE2;
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTE2, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOTE2_SELECT, &bootE2, BOOTE2_OPTIONS, BOOTE2_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_bootE2!=bootE2)
+	{
+	save_value=1;
+	}
+	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+
+	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
+	if (save_value==1)
+	{
+	if (bootE2==1)
+	{
+	//BOOTE2 STARTEN
+	system("touch /etc/.start_enigma2");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 Activated, please reboot!", 450, 2); // UTF-8("")
+	bootE2=0;
+	}
+	/*if (bootE2==0)
+	{
+	//BOOTE2 BEENDEN
+	system("rm /etc/.bootE2");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "BOOTE2 Deactivated!", 450, 2); // UTF-8("")
+	}*/
+}
+//ENDE BOOTE2
+}
+////////////////////////////// BOOTE2 Menu ENDE //////////////////////////////////////

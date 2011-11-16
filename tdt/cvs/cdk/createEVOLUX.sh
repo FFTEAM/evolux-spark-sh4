@@ -66,8 +66,10 @@ cp -RP $E2DIR/etc/hostname $EVOLUXDIR/etc/
 cp -RP $E2DIR/etc/image-version $EVOLUXDIR/etc/
 cp -RP $E2DIR/etc/localtime $EVOLUXDIR/etc/
 cp -RP $E2DIR/etc/rc.d/rc0.d $EVOLUXDIR/etc/rc.d/
+cp -RP $E2DIR/etc/rc.d/rc3.d $EVOLUXDIR/etc/rc.d/
+cp -RP $E2DIR/etc/rc.d/rc6.d $EVOLUXDIR/etc/rc.d/
 cp -RP $E2DIR/etc/init.d/ntpupdate.sh $EVOLUXDIR/etc/init.d/
-cp -RP $CURDIR/root/release/rcS_stm23_evolux_spark $EVOLUXDIR/etc/init.d/
+cp -RP $CURDIR/root/release/rcS_stm23_evolux_spark $EVOLUXDIR/etc/init.d/rcS
 cp -RP $E2DIR/lib/modules $EVOLUXDIR/lib/
 cd $EVOLUXDIR
 $USERS  tar -czvf../release_EVOLUX_with_dev.tar.gz ./

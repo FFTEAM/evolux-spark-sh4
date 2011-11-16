@@ -1417,4 +1417,8 @@ extramenu.swap.select Swap Select
 extramenu.swap.onoff SWAP
 extramenu.swap.onoff.on On
 extramenu.swap.onoff.off Off
+extramenu.boote2 Boot E2 Menue
+extramenu.boote2.select Boot E2
+extramenu.boote2.on On
+extramenu.boote2.off Off
 setting.saved Settings saved

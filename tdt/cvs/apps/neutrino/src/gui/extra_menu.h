@@ -233,4 +233,27 @@ class SWAP_Menu : public CMenuTarget
 
 };
 
+class BOOTE2_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	BOOTE2_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void BOOTE2Settings();
+
+};
 #endif //__emumenu__

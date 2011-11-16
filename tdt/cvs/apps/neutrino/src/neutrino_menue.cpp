@@ -778,25 +778,30 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(GenericMenuSeparator);
 	ExtraMenu.addItem(GenericMenuBack);
 	ExtraMenu.addItem(GenericMenuSeparatorLine);
-	FILE* fdcamd3_installed = fopen("/var/emu/camd3", "r");
-	FILE* fdmgcamd_installed = fopen("/var/emu/mgcamd", "r");
-	FILE* fdmbox_installed = fopen("/var/emu/mbox", "r");
-	FILE* fdincubuscamd_installed = fopen("/var/emu/incubusCamd", "r");
-	FILE* fdoscam_installed = fopen("/var/emu/oscam", "r");
-	FILE* fdnewcs_installed = fopen("/var/emu/newcs", "r");
-	if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
-	{
+	FILE* fdcamd3_installed = fopen("/usr/bin/camd3", "r");
+	FILE* fdmgcamd_installed = fopen("/usr/bin/mgcamd", "r");
+	FILE* fdmbox_installed = fopen("/usr/bin/mbox", "r");
+	FILE* fdincubuscamd_installed = fopen("/usr/bin/incubusCamd", "r");
+	FILE* fdoscam_installed = fopen("/usr/bin/oscam", "r");
+	FILE* fdnewcs_installed = fopen("/usr/bin/newcs", "r");
+	FILE* fde2_installed = fopen("/usr/local/bin/enigma2", "r");
+	//if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
+	//{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, new EMU_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
-	}
+	//}
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, new TUNERRESET_Menu(), NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
 	/*if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
 	{ */
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::RC_1)); // DisplayTime Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_3)); // SWAP Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_3)); // SWAP Menu
+	if((fde2_installed))
+	{
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::RC_2)); // BOOTE2 Menu
+	}
 	/*}
 	else
 	{
