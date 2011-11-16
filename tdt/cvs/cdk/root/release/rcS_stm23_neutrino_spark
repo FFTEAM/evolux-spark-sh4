@@ -106,45 +106,9 @@ fi
 	/usr/script/user_script.sh &
    fi
 
-   if [ -e /usr/local/bin/enigma2 ] && [ -e /etc/.start_enigma2 ]; then
-   echo "run" > /dev/vfd
-   echo "LOADING E2"
+   /etc/init.d/Swap.sh &
 
-   until false
-   do
-      echo "starting e2->"
-      /usr/local/bin/enigma2
-      rtv=$?
-      echo "e2 ended <- RTV: " $rtv
-      case "$rtv" in
-		0) echo "$rtv"
-		   echo "E2 ERROR"
-      		   killall -9 enigma2;;
-		1) echo "$rtv"
-		   echo "SHUTDOWN"
-                   sync
-		   HDDON=`mount | grep sda1 | cut -d " " -f5`
-		   if [ ! -z "$HDDON" ]; then
-			echo "hdd-check"
-			echo "FSCK" > /dev/vfd
-			umount /dev/sda1
-			fsck.$HDDON -y /dev/sda1
-		   fi
-                   init 0;;
-		2) echo "$rtv"
-		   echo "REBOOT"
-		   init 6;;
-		3) echo "$rtv"
-		      echo "E2 RESTART"
-		      #echo "0" > /proc/progress;;
-      		      killall -9 enigma2;;
-		*) echo "*"
-		   echo "ERROR"
-		   echo "0" > /proc/progress;;
-      esac
-   done 
-   else
-	echo "starting neutrino ->"
+   echo "starting neutrino ->"
 	/usr/local/bin/neutrino -f -u
 	echo "LOADING neutrino"
 
@@ -175,8 +139,6 @@ fi
 			   echo "0" > /proc/progress;;
 		esac
    done 
-   fi
-
 
 fi
 

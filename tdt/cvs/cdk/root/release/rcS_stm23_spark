@@ -160,13 +160,8 @@ fi
 
    until false
    do
-   if [ -e /usr/local/bin/enigma2 ]; then
       echo "starting e2->"
       /usr/local/bin/enigma2
-   else
-      echo "starting neutrino ->"
-      /usr/local/bin/neutrino -f -u
-   fi
       rtv=$?
       echo "e2 ended <- RTV: " $rtv
       case "$rtv" in
