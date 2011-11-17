@@ -76,6 +76,8 @@ if STM23
 else
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/vfd.ko
 endif
+	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release/sbin
+	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf

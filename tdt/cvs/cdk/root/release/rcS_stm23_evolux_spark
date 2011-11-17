@@ -113,7 +113,7 @@ fi
    insmod $MODDIR/pti.ko waitMS=20 videoMem=4096
    insmod $MODDIR/stm_monitor.ko
    insmod $MODDIR/stmsysfs.ko
-   insmod $MODDIR/stmdvb.ko
+   insmod $MODDIR/stmdvb.ko TSsource0=0;
 #   insmod $MODDIR/player2.ko
    insmod $MODDIR/player2.ko discardlateframe=0
    insmod $MODDIR/sth264pp.ko
