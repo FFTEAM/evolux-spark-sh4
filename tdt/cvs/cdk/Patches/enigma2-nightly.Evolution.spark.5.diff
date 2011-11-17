@@ -362,7 +362,7 @@
  		self.dolbyAvailable = False
 -		
 +	def startTimer(self):
-+		self.timer.startLongTimer(30)
++		self.timer.startLongTimer(15)
 +	def StopTimer(self, result):
 +		if result:
 +			self.timer.stop()
