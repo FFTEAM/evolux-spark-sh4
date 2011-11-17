@@ -600,6 +600,8 @@ endif
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
+#### displaytime plugin not longer needed so we remove it #####
+	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
 	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release/usr/lib/enigma2/python/Components/
