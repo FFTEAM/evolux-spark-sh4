@@ -200,8 +200,7 @@ fi
       esac
    done 
    else
-	echo "starting neutrino ->"
-	/usr/local/bin/neutrino -f -u
+	echo "run" > /dev/vfd
 	echo "LOADING neutrino"
 
 	   until false

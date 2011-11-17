@@ -107,10 +107,8 @@ fi
    fi
 
    /etc/init.d/Swap.sh &
-
-   echo "starting neutrino ->"
-	/usr/local/bin/neutrino -f -u
-	echo "LOADING neutrino"
+   echo "run" > /dev/vfd
+   echo "LOADING neutrino"
 
 	   until false
 	   do
