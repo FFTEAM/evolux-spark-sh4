@@ -440,7 +440,7 @@ endif
 
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino/etc/init.d/
 #	install autofs
-	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/
+	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/
 	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release_neutrino/etc/auto.usb
