@@ -10,14 +10,14 @@ if [ -e /etc/.start_enigma2 ]; then
 	isactive=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapArt= | cut -d = -f2`
 else
 	if [ -e /etc/.swappart ]; then
-		isactive = swappart
+		isactive=swappart
 	elif [ -e /etc/.swapfile ]; then
-		isactive = swapfile
+		isactive=swapfile
 	else
-		isactive = swapram
+		isactive=swapram
 	fi
 fi
-if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ]; then
+if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ "$isactive" = swapram ] || [ -z $isactive ]; then
 	if [ "$isactive" = swappart ]; then
 		swappart=`fdisk -l | grep swap | cut -d / -f3 | cut -b1-4`
 		echo -e -n "\n/dev/$swappart     none                swap    sw\n" >> /etc/fstab
@@ -25,12 +25,12 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 		echo "SWAPPART ON"
 		echo "SWP" > /dev/vfd
 	fi
-	if [ -z $isactive ]; then
-		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
+	if [ "$isactive" = swapram ] || [ -z $isactive ]; then
+#		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
 			alwaysthere=`lsmod | grep -m2 ramzswap0`
 			if [ -z $alwaysthere ]; then
-				insmod /lib/modules/lzo1x_compress.ko
-				insmod /lib/modules/lzo1x_decompress.ko
+				#insmod /lib/modules/lzo1x_compress.ko
+				#insmod /lib/modules/lzo1x_decompress.ko
 				insmod /lib/modules/ramzswap.ko disksize_kb=32768
 				mknod /dev/ramzswap0 b 253 0 >/dev/null 2>&1
 				echo "SWAPRAM ON"
@@ -44,7 +44,7 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ];
 					(swapoff -a;swapon /dev/ramzswap0)
 				fi 
 			fi
-		fi
+#		fi
 	fi
 	if [ "$isactive" = swapfile ]; then
 		. /etc/init.d/swapsize.old
