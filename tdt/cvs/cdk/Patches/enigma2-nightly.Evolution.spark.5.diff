@@ -344,3 +344,92 @@
 -		print "setValue", vol
  		self.volumeBar.setValue(vol)
 +		self["VolumeText"].setText(str(vol)) #NEW LINE
+
+--- enigma2-nightly.org/lib/python/Plugins/SystemPlugins/VFD-Icons/plugin.py	2011-11-17 18:41:03.335982309 +0100
++++ enigma2-nightly/lib/python/Plugins/SystemPlugins/VFD-Icons/lugin.py	2011-11-17 18:40:49.851915438 +0100
+@@ -10,6 +10,8 @@
+ 	def __init__(self, session):
+ 		# Save Session&Servicelist, Create Timer, Init Services
+ 		self.session = session
++		self.timer = eTimer()
++		self.timer.timeout.get().append(self.timerEvent)
+ 		self.service = None
+ 		self.onClose = [ ]
+ 		self.__event_tracker = ServiceEventTracker(screen=self,eventmap=
+@@ -24,7 +26,21 @@
+ 		session.nav.record_event.append(self.gotRecordEvent)
+ 		self.mp3Available = False
+ 		self.dolbyAvailable = False
+-		
++	def startTimer(self):
++		self.timer.startLongTimer(30)
++	def StopTimer(self, result):
++		if result:
++			self.timer.stop()
++			self.service = None
++	def timerEvent(self):
++		tm=localtime()
++		if config.VFD.ShowTime.value is True:
++#			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
++#			if not self.service is None:
++			servicename = strftime("%H%M",tm) 
++			evfd.getInstance().vfd_write_string(servicename[0:17])
++		self.startTimer()
++timerInstance = None
+ 	def __evStart(self):
+ 		print "[__evStart]"
+ 		self.__evSeekableStatusChanged()	
+@@ -45,21 +61,25 @@
+ 			# show the MP3 tag
+ 			servicename = currPlay.info().getInfoString(iServiceInformation.sTagTitle)
+ 		else:
++			tm=localtime()
++			servicename=strftime("%H%M",tm)
+ 			# show the service name
+-			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
+-			if not self.service is None:
+-				service = self.service.toCompareString()
+-				servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
+-				subservice = self.service.toString().split("::")
+-				if subservice[0].count(':') == 9:
+-					servicename = subservice[1].replace('\xc2\x87', '').replace('\xc3\x9f', 'ss').replace('\xc2\x86', '').ljust(16)
+-				else:
+-					servicename=servicename
+-			else:
+-				print "no Service found"
+-		
+-		print "vfd display text:", servicename[0:63]
+-		evfd.getInstance().vfd_write_string(servicename[0:63])
++		#	self.service = self.session.nav.getCurrentlyPlayingServiceReference()
++		#	if not self.service is None:
++		#		service = self.service.toCompareString()
++		#		servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
++		#		subservice = self.service.toString().split("::")
++		#		if subservice[0].count(':') == 9:
++		#			servicename = subservice[1].replace('\xc2\x87', '').replace('\xc3\x9f', 'ss').replace('\xc2\x86', '').ljust(16)
++		#		else:
++		#			servicename=servicename
++		#	else:
++		#		print "no Service found"
++		
++		#print "vfd display text:", servicename[0:63]
++		#evfd.getInstance().vfd_write_string(servicename[0:63])
++		evfd.getInstance().vfd_write_string( servicename )
++
+ 		return 1
+ 		
+ 	def showCrypted(self):
+@@ -147,8 +167,12 @@
+ def main(session, **kwargs):
+ 	# Create Instance if none present, show Dialog afterwards
+ 	global VFDIconsInstance
++	global timerInstance
+ 	if VFDIconsInstance is None:
+ 		VFDIconsInstance = VFDIcons(session)
++		timerInstance = VFDIcons(session)
++	timerInstance.startTimer()
++	timerInstance.timerEvent()
+ 
+ def Plugins(**kwargs):
+  	return [ PluginDescriptor(name="VFDIcons", description="Icons in VFD", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=main ) ]
+
