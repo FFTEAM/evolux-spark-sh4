@@ -1,6 +1,7 @@
 ############ Patches Kernel 23 ###############
-
+if ENABLE_P0123
 PATCH_STR=_0123
+endif
 
 STM23_DVB_PATCH = linux-sh4-linuxdvb_stm23$(PATCH_STR).patch
 
