@@ -778,29 +778,49 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(GenericMenuSeparator);
 	ExtraMenu.addItem(GenericMenuBack);
 	ExtraMenu.addItem(GenericMenuSeparatorLine);
-	FILE* fdcamd3_installed = fopen("/usr/bin/camd3", "r");
-	FILE* fdmgcamd_installed = fopen("/usr/bin/mgcamd", "r");
-	FILE* fdmbox_installed = fopen("/usr/bin/mbox", "r");
-	FILE* fdincubuscamd_installed = fopen("/usr/bin/incubusCamd", "r");
-	FILE* fdoscam_installed = fopen("/usr/bin/oscam", "r");
-	FILE* fdnewcs_installed = fopen("/usr/bin/newcs", "r");
+	FILE* fdcamd3_installed = fopen("/etc/.camd3", "r");
+	FILE* fdmgcamd_installed = fopen("/etc/.mgcamd", "r");
+	FILE* fdmbox_installed = fopen("/etc/.mbox", "r");
+	FILE* fdincubuscamd_installed = fopen("/etc/.incubusCamd", "r");
+	FILE* fdoscam_installed = fopen("/etc/.oscam", "r");
+	FILE* fdnewcs_installed = fopen("/etc/.newcs", "r");
 	FILE* fde2_installed = fopen("/usr/local/bin/enigma2", "r");
+	if((fdcamd3_installed))
+	{
+	system("(kill $(pidof camd3);sleep 5;/usr/bin/camd3 /usr/keys/camd3.config;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
+	if((fdmgcamd_installed))
+	{
+	system("(kill $(pidof mgcamd);sleep 5;/usr/bin/mgcamd -c /usr/keys/mg_cfg;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
+	if((fdmbox_installed))
+	{
+	system("(kill $(pidof mbox);sleep 5;/usr/bin/mbox /usr/keys/mbox.cfg;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
+	if((fdincubuscamd_installed))
+	{
+	system("(kill $(pidof incubusCamd);sleep 5;/usr/bin/incubusCamd;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
+	if((fdoscam_installed))
+	{
+	system("(kill $(pidof oscam);sleep 5;/usr/bin/oscam -b -c /usr/keys;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
 	//if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
 	//{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, new EMU_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
 	//}
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, new TUNERRESET_Menu(), NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
 	/*if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
 	{ */
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::RC_1)); // DisplayTime Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
-	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_3)); // SWAP Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_2)); // SWAP Menu
 	if((fde2_installed))
 	{
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::RC_2)); // BOOTE2 Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::RC_3)); // BOOTE2 Menu
 	}
 	/*}
 	else
