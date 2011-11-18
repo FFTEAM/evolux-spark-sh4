@@ -64,4 +64,6 @@ v.2.2
 - PP-MD-Skin fix
 v.2.2.3
 - spark: wlan support add
+v.2.2.4
+- boot neutrino option add
 ####################################################
