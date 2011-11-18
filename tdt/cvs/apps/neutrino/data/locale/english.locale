@@ -348,8 +348,8 @@ filebrowser.delete Delete
 filebrowser.denydirectoryleave Absolute start directory
 filebrowser.dodelete1 Delete
 filebrowser.dodelete2 ?
-filebrowser.filter.active Filter on
-filebrowser.filter.inactive Filter off
+filebrowser.filter.active Filter On
+filebrowser.filter.inactive Filter Off
 filebrowser.head Filebrowser
 filebrowser.mark Mark
 filebrowser.nextpage Next Page
@@ -702,11 +702,11 @@ miscsettings.noaviawatchdog enable AVIA watchdog
 miscsettings.noenxwatchdog enable eNX watchdog
 miscsettings.pmtupdate enable pmt update
 miscsettings.shutdown_count switch off after
-miscsettings.shutdown_count_hint1 time (in minutes) to switch from standby
-miscsettings.shutdown_count_hint2 to deep standby (0 = off).
-miscsettings.shutdown_real Enable standby
-miscsettings.shutdown_real_rcdelay Delayed shutdown
-miscsettings.sptsmode use spts mode
+miscsettings.shutdown_count_hint1 Time (in minutes) to switch from standby
+miscsettings.shutdown_count_hint2 To DeepStandby (0 = Off).
+miscsettings.shutdown_real Enable Standby
+miscsettings.shutdown_real_rcdelay Delayed Shutdown
+miscsettings.sptsmode Use SPTS Mode
 miscsettings.virtual_zap_mode Virtual zap
 motorcontrol.calc_positions (Re)-Calculate Positions
 motorcontrol.disable_limit Disable (soft) Limits
@@ -926,32 +926,32 @@ networkmenu.ntpserver NTP-Server
 networkmenu.ntpserver_hint1 NTP-Server example: ntp1.ptb.de
 networkmenu.ntpserver_hint2 need reboot or epg-reset
 networkmenu.ntptitle Time-Syncronisation
-networkmenu.setupnow setup network now
-networkmenu.setuponstartup setup network on startup
-networkmenu.show show active network settings
-networkmenu.test test network now
+networkmenu.setupnow Setup network now
+networkmenu.setuponstartup Setup network on startup
+networkmenu.show Show active network settings
+networkmenu.test Test network now
 neutrino_starting Neutrino starting...
 nfs.alreadymounted directory already mounted
-nfs.automount mount on startup
+nfs.automount Mount on startup
 nfs.dir directory/share
 nfs.ip Server IP
-nfs.localdir local dir
+nfs.localdir Local dir
 nfs.mount Mount Network volume
-nfs.mount_options mount options
-nfs.mounterror mount error
-nfs.mounterror_notsup filesystem type not supported
-nfs.mountnow mount now
-nfs.mountok mount successful
-nfs.mounttimeout mount error: timeout
-nfs.password password
-nfs.remount remount directories
-nfs.type type
+nfs.mount_options Mount options
+nfs.mounterror Mount error
+nfs.mounterror_notsup Filesystem type not supported
+nfs.mountnow Mount now
+nfs.mountok Mount successful
+nfs.mounttimeout Mount error: timeout
+nfs.password Password
+nfs.remount Remount directories
+nfs.type Type
 nfs.type_cifs CIFS
 nfs.type_lufs FTPFS
 nfs.type_nfs NFS
 nfs.umount Umount Network volume
-nfs.umounterror error umounting volume
-nfs.username username
+nfs.umounterror Error umounting volume
+nfs.username Username
 nfsmenu.head NFS/CIFS/FTPFS settings
 nvod.percentage (%d%% over)
 nvod.starting (starting in %d min)
@@ -959,15 +959,15 @@ nvodselector.directormode Direct-Mode
 nvodselector.head Select starting-time
 nvodselector.subservice Select Subservice
 options.default Reset to defaults
-options.fb framebuffer
-options.null null
-options.off off
-options.on on
+options.fb Framebuffer
+options.null Null
+options.off Off
+options.on On
 options.on.without_messages Without msg
 options.serial serial
 parentallock.changepin change PIN code
 parentallock.changepin_hint1 Enter your new youth protection pin code here!
-parentallock.changetolocked on locked bouquets
+parentallock.changetolocked On locked bouquets
 parentallock.head Enter Parental Lock PIN code
 parentallock.lockage lock program
 parentallock.lockage12 from 12 years up
@@ -976,7 +976,7 @@ parentallock.lockage18 from 18 years up
 parentallock.lockedchannel Locked sender...
 parentallock.lockedprogram Locked program (from %d years up)
 parentallock.never never
-parentallock.onsignal on broadcasted lock
+parentallock.onsignal On broadcasted lock
 parentallock.parentallock Youth protection
 parentallock.prompt prompt for PIN
 pictureviewer.decode_server_ip decode server ip
@@ -1039,7 +1039,7 @@ recordingmenu.filesettings direct recording settings
 recordingmenu.head Recording Settings
 recordingmenu.help Recording devices:\n--------------------------\nserver:\nusing streaming software on a PC\n\n(analog) vcr:\nusing the vcr outlet\n\ndirect (file):\ndirectly into an NFS mounted directory\nor onto an internal hard drive\nTS: use spts mode(dbox2)\nPES: do not use spts mode(dbox2)\n\n\nMax. file size:\n---------------------\nNFS V2: 2 GB (2048 MB)\nNFS V3: almost unlimited (0 MB)\nFAT: 2 GB (2048 MB)\nFAT32: 4 GB (4096 MB)
 recordingmenu.no_scart do not switch to scart mode
-recordingmenu.off off
+recordingmenu.off Off
 recordingmenu.record_in_spts_mode switch to spts mode before recording
 recordingmenu.recording_type recording device
 recordingmenu.ringbuffers no. of ringbuffers
@@ -1359,8 +1359,8 @@ videomenu.videomode_pal PAL
 videomenu.videomode_palm PAL-M
 zapit.scantype scan for services
 zapit.scantype.all all services
-zapit.scantype.radio only radio
-zapit.scantype.tv only tv
+zapit.scantype.radio Only radio
+zapit.scantype.tv Only tv
 zapit.scantype.tvradio tv & radio
 zaptotimer.announce Zapto timer in one minute
 mainmenu.extramenu Extras
