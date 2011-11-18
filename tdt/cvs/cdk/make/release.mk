@@ -608,6 +608,7 @@ endif
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
 	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
+	touch $(prefix)/release/etc/.start_enigma2
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release/usr/lib/enigma2/python/Components/
 	rm $(prefix)/release/usr/local/share/enigma2/keymap_*.xml
 
