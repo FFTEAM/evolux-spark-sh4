@@ -912,19 +912,19 @@ mpkey.stop Stop
 mpkey.time Show time
 networkmenu.broadcast Broadcast
 networkmenu.dhcp DHCP
-networkmenu.gateway default gateway
+networkmenu.gateway Default Gateway
 networkmenu.head Network Settings
 networkmenu.ipaddress IP address
 networkmenu.mount NFS/CIFS/FTPFS
-networkmenu.nameserver name server
-networkmenu.netmask netmask
+networkmenu.nameserver Nameserver
+networkmenu.netmask Netmask
 networkmenu.ntpenable Synchronization via
 networkmenu.ntprefresh NTP/DVB-Refresh
 networkmenu.ntprefresh_hint1 NTP/DVB-Time-Sync in minutes
 networkmenu.ntprefresh_hint2 need reboot or epg-reset
 networkmenu.ntpserver NTP-Server
 networkmenu.ntpserver_hint1 NTP-Server example: ntp1.ptb.de
-networkmenu.ntpserver_hint2 need reboot or epg-reset
+networkmenu.ntpserver_hint2 Need reboot or epg-reset
 networkmenu.ntptitle Time-Syncronisation
 networkmenu.setupnow Setup network now
 networkmenu.setuponstartup Setup network on startup
