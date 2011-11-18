@@ -188,8 +188,8 @@ else
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/vfd.ko
 endif
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
-	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release/sbin
-	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
+	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino/sbin
+	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino/sbin
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release_neutrino/lib/modules || true
 
 endif
