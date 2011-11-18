@@ -10,17 +10,17 @@ audiomenu.avs avs
 audiomenu.avs_control Volume Control avs/ost
 audiomenu.avsync A/V sync
 audiomenu.avsync_am Audio master
-audiomenu.clockrec
+audiomenu.clockrec Clockrec
 audiomenu.dolbydigital Dolby Digital
 audiomenu.hdmi_dd Encoded DD on HDMI
 audiomenu.head Audio Settings
-audiomenu.lirc lirc
-audiomenu.monoleft mono left
-audiomenu.monoright mono right
+audiomenu.lirc Lirc
+audiomenu.monoleft Mono left
+audiomenu.monoright Mono right
 audiomenu.ost ost
 audiomenu.PCMOffset Volume Decrease PCM
 audiomenu.spdif_dd Encoded DD on SPDIF
-audiomenu.stereo stereo
+audiomenu.stereo Stereo
 audiomenu.volume_step Volumeslider width
 audioplayer.add Add
 audioplayer.add_ic Icecast
@@ -28,53 +28,53 @@ audioplayer.add_loc Local radio list
 audioplayer.add_sc Shoutcast
 audioplayer.artist_title Artist, Title
 audioplayer.building_search_index building search index
-audioplayer.button_select_title_by_id search by ID
-audioplayer.button_select_title_by_name search by name
-audioplayer.defdir start dir.
+audioplayer.button_select_title_by_id Search by ID
+audioplayer.button_select_title_by_name Search by name
+audioplayer.defdir Start dir.
 audioplayer.delete Delete
 audioplayer.deleteall delete all
-audioplayer.display_order display order
-audioplayer.enable_sc_metadata enable shoutcast meta data parsing
-audioplayer.fastforward fast forw.
-audioplayer.follow auto select current
+audioplayer.display_order Display order
+audioplayer.enable_sc_metadata Enable shoutcast meta data parsing
+audioplayer.fastforward Fast forw.
+audioplayer.follow Auto select current
 audioplayer.head Audio Playlist
 audioplayer.highprio High decode priority
-audioplayer.jump_backwards jump backwards
+audioplayer.jump_backwards Jump backwards
 audioplayer.jump_dialog_hint1 Please enter jump target
 audioplayer.jump_dialog_hint2 (relative, in seconds)
 audioplayer.jump_dialog_title Enter jump target
-audioplayer.jump_forwards jump forwards
-audioplayer.keylevel key level
+audioplayer.jump_forwards Jump forwards
+audioplayer.keylevel Key level
 audioplayer.load_radio_stations Load internet radios
 audioplayer.name Audioplayer
-audioplayer.pause pause
+audioplayer.pause Pause
 audioplayer.play Play
 audioplayer.playing Current Track
 audioplayer.playlist_fileerror_msg File could not be created:
 audioplayer.playlist_fileoverwrite_msg Do you want to overwrite this file:
 audioplayer.playlist_fileoverwrite_title Overwrite?
-audioplayer.playlist_name filename of the play list
+audioplayer.playlist_name Filename of the play list
 audioplayer.playlist_name_hint1 Please enter the filename of the playlist
 audioplayer.playlist_name_hint2 The extension .m3u will be added automatically
-audioplayer.reading_files reading files
+audioplayer.reading_files Reading files
 audioplayer.receiving_list Receiving list, please wait
-audioplayer.repeat_on enable repeat mode
-audioplayer.rewind rewind
-audioplayer.save_playlist save play list
-audioplayer.screensaver_timeout screensaver timeout (min, 0=off)
-audioplayer.select_title_by_name search title by name (SMS)
+audioplayer.repeat_on enable Repeat mode
+audioplayer.rewind Rewind
+audioplayer.save_playlist Save play list
+audioplayer.screensaver_timeout Screensaver timeout (min, 0=off)
+audioplayer.select_title_by_name Search title by name (SMS)
 audioplayer.show_playlist Show Playlist
-audioplayer.shuffle shuffle
-audioplayer.spectrum lcd a-spectrum
+audioplayer.shuffle Shuffle
+audioplayer.spectrum lcd A-Spectrum
 audioplayer.stop Stop
 audioplayer.title_artist Title, Artist
-audioplayerpicsettings.general audioplayer / picviewer
+audioplayerpicsettings.general Audioplayer / Picviewer
 AUDIOSelectMenue.head Audio Selection
 AUDIOSelectMenue.no_tracks No Audio Tracks available
-bookmarkmanager.delete delete
-bookmarkmanager.name bookmarks
-bookmarkmanager.rename rename
-bookmarkmanager.select select
+bookmarkmanager.delete Delete
+bookmarkmanager.name Bookmarks
+bookmarkmanager.rename Rename
+bookmarkmanager.select Select
 bouqueteditor.add Add
 bouqueteditor.bouquetname Name of bouquets
 bouqueteditor.delete Delete
@@ -83,16 +83,16 @@ bouqueteditor.discardingchanges Discarding changes. Please be patient.
 bouqueteditor.hide Hide
 bouqueteditor.lock Lock
 bouqueteditor.move Move
-bouqueteditor.name bouquet editor
+bouqueteditor.name Bouquet editor
 bouqueteditor.newbouquetname New name of bouquets
 bouqueteditor.rename Rename
-bouqueteditor.return ready
+bouqueteditor.return Ready
 bouqueteditor.savechanges? Do you want to save the changes?
 bouqueteditor.savingchanges Saving changes. Please wait ...
-bouqueteditor.switch add/remove
+bouqueteditor.switch Add/Remove
 bouqueteditor.switchmode TV/Radio
 bouquetlist.head Bouquets
-cablesetup.provider cable provider
+cablesetup.provider Cable provider
 cam.empty No CAM in slot
 cam.init_ok CAM init complete
 cam.inserted CAM inserted in slot
@@ -102,8 +102,8 @@ cam.timeout Timeout waiting CI menu ready
 cam.waiting Waiting for CI answer
 channellist.current_tp Current transponder
 channellist.edit Edit
-channellist.epgtext_align_left left
-channellist.epgtext_align_right right
+channellist.epgtext_align_left Left
+channellist.epgtext_align_right Right
 channellist.extended Extended channel list
 channellist.favs Favorites
 channellist.head All Services
@@ -112,15 +112,15 @@ channellist.make_hdlist Create list of HD channels
 channellist.nonefound No channels were found!\nPlease execute a scan\n(MENU-key -> service)
 channellist.provs Providers
 channellist.sats Satellites
-channellist.since since %02d:%02d
-channellist.start starts %02d:%02d
-colorchooser.alpha alpha
-colorchooser.blue blue
-colorchooser.green green
-colorchooser.red red
+channellist.since Since %02d:%02d
+channellist.start Starts %02d:%02d
+colorchooser.alpha Alpha
+colorchooser.blue Blue
+colorchooser.green Green
+colorchooser.red Red
 colormenu.background Background
-colormenu.fade Fade menus
-colormenu.font Font size
+colormenu.fade Fade Menus
+colormenu.font Font Size
 colormenu.gtx_alpha Transparency (GTX)
 colormenu.head Color Settings
 colormenu.menucolors Menucolor
@@ -143,7 +143,7 @@ colorthememenu.head Theme Selector
 colorthememenu.neutrino_theme Neutrino Theme
 colorthememenu.red_theme Simply Red
 cpu.freq Cpu frequency
-cpu.freq_default default frequency
+cpu.freq_default Default frequency
 cpu.freq_normal Normal frequency
 cpu.freq_standby Standby frequency
 date.Apr  Apr
@@ -176,54 +176,54 @@ EPGMenu.epgplus Eventlist overview
 EPGMenu.eventinfo Details current program
 EPGMenu.eventlist Eventlist current programm
 EPGMenu.head EPG - Program Information
-EPGMenu.streaminfo technical information
+EPGMenu.streaminfo Technical Information
 EPGPlus.actions Actions
-EPGPlus.bybouquet_mode by bouquet
-EPGPlus.bypage_mode by page
-EPGPlus.change_font_size font size
-EPGPlus.change_font_style font style
-EPGPlus.change_size size
-EPGPlus.channelentry_font channel font
-EPGPlus.channelentry_separationlineheight separation line height
-EPGPlus.channelentry_width width
-EPGPlus.channelevententry_font event font
-EPGPlus.edit_fonts edit fonts
-EPGPlus.edit_sizes edit sizes
-EPGPlus.font_style_bold style bold
-EPGPlus.font_style_italic style italic
-EPGPlus.font_style_regular style regular
-EPGPlus.footer_fontbouquetchannelname footer bouquet
-EPGPlus.footer_fontbuttons footer buttons
-EPGPlus.footer_fonteventdescription footer event
-EPGPlus.footer_fonteventshortdescription footer event short
+EPGPlus.bybouquet_mode By bouquet
+EPGPlus.bypage_mode By page
+EPGPlus.change_font_size Font Size
+EPGPlus.change_font_style Font Style
+EPGPlus.change_size Size
+EPGPlus.channelentry_font Channel Font
+EPGPlus.channelentry_separationlineheight Separation line height
+EPGPlus.channelentry_width Width
+EPGPlus.channelevententry_font Event font
+EPGPlus.edit_fonts edit Fonts
+EPGPlus.edit_sizes edit Sizes
+EPGPlus.font_style_bold Style bold
+EPGPlus.font_style_italic Style italic
+EPGPlus.font_style_regular Style regular
+EPGPlus.footer_fontbouquetchannelname Footer bouquet
+EPGPlus.footer_fontbuttons footer Buttons
+EPGPlus.footer_fonteventdescription Footer event
+EPGPlus.footer_fonteventshortdescription Footer event short
 EPGPlus.head Eventlist Overview (EPG Plus)
-EPGPlus.header_font header font
-EPGPlus.horgap1_height height1
-EPGPlus.horgap2_height height2
-EPGPlus.next_bouquet next bouquet
-EPGPlus.options options
-EPGPlus.page_down page down
-EPGPlus.page_up page up
-EPGPlus.prev_bouquet prev bouquet
+EPGPlus.header_font header Font
+EPGPlus.horgap1_height Height1
+EPGPlus.horgap2_height Height2
+EPGPlus.next_bouquet Next bouquet
+EPGPlus.options Options
+EPGPlus.page_down Page down
+EPGPlus.page_up Page up
+EPGPlus.prev_bouquet Prev bouquet
 EPGPlus.record Record
 EPGPlus.refresh_epg Refresh
 EPGPlus.remind Schedule
-EPGPlus.reset_settings reset settings
-EPGPlus.save_settings save settings
+EPGPlus.reset_settings Reset settings
+EPGPlus.save_settings Save settings
 EPGPlus.scroll_mode Scroll Mode
-EPGPlus.select_font_name font name
-EPGPlus.settings settings
-EPGPlus.slider_width slider width
+EPGPlus.select_font_name Font name
+EPGPlus.settings Settings
+EPGPlus.slider_width Slider width
 EPGPlus.stretch_mode Stretch Mode
-EPGPlus.swap_mode swap mode
-EPGPlus.timeline_fontdate font date
-EPGPlus.timeline_fonttime font time
-EPGPlus.vergap1_width width1
-EPGPlus.vergap2_width width2
-EPGPlus.view_mode view mode
+EPGPlus.swap_mode Swap mode
+EPGPlus.timeline_fontdate Font date
+EPGPlus.timeline_fonttime Font time
+EPGPlus.vergap1_width Width1
+EPGPlus.vergap2_width Width2
+EPGPlus.view_mode View mode
 epgviewer.More_Screenings More Screenings on this Channel
 epgviewer.nodetailed No detailed informations available
-epgviewer.notfound no epg found
+epgviewer.notfound No epg found
 eventfinder.head Search in EPG
 eventfinder.keyword Keyword
 eventfinder.search Search
@@ -232,8 +232,8 @@ eventfinder.search_within_list Search within
 eventfinder.searching Search for keyword in EPG...
 eventfinder.start_search  Start Search
 eventlistbar.channelswitch schedule
-eventlistbar.eventsort sorting
-eventlistbar.recordevent record
+eventlistbar.eventsort Sorting
+eventlistbar.recordevent Record
 extra.add_to_bouquet Add to bouquet
 extra.audio_run_player Audio key start player
 extra.auto_delete Auto-delete

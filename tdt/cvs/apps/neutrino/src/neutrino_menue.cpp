@@ -804,6 +804,9 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	if((fdoscam_installed))
 	{
 	system("(kill $(pidof oscam);sleep 5;/usr/bin/oscam -b -c /usr/keys;sleep 3;/usr/local/bin/pzapit -rz) &");
+	/*system("kill $(pidof oscam);/usr/local/bin/pzapit -esb;sleep 2;/usr/local/bin/pzapit -lsb;sleep 2;/usr/local/bin/pzapit -rz");
+	system("sleep 8");
+	system("(/usr/bin/oscam -b -c /usr/keys) &");*/
 	}
 	//if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
 	//{
@@ -1872,7 +1875,7 @@ void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
 
 	CDHCPNotifier* dhcpNotifier = new CDHCPNotifier(m1,m2,m3,m4,m5);
 
-	network_automatic_start = networkConfig.automatic_start ? 1 : 0;
+	network_automatic_start = networkConfig.automatic_start ? 1 : 1;
 	CMenuOptionChooser* oj = new CMenuOptionChooser(LOCALE_NETWORKMENU_SETUPONSTARTUP, &network_automatic_start, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true);
 
 	networkSettings.addItem(GenericMenuSeparator);
