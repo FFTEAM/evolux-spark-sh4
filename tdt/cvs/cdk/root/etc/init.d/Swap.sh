@@ -29,8 +29,11 @@ if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ "$isactive" = s
 #		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
 			alwaysthere=`lsmod | grep -m2 ramzswap0`
 			if [ -z $alwaysthere ]; then
-				#insmod /lib/modules/lzo1x_compress.ko
-				#insmod /lib/modules/lzo1x_decompress.ko
+				isSTM24=`uname -a | grep stm23`
+				if [ -z $isSTM24 ]; then
+					insmod /lib/modules/lzo1x_compress.ko
+					insmod /lib/modules/lzo1x_decompress.ko
+				fi
 				insmod /lib/modules/ramzswap.ko disksize_kb=32768
 				mknod /dev/ramzswap0 b 253 0 >/dev/null 2>&1
 				echo "SWAPRAM ON"
