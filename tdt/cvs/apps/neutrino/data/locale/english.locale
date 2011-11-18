@@ -926,8 +926,8 @@ networkmenu.ntpserver NTP-Server
 networkmenu.ntpserver_hint1 NTP-Server example: ntp1.ptb.de
 networkmenu.ntpserver_hint2 Need reboot or epg-reset
 networkmenu.ntptitle Time-Syncronisation
-networkmenu.setupnow Setup network now
-networkmenu.setuponstartup Setup network on startup
+networkmenu.setupnow Setup Network now
+networkmenu.setuponstartup Setup Network on Startup
 networkmenu.show Show active network settings
 networkmenu.test Test network now
 neutrino_starting Neutrino starting...
@@ -936,7 +936,7 @@ nfs.automount Mount on startup
 nfs.dir directory/share
 nfs.ip Server IP
 nfs.localdir Local dir
-nfs.mount Mount Network volume
+nfs.mount Mount Network Device
 nfs.mount_options Mount options
 nfs.mounterror Mount error
 nfs.mounterror_notsup Filesystem type not supported
@@ -944,13 +944,13 @@ nfs.mountnow Mount now
 nfs.mountok Mount successful
 nfs.mounttimeout Mount error: timeout
 nfs.password Password
-nfs.remount Remount directories
+nfs.remount Remount Directories
 nfs.type Type
 nfs.type_cifs CIFS
 nfs.type_lufs FTPFS
 nfs.type_nfs NFS
-nfs.umount Umount Network volume
-nfs.umounterror Error umounting volume
+nfs.umount Umount Network Device
+nfs.umounterror Error umounting Device
 nfs.username Username
 nfsmenu.head NFS/CIFS/FTPFS settings
 nvod.percentage (%d%% over)
@@ -1104,7 +1104,7 @@ satsetup.motorcontrol Manual Motor-Setup
 satsetup.nodiseqc no DiSEqC
 satsetup.sat_setup Setup satellites input / LNB
 satsetup.satellite Satellite
-satsetup.savesettingsnow save settings now
+satsetup.savesettingsnow Save Settings now
 satsetup.smatvremote SMATV Remote Tuning
 satsetup.uncomm_input Uncommited input
 satsetup.usals_repeat USALS command repeat
