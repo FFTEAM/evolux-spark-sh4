@@ -121,7 +121,7 @@ if [ -e /etc/.start_enigma2 ]; then
 			fi
 		fi
 else
-	if [ "$isactive2" = swappart ] || [ "$isactive2" = swapfile ] || [ "$isactive2" = swapram ]; then
+	if [ ! -z $isactive2 ] || [ "$isactive2" = swappart ] || [ "$isactive2" = swapfile ] || [ "$isactive2" = swapram ]; then
 			if [ "$isactive2" = swappart ]; then
 				swappart=`fdisk -l | grep swap | cut -d / -f3 | cut -b1-4`
 				echo -e -n "\n/dev/$swappart     none                swap    sw\n" >> /etc/fstab
