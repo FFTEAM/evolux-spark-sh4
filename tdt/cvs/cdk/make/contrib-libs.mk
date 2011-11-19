@@ -1226,8 +1226,10 @@ $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL: \
 #
 $(DEPDIR)/ffmpeg.do_prepare: bootstrap libass @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
+if STM23
 	cd @DIR_ffmpeg@ && \
 	patch -p1 < ../Patches/ffmpeg.patch;
+endif
 	touch $@
 
 #$(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
