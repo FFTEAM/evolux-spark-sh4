@@ -69,16 +69,16 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
-#	if STM23
-#	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
+if STM23
+	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
+	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_nopkt.ko $(prefix)/release/lib/modules
+else
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release/lib/modules/
+	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
+endif
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
-#	else
-#	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/vfd.ko
-#	endif
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
-	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/

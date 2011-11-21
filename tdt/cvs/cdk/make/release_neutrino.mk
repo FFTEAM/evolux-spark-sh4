@@ -179,14 +179,16 @@ if ENABLE_SPARK
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
-if STM23
-#	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release_neutrino/lib/modules/
+
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
+
+if STM23
+	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
+	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 else
-	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/vfd.ko
-endif
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release_neutrino/lib/modules/
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
+endif
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino/sbin
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release_neutrino/lib/modules || true

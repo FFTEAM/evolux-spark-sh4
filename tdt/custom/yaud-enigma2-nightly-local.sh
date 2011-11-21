@@ -230,7 +230,7 @@ if [ -e $CHANGEDIR/release_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_with_dev
 fi
 mv $CHANGEDIR/release $CHANGEDIR/release_with_dev
-if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/startup.mp4 ]; then
+if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ]; then
 	cp -RP $BUILDDIR/own_build/enigma2/* $CHANGEDIR/release_with_dev/
 else
 	echo "FW NOT FOUND!!!"

@@ -228,8 +228,8 @@ if [ -e $CHANGEDIR/release_neutrino_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_neutrino_with_dev
 fi
 mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
-if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/startup.mp4 ]; then
-	cp -RP $BUILDDIR/own_build/enigma2/boot/* $CHANGEDIR/release_with_dev/boot/
+if [ -e $BUILDDIR/own_build/neutrino/boot/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/video.elf ]; then
+	cp -RP $BUILDDIR/own_build/neutrino/boot/* $CHANGEDIR/release_with_dev/boot/
 else
 	echo "FW NOT FOUND!!!"
 	exit
