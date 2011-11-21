@@ -69,14 +69,14 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
+	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
 if STM23
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
-	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_nopkt.ko $(prefix)/release/lib/modules
+	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_nopkt.ko $(prefix)/release/lib/modules/encrypt.ko
 else
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 endif
-	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
 
@@ -246,7 +246,7 @@ release_base:
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release/etc/tuxbox/ && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
-	cp $(buildprefix)/root/release/rcS$(if $(SPARK),_$(SPARK)) $(prefix)/release/etc/init.d/rcS && \
+	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release/etc/init.d/rcS && \
 	chmod 755 $(prefix)/release/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release/etc/init.d/ && \
@@ -265,9 +265,6 @@ if STM24
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
 endif
 
-if !STM22
-	cp $(buildprefix)/root/release/rcS_stm23$(if $(SPARK),_$(SPARK)) $(prefix)/release/etc/init.d/rcS
-endif
 if ENABLE_PLAYER131
 	cd $(targetprefix)/lib/modules/$(KERNELVERSION)/extra && \
 	for mod in \

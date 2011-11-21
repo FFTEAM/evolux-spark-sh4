@@ -14,51 +14,7 @@ if [ -e /var/etc/.firstboot ]; then
    rm /var/etc/.firstboot
    touch /dev/.devfsd
 fi
-if [ -e /etc/.start_enigma2 ]; then
-contrast=`grep -m1 config.psi.contrast /etc/enigma2/settings | cut -d = -f2`
-saturation=`grep -m1 config.psi.saturation /etc/enigma2/settings | cut -d = -f2`
-brightness=`grep -m1 config.psi.brightness /etc/enigma2/settings | cut -d = -f2`
-tint=`grep -m1 config.psi.hue /etc/enigma2/settings | cut -d = -f2`
-startVideoTuneEnhanced() {
-	while ! pidof "HostRec40800003" ; do
-		sleep 1
-	done
-	if [ ! -z "$contrast" ]; then
-		echo "$contrast" > /proc/stb/video/plane/psi_contrast
-	else
-		echo "128" > /proc/stb/video/plane/psi_contrast
-	fi
-	if [ ! -z "$saturation" ]; then
-		echo "$saturation" > /proc/stb/video/plane/psi_saturation
-	else
-		echo "128" > /proc/stb/video/plane/psi_saturation
-	fi
-	if [ ! -z "$brightness" ]; then
-		echo "$brightness" > /proc/stb/video/plane/psi_brightness
-	else
-		echo "128" > /proc/stb/video/plane/psi_brightness
-	fi
-	if [ ! -z "$tint" ]; then
-		echo "$tint" > /proc/stb/video/plane/psi_tint
-	else
-		echo "128" > /proc/stb/video/plane/psi_tint
-	fi
-}
 
-RCid=`grep -m1 config.plugins.PinkPanel.RCid /etc/enigma2/settings | cut -d = -f2`
-RCrd=`grep -m1 config.plugins.PinkPanel.RCrd /etc/enigma2/settings | cut -d = -f2`
-setEVREMOTE2() {
-	if [ ! -z "$RCid" ] && [ ! -z "$RCrd" ]; then
-		/bin/evremote2 $RCid $RCrd &
-	elif [ ! -z "$RCid" ] && [ -z "$RCrd" ]; then
-		/bin/evremote2 $RCid 120 &
-	elif [ -z "$RCid" ] && [ ! -z "$RCrd" ]; then
-		/bin/evremote2 10 $RCrd &
-	else
-		/bin/evremote2 10 120 &
-	fi
-}
-fi
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 
@@ -127,9 +83,8 @@ fi
    insmod $MODDIR/silencegen.ko
    insmod $MODDIR/bpamem.ko
    mknod /dev/bpamem c 153 0 
-if [ -e /etc/.start_enigma2 ]; then
-   eplayer3 /boot/startup.mp4 &
-fi
+   insmod $MODDIR/smartcard.ko
+   #eplayer3 /boot/startup.mp4 &
    stfbcontrol a 0
 
    echo "init lircd"
@@ -143,12 +98,7 @@ fi
 
    (sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
    (sleep 10; if [ -e /autofs/sda1 ]; then mount -o bind /autofs/sda1 /media/hdd; stdFolders="movie music picture swap"; for i in $stdFolders; do mkdir -p /media/hdd/$i; done; fi) &
-#   /bin/evremote2 05 30 &
-if [ -e /etc/.start_enigma2 ]; then
-   setEVREMOTE2
-else
    /bin/evremote2 &
-fi
    stfbcontrol a 255
 ### eth start ###
    NFS=`grep -c nfs /proc/cmdline`
@@ -161,52 +111,10 @@ fi
    if [ -e /usr/script/user_script.sh ]; then
 	/usr/script/user_script.sh &
    fi
-if [ -e /etc/.start_enigma2 ]; then
-   startVideoTuneEnhanced &
-fi
 
    /etc/init.d/Swap.sh &
-
-   if [ -e /usr/local/bin/enigma2 ] && [ -e /etc/.start_enigma2 ]; then
    echo "run" > /dev/vfd
-   echo "LOADING E2"
-
-   until false
-   do
-      echo "starting e2->"
-      /usr/local/bin/enigma2
-      rtv=$?
-      echo "e2 ended <- RTV: " $rtv
-      case "$rtv" in
-		0) echo "$rtv"
-		   echo "E2 ERROR"
-      		   killall -9 enigma2;;
-		1) echo "$rtv"
-		   echo "SHUTDOWN"
-                   sync
-		   HDDON=`mount | grep sda1 | cut -d " " -f5`
-		   if [ ! -z "$HDDON" ]; then
-			echo "hdd-check"
-			echo "FSCK" > /dev/vfd
-			umount /dev/sda1
-			fsck.$HDDON -y /dev/sda1
-		   fi
-                   init 0;;
-		2) echo "$rtv"
-		   echo "REBOOT"
-		   init 6;;
-		3) echo "$rtv"
-		      echo "E2 RESTART"
-		      #echo "0" > /proc/progress;;
-      		      killall -9 enigma2;;
-		*) echo "*"
-		   echo "ERROR"
-		   echo "0" > /proc/progress;;
-      esac
-   done 
-   else
-	echo "run" > /dev/vfd
-	echo "LOADING neutrino"
+   echo "LOADING neutrino"
 
 	   until false
 	   do
@@ -235,8 +143,6 @@ fi
 			   echo "0" > /proc/progress;;
 		esac
    done 
-   fi
-
 
 fi
 

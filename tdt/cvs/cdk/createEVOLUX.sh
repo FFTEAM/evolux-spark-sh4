@@ -69,7 +69,7 @@ cp -RP $E2DIR/etc/rc.d/rc0.d $EVOLUXDIR/etc/rc.d/
 cp -RP $E2DIR/etc/rc.d/rc3.d $EVOLUXDIR/etc/rc.d/
 cp -RP $E2DIR/etc/rc.d/rc6.d $EVOLUXDIR/etc/rc.d/
 cp -RP $E2DIR/etc/init.d/ntpupdate.sh $EVOLUXDIR/etc/init.d/
-cp -RP $CURDIR/root/release/rcS_stm23_evolux_spark $EVOLUXDIR/etc/init.d/rcS
+cp -RP $CURDIR/root/release/rcS_stm23_24_evolux_spark $EVOLUXDIR/etc/init.d/rcS
 cp -RP $E2DIR/lib/modules $EVOLUXDIR/lib/
 rm $EVOLUXDIR/etc/.start_enigma2
 cd $EVOLUXDIR

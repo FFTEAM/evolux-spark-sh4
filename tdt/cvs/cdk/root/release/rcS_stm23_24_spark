@@ -127,6 +127,7 @@ fi
    insmod $MODDIR/silencegen.ko
    insmod $MODDIR/bpamem.ko
    mknod /dev/bpamem c 153 0 
+   insmod $MODDIR/smartcard.ko
    eplayer3 /boot/startup.mp4 &
    stfbcontrol a 0
 
