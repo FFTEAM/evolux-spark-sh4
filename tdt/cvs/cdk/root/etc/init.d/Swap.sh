@@ -8,16 +8,6 @@ if [ "$alwaysthere" = w ]; then
 fi
 if [ -e /etc/.start_enigma2 ]; then
 	isactive=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapArt= | cut -d = -f2`
-else
-	if [ -e /etc/.swappart ]; then
-		isactive2=swappart
-	elif [ -e /etc/.swapfile ]; then
-		isactive2=swapfile
-	elif [ -e /etc/.swapram ]; then
-		isactive2=swapram
-	else
-		isactive2=""
-	fi
 fi
 if [ -e /etc/.start_enigma2 ]; then
 	if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ]; then
@@ -29,7 +19,6 @@ if [ -e /etc/.start_enigma2 ]; then
 			echo "SWP" > /dev/vfd
 		fi
 		if [ "$isactive" = swapram ] || [ -z $isactive ]; then
-	#		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
 				alwaysthere=`lsmod | grep -m2 ramzswap0`
 				if [ -z $alwaysthere ]; then
 					isSTM24=`uname -a | grep stm23`
@@ -50,7 +39,6 @@ if [ -e /etc/.start_enigma2 ]; then
 						(swapoff -a;swapon /dev/ramzswap0)
 					fi 
 				fi
-	#		fi
 		fi
 		if [ "$isactive" = swapfile ]; then
 			. /etc/init.d/swapsize.old
@@ -120,17 +108,18 @@ if [ -e /etc/.start_enigma2 ]; then
 				fi
 			fi
 		fi
-else
-	if [ ! -z $isactive2 ] || [ "$isactive2" = swappart ] || [ "$isactive2" = swapfile ] || [ "$isactive2" = swapram ]; then
-			if [ "$isactive2" = swappart ]; then
+	fi
+fi
+if [ -e /etc/.swapon ] && [ ! -e /etc/.start_enigma2 ]; then
+	if [ -e /etc/.swapram ] || [ -e /etc/.swappart ] || [ -e /etc/.swapfile ]; then
+			if [ -e /etc/.swappart ]; then
 				swappart=`fdisk -l | grep swap | cut -d / -f3 | cut -b1-4`
 				echo -e -n "\n/dev/$swappart     none                swap    sw\n" >> /etc/fstab
 				swapon -a
 				echo "SWAPPART ON"
 				echo "SWP" > /dev/vfd
 			fi
-			if [ "$isactive2" = swapram ]; then
-		#		if [ -e /lib/modules/lzo1x_decompress.ko ]; then
+			if [ -e /etc/.swapram ]; then
 					alwaysthere=`lsmod | grep -m2 ramzswap0`
 					if [ -z $alwaysthere ]; then
 						isSTM24=`uname -a | grep stm23`
@@ -153,7 +142,7 @@ else
 					fi
 		#		fi
 			fi
-			if [ "$isactive2" = swapfile ]; then
+			if [ -e /etc/.swapfile ]; then
 				. /etc/init.d/swapsize.old
 				size=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapFileSize= | cut -d = -f2`
 				if [ -z "$size" ]; then
@@ -164,7 +153,7 @@ else
 					if [ ! -e /media/hdd/swap ]; then
 						mkdir -p /media/hdd/swap
 					fi
-					if [ ! -e /media/hdd/swap/swapfile ] && [ "$isactive2" = swapfile ]; then
+					if [ ! -e /media/hdd/swap/swapfile ] && [ -e /etc/.swapfile ]; then
 						echo "SWAP create $(($size / 1000)) MB swapfile"
 						echo "CRS" > /dev/vfd
 						loopswapramold=`cat /proc/swaps | grep ram -m1 | cut -d " " -f1`
@@ -182,7 +171,7 @@ else
 						mkswap /dev/loop0
 						swapon /dev/loop0
 						sync
-					elif [ "$swapsize" != "$size" ] && [ "$isactive2" = swapfile ]; then
+					elif [ "$swapsize" != "$size" ] && [ -e /etc/.swapfile ]; then
 						echo "SWAP create NEW $(($size / 1000)) MB swapfile"
 						echo "CRS" > /dev/vfd
 						loopswap=`cat /proc/swaps | cut -b10`
@@ -201,7 +190,7 @@ else
 						fi
 						swapon /dev/loop$loopswapnew
 						sync
-					elif [ -e /media/hdd/swap/swapfile ] && [ "$swapsize" = "$size" ] && [ "$isactive2" = swapfile ]; then
+					elif [ -e /media/hdd/swap/swapfile ] && [ "$swapsize" = "$size" ] && [ -e /etc/.swapfile ]; then
 						loopswap=`cat /proc/swaps | grep loop -m1 | cut -d " " -f1`
 						echo "ACTIVATING SWAPFILE"
 						echo "SWF" > /dev/vfd
@@ -221,8 +210,7 @@ else
 					fi
 				fi
 			fi
-		fi
 	fi
-	swapon -a
 fi
+swapon -a
 exit
