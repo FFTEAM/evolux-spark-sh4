@@ -11,7 +11,7 @@ BUILDREV="100"
 #################
 
 CURDIR=`pwd`
-KATIDIR=${CURDIR%/cvs/cdk}
+KATIDIR=${CURDIR%/cvs/cdk/root/release}
 version=`git describe`
 cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/var/etc/.version.new
 
