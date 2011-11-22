@@ -59,6 +59,22 @@ setEVREMOTE2() {
 	fi
 }
 fi
+if [ ! -e /etc/.start_enigma2 ]; then
+	cpuSpeed=`grep -m1 config.plugins.PinkPanel.oclock /etc/enigma2/settings | cut -d = -f2`
+	setCPUSPEED() {
+	if [ ! -z "$cpuSpeed" ]; then
+		if [ "$cpuSpeed" == "500" ]; then
+			echo 12803 >/proc/cpu_frequ/pll0_ndiv_mdiv &
+		elif [ "$cpuSpeed" == "550" ]; then
+			echo 14083 >/proc/cpu_frequ/pll0_ndiv_mdiv &
+		elif [ "$cpuSpeed" == "600" ]; then
+			echo 5121 >/proc/cpu_frequ/pll0_ndiv_mdiv &
+		elif [ "$cpuSpeed" == "650" ]; then
+			echo 16643 >/proc/cpu_frequ/pll0_ndiv_mdiv &
+		fi
+	fi
+fi
+}
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 
@@ -149,6 +165,9 @@ if [ -e /etc/.start_enigma2 ]; then
    setEVREMOTE2
 else
    /bin/evremote2 &
+fi
+if [ ! -e /etc/.start_enigma2 ]; then
+   setCPUSPEED
 fi
    stfbcontrol a 255
 ### eth start ###
