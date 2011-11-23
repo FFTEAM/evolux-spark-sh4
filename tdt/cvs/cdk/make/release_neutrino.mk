@@ -176,9 +176,9 @@ if ENABLE_SPARK
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
 
-	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
-
 if STM23
+	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt2870sta.ko
+	cp -f $(buildprefix)/root/lib/modules/rt3070sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt3070sta.ko
 	cp -f $(buildprefix)/root/lib/modules/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
