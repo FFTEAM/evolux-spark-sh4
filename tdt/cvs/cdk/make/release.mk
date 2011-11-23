@@ -54,7 +54,6 @@ release_spark:
 	ln -s ../init.d/reboot $(prefix)/release/etc/rc.d/rc6.d/S90reboot
 	ln -fs init $(prefix)/release/sbin/telinit
 
-	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release/lib/modules/smartcard.ko
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release/etc/fstab
@@ -71,9 +70,11 @@ release_spark:
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release/lib/modules/
 if STM23
+	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release/lib/modules/smartcard.ko
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/encrypt.ko
 else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release/lib/modules/encrypt.ko
 endif

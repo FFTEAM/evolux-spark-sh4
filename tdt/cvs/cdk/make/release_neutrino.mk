@@ -174,15 +174,16 @@ if ENABLE_SPARK
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release_neutrino/usr/lib/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
 
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
 
 if STM23
+	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release_neutrino/lib/modules/
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 endif
