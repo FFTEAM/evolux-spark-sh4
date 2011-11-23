@@ -179,7 +179,7 @@ if ENABLE_SPARK
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
 
 if STM23
-	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
+	cp -f $(buildprefix)/root/lib/modules/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
 	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 else
