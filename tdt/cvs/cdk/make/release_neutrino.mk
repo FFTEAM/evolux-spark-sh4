@@ -174,7 +174,7 @@ if ENABLE_SPARK
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release_neutrino/usr/lib/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
+	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
 
 	cp -f $(buildprefix)/root/lib/modules/* $(prefix)/release_neutrino/lib/modules/
@@ -435,7 +435,7 @@ endif
 #	echo 'creator=git-developer' >> $(buildprefix)/root/var/etc/.version.new
 #	echo 'docs=http://gitorious.org/open-duckbox-project-sh4/pingulux-git/commits' >> $(buildprefix)/root/var/etc/.version.new
 #	echo 'forum=http://kathif.vs120005.hl-users.com/index.php?sid=' >> $(buildprefix)/root/var/etc/.version.new
-	mv $(buildprefix)/root/var/etc/.version.new $(prefix)/release_neutrino/etc/.version
+	cp $(buildprefix)/root/var/etc/.version.new $(prefix)/release_neutrino/etc/.version
 	ln -s ../etc $(prefix)/release_neutrino/var
 	ln -sf ../etc/.version $(prefix)/release_neutrino
 #######################################################################################

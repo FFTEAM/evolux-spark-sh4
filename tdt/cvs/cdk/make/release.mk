@@ -54,7 +54,7 @@ release_spark:
 	ln -s ../init.d/reboot $(prefix)/release/etc/rc.d/rc6.d/S90reboot
 	ln -fs init $(prefix)/release/sbin/telinit
 
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
+	cp -f $(buildprefix)/root/usr/lib/smartcard_stm23.ko $(prefix)/release/lib/modules/smartcard.ko
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release/etc/fstab
