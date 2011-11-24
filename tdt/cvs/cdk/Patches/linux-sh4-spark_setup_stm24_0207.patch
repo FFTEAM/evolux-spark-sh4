@@ -911,7 +911,7 @@
   				memcpy(buf, chip->buffers->databuf + col, bytes);
   			}
   
-**** linux-sh4-2.6.32.28_stm24_0207.orig/arch/sh/kernel/setup.c	2011-11-17 21:34:14.782844589 +0200
+*** linux-sh4-2.6.32.28_stm24_0207.orig/arch/sh/kernel/setup.c	2011-11-17 21:34:14.782844589 +0200
 --- linux-sh4/arch/sh/kernel/setup.c	2011-11-23 21:32:15.299229956 +0200
 ***************
 *** 388,393 ****
