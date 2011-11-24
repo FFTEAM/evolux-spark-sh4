@@ -7,8 +7,8 @@ if [ ! -e /usr/bin/gcc-4.5 ]; then
 fi
 cd /usr/bin
 sudo ln -sf gcc-4.5 gcc
-cd "$CURDIR/Patches"
-ln -sf stm-cross-gcc.spec.4.5.2-78-ubu11.10-64bit.diff stm-cross-gcc.spec.4.5.2-78.diff
+#cd "$CURDIR/Patches"
+#ln -sf stm-cross-gcc.spec.4.5.2-78-ubu11.10-64bit.diff stm-cross-gcc.spec.4.5.2-78.diff
 cd "$CURDIR"
 ./make.sh
 echo "Targets:"
@@ -23,8 +23,8 @@ else
 fi
 cd /usr/bin
 sudo ln -sf gcc-4.6 gcc
-cd "$CURDIR/Patches"
-ln -sf stm-cross-gcc.spec.4.5.2-78-default.diff stm-cross-gcc.spec.4.5.2-78.diff
+#cd "$CURDIR/Patches"
+#ln -sf stm-cross-gcc.spec.4.5.2-78-default.diff stm-cross-gcc.spec.4.5.2-78.diff
 cd "$CURDIR"
 exit
 
