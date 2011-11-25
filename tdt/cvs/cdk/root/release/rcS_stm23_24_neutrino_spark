@@ -3,7 +3,7 @@
 MODDIR=/lib/modules
 PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
 echo "init frontpanel"
-insmod $MODDIR/vfd.ko
+#insmod $MODDIR/vfd.ko
 insmod $MODDIR/aotom.ko
 insmod $MODDIR/simu_button.ko
 insmod $MODDIR/encrypt.ko
