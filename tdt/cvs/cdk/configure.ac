@@ -138,6 +138,14 @@ AC_ARG_ENABLE(p0207,
 AM_CONDITIONAL(ENABLE_P0207,test "$enable_p0207" = "yes")
 AC_SUBST(P0207)
 
+AC_ARG_ENABLE(p0209,
+	AS_HELP_STRING(--enable-p0209,  set up the CDK to use the STLinux 2.4 with patchlevel 0209),
+	[case "${enableval}" in
+		yes) P0209=p0209 ;;
+	esac], [enable_p0209=no])
+AM_CONDITIONAL(ENABLE_P0209,test "$enable_p0209" = "yes")
+AC_SUBST(P0209)
+
 AC_ARG_ENABLE(havana_p0207_5,
 	AS_HELP_STRING(enable-havana-p0207_5,  set up the CDK to use the STLinux 2.4 with Havana patchlevel 0207_5),
 	[case "${enableval}" in
@@ -398,6 +406,14 @@ AC_ARG_ENABLE(hs7810a,
 	esac],[enable_hs7810a=no])
 AM_CONDITIONAL(ENABLE_HS7810A,test "$enable_hs7810a" = "yes")
 AC_SUBST(HS7810A)
+
+AC_ARG_ENABLE(hs7110,
+	AS_HELP_STRING(--enable-hs7110,    enable fortis hs7110 stuff),
+	[case "${enableval}" in
+		yes) HS7110=hs7110 ;;
+	esac],[enable_hs7110=no])
+AM_CONDITIONAL(ENABLE_HS7110,test "$enable_hs7110" = "yes")
+AC_SUBST(HS7110)
 
 AC_ARG_ENABLE(cuberevo,
 	AS_HELP_STRING(--enable-cuberevo,    enable cuberevo stuff),
@@ -792,6 +808,7 @@ TUXBOX_RULES_MAKE(linuxp0201)
 TUXBOX_RULES_MAKE(linuxp0205)
 TUXBOX_RULES_MAKE(linuxp0206)
 TUXBOX_RULES_MAKE(linuxp0207)
+TUXBOX_RULES_MAKE(linuxp0209)
 
 if test "$enable_stm22" = "yes"; then
 	if test "$enable_p0040" == "yes"; then
@@ -820,6 +837,10 @@ else
 		KERNELVERSION=${VERSION_linuxp0207}
 		KERNELSTMLABEL="_${VERSION_linuxp0207#*_}"
 		KERNELLABEL="207"
+    elif test "$enable_p0209" == "yes"; then
+		KERNELVERSION=${VERSION_linuxp0209}
+		KERNELSTMLABEL="_${VERSION_linuxp0209#*_}"
+		KERNELLABEL="209"
     elif test "$enable_p0207" == "yes"; then
 		KERNELVERSION=${VERSION_linuxp0207}
 		KERNELSTMLABEL="_${VERSION_linuxp0207#*_}"
@@ -1146,6 +1167,7 @@ Patchlevel P0201            : $enable_p0201
 Patchlevel P0205            : $enable_p0205
 Patchlevel P0206            : $enable_p0206
 Patchlevel P0207            : $enable_p0207
+Patchlevel P0209            : $enable_p0209
 HAVANA Patchlevel P0207_5   : $enable_havana_p0207_5
 vdr VDR 1.7.11              : $enable_vdr1711
 flash rules                 : $enable_flashrules
@@ -1172,6 +1194,8 @@ update http prefix          : $updatehttpprefix
 stock directory             : $stockdir
 ipkg build directory        : $ipkgbuilddir
 Fortis/hdbox stuff          : $enable_fortis_hdbox
+Fortis hs7810a stuff        : $enable_hs7810a
+Fortis hs7110 stuff         : $enable_hs7110
 Atevio 7500 stuff           : $enable_atevio7500
 octagon1008 stuff           : $enable_octagon1008
 topfield stuff              : $enable_tf7700

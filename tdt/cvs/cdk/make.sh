@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ "$1" == -h ] || [ "$1" == --help ]; then
- echo "Parameter 1: target system (1-18)"
- echo "Parameter 2: kernel (1-4)"
+ echo "Parameter 1: target system (1-26)"
+ echo "Parameter 2: kernel (1-9)"
  echo "Parameter 3: debug (Y/N)"
  echo "Parameter 4: player(1-2)"
  echo "Parameter 5: Multicom(1-2)"
@@ -57,67 +57,19 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 ##############################################
 
 echo "Targets:"
-#echo " 1) Kathrein UFS-910"
-#echo " 2) Kathrein UFS-910-FLASH"
-#echo " 3) Kathrein UFS-912"
-#echo " 4) Kathrein UFS-922"
-#echo " 5) Topfield 7700 HDPVR"
-#echo " 6) Fortis based (HDBOX)"
-#echo " 7) SpiderBox HL-101"
-#echo " 8) Edision Argus vip"
-#echo " 9) Cuberevo (IPBOX 9000)"
-#echo "10) Cuberevo mini (IPBOX 900)"
-#echo "11) Cuberevo mini2 (IPBOX 910)"
-#echo "12) Cuberevo 250 (IPBOX 91)"
-#echo "13) Cuberevo 9500HD (7000HD)"
-#echo "14) Cuberevo 2000HD"
-#echo "15) Cuberevo mini_fta (200HD)"
-#echo "16) Homecast 5101"
-#echo "17) Octagon 1008"
 echo "18) SPARK"
-#echo "19) Atevio7500"
-#echo "20) SPARK7162"
-#echo "21) IPBOX9900"
-#echo "22) IPBOX99"
-#echo "23) IPBOX55"
-#echo "24) Fortis HS7810A"
-#echo "25) B4Team ADB 5800S"
 
 case $1 in
 	[1-9] | 1[0-9] | 2[0-9]) REPLY=$1
 	echo -e "\nSelected target: $REPLY\n"
 	;;
 	*)
-	read -p "Select target (1-25)? ";;
+	read -p "Select target (18)? ";;
 esac
 
 case "$REPLY" in
-	 1) TARGET="--enable-ufs910 --with-rootpartitionsize=0x9e0000 --with-datapartitionsize=0x480000";;
-	 2) TARGET="--enable-flash_ufs910 --with-rootpartitionsize=0x9e0000 --with-datapartitionsize=0x480000";;
-	 3) TARGET="--enable-ufs912";;
-	 4) TARGET="--enable-ufs922";;
-	 5) TARGET="--enable-tf7700";;
-	 6) TARGET="--enable-fortis_hdbox --with-rootpartitionsize=0xa00000 --with-datapartitionsize=0x13C0000";;
-	 7) TARGET="--enable-hl101";;
-	 8) TARGET="--enable-vip";;
-	 9) TARGET="--enable-cuberevo";;
-	10) TARGET="--enable-cuberevo_mini";;
-	11) TARGET="--enable-cuberevo_mini2";;
-	12) TARGET="--enable-cuberevo_250hd";;
-	13) TARGET="--enable-cuberevo_9500hd";;
-	14) TARGET="--enable-cuberevo_2000hd";;
-	15) TARGET="--enable-cuberevo_mini_fta";;
-	16) TARGET="--enable-homecast5101";;
-	17) TARGET="--enable-octagon1008 --with-rootpartitionsize=0xa00000 --with-datapartitionsize=0x13C0000";;
 	18) TARGET="--enable-spark";;
-	19) TARGET="--enable-atevio7500";;
-	20) TARGET="--enable-spark7162";;
-	21) TARGET="--enable-ipbox9900";;
-	22) TARGET="--enable-ipbox99";;
-	23) TARGET="--enable-ipbox55";;
-	24) TARGET="--enable-hs7810a --with-rootpartitionsize=0xa00000 --with-datapartitionsize=0x13C0000";;
-	25) TARGET="--enable-adb_box";;
-	 *) TARGET="--enable-ufs910";;
+	 *) TARGET="--enable-spark";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET"
 
@@ -145,33 +97,25 @@ esac
 
 echo -e "\nKernel:"
 echo " Maintained:"
-echo "   4) STM 23 P0123"
-echo "   6) STM 24 P0205"
-echo "   8) STM 24 P0207 (Recommended)"
-echo " Experimental:"
-echo "   9) HAVANA P0207-5 (experimental)"
-#echo " Deprecated (Not maintained):"
-#echo "   1) STM 22 P0041"
-#echo "   2) STM 23 P0119"
+echo "    4) STM 23 P0123"
+echo "    6) STM 24 P0205"
+echo "    8) STM 24 P0207 (Recommended)"
+echo "   10) STM 24 P0209 (only spark)"
+
 case $2 in
-        [1-9]) REPLY=$2
+        [1-9] | 1[0-9]) REPLY=$2
         echo -e "\nSelected kernel: $REPLY\n"
         ;;
         *)
-        read -p "Select kernel (1-9)? ";;
+        read -p "Select kernel (1-10)? ";;
 esac
 
 case "$REPLY" in
-	1) KERNEL="--enable-stm22 --enable-p0041";;
-	2) KERNEL="--enable-stm23 --enable-p0119";;
-	3) KERNEL="--enable-stm23 --enable-p0119 --enable-havana";;
 	4) KERNEL="--enable-stm23 --enable-p0123";;
-	5) KERNEL="--enable-stm24 --enable-p0201";STMFB="stm24";;
 	6) KERNEL="--enable-stm24 --enable-p0205";STMFB="stm24";;
-	7) KERNEL="--enable-stm24 --enable-p0206";STMFB="stm24";;
 	8) KERNEL="--enable-stm24 --enable-p0207";STMFB="stm24";;
-	9) KERNEL="--enable-stm24 --enable-havana-p0207_5";STMFB="stm24";;
-	*) KERNEL="--enable-stm22 --enable-p0041";;
+	10) KERNEL="--enable-stm24 --enable-p0209";STMFB="stm24";;
+	*) KERNEL="--enable-stm23 --enable-p0123";;
 esac
 CONFIGPARAM="$CONFIGPARAM $KERNEL"
 
@@ -198,7 +142,6 @@ cd -
 ##############################################
 
 echo -e "\nPlayer:"
-echo "   1) Player 131 (Deprecated)"
 echo "   2) Player 179"
 echo "   3) Player 191 (Recommended)"
 case $4 in
@@ -210,34 +153,6 @@ case $4 in
 esac
 
 case "$REPLY" in
-	1) PLAYER="--enable-player131"
-       cd ../driver/include/
-       if [ -L player2 ]; then
-          rm player2
-       fi
-
-       if [ -L stmfb ]; then
-          rm stmfb
-       fi
-       ln -s player2_131 player2
-       ln -s stmfb_player131 stmfb
-       cd -
-
-       cd ../driver/
-       if [ -L player2 ]; then
-          rm player2
-       fi
-       ln -s player2_131 player2
-       echo "export CONFIG_PLAYER_131=y" >> .config
-       cd -
-
-       cd ../driver/stgfb
-       if [ -L stmfb ]; then
-          rm stmfb
-       fi
-       ln -s stmfb_player131 stmfb
-       cd -
-    ;;
 	2) PLAYER="--enable-player179"
        cd ../driver/include/
        if [ -L player2 ]; then

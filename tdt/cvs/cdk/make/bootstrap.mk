@@ -45,7 +45,11 @@ else
 if ENABLE_P0206
 KERNEL_DIR = @DIR_linuxp0206@
 else
+if ENABLE_P0207
 KERNEL_DIR = @DIR_linuxp0207@
+else
+KERNEL_DIR = @DIR_linuxp0209@
+endif
 endif
 endif
 endif
@@ -529,13 +533,13 @@ if STM22
 CROSS_BINUTILS_VERSION = 2.17.50.0.4-13
 CROSS_BINUTILS_SPEC = stm-$(subst cross-sh4,cross,$(CROSS_BINUTILS))-sh4processed.spec
 CROSS_BINUTILS_SPEC_PATCH = $(CROSS_BINUTILS_SPEC)22.diff
-CROSS_BINUTILS_PATCHES = cross-binutils.diff
+CROSS_BINUTILS_PATCHES = stm-cross-binutils.diff
 else !STM22
 if STM23
 CROSS_BINUTILS_VERSION = $(if $(STABLE),2.18.50.0.8-34,2.18.50.0.8-38)
 CROSS_BINUTILS_SPEC = stm-$(subst cross-sh4,cross,$(CROSS_BINUTILS)).spec
 CROSS_BINUTILS_SPEC_PATCH = $(CROSS_BINUTILS_SPEC)23.diff
-CROSS_BINUTILS_PATCHES = cross-binutils.diff
+CROSS_BINUTILS_PATCHES = stm-cross-binutils.diff
 else !STM23
 # if STM24
 CROSS_BINUTILS_VERSION = 2.19.1-41
@@ -694,11 +698,11 @@ endif STM24
 #
 # CROSS GCC
 #
-CROSS_GCC		= cross-sh4-gcc
-CROSS_CPP		= cross-sh4-cpp
-CROSS_G++		= cross-sh4-g++
-CROSS_PROTOIZE		= cross-sh4-protoize
-CROSS_LIBGCC		= cross-sh4-libgcc
+CROSS_GCC = cross-sh4-gcc
+CROSS_CPP = cross-sh4-cpp
+CROSS_G++ = cross-sh4-g++
+CROSS_PROTOIZE = cross-sh4-protoize
+CROSS_LIBGCC = cross-sh4-libgcc
 if STM22
 CROSS_GCC_VERSION = 4.1.1-23
 CROSS_GCC_RAWVERSION = $(firstword $(subst -, ,$(CROSS_GCC_VERSION)))
