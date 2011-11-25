@@ -229,7 +229,7 @@ if [ -e $CHANGEDIR/release_neutrino_with_dev ]; then
 fi
 mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
 if [ -e $BUILDDIR/own_build/neutrino/boot/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/video.elf ]; then
-	cp -RP $BUILDDIR/own_build/neutrino/boot/* $CHANGEDIR/release_with_dev/boot/
+	cp -RP $BUILDDIR/own_build/neutrino/boot/* $CHANGEDIR/release_neutrino_with_dev/boot/
 else
 	echo "FW NOT FOUND!!!"
 	exit
