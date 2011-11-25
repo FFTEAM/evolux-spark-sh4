@@ -363,6 +363,11 @@ endif
 	rm -rf $(prefix)/release_neutrino/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino/usr/local/share/neutrino/icons/
 
+if STM24
+	( cd $(buildprefix)/root/wireless/RT2870_Linux_STA_v2.4.0.1 && make clean && make && cp -RP $(buildprefix)/root/wireless/RT2870_Linux_STA_v2.4.0.1/os/linux/rt2870sta.ko $(prefix)/release_neutrino/lib/modules && chmod 755 $(prefix)/release_neutrino/lib/modules/rt2870sta.ko )
+	( cd $(buildprefix)/root/wireless/RT3070_Linux_STA_V2.3.0.4 && make clean && make && cp -RP $(buildprefix)/root/wireless/RT3070_Linux_STA_V2.3.0.4/os/linux/rt3070sta.ko $(prefix)/release_neutrino/lib/modules && chmod 755 $(prefix)/release_neutrino/lib/modules/rt3070sta.ko )
+endif
+
 #######################################################################################
 #######################################################################################
 #######################################################################################
