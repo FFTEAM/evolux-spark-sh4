@@ -57,11 +57,6 @@ release_spark:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
 
-if STM24
-	( cd $(buildprefix)/root/wireless/RT2870_Linux_STA_v2.4.0.1 && make clean && make && cp -RP $(buildprefix)/root/wireless/RT2870_Linux_STA_v2.4.0.1/os/linux/rt2870sta.ko $(prefix)/release/lib/modules && chmod 755 $(prefix)/release/lib/modules/rt2870sta.ko )
-	( cd $(buildprefix)/root/wireless/RT3070_Linux_STA_V2.3.0.4 && make clean && make && cp -RP $(buildprefix)/root/wireless/RT3070_Linux_STA_V2.3.0.4/os/linux/rt3070sta.ko $(prefix)/release/lib/modules && chmod 755 $(prefix)/release/lib/modules/rt3070sta.ko )
-endif
-
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release/etc/fstab
 	cp $(buildprefix)/root/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
 
