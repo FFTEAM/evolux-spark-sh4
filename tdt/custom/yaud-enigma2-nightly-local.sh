@@ -226,6 +226,7 @@ case $TARGET in
 #		make_devs
 	;;
 esac
+$USERS chmod 777 -R $CHANGEDIR/release/dev
 if [ -e $CHANGEDIR/release_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_with_dev
 fi

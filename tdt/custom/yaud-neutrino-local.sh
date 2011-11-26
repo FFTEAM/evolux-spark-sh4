@@ -224,6 +224,7 @@ case $TARGET in
 #		make_devs
 	;;
 esac
+$USERS chmod 777 -R $CHANGEDIR/release_neutrino/dev
 if [ -e $CHANGEDIR/release_neutrino_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_neutrino_with_dev
 fi
