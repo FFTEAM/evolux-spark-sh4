@@ -34,7 +34,8 @@ $(DEPDIR)/%release_neutrino:
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_neutrino/bin/ && \
-	ln -s /bin/showiframe $(prefix)/release_neutrino/usr/bin/showiframe && \
+	rm $(prefix)/release_neutrino/bin/showiframe && \
+	rm $(prefix)/release_neutrino/bin/stslave && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/init $(prefix)/release_neutrino/sbin/ && \
 	cp -dp $(targetprefix)/sbin/killall5 $(prefix)/release_neutrino/sbin/ && \
