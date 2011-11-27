@@ -85,8 +85,6 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/init.d/sendsigs $(prefix)/release_neutrino/etc/init.d/ && \
 	cp -dp $(targetprefix)/etc/init.d/halt $(prefix)/release_neutrino/etc/init.d/ && \
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
-	cp $(buildprefix)/root/usr/local/share/config/tuxtxt/tuxtxt2_720.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/tuxtxt2.conf && \
-	cp $(buildprefix)/root/usr/local/share/config/tuxtxt/tuxtxt2_1080.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
 	cp $(buildprefix)/root/release/reboot $(prefix)/release_neutrino/etc/init.d/ && \
 	echo "576i50" > $(prefix)/release_neutrino/etc/videomode && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_neutrino_spark $(prefix)/release_neutrino/etc/init.d/rcS && \
@@ -424,6 +422,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/local/share/config
 	cp -aR $(buildprefix)/root/usr/local/share/config/* $(prefix)/release_neutrino/usr/local/share/config/
 	cp -aR $(targetprefix)/usr/local/share/neutrino $(prefix)/release_neutrino/usr/local/share/
+	( cd $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && ln -sf tuxtxt2_720.conf tuxtxt2.conf )
 #	TODO: HACK
 	cp -aR $(targetprefix)/$(targetprefix)/usr/local/share/neutrino/* $(prefix)/release_neutrino/usr/local/share/neutrino
 #######################################################################################
@@ -477,7 +476,7 @@ endif
 	( cd $(prefix)/release_neutrino/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd-y httpd )
 	( cd $(prefix)/release_neutrino/var && ln -s /usr/local/share/neutrino/httpd-y httpd )
 	find $(prefix)/release_neutrino/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
-
+	touch $(prefix)/release/etc/.fsck
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino/etc/init.d/
 #	install autofs
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/

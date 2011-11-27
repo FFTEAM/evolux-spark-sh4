@@ -186,7 +186,12 @@ fi
 if [ -e /etc/.start_enigma2 ]; then
    startVideoTuneEnhanced &
 fi
-
+neutrinoTuxtxt=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+if [ $neutrinoTuxtxt == "7" ]; then
+   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_720.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+else
+   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+fi
    /etc/init.d/Swap.sh &
 
    if [ -e /usr/local/bin/enigma2 ] && [ -e /etc/.start_enigma2 ]; then
@@ -207,7 +212,7 @@ fi
 		   echo "SHUTDOWN"
                    sync
 		   HDDON=`mount | grep sda1 | cut -d " " -f5`
-		   if [ ! -z "$HDDON" ]; then
+		   if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
 			echo "hdd-check"
 			echo "FSCK" > /dev/vfd
 			umount /dev/sda1
@@ -241,7 +246,7 @@ fi
 			   echo "SHUTDOWN"
 		           sync
 			   HDDON=`mount | grep sda1 | cut -d " " -f5`
-			   if [ ! -z "$HDDON" ]; then
+			   if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
 				echo "hdd-check"
 				echo "FSCK" > /dev/vfd
 				umount /dev/sda1
