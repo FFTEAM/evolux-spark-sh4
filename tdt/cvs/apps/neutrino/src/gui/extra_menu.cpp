@@ -1054,11 +1054,6 @@ bool EMU_Menu::CamdReset()
 	system("sleep 2");
 	system("/usr/bin/oscam -c /var/keys &");
 	}
-	system("sleep 5");
-	system("/usr/local/bin/pzapit -rz");
-	CamdResetBox->hide();
-	delete CamdResetBox;
-	}
 	//spcs
 	if (emu==5)
 	{
