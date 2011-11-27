@@ -225,7 +225,8 @@ fi
 		3) echo "$rtv"
 		      echo "E2 RESTART"
 		      #echo "0" > /proc/progress;;
-      		      killall -9 enigma2;;
+      		      #killall -9 enigma2;;
+		      init 6;;
 		*) echo "*"
 		   echo "ERROR"
 		   echo "0" > /proc/progress;;
