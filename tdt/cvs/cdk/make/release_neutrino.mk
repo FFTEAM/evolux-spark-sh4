@@ -85,7 +85,8 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/init.d/sendsigs $(prefix)/release_neutrino/etc/init.d/ && \
 	cp -dp $(targetprefix)/etc/init.d/halt $(prefix)/release_neutrino/etc/init.d/ && \
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
-	cp $(buildprefix)/root/etc/tuxbox/tuxtxt2.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
+	cp $(buildprefix)/root/usr/local/share/config/tuxtxt/tuxtxt2_720.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/tuxtxt2.conf && \
+	cp $(buildprefix)/root/usr/local/share/config/tuxtxt/tuxtxt2_1080.conf $(prefix)/release_neutrino/usr/local/share/config/tuxtxt/ && \
 	cp $(buildprefix)/root/release/reboot $(prefix)/release_neutrino/etc/init.d/ && \
 	echo "576i50" > $(prefix)/release_neutrino/etc/videomode && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_neutrino_spark $(prefix)/release_neutrino/etc/init.d/rcS && \
