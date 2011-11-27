@@ -1395,6 +1395,7 @@ extramenu.emu.incubus IncubusCamd
 extramenu.emu.camd3 Camd3
 extramenu.emu.mbox Mbox
 extramenu.emu.oscam Oscam
+extramenu.emu.spcs Spcs
 extramenu.emu.stopcamd Camd Stop
 extramenu.emu.select Emu Select
 extramenu.emu.restart Emu Restart
@@ -1408,6 +1409,7 @@ extramenu.emu.incubusversion Incubus Version
 extramenu.emu.camd3version Camd3 Version
 extramenu.emu.mboxversion Mbox Version
 extramenu.emu.oscamversion Oscam Version
+extramenu.emu.spcsversion Spcs Version
 extramenu.emu.newcsversion NewCS Version
 extramenu.swap Swap Menue
 extramenu.swap.swapram SWAPRAM

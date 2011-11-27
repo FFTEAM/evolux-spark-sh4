@@ -30,7 +30,7 @@
 #include "infoviewer.h"
 
 #include "extra_menu.h"
-#define EMU_OPTION_COUNT 5
+#define EMU_OPTION_COUNT 6
 #define EMU_ONOFF_OPTION_COUNT 2
 #define EMU_RESTART_OPTION_COUNT 2
 #define TUNERRESET_OPTION_COUNT 2
@@ -437,7 +437,8 @@ const CMenuOptionChooser::keyval EMU_OPTIONS[EMU_OPTION_COUNT] =
 	{ 1, LOCALE_EXTRAMENU_EMU_INCUBUS },
 	{ 2, LOCALE_EXTRAMENU_EMU_CAMD3 },
 	{ 3, LOCALE_EXTRAMENU_EMU_MBOX },
-	{ 4, LOCALE_EXTRAMENU_EMU_OSCAM }
+	{ 4, LOCALE_EXTRAMENU_EMU_OSCAM },
+	{ 5, LOCALE_EXTRAMENU_EMU_SPCS }
 };
 
 const CMenuOptionChooser::keyval EMU_ONOFF_OPTIONS[EMU_ONOFF_OPTION_COUNT] =
@@ -503,6 +504,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	bool camd3=0;
 	bool mbox=0;
 	bool oscam=0;
+	bool spcs=0;
 	bool newcs=0;
 	int save_value=0;
 
@@ -547,6 +549,14 @@ void EMU_Menu::EMU_Menu_Settings()
 	oscam=1;
 	emu_onoff=1;
 	}
+	FILE* fd6 = fopen("/etc/.spcs", "r");
+	if(fd6)
+	{
+	emu=5;
+	fclose(fd6);
+	spcs=1;
+	emu_onoff=1;
+	}
 
 	int old_emu=emu;
 	int old_emu_onoff=emu_onoff;
@@ -557,6 +567,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	char mboxversion[7] = "N/A";
 	char oscamversion[7] = "N/A";
 	char newcsversion[7] = "N/A";
+	char spcsversion[7] = "N/A";
 	FILE* fdemu = fopen("/usr/bin/versions.txt", "r");
 	if(fdemu)
 	{
@@ -568,6 +579,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	sscanf(buffer, "camd3=%7s", camd3version);
 	sscanf(buffer, "mbox=%7s", mboxversion);
 	sscanf(buffer, "oscam=%7s", oscamversion);
+	sscanf(buffer, "spcs=%7s", spcsversion);
 	sscanf(buffer, "newcs=%7s", newcsversion);
 	}
 	fclose(fdemu);
@@ -590,6 +602,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	FILE* fdmbox_installed = fopen("/usr/bin/mbox", "r");
 	FILE* fdincubuscamd_installed = fopen("/usr/bin/incubusCamd", "r");
 	FILE* fdoscam_installed = fopen("/usr/bin/oscam", "r");
+	FILE* fdspcs_installed = fopen("/usr/bin/spcs", "r");
 	FILE* fdnewcs_installed = fopen("/usr/bin/newcs", "r");
 	if(fdmgcamd_installed)
 	{
@@ -610,6 +623,10 @@ void EMU_Menu::EMU_Menu_Settings()
 	if(fdoscam_installed)
 	{
 	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_OSCAMVERSION, false, oscamversion));
+	}
+	if(fdspcs_installed)
+	{
+	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_SPCSVERSION, false, spcsversion));
 	}
 	if(fdnewcs_installed)
 	{
@@ -653,6 +670,11 @@ void EMU_Menu::EMU_Menu_Settings()
 	{
 	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
+	}
+	if (spcs==1)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
 	}
 	system("touch /etc/.mgcamd");
 	system("rm /tmp/camd.socket");
@@ -700,6 +722,11 @@ if (emu_onoff==1)
 	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
+	if (spcs==1)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
+	}
 	system("touch /etc/.incubus");
 	system("rm /tmp/camd.socket");
 	system("/usr/bin/incubusCamd &");
@@ -746,6 +773,11 @@ if (emu_onoff==1)
 	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
 	}
+	if (spcs==1)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
+	}
 	system("touch /etc/.camd3");
 	system("/usr/bin/camd3 /var/keys/camd3.config &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -790,6 +822,11 @@ if (emu_onoff==1)
 	{
 	system("rm /etc/.oscam");
 	system("kill $(pidof oscam)");
+	}
+	if (spcs==1)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
 	}
 	system("touch /etc/.mbox");
 	system("/usr/bin/mbox /var/keys/mbox.cfg &");
@@ -839,6 +876,11 @@ if (emu_onoff==1)
 	system("rm /etc/.mbox");
 	system("kill $(pidof mbox)");
 	}
+	if (spcs==1)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
+	}
 	system("touch /etc/.oscam");
 	system("/usr/bin/oscam -c /var/keys &");
 	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
@@ -858,6 +900,57 @@ if (emu_onoff==0)
 	}
 }
 //ENDE OSCAM
+
+//SPCS STARTEN
+if (emu_onoff==1)
+{
+	if (emu==5)
+	{
+	if (mgcamd==1)
+	{
+	system("rm /etc/.mgcamd");
+	system("kill $(pidof mgcamd)");
+	}
+	if (incubus==1)
+	{
+	system("rm /etc/.incubus");
+	system("kill $(pidof incubusCamd)");
+	}
+	if (camd3==1)
+	{
+	system("rm /etc/.camd3");
+	system("kill $(pidof camd3)");
+	}
+	if (mbox==1)
+	{
+	system("rm /etc/.mbox");
+	system("kill $(pidof mbox)");
+	}
+	if (oscam==1)
+	{
+	system("rm /etc/.oscam");
+	system("kill $(pidof oscam)");
+	}
+	system("touch /etc/.spcs");
+	system("/usr/bin/spcs -c /var/keys &");
+	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SPCS activated!", 450, 2); // UTF-8("")
+	}
+}
+//SPCS BEENDEN
+if (emu_onoff==0)
+{
+	if (emu==5)
+	{
+	system("rm /etc/.spcs");
+	system("kill $(pidof spcs)");
+	emu_onoff=0;
+	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SPCS deactivated!", 450, 2); // UTF-8("")
+	}
+}
+//ENDE SPCS
+
 }
 }
 //EMU RESTARTEN
@@ -872,6 +965,7 @@ bool EMU_Menu::CamdReset()
 	bool mbox=0;
 	bool oscam=0;
 	bool newcs=0;
+	bool spcs=0;
 //UEBERPRUEFEN WELCHES EMU LAEUFT
 	FILE* fd1 = fopen("/etc/.mgcamd", "r");
 	if(fd1)
@@ -913,6 +1007,14 @@ bool EMU_Menu::CamdReset()
 	oscam=1;
 	emu_onoff=1;
 	}
+	FILE* fd6 = fopen("/etc/.spcs", "r");
+	if(fd6)
+	{
+	emu=5;
+	fclose(fd6);
+	spcs=1;
+	emu_onoff=1;
+	}
 	if(emu_onoff==1)
 	{
 	CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, "please wait, Camd restarting");
@@ -951,6 +1053,18 @@ bool EMU_Menu::CamdReset()
 	system("kill $(pidof oscam)");
 	system("sleep 2");
 	system("/usr/bin/oscam -c /var/keys &");
+	}
+	system("sleep 5");
+	system("/usr/local/bin/pzapit -rz");
+	CamdResetBox->hide();
+	delete CamdResetBox;
+	}
+	//spcs
+	if (emu==5)
+	{
+	system("kill $(pidof spcs)");
+	system("sleep 2");
+	system("/usr/bin/spcs -c /var/keys &");
 	}
 	system("sleep 5");
 	system("/usr/local/bin/pzapit -rz");
