@@ -195,7 +195,7 @@ fi
 		      #echo "0" > /proc/progress;;
       		      #killall -9 enigma2;;
 		      sync
-		      reboot -f;;
+      		      killall enigma2;;
 		*) echo "*"
 		   echo "ERROR"
 		   echo "0" > /proc/progress;;
