@@ -1333,7 +1333,7 @@ videomenu.dbdr_none none
 videomenu.enabled_modes VF key enabled modes
 videomenu.fullscreen Full screen
 videomenu.hdmi_color_space HDMI Color Space
-videomenu.head Video Settings
+videomenu.head Pic/sub
 videomenu.letterbox Letterbox
 videomenu.osd OSD
 videomenu.panscan Pan&Scan
