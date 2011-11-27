@@ -260,7 +260,8 @@ fi
 			   init 6;;
 			*) echo "$rtv"
 			   echo "ERROR"
-			   echo "0" > /proc/progress;;
+			   #echo "0" > /proc/progress;;
+			   init 6;;
 		esac
    done 
    fi
