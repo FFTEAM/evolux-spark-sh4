@@ -1,3 +1,6 @@
+32-bit linux recommended, best is ubuntu(<11.04), suse debian for build!
+64bit works too but you must modify maybe manual some stuff!
+
 how to build enigma2, neutrino or evolux for your edision argus pingulux:
 cd /tdt/cvs/cdk
 ./make.sh
