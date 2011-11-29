@@ -1,11 +1,11 @@
-how to build enigma2, neutrino or evolux for your edision argu pingulux:
+how to build enigma2, neutrino or evolux for your edision argus pingulux:
 cd /tdt/cvs/cdk
 ./make.sh
 18 (spark)
 10 (stm24-209)
 n  (debug: n)
 3  (player2 191)
-2  (milticom 3.2.4)
+2  (multicom 3.2.4)
 1  (eplayer3)
 
 after that you have 3 options for build:
