@@ -35,7 +35,7 @@ FOR CRYPT PTI PLEASE PLACE YOUR STM24-209 pti.ko (NP) IN CDK/OWN_BUILD/ENIGMA2 O
 -press arrow down, "eng16" will shown on display
 -press arrow right, "fact" will shown on display and start flashing
 -display show blinking "U LD"
--if not "U LD" f.e. "77" shown stick wont ber recognized, check fat/fat32 and folder/img-parts
+-if not "U LD" f.e. "77" shown, stick wasn't recognized, check fat/fat32 and folder/img-parts
 -wait 3mins
 -"succ" comming on display and neutrino/enigma2 should bootup.
 
