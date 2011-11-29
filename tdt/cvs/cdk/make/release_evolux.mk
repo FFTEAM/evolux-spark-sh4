@@ -1,5 +1,6 @@
 #Trick ALPHA-Version ;)
 USERS=$(shell which sudo)
+EVOLUXVERSION=$(shell cat $(prefix)/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2)
 $(DEPDIR)/release_evolux: \
 $(DEPDIR)/%release_evolux:
 	rm -rf $(prefix)/release_evolux_with_dev || true
@@ -37,7 +38,6 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
-	EVOLUXVERSION=$(shell cat $(prefix)/release_evolux_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2)
 	$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n
 	( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt )
 
