@@ -113,7 +113,6 @@ evolux: yaud-neutrino \
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 evolux-full: yaud-none host-python lirc stslave \
-		neutrino-clean \
 		yaud-neutrino \
 		yaud-enigma2-nightly \
 		release_evolux
