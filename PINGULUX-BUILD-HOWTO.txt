@@ -26,7 +26,7 @@ TAKE CARE THAT YOU HAVE PLACED IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /BOOT YOUR A
 ALSO GIT INCL. ONLY FTA PTI!!
 FOR CRYPT PTI PLEASE PLACE YOUR STM24-209 pti.ko (NP) IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /LIB/MODULES
 
--if all true you can find e2jffs2.img + Uimage in /tdt/tufsbox
+-if all true you can find e2jffs2.img + uImage in /tdt/tufsbox
 -create a folder "enigma2" on your usb-stick with fat/fat32 formatted
 -put both files in folder
 -turn off Pingulux-AC
