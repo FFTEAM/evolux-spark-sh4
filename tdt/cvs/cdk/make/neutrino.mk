@@ -108,6 +108,6 @@ neutrino-clean neutrino-distclean:
 	cd $(appsdir)/neutrino && \
 		$(MAKE) distclean && \
 		find $(appsdir)/neutrino -name "Makefile.in" -exec rm -rf {} \; && \
-		rm -rf $(appsdir)/autom4te.cache
+		rm -rf $(appsdir)/neutrino/autom4te.cache
 
 #libogg is needed
