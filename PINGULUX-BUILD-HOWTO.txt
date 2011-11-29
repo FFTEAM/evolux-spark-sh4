@@ -1,0 +1,58 @@
+how to build enigma2, neutrino or evolux for your edision argu pingulux:
+cd /tdt/cvs/cdk
+./make.sh
+18 (spark)
+10 (stm24-209)
+n  (debug: n)
+3  (player2 191)
+2  (milticom 3.2.4)
+1  (eplayer3)
+
+after that you have 3 options for build:
+1. only neutrino build:
+   make yaud-neutrino
+2. only enigma2-nightly build:
+   make yaud-enigma-nightly
+   (if asked for option 0-6 build please select option #5 !)
+3. build evolux (neutrino+e2 in 1 image):
+   1st time if not before 1+2:
+      make evolux-full
+      (if asked for option 0-6 build please select option #5 !)
+   if 1+2 done before:
+      make evolux
+      (if asked for option 0-6 build please select option #5 !)
+
+TAKE CARE THAT YOU HAVE PLACED IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /BOOT YOUR AUDIO/VIDEO.ELF (NP) OTHERWAY IT WON'T BOOT AFTER FLASHING!
+ALSO GIT INCL. ONLY FTA PTI!!
+FOR CRYPT PTI PLEASE PLACE YOUR STM24-209 pti.ko (NP) IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /LIB/MODULES
+
+-if all true you can find e2jffs2.img + Uimage in /tdt/tufsbox
+-create a folder "enigma2" on your usb-stick with fat/fat32 formatted
+-put both files in folder
+-turn off Pingulux-AC
+-put stick in
+-turn AC on and hold "ok"-button( on pingulux,not RC!) till display showing "force"
+-press arrow down, "eng16" will shown on display
+-press arrow right, "fact" will shown on display and start flashing
+-display show blinking "U LD"
+-if not "U LD" f.e. "77" shown stick wont ber recognized, check fat/fat32 and folder/img-parts
+-wait 3mins
+-"succ" comming on display and neutrino/enigma2 should bootup.
+
+if you want boot orig-spark-soft again:
+-turn off AC
+-turn AC on and hold "ok"-button on pingulux (not RC!)
+-"force" showing on display
+-press arrow up
+-press "ok"
+-orig should boot
+
+if you want back again from orig-soft and have allways flashed neutrino/enigma2/evolux:
+-turn AC off
+-turn AC on and hold "ok"-button on pingulux (not RC!)
+-"force" showing on display
+-press arrow down
+-press "ok"
+-neutrino/enigma2/evolux will boot
+
+till you dont change by AC off on last choice will allways boot after shutdown and boot.
