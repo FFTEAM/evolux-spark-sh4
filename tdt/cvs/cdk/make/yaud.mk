@@ -107,8 +107,13 @@ flash-ufs910-neutrino: yaud-none stslave \
 		var-stock.neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
-evolux: yaud-none host-python lirc stslave \
-		$(buildprefix)/clean_neutrino.sh \
+evolux: yaud-neutrino \
+		yaud-enigma2-nightly \
+		release_evolux
+	@TUXBOX_YAUD_CUSTOMIZE@
+
+evolux-full: yaud-none host-python lirc stslave \
+		neutrino-clean \
 		yaud-neutrino \
 		yaud-enigma2-nightly \
 		release_evolux
