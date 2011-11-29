@@ -625,7 +625,7 @@ endif
 	touch $(prefix)/release/etc/.start_enigma2
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release/usr/lib/enigma2/python/Components/
 	rm $(prefix)/release/usr/local/share/enigma2/keymap_*.xml
-
+	touch $(prefix)/release/etc/changelog.txt
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 	rm $(prefix)/release/bin/showiframe
 	rm $(prefix)/release/usr/local/share/enigma2/radio.mvi

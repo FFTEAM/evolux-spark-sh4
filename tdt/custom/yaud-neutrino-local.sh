@@ -245,5 +245,8 @@ fi
 if [ -e $PATCHDIR/custom/myPatches_Neutrino.diff ]; then
 	cd $CHANGEDIR/release_with_dev && patch -p1 < "../../custom/myPatches_Neutrino.diff"
 fi
+	cp -RP $CHANGEDIR/release_neutrino_with_dev/boot/uImage $CHANGEDIR/
+	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release_neutrino_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
+	( cd $CHANGEDIR && tar -czvf Neutrino_on_Pingulux.tar.gz e2jffs2.img uImage )
 echo "--- Erledigt ---"
 exit
