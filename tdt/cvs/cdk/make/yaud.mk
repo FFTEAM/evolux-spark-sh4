@@ -107,6 +107,13 @@ flash-ufs910-neutrino: yaud-none stslave \
 		var-stock.neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+evolux: yaud-none host-python lirc stslave \
+		$(buildprefix)/clean_neutrino.sh \
+		yaud-neutrino \
+		yaud-enigma2-nightly \
+		release_evolux
+	@TUXBOX_YAUD_CUSTOMIZE@
+
 if STM22
 yaud-enigma2: yaud-none host-python lirc stslave\
 		boot-elf hotplug remote firstboot enigma2 enigma2-misc release
