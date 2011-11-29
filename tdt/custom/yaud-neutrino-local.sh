@@ -232,8 +232,15 @@ mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
 if [ -e $BUILDDIR/own_build/neutrino/boot/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/video.elf ]; then
 	cp -RP $BUILDDIR/own_build/neutrino/boot/* $CHANGEDIR/release_neutrino_with_dev/boot/
 else
-	echo "FW NOT FOUND!!!"
-	exit
+	echo "#############################"
+	echo "#############################"
+	echo "  audio/video.elf NOT FOUND "
+	echo "in cdk/own_build/enigma2/boot !!!"
+	echo "please put them in, "
+	echo "otherway it won't boot"
+	echo "##############################"
+	echo "##############################"
+	sleep 30
 fi
 if [ -e $PATCHDIR/custom/myPatches_Neutrino.diff ]; then
 	cd $CHANGEDIR/release_with_dev && patch -p1 < "../../custom/myPatches_Neutrino.diff"
