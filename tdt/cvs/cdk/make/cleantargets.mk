@@ -62,7 +62,8 @@ endif
 	-rm -rf $(prefix)/*cdkroot-tftpboot
 	-rm -rf $(rpmdbprefix)/
 	-rm -rf $(ipkprefix)/
-	-rm -rf $(prefix)/release_neutrino*
+#	-rm -rf $(prefix)/release_neutrino*
+	-rm -rf $(prefix)/release*
 	-rm -rf SOURCES SPECS BUILD && install -d SOURCES SPECS BUILD
 	-rm -rf $(prefix)/ccache
 	-rm -rf $(DEPDIR)/autofs.*
