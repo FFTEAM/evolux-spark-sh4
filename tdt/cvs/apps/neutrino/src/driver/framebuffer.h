@@ -89,7 +89,10 @@ class CFrameBuffer
 		std::string     backgroundFilename;
 		bool            useBackgroundPaint;
 		unsigned int	xRes, yRes, stride, bpp;
-
+#ifdef __sh__
+		unsigned int	xDestRes, yDestRes;
+		double          xFactor, yFactor;
+#endif
 		t_fb_var_screeninfo screeninfo, oldscreen;
 		fb_cmap cmap;
 		__u16 red[256], green[256], blue[256], trans[256];
@@ -213,6 +216,8 @@ class CFrameBuffer
 #ifdef __sh__
 		void blitRect(int x, int y, int width, int height, unsigned long color);
 		void blitIcon(int original_width, int original_height, int fb_x, int fb_y, int width, int height);
+		void blit();
+		void blit(int x, int y, int dx, int dy);
 		void resize(int format);
 		int scaleX(const int x);
 		int scaleY(const int y);

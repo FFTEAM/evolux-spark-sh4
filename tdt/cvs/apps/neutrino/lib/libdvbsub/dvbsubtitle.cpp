@@ -644,7 +644,7 @@ public:
   int64_t Pts(void) { return pts; }
   int Timeout(void) { return timeout; }
   void AddBitmap(cBitmap *Bitmap);
-  void Draw();
+  void Draw(int &min_x, int &min_y, int &max_x, int &max_y);
   void Clear(void);
   };
 
@@ -685,7 +685,7 @@ void cDvbSubtitleBitmaps::Clear()
 	}
 }
 
-void cDvbSubtitleBitmaps::Draw()
+void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 {
 	static tColor save_colors[MAXNUMCOLORS];
 
@@ -752,6 +752,10 @@ cDvbSubtitleConverter::cDvbSubtitleConverter(void)
   pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
   pthread_mutex_init(&mutex, &attr);
   running = false;
+  min_x = CFrameBuffer::getInstance()->getScreenWidth(); 		/* screen width */
+  min_y = CFrameBuffer::getInstance()->getScreenHeight();		/* screenheight */
+  max_x = CFrameBuffer::getInstance()->getScreenX();		/* startX */
+  max_y = CFrameBuffer::getInstance()->getScreenY();		/* startY */
 //  Start();
 }
 
@@ -791,10 +795,16 @@ void cDvbSubtitleConverter::Pause(bool pause)
 
 void cDvbSubtitleConverter::Clear(void)
 {
-	if(max_x && max_y) {
-		dbgconverter("cDvbSubtitleConverter::Draw: clear x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
-		CFrameBuffer::getInstance()->paintBackgroundBoxRel (min_x, min_y, max_x-min_x, max_y-min_y);
-		max_x = max_y = 0;
+	dbgconverter("cDvbSubtitleConverter::Clear: x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x - min_x, max_y - min_y);
+
+	if(running && (max_x - min_x > 0) && (max_y - min_y > 0)) 
+	{
+		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, min_y, 720, max_y-min_y);
+		CFrameBuffer::getInstance()->ClearFrameBuffer();
+#ifdef __sh__	
+		CFrameBuffer::getInstance()->blit();
+		//CFrameBuffer::getInstance()->blit(0, min_y, 720, max_y-min_y);
+#endif		
 	}
 }
 
@@ -898,16 +908,16 @@ int cDvbSubtitleConverter::Convert(const uchar *Data, int Length, int64_t pts)
 
 #define LimitTo32Bit(n) (n & 0x00000000FFFFFFFFL)
 #define MAXDELTA 40000 // max. reasonable PTS/STC delta in ms
-
+#define WAITMS 1000
+#define MIN_DISPLAY_TIME 5500
 void dvbsub_get_stc(int64_t * STC);
 
-void cDvbSubtitleConverter::Action(void)
+int cDvbSubtitleConverter::Action(void)
 {
-	static cTimeMs Timeout(0xFFFF*1000);
-	int WaitMs = 100;
+	int WaitMs = WAITMS;
 
 	if(!running)
-		return;
+		return 0;
 
 	Lock();
 	if (cDvbSubtitleBitmaps *sb = bitmaps->First()) {
@@ -915,48 +925,38 @@ void cDvbSubtitleConverter::Action(void)
 		dvbsub_get_stc(&STC);
 		int64_t Delta = 0;
 
-		Delta = sb->Pts() - STC;
+		Delta = LimitTo32Bit(sb->Pts()) - LimitTo32Bit(STC);
 		Delta /= 90; // STC and PTS are in 1/90000s
 		dbgconverter("cDvbSubtitleConverter::Action: PTS: %lld  STC: %lld (%lld) timeout: %d\n", sb->Pts(), STC, Delta, sb->Timeout());
 
-		if(Delta > 1800) {
-			Unlock();
-			usleep((Delta-500)*1000);
-			Lock();
-			if(!running) {
-				Unlock();
-				return;
+		dbgconverter("cDvbSubtitleConverter::Action: Got %d bitmaps, showing #%d\n", bitmaps->Count(), sb->Index() + 1);
+		if (running) {
+			Clear();
+			sb->Draw(min_x, min_y, max_x, max_y);
+			CFrameBuffer::getInstance()->blit(0, min_y, 720, max_y - min_y);
+			Timeout.Set(sb->Timeout());
 			}
-#if 1 // debug
-			dvbsub_get_stc(&STC);
-			Delta = sb->Pts() - STC;
-			dbgconverter("cDvbSubtitleConverter::Action: PTS: %lld  STC: %lld (%lld) timeout: %d after sleep\n", sb->Pts(), STC, Delta/90, sb->Timeout());
-#endif
-		}
-		Delta = 0;
-		if (Delta <= MAXDELTA) {
-			if (Delta <= 0) {
-				dbgconverter("cDvbSubtitleConverter::Action: Got %d bitmaps, showing #%d\n", bitmaps->Count(), sb->Index() + 1);
-				if (running) {
-					sb->Draw();
-					Timeout.Set(sb->Timeout() * 100);//max: was 1000 and timeout seems in 1/10 of sec ??
-				}
-				bitmaps->Del(sb, true);
-			}
-			else if (Delta < WaitMs)
-				WaitMs = Delta;
-		}
-		else
-			bitmaps->Del(sb, true);
+
+
+		if (Delta < WaitMs)
+			WaitMs = MIN_DISPLAY_TIME;
+		bitmaps->Del(sb, true);
+
 	} else {
-		//printf("cDvbSubtitleConverter::Action: timeout elapsed %lld\n", Timeout.Elapsed());
-		if (Timeout.TimedOut()) {
-			//printf("************************************ cDvbSubtitleConverter::Action: we timed out\n");
+		if (Timeout.TimedOut()) 
+		{
+			dbgconverter("cDvbSubtitleConverter::Action: timeout, elapsed %lld\n", Timeout.Elapsed());
+			//dbgconverter("cDvbSubtitleConverter::Action: timeout, elapsed %lld\n", Timeout.Elapsed());
 			Timeout.Set(0xFFFF*1000);
 			Clear();
 		}
 	}
 	Unlock();
+	if(WaitMs != WAITMS)
+		dbgconverter("cDvbSubtitleConverter::Action: finish, WaitMs %d\n", WaitMs);
+		//dbgconverter("cDvbSubtitleConverter::Action: finish, WaitMs %d\n", WaitMs);
+
+	return WaitMs*1000;
 }
 
 tColor cDvbSubtitleConverter::yuv2rgb(int Y, int Cb, int Cr)

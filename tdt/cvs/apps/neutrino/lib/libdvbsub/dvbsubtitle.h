@@ -11,7 +11,12 @@
 
 #ifndef __DVBSUBTITLE_H
 #define __DVBSUBTITLE_H
-
+extern "C" {
+#include <unistd.h>
+#include <linux/fb.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+}
 #include "osd.h"
 #include "tools.h"
 
@@ -31,11 +36,13 @@ private:
   int ExtractSegment(const uchar *Data, int Length, int64_t Pts);
   void FinishPage(cDvbSubtitlePage *Page);
   bool running;
+  int min_x, min_y, max_x, max_y;
+  cTimeMs Timeout;
   pthread_mutex_t mutex;
 public:
   cDvbSubtitleConverter(void);
   virtual ~cDvbSubtitleConverter();
-  void Action(void);
+  int Action(void);
   void Reset(void);
   void Clear(void);
   void Pause(bool pause);
