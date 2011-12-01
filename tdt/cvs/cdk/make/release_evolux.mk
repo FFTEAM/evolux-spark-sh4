@@ -9,6 +9,9 @@ $(DEPDIR)/%release_evolux:
 	mkdir -p $(prefix)/release_evolux_with_dev
 	$(USERS) cp -RP $(prefix)/release_neutrino_with_dev/* $(prefix)/release_evolux_with_dev/
 	$(USERS) chmod 777 -R $(prefix)/release_evolux_with_dev
+	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
+		$(buildprefix)/doEVOLUX.sh; \
+	fi;
 	cp -RP $(prefix)/release_with_dev/var $(prefix)/release_evolux_with_dev/
 	cp -RP $(prefix)/release_with_dev/sbin $(prefix)/release_evolux_with_dev/
 	cp -RP $(prefix)/release_with_dev/usr/bin $(prefix)/release_evolux_with_dev/usr/
@@ -38,8 +41,14 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
-	$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n
-	( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt )
+	if [ -e $(prefix)/release_with_dev/etc/changelog.txt ]; then \
+		cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/; \
+		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt ); \
+	else \
+		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage ); \
+	fi;
 
 	touch $@
 
