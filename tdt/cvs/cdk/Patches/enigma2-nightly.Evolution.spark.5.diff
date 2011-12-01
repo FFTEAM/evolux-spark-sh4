@@ -1,15 +1,17 @@
 --- enigma2-nightly.org/data/menu.xml	2011-10-30 11:06:40.252808194 +0100
 +++ enigma2-nightly/data/menu.xml	2011-10-30 11:06:28.448749659 +0100
-@@ -18,7 +18,7 @@
+@@ -17,8 +17,9 @@
+ 		<item text="Network setup" entryID="network_setup">self.openSetup("network")</item>-->
  		<!--<item text="CI"><screen module="Ci" screen="CiSelection" /></item>-->
  		<!--<item text="Radio"><code>print "radio mode"</code></item>-->
++		<item level="0" text="Subtitles" entryID="subtitle_selection"><screen module="Subtitles" screen="Subtitles" /></item>
  		<item level="0" text="Timer" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
 -		<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
 +		<!--<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>-->
  
  		<menu level="0" text="Information" entryID="info_screen">
  			<id val="information" />
-@@ -64,7 +64,7 @@
+@@ -64,7 +65,7 @@
  				<item level="0" text="Network" entryID="network_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection" /></item>
  				<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection" /></item>
  				<item requires="Display"><setup level="1" id="lcd" /></item>
@@ -18,7 +20,7 @@
  				<!--<menu level="1" text="Network..." entryID="network_setup">
  					<id val="network" />
  					<item level="1" text="Device Setup..." entryID="device_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection"/></item>
-@@ -72,7 +72,7 @@
+@@ -72,7 +73,7 @@
  				</menu>-->
  				<item level="2" text="Recording paths" entryId="RecordPaths"><screen module="RecordPaths" screen="RecordPathsSettings" /></item>
  			</menu>
