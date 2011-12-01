@@ -1397,8 +1397,8 @@ int tuxtx_main(int _rc, void * _fb, int pid, int x, int y, int w, int h) {
 
 	sx = CFrameBuffer::getInstance()->scaleX(x);
 	sy = CFrameBuffer::getInstance()->scaleY(y);
-	ex = CFrameBuffer::getInstance()->scaleX(w);
-	ey = CFrameBuffer::getInstance()->scaleY(h);
+	ex = CFrameBuffer::getInstance()->scaleX(w*1.02);
+	ey = CFrameBuffer::getInstance()->scaleY(h*1.02);
 
 	fprintf(stderr, "stride=%d sx=%d sy=%d ex=%d ey=%d\n", stride, sx, sy, ex, ey);
 
@@ -1726,7 +1726,7 @@ int Init() {
 				dumpl25 = ival & 1;
 			else if (1 == sscanf(line, "UseTTF %i", &ival))
 				usettf = ival & 1;
-
+#if 0
 			else if (1 == sscanf(line, "StartX %i", &ival))
 				sx = ival;
 			else if (1 == sscanf(line, "EndX %i", &ival))
@@ -1735,7 +1735,7 @@ int Init() {
 				sy = ival;
 			else if (1 == sscanf(line, "EndY %i", &ival))
 				ey = ival;
-
+#endif
 		}
 		fclose(conf);
 	}
