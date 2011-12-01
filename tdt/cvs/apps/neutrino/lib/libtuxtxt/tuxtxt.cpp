@@ -1397,8 +1397,8 @@ int tuxtx_main(int _rc, void * _fb, int pid, int x, int y, int w, int h) {
 
 	sx = CFrameBuffer::getInstance()->scaleX(x);
 	sy = CFrameBuffer::getInstance()->scaleY(y);
-	ex = CFrameBuffer::getInstance()->scaleX(w*1.02);
-	ey = CFrameBuffer::getInstance()->scaleY(h*1.02);
+	ex = CFrameBuffer::getInstance()->scaleX(w*1.125);
+	ey = CFrameBuffer::getInstance()->scaleY(h*1.075);
 
 	fprintf(stderr, "stride=%d sx=%d sy=%d ex=%d ey=%d\n", stride, sx, sy, ex, ey);
 
