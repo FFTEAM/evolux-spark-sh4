@@ -109,11 +109,12 @@ doOptimizeE2() {
 	echo "iface lo inet loopback" >> $SOURCE/etc/network/interfaces
 	echo "auto eth0" >> $SOURCE/etc/network/interfaces
 	echo "iface eth0 inet dhcp" >> $SOURCE/etc/network/interfaces
-
-	VersionPart1=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f1`
-	VersionPart2=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f2`
-	VersionPart3=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f3`
-	echo "version=0${VersionPart1}${VersionPart2}${VersionPart3}${DATE}0000" > $SOURCE/etc/image-version
+	if [ -e $SOURCE/etc/changelog.txt ]; then
+		VersionPart1=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f1`
+		VersionPart2=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f2`
+		VersionPart3=`cat $SOURCE/etc/changelog.txt | grep -m1 Version | cut -d = -f2 | cut -d . -f3`
+		echo "version=0${VersionPart1}${VersionPart2}${VersionPart3}${DATE}0000" > $SOURCE/etc/image-version
+	fi
 #	cp -RP $SOURCE/etc/changelog.txt $PINGUDIR/tufsbox/
 }
 doOptimizeE2
