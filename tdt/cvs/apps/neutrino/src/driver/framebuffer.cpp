@@ -1986,10 +1986,10 @@ void CFrameBuffer::blit()
 	bltData.dst_right  = xDestRes; 
 	bltData.dst_bottom = yDestRes; 
 
-	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+/*	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
 	{ 
 		perror("FBIO_BLIT"); 
-	} 
+	} */
 }
 
 void CFrameBuffer::blit(int x, int y, int dx, int dy)
@@ -2030,10 +2030,10 @@ void CFrameBuffer::blit(int x, int y, int dx, int dy)
 		bltData.dst_right  = desXb; 
 		bltData.dst_bottom = desYb; 
 
-		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+/*		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
 		{ 
 			perror("FBIO_BLIT"); 
-		} 
+		} */
 	}
 }
 
