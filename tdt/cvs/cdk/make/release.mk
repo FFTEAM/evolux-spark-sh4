@@ -146,7 +146,7 @@ endif
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release/etc/init.d/
 	cp -f $(buildprefix)/root/etc/fw_env.config $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release/bin/
-	cp -f $(buildprefix)/root/bin/fw_settenv $(prefix)/release/bin/
+	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release/bin/
 	touch $(prefix)/release/etc/.fsck
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
