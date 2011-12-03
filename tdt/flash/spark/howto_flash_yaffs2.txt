@@ -1,47 +1,23 @@
-1. you must change one time "bootargs_enigma2=" entry in your bootargs:
-from:
-	bootargs_enigma2=console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=jffs2 rw ...
-to:
-	bootargs_enigma2=console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=yaffs2 rw ...
-you can do this by rs232-comcable + terraterm(windows) or minicom(linux) (putty wont work!)
-- ac off 
-- connect pingulux to pc by rs232 and start terrarterm/minicom
-- ac on
-- it shows hit "esc" to stob autoboot, so press "esc" on your tastatur.
-- 3
-now we are able to change/edit bootargs(set your hwaddr as orig entry!):
-<MB618>
-
-setenv bootargs_enigma2 "console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=yaffs2 rw init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 nwhwconf=device:eth0,hwaddr:00:**:**:**:**:** rw ip=172.100.100.249:172.100.100.174:172.100.100.174:255.255.0.0:LINUX7109:eth0:off bigphysarea=6000 stmmaceth=msglvl:0,phyaddr:2,watchdog:5000"
-
-saveenv
-
-now turn ac off
+turn ac off
 we will boot orig spark >=1.2.09 now for flashing:
 - connect usb-stick with folder "enigma2" to pingulux
-  (in folder "enigma2" must be "uImage + e2yaffs2.img")
+  (in folder "enigma2" must be "uImage + e2yaffs2.img, fw_env.config, fw_setenv + fw_printenv and flash_E2_yaffs2.sh")
 - turn ac on and hold ok-button
 - ass "force" displayed press "arrow-up"-button
-- press "ok"
-now orig spark should boot
+- press "ok"-button
+(arrow+ok button on pinglux-box NOT on RC!)
+now orig spark should boot...
 (sometimes orig goes directly to deepstandby than press on RC "power-on" again and it will boot)
 as orig-spark has boot, do:
-############################
+################################
 telnet pingulux-ip
 user: root
 pw:root
-############################
-now we start flash-E2-part (no panic, orig spark untouched and if you read/do all carefully you cant damage pingulux):
-################################
-mount (should display that stick mounted successfull to /storage/c)
 
-flash_eraseall /dev/mtd5
+/storage/c/flash_E2_yaffs2.sh
 
-nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
+select option 1) YAFFS2
 
-flash_eraseall /dev/mtd6
-
-nandwrite -a -o /dev/mtd6 /storage/c/enigma2/e2yaffs2.img
 ################################
 that takes around 1 minute
 till finished shutdown orig-spark now
@@ -51,7 +27,10 @@ as "force" displayed:
 arrow-down
 ok
 
-now your flash-img should bootup as fast as hell (neutrino around 13seconds, e2 around 45s)
+now your flash-img should bootup as fast as hell(yaffs2) (neutrino around 13seconds, e2 around 45s)
 
-if you want flash "normal" jffs2-img again, you must revert bootargs-changes to jffs2.
+if you want flash "normal" jffs2-img again, you must boot orig again and one more time /storage/c/flash_E2_yaffs2.sh but than select option "2".
 
+if it's set back to jffs2 you can allways flash by usb-stick jffs2-images as before.
+
+yaffs2-images can't be flashed ONLY from booted orig-spark and flash_E2_yaffs2.sh!!!
