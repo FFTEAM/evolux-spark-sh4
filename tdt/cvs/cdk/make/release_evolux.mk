@@ -45,15 +45,16 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
+	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2.txt $(prefix)/ )
 	if [ -e $(prefix)/release_with_dev/etc/changelog.txt ]; then \
 		cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/; \
 		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
-		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt fw_env.config fw_printenv fw_setenv flash_E2_yaffs2.sh ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt fw_env.config fw_printenv fw_setenv flash_E2_yaffs2.sh howto_flash_yaffs2.txt ); \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt ); \
 	else \
 		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
-		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage fw_env.config fw_printenv fw_setenv flash_E2_yaffs2.sh ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage fw_env.config fw_printenv fw_setenv flash_E2_yaffs2.sh howto_flash_yaffs2.txt ); \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage ); \
 	fi;
