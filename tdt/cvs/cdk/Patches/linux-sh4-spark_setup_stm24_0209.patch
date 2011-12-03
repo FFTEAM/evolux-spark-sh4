@@ -355,7 +355,7 @@
   			switch (phydev->irq) {
   			case PHY_POLL:
   				irq_str = "POLL";
---- 192,213 ----
+--- 192,214 ----
   			 * and no PHY number was provided to the MAC,
   			 * use the one probed here.
   			 */
