@@ -144,6 +144,9 @@ endif
 	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release/usr/lib/python2.6/site-packages/
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release/usr/bin/
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release/etc/init.d/
+	cp -f $(buildprefix)/root/etc/fw_env.config $(prefix)/release/etc/
+	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release/bin/
+	cp -f $(buildprefix)/root/bin/fw_settenv $(prefix)/release/bin/
 	touch $(prefix)/release/etc/.fsck
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
