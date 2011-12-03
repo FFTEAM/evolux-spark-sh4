@@ -43,9 +43,13 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
 	if [ -e $(prefix)/release_with_dev/etc/changelog.txt ]; then \
 		cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/; \
+		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt ); \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt ); \
 	else \
+		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage ); \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage ); \
 	fi;
