@@ -1,0 +1,54 @@
+turn ac off
+we will boot orig spark >=1.2.09 now for flashing:
+- connect usb-stick with folder "enigma2" to pingulux
+  (in folder "enigma2" must be "uImage + e2yaffs2.img, fw_env.config, fw_printenv, fw_setenv, flash_E2_yaffs2.sh")
+- turn ac on and hold ok-button
+- ass "force" displayed press "arrow-up"-button
+- press "ok"-button
+(arrow+ok button on pinglux-box NOT on RC!)
+now orig spark should boot...
+(sometimes orig goes directly to deepstandby than press on RC "power-on" again and it will boot)
+as orig-spark has boot, do:
+################################
+telnet pingulux-ip
+user: root
+pw:root
+
+/storage/c/enigma2/flash_E2_yaffs2.sh
+
+for yaffs2 flashing select:
+
+(1) FLASH YAFFS2
+
+################################
+that takes around 1-2 minutes
+till finished shutdown orig-spark now
+turn ac off
+hold ok-button and ac on again
+as "force" displayed:
+arrow-down
+ok
+
+now your flash-img should bootup as fast as hell(yaffs2) (neutrino around 13seconds, e2 around 45s)
+
+
+if you want flash "normal" jffs2-img again, you must boot orig again:
+###################################################################
+telnet pingulux-ip
+user: root
+pw:root
+
+/storage/c/enigma2/flash_E2_yaffs2.sh
+
+for yaffs2 flashing select:
+
+2) FLASH JFFS2 (default)
+
+if it's set back to jffs2 you can allways flash by usb-stick jffs2-images as before.
+########################################################
+
+
+yaffs2-images can't be flashed by normal USB-flashing, ONLY from booted orig-spark!!!
+
+
+#######################################################
