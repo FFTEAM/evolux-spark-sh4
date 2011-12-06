@@ -5,7 +5,7 @@ Content:
 1+1a: set bootargs to yaffs2
 1b  : flash yaffs2-img
 
-2-2a: revert bootargs to yaffs2 
+2-2a: revert bootargs to jffs2 
 2b  : flash jffs2-img
 
 Update: UPGRADE YAFFS2-img
