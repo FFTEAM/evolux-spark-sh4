@@ -1,8 +1,20 @@
 #####################################################################################
 ### HOWTO flash yaffs2-images #######################################################
 #####################################################################################
+Content:
+1+1a: set bootargs to yaffs2
+1b  : flash yaffs2-img
+
+2-2a: revert bootargs to yaffs2 
+2b  : flash jffs2-img
+
+Update: UPGRADE YAFFS2-img
+####################################################################################
+####################################################################################
+
 
 if you not able set args by comcable use 1.a) !
+
 
 1.) CHANGE Bootargs via comcable as you know how to setup args by terraterm or minicom only!!!:
 ########################## it's ONE codeline !!! ####################################
