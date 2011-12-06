@@ -480,6 +480,7 @@ endif
 	touch $(prefix)/release_neutrino/etc/.fsck
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino/etc/init.d/
 	cp -f $(buildprefix)/root/etc/fw_env.config $(prefix)/release_neutrino/etc/
+	cp -f $(buildprefix)/root/etc/bootargs_* $(prefix)/release_neutrino/etc/
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release_neutrino/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release_neutrino/bin/
 

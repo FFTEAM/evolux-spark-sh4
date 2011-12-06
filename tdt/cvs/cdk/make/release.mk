@@ -145,6 +145,7 @@ endif
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release/usr/bin/
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release/etc/init.d/
 	cp -f $(buildprefix)/root/etc/fw_env.config $(prefix)/release/etc/
+	cp -f $(buildprefix)/root/etc/bootargs_* $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release/bin/
 	touch $(prefix)/release/etc/.fsck
