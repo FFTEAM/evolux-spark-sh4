@@ -3,7 +3,7 @@
 #if [ -e /storage/c/enigma2/fw_env.config ]; then
 #cp -RP /storage/c/enigma2/fw_env.config /etc/
 #fi
-chmod 755 /etc/fw_env.config
+#chmod 755 /etc/fw_env.config
 echo -e "\nFlashtool:"
 echo " what you'll do?"
 echo "    1) FLASH YAFFS2"
