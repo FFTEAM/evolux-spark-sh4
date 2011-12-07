@@ -52,12 +52,12 @@ $(DEPDIR)/%release_evolux:
 		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new.txt flash_E2_yaffs2.sh ) ; \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
-		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage changelog.txt ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-JFFS2.tar.gz e2jffs2.img uImage changelog.txt ); \
 	else \
 		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-YAFFS2.tar.gz e2yaffs2.img uImage howto_flash_yaffs2_new.txt flash_E2_yaffs2.sh ); \
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
-		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION).tar.gz e2jffs2.img uImage ); \
+		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-JFFS2.tar.gz e2jffs2.img uImage ); \
 	fi;
 
 	touch $@
