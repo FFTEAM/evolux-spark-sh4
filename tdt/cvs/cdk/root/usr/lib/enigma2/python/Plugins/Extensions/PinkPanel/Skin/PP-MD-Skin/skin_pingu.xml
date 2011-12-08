@@ -167,30 +167,30 @@
 			<convert type="FrontendInfo">SNRdB</convert>
 		</widget>
 		<eLabel backgroundColor="secondBG" foregroundColor="#666666" font="Regular;12" position="90,527" size="300,14" text="TXT  |  DD  |  16:9  |  HDTV  |  SUB  |  CRYPT" zPosition="3"/>
-		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="299,527" render="FixedLabel" size="50,14" source="session.CurrentService" text="CRYPT" transparent="1" zPosition="5">
-			<convert type="ServiceInfo">IsCrypted</convert>
-			<convert type="ConditionalShowHide"/>
-		</widget>
 		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="89,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="TXT" transparent="1" zPosition="5">
 			<convert type="ServiceInfo">HasTelext</convert>
 			<convert type="ConditionalShowHide"/>
 		</widget>
-		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="130,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="DD" transparent="1" zPosition="5">
+		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="128,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="DD" transparent="1" zPosition="5">
 			<convert type="ServiceInfo">IsMultichannel</convert>
 			<convert type="ConditionalShowHide"/>
 		</widget>
-		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="165,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="16:9" transparent="1" zPosition="5">
+		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="160,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="16:9" transparent="1" zPosition="5">
 			<convert type="ServiceInfo">IsWidescreen</convert>
 			<convert type="ConditionalShowHide"/>
-		</widget>		
-		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="257,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="SUB" transparent="1" zPosition="5">
-			<convert type="ServiceInfo">SubservicesAvailable</convert>
-			<convert type="ConditionalShowHide"/>
 		</widget>
-		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="206,527" render="FixedLabel" size="40,14" source="session.CurrentService" text="HDTV" transparent="1" zPosition="5">
+		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="199,527" render="FixedLabel" size="40,14" source="session.CurrentService" text="HDTV" transparent="1" zPosition="5">
 			<convert type="ServiceInfo">VideoWidth</convert>
 			<convert type="ValueRange">721,1980</convert>
 			<convert type="ConditionalShowHide" />
+		</widget>		
+		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="242,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="SUB" transparent="1" zPosition="5">
+			<convert type="ServiceInfo">SubservicesAvailable</convert>
+			<convert type="ConditionalShowHide"/>
+		</widget>
+		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="284,527" render="FixedLabel" size="50,14" source="session.CurrentService" text="CRYPT" transparent="1" zPosition="5">
+			<convert type="ServiceInfo">IsCrypted</convert>
+			<convert type="ConditionalShowHide"/>
 		</widget>
 		<widget backgroundColor="secondBG" foregroundColor="red" font="Regular;13" halign="left" position="340,527" render="FixedLabel" size="70,19" source="session.RecordState" text="RECORD" transparent="1" zPosition="5">
 			<convert type="ConditionalShowHide">Blink</convert>
