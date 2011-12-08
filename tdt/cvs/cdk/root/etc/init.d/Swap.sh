@@ -10,7 +10,7 @@ if [ -e /etc/.start_enigma2 ]; then
 	isactive=`cat /etc/enigma2/settings | grep config.plugins.PinkPanel.SwapArt= | cut -d = -f2`
 fi
 if [ -e /etc/.start_enigma2 ]; then
-	if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ -z $isactive ]; then
+	if [ "$isactive" = swappart ] || [ "$isactive" = swapfile ] || [ "$isactive" = swapram ]; then
 		if [ "$isactive" = swappart ]; then
 			swappart=`fdisk -l | grep swap | cut -d / -f3 | cut -b1-4`
 			echo -e -n "\n/dev/$swappart     none                swap    sw\n" >> /etc/fstab
@@ -18,7 +18,7 @@ if [ -e /etc/.start_enigma2 ]; then
 			echo "SWAPPART ON"
 			echo "SWP" > /dev/vfd
 		fi
-		if [ "$isactive" = swapram ] || [ -z $isactive ]; then
+		if [ "$isactive" = swapram ]; then
 				alwaysthere=`lsmod | grep -m2 ramzswap0`
 				if [ -z $alwaysthere ]; then
 					isSTM24=`uname -a | grep stm23`
@@ -110,6 +110,7 @@ if [ -e /etc/.start_enigma2 ]; then
 		fi
 	fi
 fi
+# neutrino
 if [ -e /etc/.swapon ] && [ ! -e /etc/.start_enigma2 ]; then
 	if [ -e /etc/.swapram ] || [ -e /etc/.swappart ] || [ -e /etc/.swapfile ]; then
 			if [ -e /etc/.swappart ]; then
