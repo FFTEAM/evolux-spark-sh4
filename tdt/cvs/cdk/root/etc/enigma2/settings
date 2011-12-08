@@ -5,4 +5,5 @@ config.usage.setup_level=expert
 config.audio.volume=25
 config.usage.on_long_powerpress=shutdown
 config.usage.e1like_radio_mode=true
+config.usage.hdd_standby=0
 config.plugins.Webinterface.https.enabled=false
