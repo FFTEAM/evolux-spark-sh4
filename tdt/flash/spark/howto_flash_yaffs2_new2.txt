@@ -1,0 +1,153 @@
+#####################################################################################
+### HOWTO flash yaffs2-images #######################################################
+#####################################################################################
+Content:
+1+1a: set bootargs to yaffs2
+1b  : flash yaffs2-img
+
+2-2a: revert bootargs to jffs2 
+2b  : flash jffs2-img
+
+Update: UPGRADE YAFFS2-img
+####################################################################################
+####################################################################################
+
+
+if you not able set args by comcable use 1.a) !
+
+
+1.) CHANGE Bootargs via comcable as you know how to setup args by terraterm or minicom only!!!:
+########################## it's ONE codeline !!! ####################################
+setenv bootargs_enigma2 "console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=yaffs2 rw init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 nwhwconf=device:eth0,hwaddr:00:80:E1:12:40:69 rw ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:LINUX7109:eth0:off bigphysarea=6000 stmmaceth=msglvl:0,phyaddr:2,watchdog:5000"
+
+check if it's ok by:
+print
+
+save as it's ok by:
+saveenv
+
+reboot box via:
+reset
+#####################################################################################
+
+1.a) Alternate CHANGE Bootargs: YOU MUST HAVE ANY E2/NEUTRINO FLASHED BEFORE:
+- boot your flash-E2/neutrino
+- copy from "BootargsPack" both folder "/bin + /etc" into your image by ftp
+- take car you made /bin/fw_printenv + fw_setenv executable(chmod 755)
+#####################################################################################
+telnet pingulux-ip
+user: root
+pw: your-telnet-pw (image given or empty)
+
+for test if working do:
+fw_printenv
+
+(if you see all bootarg-lines it should work!)
+
+now we change args:
+#####################################################################################
+fw_setenv -s /etc/bootargs_evolux-flash-yaffs2-change
+fw_printenv
+
+if we see now the line with yaffs2 its all fine:
+(bootargs_enigma2=console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=yaffs2 ....)
+
+- if not allready done: connect usb-stick with folder "enigma2" to pingulux
+  (in folder "enigma2" must be "uImage + e2yaffs2.img, flash_E2_yaffs2.sh")
+
+now we reboot hard and orig-spark should boot auto:
+#####################################################################################
+reboot -f
+#####################################################################################
+
+
+#####################################################################################
+#####################################################################################
+1.b) FLASH img:
+as orig-spark has boot, do:
+(sometimes orig goes directly to deepstandby than press on RC "power-on" again and it will boot)
+#####################################################################################
+telnet pingulux-ip
+user: root
+pw:root
+
+/storage/c/enigma2/flash_E2_yaffs2.sh
+
+for yaffs2 flashing select:
+
+	(1) FLASH YAFFS2
+
+#####################################################################################
+that takes around 1-2 minutes
+till finished shutdown orig-spark now
+turn ac off
+hold ok-button and ac on again
+as "force" displayed:
+arrow-down
+ok
+
+now your flash-img should bootup as fast as hell(yaffs2) (neutrino around 13seconds, e2 around 45s)
+
+
+#####################################################################################
+#### REVERT TO JFFS2 ################################################################
+#####################################################################################
+2.) CHANGE Bootargs via comcable as you know how to setup args by terraterm or minicom only!!!:
+########################## it's ONE codeline !!! ####################################
+setenv bootargs_enigma2 "console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=jffs2 rw init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 nwhwconf=device:eth0,hwaddr:00:80:E1:12:40:69 rw ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:LINUX7109:eth0:off bigphysarea=6000 stmmaceth=msglvl:0,phyaddr:2,watchdog:5000"
+
+check if it's ok by:
+print
+
+save as it's ok by:
+saveenv
+
+reboot box via:
+reset
+#####################################################################################
+
+2.a) Alternate CHANGE Bootargs back to jffs2 from bootet EVOLUX-yaffs2 >=1.4.2:
+Evolux-yaffs2 >=1.4.2 must be in flash:
+- boot Evolux
+#####################################################################################
+telnet pingulux-ip
+user: root
+pw: empty
+
+for test if working do:
+fw_printev
+
+(if you see all bootarg-lines it should work!)
+
+now we change args back to jffs2:
+#####################################################################################
+fw_setenv -s /etc/bootargs_evolux-flash-jffs2-change
+fw_printenv
+
+if we see now the line with jffs2 its all fine:
+(bootargs_enigma2=console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=jffs2 ....)
+
+-turn AC off now and go to 2.b) 
+#####################################################################################
+
+2.b) now flash any kind of "normal" jffs2-img like you ever done before by usb-stick:
+- if not allready done: put stick in with folder "enigma2" (must be uImage +e2jffs2.img in folder)
+- AC on ,hold OK, arrow-down, arrow right
+
+
+#####################################################################################
+### UPDATE YAFFS2 ###################################################################
+#####################################################################################
+
+if you allready have yaffs2-img in flash and want update yaffs2-img with newer once:
+- start with 1.b)
+
+
+#####################################################################################
+### END #############################################################################
+#####################################################################################
+*)
+yaffs2-images can't be flashed by normal USB-flashing, 
+ONLY from booted orig-spark by 1.b) !!!
+
+##########################################################################
