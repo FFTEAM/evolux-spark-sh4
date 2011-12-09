@@ -1,0 +1,92 @@
+###############################################################
+### HOWTO #####################################################
+###############################################################
+Content:
+1. : flash yaffs2-img
+
+2. : flash jffs2-img
+
+###############################################################
+###############################################################
+
+@your own risk!
+no warranty if you damage your box!!
+READ CAREFULL!!!
+
+###############################################################
+### FLASH YAFFS2 ##############################################
+###############################################################
+1) FLASH EVOLUX-YAFFS2:
+- format usb-stick with fat/fat32
+- copy from "BootargsPack":
+       both folder "/bin + /etc" into usb-stick-folder "enigma2"
+- copy "uImage" + "e2yaffs2.img" into usb-stick-folder "enigma2"
+- connect usb-stick to box-usb-port
+- BOOT ORIG-SPARK
+###############################################################
+telnet pingulux-ip
+user: root
+pw: root
+
+check if stick correct mounted:
+ls /storage/c/enigma2
+
+(if you see uImage, e2yaffs2.img and "bin" + "etc" all fine)
+
+now we start flashing by:
+/storage/c/enigma2/flash_E2_yaffs2.sh
+
+
+select:
+	(1) FLASH YAFFS2
+
+###############################################################
+that takes around 1-2 minutes
+till finished box reboot auto 
+     and Evolux-Neutrino-YAFFS2 should booting...
+
+
+
+
+###############################################################
+### FLASH JFFS2 ##############################################
+###############################################################
+2) FLASH JFFS2:
+- format usb-stick with fat/fat32
+- copy from "BootargsPack" both folder "/bin + /etc" into usb-stick-folder "enigma2"
+- copy "uImage" + "e2jffs2.img" into usb-stick-folder "enigma2"
+- connect usb-stick to box-usb-port
+- BOOT ORIG-SPARK
+###############################################################
+telnet pingulux-ip
+user: root
+pw: root
+
+check if stick correct mounted:
+ls /storage/c/enigma2
+
+(if you see uImage, e2jffs2.img and "bin" + "etc" all fine)
+
+now we start flashing by:
+/storage/c/enigma2/flash_E2_yaffs2.sh
+
+
+select:
+	(2) FLASH JFFS2
+
+##############################################################
+that takes around 1-2 minutes
+till finished box reboot auto and your-JFFS2-img should booting...
+
+if you revert to "(2) FLASH JFFS2" 
+   you can flash any kind off jffs2-images 
+   by "normal" standard way (ac off/on, ok, arrow-down-right)
+
+##############################################################
+YAFFS2-IMAGES CAN ONLY BE FLASHED BY:
+         BOOT ORIG-SPARK + flash_E2_yaffs2.sh!
+##############################################################
+
+##############################################################
+### END ######################################################
+##############################################################

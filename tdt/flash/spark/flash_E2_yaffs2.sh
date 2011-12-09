@@ -1,13 +1,17 @@
 #!/bin/sh
 ### /storage/c/enigma2/flash_E2_yaffs2.sh ###
-#if [ -e /storage/c/enigma2/fw_env.config ]; then
-#cp -RP /storage/c/enigma2/fw_env.config /etc/
-#fi
-#chmod 755 /etc/fw_env.config
+if [ -e /storage/c/enigma2/fw_env.config ]; then
+cp -RP /storage/c/enigma2/fw_env.config /etc/
+chmod 755 /etc/fw_env.config
+fi
+
 echo -e "\nFlashtool:"
 echo " what you'll do?"
+echo ""
 echo "    1) FLASH YAFFS2"
-echo "    2) FLASH JFFS2 (default)"
+echo ""
+echo "    2) FLASH JFFS2"
+echo ""
 echo "    *) exit"
 
 case $1 in
@@ -20,32 +24,40 @@ esac
 
 case "$REPLY" in
 1)
-if [ -e /storage/c/enigma2/e2yaffs2.img ]; then
+if [ -e /storage/c/enigma2/e2yaffs2.img ] && [ -e /storage/c/enigma2/fw_env.config ]; then
 flash_eraseall /dev/mtd5
 nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
 flash_eraseall /dev/mtd6
 nandwrite -a -o /dev/mtd6 /storage/c/enigma2/e2yaffs2.img
-#/storage/c/enigma2/fw_setenv bootargs_enigma2 "console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=yaffs2 rw init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 nwhwconf=device:eth0,hwaddr:00:80:E1:12:40:69 rw ip=172.100.100.249:172.100.100.174:172.100.100.174:255.255.0.0:LINUX7109:eth0:off bigphysarea=6000 stmmaceth=msglvl:0,phyaddr:2,watchdog:5000"
-#/storage/c/enigma2/fw_printenv
-echo "done! please turn off ac, hold ok-button and turn ac on again."
-echo "press arrow-down, than ok-button, and e2/neutrino bootup."
+/storage/c/enigma2/setmtdmode
+/storage/c/enigma2/fw_setenv -s /storage/c/enigma2/bootargs_evolux_yaffs2
+/storage/c/enigma2/setmtdmode -l
+/storage/c/enigma2/fw_printenv
+echo "Done! Bootargs also set to Evolux-YAFFS2!"
+echo "We reboot in 10s and Evolux should start with neutrino..."
+sleep 10
+reboot -f
 else
-echo "ERROR! e2yaffs2.img not found on stick!"
+echo "ERROR! Not all files found on stick!"
 exit
 fi
 ;;
 2)
-if [ -e /storage/c/enigma2/e2jffs2.img ]; then
+if [ -e /storage/c/enigma2/e2jffs2.img ] && [ -e /storage/c/enigma2/fw_env.config ]; then
 flash_eraseall /dev/mtd5
 nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
 flash_eraseall /dev/mtd6
-nandwrite -a -m -p /dev/mtd6 /storage/c/enigma2/e2yaffs2.img
-#/storage/c/enigma2/fw_setenv bootargs_enigma2 "console=ttyAS0,115200 root=/dev/mtdblock6 rootfstype=jffs2 rw init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 nwhwconf=device:eth0,hwaddr:00:80:E1:12:40:69 rw ip=172.100.100.249:172.100.100.174:172.100.100.174:255.255.0.0:LINUX7109:eth0:off bigphysarea=6000 stmmaceth=msglvl:0,phyaddr:2,watchdog:5000"
-#/storage/c/enigma2/fw_printenv
-echo "done! please turn off ac, hold ok-button and turn ac on again."
-echo "press arrow-down, than ok-button, and e2/neutrino bootup."
+nandwrite -a -m -p /dev/mtd6 /storage/c/enigma2/e2jffs2.img
+/storage/c/enigma2/setmtdmode
+/storage/c/enigma2/fw_setenv -s /storage/c/enigma2/bootargs_evolux_jffs2
+/storage/c/enigma2/setmtdmode -l
+/storage/c/enigma2/fw_printenv
+echo "Done! Bootargs also set to Evolux-JFFS2!"
+echo "We reboot in 10s and Evolux should start with neutrino..."
+sleep 10
+reboot -f
 else
-echo "ERROR! e2jffs2.img not found on stick!"
+echo "ERROR! Not all files found on stick!"
 exit
 fi
 ;;
