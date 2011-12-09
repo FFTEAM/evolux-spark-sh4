@@ -256,4 +256,28 @@ class BOOTE2_Menu : public CMenuTarget
 	void BOOTE2Settings();
 
 };
+
+class BOOTSPARK_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	BOOTSPARK_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void BOOTSPARKSettings();
+
+};
 #endif //__emumenu__
