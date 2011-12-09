@@ -784,6 +784,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	FILE* fdincubuscamd_installed = fopen("/etc/.incubusCamd", "r");
 	FILE* fdoscam_installed = fopen("/etc/.oscam", "r");
 	FILE* fdnewcs_installed = fopen("/etc/.newcs", "r");
+	FILE* fdspcs_installed = fopen("/etc/.spcs", "r");
 	FILE* fde2_installed = fopen("/usr/local/bin/enigma2", "r");
 	if((fdcamd3_installed))
 	{
@@ -800,6 +801,10 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	if((fdincubuscamd_installed))
 	{
 	system("(kill $(pidof incubusCamd);sleep 5;/usr/bin/incubusCamd;sleep 3;/usr/local/bin/pzapit -rz) &");
+	}
+	if((fdspcs_installed))
+	{
+	system("(kill $(pidof spcs);sleep 5;/usr/bin/spcs -c /usr/keys;sleep 3;/usr/local/bin/pzapit -rz) &");
 	}
 	if((fdoscam_installed))
 	{
@@ -825,6 +830,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::RC_3)); // BOOTE2 Menu
 	}
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTSPARK, true, NULL, new BOOTSPARK_Menu(), NULL, CRCInput::RC_4)); // BOOTSPARK Menu
 	/*}
 	else
 	{
