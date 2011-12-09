@@ -1,0 +1,17 @@
+### FOR ORIG SPARK-SOFT 1.2.09 ####
+
+copy tar.gz to box in /tmp
+
+telnet pingulux-ip
+
+tar -xzvf /tmp/Evolux-Orig-Spark-BootPlugin.tar.gz -C /
+
+chmod 755 /root/plugin/var/bin/Boot*
+chmod 755 /root/plugin/var/sbin/setmtd*
+chmod 755 /root/plugin/var/sbin/fw_*
+
+plugin can be found in menu->plug-in
+start jffs2 or yaffs2 by "select+ok"
+
+if popup say "ok" -> deactivate them by press again "ok"
+restart box
