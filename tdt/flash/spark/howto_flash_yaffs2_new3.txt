@@ -87,6 +87,8 @@ YAFFS2-IMAGES CAN ONLY BE FLASHED BY:
          BOOT ORIG-SPARK + flash_E2_yaffs2.sh!
 ##############################################################
 
+YOUR ORIG BOOTARGS WILL BE SAVED TO STICK/myBootargs.txt ,
+SO YOU CAN IF SOMETHING WRONG USE COMCABLE TO FIX
 ##############################################################
 ### END ######################################################
 ##############################################################
