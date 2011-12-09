@@ -36,6 +36,9 @@ exit
 fi
 read -p "are you sure? change bootargs now to YAFFS2 (Y/n) ? "
 if [ "$REPLY" == "Y" ] || ["$REPLY" == "y" ]; then
+echo "copy your orig Bootargs to /storage/c/enigma2/myBootargs.txt"
+/storage/c/enigma2/bin/fw_printenv > /storage/c/enigma2/myBootargs.txt
+echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode
 /storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_yaffs2
 /storage/c/enigma2/bin/setmtdmode -l
@@ -65,6 +68,9 @@ exit
 fi
 read -p "are you sure? change bootargs now to YAFFS2 (Y/n) ? "
 if [ "$REPLY" == "Y" ] || ["$REPLY" == "y" ]; then
+echo "copy your orig Bootargs to /storage/c/enigma2/myBootargs.txt"
+/storage/c/enigma2/bin/fw_printenv > /storage/c/enigma2/myBootargs.txt
+echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode
 /storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_jffs2
 /storage/c/enigma2/bin/setmtdmode -l
