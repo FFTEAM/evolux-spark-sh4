@@ -42,6 +42,7 @@
 #define SWAP_ONOFF_OPTION_COUNT 2
 #define CHECKFS_OPTION_COUNT 2
 #define BOOTE2_OPTION_COUNT 2
+#define BOOTSPARK_OPTION_COUNT 2
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -1521,7 +1522,7 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void BOOTE2_Menu::paint()
 {
-printf("$Id: Volume-Menue Extended  Exp $\n");
+printf("$Id: BootE2-Menue Exp $\n");
 }
 
 void BOOTE2_Menu::BOOTE2Settings()
@@ -1574,3 +1575,98 @@ void BOOTE2_Menu::BOOTE2Settings()
 //ENDE BOOTE2
 }
 ////////////////////////////// BOOTE2 Menu ENDE //////////////////////////////////////
+
+////////////////////////////// BOOTSPARK Menu ANFANG ////////////////////////////////////
+const CMenuOptionChooser::keyval BOOTSPARK_OPTIONS[BOOTSPARK_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_BOOTSPARK_OFF },
+	{ 1, LOCALE_EXTRAMENU_BOOTSPARK_ON }
+};
+
+BOOTSPARK_Menu::BOOTSPARK_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int BOOTSPARK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+	{
+	parent->hide();
+	}
+	paint();
+
+	BOOTSPARKSettings();
+
+	return res;
+}
+
+void BOOTSPARK_Menu::hide()
+{
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void BOOTSPARK_Menu::paint()
+{
+printf("$Id: BootE2-Menue Exp $\n");
+}
+
+void BOOTSPARK_Menu::BOOTSPARKSettings()
+{
+	int bootSpark=0;
+	int save_value=0;
+	//UEBERPRUEFEN OB BOOTSPARK SCHON LAEUFT
+	FILE* fd1 = fopen("/etc/.start_spark", "r");
+	if(fd1)
+	{
+	bootSpark=1;
+	fclose(fd1);
+	}
+	int old_bootSpark=bootSpark;
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTSPARK, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOTSPARK_SELECT, &bootSpark, BOOTSPARK_OPTIONS, BOOTSPARK_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_bootSpark!=bootSpark)
+	{
+	save_value=1;
+	}
+	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+
+	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
+	if (save_value==1)
+	{
+	if (bootSpark==1)
+	{
+	//BOOTSPARK STARTEN
+	system("touch /etc/.start_spark");
+	system("fw_setenv -s /etc/bootargs_orig");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark Activated, please reboot!", 450, 2); // UTF-8("")
+	}
+	bootSpark=0;
+	old_bootSpark=0;
+	/*if (bootSpark==0)
+	{
+	//BOOTSPARK BEENDEN
+	system("rm /etc/.bootSpark");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "BOOTSPARK Deactivated!", 450, 2); // UTF-8("")
+	}*/
+}
+//ENDE BOOTSPARK
+}
+////////////////////////////// BOOTSPARK Menu ENDE //////////////////////////////////////

@@ -1423,4 +1423,8 @@ extramenu.boote2 Boot E2 Menue
 extramenu.boote2.select Boot E2
 extramenu.boote2.on On
 extramenu.boote2.off Off
+extramenu.bootspark Boot SPARK Menue
+extramenu.bootspark.select Boot SPARK
+extramenu.bootspark.on On
+extramenu.bootspark.off Off
 setting.saved Settings saved

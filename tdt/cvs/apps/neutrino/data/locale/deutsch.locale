@@ -1420,7 +1420,11 @@ extramenu.swap.onoff SWAP
 extramenu.swap.onoff.on Ein
 extramenu.swap.onoff.off Aus
 extramenu.boote2 Boot E2 Menue
-extramenu.boote2.select Boot E2
+extramenu.boote2.select Boote E2
 extramenu.boote2.on Ein
 extramenu.boote2.off Aus
+extramenu.bootspark Boot SPARK Menue
+extramenu.bootspark.select Boote SPARK
+extramenu.bootspark.on Ein
+extramenu.bootspark.off Aus
 setting.saved Einstellungen Gespeichert

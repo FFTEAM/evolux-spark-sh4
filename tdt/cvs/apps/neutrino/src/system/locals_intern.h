@@ -1427,6 +1427,10 @@ const char *locale_real_names[] = {
 	"extramenu.boote2.select",
 	"extramenu.boote2.on",
 	"extramenu.boote2.off",
+	"extramenu.bootspark",
+	"extramenu.bootspark.select",
+	"extramenu.bootspark.on",
+	"extramenu.bootspark.off",
 	"setting.saved",
 	"play.button.action",
 	"videomenu.videomode_auto"
