@@ -42,7 +42,7 @@ echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode
 /storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_yaffs2
 /storage/c/enigma2/bin/setmtdmode -l
-/storage/c/enigma2/bin/fw_printenv
+#/storage/c/enigma2/bin/fw_printenv
 echo "All Done! Bootargs also set to YAFFS2!"
 echo "We reboot in 10s and Evolux should booting with neutrino..."
 sleep 10
@@ -74,7 +74,7 @@ echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode
 /storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_jffs2
 /storage/c/enigma2/bin/setmtdmode -l
-/storage/c/enigma2/bin/fw_printenv
+#/storage/c/enigma2/bin/fw_printenv
 echo "All Done! Bootargs also set to JFFS2!"
 echo "We reboot in 10s and your e2jjfs2.img should booting..."
 sleep 10
