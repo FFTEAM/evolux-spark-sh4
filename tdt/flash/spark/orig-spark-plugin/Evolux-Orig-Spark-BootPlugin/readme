@@ -4,7 +4,7 @@ copy tar.gz to box in /tmp
 
 telnet pingulux-ip
 
-tar -xf /tmp/Evolux-Orig-Spark-BootPlugin.tar.gz -C /root/
+tar -xf /tmp/Evolux-Orig-Spark-BootPlugin.tar -C /root/
 
 chmod 755 /root/plugin/var/bin/Boot*
 chmod 755 /root/plugin/var/sbin/setmtd*
