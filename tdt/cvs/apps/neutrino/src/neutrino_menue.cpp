@@ -823,16 +823,17 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	/*if((fdcamd3_installed) || (fdmgcamd_installed) || (fdmbox_installed) || (fdincubuscamd_installed) || (fdoscam_installed) || (fdnewcs_installed))
 	{ */
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::RC_1)); // DisplayTime Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::RC_1)); // DisplayTime Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_2)); // SWAP Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_3)); // FSCK Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::RC_4)); // STFMB Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // SWAP Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
+	int extrashortcut = 1;
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
 	if((fde2_installed))
 	{
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::RC_5)); // BOOTE2 Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTE2 Menu
 	}
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTSPARK, true, NULL, new BOOTSPARK_Menu(), NULL, CRCInput::RC_6)); // BOOTSPARK Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTSPARK, true, NULL, new BOOTSPARK_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
 	/*}
 	else
 	{
