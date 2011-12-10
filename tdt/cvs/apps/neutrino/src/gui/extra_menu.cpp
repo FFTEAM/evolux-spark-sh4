@@ -43,6 +43,8 @@
 #define CHECKFS_OPTION_COUNT 2
 #define BOOTE2_OPTION_COUNT 2
 #define BOOTSPARK_OPTION_COUNT 2
+#define FSCK_OPTION_COUNT 2
+#define STMFB_OPTION_COUNT 2
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -1670,3 +1672,187 @@ void BOOTSPARK_Menu::BOOTSPARKSettings()
 //ENDE BOOTSPARK
 }
 ////////////////////////////// BOOTSPARK Menu ENDE //////////////////////////////////////
+
+////////////////////////////// FSCK Menu ANFANG ////////////////////////////////////
+const CMenuOptionChooser::keyval FSCK_OPTIONS[FSCK_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_FSCK_OFF },
+	{ 1, LOCALE_EXTRAMENU_FSCK_ON }
+};
+
+FSCK_Menu::FSCK_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+	{
+	parent->hide();
+	}
+	paint();
+
+	FSCKSettings();
+
+	return res;
+}
+
+void FSCK_Menu::hide()
+{
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void FSCK_Menu::paint()
+{
+printf("$Id: BootE2-Menue Exp $\n");
+}
+
+void FSCK_Menu::FSCKSettings()
+{
+	int fsck=0;
+	int save_value=0;
+	//UEBERPRUEFEN OB FSCK SCHON LAEUFT
+	FILE* fd1 = fopen("/etc/.fsck", "r");
+	if(fd1)
+	{
+	fsck=1;
+	fclose(fd1);
+	}
+	int old_fsck=fsck;
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FSCK_SELECT, &fsck, FSCK_OPTIONS, FSCK_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_fsck!=fsck)
+	{
+	save_value=1;
+	}
+	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+
+	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
+	if (save_value==1)
+	{
+	if (fsck==1)
+	{
+	//FSCK STARTEN
+	system("touch /etc/.fsck");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Activated, please reboot!", 450, 2); // UTF-8("")
+	}
+	if (fsck==0)
+	{
+	//FSCK BEENDEN
+	system("rm /etc/.fsck");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Deactivated!", 450, 2); // UTF-8("")
+	}
+}
+//ENDE FSCK
+}
+////////////////////////////// FSCK Menu ENDE //////////////////////////////////////
+
+////////////////////////////// STMFB Menu ANFANG ////////////////////////////////////
+const CMenuOptionChooser::keyval STMFB_OPTIONS[STMFB_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_STMFB_OFF },
+	{ 1, LOCALE_EXTRAMENU_STMFB_ON }
+};
+
+STMFB_Menu::STMFB_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int STMFB_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+	{
+	parent->hide();
+	}
+	paint();
+
+	STMFBSettings();
+
+	return res;
+}
+
+void STMFB_Menu::hide()
+{
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void STMFB_Menu::paint()
+{
+printf("$Id: BootE2-Menue Exp $\n");
+}
+
+void STMFB_Menu::STMFBSettings()
+{
+	int stmfb=0;
+	int save_value=0;
+	//UEBERPRUEFEN OB STMFB SCHON LAEUFT
+	FILE* fd1 = fopen("/etc/.15m", "r");
+	if(fd1)
+	{
+	stmfb=1;
+	fclose(fd1);
+	}
+	int old_stmfb=stmfb;
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_STMFB_SELECT, &stmfb, STMFB_OPTIONS, STMFB_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_stmfb!=stmfb)
+	{
+	save_value=1;
+	}
+	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+
+	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
+	if (save_value==1)
+	{
+	if (stmfb==1)
+	{
+	//STMFB STARTEN
+	system("touch /etc/.15m");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Activated, please reboot!", 450, 2); // UTF-8("")
+	}
+	if (stmfb==0)
+	{
+	//STMFB BEENDEN
+	system("rm /etc/.15m");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Deactivated!", 450, 2); // UTF-8("")
+	}
+}
+//ENDE STMFB
+}
+////////////////////////////// STMFB Menu ENDE //////////////////////////////////////

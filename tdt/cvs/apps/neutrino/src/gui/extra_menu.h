@@ -280,4 +280,52 @@ class BOOTSPARK_Menu : public CMenuTarget
 	void BOOTSPARKSettings();
 
 };
+
+class FSCK_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	FSCK_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void FSCKSettings();
+
+};
+
+class STMFB_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	STMFB_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void STMFBSettings();
+
+};
 #endif //__emumenu__

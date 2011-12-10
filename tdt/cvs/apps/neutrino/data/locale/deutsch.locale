@@ -1427,4 +1427,12 @@ extramenu.bootspark Boot SPARK Menue
 extramenu.bootspark.select Boote SPARK
 extramenu.bootspark.on Ein
 extramenu.bootspark.off Aus
+extramenu.fsck FSCK Menue
+extramenu.fsck.select FSCK
+extramenu.fsck.on Ein
+extramenu.fsck.off Aus
+extramenu.stmfb STMFB Menue
+extramenu.stmfb.select STMFB 15m
+extramenu.stmfb.on Ein
+extramenu.stmfb.off Aus
 setting.saved Einstellungen Gespeichert
