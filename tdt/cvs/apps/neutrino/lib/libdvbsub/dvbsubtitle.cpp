@@ -720,8 +720,8 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 		/* move to screen bottom */
 //		int yoff = (yend - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0()))*stride;
 //		int ys = yend - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0());
-		int yoff = (yend - (CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight())-bitmaps[i]->Y0()))*stride;
-		int ys = yend - (CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight())-bitmaps[i]->Y0());
+		int yoff = (CFrameBuffer::getInstance()->scaleY(yend) - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0()))*stride;
+		int ys = CFrameBuffer::getInstance()->scaleY(yend) - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0());
 
 		dbgconverter("cDvbSubtitleBitmaps::Draw %d colors= %d at %d,%d (x=%d y=%d) size %dx%d\n", 
 			i, NumColors, bitmaps[i]->X0(), bitmaps[i]->Y0(), xoff, ys, bitmaps[i]->Width(), bitmaps[i]->Height());
