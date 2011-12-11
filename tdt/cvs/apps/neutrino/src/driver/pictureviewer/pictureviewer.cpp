@@ -1,7 +1,6 @@
 #include <global.h>
 #include <neutrino.h>
 #include "pictureviewer.h"
-#include "config.h"
 #include "fb_display.h"
 #include "driver/framebuffer.h"
 
@@ -16,6 +15,12 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #endif
+
+#define FBV_SUPPORT_PNG
+#define FBV_SUPPORT_BMP
+#define FBV_SUPPORT_JPEG
+#define FBV_SUPPORT_GIF
+#define FBV_SUPPORT_CRW
 
 #ifndef __sh__
 /* resize.cpp */

@@ -1,5 +1,5 @@
 #include "../../../config.h"
-#include "config.h"
+#define FBV_SUPPORT_JPEG
 #ifdef FBV_SUPPORT_JPEG
 	
 #include <cstdio>

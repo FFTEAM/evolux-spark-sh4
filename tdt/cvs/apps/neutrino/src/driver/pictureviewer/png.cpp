@@ -1,4 +1,4 @@
-#include "config.h"
+#define FBV_SUPPORT_PNG
 
 #ifdef FBV_SUPPORT_PNG
 	#include <png.h>

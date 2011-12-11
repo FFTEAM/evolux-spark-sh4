@@ -1,4 +1,4 @@
-#include "config.h"
+#define FBV_SUPPORT_BMP
 #ifdef FBV_SUPPORT_BMP
 #include "pictureviewer.h"
 #include <cstdlib>

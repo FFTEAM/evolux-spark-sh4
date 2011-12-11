@@ -1,4 +1,4 @@
-#include "config.h"
+#define FBV_SUPPORT_CRW
 #include <cstring>
 #include <cstdlib>
 #ifdef FBV_SUPPORT_CRW
