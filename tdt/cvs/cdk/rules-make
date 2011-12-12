@@ -83,8 +83,8 @@ ncurses;5.5;ncurses-5.5;ncurses-5.5.tar.gz;extract:ncurses-5.5.tar.gz
 libz;1.2.3;zlib-1.2.3;zlib-1.2.3.tar.bz2;extract:zlib-1.2.3.tar.bz2
 libreadline;5.2;readline-5.2;readline-5.2.tar.gz;extract:readline-5.2.tar.gz
 #freetype_old;2.1.4;freetype-2.1.4;freetype-2.1.4.tar.bz2:libfreetype.diff;extract:freetype-2.1.4.tar.bz2;patch:libfreetype.diff
-#freetype;2.3.5;freetype-2.3.5;freetype-2.3.5.tar.bz2;extract:freetype-2.3.5.tar.bz2
-freetype;2.4.8;freetype-2.4.8;freetype-2.4.8.tar.bz2;extract:freetype-2.4.8.tar.bz2
+freetype;2.3.5;freetype-2.3.5;freetype-2.3.5.tar.bz2;extract:freetype-2.3.5.tar.bz2
+#freetype;2.4.8;freetype-2.4.8;freetype-2.4.8.tar.bz2;extract:freetype-2.4.8.tar.bz2
 lirc;0.8.2;lirc-0.8.2;lirc-0.8.2.tar.gz:lirc.diff;extract:lirc-0.8.2.tar.gz;patch:lirc.diff
 jpeg;6b;jpeg-6b;jpegsrc.v6b.tar.gz:jpeg.diff;extract:jpegsrc.v6b.tar.gz;patch:jpeg.diff
 libpng;1.2.16;libpng-1.2.16;libpng-1.2.16.tar.bz2:libpng.diff;extract:libpng-1.2.16.tar.bz2
@@ -154,6 +154,8 @@ dvbdata;0.6;dvbdata-0.6;dvbdata-0.6.tar.gz;extract:dvbdata-0.6.tar.gz
 brofs;1.2;BroFS1.2;BroFS1.2.tgz;extract:BroFS1.2.tgz
 
 libalsa;1.0.21a;alsa-lib-1.0.21a;alsa-lib-1.0.21a.tar.bz2:alsa-lib-1.0.21a-soft_float.patch;extract:alsa-lib-1.0.21a.tar.bz2;patch:alsa-lib-1.0.21a-soft_float.patch
+
+libusb;0.1.12;libusb-0.1.12;libusb-0.1.12.tar.gz;extract:libusb-0.1.12.tar.gz
 
 #
 # net apps
