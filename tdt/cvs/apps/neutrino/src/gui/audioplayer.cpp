@@ -95,6 +95,9 @@
 #include <video_cs.h>
 extern cVideo * videoDecoder;
 
+#include <gui/pictureviewer.h>
+extern CPictureViewer * g_PicViewer;
+
 #ifdef ConnectLineBox_Width
 #undef ConnectLineBox_Width
 #endif
@@ -298,7 +301,14 @@ int CAudioPlayerGui::exec(CMenuTarget* parent, const std::string &)
 	// set zapit in standby mode
 	g_Zapit->stopPlayBack();
 
+	videoDecoder->setBlank(true);
+	//show audio background pic
+#ifdef __sh__
+	m_frameBuffer->loadBackgroundPic("mp3.jpg");
+	m_frameBuffer->blit();
+#else
 	videoDecoder->ShowPicture(DATADIR "/neutrino/icons/mp3.jpg");
+#endif
 
 	// tell neutrino we're in audio mode
 	CNeutrinoApp::getInstance()->handleMsg( NeutrinoMessages::CHANGEMODE , NeutrinoMessages::mode_audio );
@@ -416,14 +426,25 @@ int CAudioPlayerGui::show()
 
 					int ret = access(fname, F_OK);
 					printf("CAudioPlayerGui::show: new pic %s: %s\n", fname, ret ? "not found" : "found");
-					if(ret == 0) {
+					if(ret == 0) 
+					{
 						pic_index++;
+#ifndef __sh__
 						videoDecoder->StopPicture();
 						videoDecoder->ShowPicture(fname);
-					} else if(pic_index) {
+#else
+						g_PicViewer->DisplayImage(fname, 0, 0, m_frameBuffer->getScreenWidth(true), m_frameBuffer->getScreenHeight(true));
+#endif
+					} 
+					else if(pic_index) 
+					{
 						pic_index = 0;
+#ifndef __sh__
 						videoDecoder->StopPicture();
 						videoDecoder->ShowPicture(DATADIR "/neutrino/icons/mp3.jpg");
+#else
+						g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/mp3.jpg",0, 0, m_frameBuffer->getScreenWidth(true), m_frameBuffer->getScreenHeight(true));
+#endif
 					}
 				} else
 					pic_index = 0;
@@ -2308,6 +2329,9 @@ void CAudioPlayerGui::screensaver(bool on)
 	{
 		m_screensaver = true;
 		m_frameBuffer->ClearFrameBuffer();
+#ifdef __sh__
+		m_frameBuffer->blit(0, 0, 720, 576);
+#endif
 		stimer = g_RCInput->addTimer(10*1000*1000, false);
 	}
 	else
@@ -2316,10 +2340,12 @@ void CAudioPlayerGui::screensaver(bool on)
 			g_RCInput->killTimer(stimer);
 		stimer = 0;
 		m_screensaver = false;
-#if 0
-		m_frameBuffer->loadPal("radiomode.pal", 18, COL_MAXFREE);
-		m_frameBuffer->useBackground(m_frameBuffer->loadBackground("radiomode.raw"));// set useBackground true or false
-		m_frameBuffer->paintBackground();
+		bool usedBackground = m_frameBuffer->getuseBackground();
+		if (usedBackground)
+			m_frameBuffer->saveBackgroundImage();
+#ifdef __sh__
+		m_frameBuffer->loadBackgroundPic("mp3.jpg");
+		m_frameBuffer->blit(0, 0, m_frameBuffer->getScreenWidth(true), m_frameBuffer->getScreenHeight(true));
 #endif
 		paint();
 		m_idletime = time(NULL);
