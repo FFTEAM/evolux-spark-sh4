@@ -28,7 +28,7 @@ libneutrino_gui_a_SOURCES = \
 	filebrowser.cpp audioplayer.cpp nfs.cpp pictureviewer.cpp \
 	movieplayer.cpp rc_lock.cpp bookmarkmanager.cpp \
 	timeosd.cpp epgplus.cpp epg_menu.cpp \
-	streaminfo2.cpp dboxinfo.cpp \
+	streaminfo2.cpp dboxinfo.cpp extra_menu.cpp \
 	plugins.cpp imageinfo.cpp audio_select.cpp moviebrowser.cpp movieinfo.cpp
 
 libneutrino_gui2_a_SOURCES = \
