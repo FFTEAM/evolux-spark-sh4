@@ -52,7 +52,7 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/setmtdmode $(prefix)/BootargsPack/bin/
-	cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev/sbin/
+	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev/sbin/ )
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	if [ -e $(prefix)/release_with_dev/etc/changelog.txt ]; then \
