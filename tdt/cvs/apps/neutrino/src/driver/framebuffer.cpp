@@ -2039,7 +2039,7 @@ void CFrameBuffer::blit(int x, int y, int dx, int dy)
 
 void CFrameBuffer::resize(int format)
 {
-	char *aVideoSystems[][2] = {
+	const char *aVideoSystems[][2] = {
 	{"VIDEO_STD_NTSC", "pal"},
 	{"VIDEO_STD_SECAM", "pal"},
 	{"VIDEO_STD_PAL", "pal"},

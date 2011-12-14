@@ -44,7 +44,6 @@ streamproxy/Makefile
 ustslave/Makefile
 gitVCInfo/Makefile
 hotplug/Makefile
-libcoolstream/Makefile
 vfdctl/Makefile
 libmme_host/Makefile
 libmmeimage/Makefile

@@ -11,8 +11,7 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/libnet \
 	-I$(top_srcdir)/lib/libconfigfile \
 	-I$(top_srcdir)/lib/xmltree \
-	-I$(top_srcdir)/../misc/tools/libcoolstream \
-	-I$(top_srcdir)/../misc/tools \
+	-I$(top_srcdir)/lib/libcoolstream \
 	-I$(top_srcdir)/lib/libupnpclient \
 	@CURL_CFLAGS@ \
 	@FREETYPE_CFLAGS@ \
@@ -29,7 +28,7 @@ libneutrino_gui_a_SOURCES = \
 	filebrowser.cpp audioplayer.cpp nfs.cpp pictureviewer.cpp \
 	movieplayer.cpp rc_lock.cpp bookmarkmanager.cpp \
 	timeosd.cpp epgplus.cpp epg_menu.cpp \
-	streaminfo2.cpp dboxinfo.cpp extra_menu.cpp \
+	streaminfo2.cpp dboxinfo.cpp \
 	plugins.cpp imageinfo.cpp audio_select.cpp moviebrowser.cpp movieinfo.cpp
 
 libneutrino_gui2_a_SOURCES = \

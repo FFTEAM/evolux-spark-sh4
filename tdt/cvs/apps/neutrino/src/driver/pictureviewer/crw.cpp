@@ -1,4 +1,4 @@
-#define FBV_SUPPORT_CRW
+#include "pv_config.h"
 #include <cstring>
 #include <cstdlib>
 #ifdef FBV_SUPPORT_CRW

@@ -13,7 +13,6 @@ SUBDIRS = \
 	ustslave \
 	gitVCInfo \
 	hotplug \
-	libcoolstream \
 	vfdctl \
 	libmme_host \
 	libmmeimage

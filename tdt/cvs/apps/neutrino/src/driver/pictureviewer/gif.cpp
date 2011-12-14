@@ -1,8 +1,8 @@
-
+#include "pv_config.h"
 
 #include <cstring>
 #include <cstdlib>
-#define FBV_SUPPORT_GIF
+
 #ifdef FBV_SUPPORT_GIF
 	#include "pictureviewer.h"
 	#include <stdio.h>

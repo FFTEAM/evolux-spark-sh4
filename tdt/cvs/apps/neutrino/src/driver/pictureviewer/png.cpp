@@ -1,4 +1,4 @@
-#define FBV_SUPPORT_PNG
+#include "pv_config.h"
 
 #ifdef FBV_SUPPORT_PNG
 	#include <png.h>
