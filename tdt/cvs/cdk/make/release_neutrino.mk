@@ -152,6 +152,7 @@ if ENABLE_SPARK
 	rm -f $(prefix)/release_neutrino/bin/evremote
 	rm -f $(prefix)/release_neutrino/bin/gotosleep
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release_neutrino/usr/bin/
+	cp -f $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release_neutrino/sbin/
 	mkdir -p $(prefix)/release_neutrino/usr/lib
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release_neutrino/lib/

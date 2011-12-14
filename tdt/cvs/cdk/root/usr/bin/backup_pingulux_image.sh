@@ -3,7 +3,8 @@ DIRECTORY=$1
 #DIRECTORY="/media/hdd"
 MTDBOOT=5
 MTDROOT=6
-IMAGENAME="Evolution"
+#IMAGENAME="Evolution"
+IMAGENAME="Evolux-yaffs2"
 #ISAVAILABLE=`mount | grep sda1`
 #if [ ! -z "$ISAVAILABLE" ]; then
 	if grep -qs 'spark' /proc/stb/info/model ; then
@@ -18,7 +19,8 @@ IMAGENAME="Evolution"
 	echo $BOXTYPE " found"
 
 	DATE=`date +%Y%m%d`
-	MKFS=/usr/bin/mkfs.jffs2
+#	MKFS=/usr/bin/mkfs.jffs2
+	MKFS=/sbin/mkyaffs2
 	BACKUPIMAGE="$IMAGENAME-$BOXTYPE-$DATE.img"
 
 	if [ ! -f $MKFS ] ; then
@@ -32,14 +34,17 @@ IMAGENAME="Evolution"
 		mkdir -p "$DIRECTORY/myBU"
 	fi
 
-	mount -t jffs2 /dev/mtdblock$MTDROOT "$DIRECTORY/tmp/root"
+#	mount -t jffs2 /dev/mtdblock$MTDROOT "$DIRECTORY/tmp/root"
+	mount -t yaffs2 /dev/mtdblock$MTDROOT "$DIRECTORY/tmp/root"
 
 	echo "Copying uImage"
 #	dd if=/dev/mtdblock$MTDBOOT of="/tmp/uImage" bs=1024 count=2560
 	cp /boot/uImage "$DIRECTORY/myBU/uImage-$IMAGENAME-$BOXTYPE-$DATE"
 
-	echo "create root.jffs2"
-	$MKFS --root="$DIRECTORY/tmp/root" --faketime --output="$DIRECTORY/tmp/$BACKUPIMAGE" $OPTIONS
+#	echo "create root.jffs2"
+	echo "create root.yaffs2"
+#	$MKFS --root="$DIRECTORY/tmp/root" --faketime --output="$DIRECTORY/tmp/$BACKUPIMAGE" $OPTIONS
+	$MKFS -o /sbin/spark_oob.img "$DIRECTORY/tmp/root" "$DIRECTORY/tmp/$BACKUPIMAGE"
 
 	mv "$DIRECTORY/tmp/$BACKUPIMAGE" "$DIRECTORY/myBU/"
 #	mv "/tmp/uImage" "$DIRECTORY/myBU/uImage"
