@@ -13,5 +13,6 @@ elif [ -e /etc/.mbox ]; then
 	/usr/bin/mbox &
 elif [ -e /etc/.gbox ]; then
 	/usr/bin/gbox &
+fi
 exit
 
