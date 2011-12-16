@@ -301,6 +301,7 @@ void CMoviePlayerGui::restoreNeutrino()
 
 int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 {
+
 	printf("[movieplayer] actionKey=%s\n", actionKey.c_str());
 
 	if (Path_vlc_settings != g_settings.streaming_server_startdir) {
@@ -309,6 +310,10 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		Path_vlc_settings = g_settings.streaming_server_startdir;
 	}
 	bookmarkmanager = new CBookmarkManager();
+
+	// set zapit in standby mode
+	g_Zapit->stopPlayBack();
+	g_Zapit->setStandby(true);
 
 	dvbsub_pause();
 
@@ -897,6 +902,11 @@ const CMenuOptionChooser::keyval VIDEOMENU_43MODE_OPTIONS[VIDEOMENU_43MODE_OPTIO
 	{ DISPLAY_AR_MODE_NONE, LOCALE_VIDEOMENU_FULLSCREEN }
 	//{ 2, LOCALE_VIDEOMENU_AUTO } // whatever is this auto mode, it seems its totally broken
 };
+		if (!timeshift) {
+			puts("[movieplayer.cpp] executing " MOVIEPLAYER_START_SCRIPT "."); 
+			if (system(MOVIEPLAYER_START_SCRIPT) != 0)
+				perror("Datei " MOVIEPLAYER_START_SCRIPT " fehlt. Bitte erstellen, wenn gebraucht.\nFile " MOVIEPLAYER_START_SCRIPT " not found. Please create if needed.\n");
+		}
 
 		if (start_play) {
 			printf("%s::%s Startplay at %d seconds\n", FILENAME, __FUNCTION__, startposition/1000);
@@ -918,12 +928,6 @@ const CMenuOptionChooser::keyval VIDEOMENU_43MODE_OPTIONS[VIDEOMENU_43MODE_OPTIO
 			} else {
 				playstate = CMoviePlayerGui::PLAY;
 				CVFD::getInstance()->ShowIcon(VFD_ICON_PLAY, true);
-
-				if (!timeshift) {
-					puts("[movieplayer.cpp] executing " MOVIEPLAYER_START_SCRIPT "."); 
-					if (system(MOVIEPLAYER_START_SCRIPT) != 0)
-						perror("Datei " MOVIEPLAYER_START_SCRIPT " fehlt. Bitte erstellen, wenn gebraucht.\nFile " MOVIEPLAYER_START_SCRIPT " not found. Please create if needed.\n");
-				}
 
 				if(timeshift) {
 					timeshift_paused = true;
