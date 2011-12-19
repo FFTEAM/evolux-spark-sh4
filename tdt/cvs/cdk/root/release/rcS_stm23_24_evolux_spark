@@ -176,6 +176,9 @@ else
    /bin/evremote2 &
 fi
 if [ ! -e /etc/.start_enigma2 ]; then
+   if [ -e /etc/.time ]; then
+      (sleep 20; /etc/init.d/DisplayTime.sh &) &
+   fi
    setCPUSPEED
 fi
    stfbcontrol a 255

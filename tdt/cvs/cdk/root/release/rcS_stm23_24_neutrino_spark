@@ -120,6 +120,9 @@ else
    ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
 fi
    /etc/init.d/Swap.sh &
+if [ -e /etc/.time ]; then
+   (sleep 20; /etc/init.d/DisplayTime.sh &) &
+fi
    echo "run" > /dev/vfd
    echo "LOADING neutrino"
 

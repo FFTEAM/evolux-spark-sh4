@@ -1151,17 +1151,15 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	{
 	//DisplayTime STARTEN
 	system("touch /etc/.time");
-	system("touch /etc/.scroll");
-//	system("/etc/init.d/DisplayTime.sh &");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!\nPlease REBOOT", 450, 2); // UTF-8("")
+	system("/etc/init.d/DisplayTime.sh &");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
 	}
 	if (displaytime==0)
 	{
 	//DisplayTime BEENDEN
 	system("rm /etc/.time");
-	system("rm /etc/.scroll");
-//	system("killall -9 DisplayTime.sh");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!\nPlease REBOOT", 450, 2); // UTF-8("")
+	system("killall -9 DisplayTime.sh");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
 	}
 }
 //ENDE DisplayTime

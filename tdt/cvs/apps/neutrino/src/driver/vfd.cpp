@@ -220,20 +220,27 @@ void CVFD::setlcdparameter(void)
 			last_toggle_state_power);
 }
 
+/* show only displaytime
 void CVFD::showServicename(const std::string & name) // UTF-8
 {
- if(!has_lcd) return;
+	if(!has_lcd) return;
 
-/*printf("CVFD::showServicename: %s\n", name.c_str());
- servicename = name;
- if (mode != MODE_TVRADIO)
-  return;
+	printf("CFVD:: force showTime()");
+	showTime();
+	wake_up();
+}
+*/
+void CVFD::showServicename(const std::string & name) // UTF-8
+{
+	if(!has_lcd) return;
 
- 
-ShowText((char *) name.c_str());*/
- printf("CFVD:: force showTime()");
- showTime();
- wake_up();
+printf("CVFD::showServicename: %s\n", name.c_str());
+	servicename = name;
+	if (mode != MODE_TVRADIO)
+		return;
+
+	ShowText((char *) name.c_str());
+	wake_up();
 }
 
 void CVFD::showTime(bool force)
@@ -242,7 +249,8 @@ void CVFD::showTime(bool force)
 		return;
 
 	if (showclock) {
-		//if (mode == MODE_STANDBY) {
+//		if (mode == MODE_STANDBY) {
+		if (mode == MODE_STANDBY) {
 			char timestr[21];
 			struct timeb tm;
 			struct tm * t;
@@ -256,7 +264,8 @@ void CVFD::showTime(bool force)
 				strftime(timestr, 20, "%H%M", t);
 				ShowText((char *) timestr);
 			}
-		//} 
+		} 
+//		} 
 	}
 
 	if (CNeutrinoApp::getInstance ()->recordingstatus) {
