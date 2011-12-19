@@ -164,6 +164,7 @@ if ENABLE_SPARK
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/dropbear $(prefix)/release_neutrino/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_neutrino/etc/init.d/
 	mkdir -p $(prefix)/release_neutrino/etc/dropbear
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release_neutrino/usr/bin/
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release_neutrino/usr/sbin/
