@@ -38,7 +38,7 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_with_dev/etc/init.d/
-	cp -RP $(prefix)/release_with_dev/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_with_dev/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
