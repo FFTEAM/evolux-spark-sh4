@@ -625,7 +625,7 @@ endif
 
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
 #### displaytime plugin not longer needed so we remove it #####
-	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
+#	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
 	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release/etc/enigma2/
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/
 	touch $(prefix)/release/etc/.start_enigma2
