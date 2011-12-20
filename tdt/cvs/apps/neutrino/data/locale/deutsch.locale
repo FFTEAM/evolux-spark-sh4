@@ -688,7 +688,7 @@ miscsettings.epg_extendedcache_hint2 gespeichert werden? (in Std.)
 miscsettings.epg_head EPG Einstellungen
 miscsettings.epg_max_events Max. Events
 miscsettings.epg_max_events_hint1 Wieviele Events sollen max. gespeichert werden?
-miscsettings.epg_max_events_hint2 Standard 6000, 0 (ohne Limit)
+miscsettings.epg_max_events_hint2 Max. 50000, min. 1
 miscsettings.epg_old_events EPG verwerfen nach (Std.)
 miscsettings.epg_old_events_hint1 Wie lange abgelaufene EPG-Daten aufheben?
 miscsettings.epg_old_events_hint2 Angabe in Stunden
