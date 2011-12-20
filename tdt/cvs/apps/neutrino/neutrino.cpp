@@ -298,7 +298,7 @@ int safe_mkdir(char * path)
 
 static int check_dir(const char * newdir)
 {
-	if(strncmp(newdir, "/media/sda1/", 12) && strncmp(newdir, "/media/sdb1/", 12) && strncmp(newdir, "/mnt/", 5) && strncmp(newdir, "/tmp/", 5) && strncmp(newdir, "/media/", 7)) {
+	if(strncmp(newdir, "/", 1)) {
 		return 1;
 	}
 
