@@ -143,7 +143,7 @@ fi
    mknod /dev/sparkid c $major 0 
 
    (sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
-   (sleep 10; if [ -e /autofs/sda1 ]; then mount -o bind /autofs/sda1 /media/hdd; stdFolders="movie music picture swap"; for i in $stdFolders; do mkdir -p /media/hdd/$i; done; fi) &
+   (sleep 10; if [ -e /autofs/sda1 ]; then mount -o bind /autofs/sda1 /media/hdd; stdFolders="movie music picture swap epg"; for i in $stdFolders; do mkdir -p /media/hdd/$i; done; fi) &
 #   /bin/evremote2 05 30 &
    setEVREMOTE2
    stfbcontrol a 255
