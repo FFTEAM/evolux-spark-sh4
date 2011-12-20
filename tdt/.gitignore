@@ -47,7 +47,6 @@ cvs/apps/misc/tools/gitVCInfo/gitVCInfo
 cvs/apps/misc/tools/hotplug/Makefile
 cvs/apps/misc/tools/hotplug/hotplug
 cvs/apps/misc/tools/install-sh
-cvs/apps/misc/tools/libcoolstream/Makefile
 cvs/apps/misc/tools/libdreamdvd/Makefile
 cvs/apps/misc/tools/libdreamdvd/libdreamdvd.pc
 cvs/apps/misc/tools/libeplayer2/Makefile
