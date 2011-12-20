@@ -81,6 +81,7 @@ cvs/apps/neutrino/lib/Makefile
 cvs/apps/neutrino/lib/connection/Makefile
 cvs/apps/neutrino/lib/controldclient/Makefile
 cvs/apps/neutrino/lib/libconfigfile/Makefile
+cvs/apps/neutrino/lib/libcoolstream/Makefile
 cvs/apps/neutrino/lib/libdvbsub/Makefile
 cvs/apps/neutrino/lib/libeventserver/Makefile
 cvs/apps/neutrino/lib/libmd5sum/Makefile
