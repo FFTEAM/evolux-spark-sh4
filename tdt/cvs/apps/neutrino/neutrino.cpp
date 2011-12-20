@@ -298,11 +298,11 @@ int safe_mkdir(char * path)
 
 static int check_dir(const char * newdir)
 {
-	if(strncmp(newdir, "/", 1)) {
-		return 1;
-	}
+        if(strncmp(newdir, "/media/sda1/", 12) && strncmp(newdir, "/media/sdb1/", 12) && strncmp(newdir, "/mnt/", 5) && strncmp(newdir, "/tmp/", 5) && strncmp(newdir, "/media/", 7)) {
+                return 1;
+        }
 
-	return 0;
+        return 0;
 }
 
 static void initGlobals(void)
@@ -4334,7 +4334,7 @@ printf("New timeshift dir: %s\n", timeshiftDir);
 		b.Dir_Mode=true;
 		if (b.exec(g_settings.epg_dir.c_str())) {
 			const char * newdir = b.getSelectedFile()->Name.c_str();
-			if(check_dir(newdir))
+			if(check_direpg(newdir))
 				printf("Wrong/unsupported epg dir %s\n", newdir);
 			else {
 				g_settings.epg_dir = b.getSelectedFile()->Name;
