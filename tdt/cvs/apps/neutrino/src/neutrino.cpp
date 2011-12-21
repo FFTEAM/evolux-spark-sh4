@@ -299,7 +299,7 @@ int safe_mkdir(char * path)
 
 static int check_dir(const char * newdir)
 {
-	if(strncmp(newdir, "/media/sda1/", 12) && strncmp(newdir, "/media/sdb1/", 12) && strncmp(newdir, "/mnt/", 5) && strncmp(newdir, "/tmp/", 5) && strncmp(newdir, "/media/", 7)) {
+	if(strncmp(newdir, "/mnt/", 5) && strncmp(newdir, "/tmp/", 5) && strncmp(newdir, "/media/", 7)) {
 		return 1;
 	}
 
@@ -853,7 +853,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         g_settings.epg_extendedcache    = configfile.getString("epg_extendedcache_time", "360");
         g_settings.epg_old_events       = configfile.getString("epg_old_events", "1");
         g_settings.epg_max_events       = configfile.getString("epg_max_events", "30000");
-        g_settings.epg_dir              = configfile.getString("epg_dir", "/media/sda1/epg");
+        g_settings.epg_dir              = configfile.getString("epg_dir", "/media/hdd/epg");
         // NTP-Server for sectionsd
         g_settings.network_ntpserver    = configfile.getString("network_ntpserver", "time.fu-berlin.de");
         g_settings.network_ntprefresh   = configfile.getString("network_ntprefresh", "30" );
@@ -946,10 +946,10 @@ int CNeutrinoApp::loadSetup(const char * fname)
 		sprintf(cfg_key, "network_nfs_mac_%d", i);
 		strcpy( g_settings.network_nfs_mac[i], configfile.getString( cfg_key, "11:22:33:44:55:66").c_str() );
 	}
-	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/sda1/music" ).c_str() );
-	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/sda1/pictures" ).c_str() );
-	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/sda1/movies" ).c_str() );
-	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/sda1/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/net/music" ).c_str() );
+	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/net/pictures" ).c_str() );
+	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/net/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/net/movies" ).c_str() );
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
 	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 0 );
@@ -2646,14 +2646,14 @@ int CNeutrinoApp::run(int argc, char **argv)
 		configfile.setModifiedFlag(true);
 		saveSetup(NEUTRINO_SETTINGS_FILE);
 	}
-#if 1 // FIXME
+/*#if 1 // FIXME
 	system("mkdir /media/sda1 2> /dev/null");
 	system("mount /media/sda1 2> /dev/null");
 	system("mkdir /media/sdb1 2> /dev/null");
 	system("mount /media/sdb1 2> /dev/null");
 	CHDDDestExec * hdd = new CHDDDestExec();
 	hdd->exec(NULL, "");
-#endif
+#endif*/
 
 	InitZapper();
 	InitRecordingSettings(recordingSettings);
@@ -3379,7 +3379,7 @@ _repeat:
 				recordingstatus = 0;
 			}
 			if(has_hdd) {
-				system("(rm /media/sda1/.wakeup; touch /media/sda1/.wakeup; sync) > /dev/null  2> /dev/null &"); // wakeup hdd
+				system("(rm /media/hdd/.wakeup; touch /media/hdd/.wakeup; sync) > /dev/null  2> /dev/null &"); // wakeup hdd
 			}
 		}
 		if( g_settings.recording_zap_on_announce ) {
