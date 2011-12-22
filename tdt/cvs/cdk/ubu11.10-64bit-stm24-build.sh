@@ -14,10 +14,16 @@ cd "$CURDIR"
 echo "Targets:"
 echo " 1) Build yaud-neutrino"
 echo " 2) Build yaud-enigma2-nightly"
+echo " 3) Build Evolux"
+echo " 4) Build Evolux-FULL"
 if [ "$REPLY" == "1" ]; then
 	make yaud-neutrino
 elif [ "$REPLY" == "2" ]; then
 	make yaud-enigma2-nightly
+elif [ "$REPLY" == "3" ]; then
+	make evolux
+elif [ "$REPLY" == "4" ]; then
+	make evolux-full
 else
 	exit
 fi
