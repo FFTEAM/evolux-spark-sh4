@@ -2430,8 +2430,11 @@ int CNeutrinoApp::run(int argc, char **argv)
 	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AVSYNC, NULL);
 
 	if(display_language_selection)
+#ifdef __sh__
+		g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/start.jpg", 0, 0, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
+#else
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/start.jpg");
-
+#endif
 	powerManager = new cPowerManager;
 
 	if (powerManager) {
@@ -2854,14 +2857,18 @@ printf("[neutrino] direct record\n");
 				}
 				if(show) {
 					//dvbsub_pause();
-					if( mode == mode_radio )
-						videoDecoder->StopPicture();
+/*					if( mode == mode_radio )
+						videoDecoder->StopPicture(); */
 					if ( g_settings.play_button_action == 0 )
 						moviePlayerGui->exec(NULL, "tsmoviebrowser");
 					else
 						moviePlayerGui->exec(NULL, "fileplayback");
-					if( mode == mode_radio )
+/*					if( mode == mode_radio )
+#ifdef __sh__
+						g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/radiomode.jpg", 0, 0, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
+#else
 						videoDecoder->ShowPicture(DATADIR "/neutrino/icons/radiomode.jpg");
+#endif */
 					//dvbsub_start(0);
 				}
 			}
@@ -3581,10 +3588,12 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 
 		dprintf(DEBUG_INFO, "exit\n");
 		g_Zapit->stopPlayBack();
-
+#ifdef __sh__
+		g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/shutdown.jpg", 0, 0, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
+#else
 		frameBuffer->paintBackground();
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/shutdown.jpg");
-
+#endif
 		networkConfig.automatic_start = (network_automatic_start == 1);
 		networkConfig.commitConfig();
 		saveSetup(NEUTRINO_SETTINGS_FILE);
@@ -3708,7 +3717,7 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 #else
 
 	int x = frameBuffer->getScreenX() + 10;
-	int y = frameBuffer->getScreenY() + 0;
+	int y = frameBuffer->getScreenY() + 10;
 #endif
 	int vol = g_settings.current_volume;
 
@@ -4015,7 +4024,11 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 		channelList->tuned = 0xfffffff;;
 		channelList->zapTo( firstchannel.channelNumber -1 );
 	}
+/*#ifdef __sh__
+	g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/radiomode.jpg", 0, 0, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
+#else
 	videoDecoder->ShowPicture(DATADIR "/neutrino/icons/radiomode.jpg");
+#endif*/
 }
 
 void CNeutrinoApp::startNextRecording()
