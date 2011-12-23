@@ -903,9 +903,11 @@ const CMenuOptionChooser::keyval VIDEOMENU_43MODE_OPTIONS[VIDEOMENU_43MODE_OPTIO
 	//{ 2, LOCALE_VIDEOMENU_AUTO } // whatever is this auto mode, it seems its totally broken
 };
 		if (!timeshift) {
-			puts("[movieplayer.cpp] executing " MOVIEPLAYER_START_SCRIPT "."); 
-			if (system(MOVIEPLAYER_START_SCRIPT) != 0)
-				perror("Datei " MOVIEPLAYER_START_SCRIPT " fehlt. Bitte erstellen, wenn gebraucht.\nFile " MOVIEPLAYER_START_SCRIPT " not found. Please create if needed.\n");
+			FILE* fd1 = fopen("/etc/.movieplayer.start", "r");
+			if(!fd1)
+				puts("[movieplayer.cpp] executing " MOVIEPLAYER_START_SCRIPT "."); 
+				if (system(MOVIEPLAYER_START_SCRIPT) != 0)
+					perror("Datei " MOVIEPLAYER_START_SCRIPT " fehlt. Bitte erstellen, wenn gebraucht.\nFile " MOVIEPLAYER_START_SCRIPT " not found. Please create if needed.\n");
 		}
 
 		if (start_play) {
