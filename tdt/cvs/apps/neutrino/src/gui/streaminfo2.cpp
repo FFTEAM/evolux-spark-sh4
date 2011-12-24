@@ -279,7 +279,7 @@ void CStreamInfo2::hide ()
 
 void CStreamInfo2::paint_pig (int x, int y, int w, int h)
 {
-	frameBuffer->paintBackgroundBoxRel (x, y, w, h);
+	frameBuffer->paintBackgroundBoxRel (x-5, y, w+105, h+65);
 	printf("CStreamInfo2::paint_pig x %d y %d w %d h %d osd_w %d osd_w %d\n", x, y, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
 //	videoDecoder->Pig(x, y, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
 // 	use osd adjust then is the size correctly @obi
@@ -366,19 +366,19 @@ void CStreamInfo2::paint_signal_fe(struct bitrate br, struct feSignal s)
 		old_x = sigBox_x+x_now;
 		old_y = sigBox_y+sigBox_h-yd;
 	} else {
-		frameBuffer->paintLine(old_x, old_y, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_YELLOW); //yellow
+/*		frameBuffer->paintLine(old_x, old_y, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_YELLOW); //yellow
 		old_x = sigBox_x+x_now;
-		old_y = sigBox_y+sigBox_h-yd;
+		old_y = sigBox_y+sigBox_h-yd;*/
 	}
 	
-	if (s.ber != s.old_ber) {
+/*	if (s.ber != s.old_ber) {
 		SignalRenderStr(s.ber,     sig_text_ber_x, yt - sheight);
 		SignalRenderStr(s.max_ber, sig_text_ber_x, yt - sheight - sheight);
 		SignalRenderStr(s.min_ber, sig_text_ber_x, yt);
 	}
 	yd = y_signal_fe (s.ber, 4000, sigBox_h);
 	frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_RED); //red
-
+*/
 
 	if (s.sig != s.old_sig) {
 		SignalRenderStr(s.sig,     sig_text_sig_x, yt - sheight);
