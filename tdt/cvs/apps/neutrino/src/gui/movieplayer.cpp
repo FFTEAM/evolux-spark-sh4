@@ -904,14 +904,18 @@ const CMenuOptionChooser::keyval VIDEOMENU_43MODE_OPTIONS[VIDEOMENU_43MODE_OPTIO
 };
 		if (!timeshift) {
 			FILE* fd1 = fopen("/etc/.movieplayer.start", "r");
-			if(!fd1)
+			if (!fd1) {
 				puts("[movieplayer.cpp] executing " MOVIEPLAYER_START_SCRIPT "."); 
 				if (system(MOVIEPLAYER_START_SCRIPT) != 0)
 					perror("Datei " MOVIEPLAYER_START_SCRIPT " fehlt. Bitte erstellen, wenn gebraucht.\nFile " MOVIEPLAYER_START_SCRIPT " not found. Please create if needed.\n");
+			}
+			if (fd1) {
+				fclose(fd1);
+			}
 		}
 
 		if (start_play) {
-			printf("%s::%s Startplay at %d seconds\n", FILENAME, __FUNCTION__, startposition/1000);
+//			printf("%s::%s Startplay at %d seconds\n", FILENAME, __FUNCTION__, startposition/1000);
 			start_play = false;
 			if (playstate >= CMoviePlayerGui::PLAY) {
 				playstate = CMoviePlayerGui::STOPPED;
@@ -921,10 +925,10 @@ const CMenuOptionChooser::keyval VIDEOMENU_43MODE_OPTIONS[VIDEOMENU_43MODE_OPTIO
 			cutNeutrino();
 			playback->Open(is_file_player ? PLAYMODE_FILE : PLAYMODE_TS);
 
-			printf("IS FILE PLAYER: %s\n", is_file_player ?  "true": "false" );
+//			printf("IS FILE PLAYER: %s\n", is_file_player ?  "true": "false" );
 
 			if(!playback->Start((char *)filename, g_vpid, g_vtype, g_currentapid, g_currentac3)) {
-				printf("%s::%s Starting Playback failed!\n", FILENAME, __FUNCTION__);
+//				printf("%s::%s Starting Playback failed!\n", FILENAME, __FUNCTION__);
 				playback->Close();
 				restoreNeutrino();
 			} else {
