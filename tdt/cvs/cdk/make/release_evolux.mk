@@ -56,6 +56,7 @@ $(DEPDIR)/%release_evolux:
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev/sbin/ )
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
+	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
 	if [ -e $(prefix)/release_with_dev/etc/changelog.txt ]; then \
 		cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/; \
 		( cd $(prefix) && ../flash/spark/mkyaffs2 -o ../flash/spark/spark_oob.img $(prefix)/release_evolux_with_dev $(prefix)/e2yaffs2.img ); \
