@@ -828,7 +828,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 	int extrashortcut = 1;
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
 	if((fde2_installed))
 	{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTE2 Menu
