@@ -455,14 +455,14 @@ void CStreamInfo2::paint (int mode)
 		paint_techinfo (xpos, ypos);
 
 		//paint_signal_fe_box (width - 240, (y + 190 + hheight), 240, 190);
-		paint_signal_fe_box (width - width/3 - 10, (y + 10 + height/3 + hheight), width/3, height/3 + hheight);
+		paint_signal_fe_box (width - width/3 - 10, (y + 10 + height/3 + hheight - 50), width/3, height/3 + hheight - 50);
 	} else {
 		// --  small PIG, small signal graph
 		// -- paint backround, title pig, etc.
 		frameBuffer->paintBoxRel (0, 0, max_width, max_height, COL_MENUHEAD_PLUS_0);
 
 		// -- paint large signal graph
-		paint_signal_fe_box (x, y, width, height-100);
+		paint_signal_fe_box (x, y-50, width, height-100);
 
 	}
 	
@@ -792,7 +792,7 @@ void CStreamInfo2::showSNR ()
 
 	int mheight = g_Font[font_info]->getHeight();
 	if(sigscale->getPercent() != sig) {
-	  	posy = yypos + (mheight/2);
+	  	posy = yypos + (mheight/2) +50;
 		posx = x + 10;
 		sprintf(percent, "%d%% SIG", sig);
 		sw = g_Font[font_info]->getRenderWidth (percent);
