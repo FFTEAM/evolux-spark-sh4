@@ -51,8 +51,8 @@ export SCRIPT
 #-------------------------------------------------------------------------------
 cat /dev/null | nc $FRITZBOXIP $FRITZBOXPORT
 if [ $? != 0 ]; then
- echo "Fritzbox (" $FRITZBOXIP ") ist nicht auf Port" $FRITZBOXPORT "erreichbar!"
- echo "Skript wird beendet!"
+ echo "Fritzbox (" $FRITZBOXIP ") unreachable by Port" $FRITZBOXPORT "!"
+ echo "Skript stopped!"
  FRITZUP=down
  wget -q -O /dev/null "http://127.0.0.1/control/message?popup=Fritzbox%20nicht%20erreichbar!"
  exit 1
