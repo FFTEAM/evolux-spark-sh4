@@ -678,6 +678,9 @@ int CStreamInfo2Handler::exec(CMenuTarget* parent, const std::string &actionkey)
 	CStreamInfo2 *e = new CStreamInfo2;
 	e->exec();
 	delete e;
+	CZapitClient zapit;
+	zapit.Rezap();
+//	system("(/usr/local/bin/pzapit -rz) &");
 	return res;
 }
 
