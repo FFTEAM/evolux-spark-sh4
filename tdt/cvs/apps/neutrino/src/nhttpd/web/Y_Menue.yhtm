@@ -89,6 +89,7 @@ function i_stop()
 				<a target="base" href="Y_Dyn_Pages.yhtm?page=frame_live_directtv" title="LiveTV"><img src="/images/live.gif"></a>&nbsp;
 				<a target="base" href="Y_Dyn_Pages.yhtm?page=frame_live&dostart=live_tv_popup" title="LiveTV Popup"><img src="/images/live_popup.gif"></a>&nbsp;
 				<a href="/control/build_live_url?vlc_link=true" title="Stream to VLC Client"><img src="/images/vlc.gif"></a>
+				<a href="/control/build_live_url?vlc_link=avcodec" title="Stream to VLC Client (avcodec)"><img src="/images/vlc_av.gif"></a>
 			</td>
 			<td align="right">
 				<span id="state" style="color : red;font-family: Courier New, Courier, monospace;">&nbsp;</span>

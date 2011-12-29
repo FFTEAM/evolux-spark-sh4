@@ -2142,7 +2142,16 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 	url += xpids;
 printf("Live url: %s\n", url.c_str());
 	// response url
-	if(hh->ParamList["vlc_link"] !="")
+	if(hh->ParamList["vlc_link"] == "avcodec")
+	{
+		FILE *fd = fopen("/tmp/vlc.m3u" ,"w");
+		if(fd) {
+			fprintf(fd, "http/avformat,avcodec%s", url.c_str() + 4);
+			fclose(fd);
+        	}
+		hh->SendRedirect("/tmp/vlc.m3u");
+	}
+	else if(hh->ParamList["vlc_link"] !="")
 	{
 		write_to_file("/tmp/vlc.m3u", url);
 		hh->SendRedirect("/tmp/vlc.m3u");
