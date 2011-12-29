@@ -4600,6 +4600,7 @@ int main(int argc, char **argv)
         signal(SIGTERM, sighandler);
         signal(SIGINT, sighandler);
         signal(SIGHUP, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 
 	for(int i = 3; i < 256; i++)
 		close(i);
