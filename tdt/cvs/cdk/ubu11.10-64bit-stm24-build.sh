@@ -3,7 +3,8 @@ CURDIR=`pwd`
 if [ ! -e /usr/bin/gcc-4.5 ]; then
 	sudo apt-get install -y gcc-4.5 \
 	gcc-4.5-base \
-	gcc-4.5-multilib
+	gcc-4.5-multilib \
+	python-dev
 fi
 cd /usr/bin
 sudo ln -sf gcc-4.5 gcc
