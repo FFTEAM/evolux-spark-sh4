@@ -368,6 +368,7 @@ endif
 	( cd $(prefix)/release_neutrino/var && ln -s ../usr/keys keys )
 	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/neutrino.conf )
 	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/Sportster.conf )
+	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/nhttpd.conf )
 	( cd $(prefix)/release_neutrino/share/tuxbox && ln -s /usr/local/share/neutrino )
 	( cd $(prefix)/release_neutrino/var/share/icons/ && ln -s /usr/local/share/neutrino/icons/logo )
 	( cd $(prefix)/release_neutrino/ && ln -s /usr/local/share/neutrino/icons/logo logos )
