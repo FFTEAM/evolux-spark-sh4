@@ -57,7 +57,7 @@ fi
 ;;
 2)
 if [ -e /storage/c/enigma2/e2jffs2.img ] && [ -e /storage/c/enigma2/etc/fw_env.config ]; then
-read -p "are you sure? start flashing YAFFS2 now (Y/n) ? "
+read -p "are you sure? start flashing JAFFS2 now (Y/n) ? "
 if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
 flash_eraseall /dev/mtd5
 nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
@@ -66,7 +66,7 @@ nandwrite -a -m -p /dev/mtd6 /storage/c/enigma2/e2jffs2.img
 else
 exit
 fi
-read -p "are you sure? change bootargs now to YAFFS2 (Y/n) ? "
+read -p "are you sure? change bootargs now to JAFFS2 (Y/n) ? "
 if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
 echo "copy your orig Bootargs to /storage/c/enigma2/myBootargs.txt"
 /storage/c/enigma2/bin/fw_printenv > /storage/c/enigma2/myBootargs.txt
