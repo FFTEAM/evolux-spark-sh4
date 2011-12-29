@@ -5,8 +5,13 @@
 #include <linux/types.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
+
 #ifdef __TDT__
 #include <linux/version.h>
+#endif
+
+#if 1
+#include <asm/div64.h>
 #endif
 
 extern u64 __xdiv64_32(u64 n, u32 d);
@@ -14,7 +19,28 @@ extern u64 __xdiv64_32(u64 n, u32 d);
 u64 __udivdi3(u64 n, u64 d)
 {
 	if (unlikely(d & 0xffffffff00000000ULL))
+#if 0
 		panic("Need true 64-bit/64-bit division");
+#else
+	{
+		uint32_t di = d;
+
+		/* Scale divisor to 32 bits */
+		if (d > 0xffffffffULL) {
+			unsigned int shift = fls(d >> 32);
+
+			di = d >> shift;
+			n >>= shift;
+		}
+
+		/* avoid 64 bit division if possible */
+		if (n >> 32) {
+			do_div(n, di);
+			return d;
+		}
+
+	}
+#endif
 	return __xdiv64_32(n, (u32)d);
 }
 
