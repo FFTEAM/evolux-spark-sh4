@@ -45,6 +45,7 @@
 #define BOOTSPARK_OPTION_COUNT 2
 #define FSCK_OPTION_COUNT 2
 #define STMFB_OPTION_COUNT 2
+#define FRITZCALL_OPTION_COUNT 2
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -1854,3 +1855,97 @@ void STMFB_Menu::STMFBSettings()
 //ENDE STMFB
 }
 ////////////////////////////// STMFB Menu ENDE //////////////////////////////////////
+
+////////////////////////////// FRITZCALL Menu ANFANG ////////////////////////////////////
+const CMenuOptionChooser::keyval FRITZCALL_OPTIONS[FRITZCALL_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_FRITZCALL_OFF },
+	{ 1, LOCALE_EXTRAMENU_FRITZCALL_ON }
+};
+
+FRITZCALL_Menu::FRITZCALL_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+	{
+	parent->hide();
+	}
+	paint();
+
+	FRITZCALLSettings();
+
+	return res;
+}
+
+void FRITZCALL_Menu::hide()
+{
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void FRITZCALL_Menu::paint()
+{
+printf("$Id: BootE2-Menue Exp $\n");
+}
+
+void FRITZCALL_Menu::FRITZCALLSettings()
+{
+	int fritzcall=0;
+	int save_value=0;
+	//UEBERPRUEFEN OB FRITZCALL SCHON LAEUFT
+	FILE* fd1 = fopen("/etc/.15m", "r");
+	if(fd1)
+	{
+	fritzcall=1;
+	fclose(fd1);
+	}
+	int old_fritzcall=fritzcall;
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FRITZCALL_SELECT, &fritzcall, FRITZCALL_OPTIONS, FRITZCALL_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_fritzcall!=fritzcall)
+	{
+	save_value=1;
+	}
+	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+
+	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
+	if (save_value==1)
+	{
+	if (fritzcall==1)
+	{
+	//FRITZCALL STARTEN
+	system("touch /etc/.fritzcall");
+	system("/var/plugins/fritzcall/fb.sh start");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
+	}
+	if (fritzcall==0)
+	{
+	//FRITZCALL BEENDEN
+	system("rm /etc/.fritzcall");
+	system("/var/plugins/fritzcall/fb.sh stop");
+	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
+	}
+}
+//ENDE FRITZCALL
+}
+////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////

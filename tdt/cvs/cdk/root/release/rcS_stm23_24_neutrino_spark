@@ -123,6 +123,9 @@ fi
 if [ -e /etc/.time ]; then
    (sleep 20; /etc/init.d/DisplayTime.sh &) &
 fi
+if [ -e /etc/.fritzcall ]; then
+   (sleep 20; /var/plugins/fritzcall/fb.sh start) &
+fi
    # green led off
    (sleep 10;/bin/fp_control -l 1 0) &
    echo "run" > /dev/vfd

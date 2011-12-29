@@ -1439,6 +1439,10 @@ const char *locale_real_names[] = {
 	"extramenu.stmfb.select",
 	"extramenu.stmfb.on",
 	"extramenu.stmfb.off",
+	"extramenu.fritzcall",
+	"extramenu.fritzcall.select",
+	"extramenu.fritzcall.on",
+	"extramenu.fritzcall.off",
 	"setting.saved",
 	"play.button.action",
 	"videomenu.videomode_auto"

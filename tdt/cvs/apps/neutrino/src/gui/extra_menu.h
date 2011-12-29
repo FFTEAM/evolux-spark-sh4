@@ -328,4 +328,28 @@ class STMFB_Menu : public CMenuTarget
 	void STMFBSettings();
 
 };
+
+class FRITZCALL_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	FRITZCALL_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void FRITZCALLSettings();
+
+};
 #endif //__emumenu__

@@ -1435,4 +1435,8 @@ extramenu.stmfb STMFB Menue
 extramenu.stmfb.select STMFB 15m
 extramenu.stmfb.on On
 extramenu.stmfb.off Off
+extramenu.fritzcall Fritzcall Menue
+extramenu.fritzcall.select Fritzcallmonitor
+extramenu.fritzcall.on On
+extramenu.fritzcall.off Off
 setting.saved Settings saved

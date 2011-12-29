@@ -355,6 +355,7 @@ endif
 #######################################################################################
 	mkdir -p $(prefix)/release_neutrino/tuxbox/config
 	mkdir -p $(prefix)/release_neutrino/var/plugins
+	cp -aR $(buildprefix)/root/var/plugins/* $(prefix)/release_neutrino/var/plugins/
 	mkdir -p $(prefix)/release_neutrino/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/keys
