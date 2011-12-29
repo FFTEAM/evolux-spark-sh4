@@ -446,7 +446,8 @@ void CStreamInfo2::paint (int mode)
 
 		// paint PIG
 		//paint_pig (width - 240, y + 10, 240, 190);
-		paint_pig (width - width/3 - 10, y + 10, width/3, height/3);
+
+		//paint_pig (width - width/3 - 10, y + 10, width/3, height/3);
 
 		// Info Output
 		//ypos += (iheight >> 1);
@@ -678,8 +679,8 @@ int CStreamInfo2Handler::exec(CMenuTarget* parent, const std::string &actionkey)
 	CStreamInfo2 *e = new CStreamInfo2;
 	e->exec();
 	delete e;
-	CZapitClient zapit;
-	zapit.Rezap();
+//	CZapitClient zapit;
+//	zapit.Rezap();
 //	system("(/usr/local/bin/pzapit -rz) &");
 	return res;
 }
