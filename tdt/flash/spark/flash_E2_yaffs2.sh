@@ -57,7 +57,7 @@ fi
 ;;
 2)
 if [ -e /storage/c/enigma2/e2jffs2.img ] && [ -e /storage/c/enigma2/etc/fw_env.config ]; then
-read -p "are you sure? start flashing JAFFS2 now (Y/n) ? "
+read -p "are you sure? start flashing JFFS2 now (Y/n) ? "
 if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
 flash_eraseall /dev/mtd5
 nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
