@@ -66,7 +66,8 @@ g++-4.2-multilib \
 lib32z1-dev \
 autopoint \
 ntfs-config \
-lib32z1-dev
+lib32z1-dev \
+python2.6-dev
 
 exit
 
