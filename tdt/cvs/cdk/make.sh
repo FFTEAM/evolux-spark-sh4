@@ -338,3 +338,11 @@ echo "make yaud-enigma1-hd"
 echo "make evolux"
 echo "make evolux-full"
 echo "-----------------------"
+ISUBU10_10_64bit=`uname -a | grep 2.6.35.31`
+if [ ! -z $ISUBU10_10_64bit ]; then
+	export LD_LIBRARY_PATH=/usr/lib32/:$LD_LIBRARY_PATH
+	if [ ! -e "$CURDIR/.ubu1010" ]; then
+		./ubu10.10-64bit-prepare.sh
+	fi
+fi
+
