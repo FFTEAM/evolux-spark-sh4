@@ -565,13 +565,13 @@ void EMU_Menu::EMU_Menu_Settings()
 	int old_emu=emu;
 	int old_emu_onoff=emu_onoff;
 	int old_emu_restart=emu_restart;
-	char mgcamdversion[7] = "N/A";
-	char incubusversion[7] = "N/A";
-	char camd3version[7] = "N/A";
-	char mboxversion[7] = "N/A";
-	char oscamversion[7] = "N/A";
-	char newcsversion[7] = "N/A";
-	char spcsversion[7] = "N/A";
+	char mgcamdversion[8] = "N/A";
+	char incubusversion[8] = "N/A";
+	char camd3version[8] = "N/A";
+	char mboxversion[8] = "N/A";
+	char oscamversion[8] = "N/A";
+	char newcsversion[8] = "N/A";
+	char spcsversion[8] = "N/A";
 	FILE* fdemu = fopen("/usr/bin/versions.txt", "r");
 	if(fdemu)
 	{
