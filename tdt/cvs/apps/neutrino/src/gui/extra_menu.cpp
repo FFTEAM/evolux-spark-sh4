@@ -1904,7 +1904,7 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 	int fritzcall=0;
 	int save_value=0;
 	//UEBERPRUEFEN OB FRITZCALL SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.15m", "r");
+	FILE* fd1 = fopen("/etc/.fritzcall", "r");
 	if(fd1)
 	{
 	fritzcall=1;
