@@ -164,7 +164,7 @@ libusb-0.1.12.tar.gz;http://downloads.sourceforge.net/libusb/
 #
 # net apps
 #
-portmap-6.0.tgz;http://neil.brown.name/portmap
+portmap-6.0.tgz;http://fossies.org/unix/misc
 portmap_6.0-9.diff.gz;http://debian.osuosl.org/debian/pool/main/p/portmap/
 nfs-utils-1.1.1.tar.bz2;ftp://ftp.kernel.org/pub/linux/utils/nfs
 nfs-utils_1.1.1-12.diff.gz;http://ftp.de.debian.org/debian/pool/main/n/nfs-utils
