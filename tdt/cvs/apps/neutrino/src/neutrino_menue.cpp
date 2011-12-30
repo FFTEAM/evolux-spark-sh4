@@ -789,26 +789,32 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	if((fdcamd3_installed))
 	{
 	system("(kill $(pidof camd3);sleep 5;/usr/bin/camd3 /usr/keys/camd3.config;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdcamd3_installed);
 	}
 	if((fdmgcamd_installed))
 	{
 	system("(kill $(pidof mgcamd);sleep 5;/usr/bin/mgcamd -c /usr/keys/mg_cfg;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdmgcamd_installed);
 	}
 	if((fdmbox_installed))
 	{
 	system("(kill $(pidof mbox);sleep 5;/usr/bin/mbox /usr/keys/mbox.cfg;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdmbox_installed);
 	}
 	if((fdincubuscamd_installed))
 	{
 	system("(kill $(pidof incubusCamd);sleep 5;/usr/bin/incubusCamd;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdincubuscamd_installed);
 	}
 	if((fdspcs_installed))
 	{
 	system("(kill $(pidof spcs);sleep 5;/usr/bin/spcs -c /usr/keys;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdspcs_installed);
 	}
 	if((fdoscam_installed))
 	{
 	system("(kill $(pidof oscam);sleep 5;/usr/bin/oscam -b -c /usr/keys;sleep 3;/usr/local/bin/pzapit -rz) &");
+	fclose(fdoscam_installed);
 	/*system("kill $(pidof oscam);/usr/local/bin/pzapit -esb;sleep 2;/usr/local/bin/pzapit -lsb;sleep 2;/usr/local/bin/pzapit -rz");
 	system("sleep 8");
 	system("(/usr/bin/oscam -b -c /usr/keys) &");*/
