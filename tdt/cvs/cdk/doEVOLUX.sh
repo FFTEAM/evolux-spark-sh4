@@ -54,8 +54,10 @@ doOptimizeE2() {
 	if [ -e $bnc ]; then rm $bn; fi
 	#rm $dn/$bn
 	done
-	cd /usr/bin
-	$USERS ln -sf python2.7 python
+	if [ -e /usr/bin/python2.7 ]; then
+		cd /usr/bin
+		$USERS ln -sf python2.7 python
+	fi
 	cd $CURDIR
 
 	rm $SOURCE/etc/enigma2/*dbe*.tv
