@@ -166,7 +166,7 @@
 		<widget source="session.FrontendStatus" render="Label" position="910,525" size="55,20" font="Regular; 14" backgroundColor="secondBG" transparent="1" halign="left" zPosition="3">
 			<convert type="FrontendInfo">SNRdB</convert>
 		</widget>
-		<eLabel backgroundColor="secondBG" foregroundColor="#666666" font="Regular;12" position="90,527" size="300,14" text="TXT  |  DD  |  16:9  |  HDTV  |  SUB  |  CRYPT" zPosition="3"/>
+		<!-- <eLabel backgroundColor="secondBG" foregroundColor="#666666" font="Regular;12" position="90,527" size="300,14" text="TXT  |  DD  |  16:9  |  HDTV  |  SUB  |  CRYPT" zPosition="3"/> -->
 		<widget backgroundColor="secondBG" font="Regular;12" halign="left" position="89,527" render="FixedLabel" size="30,14" source="session.CurrentService" text="TXT" transparent="1" zPosition="5">
 			<convert type="ServiceInfo">HasTelext</convert>
 			<convert type="ConditionalShowHide"/>
