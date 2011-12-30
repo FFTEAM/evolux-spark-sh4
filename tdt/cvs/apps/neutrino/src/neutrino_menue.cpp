@@ -781,9 +781,9 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	FILE* fdcamd3_installed = fopen("/etc/.camd3", "r");
 	FILE* fdmgcamd_installed = fopen("/etc/.mgcamd", "r");
 	FILE* fdmbox_installed = fopen("/etc/.mbox", "r");
-	FILE* fdincubuscamd_installed = fopen("/etc/.incubusCamd", "r");
+	FILE* fdincubuscamd_installed = fopen("/etc/.incubus", "r");
 	FILE* fdoscam_installed = fopen("/etc/.oscam", "r");
-	FILE* fdnewcs_installed = fopen("/etc/.newcs", "r");
+//	FILE* fdnewcs_installed = fopen("/etc/.newcs", "r");
 	FILE* fdspcs_installed = fopen("/etc/.spcs", "r");
 	FILE* fde2_installed = fopen("/usr/local/bin/enigma2", "r");
 	if((fdcamd3_installed))
@@ -839,6 +839,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	if((fde2_installed))
 	{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTE2, true, NULL, new BOOTE2_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTE2 Menu
+	fclose(fde2_installed);
 	}
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOTSPARK, true, NULL, new BOOTSPARK_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
 	/*}
