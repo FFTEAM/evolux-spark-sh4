@@ -44,7 +44,6 @@ sysfsutils \
 libssl-dev \
 libbz2-dev \
 libgtk2.0-dev \
-padevchooser \
 ubuntu-restricted-extras \
 jam \
 libgif-dev \
