@@ -153,8 +153,8 @@ endif
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release/bin/
 	touch $(prefix)/release/etc/.fsck
 	mkdir -p $(prefix)/release/etc/rc.d/rc3.d
-	ln -s ../init.d/Swap.sh $(prefix)/release/etc/rc.d/rc6.d/S51swap
-	ln -s ../init.d/ntpupdate.sh $(prefix)/release/etc/rc.d/rc6.d/S52ntpupdate
+	ln -s ../init.d/Swap.sh $(prefix)/release/etc/rc.d/rc3.d/S51swap
+	ln -s ../init.d/ntpupdate.sh $(prefix)/release/etc/rc.d/rc3.d/S52ntpupdate
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
 	rm -f $(prefix)/release/lib/libeplayer2*
