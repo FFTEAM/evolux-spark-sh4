@@ -61,6 +61,7 @@ lib32z1-dev \
 autopoint \
 ntfs-config \
 lib32z1-dev \
+libxml2-dev \
 python2.6-dev
 
 exit
