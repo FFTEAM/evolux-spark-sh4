@@ -1439,4 +1439,6 @@ extramenu.fritzcall Fritzcall Menue
 extramenu.fritzcall.select Fritzcallmonitor
 extramenu.fritzcall.on Ein
 extramenu.fritzcall.off Aus
+extramenu.oc Overclocking Menue
+extramenu.oc.select Overclocking
 setting.saved Einstellungen Gespeichert

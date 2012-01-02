@@ -6,6 +6,19 @@
 #include <sys/vfs.h>
 #include "libnet.h"
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <string>
+
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <system/debug.h>
 
 #include <global.h>
 #include <neutrino.h>
@@ -30,22 +43,7 @@
 #include "infoviewer.h"
 
 #include "extra_menu.h"
-#define EMU_OPTION_COUNT 6
-#define EMU_ONOFF_OPTION_COUNT 2
-#define EMU_RESTART_OPTION_COUNT 2
-#define TUNERRESET_OPTION_COUNT 2
-#define CORRECTVOLUME_OPTION_COUNT 2
-#define AMOUNT_OPTION_COUNT 2
-#define DISPLAYTIME_OPTION_COUNT 2
-#define WWWDATE_OPTION_COUNT 2
-#define SWAP_OPTION_COUNT 3
-#define SWAP_ONOFF_OPTION_COUNT 2
-#define CHECKFS_OPTION_COUNT 2
-#define BOOTE2_OPTION_COUNT 2
-#define BOOTSPARK_OPTION_COUNT 2
-#define FSCK_OPTION_COUNT 2
-#define STMFB_OPTION_COUNT 2
-#define FRITZCALL_OPTION_COUNT 2
+
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -54,7 +52,18 @@ const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_
 { 1, LOCALE_EXTRAMENU_ONOFF_ON },
 }; */
 
+static int touch(const char *filename) {
+	int fn = open(filename, O_RDWR | O_CREAT, 0644);
+	if (fn > -1) {
+		close(fn);
+		return -1;
+	}
+	return 0;
+}
+
+# if 0 /* unused code */
 ////////////////////////////// CORRECTVOLUME Menu ANFANG ////////////////////////////////////
+#define CORRECTVOLUME_OPTION_COUNT 2
 const CMenuOptionChooser::keyval CORRECTVOLUME_OPTIONS[CORRECTVOLUME_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_CORRECTVOLUME_OFF },
@@ -94,7 +103,7 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void CORRECTVOLUME_Menu::paint()
 {
-printf("$Id: Volume-Menue Extended  Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
@@ -147,8 +156,10 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 //ENDE CORRECTVOLUME
 }
 ////////////////////////////// CORRECTVOLUME Menu ENDE //////////////////////////////////////
+#endif
 
 ////////////////////////////// TUNERRESET Menu ANFANG ////////////////////////////////////
+#define TUNERRESET_OPTION_COUNT 2
 const CMenuOptionChooser::keyval TUNERRESET_OPTIONS[TUNERRESET_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_TUNERRESET_OFF },
@@ -166,24 +177,25 @@ TUNERRESET_Menu::TUNERRESET_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int TUNERRESET_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 	if(actionKey == "tunerreset") 
 	{
-	this->TunerReset();
-	return res;
+		this->TunerReset();
+		return res;
 	}
+
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
+
 	paint();
 
 	TUNERRESETSettings();
 
 	return res;
-	}
+}
 
 void TUNERRESET_Menu::hide()
 {
@@ -192,21 +204,11 @@ void TUNERRESET_Menu::hide()
 
 void TUNERRESET_Menu::paint()
 {
-	printf("$Id: TUNER-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void TUNERRESET_Menu::TUNERRESETSettings()
 {
-	int tuner=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB RESET SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.reset", "r");
-	if(fd1)
-	{
-	tuner=1;
-	fclose(fd1);
-	}
-	int old_tuner=tuner;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
@@ -219,27 +221,21 @@ void TUNERRESET_Menu::TUNERRESETSettings()
 }
 bool TUNERRESET_Menu::TunerReset()
 {
-	int tuner=1;
-	// AUSFUEHREN
-	if (tuner==1)
-	{
 	//TUNERRESET STARTEN
 	CHintBox * TunerResetBox = new CHintBox(LOCALE_EXTRAMENU_TUNERRESET_RESTART, "bitte warten, Tuner wird resettet");
-TunerResetBox->paint();
+	TunerResetBox->paint();
 
-	system("/usr/local/bin/pzapit -esb");
-	system("sleep 2");
-	system("/usr/local/bin/pzapit -lsb");
+	system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
 	TunerResetBox->hide();
 	delete TunerResetBox;
-	}
 }
 //ENDE TUNERRESET
 
 ////////////////////////////// TUNERRESET Menu ENDE //////////////////////////////////////
 
-
+# if 0 /* unused code */
 ////////////////////////////// AMOUNT Menu ANFANG ////////////////////////////////////
+#define AMOUNT_OPTION_COUNT 2
 const CMenuOptionChooser::keyval AMOUNT_OPTIONS[AMOUNT_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_AMOUNT_OFF },
@@ -279,7 +275,7 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void AMOUNT_Menu::paint()
 {
-printf("$Id: Amount-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void AMOUNT_Menu::AMOUNTSettings()
@@ -339,9 +335,11 @@ void AMOUNT_Menu::AMOUNTSettings()
 //ENDE AMOUNT
 }
 ////////////////////////////// AMOUNT Menu ENDE //////////////////////////////////////
+#endif
 
-
+#if 0
 ////////////////////////////// CheckFS Menu ANFANG ////////////////////////////////////
+#define CHECKFS_OPTION_COUNT 2
 const CMenuOptionChooser::keyval CHECKFS_OPTIONS[CHECKFS_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_CHECKFS_OFF },
@@ -359,14 +357,13 @@ CHECKFS_Menu::CHECKFS_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int CHECKFS_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
 	paint();
 
 	CHECKFSSettings();
@@ -381,20 +378,13 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void CHECKFS_Menu::paint()
 {
-printf("$Id: Amount-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void CHECKFS_Menu::CHECKFSSettings()
 {
-	int checkfs=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB CHECKFS SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.checkfs", "r");
-	if(fd1)
-	{
-	checkfs=1;
-	fclose(fd1);
-	}
+#define DOTFILE_CHECKFS "/etc/.checkfs"
+	int checkfs = access(DOTFILE_CHECKFS, R_OK) ? 0 : 1;
 	int old_checkfs=checkfs;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings.raw");
@@ -409,53 +399,130 @@ void CHECKFS_Menu::CHECKFSSettings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_checkfs!=checkfs)
 	{
-	save_value=1;
+		if (checkfs==1)
+		{
+			//CHECKFS STARTEN
+			touch(DOTFILE_CHECKFS);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Activated!", 450, 2); // UTF-8("")
+		} else {
+			//CHECKFS BEENDEN
+			unlink(DOTFILE_CHECKFS);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Deactivated!", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (checkfs==1)
-	{
-	//CHECKFS STARTEN
-	system("touch /etc/.checkfs");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Activated!", 450, 2); // UTF-8("")
-	}
-	if (checkfs==0)
-	{
-	//CHECKFS BEENDEN
-	system("rm /etc/.checkfs");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE CHECKFS
 }
 ////////////////////////////// CheckFS Menu ENDE //////////////////////////////////////
+#endif
 
 ////////////////////////////// EMU choose Menu ANFANG ////////////////////////////////////
 
-const CMenuOptionChooser::keyval EMU_OPTIONS[EMU_OPTION_COUNT] =
+#define EMU_OPTION_COUNT 6
+static const CMenuOptionChooser::keyval EMU_OPTIONS[EMU_OPTION_COUNT] =
 {
-	{ 0, LOCALE_EXTRAMENU_EMU_MGCAMD },
-	{ 1, LOCALE_EXTRAMENU_EMU_INCUBUS },
-	{ 2, LOCALE_EXTRAMENU_EMU_CAMD3 },
-	{ 3, LOCALE_EXTRAMENU_EMU_MBOX },
-	{ 4, LOCALE_EXTRAMENU_EMU_OSCAM },
-	{ 5, LOCALE_EXTRAMENU_EMU_SPCS }
+#define KEY_EMU_MGCAMD	0
+#define KEY_EMU_INCUBUS	1
+#define KEY_EMU_CAMD3	2
+#define KEY_EMU_MBOX	3
+#define KEY_EMU_OSCAM	4
+#define KEY_EMU_SPCS	5
+	{ KEY_EMU_MGCAMD,	LOCALE_EXTRAMENU_EMU_MGCAMD },
+	{ KEY_EMU_INCUBUS,	LOCALE_EXTRAMENU_EMU_INCUBUS },
+	{ KEY_EMU_CAMD3,	LOCALE_EXTRAMENU_EMU_CAMD3 },
+	{ KEY_EMU_MBOX,		LOCALE_EXTRAMENU_EMU_MBOX },
+	{ KEY_EMU_OSCAM,	LOCALE_EXTRAMENU_EMU_OSCAM },
+	{ KEY_EMU_SPCS,		LOCALE_EXTRAMENU_EMU_SPCS }
 };
 
+static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
+{
+	{ "mgcamd", "/etc/.mgcamd", LOCALE_EXTRAMENU_EMU_MGCAMDVERSION,
+		"rm -f /tmp/camd.socket 2>/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &",
+		"kill -9 $(pidof mgcamd)", false, false },
+	{ "incubusCamd", "/etc/.incubus", LOCALE_EXTRAMENU_EMU_INCUBUSVERSION,
+		"rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &",
+		"kill -9 $(pidof incubusCamd)",
+		false, false },
+	{ "camd3", "/etc/.camd3", LOCALE_EXTRAMENU_EMU_CAMD3VERSION,
+		"/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &",
+		"kill -9 $(pidof camd3)",
+		false, false },
+	{ "mbox", "/etc/.mbox", LOCALE_EXTRAMENU_EMU_MBOXVERSION,
+		"/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &"
+		"kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null",
+		false, false },
+	{ "oscam", "/etc/.oscam", LOCALE_EXTRAMENU_EMU_OSCAMVERSION,
+		"/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1",
+		"kill -9 $(pidof oscam)",
+		false, false },
+	{ "spcs", "/etc/.spcs", LOCALE_EXTRAMENU_EMU_SPCSVERSION,
+		"/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &",
+		"kill -9 $(pidof spcs)",
+		false, false }
+};
+
+#define EMU_ONOFF_OPTION_COUNT 2
 const CMenuOptionChooser::keyval EMU_ONOFF_OPTIONS[EMU_ONOFF_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_EMU_OFF },
 	{ 1, LOCALE_EXTRAMENU_EMU_ON },
 };
 
+#define EMU_RESTART_OPTION_COUNT 2
 const CMenuOptionChooser::keyval EMU_RESTART_OPTIONS[EMU_RESTART_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_EMU_RESTART_OFF },
 	{ 1, LOCALE_EXTRAMENU_EMU_RESTART_ON }
 }; 
+
+int EMU_Menu::get_installed_count() {
+	return installed_count;
+}
+
+int EMU_Menu::update_installed()
+{
+	installed_count = 0;
+
+	for (int i = 0; i < EMU_OPTION_COUNT; i++) {
+		string e = "/usr/bin/" + string(EMU_list[i].procname);
+		if (!access(e.c_str(), X_OK)) {
+			EMU_list[i].installed = true;
+			installed_count++;
+		}
+	}
+
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		strncpy(EMU_list[i].version, "N/A", 8);
+
+	if (FILE *ev = fopen("/usr/bin/versions.txt", "r"))
+	{
+		char buffer[120];
+		while(fgets(buffer, sizeof(buffer), ev))
+		{
+			sscanf(buffer, "mgcamd=%7s", EMU_list[KEY_EMU_MGCAMD].version);
+			sscanf(buffer, "incubuscamd=%7s", EMU_list[KEY_EMU_INCUBUS].version);
+			sscanf(buffer, "camd3=%7s", EMU_list[KEY_EMU_CAMD3].version);
+			sscanf(buffer, "mbox=%7s", EMU_list[KEY_EMU_MBOX].version);
+			sscanf(buffer, "oscam=%7s", EMU_list[KEY_EMU_OSCAM].version);
+			sscanf(buffer, "spcs=%7s", EMU_list[KEY_EMU_SPCS].version);
+		}
+		fclose(ev);
+	}
+	return installed_count;
+}
+
+int EMU_Menu::update_activated()
+{
+	for (int i = 0; i < EMU_OPTION_COUNT; i++) {
+		int fn = open (EMU_list[i].dotfile, O_RDONLY);
+		if (fn > -1) {
+			close(fn);
+			EMU_list[i].activated = true;
+			return i;
+		} else
+			EMU_list[i].activated = false;
+	}
+	return -1;
+}
 
 EMU_Menu::EMU_Menu()
 {
@@ -467,19 +534,30 @@ EMU_Menu::EMU_Menu()
 
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+
+	update_installed();
+	update_activated();
+
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if (EMU_list[i].activated) {
+			string cmd = "(" + string(EMU_list[i].start_command) +
+				"sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
+			system(cmd.c_str());
+			break;
+		}
 }
+
 int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
-	if(actionKey == "camdreset") 
-	{
-	this->CamdReset();
-	return res;
+	if(actionKey == "camdreset") {
+		this->CamdReset();
+		return res;
 	}
+
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
+
 	paint();
 
 	EMU_Menu_Settings();
@@ -494,586 +572,95 @@ void EMU_Menu::hide()
 
 void EMU_Menu::paint()
 {
-	printf("$Id: EMU-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void EMU_Menu::EMU_Menu_Settings()
 {
-	int emu=0;
-	int emu_onoff=0;
-	/*int stop=0; */
-	int emu_restart=0;
-	bool mgcamd=0;
-	bool incubus=0;
-	bool camd3=0;
-	bool mbox=0;
-	bool oscam=0;
-	bool spcs=0;
-	bool newcs=0;
-	int save_value=0;
+	int emu_onoff;
+	int emu = update_activated();
 
-//UEBERPRUEFEN WELCHES EMU LAEUFT
-	FILE* fd1 = fopen("/etc/.mgcamd", "r");
-	if(fd1)
-	{
-	emu=0;
-	fclose(fd1);
-	mgcamd=1;
-	emu_onoff=1;
-	}
-	FILE* fd2 = fopen("/etc/.incubus", "r");
-	if(fd2)
-	{
-	emu=1;
-	fclose(fd2);
-	incubus=1;
-	emu_onoff=1;
-	}
-	FILE* fd3 = fopen("/etc/.camd3", "r");
-	if(fd3)
-	{
-	emu=2;
-	fclose(fd3);
-	camd3=1;
-	emu_onoff=1;
-	}
-	FILE* fd4 = fopen("/etc/.mbox", "r");
-	if(fd4)
-	{
-	emu=3;
-	fclose(fd4);
-	mbox=1;
-	emu_onoff=1;
-	}
-	FILE* fd5 = fopen("/etc/.oscam", "r");
-	if(fd5)
-	{
-	emu=4;
-	fclose(fd5);
-	oscam=1;
-	emu_onoff=1;
-	}
-	FILE* fd6 = fopen("/etc/.spcs", "r");
-	if(fd6)
-	{
-	emu=5;
-	fclose(fd6);
-	spcs=1;
-	emu_onoff=1;
-	}
-
-	int old_emu=emu;
-	int old_emu_onoff=emu_onoff;
-	int old_emu_restart=emu_restart;
-	char mgcamdversion[8] = "N/A";
-	char incubusversion[8] = "N/A";
-	char camd3version[8] = "N/A";
-	char mboxversion[8] = "N/A";
-	char oscamversion[8] = "N/A";
-	char newcsversion[8] = "N/A";
-	char spcsversion[8] = "N/A";
-	FILE* fdemu = fopen("/usr/bin/versions.txt", "r");
-	if(fdemu)
-	{
-	char buffer[120];
-	while(fgets(buffer, 120, fdemu)!=NULL)
-	{
-	sscanf(buffer, "mgcamd=%7s", mgcamdversion);
-	sscanf(buffer, "incubuscamd=%7s", incubusversion);
-	sscanf(buffer, "camd3=%7s", camd3version);
-	sscanf(buffer, "mbox=%7s", mboxversion);
-	sscanf(buffer, "oscam=%7s", oscamversion);
-	sscanf(buffer, "spcs=%7s", spcsversion);
-	sscanf(buffer, "newcs=%7s", newcsversion);
-	}
-	fclose(fdemu);
-	}
+	if (emu < 0) {
+		emu = 0;
+		emu_onoff = 0;
+	} else
+		emu_onoff = 1;
 
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
 	ExtraMenuSettings->addItem(GenericMenuBack);
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_ONOFF, &emu_onoff, EMU_ONOFF_OPTIONS, 		EMU_ONOFF_OPTION_COUNT,true);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_ONOFF, &emu_onoff, EMU_ONOFF_OPTIONS, EMU_ONOFF_OPTION_COUNT,true);
 	ExtraMenuSettings->addItem( oj1 );
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_SELECT, &emu, EMU_OPTIONS, EMU_OPTION_COUNT,true);
+	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_SELECT, &emu, EMU_OPTIONS, EMU_OPTION_COUNT, true);
 	ExtraMenuSettings->addItem( oj2 );
 	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "camdreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	FILE* fdcamd3_installed = fopen("/usr/bin/camd3", "r");
-	FILE* fdmgcamd_installed = fopen("/usr/bin/mgcamd", "r");
-	FILE* fdmbox_installed = fopen("/usr/bin/mbox", "r");
-	FILE* fdincubuscamd_installed = fopen("/usr/bin/incubusCamd", "r");
-	FILE* fdoscam_installed = fopen("/usr/bin/oscam", "r");
-	FILE* fdspcs_installed = fopen("/usr/bin/spcs", "r");
-	FILE* fdnewcs_installed = fopen("/usr/bin/newcs", "r");
-	if(fdmgcamd_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_MGCAMDVERSION, false, mgcamdversion));
-	}
-	if(fdincubuscamd_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_INCUBUSVERSION, false, incubusversion));
-	}
-	if(fdcamd3_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_CAMD3VERSION, false, camd3version));
-	}
-	if(fdmbox_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_MBOXVERSION, false, mboxversion));
-	}
-	if(fdoscam_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_OSCAMVERSION, false, oscamversion));
-	}
-	if(fdspcs_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_SPCSVERSION, false, spcsversion));
-	}
-	if(fdnewcs_installed)
-	{
-	ExtraMenuSettings->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_EMU_NEWCSVERSION, false, newcsversion));
-	}
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
+
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if (EMU_list[i].installed)
+			ExtraMenuSettings->addItem( new CMenuForwarder(EMU_list[i].loctxt, false, EMU_list[i].version));
+
+	ExtraMenuSettings->exec(NULL, "");
+	ExtraMenuSettings->hide();
 	delete ExtraMenuSettings;
 
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if ((old_emu!=emu) || (old_emu_onoff!=emu_onoff) || (old_emu_restart!=emu_restart))
-	{
-	save_value=1;
+	if(!EMU_list[emu].installed) {
+		string m = " " + string(EMU_list[emu].procname) + " is not installed ";
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+	} else if (EMU_list[emu].activated && (emu_onoff == 0)) {
+		// deactivate emu
+		EMU_list[emu].activated = false;
+		system(EMU_list[emu].stop_command);
+		unlink(EMU_list[emu].dotfile);
+		string m = " " + string(EMU_list[emu].procname) + " is now inactive ";
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+	} else if (!EMU_list[emu].activated && (emu_onoff == 1)) {
+		for (int i = 0; i < EMU_OPTION_COUNT; i++) {
+			if (EMU_list[i].activated) {
+				EMU_list[i].activated = false;
+				unlink(EMU_list[i].dotfile);
+				system(EMU_list[i].stop_command);
+				string m = " " + string(EMU_list[i].procname) + " is now inactive ";
+				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+			}
+		}
+		// activate emu
+		EMU_list[emu].activated = true;
+		touch(EMU_list[emu].dotfile);
+		system(EMU_list[emu].start_command);
+		sleep(2);
+		system("/usr/local/bin/pzapit -rz &");
+		string m = " " + string(EMU_list[emu].procname) + " is now active ";
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	//MGCAMD STARTEN
-	if (emu_onoff==1)
-	{
-	if (emu==0)
-	{
-	if (camd3==1)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	}
-	if (incubus==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	}
-	if (mbox==1)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	}
-	if (oscam==1)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	}
-	if (spcs==1)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	}
-	system("touch /etc/.mgcamd");
-	system("rm /tmp/camd.socket");
-	system("/usr/bin/mgcamd /var/keys/mg_cfg &");
-//	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MGCAMD activated!", 450, 2); // UTF-8("")
-}
-}
-//MGCAMD BEENDEN
-if (emu_onoff==0)
-{
-	if (emu==0)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MGCAMD deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE MGCAMD
-
-//INCUBUS STARTEN
-if (emu_onoff==1)
-{
-	if (emu==1)
-	{
-	if (camd3==1)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	}
-	if (mgcamd==1)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	}
-	if (mbox==1)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	}
-	if (oscam==1)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	}
-	if (spcs==1)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	}
-	system("touch /etc/.incubus");
-	system("rm /tmp/camd.socket");
-	system("/usr/bin/incubusCamd &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " INCUBUS activated!", 450, 2); // UTF-8("")
-	}
-}
-//INCUBUS BEENDEN
-if (emu_onoff==0)
-{
-	if (emu==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " INCUBUS deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE INCUBUS
-
-//CAMD3 STARTEN
-if (emu_onoff==1)
-{
-	if (emu==2)
-	{
-	if (mgcamd==1)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	}
-	if (incubus==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	}
-	if (mbox==1)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	}
-	if (oscam==1)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	}
-	if (spcs==1)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	}
-	system("touch /etc/.camd3");
-	system("/usr/bin/camd3 /var/keys/camd3.config &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " CAMD3 activated!", 450, 2); // UTF-8("")
-	}
-}
-//CAMD3 BEENDEN
-if (emu_onoff==0)
-{
-	if (emu==2)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " CAMD3 deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE CAMD3
-
-//MBOX STARTEN
-if (emu_onoff==1)
-{
-	if (emu==3)
-	{
-	if (mgcamd==1)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	}
-	if (incubus==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	}
-	if (camd3==1)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	}
-	if (oscam==1)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	}
-	if (spcs==1)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	}
-	system("touch /etc/.mbox");
-	system("/usr/bin/mbox /var/keys/mbox.cfg &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MBOX activated!", 450, 2); // UTF-8("")
-	}
-}
-//MBOX BEENDEN
-if (emu_onoff==0)
-	{
-	if (emu==3)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	system("rm /tmp/share.*");
-	system("rm /tmp/mbox.ver");
-	system("rm /tmp/*.info");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " MBOX deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE MBOX
-
-//OSCAM STARTEN
-if (emu_onoff==1)
-{
-	if (emu==4)
-	{
-	if (mgcamd==1)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	}
-	if (incubus==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	}
-	if (camd3==1)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	}
-	if (mbox==1)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	}
-	if (spcs==1)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	}
-	system("touch /etc/.oscam");
-	system("/usr/bin/oscam -c /var/keys &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " OSCAM activated!", 450, 2); // UTF-8("")
-	}
-}
-//OSCAM BEENDEN
-if (emu_onoff==0)
-{
-	if (emu==4)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " OSCAM deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE OSCAM
-
-//SPCS STARTEN
-if (emu_onoff==1)
-{
-	if (emu==5)
-	{
-	if (mgcamd==1)
-	{
-	system("rm /etc/.mgcamd");
-	system("kill $(pidof mgcamd)");
-	}
-	if (incubus==1)
-	{
-	system("rm /etc/.incubus");
-	system("kill $(pidof incubusCamd)");
-	}
-	if (camd3==1)
-	{
-	system("rm /etc/.camd3");
-	system("kill $(pidof camd3)");
-	}
-	if (mbox==1)
-	{
-	system("rm /etc/.mbox");
-	system("kill $(pidof mbox)");
-	}
-	if (oscam==1)
-	{
-	system("rm /etc/.oscam");
-	system("kill $(pidof oscam)");
-	}
-	system("touch /etc/.spcs");
-	system("/usr/bin/spcs -c /var/keys &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SPCS activated!", 450, 2); // UTF-8("")
-	}
-}
-//SPCS BEENDEN
-if (emu_onoff==0)
-{
-	if (emu==5)
-	{
-	system("rm /etc/.spcs");
-	system("kill $(pidof spcs)");
-	emu_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SPCS deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE SPCS
 
 }
-}
+
 //EMU RESTARTEN
-/*if (emu_restart==1) */
 bool EMU_Menu::CamdReset()
 {
-	int emu=0;
-	int emu_onoff=0;
-	bool mgcamd=0;
-	bool incubus=0;
-	bool camd3=0;
-	bool mbox=0;
-	bool oscam=0;
-	bool newcs=0;
-	bool spcs=0;
-//UEBERPRUEFEN WELCHES EMU LAEUFT
-	FILE* fd1 = fopen("/etc/.mgcamd", "r");
-	if(fd1)
-	{
-	emu=0;
-	fclose(fd1);
-	mgcamd=1;
-	emu_onoff=1;
-	}
-	FILE* fd2 = fopen("/etc/.incubus", "r");
-	if(fd2)
-	{
-	emu=1;
-	fclose(fd2);
-	incubus=1;
-	emu_onoff=1;
-	}
-	FILE* fd3 = fopen("/etc/.camd3", "r");
-	if(fd3)
-	{
-	emu=2;
-	fclose(fd3);
-	camd3=1;
-	emu_onoff=1;
-	}
-	FILE* fd4 = fopen("/etc/.mbox", "r");
-	if(fd4)
-	{
-	emu=3;
-	fclose(fd4);
-	mbox=1;
-	emu_onoff=1;
-	}
-	FILE* fd5 = fopen("/etc/.oscam", "r");
-	if(fd5)
-	{
-	emu=4;
-	fclose(fd5);
-	oscam=1;
-	emu_onoff=1;
-	}
-	FILE* fd6 = fopen("/etc/.spcs", "r");
-	if(fd6)
-	{
-	emu=5;
-	fclose(fd6);
-	spcs=1;
-	emu_onoff=1;
-	}
-	if(emu_onoff==1)
-	{
-	CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, "please wait, Camd restarting");
-	CamdResetBox->paint();
-	//mgc
-	if (emu==0)
-	{
-	system("kill $(pidof mgcamd)");
-	system("sleep 2");
-	system("/usr/bin/mgcamd /var/keys/mg_cfg &");
-	}
-	//incubus
-	if (emu==1)
-	{
-	system("kill $(pidof incubusCamd)");
-	system("sleep 2");
-	system("/usr/bin/incubusCamd &");
-	}
-	//camd3
-	if (emu==2)
-	{
-	system("kill $(pidof camd3)");
-	system("sleep 2");
-	system("/usr/bin/camd3 /var/keys/camd3.config &");
-	}
-	//mbox
-	if (emu==3)
-	{
-	system("kill $(pidof mbox)");
-	system("sleep 2");
-	system("/usr/bin/mbox &");
-	}
-	//oscam
-	if (emu==4)
-	{
-	system("kill $(pidof oscam)");
-	system("sleep 2");
-	system("/usr/bin/oscam -c /var/keys &");
-	}
-	//spcs
-	if (emu==5)
-	{
-	system("kill $(pidof spcs)");
-	system("sleep 2");
-	system("/usr/bin/spcs -c /var/keys &");
-	}
-	system("sleep 5");
-	system("/usr/local/bin/pzapit -rz");
-	CamdResetBox->hide();
-	delete CamdResetBox;
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if(EMU_list[i].activated) {
+			string m = "Please wait for " +  string(EMU_list[i].procname) + " to restart.";
+			CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, m.c_str());
+			CamdResetBox->paint();
+			system(EMU_list[i].stop_command);
+			sleep(1);
+			system(EMU_list[i].start_command);
+			sleep(2);
+        		system("/usr/local/bin/pzapit -rz &");
+			CamdResetBox->hide();
+			delete CamdResetBox;
+			return true;
 	}
 }
 ////////////////////////////// EMU Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// DISPLAYTIME Menu ANFANG ////////////////////////////////////
+#define DISPLAYTIME_OPTION_COUNT 2
 const CMenuOptionChooser::keyval DISPLAYTIME_OPTIONS[DISPLAYTIME_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_DISPLAYTIME_OFF },
@@ -1096,9 +683,7 @@ int DISPLAYTIME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
 	paint();
 
 	DISPLAYTIMESettings();
@@ -1108,25 +693,18 @@ int DISPLAYTIME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void DISPLAYTIME_Menu::hide()
 {
-frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
 void DISPLAYTIME_Menu::paint()
 {
-printf("$Id: DisplayTime-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 {
-	int displaytime=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB DISPLAYTIME SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.time", "r");
-	if(fd1)
-	{
-	displaytime=1;
-	fclose(fd1);
-	}
+#define DOTFILE_DISPLAYTIME "/etc/.time"
+	int displaytime = access(DOTFILE_DISPLAYTIME, R_OK) ? 0 : 1;
 	int old_displaytime=displaytime;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings.raw");
@@ -1141,33 +719,25 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_displaytime!=displaytime)
 	{
-	save_value=1;
+		if (displaytime==1)
+		{
+			//DisplayTime STARTEN
+			touch("/etc/.time");
+			system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
+		} else {
+			//DisplayTime BEENDEN
+			unlink("/etc/.time");
+			system("killall -9 DisplayTime.sh");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (displaytime==1)
-	{
-	//DisplayTime STARTEN
-	system("touch /etc/.time");
-	system("/etc/init.d/DisplayTime.sh &");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
-	}
-	if (displaytime==0)
-	{
-	//DisplayTime BEENDEN
-	system("rm /etc/.time");
-	system("killall -9 DisplayTime.sh");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE DisplayTime
 }
 ////////////////////////////// DisplayTime Menu ENDE //////////////////////////////////////
 
+#if 0 /* unused code */
 ////////////////////////////// WWWDATE Menu ANFANG ////////////////////////////////////
+#define WWWDATE_OPTION_COUNT 2
 const CMenuOptionChooser::keyval WWWDATE_OPTIONS[WWWDATE_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_WWWDATE_OFF },
@@ -1207,7 +777,7 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void WWWDATE_Menu::paint()
 {
-printf("$Id: wwwDate-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void WWWDATE_Menu::WWWDATESettings()
@@ -1258,16 +828,22 @@ void WWWDATE_Menu::WWWDATESettings()
 //ENDE WWWDATE
 }
 ////////////////////////////// WWWDATE Menu ENDE //////////////////////////////////////
+#endif
 
 ////////////////////////////// SWAP choose Menu ANFANG ////////////////////////////////////
 
+#define SWAP_OPTION_COUNT 3
 const CMenuOptionChooser::keyval SWAP_OPTIONS[SWAP_OPTION_COUNT] =
 {
-	{ 0, LOCALE_EXTRAMENU_SWAP_SWAPRAM },
-	{ 1, LOCALE_EXTRAMENU_SWAP_SWAPPART },
-	{ 2, LOCALE_EXTRAMENU_SWAP_SWAPFILE }
+#define KEY_SWAP_SWAPRAM 0
+#define KEY_SWAP_SWAPPART 1
+#define KEY_SWAP_SWAPFILE 2
+	{ KEY_SWAP_SWAPRAM, LOCALE_EXTRAMENU_SWAP_SWAPRAM },
+	{ KEY_SWAP_SWAPPART, LOCALE_EXTRAMENU_SWAP_SWAPPART },
+	{ KEY_SWAP_SWAPFILE, LOCALE_EXTRAMENU_SWAP_SWAPFILE }
 };
 
+#define SWAP_ONOFF_OPTION_COUNT 2
 const CMenuOptionChooser::keyval SWAP_ONOFF_OPTIONS[SWAP_ONOFF_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_SWAP_OFF },
@@ -1285,14 +861,13 @@ SWAP_Menu::SWAP_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int SWAP_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
 	paint();
 
 	SWAP_Menu_Settings();
@@ -1307,43 +882,87 @@ void SWAP_Menu::hide()
 
 void SWAP_Menu::paint()
 {
-	printf("$Id: SWAP-Menue Exp $\n");
+	printf("%s\n", __func__);
+}
+
+#define DOTFILE_SWAPON "/etc/.swapon"
+#define DOTFILE_SWAPRAM "/etc/.swapram"
+#define DOTFILE_SWAPPART "/etc/.swappart"
+#define DOTFILE_SWAPFILE "/etc/.swapjn"
+
+string SWAP_Menu::start_swap(int swaptype) {
+	switch(swaptype) {
+		case KEY_SWAP_SWAPRAM:
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			return "SWAP-RAM activated";
+		case KEY_SWAP_SWAPPART:
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			return "SWAP partition activated";
+		case KEY_SWAP_SWAPFILE:
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			return "SWAP file activated";
+		default:
+			return "Internal error.";
+	}
+}
+
+string SWAP_Menu::stop_swap(int swaptype) {
+	switch(swaptype) {
+		case KEY_SWAP_SWAPRAM:
+			system("swapoff -a");
+			return "SWAPRAM deactivated";
+		case KEY_SWAP_SWAPPART:
+			system("swapoff -a");
+			return "SWAP partition deactivated";
+		case KEY_SWAP_SWAPFILE:
+			system("swapoff /dev/loop0 ; losetup -d /dev/loop0 ; swapoff -a");
+			return "SWAP file deactivated";
+		default:
+			return "Internal error.";
+	}
+}
+
+void SWAP_Menu::unlink_dotfile(int swaptype) {
+	switch(swaptype) {
+		case KEY_SWAP_SWAPRAM:
+			unlink(DOTFILE_SWAPRAM);
+			return;
+		case KEY_SWAP_SWAPPART:
+			unlink(DOTFILE_SWAPPART);
+			return;
+		case KEY_SWAP_SWAPFILE:
+			unlink(DOTFILE_SWAPFILE);
+		default:
+			return;
+	}
+}
+
+void SWAP_Menu::touch_dotfile(int swaptype) {
+	switch(swaptype) {
+		case KEY_SWAP_SWAPRAM:
+			touch(DOTFILE_SWAPRAM);
+			return;
+		case KEY_SWAP_SWAPPART:
+			touch(DOTFILE_SWAPPART);
+			return;
+		case KEY_SWAP_SWAPFILE:
+			touch(DOTFILE_SWAPFILE);
+		default:
+			return;
+	}
 }
 
 void SWAP_Menu::SWAP_Menu_Settings()
 {
+	int swap_onoff = access(DOTFILE_SWAPON, R_OK) ? 0 : 1;
 	int swap=0;
-	int swap_onoff=0;
-	bool swapram=0;
-	bool swappart=0;
-	bool swapfile=0;
-	int save_value=0;
 
-//UEBERPRUEFEN WELCHES SWAP LAEUFT
-	FILE* fd1 = fopen("/etc/.swapram", "r");
-	if(fd1)
-	{
-	swap=0;
-	fclose(fd1);
-	swapram=1;
-	swap_onoff=1;
-	}
-	FILE* fd2 = fopen("/etc/.swappart", "r");
-	if(fd2)
-	{
-	swap=1;
-	fclose(fd2);
-	swappart=1;
-	swap_onoff=1;
-	}
-	FILE* fd3 = fopen("/etc/.swapfile", "r");
-	if(fd3)
-	{
-	swap=2;
-	fclose(fd3);
-	swapfile=1;
-	swap_onoff=1;
-	}
+	if (!access(DOTFILE_SWAPRAM, R_OK))
+		swap = KEY_SWAP_SWAPRAM;
+	else if (!access(DOTFILE_SWAPPART, R_OK))
+		swap = KEY_SWAP_SWAPPART;
+	else if (!access(DOTFILE_SWAPFILE, R_OK))
+		swap = KEY_SWAP_SWAPFILE;
 
 	int old_swap=swap;
 	int old_swap_onoff=swap_onoff;
@@ -1363,127 +982,39 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	delete ExtraMenuSettings;
 
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if ((old_swap!=swap) || (old_swap_onoff!=swap_onoff))
-	{
-	save_value=1;
+	if ((old_swap != swap) && (swap_onoff == 1)) {
+		if (old_swap_onoff == 0)
+			stop_swap(old_swap);
+		else
+			unlink_dotfile(old_swap);
+		touch_dotfile(swap);
+		touch(DOTFILE_SWAPON);
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, start_swap(swap).c_str(), 450, 2); // UTF-8("")
+	} else if ((old_swap!=swap) && (swap_onoff == 0)) {
+		if (old_swap_onoff == 1) {
+			unlink(DOTFILE_SWAPON);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, stop_swap(old_swap).c_str(), 450, 2); // UTF-8("")
+		}
+		unlink_dotfile(old_swap);
+		touch_dotfile(swap);
+	} else if ((old_swap == swap) && (swap_onoff == 1)) {
+		if (old_swap_onoff == 0) {
+			touch_dotfile(swap); // might be the default value
+			touch(DOTFILE_SWAPON);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, start_swap(swap).c_str(), 450, 2); // UTF-8("")
+		}
+	} else if ((old_swap == swap) && (swap_onoff == 0)) {
+		if (old_swap_onoff == 1) {
+			unlink(DOTFILE_SWAPON);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, stop_swap(swap).c_str(), 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	//SWAPRAM STARTEN
-	if (swap_onoff==1)
-	{
-	if (swap==0)
-	{
-	if (swapfile==1)
-	{
-	system("rm /etc/.swapfile");
-	}
-	if (swappart==1)
-	{
-	system("rm /etc/.swappart");
-	}
-	system("touch /etc/.swapram");
-	system("touch /etc/.swapon");
-	system("/etc/init.d/Swap.sh &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPRAM activated!", 450, 2); // UTF-8("")
-	}
-}
-//SWAPRAM BEENDEN
-if (swap_onoff==0)
-{
-	if (swap==0)
-	{
-	system("rm /etc/.swapram");
-	system("rm /etc/.swapon");
-	system("swapoff -a");
-	swap_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPRAM deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE SWAPRAM
-
-//SWAPPART STARTEN
-if (swap_onoff==1)
-{
-	if (swap==1)
-	{
-	if (swapfile==1)
-	{
-	system("rm /etc/.swapfile");
-	}
-	if (swapram==1)
-	{
-	system("rm /etc/.swapram");
-	}
-	system("touch /etc/.swappart");
-	system("touch /etc/.swapon");
-	system("/etc/init.d/Swap.sh &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPPART activated!", 450, 2); // UTF-8("")
-	}
-}
-//SWAPPART BEENDEN
-if (swap_onoff==0)
-{
-	if (swap==1)
-	{
-	system("rm /etc/.swappart");
-	system("rm /etc/.swapon");
-	system("swapoff -a");
-	swap_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPPART deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE SWAPPART
-
-//SWAPFILE STARTEN
-if (swap_onoff==1)
-{
-	if (swap==2)
-	{
-	if (swapram==1)
-	{
-	system("rm /etc/.swapram");
-	}
-	if (swappart==1)
-	{
-	system("rm /etc/.swappart");
-	}
-	system("touch /etc/.swapfile");
-	system("touch /etc/.swapon");
-	system("/etc/init.d/Swap.sh &");
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPFILE activated!", 450, 2); // UTF-8("")
-	}
-}
-//SWAPFILE BEENDEN
-if (swap_onoff==0)
-{
-	if (swap==2)
-	{
-	system("rm /etc/.swapfile");
-	system("rm /etc/.swapon");
-	system("swapoff /dev/loop0");
-	system("losetup -d /dev/loop0");
-	system("swapoff -a");
-	swap_onoff=0;
-	//ShowHintUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SETTINGS_SAVED), 450, 2); // UTF-8("")
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, " SWAPFILE Deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE SWAPFILE
-}
 }
 
 ////////////////////////////// SWAP Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// BOOTE2 Menu ANFANG ////////////////////////////////////
+#define BOOTE2_OPTION_COUNT 2
 const CMenuOptionChooser::keyval BOOTE2_OPTIONS[BOOTE2_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_BOOTE2_OFF },
@@ -1501,14 +1032,14 @@ BOOTE2_Menu::BOOTE2_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
+
 	paint();
 
 	BOOTE2Settings();
@@ -1518,25 +1049,18 @@ int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void BOOTE2_Menu::hide()
 {
-frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
 void BOOTE2_Menu::paint()
 {
-printf("$Id: BootE2-Menue Exp $\n");
+	printf("$Id: BootE2-Menue Exp $\n");
 }
 
 void BOOTE2_Menu::BOOTE2Settings()
 {
-	int bootE2=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB BOOTE2 SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.start_enigma2", "r");
-	if(fd1)
-	{
-	bootE2=1;
-	fclose(fd1);
-	}
+#define DOTFILE_BOOTE2 "/etc/.start_enigma2"
+	int bootE2 = access(DOTFILE_BOOTE2, R_OK) ? 0 : 1;
 	int old_bootE2=bootE2;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTE2, "settings.raw");
@@ -1551,33 +1075,19 @@ void BOOTE2_Menu::BOOTE2Settings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_bootE2!=bootE2)
 	{
-	save_value=1;
+		if (bootE2==1) {
+			touch(DOTFILE_BOOTE2);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 booting is enabled. Please reboot.", 450, 2); // UTF-8("")
+		} else {
+			unlink(DOTFILE_BOOTE2);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Neutrino booting is re-enabled.", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (bootE2==1)
-	{
-	//BOOTE2 STARTEN
-	system("touch /etc/.start_enigma2");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 Activated, please reboot!", 450, 2); // UTF-8("")
-	}
-	bootE2=0;
-	old_bootE2=0;
-	/*if (bootE2==0)
-	{
-	//BOOTE2 BEENDEN
-	system("rm /etc/.bootE2");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "BOOTE2 Deactivated!", 450, 2); // UTF-8("")
-	}*/
-}
-//ENDE BOOTE2
 }
 ////////////////////////////// BOOTE2 Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// BOOTSPARK Menu ANFANG ////////////////////////////////////
+#define BOOTSPARK_OPTION_COUNT 2
 const CMenuOptionChooser::keyval BOOTSPARK_OPTIONS[BOOTSPARK_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_BOOTSPARK_OFF },
@@ -1595,14 +1105,14 @@ BOOTSPARK_Menu::BOOTSPARK_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int BOOTSPARK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
+
 	paint();
 
 	BOOTSPARKSettings();
@@ -1617,21 +1127,14 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void BOOTSPARK_Menu::paint()
 {
-printf("$Id: BootE2-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void BOOTSPARK_Menu::BOOTSPARKSettings()
 {
-	int bootSpark=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB BOOTSPARK SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.start_spark", "r");
-	if(fd1)
-	{
-	bootSpark=1;
-	fclose(fd1);
-	}
-	int old_bootSpark=bootSpark;
+#define DOTFILE_BOOTSPARK "/etc/.start_spark"
+	int bootSpark = access(DOTFILE_BOOTSPARK, R_OK) ? 0 : 1;
+	int old_bootSpark = bootSpark;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTSPARK, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
@@ -1643,36 +1146,22 @@ void BOOTSPARK_Menu::BOOTSPARKSettings()
 	ExtraMenuSettings->hide ();
 	delete ExtraMenuSettings;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_bootSpark!=bootSpark)
-	{
-	save_value=1;
+	if (old_bootSpark!=bootSpark) {
+		if (bootSpark==1) {
+			touch(DOTFILE_BOOTSPARK);
+			system("fw_setenv -s /etc/bootargs_orig");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "SPARK booting is enabled. Please reboot.", 450, 2); // UTF-8("")
+		} else {
+			unlink(DOTFILE_BOOTSPARK);
+			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Evolux (YAFFS2) booting is re-enabled.", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (bootSpark==1)
-	{
-	//BOOTSPARK STARTEN
-	system("touch /etc/.start_spark");
-	system("fw_setenv -s /etc/bootargs_orig");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark Activated, please reboot!", 450, 2); // UTF-8("")
-	}
-	bootSpark=0;
-	old_bootSpark=0;
-	/*if (bootSpark==0)
-	{
-	//BOOTSPARK BEENDEN
-	system("rm /etc/.bootSpark");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "BOOTSPARK Deactivated!", 450, 2); // UTF-8("")
-	}*/
-}
-//ENDE BOOTSPARK
 }
 ////////////////////////////// BOOTSPARK Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// FSCK Menu ANFANG ////////////////////////////////////
+#define FSCK_OPTION_COUNT 2
 const CMenuOptionChooser::keyval FSCK_OPTIONS[FSCK_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_FSCK_OFF },
@@ -1690,14 +1179,14 @@ FSCK_Menu::FSCK_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
+
 	paint();
 
 	FSCKSettings();
@@ -1707,25 +1196,18 @@ int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void FSCK_Menu::hide()
 {
-frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
 void FSCK_Menu::paint()
 {
-printf("$Id: BootE2-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void FSCK_Menu::FSCKSettings()
 {
-	int fsck=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB FSCK SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.fsck", "r");
-	if(fd1)
-	{
-	fsck=1;
-	fclose(fd1);
-	}
+#define DOTFILE_FSCK "/etc/.fsck"
+	int fsck = access(DOTFILE_FSCK, R_OK) ? 0 : 1;
 	int old_fsck=fsck;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
@@ -1740,31 +1222,19 @@ void FSCK_Menu::FSCKSettings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_fsck!=fsck)
 	{
-	save_value=1;
+		if (fsck == 1) {
+			touch(DOTFILE_FSCK);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Activated, please reboot!", 450, 2); // UTF-8("")
+		} else {
+			unlink(DOTFILE_FSCK);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Deactivated!", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (fsck==1)
-	{
-	//FSCK STARTEN
-	system("touch /etc/.fsck");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Activated, please reboot!", 450, 2); // UTF-8("")
-	}
-	if (fsck==0)
-	{
-	//FSCK BEENDEN
-	system("rm /etc/.fsck");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE FSCK
 }
 ////////////////////////////// FSCK Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// STMFB Menu ANFANG ////////////////////////////////////
+#define STMFB_OPTION_COUNT 2
 const CMenuOptionChooser::keyval STMFB_OPTIONS[STMFB_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_STMFB_OFF },
@@ -1804,20 +1274,13 @@ frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 
 void STMFB_Menu::paint()
 {
-printf("$Id: BootE2-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void STMFB_Menu::STMFBSettings()
 {
-	int stmfb=0;
-	int save_value=0;
-	//UEBERPRUEFEN OB STMFB SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.15m", "r");
-	if(fd1)
-	{
-	stmfb=1;
-	fclose(fd1);
-	}
+#define DOTFILE_STMFB "/etc/.15m"
+	int stmfb = access(DOTFILE_STMFB, R_OK) ? 0 : 1;
 	int old_stmfb=stmfb;
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
@@ -1832,31 +1295,22 @@ void STMFB_Menu::STMFBSettings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_stmfb!=stmfb)
 	{
-	save_value=1;
+		if (stmfb==1)
+		{
+			//STMFB STARTEN
+			touch(DOTFILE_STMFB);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Activated, please reboot!", 450, 2); // UTF-8("")
+		} else {
+			//STMFB BEENDEN
+			unlink(DOTFILE_STMFB);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Deactivated!", 450, 2); // UTF-8("")
+		}
 	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (stmfb==1)
-	{
-	//STMFB STARTEN
-	system("touch /etc/.15m");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Activated, please reboot!", 450, 2); // UTF-8("")
-	}
-	if (stmfb==0)
-	{
-	//STMFB BEENDEN
-	system("rm /etc/.15m");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Deactivated!", 450, 2); // UTF-8("")
-	}
-}
-//ENDE STMFB
 }
 ////////////////////////////// STMFB Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// FRITZCALL Menu ANFANG ////////////////////////////////////
+#define FRITZCALL_OPTION_COUNT 2
 const CMenuOptionChooser::keyval FRITZCALL_OPTIONS[FRITZCALL_OPTION_COUNT] =
 {
 	{ 0, LOCALE_EXTRAMENU_FRITZCALL_OFF },
@@ -1874,14 +1328,13 @@ FRITZCALL_Menu::FRITZCALL_Menu()
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
+
 int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-	{
-	parent->hide();
-	}
+		parent->hide();
 	paint();
 
 	FRITZCALLSettings();
@@ -1891,26 +1344,21 @@ int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void FRITZCALL_Menu::hide()
 {
-frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
 void FRITZCALL_Menu::paint()
 {
-printf("$Id: BootE2-Menue Exp $\n");
+	printf("%s\n", __func__);
 }
 
 void FRITZCALL_Menu::FRITZCALLSettings()
 {
-	int fritzcall=0;
-	int save_value=0;
+#define DOTFILE_FRITZCALL "/etc/.fritzcall"
 	//UEBERPRUEFEN OB FRITZCALL SCHON LAEUFT
-	FILE* fd1 = fopen("/etc/.fritzcall", "r");
-	if(fd1)
-	{
-	fritzcall=1;
-	fclose(fd1);
-	}
+	int fritzcall = access(DOTFILE_FRITZCALL, R_OK) ? 0 : 1;
 	int old_fritzcall=fritzcall;
+
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
@@ -1924,28 +1372,230 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_fritzcall!=fritzcall)
 	{
-	save_value=1;
-	}
-	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-
-	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
-	if (save_value==1)
-	{
-	if (fritzcall==1)
-	{
-	//FRITZCALL STARTEN
-	system("touch /etc/.fritzcall");
-	system("/var/plugins/fritzcall/fb.sh start");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
-	}
-	if (fritzcall==0)
-	{
-	//FRITZCALL BEENDEN
-	system("rm /etc/.fritzcall");
-	system("/var/plugins/fritzcall/fb.sh stop");
-	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
+		if (fritzcall == 1)
+		{
+			//FRITZCALL STARTEN
+			touch(DOTFILE_FRITZCALL);
+			system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
+		} else {
+			//FRITZCALL BEENDEN
+			unlink(DOTFILE_FRITZCALL);
+			system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
 	}
 }
 //ENDE FRITZCALL
 }
 ////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////
+
+////////////////////////////// Overclocking Menu ANFANG ////////////////////////////////////
+
+#define OC_OPTION_COUNT 10
+const CMenuOptionChooser::keyval OC_OPTIONS[OC_OPTION_COUNT] = 
+{
+	{ 200, NONEXISTANT_LOCALE, "250MHz" },
+	{ 250, NONEXISTANT_LOCALE, "250MHz" },
+	{ 300, NONEXISTANT_LOCALE, "350MHz" },
+	{ 350, NONEXISTANT_LOCALE, "350MHz" },
+	{ 400, NONEXISTANT_LOCALE, "400MHz" },
+	{ 450, NONEXISTANT_LOCALE, "450MHz (Default)" },
+	{ 500, NONEXISTANT_LOCALE, "500MHz" },
+	{ 550, NONEXISTANT_LOCALE, "550MHz" },
+	{ 600, NONEXISTANT_LOCALE, "600MHz" },
+	{ 650, NONEXISTANT_LOCALE, "650MHz" }
+};
+
+OC_Menu::OC_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+
+int OC_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+		parent->hide();
+	paint();
+
+	OCSettings();
+
+	return res;
+}
+
+void OC_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void OC_Menu::paint()
+{
+	printf("%s\n", __func__);
+}
+
+void OC_Menu::OCSettings()
+{
+	int freq = 0;
+
+	if (FILE *pll0 = fopen("/proc/cpu_frequ/pll0_ndiv_mdiv", "r")) {
+		char buffer[120];
+		while(fgets(buffer, sizeof(buffer), pll0)) {
+			if (1 == sscanf(buffer, "SH4 = %d MHZ", &freq))
+				break;
+		}
+		fclose(pll0);
+	}
+
+	bool found = false;
+
+	for (int i = 0; i < OC_OPTION_COUNT && !found; i++)
+		found = (OC_OPTIONS[i].key == freq);
+
+	if (!found) {
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Unsupported frequeny detected. Aborting.", 450, 2); // UTF-8("")
+		return;
+	}
+
+	int old_freq = freq;
+
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_OC, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_OC_SELECT, &freq, OC_OPTIONS, OC_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+
+	if (freq != old_freq) {
+		FILE *pll0 = fopen ("/proc/cpu_frequ/pll0_ndiv_mdiv", "w");
+		if (!pll0) {
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Modifying frequency failed. Aborting.", 450, 2); // UTF-8("")
+			return;
+		}
+		fprintf(pll0, "%d\n", freq/10 * 256 + 3);
+		fclose (pll0);
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CPU frequency updated.", 450, 2); // UTF-8("")
+	}
+
+	stringstream tmp_out;
+	tmp_out << freq;
+	E2_Config *cfg = new E2_Config("/etc/enigma2/settings");
+	cfg->set("config.plugins.PinkPanel.oclock", tmp_out.str());
+	delete cfg;
+}
+////////////////////////////// OC Menu ENDE //////////////////////////////////////
+
+// E2 configuration handling functions
+
+void E2_Config::lock(void){
+	int lockfd;
+	while ((lockfd = open(lockfile.c_str(), O_RDWR | O_EXCL | O_CREAT)) < -1)
+		sleep(1);
+	close(lockfd);
+}
+
+void E2_Config::unlock(void){
+	unlink(lockfile.c_str());
+}
+
+E2_Config::E2_Config(const string filename) {
+	name = filename;
+	lockfile = "/tmp/" + name;
+	for (int i = 5; i < lockfile.length(); i++)
+		if (lockfile[i] == '/')
+			lockfile[i] = '_';
+	lock();
+	ifstream e2cfg (filename.c_str());
+	string line;
+	while (e2cfg.good()) {
+		if (getline(e2cfg, line)) {
+			string::size_type delimiter_pos = line.find_first_of("=", 0);
+			if (delimiter_pos > 1)
+				cfg[line.substr(0, delimiter_pos)] = line.substr(delimiter_pos + 1);
+		}
+	}
+	e2cfg.close();
+}
+
+E2_Config::~E2_Config(void) {
+	if (needs_write)
+		this->sync();
+	unlock();
+}
+
+string E2_Config::get(string key) {
+	map<string, string>::iterator i;
+	i = cfg.find(key);
+	if (i != cfg.end())
+		return i->second;
+	return NULL;
+}
+
+void E2_Config::set(string key, string value) {
+	map<string, string>::iterator i;
+	i = cfg.find(key);
+	if (i == cfg.end() || value.compare(i->second)) {
+		cfg[key] = value;
+		needs_write = true;
+	}
+}
+
+void E2_Config::unset(string key) {
+	map<string, string>::iterator i;
+	i = cfg.find(key);
+	if (i != cfg.end()) {
+		cfg.erase(i);
+		needs_write = true;
+	}
+}
+
+void E2_Config::unset_hierarchy(string key) {
+	map<string, string>::iterator i, j;
+	for (i=cfg.begin(); i != cfg.end(); i = j) {
+		j = i;
+		j++;
+		if (!i->first.compare(0, key.length(), key)) {
+			switch(i->first[key.length()]) {
+				case 0:
+				case '.':
+					cfg.erase(i);
+					needs_write = true;
+					break;
+				default:
+					;
+			}
+		}
+	}
+}
+
+void E2_Config::dump() {
+	map<string, string>::iterator i;
+	for (i=cfg.begin(); i != cfg.end(); ++i)
+		cout << i->first << "=" << i->second << endl;
+}
+
+void E2_Config::sync() {
+	needs_write = false;
+
+	string tmpname = name + ".tmp";
+	ofstream tmp (tmpname.c_str());
+	if(tmp.is_open()) {
+		map<string, string>::iterator i;
+		for (i=cfg.begin(); i != cfg.end(); ++i)
+			tmp << i->first << "=" << i->second << endl;
+		tmp.close();
+		rename(tmpname.c_str(), name.c_str());
+	}
+}
+
+

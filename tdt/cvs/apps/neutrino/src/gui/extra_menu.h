@@ -101,10 +101,25 @@ class EMU_Menu : public CMenuTarget
 	int hheight,mheight; // head/menu font height
 
 	void paint();
-	bool showemuversions();
-
+	int installed_count;
+	int update_installed();
+	int update_activated();
 
 	public:
+
+	struct emu_list
+	{
+		const char *procname;
+		const char *dotfile;
+		const neutrino_locale_t loctxt;
+		const char *start_command;
+		const char *stop_command;
+		bool installed;
+		bool activated;
+		char version[8];
+	};
+
+	int get_installed_count();
 
 	EMU_Menu();
 	bool CamdReset();
@@ -222,7 +237,10 @@ class SWAP_Menu : public CMenuTarget
 	int hheight,mheight; // head/menu font height
 
 	void paint();
-
+	string start_swap(int);
+	string stop_swap(int);
+	void touch_dotfile(int);
+	void unlink_dotfile(int);
 
 	public:
 
@@ -352,4 +370,55 @@ class FRITZCALL_Menu : public CMenuTarget
 	void FRITZCALLSettings();
 
 };
+
+class OC_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	void paint();
+
+
+	public:
+
+	OC_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void OCSettings();
+
+};
+
+#include <map>
+#include <string>
+#include <sys/types.h>
+
+class E2_Config
+{
+	private:
+		void lock(void);
+		void unlock(void);
+		int fd;
+		int lockfd;
+		string name;
+		string lockfile;
+		map<string,string> cfg;
+		bool needs_write;
+	public:
+		E2_Config(const string);
+		~E2_Config(void);
+		string get(string);
+		void set(string, string);
+		void unset(string);
+		void unset_hierarchy(string);
+		void sync(void);
+		void dump(void);
+};
+
 #endif //__emumenu__
