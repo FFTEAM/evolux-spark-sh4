@@ -20,7 +20,7 @@ extern int optind;
 static void usage(char *p)
 {
     fprintf(stderr,
-	    "Usage: %s [ -q ] [ -l *-u ] [ number ]\n\n"
+	    "Usage: %s [ -q ] [ -l | -u ] [ number ]\n\n"
 	    "Options:\n"
 	    "-q	quiet mode\n"
 	    "-l	lock mtd device (set to read-only)\n"
