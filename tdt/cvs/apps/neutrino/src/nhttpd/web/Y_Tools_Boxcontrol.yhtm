@@ -21,7 +21,7 @@ function goUrl(_url)
 	<div class="work_box_body">
 	<form action="">
 		<table class="y_invisible_table" cellpadding="5">
-		<tr><td class="y_form_header">Coolstream HD1</td><td class="y_form_header">Standby Mode</td></tr>
+		<tr><td class="y_form_header">Neutrino</td><td class="y_form_header">Standby Mode</td></tr>
 		<tr>
 			<td>
 			<input type="button" value="Restart" title="reboot" onclick='goConfirmUrl("Do you really want to reboot the dbox?","/control/reboot");'/>
