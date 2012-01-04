@@ -1408,7 +1408,6 @@ const char *locale_real_names[] = {
 	"extramenu.emu.restart",
 	"extramenu.emu.restart_off",
 	"extramenu.emu.restart_on",
-	"extramenu.emu.autostart",
 	"extramenu.emu.mgcamdversion",
 	"extramenu.emu.incubusversion",
 	"extramenu.emu.camd3version",

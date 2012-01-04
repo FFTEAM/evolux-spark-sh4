@@ -52,6 +52,9 @@ class CORRECTVOLUME_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	CORRECTVOLUME_Menu();
@@ -72,6 +75,9 @@ class TUNERRESET_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 
@@ -94,24 +100,22 @@ class EMU_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
 	int installed_count;
 	int update_installed();
-	int update_selected();
-	void create_startstop_scripts(int);
-	void remove_startstop_scripts(void);
-	int selected;
-	bool autostart;
-	bool running;
+	int update_activated();
 
 	public:
 
 	struct emu_list
 	{
 		const char *procname;
+		const char *dotfile;
 		const neutrino_locale_t loctxt;
 		const char *start_command;
 		const char *stop_command;
 		bool installed;
+		bool activated;
 		char version[8];
 	};
 
@@ -136,6 +140,9 @@ class AMOUNT_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	AMOUNT_Menu();
@@ -156,6 +163,9 @@ class CHECKFS_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 
@@ -178,6 +188,9 @@ class DISPLAYTIME_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	DISPLAYTIME_Menu();
@@ -198,6 +211,9 @@ class WWWDATE_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 
@@ -220,6 +236,7 @@ class SWAP_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
 	string start_swap(int);
 	string stop_swap(int);
 	void touch_dotfile(int);
@@ -245,6 +262,9 @@ class BOOTE2_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	BOOTE2_Menu();
@@ -265,6 +285,9 @@ class BOOTSPARK_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 
@@ -287,6 +310,9 @@ class FSCK_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	FSCK_Menu();
@@ -307,6 +333,9 @@ class STMFB_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 
@@ -329,6 +358,9 @@ class FRITZCALL_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	void paint();
+
+
 	public:
 
 	FRITZCALL_Menu();
@@ -349,6 +381,9 @@ class OC_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
+
+	void paint();
+
 
 	public:
 

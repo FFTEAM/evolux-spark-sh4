@@ -44,8 +44,6 @@
 
 #include "extra_menu.h"
 
-#define E2SETTINGS "/etc/enigma2/settings"
-
 /*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
 const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
@@ -91,6 +89,7 @@ int CORRECTVOLUME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	{
 	parent->hide();
 	}
+	paint();
 
 	CORRECTVOLUMESettings();
 
@@ -100,6 +99,11 @@ int CORRECTVOLUME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void CORRECTVOLUME_Menu::hide()
 {
 frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void CORRECTVOLUME_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
@@ -186,6 +190,8 @@ int TUNERRESET_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
+	paint();
+
 	TUNERRESETSettings();
 
 	return res;
@@ -194,6 +200,11 @@ int TUNERRESET_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void TUNERRESET_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void TUNERRESET_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void TUNERRESET_Menu::TUNERRESETSettings()
@@ -248,8 +259,9 @@ int AMOUNT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 	{
-		parent->hide();
+	parent->hide();
 	}
+	paint();
 
 	AMOUNTSettings();
 
@@ -258,7 +270,12 @@ int AMOUNT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void AMOUNT_Menu::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void AMOUNT_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void AMOUNT_Menu::AMOUNTSettings()
@@ -347,6 +364,7 @@ int CHECKFS_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 		parent->hide();
+	paint();
 
 	CHECKFSSettings();
 
@@ -355,7 +373,12 @@ int CHECKFS_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void CHECKFS_Menu::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void CHECKFS_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void CHECKFS_Menu::CHECKFSSettings()
@@ -412,26 +435,26 @@ static const CMenuOptionChooser::keyval EMU_OPTIONS[EMU_OPTION_COUNT] =
 
 static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
 {
-	{ "mgcamd", LOCALE_EXTRAMENU_EMU_MGCAMDVERSION,
+	{ "mgcamd", "/etc/.mgcamd", LOCALE_EXTRAMENU_EMU_MGCAMDVERSION,
 		"rm -f /tmp/camd.socket 2>/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &",
 		"kill -9 $(pidof mgcamd)", false, false },
-	{ "incubusCamd", LOCALE_EXTRAMENU_EMU_INCUBUSVERSION,
+	{ "incubusCamd", "/etc/.incubus", LOCALE_EXTRAMENU_EMU_INCUBUSVERSION,
 		"rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &",
 		"kill -9 $(pidof incubusCamd)",
 		false, false },
-	{ "camd3", LOCALE_EXTRAMENU_EMU_CAMD3VERSION,
+	{ "camd3", "/etc/.camd3", LOCALE_EXTRAMENU_EMU_CAMD3VERSION,
 		"/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &",
 		"kill -9 $(pidof camd3)",
 		false, false },
-	{ "mbox", LOCALE_EXTRAMENU_EMU_MBOXVERSION,
+	{ "mbox", "/etc/.mbox", LOCALE_EXTRAMENU_EMU_MBOXVERSION,
 		"/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &"
 		"kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null",
 		false, false },
-	{ "oscam", LOCALE_EXTRAMENU_EMU_OSCAMVERSION,
+	{ "oscam", "/etc/.oscam", LOCALE_EXTRAMENU_EMU_OSCAMVERSION,
 		"/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1",
 		"kill -9 $(pidof oscam)",
 		false, false },
-	{ "spcs", LOCALE_EXTRAMENU_EMU_SPCSVERSION,
+	{ "spcs", "/etc/.spcs", LOCALE_EXTRAMENU_EMU_SPCSVERSION,
 		"/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &",
 		"kill -9 $(pidof spcs)",
 		false, false }
@@ -487,28 +510,19 @@ int EMU_Menu::update_installed()
 	return installed_count;
 }
 
-int EMU_Menu::update_selected()
+int EMU_Menu::update_activated()
 {
-	E2_Config *cfg = new E2_Config(E2SETTINGS);
-	string CamSelect = cfg->get("config.plugins.PinkPanel.CamSelect");
-	string CamAutostart = cfg->get("config.plugins.PinkPanel.CamAutostart");
-	delete cfg;
-
-	autostart = (CamAutostart.length() && !CamAutostart.compare("true"));
-	selected = -1;
-
-	if (CamSelect.length())
-		for (int i = 0; i < EMU_OPTION_COUNT; i++)
-			if (!CamSelect.compare(EMU_list[i].procname)) {
-				if (EMU_list[i].installed)
-					selected = i;
-				return selected;
-			}
+	for (int i = 0; i < EMU_OPTION_COUNT; i++) {
+		int fn = open (EMU_list[i].dotfile, O_RDONLY);
+		if (fn > -1) {
+			close(fn);
+			EMU_list[i].activated = true;
+			return i;
+		} else
+			EMU_list[i].activated = false;
+	}
 	return -1;
 }
-
-#define EMU_START_SCRIPT "/tmp/emu-start.sh"
-#define EMU_STOP_SCRIPT "/tmp/emu-stop.sh"
 
 EMU_Menu::EMU_Menu()
 {
@@ -522,16 +536,15 @@ EMU_Menu::EMU_Menu()
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 
 	update_installed();
-	update_selected();
+	update_activated();
 
-	if ((selected > -1) && autostart){
-		string cmd = "(" + string(EMU_list[selected].start_command) +
-			"sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1" + // <- FIXME. No need for this when viewing a clear channel.
-			") &";
-		system(cmd.c_str());
-		running = true;
-		create_startstop_scripts(selected);
-	}
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if (EMU_list[i].activated) {
+			string cmd = "(" + string(EMU_list[i].start_command) +
+				"sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
+			system(cmd.c_str());
+			break;
+		}
 }
 
 int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
@@ -545,6 +558,8 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
+	paint();
+
 	EMU_Menu_Settings();
 
 	return res;
@@ -555,48 +570,32 @@ void EMU_Menu::hide()
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
-void EMU_Menu::create_startstop_scripts(int i)
+void EMU_Menu::paint()
 {
-	ofstream startscript (EMU_START_SCRIPT);
-	if(startscript.is_open()) {
-		startscript << "#!/bin/sh" << endl
-			    << EMU_list[selected].start_command << endl;
-		startscript.close();
-		chmod(EMU_START_SCRIPT, 0755);
-	}
-	ofstream stopscript (EMU_STOP_SCRIPT);
-	if(stopscript.is_open()) {
-		stopscript << "#!/bin/sh" << endl
-			   << EMU_list[selected].stop_command << endl;
-		stopscript.close();
-		chmod(EMU_STOP_SCRIPT, 0755);
-	}
-}
-
-void EMU_Menu::remove_startstop_scripts(void) {
-	unlink(EMU_STOP_SCRIPT);
-	unlink(EMU_START_SCRIPT);
+	printf("%s\n", __func__);
 }
 
 void EMU_Menu::EMU_Menu_Settings()
 {
-	int emu_onoff = running ? 1 : 0;
-	int emu_onoff_new = emu_onoff;
-	int emu = (selected < 0) ? 0 : selected;
-	int emu_autostart = autostart ? 1 : 0;
-	int emu_autostart_new = emu_autostart;
+	int emu_onoff;
+	int emu = update_activated();
+
+	if (emu < 0) {
+		emu = 0;
+		emu_onoff = 0;
+	} else
+		emu_onoff = 1;
 
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
 	ExtraMenuSettings->addItem(GenericMenuBack);
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_ONOFF, &emu_onoff_new, EMU_ONOFF_OPTIONS, EMU_ONOFF_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem(oj1);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_ONOFF, &emu_onoff, EMU_ONOFF_OPTIONS, EMU_ONOFF_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_SELECT, &emu, EMU_OPTIONS, EMU_OPTION_COUNT, true);
-	ExtraMenuSettings->addItem(oj2);
-	CMenuOptionChooser* oj3 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_AUTOSTART, &emu_autostart_new, EMU_ONOFF_OPTIONS, EMU_ONOFF_OPTION_COUNT, true);
-	ExtraMenuSettings->addItem(oj3);
+	ExtraMenuSettings->addItem( oj2 );
 	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "camdreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
 
@@ -611,62 +610,52 @@ void EMU_Menu::EMU_Menu_Settings()
 	if(!EMU_list[emu].installed) {
 		string m = " " + string(EMU_list[emu].procname) + " is not installed ";
 		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-		return;
-	}
-
-	if ((emu_autostart != emu_autostart_new) || (selected != emu)) {
-		E2_Config *cfg = new E2_Config(E2SETTINGS);
-		if (emu_autostart_new == 0) {
-			cfg->unset("config.plugins.PinkPanel.CamAutostart");
-			autostart = false;
-		} else {
-			cfg->set("config.plugins.PinkPanel.CamAutostart", "true");
-			autostart = true;
-		}
-		cfg->set("config.plugins.PinkPanel.CamSelect", string(EMU_list[selected].procname));
-		delete cfg;
-		return;
-	}
-
-	if (running && ((emu_onoff_new == 0) || (selected != emu))) {
-		// stop currently running emu
-		system(EMU_list[selected].stop_command);
-		running = false;
-		remove_startstop_scripts();
-		string m = " " + string(EMU_list[selected].procname) + " is now inactive ";
+	} else if (EMU_list[emu].activated && (emu_onoff == 0)) {
+		// deactivate emu
+		EMU_list[emu].activated = false;
+		system(EMU_list[emu].stop_command);
+		unlink(EMU_list[emu].dotfile);
+		string m = " " + string(EMU_list[emu].procname) + " is now inactive ";
 		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-		selected = emu;
-		return;
-	}
-
-	if (!running && emu_onoff_new == 1) {
-		// start currently selected emu
+	} else if (!EMU_list[emu].activated && (emu_onoff == 1)) {
+		for (int i = 0; i < EMU_OPTION_COUNT; i++) {
+			if (EMU_list[i].activated) {
+				EMU_list[i].activated = false;
+				unlink(EMU_list[i].dotfile);
+				system(EMU_list[i].stop_command);
+				string m = " " + string(EMU_list[i].procname) + " is now inactive ";
+				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+			}
+		}
+		// activate emu
+		EMU_list[emu].activated = true;
+		touch(EMU_list[emu].dotfile);
 		system(EMU_list[emu].start_command);
 		sleep(2);
-		system("/usr/local/bin/pzapit -rz >/dev/null 2>&1");
-		running = true;
+		system("/usr/local/bin/pzapit -rz &");
 		string m = " " + string(EMU_list[emu].procname) + " is now active ";
-		create_startstop_scripts(emu);
 		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 	}
+
 }
 
 //EMU RESTARTEN
 bool EMU_Menu::CamdReset()
 {
-	if (running) {
-		string m = "Please wait for " +  string(EMU_list[selected].procname) + " to restart.";
-		CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, m.c_str());
-		CamdResetBox->paint();
-		system(EMU_list[selected].stop_command);
-		sleep(1);
-		system(EMU_list[selected].start_command);
-		sleep(2);
-		system("/usr/local/bin/pzapit -rz >/dev/null 2>&1");
-		CamdResetBox->hide();
-		delete CamdResetBox;
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if(EMU_list[i].activated) {
+			string m = "Please wait for " +  string(EMU_list[i].procname) + " to restart.";
+			CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, m.c_str());
+			CamdResetBox->paint();
+			system(EMU_list[i].stop_command);
+			sleep(1);
+			system(EMU_list[i].start_command);
+			sleep(2);
+        		system("/usr/local/bin/pzapit -rz &");
+			CamdResetBox->hide();
+			delete CamdResetBox;
+			return true;
 	}
-	return true;
 }
 ////////////////////////////// EMU Menu ENDE //////////////////////////////////////
 
@@ -695,6 +684,7 @@ int DISPLAYTIME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 		parent->hide();
+	paint();
 
 	DISPLAYTIMESettings();
 
@@ -704,6 +694,11 @@ int DISPLAYTIME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void DISPLAYTIME_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void DISPLAYTIME_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void DISPLAYTIME_Menu::DISPLAYTIMESettings()
@@ -765,7 +760,10 @@ int WWWDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-		parent->hide();
+	{
+	parent->hide();
+	}
+	paint();
 
 	WWWDATESettings();
 
@@ -775,6 +773,11 @@ int WWWDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void WWWDATE_Menu::hide()
 {
 frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void WWWDATE_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void WWWDATE_Menu::WWWDATESettings()
@@ -865,6 +868,7 @@ int SWAP_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 		parent->hide();
+	paint();
 
 	SWAP_Menu_Settings();
 
@@ -874,6 +878,11 @@ int SWAP_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void SWAP_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void SWAP_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 #define DOTFILE_SWAPON "/etc/.swapon"
@@ -1031,6 +1040,8 @@ int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
+	paint();
+
 	BOOTE2Settings();
 
 	return res;
@@ -1039,6 +1050,11 @@ int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void BOOTE2_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void BOOTE2_Menu::paint()
+{
+	printf("$Id: BootE2-Menue Exp $\n");
 }
 
 void BOOTE2_Menu::BOOTE2Settings()
@@ -1061,7 +1077,6 @@ void BOOTE2_Menu::BOOTE2Settings()
 	{
 		if (bootE2==1) {
 			touch(DOTFILE_BOOTE2);
-			//unlink(STARTCAM);
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 booting is enabled. Please reboot.", 450, 2); // UTF-8("")
 		} else {
 			unlink(DOTFILE_BOOTE2);
@@ -1098,6 +1113,8 @@ int BOOTSPARK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
+	paint();
+
 	BOOTSPARKSettings();
 
 	return res;
@@ -1105,7 +1122,12 @@ int BOOTSPARK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void BOOTSPARK_Menu::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void BOOTSPARK_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void BOOTSPARK_Menu::BOOTSPARKSettings()
@@ -1165,6 +1187,8 @@ int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
+	paint();
+
 	FSCKSettings();
 
 	return res;
@@ -1173,6 +1197,11 @@ int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void FSCK_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void FSCK_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void FSCK_Menu::FSCKSettings()
@@ -1228,7 +1257,10 @@ int STMFB_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	int res = menu_return::RETURN_REPAINT;
 
 	if (parent)
-		parent->hide();
+	{
+	parent->hide();
+	}
+	paint();
 
 	STMFBSettings();
 
@@ -1237,7 +1269,12 @@ int STMFB_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 void STMFB_Menu::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void STMFB_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void STMFB_Menu::STMFBSettings()
@@ -1298,6 +1335,7 @@ int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 		parent->hide();
+	paint();
 
 	FRITZCALLSettings();
 
@@ -1307,6 +1345,11 @@ int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void FRITZCALL_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void FRITZCALL_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void FRITZCALL_Menu::FRITZCALLSettings()
@@ -1351,9 +1394,9 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 #define OC_OPTION_COUNT 10
 const CMenuOptionChooser::keyval OC_OPTIONS[OC_OPTION_COUNT] = 
 {
-	{ 200, NONEXISTANT_LOCALE, "200MHz" },
+	{ 200, NONEXISTANT_LOCALE, "250MHz" },
 	{ 250, NONEXISTANT_LOCALE, "250MHz" },
-	{ 300, NONEXISTANT_LOCALE, "300MHz" },
+	{ 300, NONEXISTANT_LOCALE, "350MHz" },
 	{ 350, NONEXISTANT_LOCALE, "350MHz" },
 	{ 400, NONEXISTANT_LOCALE, "400MHz" },
 	{ 450, NONEXISTANT_LOCALE, "450MHz (Default)" },
@@ -1381,6 +1424,7 @@ int OC_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (parent)
 		parent->hide();
+	paint();
 
 	OCSettings();
 
@@ -1390,6 +1434,11 @@ int OC_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 void OC_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void OC_Menu::paint()
+{
+	printf("%s\n", __func__);
 }
 
 void OC_Menu::OCSettings()
@@ -1411,7 +1460,7 @@ void OC_Menu::OCSettings()
 		found = (OC_OPTIONS[i].key == freq);
 
 	if (!found) {
-		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Unsupported frequency detected. Aborting.", 450, 2); // UTF-8("")
+		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Unsupported frequeny detected. Aborting.", 450, 2); // UTF-8("")
 		return;
 	}
 
@@ -1440,15 +1489,13 @@ void OC_Menu::OCSettings()
 
 	stringstream tmp_out;
 	tmp_out << freq;
-	E2_Config *cfg = new E2_Config(E2SETTINGS);
+	E2_Config *cfg = new E2_Config("/etc/enigma2/settings");
 	cfg->set("config.plugins.PinkPanel.oclock", tmp_out.str());
 	delete cfg;
 }
 ////////////////////////////// OC Menu ENDE //////////////////////////////////////
 
-
-
-// E2 configuration handling functions for keeping ExtraMenu and PinkPanel in sync.
+// E2 configuration handling functions
 
 void E2_Config::lock(void){
 	int lockfd;
@@ -1491,7 +1538,7 @@ string E2_Config::get(string key) {
 	i = cfg.find(key);
 	if (i != cfg.end())
 		return i->second;
-	return "";
+	return NULL;
 }
 
 void E2_Config::set(string key, string value) {

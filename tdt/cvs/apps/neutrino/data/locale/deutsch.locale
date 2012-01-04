@@ -1365,7 +1365,6 @@ zapit.scantype.tvradio Nur TV & Radio
 zaptotimer.announce In einer Minute wird umgeschaltet.
 mainmenu.extramenu Extras
 extramenu.emu Emu Menue
-extramenu.emu.autostart Autostart
 extramenu.tunerreset Tuner Menue
 extramenu.tunerreset.select Tuner Reset
 extramenu.tunerreset.on Ein

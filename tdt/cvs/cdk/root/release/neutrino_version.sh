@@ -7,7 +7,10 @@ INTERNAL=2
 SNAPSHOT=$RELEASE
 TIMESTAMP=`date +%Y%m%d%H%M`
 #BUILDREV=`git describe | cut -f2 -d'-'`
-BUILDREV="100"
+version1=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f1`
+version2=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f2`
+version3=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f3`
+BUILDREV=$version1$version2$version3
 #################
 
 CURDIR=`pwd`

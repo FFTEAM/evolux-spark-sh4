@@ -1,7 +1,19 @@
 #!/bin/sh
-if [ -e /tmp/.movieplayer.start ] ; then
-	[ -x /tmp/emu-start.sh ] && /tmp/emu-start.sh
-	rm /tmp/.movieplayer.start
+if [ -e /etc/.oscam ]; then
+	/usr/bin/oscam -c /usr/keys &
+elif [ -e /etc/.mgcamd ]; then
+	/usr/bin/mgcamd &
+elif [ -e /etc/.spcs ]; then
+	/usr/bin/spcs -c /usr/keys &
+elif [ -e /etc/.camd3 ]; then
+	/usr/bin/camd3 /usr/keys/camd3.config &
+elif [ -e /etc/.incubusCamd ]; then
+	/usr/bin/incubusCamd &
+elif [ -e /etc/.mbox ]; then
+	/usr/bin/mbox &
+elif [ -e /etc/.gbox ]; then
+	/usr/bin/gbox &
 fi
-exit 0
+rm /etc/.movieplayer.start
+exit
 
