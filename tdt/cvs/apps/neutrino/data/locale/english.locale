@@ -1365,7 +1365,10 @@ zapit.scantype.tvradio tv & radio
 zaptotimer.announce Zapto timer in one minute
 mainmenu.extramenu Extras
 extramenu.emu Emu Menue
+<<<<<<< HEAD
 extramenu.emu.autostart Autostart
+=======
+>>>>>>> parent of 3598da7... extramenu update
 extramenu.tunerreset Tuner Menue
 extramenu.tunerreset.select Tuner Reset
 extramenu.tunerreset.on On
