@@ -98,6 +98,7 @@ endif
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
+	mkdir $(prefix)/release/lirc
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
