@@ -1,0 +1,469 @@
+--- enigma2-nightly.org/data/menu.xml	2011-10-30 11:06:40.252808194 +0100
++++ enigma2-nightly/data/menu.xml	2011-10-30 11:06:28.448749659 +0100
+@@ -17,8 +17,9 @@
+ 		<item text="Network setup" entryID="network_setup">self.openSetup("network")</item>-->
+ 		<!--<item text="CI"><screen module="Ci" screen="CiSelection" /></item>-->
+ 		<!--<item text="Radio"><code>print "radio mode"</code></item>-->
++		<item level="0" text="Subtitles" entryID="subtitle_selection"><screen module="Subtitles" screen="Subtitles" /></item>
+ 		<item level="0" text="Timer" entryID="timer_edit"><screen module="TimerEdit" screen="TimerEditList" /></item>
+-		<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>
++		<!--<item level="1" text="VCR scart" entryID="scart_switch" requires="ScartSwitch"><code>self.session.scart.VCRSbChanged(3)</code></item>-->
+ 
+ 		<menu level="0" text="Information" entryID="info_screen">
+ 			<id val="information" />
+@@ -64,7 +65,7 @@
+ 				<item level="0" text="Network" entryID="network_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection" /></item>
+ 				<item level="1" text="Input devices" entryID="input_device_setup"><screen module="InputDeviceSetup" screen="InputDeviceSelection" /></item>
+ 				<item requires="Display"><setup level="1" id="lcd" /></item>
+-				<item text="Keyboard"><setup id="keyboard" /></item>
++				<!--<item text="Keyboard"><setup id="keyboard" /></item>-->
+ 				<!--<menu level="1" text="Network..." entryID="network_setup">
+ 					<id val="network" />
+ 					<item level="1" text="Device Setup..." entryID="device_setup"><screen module="NetworkSetup" screen="NetworkAdapterSelection"/></item>
+@@ -72,7 +73,7 @@
+ 				</menu>-->
+ 				<item level="2" text="Recording paths" entryId="RecordPaths"><screen module="RecordPaths" screen="RecordPathsSettings" /></item>
+ 			</menu>
+-			<item weight="10" level="1" text="Common Interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection" /></item>
++			<!--<item weight="10" level="1" text="Common Interface" entryID="ci_setup" requires="CommonInterface"><screen module="Ci" screen="CiSelection" /></item>-->
+ 			<item weight="15" level="0" text="Parental control" entryID="parental_setup"><screen module="ParentalControlSetup" screen="ParentalControlSetup" /></item>
+ 			<!--item level="0" text="Startwizard" entryID="startwizzard"><screen module="StartWizard" screen="StartWizard" /></item-->
+ 			<item weight="25" level="0" text="Factory reset" entryID="factory_reset">
+@@ -97,7 +98,7 @@
+ 			<item text="Sleep Timer" entryID="sleep"><screen module="SleepTimerEdit" screen="SleepTimerEdit" /></item>
+ 			<item text="Standby" entryID="standby"><screen module="Standby" screen="Standby"/></item>
+ 			<item text="Restart" entryID="restart"><screen module="Standby" screen="TryQuitMainloop">2</screen></item>
+-			<item level="2" text="Restart GUI" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>
++			<!--<item level="2" text="Restart GUI" entryID="restart_enigma"><screen module="Standby" screen="TryQuitMainloop">3</screen></item>-->
+ 			<item text="Deep Standby" requires="DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
+ 			<item text="Shutdown" requires="!DeepstandbySupport" entryID="deep_standby"><screen module="Standby" screen="TryQuitMainloop">1</screen></item>
+ 		</menu>
+
+--- enigma2-nightly.org/lib/python/Screens/About.py	2011-10-09 16:27:00.873040403 +0200
++++ enigma2-nightly/lib/python/Screens/About.py	2011-10-09 16:26:44.828960832 +0200
+@@ -12,7 +12,7 @@
+ 		Screen.__init__(self, session)
+ 
+ 		self["EnigmaVersion"] = StaticText("Enigma: " + about.getEnigmaVersionString())
+-		self["ImageVersion"] = StaticText("Image: " + about.getImageVersionString())
++		self["ImageVersion"] = StaticText("Evolution: " + about.getImageVersionString())
+ 
+ 		self["TunerHeader"] = StaticText(_("Detected NIMs:"))
+
+--- enigma2-nightly.org/lib/python/Components/Language.py	2011-10-07 19:08:57.371873384 +0200
++++ enigma2-nightly/lib/python/Components/Language.py	2011-10-07 19:09:07.563923919 +0200
+@@ -15,33 +15,9 @@
+ 		# also, see "precalcLanguageList" below on how to re-create the language cache after you added a language
+ 		self.addLanguage(_("English"), "en", "EN")
+ 		self.addLanguage(_("German"), "de", "DE")
+-		self.addLanguage(_("Arabic"), "ar", "AE")
+-		self.addLanguage(_("Catalan"), "ca", "AD")
+-		self.addLanguage(_("Croatian"), "hr", "HR")
+-		self.addLanguage(_("Czech"), "cs", "CZ")
+-		self.addLanguage(_("Danish"), "da", "DK")
+-		self.addLanguage(_("Dutch"), "nl", "NL")
+-		self.addLanguage(_("Estonian"), "et", "EE")
+-		self.addLanguage(_("Finnish"), "fi", "FI")
+-		self.addLanguage(_("French"), "fr", "FR")
+-		self.addLanguage(_("Greek"), "el", "GR")
+-		self.addLanguage(_("Hungarian"), "hu", "HU")
+-		self.addLanguage(_("Lithuanian"), "lt", "LT")
+-		self.addLanguage(_("Latvian"), "lv", "LV")
+-		self.addLanguage(_("Icelandic"), "is", "IS")
+-		self.addLanguage(_("Italian"), "it", "IT")
+ 		self.addLanguage(_("Norwegian"), "no", "NO")
+ 		self.addLanguage(_("Polish"), "pl", "PL")
+-		self.addLanguage(_("Portuguese"), "pt", "PT")
+ 		self.addLanguage(_("Russian"), "ru", "RU")
+-		self.addLanguage(_("Serbian"), "sr", "YU")
+-		self.addLanguage(_("Slovakian"), "sk", "SK")
+-		self.addLanguage(_("Slovenian"), "sl", "SI")
+-		self.addLanguage(_("Spanish"), "es", "ES")
+-		self.addLanguage(_("Swedish"), "sv", "SE")
+-		self.addLanguage(_("Turkish"), "tr", "TR")
+-		self.addLanguage(_("Ukrainian"), "uk", "UA")
+-		self.addLanguage(_("Frisian"), "fy", "x-FY") # there is no separate country for frisian
+ 
+ 		self.callbacks = []
+
+--- enigma2-nightly.org/lib/python/Screens/InfoBar.py	2011-10-03 23:01:44.000000000 +0200
++++ enigma2-nightly/lib/python/Screens/InfoBar.py	2011-10-04 15:26:13.818571915 +0200
+@@ -53,7 +53,10 @@
+ #+++>
+ 				"toogleTvRadio": (self.toogleTvRadio, _("toggels betwenn tv and radio...")), 
+ 				"volumeUp": (self._volUp, _("...")), 
+-				"volumeDown": (self._volDown, _("...")), 
++				"volumeDown": (self._volDown, _("...")),
++# ------------------ Extra-Menu Patch Blue----------------
++				"pinkpanel": (self.callPinkPanelBlue, _("view PinkPanel...")),
++# ------------------ Extra-Menu Patch Blue----------------
+ #+++<
+ 			}, prio=2)
+ 		
+@@ -91,7 +94,13 @@
+ 		from Components.config import config, ConfigSubsection, ConfigInteger
+ 		config.audio = ConfigSubsection()
+ 		config.audio.volume = ConfigInteger(default = 100, limits = (0, 100))
+-		
++# ------------------ Extra-Menu Patch Blue----------------
++	def callPinkPanelBlue(self):
++                from Plugins.Extensions.PinkPanel.plugin import PinkPanelMenu, PinkPanelButton
++	        PinkPanelButton(self,"blue")
++		self.session.open(PinkPanelMenu)
++                PinkPanelButton(self,"")
++# ------------------ Extra-Menu Patch Blue----------------		
+ 	def volHide(self):
+ 		self.volumeDialog.hide()
+
+--- enigma2-nightly.org/lib/python/Screens/InfoBarGenerics.py	2011-10-03 23:01:44.000000000 +0200
++++ enigma2-nightly/lib/python/Screens/InfoBarGenerics.py	2011-10-04 20:39:10.978171232 +0200
+@@ -328,6 +328,8 @@
+ 				"zapDown": (self.zapDown, _("next channel")),
+ 				"historyBack": (self.historyBack, _("previous channel in history")),
+ 				"historyNext": (self.historyNext, _("next channel in history")),
++				"prevBouquet": (self.prevBouquet, _("previous bouquet")),
++				"nextBouquet": (self.nextBouquet, _("next bouquet")),
+ 				"openServiceList": (self.openServiceList, _("open servicelist")),
+ 			})
+ 
+@@ -366,6 +368,16 @@
+ 	def openServiceList(self):
+ 		self.session.execDialog(self.servicelist)
+ 
++	def prevBouquet(self):
++		if self.servicelist.inBouquet():
++			self.servicelist.prevBouquet()
++			self.servicelist.zap()
++
++	def nextBouquet(self):
++		if self.servicelist.inBouquet():
++			self.servicelist.nextBouquet()
++			self.servicelist.zap()
++
+ 	def zapUp(self):
+ 		if self.servicelist.inBouquet():
+ 			prev = self.servicelist.getCurrentSelection()
+@@ -2290,7 +2302,6 @@
+ 			eDVBServicePMTHandler.eventNoResources: _("No free tuner!"),
+ 			eDVBServicePMTHandler.eventTuneFailed: _("Tune failed!"),
+ 			eDVBServicePMTHandler.eventNoPAT: _("No data on transponder!\n(Timeout reading PAT)"),
+-			eDVBServicePMTHandler.eventNoPATEntry: _("Service not found!\n(SID not found in PAT)"),
+ 			eDVBServicePMTHandler.eventNoPMT: _("Service invalid!\n(Timeout reading PMT)"),
+ 			eDVBServicePMTHandler.eventNewProgramInfo: None,
+ 			eDVBServicePMTHandler.eventTuned: None,
+
+--- enigma2-nightly.org/lib/python/Components/Harddisk.py	2011-11-02 14:06:14.129546161 +0100
++++ enigma2-nightly/lib/python/Components/Harddisk.py	2011-11-02 14:05:59.077471517 +0100
+@@ -122,7 +122,8 @@
+ 		cap = self.diskSize()
+ 		if cap == 0:
+ 			return ""
+-		return "%d.%03d GB" % (cap/1000, cap%1000)
++#		return "%d.%03d GB" % (cap/1000, cap%1000)
++		return "%d GB" % (cap/1000)
+ 
+ 	def model(self):
+ 		if self.device[:2] == "hd":
+@@ -471,18 +472,12 @@
+ #---<
+ #+++>
+ DEVICEDB =  \
+-	{"ufs910":
++	{"spark":
+ 		{
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.4/1-1.4:1.0": "Front USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0": "Back, lower USB Slot",
+-		},
+-	"UFS922":
+-		{
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.1/1-1.1:1.0/": "Back, upper USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0/": "Back, lower USB Slot",
+-			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0/": "Front USB Slot",
+-		}	
++			"/devices/platform/st-usb.0/stm-ehci.0/usb1/1-1/1-1:1.0": "USB Slot"
++#			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.3/1-1.3:1.0": "Back, upper USB Slot",
++#			"/devices/platform/ST40-ehci.2/usb1/1-1/1-1.2/1-1.2:1.0": "Back, lower USB Slot",
++		}
+ 	}
+ #+++<
+ 
+@@ -528,7 +523,7 @@
+ #-			if dev in (7, 31): # loop, mtdblock
+ #---<
+ #+++>
+-			if dev in [1, 7, 31, 253]: # ram, loop, mtdblock, ramzswap
++			if dev in [1, 7, 31, 253, 254]: # ram, loop, mtdblock, ramzswap, ramzswap0
+ #+++<
+ 				blacklisted = True
+ 			if blockdev[0:2] == 'sr':
+@@ -609,7 +604,7 @@
+ 		l = len(device)
+ 		if l and not device[l-1].isdigit():
+ 			error, blacklisted, removable, is_cdrom, partitions, medium_found = self.getBlockDevInfo(device)
+-			if not blacklisted and not removable and not is_cdrom and medium_found:
++			if not blacklisted and not is_cdrom and medium_found:
+ 				self.hdd.append(Harddisk(device))
+ 				self.hdd.sort()
+ 				SystemInfo["Harddisk"] = len(self.hdd) > 0
+
+--- enigma2-nightly.org/lib/python/Components/InputDevice.py	2011-11-04 23:16:03.373410299 +0100
++++ enigma2-nightly/lib/python/Components/InputDevice.py	2011-11-04 23:16:14.133463678 +0100
+@@ -40,7 +40,7 @@
+ 				self.name = self.name[:self.name.find("\0")]
+ 				os_close(self.fd)
+ 			except (IOError,OSError), err:
+-				print '[iInputDevices] getInputDevices  <ERROR: ioctl(EVIOCGNAME): ' + str(err) + ' >'
++				#print '[iInputDevices] getInputDevices  <ERROR: ioctl(EVIOCGNAME): ' + str(err) + ' >'
+ 				self.name = None
+ 			
+ 			if self.name:
+
+--- enigma2-nightly.org/skin.py	2011-11-04 23:26:21.596475897 +0100
++++ enigma2-nightly/skin.py	2011-11-04 23:26:29.040512808 +0100
+@@ -550,7 +550,7 @@
+ 						c = i
+ 
+ 				if c is None:
+-					print "allocating new converter!"
++					#print "allocating new converter!"
+ 					c = converter_class(parms)
+ 					c.connect(source)
+ 				else:
+
+--- enigma2-nightly.org/lib/dvb/pmt.cpp	2011-11-04 23:47:00.034616978 +0100
++++ enigma2-nightly/lib/dvb/pmt.cpp	2011-11-04 23:47:08.590659408 +0100
+@@ -815,7 +815,7 @@
+ 
+ eDVBCAService::~eDVBCAService()
+ {
+-	eDebug("[eDVBCAService] free service %s", m_service.toString().c_str());
++	//eDebug("[eDVBCAService] free service %s", m_service.toString().c_str());
+ 	::close(m_sock);
+ }
+ 
+@@ -879,7 +879,7 @@
+ 				{
+ 					if ( !freed && caservice->m_used_demux[iter] == demux_nums[i] )
+ 					{
+-						eDebug("[eDVBCAService] free slot %d demux %d for service %s", iter, caservice->m_used_demux[iter], caservice->m_service.toString().c_str() );
++						//eDebug("[eDVBCAService] free slot %d demux %d for service %s", iter, caservice->m_used_demux[iter], caservice->m_service.toString().c_str() );
+ 						caservice->m_used_demux[iter] = 0xFF;
+ 						freed=true;
+ 					}
+@@ -919,7 +919,7 @@
+ {
+ 	if ( chan )
+ 	{
+-		eDebug("[eDVBCAService] new channel %p!", chan);
++		//eDebug("[eDVBCAService] new channel %p!", chan);
+ 		channel_data *data = new channel_data();
+ 		data->m_channel = chan;
+ 		data->m_prevChannelState = -1;
+@@ -943,12 +943,12 @@
+ 			{
+ 				case iDVBChannel::state_ok:
+ 				{
+-					eDebug("[eDVBCAService] channel %p running", chan);
++					//eDebug("[eDVBCAService] channel %p running", chan);
+ 					break;
+ 				}
+ 				case iDVBChannel::state_release:
+ 				{
+-					eDebug("[eDVBCAService] remove channel %p", chan);
++					//eDebug("[eDVBCAService] remove channel %p", chan);
+ 					unsigned char msg[8] = { 0x9f,0x80,0x3f,0x04,0x83,0x02,0x00,0x00 };
+ 					msg[7] = it->second->m_dataDemux & 0xFF;
+ 					int sock, clilen;
+@@ -1235,7 +1235,7 @@
+ 	if ( write(m_sock, m_capmt, wp) == wp )
+ 	{
+ 		m_sendstate=0xFFFFFFFF;
+-		eDebug("[eDVBCAService] send %d bytes",wp);
++		//eDebug("[eDVBCAService] send %d bytes",wp);
+ 		eDVBChannelID chid;
+ 		m_service.getChannelID(chid);
+ 		channel_data *data = getChannelData(chid);
+
+--- enigma2-nightly.org/lib/dvb/epgcache.cpp	2011-11-04 21:21:58.822934284 +0100
++++ enigma2-nightly/lib/dvb/epgcache.cpp	2011-11-04 23:54:06.868733562 +0100
+@@ -817,7 +817,7 @@
+ 	singleLock s(cache_lock);
+ 	if (!eventDB.empty())
+ 	{
+-		eDebug("[EPGC] start cleanloop");
++		//eDebug("[EPGC] start cleanloop");
+ 
+ 		time_t now = ::time(0);
+ 
+@@ -874,8 +874,8 @@
+ 			}
+ #endif
+ 		}
+-		eDebug("[EPGC] stop cleanloop");
+-		eDebug("[EPGC] %i bytes for cache used", eventData::CacheSize);
++		//eDebug("[EPGC] stop cleanloop");
++		//eDebug("[EPGC] %i bytes for cache used", eventData::CacheSize);
+ 	}
+ 	cleanTimer->start(CLEAN_INTERVAL,true);
+ }
+
+--- enigma2-nightly.org/timer.py	2011-11-04 21:21:56.894924727 +0100
++++ enigma2-nightly/timer.py	2011-11-05 00:11:57.722043611 +0100
+@@ -201,7 +201,7 @@
+ 	
+ 	def setNextActivation(self, when):
+ 		delay = int((when - time()) * 1000)
+-		print "[timer.py] next activation: %d (in %d ms)" % (when, delay)
++		#print "[timer.py] next activation: %d (in %d ms)" % (when, delay)
+ 		
+ 		self.timer.start(delay, 1)
+ 		self.next = when
+
+--- enigma2-nightly.org/data/skin.xml	2011-11-05 00:16:42.967458066 +0100
++++ enigma2-nightly/data/skin.xml	2011-11-05 19:07:27.931236326 +0100
+@@ -281,6 +281,10 @@
+ 			<convert type="MenuEntryCompare">subtitle_selection</convert>
+ 			<convert type="ConditionalShowHide"/>
+ 		</widget>
++		<widget source="menu" render="Pixmap" pixmap="skin_default/menu/evomc.png" position="20,20" size="140,140" zPosition="1" alphatest="on">
++  			<convert type="MenuEntryCompare">EVO_MC</convert>
++  			<convert type="ConditionalShowHide"/>
++ 		</widget>
+ 	</screen>
+ 	<!-- Movieplayer infobar -->
+ 	<screen name="MoviePlayer" flags="wfNoBorder" position="0,380" size="720,160" title="InfoBar" backgroundColor="transparent">
+
+--- enigma2-nightly.org/lib/python/Screens/Volume.py	2011-11-05 20:00:30.923019944 +0100
++++ enigma2-nightly/lib/python/Screens/Volume.py	2011-11-05 20:00:41.715073445 +0100
+@@ -1,14 +1,13 @@
+ from Screen import Screen
+ from Components.VolumeBar import VolumeBar
+-		
++from Components.Label import Label #NEW LINE		
+ class Volume(Screen):
+ 	def __init__(self, session):
+ 		Screen.__init__(self, session)
+-		
+ 		self.volumeBar = VolumeBar()
+-		
+ 		self["Volume"] = self.volumeBar
+-		
++		self["VolumeText"] = Label("") #NEW LINE
++
+ 	def setValue(self, vol):
+-		print "setValue", vol
+ 		self.volumeBar.setValue(vol)
++		self["VolumeText"].setText(str(vol)) #NEW LINE
+
+--- enigma2-nightly.org/lib/python/Plugins/SystemPlugins/VFD-Icons/plugin.py	2011-11-17 18:41:03.335982309 +0100
++++ enigma2-nightly/lib/python/Plugins/SystemPlugins/VFD-Icons/plugin.py	2011-11-17 18:40:49.851915438 +0100
+@@ -1,15 +1,16 @@
+ # -*- coding: utf-8 -*-
+ from Plugins.Plugin import PluginDescriptor
+ import ServiceReference
+-from enigma import iPlayableService, eTimer, eServiceCenter, iServiceInformation
+-from enigma import evfd
+-import time
++from enigma import iPlayableService, eTimer, eServiceCenter, iServiceInformation, evfd
++from time import time, localtime, strftime
+ from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
+ 
+ class VFDIcons:
+ 	def __init__(self, session):
+ 		# Save Session&Servicelist, Create Timer, Init Services
+ 		self.session = session
++		self.timer = eTimer()
++		self.timer.timeout.get().append(self.timerEvent)
+ 		self.service = None
+ 		self.onClose = [ ]
+ 		self.__event_tracker = ServiceEventTracker(screen=self,eventmap=
+@@ -24,7 +25,18 @@
+ 		session.nav.record_event.append(self.gotRecordEvent)
+ 		self.mp3Available = False
+ 		self.dolbyAvailable = False
+-		
++	def startTimer(self):
++		self.timer.startLongTimer(15)
++	def StopTimer(self, result):
++		if result:
++			self.timer.stop()
++			self.service = None
++	def timerEvent(self):
++		tm=localtime()
++		servicename = strftime("%H%M",tm) 
++		evfd.getInstance().vfd_write_string(servicename[0:17])
++		self.startTimer()
++
+ 	def __evStart(self):
+ 		print "[__evStart]"
+ 		self.__evSeekableStatusChanged()	
+@@ -45,21 +57,25 @@
+ 			# show the MP3 tag
+ 			servicename = currPlay.info().getInfoString(iServiceInformation.sTagTitle)
+ 		else:
++			tm=localtime()
++			servicename=strftime("%H%M",tm)
+ 			# show the service name
+-			self.service = self.session.nav.getCurrentlyPlayingServiceReference()
+-			if not self.service is None:
+-				service = self.service.toCompareString()
+-				servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
+-				subservice = self.service.toString().split("::")
+-				if subservice[0].count(':') == 9:
+-					servicename = subservice[1].replace('\xc2\x87', '').replace('\xc3\x9f', 'ss').replace('\xc2\x86', '').ljust(16)
+-				else:
+-					servicename=servicename
+-			else:
+-				print "no Service found"
+-		
+-		print "vfd display text:", servicename[0:63]
+-		evfd.getInstance().vfd_write_string(servicename[0:63])
++		#	self.service = self.session.nav.getCurrentlyPlayingServiceReference()
++		#	if not self.service is None:
++		#		service = self.service.toCompareString()
++		#		servicename = ServiceReference.ServiceReference(service).getServiceName().replace('\xc2\x87', '').replace('\xc2\x86', '').ljust(16)
++		#		subservice = self.service.toString().split("::")
++		#		if subservice[0].count(':') == 9:
++		#			servicename = subservice[1].replace('\xc2\x87', '').replace('\xc3\x9f', 'ss').replace('\xc2\x86', '').ljust(16)
++		#		else:
++		#			servicename=servicename
++		#	else:
++		#		print "no Service found"
++		
++		#print "vfd display text:", servicename[0:63]
++		#evfd.getInstance().vfd_write_string(servicename[0:63])
++		evfd.getInstance().vfd_write_string( servicename )
++
+ 		return 1
+ 		
+ 	def showCrypted(self):
+@@ -143,12 +159,16 @@
+ 		
+ 
+ VFDIconsInstance = None
+-
++timerInstance = None
+ def main(session, **kwargs):
+ 	# Create Instance if none present, show Dialog afterwards
+ 	global VFDIconsInstance
++	global timerInstance
+ 	if VFDIconsInstance is None:
+ 		VFDIconsInstance = VFDIcons(session)
++		timerInstance = VFDIcons(session)
++	timerInstance.startTimer()
++	timerInstance.timerEvent()
+ 
+ def Plugins(**kwargs):
+  	return [ PluginDescriptor(name="VFDIcons", description="Icons in VFD", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=main ) ]
+
+--- enigma2-nightly.org/lib/python/Plugins/Extensions/Makefile.am	2011-11-18 01:31:20.698053212 +0100
++++ enigma2-nightly/lib/python/Plugins/Extensions/Makefile.am	2011-11-18 01:31:07.941989960 +0100
+@@ -1,6 +1,6 @@
+ installdir = $(pkglibdir)/python/Plugins/Extensions
+ 
+-SUBDIRS = CutListEditor PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI DVDPlayer DVDBurn
++SUBDIRS = CutListEditor PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI DVDBurn
+ 
+ if ENABLE_TF7700
+ SUBDIRS += TopfieldVFD

@@ -78,48 +78,38 @@ endif
 #
 # AUTOFS
 #
-if ENABLE_ADB_BOX
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
-	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
-	touch $@
-else
 if ENABLE_TF7700
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_UFS912
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_HS7810A
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
-	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
-	touch $@
-else
-if ENABLE_HS7110
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_HL101
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_SPARK
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_SPARK7162
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
 if ENABLE_ATEVIO7500
-$(DEPDIR)/autofs.do_prepare: $(archivedir)/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
+$(DEPDIR)/autofs.do_prepare:  Archive/stlinux23-sh4-autofs-3.1.7-13.sh4.rpm
 	rpm $(DRPM) --noscripts --badreloc --relocate /opt/STM/STLinux-2.3/devkit/sh4/target=$(prefix)/cdkroot --ignorearch --nodeps --nosignature -Uhv $<
 	touch $@
 else
@@ -133,19 +123,13 @@ endif
 endif
 endif
 endif
-endif
-endif
 
 $(DEPDIR)/autofs.do_compile: bootstrap $(DEPDIR)/autofs.do_prepare
-if ENABLE_ADB_BOX
-else
 if ENABLE_TF7700
 else
 if ENABLE_UFS912
 else
 if ENABLE_HS7810A
-else
-if ENABLE_HS7110
 else
 if ENABLE_HL101
 else
@@ -165,8 +149,6 @@ endif
 endif
 endif
 endif
-endif
-endif
 	touch $@
 
 $(DEPDIR)/min-autofs $(DEPDIR)/std-autofs $(DEPDIR)/max-autofs $(DEPDIR)/ipk-autofs \
@@ -174,9 +156,6 @@ $(DEPDIR)/autofs: \
 $(DEPDIR)/%autofs: $(AUTOFS_ADAPTED_ETC_FILES:%=root/etc/%) \
 		$(DEPDIR)/autofs.do_compile
 	@[ "x$*" = "xipk-" ] && rm -rf  $(prefix)/$*cdkroot || true
-if ENABLE_ADB_BOX
-	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default
-else
 if ENABLE_TF7700
 	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default
 else
@@ -184,9 +163,6 @@ if ENABLE_UFS912
 	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default
 else
 if ENABLE_HS7810A
-	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default
-else
-if ENABLE_HS7110
 	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default
 else
 if ENABLE_HL101
@@ -204,8 +180,6 @@ else
 	$(INSTALL) -d $(prefix)/$*cdkroot/etc/default && \
 	cd @DIR_autofs@  && \
 		@INSTALL_autofs@
-endif
-endif
 endif
 endif
 endif

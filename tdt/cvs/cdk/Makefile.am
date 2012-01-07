@@ -94,7 +94,7 @@ include make/libtuxbox.mk
 include make/yaud.mk
 
 # Include record targets
-#include make/record.mk
+include make/record.mk
 
 # Include prog targets
 include make/prog.mk

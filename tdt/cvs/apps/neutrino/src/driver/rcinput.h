@@ -249,11 +249,7 @@ class CRCInput
 #if HAVE_DVB_API_VERSION == 1
 			return fd_gamerc;
 #else
-#ifdef PLATFORM_SPARK
-			return fd_rc[1];
-#else
 			return fd_rc[0];
-#endif
 #endif
 		}
 		void stopInput();

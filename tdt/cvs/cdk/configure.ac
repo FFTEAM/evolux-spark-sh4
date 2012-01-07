@@ -193,12 +193,6 @@ AC_ARG_ENABLE(mediafwgstreamer,
 AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
 AC_SUBST(MEDIAFWGSTREAMER)
 
-AC_ARG_ENABLE(externallcd,
-	AS_HELP_STRING(--enable-externallcd,	set up the CDK to use graphlcd),
-	,[enable_externallcd=no])
-AM_CONDITIONAL(ENABLE_EXTERNALLCD,test "$enable_externallcd" = "yes")
-AC_SUBST(EXTERNALLCD)
-
 AC_ARG_ENABLE(flashrules,
 	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
 	,[enable_flashrules=yes])
@@ -604,10 +598,6 @@ else
 fi
 AC_SUBST(TUXBOX_CHECKIMAGE)
 
-AC_ARG_WITH(archivedir,
-	[ --with-archivedir=DIR where to store downloaded files [[Archive/]]],
-	[archivedir="$with_archivedir"],[archivedir="$buildprefix/Archive"])
-
 AC_ARG_WITH(cvsdir,
 	[  --with-cvsdir=DIR       where to find the cvs],
 	[cvsdir="$with_cvsdir"],[cvsdir="NONE"])
@@ -630,7 +620,7 @@ AC_ARG_WITH(hostappsdir,
 
 AC_ARG_WITH(gnuserver,
 	[  --with-gnuserver=ADDRESS   the gnu server for gnu-stuff (without ftp://)],
-	[gnuserver="$with_gnuserver"],[gnuserver=ftp.gwdg.de/pub/misc/gnu/ftp/gnu])
+	[gnuserver="$with_gnuserver"],[gnuserver="NONE"])
 
 AC_ARG_WITH(defaultserver,
 	[  --with-defaultserver=ADDRESS   the server that is taken if no server is given/works (without http://)],
@@ -664,12 +654,17 @@ else
 	fi
 fi
 
+if test "$gnuserver" = "NONE"; then
+	gnuserver="ftp.gwdg.de/pub/misc/gnu/ftp/gnu"
+fi
+
 if test "$defaultserver" = "NONE"; then
 	defaultserver=""
 fi
 
 dircheck="ok"
 AC_MSG_CHECKING([for apps directory])
+#if test ! -f "$appsdir/dvb/zapit/configure.ac" ; then
 if test ! -f "$appsdir/enigma2/configure.ac" ; then
 	AC_MSG_WARN([appsdir $appsdir not found])
 	appsdir="missing_appsir"
@@ -711,7 +706,6 @@ AC_SUBST(driverdir)
 AC_SUBST(hostappsdir)
 AC_SUBST(gnuserver)
 AC_SUBST(defaultserver)
-AC_SUBST(archivedir)
 
 AC_PATH_PROG(M4,m4,no)
 if test "$M4" = "no"; then
@@ -867,14 +861,6 @@ else
 fi
 fi
 
-AC_SUBST(EXTERNALLCD_DEP)
-
-if test "$enable_externallcd" == "yes"; then
-	EXTERNALLCD_DEP="graphlcd"
-else
-	EXTERNALLCD_DEP=""
-fi
-
 AC_SUBST(MEDIAFW)
 AC_SUBST(MEDIAFW_DEP)
 
@@ -1019,7 +1005,6 @@ TUXBOX_RULES_MAKE(gst_plugins_ugly)
 TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
 TUXBOX_RULES_MAKE(libalsa)
-TUXBOX_RULES_MAKE(libusb)
 
 #
 # GUI
@@ -1140,6 +1125,14 @@ fi
 AC_SUBST(DRPM)
 AC_SUBST(DRPMBUILD)
 
+#	old
+#test -d ../../Archive || mkdir ../../Archive
+#ln -sf ../../Archive
+
+test -d ~/Archive || mkdir ~/Archive
+ln -sf ~/Archive
+install -d $stockdir/{conf,root,.app,.eme,.dat}
+
 #
 # internal
 #
@@ -1193,7 +1186,6 @@ boot directory              : $bootdir
 driver directory            : $driverdir
 host apps directory         : $hostappsdir
 customization directory     : $customizationsdir
-archive directory	    : $archivedir
 ucode directory             : $ucodesdir
 GNU server                  : $gnuserver
 default server              : $defaultserver
@@ -1241,8 +1233,6 @@ Multicom324                 : $enable_multicom324
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
-EXTERNALLCD                 : $enable_externallcd
-EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
 ])
 
 if test "$dircheck" = "fail"; then

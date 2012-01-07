@@ -138,7 +138,7 @@ $(DEPDIR)/lirc.do_compile: $(DEPDIR)/lirc.do_prepare
 	cd @DIR_lirc@ && \
 		$(BUILDENV) \
 		ac_cv_path_LIBUSB_CONFIG= \
-		CFLAGS="$(TARGET_CFLAGS) -Os -D__KERNEL_STRICT_NAMES" \
+		CFLAGS="$(TARGET_CFLAGS) -Os" \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -691,10 +691,6 @@ $(DEPDIR)/directfb.do_compile: bootstrap freetype directfb.do_prepare
 			--disable-devmem \
 			--disable-multi \
 			--with-gfxdrivers=stgfx \
-			--with-inputdrivers=linuxinput \
-			--without-software \
-			--enable-stmfbdev \
-			--disable-fbdev \
 			--enable-mme=yes && \
 			export top_builddir=`pwd` && \
 		$(MAKE) LD=$(target)-ld
@@ -1230,8 +1226,10 @@ $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL: \
 #
 $(DEPDIR)/ffmpeg.do_prepare: bootstrap libass @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
+if STM23
 	cd @DIR_ffmpeg@ && \
 	patch -p1 < ../Patches/ffmpeg.patch;
+endif
 	touch $@
 
 #$(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
@@ -1712,7 +1710,7 @@ $(DEPDIR)/gst_plugins_base.do_compile: $(DEPDIR)/gst_plugins_base.do_prepare
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
-		--disable-theora --disable-pango --disable-vorbis --disable-x
+		--disable-theora --disable-pango --disable-vorbis
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_base $(DEPDIR)/std-gst_plugins_base $(DEPDIR)/max-gst_plugins_base \
@@ -1736,7 +1734,7 @@ $(DEPDIR)/gst_plugins_good.do_compile: $(DEPDIR)/gst_plugins_good.do_prepare
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-esd --disable-esdtest \
-		--disable-shout2 --disable-shout2test --disable-x
+		--disable-shout2 --disable-shout2test
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_good $(DEPDIR)/std-gst_plugins_good $(DEPDIR)/max-gst_plugins_good \
@@ -1883,65 +1881,6 @@ $(DEPDIR)/%gst_plugins_dvbmediasink: $(DEPDIR)/gst_plugins_dvbmediasink.do_compi
 		@INSTALL_gst_plugins_dvbmediasink@
 	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
-
-################ EXTERNAL_CLD #############################
-
-# libusb 
-# 
-$(DEPDIR)/libusb.do_prepare:  @DEPENDS_libusb@ 
-	@PREPARE_libusb@ 
-	touch $@ 
- 
-$(DEPDIR)/libusb.do_compile: $(DEPDIR)/libusb.do_prepare 
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libusb@ && \
-	$(BUILDENV) \
-	./configure \
-		--host=$(target) \
-		--prefix=/usr && \
-		$(MAKE) all
-	touch $@
- 
-$(DEPDIR)/min-libusb $(DEPDIR)/std-libusb $(DEPDIR)/max-libusb \
-$(DEPDIR)/libusb: \
-$(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
-	@[ "x$*" = "x" ] && touch $@ || true
-	cd @DIR_libusb@ && \
-		@INSTALL_libusb@
-	@TUXBOX_YAUD_CUSTOMIZE@
-
-# graphlcd
-$(DEPDIR)/graphlcd.do_prepare:	libusb
-	[ -d graphlcd-base ] && \
-    rm -rf graphlcd-base; \
-	git clone git://projects.vdr-developer.org/graphlcd-base.git --branch touchcol graphlcd-base;
-	cd graphlcd-base && \
-    patch -p0 <../Patches/graphlcd.patch
-	touch $@
-
-$(DEPDIR)/graphlcd.do_compile: $(DEPDIR)/graphlcd.do_prepare
-	cd graphlcd-base && \
-	$(BUILDENV) && \
-	$(MAKE) all
-	touch $@
-
-$(DEPDIR)/min-graphlcd $(DEPDIR)/std-graphlcd $(DEPDIR)/max-graphlcd \
-$(DEPDIR)/graphlcd: \
-$(DEPDIR)/%graphlcd: $(DEPDIR)/graphlcd.do_compile
-	@[ "x$*" = "x" ] && touch $@ || true
-	cd graphlcd-base && \
-		cp glcddrivers/*.so* $(targetprefix)/usr/lib/ && \
-		cp glcdgraphics/*.so* $(targetprefix)/usr/lib/ && \
-		cp glcdskin/*.so* $(targetprefix)/usr/lib/ && \
-		cp tools/showpic/showpic $(targetprefix)/usr/bin/ && \
-		cp tools/showtext/showtext $(targetprefix)/usr/bin/ && \
-		cp graphlcd.conf $(targetprefix)/etc/
-	@TUXBOX_YAUD_CUSTOMIZE@
-
-#$(DEPDIR)/graphlcd: graphlcd.do_compile
-#	touch $@
-
-################ END EXTERNAL_CLD #############################
 
 #
 # eve-browser

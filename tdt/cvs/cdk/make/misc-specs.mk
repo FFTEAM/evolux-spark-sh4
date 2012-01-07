@@ -13,35 +13,7 @@ $(DEPDIR)/boot-elf:
 	cp $(buildprefix)/root/firmware/*.fw $(targetprefix)/lib/firmware/
 	@[ "x$*" = "x" ] && touch $@ || true
 
-if ENABLE_ADB_BOX
-LIRCD_CONF := lircd_adb_box.conf
-else !ENABLE_ADB_BOX
-if ENABLE_SPARK
 LIRCD_CONF := lircd_spark.conf
-else !ENABLE_SPARK
-if ENABLE_SPARK7162
-LIRCD_CONF := lircd_spark7162.conf
-else !ENABLE_SPARK7162
-if ENABLE_HL101
-LIRCD_CONF := lircd_hl101.conf
-else !ENABLE_HL101
-if ENABLE_VIP1_V2
-LIRCD_CONF := lircd_vip1_v2.conf
-else !ENABLE_VIP1_V2
-if ENABLE_VIP2_V1
-LIRCD_CONF := lircd_vip2_v1.conf
-else !ENABLE_VIP2_V1
-if ENABLE_HOMECAST5101
-LIRCD_CONF := lircd_hs5101.conf
-else !ENABLE_HOMECAST5101
-LIRCD_CONF := lircd.conf
-endif !ENABLE_HOMECAST5101
-endif !ENABLE_VIP2_V1
-endif !ENABLE_VIP1_V2
-endif !ENABLE_HL101
-endif !ENABLE_SPARK7162
-endif !ENABLE_SPARK
-endif !ENABLE_ADB_BOX
 
 $(DEPDIR)/misc-cp:
 	cp $(buildprefix)/root/sbin/hotplug $(targetprefix)/sbin
@@ -98,7 +70,7 @@ $(SPLASHUTILS_RPM): \
 		$(if $(SPLASHUTILS_SPEC_PATCH),Patches/$(SPLASHUTILS_PATCH)) \
 		$(if $(SPLASHUTILS_PATCHES),$(SPLASHUTILS_PATCHES:%=Patches/%)) \
 		jpeg libmng freetype libpng \
-		$(archivedir)/stlinux23-target-$(SPLASHUTILS)-$(SPLASHUTILS_VERSION).src.rpm
+		Archive/stlinux23-target-$(SPLASHUTILS)-$(SPLASHUTILS_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(SPLASHUTILS_SPEC_PATCH),( cd SPECS && patch -p1 $(SPLASHUTILS_SPEC) < ../Patches/$(SPLASHUTILS_SPEC_PATCH) ) &&) \
 	$(if $(SPLASHUTILS_PATCHES),cp $(SPLASHUTILS_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -166,7 +138,7 @@ BINUTILS_DEV_RPM := RPMS/sh4/$(STLINUX)-sh4-$(BINUTILS_DEV)-$(BINUTILS_VERSION).
 $(BINUTILS_RPM) $(BINUTILS_DEV_RPM): \
 		$(if $(BINUTILS_SPEC_PATCH),Patches/$(BINUTILS_PATCH)) \
 		$(if $(BINUTILS_PATCHES),$(BINUTILS_PATCHES:%=Patches/%)) \
-		$(archivedir)/$(STLINUX:%23=%24)-target-$(BINUTILS)-$(BINUTILS_VERSION).src.rpm
+		Archive/$(STLINUX:%23=%24)-target-$(BINUTILS)-$(BINUTILS_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(BINUTILS_SPEC_PATCH),( cd SPECS && patch -p1 $(BINUTILS_SPEC) < ../Patches/$(BINUTILS_SPEC_PATCH) ) &&) \
 	$(if $(BINUTILS_PATCHES),cp $(BINUTILS_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -211,7 +183,7 @@ STSLAVE_RPM := RPMS/sh4/$(STLINUX)-sh4-$(STSLAVE)-$(STSLAVE_VERSION).sh4.rpm
 $(STSLAVE_RPM): \
 		$(if $(STSLAVE_SPEC_PATCH),Patches/$(STSLAVE_PATCH)) \
 		$(if $(STSLAVE_PATCHES),$(STSLAVE_PATCHES:%=Patches/%)) \
-		$(archivedir)/$(STLINUX:%23=%24)-target-$(STSLAVE)-$(STSLAVE_VERSION).src.rpm
+		Archive/$(STLINUX:%23=%24)-target-$(STSLAVE)-$(STSLAVE_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(STSLAVE_SPEC_PATCH),( cd SPECS && patch -p1 $(STSLAVE_SPEC) < ../Patches/$(STSLAVE_SPEC_PATCH) ) &&) \
 	$(if $(STSLAVE_PATCHES),cp $(STSLAVE_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -274,7 +246,7 @@ OPENSSL_DEV_RPM := RPMS/sh4/$(STLINUX)-sh4-$(OPENSSL_DEV)-$(OPENSSL_VERSION).sh4
 $(OPENSSL_RPM) $(OPENSSL_DEV_RPM): \
 		$(if $(OPENSSL_SPEC_PATCH),Patches/$(OPENSSL_PATCH)) \
 		$(if $(OPENSSL_PATCHES),$(OPENSSL_PATCHES:%=Patches/%)) \
-		$(archivedir)/$(STLINUX)-target-$(OPENSSL)-$(OPENSSL_VERSION).src.rpm
+		Archive/$(STLINUX)-target-$(OPENSSL)-$(OPENSSL_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(OPENSSL_SPEC_PATCH),( cd SPECS && patch -p1 $(OPENSSL_SPEC) < ../Patches/$(OPENSSL_SPEC_PATCH) ) &&) \
 	$(if $(OPENSSL_PATCHES),cp $(OPENSSL_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -326,7 +298,7 @@ ALSALIB_DEV_RPM := RPMS/sh4/$(STLINUX)-sh4-$(ALSALIB_DEV)-$(ALSALIB_VERSION).sh4
 $(ALSALIB_RPM) $(ALSALIB_DEV_RPM): \
 		$(if $(ALSALIB_SPEC_PATCH),Patches/$(ALSALIB_SPEC_PATCH)) \
 		$(if $(ALSALIB_PATCHES),$(ALSALIB_PATCHES:%=Patches/%)) \
-		$(archivedir)/$(STLINUX)-target-$(ALSALIB)-$(ALSALIB_VERSION).src.rpm
+		Archive/$(STLINUX)-target-$(ALSALIB)-$(ALSALIB_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(ALSALIB_SPEC_PATCH),( cd SPECS && patch -p1 $(ALSALIB_SPEC) < ../Patches/$(ALSALIB_SPEC_PATCH) ) &&) \
 	$(if $(ALSALIB_PATCHES),cp $(ALSALIB_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -385,7 +357,7 @@ $(ALSAUTILS_RPM): \
 		$(if $(ALSAUTILS_SPEC_PATCH),Patches/$(ALSAUTILS_PATCH)) \
 		$(if $(ALSAUTILS_PATCHES),$(ALSAUTILS_PATCHES:%=Patches/%)) \
 		$(NCURSES_DEV) $(ALSALIB_DEV) \
-		$(archivedir)/$(STLINUX)-target-$(ALSAUTILS)-$(ALSAUTILS_VERSION).src.rpm
+		Archive/$(STLINUX)-target-$(ALSAUTILS)-$(ALSAUTILS_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(ALSAUTILS_SPEC_PATCH),( cd SPECS && patch -p1 $(ALSAUTILS_SPEC) < ../Patches/$(ALSAUTILS_SPEC_PATCH) ) &&) \
 	$(if $(ALSAUTILS_PATCHES),cp $(ALSAUTILS_PATCHES:%=Patches/%) SOURCES/ &&) \
@@ -442,7 +414,7 @@ $(ALSAPLAYER_RPM) $(ALSAPLAYER_DEV_RPM): \
 		$(if $(ALSAPLAYER_SPEC_PATCH),Patches/$(ALSAPLAYER_PATCH)) \
 		$(if $(ALSAPLAYER_PATCHES),$(ALSAPLAYER_PATCHES:%=Patches/%)) \
 		libmad libid3tag \
-		$(archivedir)/$(STLINUX:%23=%24)-target-$(ALSAPLAYER)-$(ALSAPLAYER_VERSION).src.rpm
+		Archive/$(STLINUX:%23=%24)-target-$(ALSAPLAYER)-$(ALSAPLAYER_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
 	$(if $(ALSAPLAYER_SPEC_PATCH),( cd SPECS && patch -p1 $(ALSAPLAYER_SPEC) < ../Patches/$(ALSAPLAYER_SPEC_PATCH) ) &&) \
 	$(if $(ALSAPLAYER_PATCHES),cp $(ALSAPLAYER_PATCHES:%=Patches/%) SOURCES/ &&) \

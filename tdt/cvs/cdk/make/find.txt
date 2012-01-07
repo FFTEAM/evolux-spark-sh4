@@ -1,0 +1,171 @@
+contrib-libs.mk:			--with-python=$(crossprefix) \
+contrib-libs.mk:		[ -f "$(targetprefix)/usr/lib/python2.6/site-packages/libxml2mod.la" ] && \
+contrib-libs.mk:		sed -e "/^dependency_libs/ s,/usr/lib/libxml2.la,$(targetprefix)/usr/lib/libxml2.la,g" -i $(targetprefix)/usr/lib/python2.6/site-packages/libxml2mod.la; \
+contrib-libs.mk:	rm $*/usr/lib/python2.6/site-packages/libxml2mod.a && \
+contrib-libs.mk:			--with-python=$(crossprefix) \
+contrib-libs.mk:		sed -e "/^dependency_libs/ s,/usr/lib/libxslt.la,$(targetprefix)/usr/lib/libxslt.la,g" -i $(targetprefix)/usr/lib/python2.6/site-packages/libxsltmod.la && \
+contrib-libs.mk:		sed -e "/^dependency_libs/ s,/usr/lib/libexslt.la,$(targetprefix)/usr/lib/libexslt.la,g" -i $(targetprefix)/usr/lib/python2.6/site-packages/libxsltmod.la && \
+contrib-libs.mk:	rm $*/usr/lib/python2.6/site-packages/libxsltmod.a && \
+contrib-libs.mk:$(DEPDIR)/python.do_prepare: host-python @DEPENDS_python@
+contrib-libs.mk:	@PREPARE_python@ && \
+contrib-libs.mk:$(DEPDIR)/python.do_compile: openssl openssl-dev sqlite bootstrap python.do_prepare
+contrib-libs.mk:	( cd @DIR_python@ && \
+contrib-libs.mk:			HOSTPYTHON=$(crossprefix)/bin/python \
+contrib-libs.mk:			HOSTPYTHON=$(crossprefix)/bin/python \
+contrib-libs.mk:$(DEPDIR)/min-python $(DEPDIR)/std-python $(DEPDIR)/max-python \
+contrib-libs.mk:$(DEPDIR)/python: \
+contrib-libs.mk:$(DEPDIR)/%python: python.do_compile
+contrib-libs.mk:	( cd @DIR_python@ && \
+contrib-libs.mk:			HOSTPYTHON=$(crossprefix)/bin/python \
+contrib-libs.mk:	$(LN_SF) ../../libpython2.6.so.1.0 $(prefix)/$*cdkroot/usr/lib/python2.6/config/libpython2.6.so && \
+contrib-libs.mk:flash-python-enigma2: $(flashprefix)/root-enigma2/usr/bin/python
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/bin/python: \
+contrib-libs.mk:%/usr/bin/python: python.do_compile
+contrib-libs.mk:	( cd @DIR_python@ && \
+contrib-libs.mk:			HOSTPYTHON=$(crossprefix)/bin/python \
+contrib-libs.mk:	rm $*/usr/bin/{python,idle,pydoc,python2.6-config,python-config,smtpd.py} && \
+contrib-libs.mk:	$(LN_SF) python2.6 $@ && \
+contrib-libs.mk:	chmod 755 $*/usr/lib/libpython2.6.so.1.0 && \
+contrib-libs.mk:	rm -rf $*/usr/lib/python2.6/config/ && \
+contrib-libs.mk:$(DEPDIR)/%elementtree: %python elementtree.do_compile
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:#		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:flash-elementtree-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/elementtree
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/elementtree: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/elementtree: elementtree.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:$(DEPDIR)/lxml.do_compile: bootstrap python lxml.do_prepare
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py build \
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:flash-lxml-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/lxml
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/lxml: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/lxml: lxml.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py build
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py build
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:flash-zope-interface-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/zope/interface
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/zope/interface: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/zope/interface: zope-interface.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python -c "import setuptools; execfile('setup.py')" build
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:flash-twisted-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/twisted
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/twisted: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/twisted: twisted.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python -c "import setuptools; execfile('setup.py')" build
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:flash-twistedweb2-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/twisted/web2
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/twisted/web2: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/twisted/web2: twisted.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py build
+contrib-libs.mk:		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+contrib-libs.mk:flash-pyopenssl-enigma2: $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL
+contrib-libs.mk:$(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL: \
+contrib-libs.mk:%/usr/lib/python2.6/site-packages/OpenSSL: pyopenssl.do_compile
+contrib-libs.mk:		PYTHONPATH=$*/usr/lib/python2.6/site-packages \
+contrib-libs.mk:		$(crossprefix)/bin/python ./setup.py install --root=$* --prefix=/usr ) && \
+contrib-libs.mk:	rm $*/usr/lib/python2.6/site-packages/OpenSSL/test && \
+contrib-libs.mk:		cp -ar enigma2/HbbTv $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/
+contrib-libs.mk:		--disable-python && \
+enigma2.mk:		libdvbsi++ python libxml2 libxslt elementtree zope-interface twisted pyopenssl lxml libxmlccwrap ncurses-dev
+enigma2.mk:		sed -e 's|#!/usr/bin/python|#!$(crossprefix)/bin/python|' -i po/xml2po.py && \
+enigma2.mk:			--with-plugindir=/usr/lib/enigma2/python/Plugins \
+enigma2.mk:	$(MAKE) flash-python-enigma2 && \
+enigma2-nightly.mk:		libdvbsi++ python libxml2 libxslt elementtree zope-interface twisted pyopenssl lxml libxmlccwrap ncurses-dev $(MEDIAFW_DEP)
+enigma2-nightly.mk:		sed -e 's|#!/usr/bin/python|#!$(crossprefix)/bin/python|' -i po/xml2po.py && \
+hostapps.mk:$(DEPDIR)/host-python: @DEPENDS_host_python@
+hostapps.mk:	@PREPARE_host_python@ && \
+hostapps.mk:	( cd @DIR_host_python@ && \
+hostapps.mk:		$(MAKE) python Parser/pgen && \
+hostapps.mk:		mv python ./hostpython && \
+hostapps.mk:			HOSTPYTHON=./hostpython \
+reduce-libs.mk:	PATH=$(MAKE_PATH) $(target)-strip `find $*/usr/lib/python*/ -path "*lib/?*"` 2>/dev/null || /bin/true
+reduce-libs.mk:	PATH=$(MAKE_PATH) $(target)-strip $</usr/lib/python2.6/lib-dynload/* 2>/dev/null || /bin/true
+reduce-libs.mk:	PATH=$(MAKE_PATH) $(target)-strip `find $</usr/lib/python2.6/site-packages/* -type f -name "*.so"` 2>/dev/null || /bin/true
+release.mk:	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release/usr/lib/python2.6/site-packages/
+release.mk:	cp -p $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/DemoPlugins
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/FrontprocessorUpgrade
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/NFIFlash
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/FileManager
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/DVDBurn
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/DVDPlayer
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/CutListEditor
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/MediaScanner
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/TuxboxPlugins
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/CrashlogAutoSubmit
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/TempFanControl
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/DefaultServicesScanner
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/DiseqcTester
+release.mk:	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/CommonInterfaceAssignment
+release.mk:	$(INSTALL_DIR) $(prefix)/release/usr/lib/python2.6
+release.mk:	cp -a $(targetprefix)/usr/lib/python2.6/* $(prefix)/release/usr/lib/python2.6/
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/test
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/lxml
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/lxml-2.0.5-py2.6.egg-info
+release.mk:	rm -f $(prefix)/release/usr/lib/python2.6/site-packages/libxml2mod.so
+release.mk:	rm -f $(prefix)/release/usr/lib/python2.6/site-packages/libxsltmod.so
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/OpenSSL/test
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/setuptools
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/setuptools-0.6c8-py2.6.egg-info
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/zope.interface-3.3.0-py2.6.egg-info
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/test
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/conch
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/mail
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/manhole
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/names
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/news
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/trial
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/words
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/application
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/enterprise
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/flow
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/lore
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/pair
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/runner
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/scripts
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/tap
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/topfiles
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/Twisted-8.2.0-py2.6.egg-info
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/bsddb
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/compiler
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/config
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/ctypes
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/curses
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/distutils
+release.mk:	rm -rf $(prefix)/release/usr/lib/python2.6/email
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyc' -exec rm -f {} \;
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyo' -exec rm -f {} \;
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.a' -exec rm -f {} \;
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.o' -exec rm -f {} \;
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
+release.mk:	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
+release.mk:#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions $(prefix)/release/usr/lib/enigma2/python/Plugins/
+release.mk:	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
+release.mk:#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release/usr/lib/enigma2/python/Components/
+yaud.mk:yaud-enigma2: yaud-none host-python lirc stslave\
+yaud.mk:yaud-enigma2: yaud-none host-python lirc \
+yaud.mk:yaud-enigma2-nightly: yaud-none host-python lirc stslave\
+yaud.mk:yaud-enigma2-nightly: yaud-none host-python lirc stslave\
+yaud.mk:flash-ufs910-enigma2: yaud-none host-python lirc stslave \
+yaud.mk:flash-hdbox-enigma2: yaud-none host-python lirc \

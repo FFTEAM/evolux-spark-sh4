@@ -98,7 +98,6 @@ endif
 
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
-#	mkdir -p $(prefix)/release/var/run/lirc/
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
@@ -767,10 +766,3 @@ endif
 		rm -rf $(prefix)/release/usr/lib/enchant; \
 	fi
 
-#graphlcd Stuff
-	if [ -e $(prefix)/release/usr/lib/libglcddrivers.so ]; then \
-	    ln -s /usr/lib/libglcddrivers.so $(prefix)/release/usr/lib/libglcddrivers.so.2; \
-	    ln -s /usr/lib/libglcdgraphics.so $(prefix)/release/usr/lib/libglcdgraphics.so.2; \
-	    ln -s /usr/lib/libglcdskin.so $(prefix)/release/usr/lib/libglcdskin.so.2; \
-		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release/etc/graphlcd.conf; \
-	fi
