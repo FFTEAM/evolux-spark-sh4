@@ -349,7 +349,7 @@ static int pInit(Context_t* context, int argc, char* argv[]) {
 
     vAddr.sun_family = AF_UNIX;
 //    strcpy(vAddr.sun_path, "/dev/lircd");
-    strcpy(vAddr.sun_path, "/var/run/lirc/lircd");
+    strcpy(vAddr.sun_path, "/dev/lircd");
 
     vHandle = socket(AF_UNIX,SOCK_STREAM, 0);
 
