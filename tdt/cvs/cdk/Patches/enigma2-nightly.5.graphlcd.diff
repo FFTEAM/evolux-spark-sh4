@@ -75,15 +75,18 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
  
  bin_PROGRAMS = enigma2
  
-@@ -68,7 +69,7 @@
+@@ -68,9 +69,9 @@
  	@LIBUNGIF_LIBS@ \
  	@XML2_LIBS@ \
  	@XMLCCWRAP_LIBS@ \
--	-ldl -lpthread -lcrypt -lresolv -lrt
-+	-ldl -lpthread -lcrypt -lresolv -lrt -lglcddrivers -lglcdgraphics -lglcdskin
+-	-ldl -lpthread -lcrypt -lresolv -lrt -leplayer3 -lmmeimage
++	-ldl -lpthread -lcrypt -lresolv -lrt -leplayer3 -lmmeimage -lglcddrivers -lglcdgraphics -lglcdskin
  
  enigma2$(EXEEXT): $(enigma2_OBJECTS) $(enigma2_DEPENDENCIES) $(enigma2_LDADD_WHOLE)
  #	@rm -f enigma2$(EXEEXT)
+-	$(CXXLINK) $(enigma2_LDFLAGS) $(enigma2_OBJECTS) -Wl,--export-dynamic -Wl,--whole-archive $(enigma2_LDADD_WHOLE) -Wl,--no-whole-archive $(enigma2_LDADD) $(LIBS)
++	$(CXXLINK) $(enigma2_LDFLAGS) $(enigma2_OBJECTS) -Wl,--export-dynamic -Wl,--whole-archive $(enigma2_LDADD_WHOLE) -Wl,--no-whole-archive $(enigma2_LDADD) $(LIBS) -lglcddrivers -lglcdgraphics -lglcdskin
+ #	g++ -o enigma2$(EXEEXT) $(enigma2_LDFLAGS) $(enigma2_OBJECTS) -Wl,--export-dynamic -Wl,--whole-archive $(enigma2_LDADD_WHOLE) -Wl,--no-whole-archive $(enigma2_LDADD) $(LIBS)
 
 --- enigma2-nightly/main/enigma.cpp	2011-12-11 15:18:31.286513516 +0100
 +++ enigma2-nightly.patched/main/enigma.cpp	2011-12-11 15:19:36.656544176 +0100
