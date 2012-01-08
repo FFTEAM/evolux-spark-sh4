@@ -19,6 +19,7 @@ CONFIGPARAM=" \
  --prefix=$KATIDIR/tufsbox \
  --with-cvsdir=$KATIDIR/cvs \
  --with-customizationsdir=$KATIDIR/custom \
+ --with-archivedir=$HOME/Archive \
  --enable-ccache \
  --enable-flashrules \
  --with-stockdir=$KATIDIR/stock"
@@ -302,7 +303,27 @@ esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW"
+echo -e "\nExternal LCD support:"
+echo "   1) No external LCD"
+echo "   2) graphlcd for external LCD"
+case $7 in
+        [1-2]) REPLY=$7
+        echo -e "\nSelected LCD support: $REPLY\n"
+        ;;
+        *)
+        read -p "Select external LCD support (1-2)? ";;
+esac
+
+case "$REPLY" in
+	1) EXTERNAL_LCD="";;
+	2) EXTERNAL_LCD="--enable-externallcd";;
+	*) EXTERNAL_LCD="";;
+esac
+
+
+##############################################
+
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD"
 
 ##############################################
 
