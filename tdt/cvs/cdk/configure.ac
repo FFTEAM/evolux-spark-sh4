@@ -861,6 +861,14 @@ else
 fi
 fi
 
+AC_SUBST(EXTERNALLCD_DEP)
+
+if test "$enable_externallcd" == "yes"; then
+	EXTERNALLCD_DEP="graphlcd"
+else
+	EXTERNALLCD_DEP=""
+fi
+
 AC_SUBST(MEDIAFW)
 AC_SUBST(MEDIAFW_DEP)
 
@@ -1233,6 +1241,8 @@ Multicom324                 : $enable_multicom324
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
+EXTERNALLCD                 : $enable_externallcd
+EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
 ])
 
 if test "$dircheck" = "fail"; then
