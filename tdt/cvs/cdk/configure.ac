@@ -193,6 +193,12 @@ AC_ARG_ENABLE(mediafwgstreamer,
 AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
 AC_SUBST(MEDIAFWGSTREAMER)
 
+AC_ARG_ENABLE(externallcd,
+	AS_HELP_STRING(--enable-externallcd,	set up the CDK to use graphlcd),
+	,[enable_externallcd=no])
+AM_CONDITIONAL(ENABLE_EXTERNALLCD,test "$enable_externallcd" = "yes")
+AC_SUBST(EXTERNALLCD)
+
 AC_ARG_ENABLE(flashrules,
 	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
 	,[enable_flashrules=yes])
@@ -1013,6 +1019,7 @@ TUXBOX_RULES_MAKE(gst_plugins_ugly)
 TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
 TUXBOX_RULES_MAKE(libalsa)
+TUXBOX_RULES_MAKE(libusb)
 
 #
 # GUI
