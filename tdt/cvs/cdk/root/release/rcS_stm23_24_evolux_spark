@@ -6,78 +6,46 @@ echo "init frontpanel"
 #insmod $MODDIR/vfd.ko
 insmod $MODDIR/aotom.ko
 insmod $MODDIR/simu_button.ko
-if [ -e $MODDIR/encrypt.ko ]; then
-   insmod $MODDIR/encrypt.ko
-fi
+[ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
+
 if [ -e /var/etc/.firstboot ]; then
-   echo "WAIT 1 min" >/dev/vfd
-   echo "WAIT 1 min"
-   rm /var/etc/.firstboot
-   touch /dev/.devfsd
+	echo "WAIT 1 min" >/dev/vfd
+	echo "WAIT 1 min"
+	rm /var/etc/.firstboot
+	touch /dev/.devfsd
 fi
-if [ -e /etc/.start_spark ]; then
-   rm /etc/.start_spark
+
+rm -f /etc/.start_spark >/dev/null 2>&1
+
+if [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
+then
+	START_E2=1
+elif [ -e /usr/local/bin/neutrino ]
+then
+	START_NEUTRINO=1
+elif [ -e /usr/local/bin/enigma2 ]
+then
+	START_E2=1
 fi
-contrast=`grep -m1 config.psi.contrast /etc/enigma2/settings | cut -d = -f2`
-saturation=`grep -m1 config.psi.saturation /etc/enigma2/settings | cut -d = -f2`
-brightness=`grep -m1 config.psi.brightness /etc/enigma2/settings | cut -d = -f2`
-tint=`grep -m1 config.psi.hue /etc/enigma2/settings | cut -d = -f2`
+
+if [ -n "$START_E2" ]
+then
+	eval `egrep '^config\.(psi|plugins\.PinkPanel)\.' /etc/enigma2/settings | tr . _ `
+fi
+
 startVideoTuneEnhanced() {
-	while ! pidof "HostRec40800002" ; do
-		sleep 1
-	done
-	if [ ! -z "$contrast" ]; then
-		echo "$contrast" > /proc/stb/video/plane/psi_contrast
-	else
-		echo "128" > /proc/stb/video/plane/psi_contrast
-	fi
-	if [ ! -z "$saturation" ]; then
-		echo "$saturation" > /proc/stb/video/plane/psi_saturation
-	else
-		echo "128" > /proc/stb/video/plane/psi_saturation
-	fi
-	if [ ! -z "$brightness" ]; then
-		echo "$brightness" > /proc/stb/video/plane/psi_brightness
-	else
-		echo "128" > /proc/stb/video/plane/psi_brightness
-	fi
-	if [ ! -z "$tint" ]; then
-		echo "$tint" > /proc/stb/video/plane/psi_tint
-	else
-		echo "128" > /proc/stb/video/plane/psi_tint
-	fi
+	until [ -e /proc/stb/video/plane/psi_contrast ] ; do sleep 1 ; done
+
+	[ -z "$config_psi_contrast" ] && config_psi_contrast=128
+	[ -z "$config_psi_saturation" ] && config_psi_saturation=128
+	[ -z "$config_psi_brightness" ] && config_psi_brightness=128
+	[ -z "$config_psi_hue" ] && config_psi_hue=128
+	
+	echo $config_psi_contrast > /proc/stb/video/plane/psi_contrast
+	echo $config_psi_saturation > /proc/stb/video/plane/psi_saturation
+	echo $config_psi_brightness > /proc/stb/video/plane/psi_brightness
+	echo $config_psi_hue > /proc/stb/video/plane/psi_tint
 }
-if [ -e /etc/.start_enigma2 ]; then
-RCid=`grep -m1 config.plugins.PinkPanel.RCid /etc/enigma2/settings | cut -d = -f2`
-RCrd=`grep -m1 config.plugins.PinkPanel.RCrd /etc/enigma2/settings | cut -d = -f2`
-setEVREMOTE2() {
-	if [ ! -z "$RCid" ] && [ ! -z "$RCrd" ]; then
-		/bin/evremote2 $RCid $RCrd &
-	elif [ ! -z "$RCid" ] && [ -z "$RCrd" ]; then
-		/bin/evremote2 $RCid 120 &
-	elif [ -z "$RCid" ] && [ ! -z "$RCrd" ]; then
-		/bin/evremote2 10 $RCrd &
-	else
-		/bin/evremote2 10 120 &
-	fi
-}
-fi
-if [ ! -e /etc/.start_enigma2 ]; then
-	cpuSpeed=`grep -m1 config.plugins.PinkPanel.oclock /etc/enigma2/settings | cut -d = -f2`
-	setCPUSPEED() {
-	if [ ! -z "$cpuSpeed" ]; then
-		if [ "$cpuSpeed" == "500" ]; then
-			echo 12803 >/proc/cpu_frequ/pll0_ndiv_mdiv &
-		elif [ "$cpuSpeed" == "550" ]; then
-			echo 14083 >/proc/cpu_frequ/pll0_ndiv_mdiv &
-		elif [ "$cpuSpeed" == "600" ]; then
-			echo 5121 >/proc/cpu_frequ/pll0_ndiv_mdiv &
-		elif [ "$cpuSpeed" == "650" ]; then
-			echo 16643 >/proc/cpu_frequ/pll0_ndiv_mdiv &
-		fi
-	fi
-	}
-fi
 
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
@@ -87,204 +55,217 @@ insmod $MODDIR/autofs4.ko
 
 if [ ! -e /var/etc/.firstboot ]; then
 
-   echo "Starting DEBUG Interface"
-   /etc/init.d/mountall start
-   /etc/init.d/hostname start
-#   echo "starting telnetd vsftpd inetd mountall"
-   /usr/sbin/telnetd -l /bin/login
-   /etc/init.d/vsftpd start
-   /usr/sbin/inetd
-   echo "init stmfb"
-   insmod $MODDIR/stmcore-display-sti7111.ko
-if [ -e /etc/.15m ] && [ -e /etc/.start_enigma2 ]; then
-   MEMSIZE=15m
-elif [ ! -e /etc/.15m ] && [ -e /etc/.start_enigma2 ]; then
-   MEMSIZE=12m
-else
-   MEMSIZE=8m
-fi
-   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv
+	echo "Starting DEBUG Interface"
+	/etc/init.d/mountall start
+	/etc/init.d/hostname start
+	# echo "starting telnetd vsftpd inetd mountall"
+	/usr/sbin/telnetd -l /bin/login
+	/etc/init.d/vsftpd start
+	/usr/sbin/inetd
+	echo "init stmfb"
+	insmod $MODDIR/stmcore-display-sti7111.ko
 
-   echo "LOADING MODULES"   
-   echo "LOAD" > /dev/vfd
-   if [ -e /boot/audio.elf ] && [ -e /boot/video.elf ]; then
-   	echo "load a firmware"
-   	/bin/ustslave /dev/st231-1 /boot/audio.elf
-   	echo "load v firmware"
-   	/bin/ustslave /dev/st231-0 /boot/video.elf
-   else
-	echo "FIRMWARE MISSING (*.elf) !!!"
-   fi
-if [ -e $MODDIR/cpu_frequ.ko ]; then
-   insmod $MODDIR/cpu_frequ.ko
-fi
-   echo "init embx"
-   insmod $MODDIR/embxshell.ko
-   insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
-   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
-   insmod $MODDIR/mme_host.ko transport0=shm
-   echo "init AVS"
-#   insmod $MODDIR/avs.ko type=spark_avs
-   insmod $MODDIR/avs.ko type=avs_pio
-   player=`cat /proc/stb/player/version`
-   echo "init player $player"
+	MEMSIZE=8m
+	if [ -e /etc/.start_enigma2 ] ; then
+		MEMSIZE=12m
+		[ -e /etc/.15m ] && MEMSIZE=15m
+	fi	
+	insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv
 
-   insmod $MODDIR/mmelog.ko
-   insmod $MODDIR/ksound.ko
-   insmod $MODDIR/p2div64.ko
-   insmod $MODDIR/stm_v4l2.ko
-   insmod $MODDIR/stmvout.ko
-   insmod $MODDIR/stmvbi.ko
-   insmod $MODDIR/pseudocard.ko
-   insmod $MODDIR/stv090x.ko
-   insmod $MODDIR/pti.ko waitMS=20 videoMem=4096
-   insmod $MODDIR/stm_monitor.ko
-   insmod $MODDIR/stmsysfs.ko
-#   whichSTM=`uname -a | grep stm23`
-#   if [ -z "$whichSTM" ]; then
-#      insmod $MODDIR/stmdvb.ko TSsource0=0
-#   else
-      insmod $MODDIR/stmdvb.ko
-#   fi
-#   insmod $MODDIR/player2.ko
-   insmod $MODDIR/player2.ko discardlateframe=0
-   insmod $MODDIR/sth264pp.ko
-   insmod $MODDIR/stmalloc.ko
-   insmod $MODDIR/platform.ko
-   insmod $MODDIR/silencegen.ko
-   insmod $MODDIR/bpamem.ko
-   mknod /dev/bpamem c 153 0 
-   insmod $MODDIR/smartcard.ko
-if [ -e /etc/.start_enigma2 ]; then
-   eplayer3 /boot/startup.mp4 &
-fi
-   stfbcontrol a 0
+	echo "LOADING MODULES"   
+	echo "LOAD" > /dev/vfd
 
-   echo "init lircd"
-   /usr/bin/lircd
+	if [ -e /boot/audio.elf ] && [ -e /boot/video.elf ]; then
+		echo "load a firmware"
+		/bin/ustslave /dev/st231-1 /boot/audio.elf
+		echo "load v firmware"
+		/bin/ustslave /dev/st231-0 /boot/video.elf
+	else
+		echo "FIRMWARE MISSING (*.elf) !!!"
+	fi
 
-   mknod /dev/rc c 147 1
-   mknod /dev/sci0 c 169 0 
-   major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
-   rm -f /dev/sparkid
-   mknod /dev/sparkid c $major 0 
-   echo 1 > /proc/sys/kernel/panic
-   (sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
-   (sleep 10; if [ -e /autofs/sda1 ]; then mount -o bind /autofs/sda1 /media/hdd; stdFolders="movie music picture swap epg"; for i in $stdFolders; do mkdir -p /media/hdd/$i; done; fi) &
-#   /bin/evremote2 05 30 &
-if [ -e /etc/.start_enigma2 ]; then
-   setEVREMOTE2
-else
-   /bin/evremote2 &
-fi
-if [ ! -e /etc/.start_enigma2 ]; then
-   if [ -e /etc/.time ]; then
-      (sleep 20; /etc/init.d/DisplayTime.sh &) &
-   fi
-   if [ -e /etc/.fritzcall ]; then
-      (sleep 20; /var/plugins/fritzcall/fb.sh start) &
-   fi
-   # green led off
-   (sleep 10;/bin/fp_control -l 1 0) &
-   setCPUSPEED
-fi
-   stfbcontrol a 255
-### eth start ###
-   NFS=`grep -c nfs /proc/cmdline`
-   if [ "$NFS" -eq "1" ]; then
-      echo "Booting from nfs, don't set network"
-   else
-      /etc/init.d/setupETH.sh &
-   fi
+	[ -e $MODDIR/cpu_frequ.ko ] && insmod $MODDIR/cpu_frequ.ko
 
-   if [ -e /usr/script/user_script.sh ]; then
-	/usr/script/user_script.sh &
-   fi
-#if [ -e /etc/.start_enigma2 ]; then
-(sleep 15;startVideoTuneEnhanced) &
-#fi
-#neutrinoTuxtxt=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
-#if [ $neutrinoTuxtxt == "7" ]; then
-#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_720.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
-#else
-#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
-#fi
-   /etc/init.d/Swap.sh &
+	echo "init embx"
+	insmod $MODDIR/embxshell.ko
+	insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
+	insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
+	insmod $MODDIR/mme_host.ko transport0=shm
+	echo "init AVS"
+	# insmod $MODDIR/avs.ko type=spark_avs
+	insmod $MODDIR/avs.ko type=avs_pio
+	player=`cat /proc/stb/player/version`
+	echo "init player $player"
 
-   if [ -e /usr/local/bin/enigma2 ] && [ -e /etc/.start_enigma2 ]; then
-   echo "run" > /dev/vfd
-   echo "LOADING E2"
+	insmod $MODDIR/mmelog.ko
+	insmod $MODDIR/ksound.ko
+	insmod $MODDIR/p2div64.ko
+	insmod $MODDIR/stm_v4l2.ko
+	insmod $MODDIR/stmvout.ko
+	insmod $MODDIR/stmvbi.ko
+	insmod $MODDIR/pseudocard.ko
+	insmod $MODDIR/stv090x.ko
+	insmod $MODDIR/pti.ko waitMS=20 videoMem=4096
+	insmod $MODDIR/stm_monitor.ko
+	insmod $MODDIR/stmsysfs.ko
+	#   whichSTM=`uname -a | grep stm23`
+	#   if [ -z "$whichSTM" ]; then
+	#      insmod $MODDIR/stmdvb.ko TSsource0=0
+	#   else
+	insmod $MODDIR/stmdvb.ko
+	#   fi
+	#   insmod $MODDIR/player2.ko
+	insmod $MODDIR/player2.ko discardlateframe=0
+	insmod $MODDIR/sth264pp.ko
+	insmod $MODDIR/stmalloc.ko
+	insmod $MODDIR/platform.ko
+	insmod $MODDIR/silencegen.ko
+	insmod $MODDIR/bpamem.ko
+	mknod /dev/bpamem c 153 0 
+	insmod $MODDIR/smartcard.ko
 
-   until false
-   do
-      echo "starting e2->"
-      /usr/local/bin/enigma2
-      rtv=$?
-      echo "e2 ended <- RTV: " $rtv
-      case "$rtv" in
-		0) echo "$rtv"
-		   echo "E2 ERROR"
-      		   killall -9 enigma2;;
-		1) echo "$rtv"
-		   echo "SHUTDOWN"
-                   sync
-		   HDDON=`mount | grep sda1 | cut -d " " -f5`
-		   if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
-			echo "hdd-check"
-			echo "FSCK" > /dev/vfd
-			umount /dev/sda1
-			fsck.$HDDON -y /dev/sda1
-		   fi
-                   init 0;;
-		2) echo "$rtv"
-		   echo "REBOOT"
-		   init 6;;
-		3) echo "$rtv"
-		      echo "E2 RESTART"
-		      #echo "0" > /proc/progress;;
-      		      #killall -9 enigma2;;
-		      sync
-      		      killall enigma2;;
-		*) echo "*"
-		   echo "ERROR"
-		   echo "0" > /proc/progress;;
-      esac
-   done 
-   else
+	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
+
+	stfbcontrol a 0
+
+	echo "init lircd"
+	/usr/bin/lircd
+
+	mknod /dev/rc c 147 1 2>/dev/null
+	mknod /dev/sci0 c 169 0 2>/dev/null
+
+	major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
+	[ -n "$major" ] && {
+		rm -f /dev/sparkid
+		mknod /dev/sparkid c $major 0 
+	}
+
+	echo 1 > /proc/sys/kernel/panic
+
+	( sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
+	( sleep 10
+	  if [ -e /autofs/sda1 ]; then
+		mount -o bind /autofs/sda1 /media/hdd
+		cd /media/hdd && mkdir movie music picture swap epg
+	  fi
+	) &
+
+	# /bin/evremote2 05 30 &
+
+	if [ -n "$START_E2" ]; then
+		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
+		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
+		/bin/evremote2 $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
+	else
+		/bin/evremote2 &
+	fi
+
+	[ -n "$START_NEUTRINO" ] && [ -e /etc/.time ] && (sleep 20; /etc/init.d/DisplayTime.sh) &
+	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
+
+	# green led off
+
+	(sleep 10;/bin/fp_control -l 1 0) &
+
+	if [ -n "$START_E2" ]
+	then
+		PLL0=/proc/cpu_frequ/pll0_ndiv_mdiv
+		[ -e $PLL0 ] && [ -n "$config_plugins_PinkPanel_oclock" ] && echo $(($config_plugins_PinkPanel_oclock/10 * 256 + 3)) > $PLL0
+	fi
+
+	stfbcontrol a 255
+
+	### eth start ###
+	NFS=`grep -c nfs /proc/cmdline`
+	if [ "$NFS" -eq "1" ]; then
+	      echo "Booting from nfs, don't set network"
+	else
+		/etc/init.d/setupETH.sh &
+	fi
+
+	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &
+
+	[ -n "$START_E2" ] && (sleep 15;startVideoTuneEnhanced) &
+	
+	#neutrinoTuxtxt=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+	#if [ $neutrinoTuxtxt == "7" ]; then
+	#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_720.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+	#else
+	#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+	#fi
+	/etc/init.d/Swap.sh &
+
 	echo "run" > /dev/vfd
-	echo "LOADING neutrino"
+	if [ -n "$START_E2" ]; then
+		echo "LOADING E2"
 
-	   until false
-	   do
-	      echo "starting neutrino ->"
-	      /usr/local/bin/neutrino -f -u
-	      rtv=$?
-	      echo "neutrino ended <- RTV: " $rtv
-	      case "$rtv" in
-			0|1) echo "$rtv"
-			   echo "SHUTDOWN"
-		           sync
-			   HDDON=`mount | grep sda1 | cut -d " " -f5`
-			   if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
-				echo "hdd-check"
-				echo "FSCK" > /dev/vfd
-				umount /dev/sda1
-				fsck.$HDDON -y /dev/sda1
-			   fi
-			   init 0;;
-			2) echo "$rtv"
-			   echo "REBOOT"
-			   sync
-			   init 6;;
+		until false
+		do
+			echo "starting e2->"
+			/usr/local/bin/enigma2
+			rtv=$?
+			echo "e2 ended <- RTV: " $rtv
+			case "$rtv" in
+			0)	echo "$rtv"
+			   echo "E2 ERROR"
+			   killall -9 enigma2;;
+			1)	echo "$rtv"
+				echo "SHUTDOWN"
+				sync
+				HDDON=`mount | grep sda1 | cut -d " " -f5`
+				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check"
+					echo "FSCK" > /dev/vfd
+					umount /dev/sda1
+					fsck.$HDDON -y /dev/sda1
+				fi
+				init 0;;
+			2)	echo "$rtv"
+				echo "REBOOT"
+				init 6;;
+			3)	echo "$rtv"
+				echo "E2 RESTART"
+				#echo "0" > /proc/progress;;
+				#killall -9 enigma2;;
+				sync
+				killall enigma2;;
+			*)	echo "*"
+				echo "ERROR"
+				echo "0" > /proc/progress;;
+			esac
+		done 
+	else
+		echo "LOADING neutrino"
+
+		until false
+		do
+			echo "starting neutrino ->"
+			/usr/local/bin/neutrino -f -u
+			rtv=$?
+			echo "neutrino ended <- RTV: " $rtv
+			case "$rtv" in
+			0|1)	echo "$rtv"
+				echo "SHUTDOWN"
+				sync
+				HDDON=`mount | grep sda1 | cut -d " " -f5`
+				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check"
+					echo "FSCK" > /dev/vfd
+					umount /dev/sda1
+					fsck.$HDDON -y /dev/sda1
+				fi
+				init 0;;
+			2)	echo "$rtv"
+				echo "REBOOT"
+				sync
+				init 6;;
 			*) echo "$rtv"
-			   echo "ERROR"
-			   #echo "0" > /proc/progress;;
-			   init 6;;
-		esac
-   done 
-   fi
-
-
+				echo "ERROR"
+				#echo "0" > /proc/progress;;
+				init 6;;
+			esac
+		done 
+	fi
 fi
 
 #never reached
