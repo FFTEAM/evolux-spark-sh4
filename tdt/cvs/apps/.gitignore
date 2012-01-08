@@ -5,7 +5,7 @@ enigma2-nightly.newest.patched
 enigma2-nightly.patched
 *.in
 *.guess
-*.m4
+aclocal.m4
 configure
 *.log
 *.status
