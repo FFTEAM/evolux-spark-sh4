@@ -174,7 +174,6 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void setvol(int vol, int avs);
 		void saveEpg();
 
-		void ExitRun(const bool write_si = true, int retcode = 0);
 		void RealRun(CMenuWidget &mainSettings);
 		void InitZapper();
 		void InitKeySettings(CMenuWidget &);
@@ -251,5 +250,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void SendSectionsdConfig(void);
 		int GetChannelMode(void) { return g_settings.channel_mode; };
 		void SetChannelMode(int mode);
+
+		void ExitRun(const bool write_si = true, int retcode = 0);
 };
 #endif
