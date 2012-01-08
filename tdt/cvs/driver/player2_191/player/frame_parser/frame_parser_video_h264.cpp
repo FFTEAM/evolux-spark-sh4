@@ -672,7 +672,8 @@ unsigned int		UnitLength;
 			break;
 
 	    default:
-			report( severity_info, "FrameParser_VideoH264_c::ReadHeaders - Ignored reserved NAL unit type %02x.\n", nal_unit_type );
+			// Disabled to avoid overflooding the console.
+			// report( severity_info, "FrameParser_VideoH264_c::ReadHeaders - Ignored reserved NAL unit type %02x.\n", nal_unit_type );
 			Status = FrameParserNoError;
 			break;
 	}
