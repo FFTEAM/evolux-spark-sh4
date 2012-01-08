@@ -1363,6 +1363,8 @@ videomenu.psi.saturation Saturation
 videomenu.psi.brightness Brightness
 videomenu.psi.tint Tint
 videomenu.psi Color Settings
+videomenu.psi.reset Set Defaults
+videomenu.psi.step Video Slider Width
 zapit.scantype scan for services
 zapit.scantype.all all services
 zapit.scantype.radio Only radio
@@ -1421,14 +1423,10 @@ extramenu.swap.select Swap Select
 extramenu.swap.onoff SWAP
 extramenu.swap.onoff.on On
 extramenu.swap.onoff.off Off
-extramenu.boote2 Boot E2 Menue
-extramenu.boote2.select Boot E2
-extramenu.boote2.on On
-extramenu.boote2.off Off
-extramenu.bootspark Boot SPARK Menue
-extramenu.bootspark.select Boot SPARK
-extramenu.bootspark.on On
-extramenu.bootspark.off Off
+extramenu.boot.head Boot Settings
+extramenu.boot.select On reboot, start
+extramenu.boot.bootargs.head Changing BootParameters
+extramenu.boot.bootargs.text Do not switch off your STB!
 extramenu.fsck FSCK Menue
 extramenu.fsck.select FSCK
 extramenu.fsck.on On

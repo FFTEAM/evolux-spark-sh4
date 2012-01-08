@@ -61,6 +61,7 @@ struct SNeutrinoSettings
 	int psi_saturation;
 	int psi_brightness;
 	int psi_tint;
+	int psi_step;
 	unsigned char video_csync;
 	char current_volume;
 	int current_volume_step;

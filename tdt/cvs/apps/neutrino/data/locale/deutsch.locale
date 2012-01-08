@@ -1363,6 +1363,8 @@ videomenu.psi.saturation Sättigung
 videomenu.psi.brightness Helligkeit
 videomenu.psi.tint Farbton
 videomenu.psi Farbeinstellungen
+videomenu.psi.reset Standard-Einstellungen
+videomenu.psi.step Videoregler-Schrittweite
 zapit.scantype Service-Auswahl
 zapit.scantype.all Alle Services
 zapit.scantype.radio Nur Radio
@@ -1420,14 +1422,10 @@ extramenu.swap.select Swap Auswahl
 extramenu.swap.onoff SWAP
 extramenu.swap.onoff.on Ein
 extramenu.swap.onoff.off Aus
-extramenu.boote2 Boot E2 Menue
-extramenu.boote2.select Boote E2
-extramenu.boote2.on Ein
-extramenu.boote2.off Aus
-extramenu.bootspark Boot SPARK Menue
-extramenu.bootspark.select Boote SPARK
-extramenu.bootspark.on Ein
-extramenu.bootspark.off Aus
+extramenu.boot.head Boot-Einstellungen
+extramenu.boot.select Startsystem bei Neustart
+extramenu.boot.bootargs.head Änderung der Boot-Parameter
+extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.fsck FSCK Menue
 extramenu.fsck.select FSCK
 extramenu.fsck.on Ein

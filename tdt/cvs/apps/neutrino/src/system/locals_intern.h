@@ -1418,14 +1418,10 @@ const char *locale_real_names[] = {
 	"extramenu.swap.onoff",
 	"extramenu.swap.onoff.on",
 	"extramenu.swap.onoff.off",
-	"extramenu.boote2",
-	"extramenu.boote2.select",
-	"extramenu.boote2.on",
-	"extramenu.boote2.off",
-	"extramenu.bootspark",
-	"extramenu.bootspark.select",
-	"extramenu.bootspark.on",
-	"extramenu.bootspark.off",
+	"extramenu.boot.head",
+	"extramenu.boot.select",
+	"extramenu.boot.bootargs.head",
+	"extramenu.boot.bootargs.text",
 	"extramenu.fsck",
 	"extramenu.fsck.select",
 	"extramenu.fsck.on",
@@ -1441,10 +1437,12 @@ const char *locale_real_names[] = {
 	"setting.saved",
 	"play.button.action",
 	"videomenu.videomode_auto",
+	"videomenu.psi",
 	"videomenu.psi.contrast",
 	"videomenu.psi.saturation",
 	"videomenu.psi.brightness",
 	"videomenu.psi.tint",
-	"videomenu.psi"
+	"videomenu.psi.reset",
+	"videomenu.psi.step"
 };
 #endif

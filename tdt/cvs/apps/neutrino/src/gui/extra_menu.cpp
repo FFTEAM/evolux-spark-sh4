@@ -1009,15 +1009,19 @@ void SWAP_Menu::SWAP_Menu_Settings()
 
 ////////////////////////////// SWAP Menu ENDE //////////////////////////////////////
 
-////////////////////////////// BOOTE2 Menu ANFANG ////////////////////////////////////
-#define BOOTE2_OPTION_COUNT 2
-const CMenuOptionChooser::keyval BOOTE2_OPTIONS[BOOTE2_OPTION_COUNT] =
+////////////////////////////// BOOT Menu ANFANG ////////////////////////////////////
+#define BOOT_OPTION_COUNT 3
+const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 {
-	{ 0, LOCALE_EXTRAMENU_BOOTE2_OFF },
-	{ 1, LOCALE_EXTRAMENU_BOOTE2_ON }
+#define BOOT_NEUTRINO 0
+#define BOOT_E2       1
+#define BOOT_SPARK    2
+	{ BOOT_NEUTRINO, NONEXISTANT_LOCALE, "Neutrino" },
+	{ BOOT_E2, NONEXISTANT_LOCALE, "E2" },
+	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" }
 };
 
-BOOTE2_Menu::BOOTE2_Menu()
+BOOT_Menu::BOOT_Menu()
 {
 	frameBuffer = CFrameBuffer::getInstance();
 	width = 600;
@@ -1029,119 +1033,81 @@ BOOTE2_Menu::BOOTE2_Menu()
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 }
 
-int BOOTE2_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+int BOOT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
+	if(actionKey == "reboot") {
+                FILE *f = fopen("/tmp/.reboot", "w");
+                fclose(f);
+		CNeutrinoApp::getInstance()->ExitRun(true, 2);
+		// not reached, hopefully...
+                unlink("/tmp/.reboot");
+		return res;
+	}
 
 	if (parent)
 		parent->hide();
 
-	BOOTE2Settings();
+	BOOTSettings();
 
 	return res;
 }
 
-void BOOTE2_Menu::hide()
+void BOOT_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
-void BOOTE2_Menu::BOOTE2Settings()
+void BOOT_Menu::BOOTSettings()
 {
 #define DOTFILE_BOOTE2 "/etc/.start_enigma2"
-	int bootE2 = access(DOTFILE_BOOTE2, R_OK) ? 0 : 1;
-	int old_bootE2=bootE2;
-	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTE2, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOTE2_SELECT, &bootE2, BOOTE2_OPTIONS, BOOTE2_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_bootE2!=bootE2)
-	{
-		if (bootE2==1) {
-			touch(DOTFILE_BOOTE2);
-			//unlink(STARTCAM);
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Enigma2 booting is enabled. Please reboot.", 450, 2); // UTF-8("")
-		} else {
-			unlink(DOTFILE_BOOTE2);
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Neutrino booting is re-enabled.", 450, 2); // UTF-8("")
-		}
-	}
-}
-////////////////////////////// BOOTE2 Menu ENDE //////////////////////////////////////
-
-////////////////////////////// BOOTSPARK Menu ANFANG ////////////////////////////////////
-#define BOOTSPARK_OPTION_COUNT 2
-const CMenuOptionChooser::keyval BOOTSPARK_OPTIONS[BOOTSPARK_OPTION_COUNT] =
-{
-	{ 0, LOCALE_EXTRAMENU_BOOTSPARK_OFF },
-	{ 1, LOCALE_EXTRAMENU_BOOTSPARK_ON }
-};
-
-BOOTSPARK_Menu::BOOTSPARK_Menu()
-{
-	frameBuffer = CFrameBuffer::getInstance();
-	width = 600;
-	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
-	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-	height = hheight+13*mheight+ 10;
-
-	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
-	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
-}
-
-int BOOTSPARK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
-{
-	int res = menu_return::RETURN_REPAINT;
-
-	if (parent)
-		parent->hide();
-
-	BOOTSPARKSettings();
-
-	return res;
-}
-
-void BOOTSPARK_Menu::hide()
-{
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
-}
-
-void BOOTSPARK_Menu::BOOTSPARKSettings()
-{
 #define DOTFILE_BOOTSPARK "/etc/.start_spark"
-	int bootSpark = access(DOTFILE_BOOTSPARK, R_OK) ? 0 : 1;
-	int old_bootSpark = bootSpark;
-	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOTSPARK, "settings.raw");
+	int boot = BOOT_NEUTRINO;
+	if (!access(DOTFILE_BOOTSPARK, R_OK))
+		boot = BOOT_SPARK;
+	else if (!access(DOTFILE_BOOTE2, R_OK))
+		boot = BOOT_E2;
+	int old_boot = boot;
+
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
 	ExtraMenuSettings->addItem(GenericMenuBack);
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOTSPARK_SELECT, &bootSpark, BOOTSPARK_OPTIONS, BOOTSPARK_OPTION_COUNT,true);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_SELECT, &boot, BOOT_OPTIONS, BOOT_OPTION_COUNT,true);
 	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_MAINMENU_REBOOT, true, "", this, "reboot", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
 	ExtraMenuSettings->exec (NULL, "");
 	ExtraMenuSettings->hide ();
 	delete ExtraMenuSettings;
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_bootSpark!=bootSpark) {
-		if (bootSpark==1) {
+
+	if (boot != old_boot)
+	{
+		CHintBox *b = NULL;
+		if(boot == BOOT_SPARK || old_boot == BOOT_SPARK) {
+			b = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
+			b->paint();
+		}
+		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_orig");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "SPARK booting is enabled. Please reboot.", 450, 2); // UTF-8("")
-		} else {
+		}
+		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Evolux (YAFFS2) booting is re-enabled.", 450, 2); // UTF-8("")
 		}
+		if(b) {
+			b->hide();
+			delete b;
+		}
+		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK))
+			touch(DOTFILE_BOOTE2);
+		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
+			unlink(DOTFILE_BOOTE2);
+
 	}
 }
-////////////////////////////// BOOTSPARK Menu ENDE //////////////////////////////////////
+////////////////////////////// BOOT Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// FSCK Menu ANFANG ////////////////////////////////////
 #define FSCK_OPTION_COUNT 2
