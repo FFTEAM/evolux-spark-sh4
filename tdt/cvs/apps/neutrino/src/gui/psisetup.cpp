@@ -63,7 +63,7 @@ static
 #define SLIDERWIDTH 200
 #define SLIDERHEIGHT 15
 #define LOCGAP 5
-#define SLIDER_DELTA 0x08
+#define SLIDER_DELTA 0x04
 #define ROUND_RADIUS 9
 
 CPSISetup::CPSISetup (const neutrino_locale_t Name)
