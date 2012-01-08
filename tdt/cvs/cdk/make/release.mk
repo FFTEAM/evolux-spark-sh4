@@ -768,8 +768,6 @@ endif
 
 #graphlcd Stuff
 	if [ -e $(prefix)/release/usr/lib/libglcddrivers.so ]; then \
-	    ln -s /usr/lib/libglcddrivers.so $(prefix)/release/usr/lib/libglcddrivers.so.2; \
-	    ln -s /usr/lib/libglcdgraphics.so $(prefix)/release/usr/lib/libglcdgraphics.so.2; \
-	    ln -s /usr/lib/libglcdskin.so $(prefix)/release/usr/lib/libglcdskin.so.2; \
+		( cd $(prefix)/release/usr/lib && ln -sf libglcddrivers.so.2 libglcddrivers.so && ln -sf libglcdgraphics.so.2 libglcdgraphics.so &&  ln -sf libglcdskin.so.2 libglcdskin.so ); \
 		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release/etc/graphlcd.conf; \
 	fi
