@@ -1633,6 +1633,11 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 #endif
 
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_VIRTUAL_ZAP_MODE, &g_settings.virtual_zap_mode, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+// CPU menue
+	CCpuFreqNotifier * cpuNotifier = new CCpuFreqNotifier();
+	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_CPU_FREQ));	
+	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_NORMAL, &g_settings.cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true, cpuNotifier));
+//	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true));
 
 	//channellist
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_MISCSETTINGS_CHANNELLIST));
@@ -1696,10 +1701,7 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 	fclose(rd);
 	}
 #endif
-	CCpuFreqNotifier * cpuNotifier = new CCpuFreqNotifier();
-	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_CPU_FREQ));	
-	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_NORMAL, &g_settings.cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true, cpuNotifier));
-	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true));
+
 }
 
 void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
