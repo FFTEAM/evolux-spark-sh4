@@ -1061,7 +1061,7 @@ void BOOT_Menu::hide()
 void BOOT_Menu::BOOTSettings()
 {
 #define DOTFILE_BOOTE2 "/etc/.start_enigma2"
-#define DOTFILE_BOOTSPARK "/etc/.start_spark"
+//#define DOTFILE_BOOTSPARK "/etc/.start_spark"
 	int boot = BOOT_NEUTRINO;
 	if (!access(DOTFILE_BOOTSPARK, R_OK))
 		boot = BOOT_SPARK;
@@ -1089,11 +1089,11 @@ void BOOT_Menu::BOOTSettings()
 			b->paint();
 		}
 		if (boot == BOOT_SPARK) {
-			touch(DOTFILE_BOOTSPARK);
+//			touch(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_orig");
 		}
 		if (old_boot == BOOT_SPARK) {
-			unlink(DOTFILE_BOOTSPARK);
+//			unlink(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
 		}
 		if(b) {
