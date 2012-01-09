@@ -166,7 +166,8 @@ portmap;6.0;portmap_6.0;portmap-6.0.tgz:portmap_6.0.diff:portmap_6.0-9.diff.gz;e
 nfs_utils;1.1.1;nfs-utils-1.1.1;nfs-utils-1.1.1.tar.bz2:nfs-utils_1.1.1-12.diff.gz;extract:nfs-utils-1.1.1.tar.bz2
 autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.bz2:autofs4.diff;extract:autofs-4.1.4.tar.bz2;patch:autofs4.diff
 #autofs;3.1.7;autofs-3.1.7;autofs-3.1.7.tar.bz2;extract:autofs-3.1.7.tar.bz2;patch:autofs-3.1.7-16.diff
-vsftpd;2.0.7;vsftpd-2.0.7;vsftpd-2.0.7.tar.gz:vsftpd.diff;extract:vsftpd-2.0.7.tar.gz;patch:vsftpd.diff
+#vsftpd;2.0.7;vsftpd-2.0.7;vsftpd-2.0.7.tar.gz:vsftpd.diff;extract:vsftpd-2.0.7.tar.gz;patch:vsftpd.diff
+vsftpd;2.3.4;vsftpd-2.3.4;vsftpd-2.3.4.tar.gz:vsftpd.diff;extract:vsftpd-2.3.4.tar.gz;patch:vsftpd.diff
 netkit_ftp;0.17;netkit-ftp-0.17;netkit-ftp-0.17.tar.gz:netkit-ftp.diff;extract:netkit-ftp-0.17.tar.gz;patch:netkit-ftp.diff
 #samba;3.0.28;samba-3.0.28;samba-3.0.28.tar.gz:samba.diff;extract:samba-3.0.28.tar.gz;patch:samba.diff
 samba;3.5.5;samba-3.5.5;samba-3.5.5.tar.gz:samba-3.5.5.diff;extract:samba-3.5.5.tar.gz;patch:samba-3.5.5.diff

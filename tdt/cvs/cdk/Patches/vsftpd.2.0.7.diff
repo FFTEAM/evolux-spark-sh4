@@ -49,13 +49,14 @@
  
  clean:
  	rm -f *.o *.swp vsftpd
---- vsftpd-2.3.4/parseconf.c	2010-03-27 23:20:56.903712923 +0100
-+++ vsftpd-2.3.4/parseconf.c	2010-03-27 23:20:38.691538456 +0100
-@@ -223,7 +223,6 @@
-      * race conditions.
-      */
-     if (vsf_sysutil_retval_is_error(retval) ||
--        vsf_sysutil_statbuf_get_uid(p_statbuf) != vsf_sysutil_getuid() ||
-         !vsf_sysutil_statbuf_is_regfile(p_statbuf))
-     {
-       die("config file not owned by correct user, or not a file");
+--- vsftpd-2.0.7/sysdeputil.c	2008-02-03 20:02:01.000000000 +0100
++++ vsftpd-2.0.7/sysdeputil.c-new	2008-11-01 10:38:28.000000000 +0100
+@@ -159,7 +159,7 @@
+ #include <linux/capability.h>
+ #include <errno.h>
+ #include <syscall.h>
+-_syscall2(int, capset, cap_user_header_t, header, const cap_user_data_t, data)
++//_syscall2(int, capset, cap_user_header_t, header, const cap_user_data_t, data)
+ /* Gross HACK to avoid warnings - linux headers overlap glibc headers */
+ #undef __NFDBITS
+ #undef __FDMASK
