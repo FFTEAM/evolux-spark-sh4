@@ -52,7 +52,6 @@ private:
   void setPSI ();
   void paintSlider (int i);
   // unsigned char readProcPSI(int);
-  void writeProcPSI (int);
 
 public:
   struct PSI_list
@@ -73,9 +72,18 @@ public:
 
     CPSISetup (const neutrino_locale_t Name);
 
-  void hide ();
   int exec (CMenuTarget * parent, const std::string & actionKey);
-
+  void hide ();
+  void writeProcPSI (int);
 };
 
+class CPSISetupNotifier : public CChangeObserver
+{
+        private:
+                CPSISetup* psisetup;
+
+        public:
+                CPSISetupNotifier(CPSISetup*);
+                bool changeNotify(const neutrino_locale_t, void *);
+};
 #endif

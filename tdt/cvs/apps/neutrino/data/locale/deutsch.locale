@@ -1424,6 +1424,7 @@ extramenu.swap.onoff.on Ein
 extramenu.swap.onoff.off Aus
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
+extramenu.boot.unchanged Unverändert
 extramenu.boot.bootargs.head Änderung der Boot-Parameter
 extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.fsck FSCK Menue

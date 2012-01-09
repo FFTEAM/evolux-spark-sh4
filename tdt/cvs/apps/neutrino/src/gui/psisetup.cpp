@@ -134,9 +134,6 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
   neutrino_msg_data_t data;
 
   fb_pixel_t *pixbuf = NULL;
-
-  // [ SLIDERWIDTH ][5][2 + width + 2 ]
-
   locWidth = 0;
   for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
     {
@@ -327,23 +324,38 @@ void
 CPSISetup::paintSlider (int i)	// UTF-8
 {
   int col_bg =
-    psi_list[i].
-    selected ? COL_MENUCONTENTSELECTED_PLUS_0 : COL_MENUCONTENT_PLUS_0;
+    psi_list[i].selected ? COL_MENUCONTENTSELECTED_PLUS_0 :
+    COL_MENUCONTENT_PLUS_0;
   int col_fg =
     psi_list[i].selected ? COL_MENUCONTENTSELECTED : COL_MENUCONTENT;
 
   if (i < PSI_RESET)
     {
-      psi_list[i].scale->paint (psi_list[i].x, psi_list[i].y + sliderOffset,
-				(psi_list[i].value * 100) >> 8);
-      frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, locWidth,
-				locHeight, col_bg, ROUND_RADIUS, 3);
+      psi_list[i].scale->paint (psi_list[i].x, psi_list[i].y + sliderOffset, (psi_list[i].value * 100)/255);
+      frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, locWidth, locHeight, col_bg, ROUND_RADIUS, 3);
       g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc, psi_list[i].yLoc, locWidth, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
     }
   else
     {
       frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, dx, locHeight, col_bg, ROUND_RADIUS, 3);
-      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc, psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
+      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc,psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
       frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_RED, psi_list[i].x + 2, psi_list[i].y + (locHeight >> 1) - 7);
     }
+}
+
+CPSISetupNotifier::CPSISetupNotifier (class CPSISetup *p) {
+	psisetup = p;
+}
+
+bool
+CPSISetupNotifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
+{
+  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+    if (OptionName == psi_list[i].loc)
+      {
+	psi_list[i].value = *((int *) Data);
+	psisetup->writeProcPSI (i);
+	return true;
+      }
+  return false;
 }

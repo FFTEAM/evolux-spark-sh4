@@ -1420,6 +1420,7 @@ const char *locale_real_names[] = {
 	"extramenu.swap.onoff.off",
 	"extramenu.boot.head",
 	"extramenu.boot.select",
+	"extramenu.boot.unchanged",
 	"extramenu.boot.bootargs.head",
 	"extramenu.boot.bootargs.text",
 	"extramenu.fsck",

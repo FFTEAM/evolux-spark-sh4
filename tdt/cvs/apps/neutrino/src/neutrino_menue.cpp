@@ -344,6 +344,11 @@ CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video.raw
 	CPSISetup* chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
 	addItem(new CMenuForwarder(LOCALE_VIDEOMENU_PSI, true, NULL, chPSISetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));;
 	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_STEP, (int *)&g_settings.psi_step, true, 1, 100, NULL));
+	CPSISetupNotifier *psiNotifier = new CPSISetupNotifier(chPSISetup);
+	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_CONTRAST, (int *)&g_settings.psi_contrast, true, 0, 255, psiNotifier));
+	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_SATURATION, (int *)&g_settings.psi_saturation, true, 0, 255, psiNotifier));
+	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_BRIGHTNESS, (int *)&g_settings.psi_brightness, true, 0, 255, psiNotifier));
+	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_TINT, (int *)&g_settings.psi_tint, true, 0, 255, psiNotifier));
 
 	changeNotify(LOCALE_VIDEOMENU_VIDEOFORMAT, NULL);
 	if (system_rev == 0x06) {
@@ -1633,11 +1638,12 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 #endif
 
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_VIRTUAL_ZAP_MODE, &g_settings.virtual_zap_mode, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
-// CPU menue
+
+	//CPU menu
 	CCpuFreqNotifier * cpuNotifier = new CCpuFreqNotifier();
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_CPU_FREQ));	
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_NORMAL, &g_settings.cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true, cpuNotifier));
-//	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true));
+	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true));
 
 	//channellist
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_MISCSETTINGS_CHANNELLIST));
@@ -1701,7 +1707,6 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 	fclose(rd);
 	}
 #endif
-
 }
 
 void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)

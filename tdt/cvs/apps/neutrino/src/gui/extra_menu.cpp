@@ -641,7 +641,7 @@ void EMU_Menu::EMU_Menu_Settings()
 
 void EMU_Menu::suspend()
 {
-	if (!suspended) {
+	if (selected && !suspended) {
 		system(EMU_list[selected].stop_command);
 		suspended = true;
 	}
@@ -649,7 +649,7 @@ void EMU_Menu::suspend()
 
 void EMU_Menu::resume()
 {
-	if (suspended) {
+	if (selected && suspended) {
 		system(EMU_list[selected].start_command);
 		suspended = false;
 	}
@@ -1016,7 +1016,11 @@ const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 #define BOOT_NEUTRINO 0
 #define BOOT_E2       1
 #define BOOT_SPARK    2
+#if 0
 	{ BOOT_NEUTRINO, NONEXISTANT_LOCALE, "Neutrino" },
+#else
+	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
+#endif
 	{ BOOT_E2, NONEXISTANT_LOCALE, "E2" },
 	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" }
 };
@@ -1075,13 +1079,16 @@ void BOOT_Menu::BOOTSettings()
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_SELECT, &boot, BOOT_OPTIONS, BOOT_OPTION_COUNT,true);
 	ExtraMenuSettings->addItem( oj1 );
+#if 0
 	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_MAINMENU_REBOOT, true, "", this, "reboot", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+#endif
 	ExtraMenuSettings->exec (NULL, "");
 	ExtraMenuSettings->hide ();
 	delete ExtraMenuSettings;
 
-	if (boot != old_boot)
+	if ((boot != old_boot)
+         && (ShowLocalizedMessage (LOCALE_EXTRAMENU_BOOT_HEAD, LOCALE_MESSAGEBOX_ACCEPT, CMessageBox::mbrYes, CMessageBox::mbYes | CMessageBox::mbCancel) != CMessageBox::mbrCancel))
 	{
 		CHintBox *b = NULL;
 		if(boot == BOOT_SPARK || old_boot == BOOT_SPARK) {
@@ -1091,6 +1098,7 @@ void BOOT_Menu::BOOTSettings()
 		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_orig");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
@@ -1100,8 +1108,10 @@ void BOOT_Menu::BOOTSettings()
 			b->hide();
 			delete b;
 		}
-		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK))
+		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
 			touch(DOTFILE_BOOTE2);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
+		}
 		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
 			unlink(DOTFILE_BOOTE2);
 

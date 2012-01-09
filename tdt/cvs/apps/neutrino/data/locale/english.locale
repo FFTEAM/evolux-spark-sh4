@@ -1424,7 +1424,8 @@ extramenu.swap.onoff SWAP
 extramenu.swap.onoff.on On
 extramenu.swap.onoff.off Off
 extramenu.boot.head Boot Settings
-extramenu.boot.select On reboot, start
+extramenu.boot.select System to start on reboot
+extramenu.boot.unchanged Unchanged
 extramenu.boot.bootargs.head Changing BootParameters
 extramenu.boot.bootargs.text Do not switch off your STB!
 extramenu.fsck FSCK Menue

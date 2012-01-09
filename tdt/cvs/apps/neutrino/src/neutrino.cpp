@@ -203,8 +203,8 @@ extern bool timeset; // sectionsd
 
 extern cVideo * videoDecoder;
 extern cAudio * audioDecoder;
-cPowerManager *powerManager;
-cCpuFreqManager * cpuFreq;
+cPowerManager *powerManager = NULL;
+cCpuFreqManager * cpuFreq = NULL;
 
 int prev_video_mode;
 
@@ -258,7 +258,7 @@ static char **global_argv;
 
 //static CTimingSettingsNotifier timingsettingsnotifier;
 CFontSizeNotifier fontsizenotifier;
-CFanControlNotifier * funNotifier;
+CFanControlNotifier * funNotifier = NULL;
 
 extern const char * locale_real_names[]; /* #include <system/locals_intern.h> */
 // USERMENU
@@ -3229,8 +3229,8 @@ _repeat:
 		if(!recordingstatus && was_record && (!data)) {
 			g_Zapit->setStandby(true);
 			was_record = 0;
-//			if( mode == mode_standby )
-//				cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
+			if( mode == mode_standby )
+				cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 		}
 		if( mode == mode_standby && data )
 			was_record = 1;
@@ -3241,8 +3241,8 @@ _repeat:
 		return messages_return::handled;
 	}
 	else if (msg == NeutrinoMessages::RECORD_START) {
-//		if( mode == mode_standby )
-//			cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
+		if( mode == mode_standby )
+			cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
 
 		if(autoshift) {
 			stopAutoRecord();
@@ -3287,8 +3287,8 @@ _repeat:
 				puts("[neutrino.cpp] executing " NEUTRINO_RECORDING_ENDED_SCRIPT ".");
 				if (system(NEUTRINO_RECORDING_ENDED_SCRIPT) != 0)
 					perror(NEUTRINO_RECORDING_ENDED_SCRIPT " failed");
-//				if( mode == mode_standby )
-//					cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
+				if( mode == mode_standby )
+					cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 			}
 		}
 		else if(nextRecordingInfo!=NULL) {
@@ -3624,11 +3624,12 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 
 			system("/bin/sync");
 			system("/bin/umount -a");
-//			cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
+			cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 			powerManager->SetStandby(true, true);
-//			int fspeed = 0;
-//			funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
-
+			if (funNotifier) {
+				int fspeed = 0;
+				funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
+			}
 			if (powerManager) {
 				powerManager->Close();
 				delete powerManager;
@@ -3658,9 +3659,10 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 				delete g_RCInput;
 
 			stop_daemons();
-
-//			int fspeed = 0;
-//			funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
+			if (funNotifier) {
+				int fspeed = 0;
+				funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
+			}
 			exit(retcode);
 		}
 	}
@@ -3942,22 +3944,26 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 
 		lastMode = mode;
 		mode = mode_standby;
-//		int fspeed = 1;
-//		funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
+		if (funNotifier) {
+			int fspeed = 1;
+			funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
+		}
 
 		frameBuffer->setActive(false);
 		// Active standby on
 		powerManager->SetStandby(true, false);
-//		if(!was_record)
-//			cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
+		if(!was_record)
+			cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 	} else {
 		// Active standby off
-//		cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
+		cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
 
 		powerManager->SetStandby(false, false);
 		frameBuffer->setActive(true);
 
-//		funNotifier->changeNotify(NONEXISTANT_LOCALE, (void*) &g_settings.fan_speed);
+		if (funNotifier)
+			funNotifier->changeNotify(NONEXISTANT_LOCALE, (void*) &g_settings.fan_speed);
+
 		puts("[neutrino.cpp] executing " NEUTRINO_LEAVE_STANDBY_SCRIPT ".");
 		if (system(NEUTRINO_LEAVE_STANDBY_SCRIPT) != 0)
 			perror(NEUTRINO_LEAVE_STANDBY_SCRIPT " failed");
