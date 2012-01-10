@@ -1,0 +1,9 @@
+#!/bin/sh
+### set args back to orig-spark ####
+ln -sf /root/plugin/var/etc/fw_env.config /etc/fw_env.config
+/root/plugin/var/sbin/setmtdmode
+/root/plugin/var/sbin/fw_setenv -s /root/plugin/var/etc/bootargs_orig
+/root/plugin/var/sbin/setmtdmode -l
+echo "please restart box"
+exit
+
