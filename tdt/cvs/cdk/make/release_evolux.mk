@@ -32,6 +32,9 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/release_evolux_with_dev/etc/
 	cp -RP $(prefix)/release_with_dev/etc/hostname $(prefix)/release_evolux_with_dev/etc/
 	cp -RP $(prefix)/release_with_dev/etc/image-version $(prefix)/release_evolux_with_dev/etc/
+	if [ -e $(prefix)/release_with_dev/etc/graphlcd.conf ]; then \
+		cp -RP $(prefix)/release_with_dev/etc/graphlcd.conf $(prefix)/release_evolux_with_dev/etc/; \
+	fi;
 	cp -RP $(prefix)/release_with_dev/etc/inetd.conf $(prefix)/release_evolux_with_dev/etc/
 	cp -RP $(prefix)/release_with_dev/etc/localtime $(prefix)/release_evolux_with_dev/etc/
 	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_with_dev/etc/rc.d/
