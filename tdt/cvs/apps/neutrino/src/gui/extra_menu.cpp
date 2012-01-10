@@ -595,6 +595,8 @@ void EMU_Menu::EMU_Menu_Settings()
 	int emu = selected;
 	int emu_old = emu;
 
+	update_installed();
+
 	//MENU AUFBAUEN
 	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
 	ExtraMenuSettings->addItem(GenericMenuSeparator);
@@ -613,10 +615,10 @@ void EMU_Menu::EMU_Menu_Settings()
 	ExtraMenuSettings->hide();
 	delete ExtraMenuSettings;
 
-/*	if(emu > 0 && !EMU_list[emu].installed) {
+	if(emu > 0 && !EMU_list[emu].installed) {
 		string m = " " + string(EMU_list[emu].procname) + " is not installed ";
 		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-	} else */ if (emu_old != emu) {
+	} else if (emu_old != emu) {
 		if (emu_old) {
 			// stop currently running emu
 			system(EMU_list[emu_old].stop_command);
