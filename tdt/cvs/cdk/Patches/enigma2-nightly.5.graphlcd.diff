@@ -148,7 +148,7 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
 -	<screen name="ChannelSelection_summary" position="0,0" size="132,64" id="1">
 -		<widget source="parent.ServiceEvent" render="Label" position="6,0" size="120,25" font="Regular;14" halign="center" valign="center" >
 +	<screen name="ChannelSelection_summary" position="0,0" size="320,240" id="1">
-+		<widget source="parent.ServiceEvent" render="Label" position="2,96" size="316,85" font="Display;48" halign="center" valign="center" >
++		<widget source="parent.ServiceEvent" render="Label" position="2,96" size="316,85" font="LCD;48" halign="center" valign="center" >
  			<convert type="ServiceName">Name</convert>
  		</widget>
 -		<widget source="parent.ServiceEvent" render="Progress" position="16,27" size="100,5" borderWidth="1">
@@ -156,11 +156,11 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
  			<convert type="EventTime">Progress</convert>
  		</widget>
 -		<widget source="global.CurrentTime" render="Label" position="6,32" size="90,32" font="Regular;32" halign="right" valign="top">
-+		<widget source="global.CurrentTime" render="Label" position="2,25" size="120,50" font="Display;48" halign="center" valign="center" foregroundColor="#FFFFFF" backgroundColor="#000000" >
++		<widget source="global.CurrentTime" render="Label" position="2,25" size="120,50" font="LCD;48" halign="center" valign="center" foregroundColor="#FFFFFF" backgroundColor="#000000" >
  			<convert type="ClockToText">Format:%H:%M</convert>
  		</widget>
 -		<widget source="global.CurrentTime" render="Label" position="100,34" zPosition="1" size="26,30" font="Regular;16" valign="top">
-+		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="Display;32" valign="top">
++		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="LCD;32" valign="top">
  			<convert type="ClockToText">Format:%S</convert>
  		</widget>
  	</screen> 
@@ -171,7 +171,7 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
 -	<screen name="InfoBarSummary" position="0,0" size="132,64" id="1">
 -		<widget source="session.CurrentService" render="Label" position="6,0" size="120,25" font="Regular;14" halign="center" valign="center" >
 +	<screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
-+		<widget source="session.CurrentService" render="Label" position="2,96" size="316,85" font="Display;48" halign="center" valign="center" >
++		<widget source="session.CurrentService" render="Label" position="2,96" size="316,85" font="LCD;48" halign="center" valign="center" >
  			<convert type="ServiceName">Name</convert>
  		</widget>
 -		<widget source="session.Event_Now" render="Progress" position="16,27" size="100,5" borderWidth="1">
@@ -183,11 +183,11 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
  			<convert type="EventTime">Progress</convert>
  		</widget>
 -		<widget source="global.CurrentTime" render="Label" position="6,32" size="90,32" font="Regular;32" halign="right" valign="top">
-+		<widget source="global.CurrentTime" render="Label" position="2,25" size="120,50" font="Display;48" halign="right" valign="top">
++		<widget source="global.CurrentTime" render="Label" position="2,25" size="120,50" font="LCD;48" halign="right" valign="top">
  			<convert type="ClockToText">Format:%H:%M</convert>
  		</widget>
 -		<widget source="global.CurrentTime" render="Label" position="100,34" zPosition="1" size="26,30" font="Regular;16" valign="top">
-+		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="Display;32" valign="top">
++		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="LCD;32" valign="top">
  			<convert type="ClockToText">Format:%S</convert>
  		</widget>
 -		<widget source="session.RecordState" render="FixedLabel" text=" " position="6,30" zPosition="1" size="120,34">
@@ -211,7 +211,7 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
 -	<screen name="ChoiceBox_summary" position="0,0" size="132,64" id="1">
 -		<widget source="parent.summary_list" render="Label" position="6,0" size="126,64" font="Regular;11" />
 +	<screen name="ChoiceBox_summary" position="0,0" size="320,240" id="1">
-+		<widget source="parent.summary_list" render="Label" position="2,0" size="316,200" font="Display;48" />
++		<widget source="parent.summary_list" render="Label" position="2,0" size="316,200" font="LCD;48" />
  	</screen>
  	<!-- Color OLED screen (ChoiceBox) -->
  	<screen name="ChoiceBox_summary" position="0,0" size="96,64" id="2">
@@ -222,8 +222,8 @@ diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/main/Makefile.
 -		<widget source="parent.Text" render="Label" position="0,0" size="132,52" font="Regular;11" halign="center" valign="center" />
 -		<widget source="parent.selectedChoice" render="Label" position="6,50" size="120,14" font="Regular;14" halign="center" valign="center" />
 +	<screen name="MessageBox_summary" position="0,0" size="320,240" id="1">
-+		<widget source="parent.Text" render="Label" position="2,0" size="316,200" font="Display;48" halign="center" valign="center" />
-+		<widget source="parent.selectedChoice" render="Label" position="6,205" size="120,30" font="Display;28" halign="center" valign="center" />
++		<widget source="parent.Text" render="Label" position="2,0" size="316,200" font="LCD;48" halign="center" valign="center" />
++		<widget source="parent.selectedChoice" render="Label" position="6,205" size="120,30" font="LCD;28" halign="center" valign="center" />
  	</screen>
  	<!-- Color OLED screen (MessageBox) -->
  	<screen name="MessageBox_summary" position="0,0" size="96,64" id="2">
