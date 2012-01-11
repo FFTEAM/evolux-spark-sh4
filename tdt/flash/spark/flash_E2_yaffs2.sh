@@ -46,14 +46,17 @@ echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode -l
 #/storage/c/enigma2/bin/fw_printenv
 echo "All Done! Bootargs also set to YAFFS2!"
-else
-echo "All Done! Bootargs are YAFFS2!"
-fi
 echo "We reboot in 10s and Evolux should booting with neutrino..."
 sleep 10
 reboot -f
 else
 exit
+fi
+else
+echo "All Done! Bootargs allways set to YAFFS2!"
+echo "We reboot in 10s and Evolux should booting with neutrino..."
+sleep 10
+reboot -f
 fi
 else
 echo "ERROR! Not all files found on stick!"
