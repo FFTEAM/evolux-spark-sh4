@@ -34,6 +34,8 @@ nandwrite -a -o /dev/mtd6 /storage/c/enigma2/e2yaffs2.img
 else
 exit
 fi
+ARGSSET=`/storage/c/enigma2/bin/fw_printenv | grep rootfstype=yaffs2`
+if [ -z "$ARGSSET" ]; then
 read -p "are you sure? change bootargs now to YAFFS2 (Y/n) ? "
 if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
 echo "copy your orig Bootargs to /storage/c/enigma2/myBootargs.txt"
@@ -44,6 +46,9 @@ echo "change bootargs now..."
 /storage/c/enigma2/bin/setmtdmode -l
 #/storage/c/enigma2/bin/fw_printenv
 echo "All Done! Bootargs also set to YAFFS2!"
+else
+echo "All Done! Bootargs are YAFFS2!"
+fi
 echo "We reboot in 10s and Evolux should booting with neutrino..."
 sleep 10
 reboot -f
