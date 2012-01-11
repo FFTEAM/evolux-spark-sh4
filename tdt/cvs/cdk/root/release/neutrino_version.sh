@@ -1,5 +1,6 @@
 #!/bin/sh
-
+CURDIR=`pwd`
+KATIDIR=${CURDIR%/cvs/cdk}
 #################
 RELEASE=0
 BETA=1
@@ -7,14 +8,13 @@ INTERNAL=2
 SNAPSHOT=$RELEASE
 TIMESTAMP=`date +%Y%m%d%H%M`
 #BUILDREV=`git describe | cut -f2 -d'-'`
-version1=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f1`
-version2=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f2`
-version3=`cat /home/pinky/pingulux-git-stm23/tdt/cvs/cdk/own_build/enigma2/etc/changelog.txt | grep -m1 Version= | cut -d = -f2 | cut -d . -f3`
+MyChangelog="cvs/cdk/own_build/enigma2/etc/changelog.txt"
+version1=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f1`
+version2=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f2`
+version3=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f3`
 BUILDREV=$version1$version2$version3
 #################
 
-CURDIR=`pwd`
-KATIDIR=${CURDIR%/cvs/cdk}
 version=`git describe`
 cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/var/etc/.version.new
 
