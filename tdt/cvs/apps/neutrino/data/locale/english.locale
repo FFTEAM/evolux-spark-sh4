@@ -22,6 +22,9 @@ audiomenu.PCMOffset Volume Decrease PCM
 audiomenu.spdif_dd Encoded DD on SPDIF
 audiomenu.stereo Stereo
 audiomenu.volume_step Volumeslider width
+audiomenu.volume_position Volumeslider location
+audiomenu.volume_position.upperleft upper left
+audiomenu.volume_position.center center
 audioplayer.add Add
 audioplayer.add_ic Icecast
 audioplayer.add_loc Local radio list

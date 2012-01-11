@@ -1783,6 +1783,13 @@ const CMenuOptionChooser::keyval AUDIOMENU_CLOCKREC_OPTIONS[AUDIOMENU_CLOCKREC_O
         { 1, LOCALE_OPTIONS_ON  },
 };
 
+#define AUDIOMENU_VOLUME_POSITION_OPTION_COUNT 2
+const CMenuOptionChooser::keyval AUDIOMENU_VOLUME_POSITION_OPTIONS[AUDIOMENU_VOLUME_POSITION_OPTION_COUNT] =
+{
+        { 0, LOCALE_AUDIOMENU_VOLUME_POSITION_UPPERLEFT },
+        { 1, LOCALE_AUDIOMENU_VOLUME_POSITION_CENTER  },
+};
+
 void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier* audioSetupNotifier)
 {
 	audioSettings.addItem(GenericMenuSeparator);
@@ -1797,6 +1804,7 @@ void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNoti
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_AUDIOMENU_AVSYNC, &g_settings.avsync, AUDIOMENU_AVSYNC_OPTIONS, AUDIOMENU_AVSYNC_OPTION_COUNT, true, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_AUDIOMENU_CLOCKREC, &g_settings.clockrec, AUDIOMENU_CLOCKREC_OPTIONS, AUDIOMENU_CLOCKREC_OPTION_COUNT, true, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_AUDIOMENU_VOLUME_STEP, (int *)&g_settings.current_volume_step, true, 1, 100, NULL));
+	audioSettings.addItem(new CMenuOptionChooser(LOCALE_AUDIOMENU_VOLUME_POSITION, &g_settings.volslider_pos, AUDIOMENU_VOLUME_POSITION_OPTIONS, AUDIOMENU_VOLUME_POSITION_OPTION_COUNT, true, NULL));
 	audioSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_SRS_IQ));
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_SRS_IQ, &g_settings.srs_enable, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_SRS_ALGO, &g_settings.srs_algo, AUDIOMENU_SRS_OPTIONS, AUDIOMENU_SRS_OPTION_COUNT, true, audioSetupNotifier));
