@@ -677,6 +677,7 @@ messagebox.info Information
 messagebox.no No
 messagebox.yes Yes
 messagebox.yes Keep changes?
+messagebox.accept Save changes?
 miscsettings.bootinfo Show infos at start
 miscsettings.bootmenu Show boot menu
 miscsettings.channellist Channellist
