@@ -1607,6 +1607,17 @@ const CMenuOptionChooser::keyval CPU_FREQ_OPTIONS[CPU_FREQ_OPTION_COUNT] =
 	{ 650, NONEXISTANT_LOCALE, "650 Mhz"},
 };
 
+#define CPU_FREQ_STANDBY_OPTION_COUNT 6
+const CMenuOptionChooser::keyval CPU_FREQ_STANDBY_OPTIONS[CPU_FREQ_STANDBY_OPTION_COUNT] =
+{
+	{ 200, NONEXISTANT_LOCALE, "200 Mhz"},
+	{ 250, NONEXISTANT_LOCALE, "250 Mhz"},
+	{ 300, NONEXISTANT_LOCALE, "300 Mhz"},
+	{ 350, NONEXISTANT_LOCALE, "350 Mhz"},
+	{ 400, NONEXISTANT_LOCALE, "400 Mhz"},
+	{ 450, NONEXISTANT_LOCALE, "450 Mhz"},
+};
+
 void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 {
 	dprintf(DEBUG_DEBUG, "init miscsettings\n");
@@ -1643,7 +1654,7 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 	CCpuFreqNotifier * cpuNotifier = new CCpuFreqNotifier();
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_CPU_FREQ));	
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_NORMAL, &g_settings.cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true, cpuNotifier));
-	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_OPTIONS, CPU_FREQ_OPTION_COUNT, true));
+	miscSettings.addItem(new CMenuOptionChooser(LOCALE_CPU_FREQ_STANDBY, &g_settings.standby_cpufreq, CPU_FREQ_STANDBY_OPTIONS, CPU_FREQ_STANDBY_OPTION_COUNT, true));
 
 	//channellist
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_MISCSETTINGS_CHANNELLIST));
