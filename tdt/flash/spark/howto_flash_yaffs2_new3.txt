@@ -122,7 +122,7 @@ A) FLASH EVOLUX-YAFFS2:
 - usb-stick mit fat/fat32 formatieren
 - "BootargsPack"-Inhalt:
        beide Ordner "/bin + /etc" auf Stick in Ordner "enigma2" kopieren
-- "uImage" + "e2yaffs2.img" auf Stick in Ordner "enigma2" kopieren
+- "uImage" + "e2yaffs2.img + flash_E2_yaffs2.sh" auf Stick in Ordner "enigma2" kopieren
 - usb-stick an box stecken
 - ORIG-SPARK booten lassen
 ###############################################################
@@ -157,7 +157,7 @@ B) FLASH JFFS2:
 - usb-stick mit fat/fat32 formatieren
 - "BootargsPack"-Inhalt:
        beide Ordner "/bin + /etc" auf Stick in Ordner "enigma2" kopieren
-- "uImage" + "e2jffs2.img" auf Stick in Ordner "enigma2" kopieren
+- "uImage" + "e2jffs2.img + flash_E2_yaffs2.sh" auf Stick in Ordner "enigma2" kopieren
 - usb-stick an box stecken
 - ORIG-SPARK booten lassen
 ###############################################################
