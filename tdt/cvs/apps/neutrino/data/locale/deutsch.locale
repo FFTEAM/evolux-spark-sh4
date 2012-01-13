@@ -1442,4 +1442,7 @@ extramenu.fritzcall Fritzcall Menue
 extramenu.fritzcall.select Fritzcallmonitor
 extramenu.fritzcall.on Ein
 extramenu.fritzcall.off Aus
-setting.saved Einstellungen Gespeichert
+setting.saved Einstellungen gespeichert
+dvb.subtitle.placement Untertitelanzeige
+dvb.subtitle.placement.bottom unten
+dvb.subtitle.placement.top oben

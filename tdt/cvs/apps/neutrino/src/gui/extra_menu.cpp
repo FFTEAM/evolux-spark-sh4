@@ -653,6 +653,8 @@ void EMU_Menu::resume()
 {
 	if (selected && suspended) {
 		system(EMU_list[selected].start_command);
+		if (is_scrambled())
+			system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
 		suspended = false;
 	}
 }
@@ -1100,7 +1102,6 @@ void BOOT_Menu::BOOTSettings()
 		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_orig");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
@@ -1110,10 +1111,8 @@ void BOOT_Menu::BOOTSettings()
 			b->hide();
 			delete b;
 		}
-		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
+		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK))
 			touch(DOTFILE_BOOTE2);
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
-		}
 		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
 			unlink(DOTFILE_BOOTE2);
 

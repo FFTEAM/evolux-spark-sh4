@@ -763,6 +763,8 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.psi_brightness = configfile.getInt32("video_psi_brightness", 128);
 	g_settings.psi_tint = configfile.getInt32("video_psi_tint", 128);
 	g_settings.psi_step = configfile.getInt32("video_psi_step", 2);
+
+	g_settings.dvb_subtitle_placement = configfile.getInt32("dvb_subtitle_placement", 0); // 0: bottom, top else
 	
 	#ifdef DUCKBOX
 	g_settings.hdmi_color_space = configfile.getInt32("hdmi_color_space", 0); // default RGB
@@ -1348,6 +1350,8 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32("video_psi_tint", g_settings.psi_tint);
 	configfile.setInt32("video_psi_step", g_settings.psi_step);
 	
+	configfile.setInt32("dvb_subtitle_placement", g_settings.dvb_subtitle_placement);
+
 	#ifdef DUCKBOX
 	configfile.setInt32( "hdmi_color_space", g_settings.hdmi_color_space );
 	#endif

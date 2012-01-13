@@ -1618,6 +1618,13 @@ const CMenuOptionChooser::keyval CPU_FREQ_STANDBY_OPTIONS[CPU_FREQ_STANDBY_OPTIO
 	{ 450, NONEXISTANT_LOCALE, "450 Mhz"},
 };
 
+#define DVB_SUBTITLE_PLACEMENT_OPTIONS_COUNT 2
+const CMenuOptionChooser::keyval DVB_SUBTITLE_PLACEMENT_OPTIONS[DVB_SUBTITLE_PLACEMENT_OPTIONS_COUNT] =
+{
+	{ 0, LOCALE_DVB_SUBTITLE_PLACEMENT_BOTTOM },
+	{ 1, LOCALE_DVB_SUBTITLE_PLACEMENT_TOP }
+};
+
 void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 {
 	dprintf(DEBUG_DEBUG, "init miscsettings\n");
@@ -1642,6 +1649,8 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_EXTRA_ROTORSWAP, &g_settings.rotor_swap, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_INFOVIEWER_SUBCHAN_DISP_POS, &g_settings.infobar_subchan_disp_pos, INFOBAR_SUBCHAN_DISP_POS_OPTIONS, INFOBAR_SUBCHAN_DISP_POS_OPTIONS_COUNT, true));
+	miscSettings.addItem(new CMenuOptionChooser(LOCALE_DVB_SUBTITLE_PLACEMENT, &g_settings.dvb_subtitle_placement, DVB_SUBTITLE_PLACEMENT_OPTIONS, DVB_SUBTITLE_PLACEMENT_OPTIONS_COUNT, true));
+
 #if 0
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_EXTRA_CACHE_TXT,  (int *)&g_settings.cacheTXT, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 #else

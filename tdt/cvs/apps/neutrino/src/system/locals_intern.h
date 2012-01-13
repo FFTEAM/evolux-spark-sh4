@@ -1447,6 +1447,9 @@ const char *locale_real_names[] = {
 	"videomenu.psi.brightness",
 	"videomenu.psi.tint",
 	"videomenu.psi.reset",
-	"videomenu.psi.step"
+	"videomenu.psi.step",
+	"dvb.subtitle.placement",
+	"dvb.subtitle.placement.top",
+	"dvb.subtitle.placement.bottom"
 };
 #endif

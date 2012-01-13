@@ -677,7 +677,6 @@ messagebox.info Information
 messagebox.no No
 messagebox.yes Yes
 messagebox.yes Keep changes?
-messagebox.accept Save changes?
 miscsettings.bootinfo Show infos at start
 miscsettings.bootmenu Show boot menu
 miscsettings.channellist Channellist
@@ -1445,3 +1444,6 @@ extramenu.fritzcall.select Fritzcallmonitor
 extramenu.fritzcall.on On
 extramenu.fritzcall.off Off
 setting.saved Settings saved
+dvb.subtitle.placement Subtitle placement
+dvb.subtitle.placement.bottom bottom
+dvb.subtitle.placement.top top
