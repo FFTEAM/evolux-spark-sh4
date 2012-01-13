@@ -1194,20 +1194,20 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 	</screen>
 	<!-- LCD screen (main) -->
 	<screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
-		<widget source="session.CurrentService" render="Label" position="2,96" size="316,85" font="LCD;48" halign="center" valign="center" >
+		<widget source="session.CurrentService" render="Label" position="2,116" size="316,56" font="LCD;54" halign="center" valign="center" >
 			<convert type="ServiceName">Name</convert>
 		</widget>
 		<!-- Channellogo (Picon) -->
-		<widget source="session.CurrentService" render="Picon" position="200,10" zPosition="1" size="100,60" alphatest="on">
+		<!-- <widget source="session.CurrentService" render="Picon" backgroundColor="#00006c" position="220,10" zPosition="1" size="100,60" alphatest="on">
 			<convert type="ServiceName">Reference</convert>
-		</widget>
+		</widget> -->
 		<widget source="session.Event_Now" render="Progress" position="2,200" size="316,20" borderWidth="3">
 			<convert type="EventTime">Progress</convert>
 		</widget>
-		<widget source="global.CurrentTime" render="Label" position="2,25" size="120,50" font="LCD;48" halign="right" valign="top">
+		<widget source="global.CurrentTime" render="Label" position="22,0" size="180,90" font="LCD;88" halign="right" valign="top">
 			<convert type="ClockToText">Format:%H:%M</convert>
 		</widget>
-		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="LCD;32" valign="top">
+		<widget source="global.CurrentTime" render="Label" position="232,9" zPosition="1" size="66,66" font="LCD;64" valign="top">
 			<convert type="ClockToText">Format:%S</convert>
 		</widget>
 		<widget source="session.RecordState" render="FixedLabel" text=" " position="2,2" zPosition="1" size="126,20">

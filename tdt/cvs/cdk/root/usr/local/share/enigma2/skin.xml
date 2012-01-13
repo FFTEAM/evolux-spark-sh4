@@ -62,18 +62,18 @@
 	</windowstyle>
 	<!-- Main screen colors (id=1 LCD) -->
 	<windowstyle type="skinned" id="1">
-		<color name="Background" color="#000000"/>
-		<color name="LabelForeground" color="#ffffff"/>
-		<color name="ListboxBackground" color="#000000"/>
-		<color name="ListboxForeground" color="#ffffff"/>
-		<color name="ListboxSelectedBackground" color="#000000"/>
-		<color name="ListboxSelectedForeground" color="#ffffff"/>
-		<color name="ListboxMarkedBackground" color="#000000"/>
-		<color name="ListboxMarkedForeground" color="#ffffff"/>
-		<color name="ListboxMarkedAndSelectedBackground" color="#000000"/>
-		<color name="ListboxMarkedAndSelectedForeground" color="#ffffff"/>
-		<color name="WindowTitleForeground" color="#ffffff"/>
-		<color name="WindowTitleBackground" color="#000000"/>
+		<color name="Background" color="#00006c" />
+		<color name="LabelForeground" color="#a0a0a0" />
+		<color name="ListboxBackground" color="#00006c" />
+		<color name="ListboxForeground" color="#a0a0a0" />
+		<color name="ListboxSelectedBackground" color="#00006c" />
+		<color name="ListboxSelectedForeground" color="#a0a0a0" />
+		<color name="ListboxMarkedBackground" color="#00006c" />
+		<color name="ListboxMarkedForeground" color="#a0a0a0" />
+		<color name="ListboxMarkedAndSelectedBackground" color="#00006c" />
+		<color name="ListboxMarkedAndSelectedForeground" color="#a0a0a0" />
+		<color name="WindowTitleForeground" color="#a0a0a0" />
+		<color name="WindowTitleBackground" color="#00006c" />
 	</windowstyle>
 	<!-- Fonts -->
 	<fonts>
