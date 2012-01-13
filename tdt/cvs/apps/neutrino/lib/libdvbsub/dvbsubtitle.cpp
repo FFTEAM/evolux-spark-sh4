@@ -679,69 +679,68 @@ static int min_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance
 static int min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());		/* startY */
 static int max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());	/* screen width */
 static int max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());	/* screen height */
+//FIXME
+int clear_x = 0;
+int clear_y = 0;
+int clear_width = 0;
+int clear_height = 0;
 
 void cDvbSubtitleBitmaps::Clear()
 {
-	dbgconverter("cDvbSubtitleBitmaps::Draw: clear x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
-	if(max_x && max_y) {
-		CFrameBuffer::getInstance()->paintBackgroundBoxRel (min_x, min_y, max_x-min_x, max_y-min_y);
-		max_x = max_y = 0;
+//	dbgconverter("cDvbSubtitleBitmaps::Draw: clear x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
+	if(clear_height && clear_width) {
+		CFrameBuffer::getInstance()->paintBackgroundBoxRel (clear_x, clear_y, clear_width, clear_height);
+		clear_x = clear_y = clear_width = clear_height = 0;
 	}
 }
 
 void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 {
 	static tColor save_colors[MAXNUMCOLORS];
+	min_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenX());
+	min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());
+	max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());
+	max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());
 
-/*	int stride = CFrameBuffer::getInstance()->getScreenWidth(true);
-	int wd = CFrameBuffer::getInstance()->getScreenWidth();
-	int xs = CFrameBuffer::getInstance()->getScreenX();
-	int yend = CFrameBuffer::getInstance()->getScreenY() + CFrameBuffer::getInstance()->getScreenHeight(); */
 	int stride = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
-	int wd = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());
-	int xs = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenX());
-	int yend = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY()) + CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());
 	uint32_t *sublfb = CFrameBuffer::getInstance()->getFrameBufferPointer();
 
-	dbgconverter("cDvbSubtitleBitmaps::Draw: %d bitmaps, x= %d, width= %d end=%d stride %d\n", bitmaps.Size(), xs, wd, yend, stride);
-
-	if(bitmaps.Size())
+	if(bitmaps.Size()) {
+		dbgconverter("cDvbSubtitleBitmaps::Draw: %d bitmaps, x= %d, width= %d end=%d stride %d\n", bitmaps.Size(), min_x, max_x, min_y + max_y, stride);
 		Clear(); //FIXME should we clear for new bitmaps set ?
+	}
+
+	int yspace = min_y + max_y;
+	for (int i = 0; i < bitmaps.Size(); i++)
+		yspace -= bitmaps[i]->Height();
+
+	clear_y = yspace;
+	clear_height = max_y - yspace;
 
 	for (int i = 0; i < bitmaps.Size(); i++) {
 
 		int NumColors;
 		const tColor *Colors = bitmaps[i]->Colors(NumColors);
-		if (Colors) {
+		if (Colors)
 			memcpy(save_colors, Colors, sizeof(tColor)*NumColors);
-		}
+
 		/* center on screen */
-		int xoff = xs + (wd - bitmaps[i]->Width())/2;
-		/* move to screen bottom */
-//		int yoff = (yend - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0()))*stride;
-//		int ys = yend - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0());
-		int yoff = (CFrameBuffer::getInstance()->scaleY(yend) - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0()))*stride;
-		int ys = CFrameBuffer::getInstance()->scaleY(yend) - (CFrameBuffer::getInstance()->getScreenHeight()-bitmaps[i]->Y0());
+		int xoff = min_x + (max_x - bitmaps[i]->Width())/2;
 
-		dbgconverter("cDvbSubtitleBitmaps::Draw %d colors= %d at %d,%d (x=%d y=%d) size %dx%d\n", 
-			i, NumColors, bitmaps[i]->X0(), bitmaps[i]->Y0(), xoff, ys, bitmaps[i]->Width(), bitmaps[i]->Height());
+		if (clear_x > xoff)
+			clear_x = xoff;
+		if (clear_width < bitmaps[i]->Width())
+			clear_width = bitmaps[i]->Width();
 
-		for (int y2 = 0; y2 < bitmaps[i]->Height(); y2++) {
-			int y = y2*stride + yoff;
-			for (int x2 = 0; x2 < bitmaps[i]->Width(); x2++)
-			{
+		int y = yspace * stride;
+
+		for (int y2 = 0; y2 < bitmaps[i]->Height(); y2++, y += stride)
+			for (int x2 = 0; x2 < bitmaps[i]->Width(); x2++) {
 				int idx = *(bitmaps[i]->Data(x2, y2));
 				*(sublfb + xoff + x2 + y) = save_colors[idx];
 			}
-		}
-		if(min_x > xoff)
-			min_x = xoff;
-		if(min_y > ys)
-			min_y = ys;
-		if(max_x < (xoff + bitmaps[i]->Width()))
-			max_x = xoff + bitmaps[i]->Width();
-		if(max_y < (ys+bitmaps[i]->Height()))
-			max_y = ys+bitmaps[i]->Height();
+
+		yspace += bitmaps[i]->Height();
 	}
 	if(bitmaps.Size())
 		dbgconverter("cDvbSubtitleBitmaps::Draw: finish, min/max screen: x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
