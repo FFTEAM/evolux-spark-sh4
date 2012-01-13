@@ -463,7 +463,7 @@ void CRemoteControl::processAPIDnames()
 							// workaround for buggy ZDF ctags / or buggy sectionsd/drivers , who knows...
 							if(!tags[i].component.empty())
 							{
-								strncpy(current_PIDs.APIDs[j].desc, (Latin1_to_UTF8(tags[i].component)).c_str(), 25);
+								strncpy(current_PIDs.APIDs[j].desc, tags[i].component.c_str(), 25);
 								if (current_PIDs.APIDs[j].is_ac3)
 									strncat(current_PIDs.APIDs[j].desc, " (AC3)", 25);
 							}
