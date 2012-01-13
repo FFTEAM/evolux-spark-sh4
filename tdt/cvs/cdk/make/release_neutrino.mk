@@ -461,7 +461,7 @@ endif
 #######################################################################################
 
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/lib
-
+	rm -rf $(prefix)/release_neutrino/usr/lib/tuxbox
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino/usr/lib/
 	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino/usr/lib/
 	rm -rf $(prefix)/release_neutrino/usr/lib/alsa-lib
