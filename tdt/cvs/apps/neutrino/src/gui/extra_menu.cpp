@@ -66,6 +66,8 @@ static int touch(const char *filename) {
 static struct {
 #define EXTRA_CAM_SELECTED "cam_selected"
         std::string     cam_selected;
+#define EXTRA_FRITZCALL "fritzcall"
+        bool            fritzcall;
 } settings;
 
 CConfigFile *configfile = NULL;
@@ -73,6 +75,7 @@ CConfigFile *configfile = NULL;
 static bool saveSettings() {
 	if (configfile) {
 		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
+		configfile->setInt32(EXTRA_FRITZCALL, settings.fritzcall);
 		configfile->saveConfig(EXTRA_SETTINGS_FILE);
 		return true;
 	}
@@ -81,6 +84,7 @@ static bool saveSettings() {
 
 static bool initSettings() {
 	settings.cam_selected = "disabled";
+	settings.fritzcall = 0;
 }
 
 static bool loadSettings() {
@@ -89,6 +93,7 @@ static bool loadSettings() {
 		configfile = new CConfigFile('=');
 		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
 			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
+			settings.fritzcall = configfile->getInt32(EXTRA_FRITZCALL, 0);
 			return true;
 		}
 	}
@@ -648,6 +653,8 @@ void EMU_Menu::resume()
 {
 	if (selected && suspended) {
 		system(EMU_list[selected].start_command);
+		if (is_scrambled())
+			system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
 		suspended = false;
 	}
 }
@@ -1095,7 +1102,6 @@ void BOOT_Menu::BOOTSettings()
 		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
 			system("fw_setenv -s /etc/bootargs_orig");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
@@ -1105,10 +1111,8 @@ void BOOT_Menu::BOOTSettings()
 			b->hide();
 			delete b;
 		}
-		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
+		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK))
 			touch(DOTFILE_BOOTE2);
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
-		}
 		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
 			unlink(DOTFILE_BOOTE2);
 
@@ -1287,11 +1291,10 @@ void FRITZCALL_Menu::hide()
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
-#define DOTFILE_FRITZCALL "/etc/.fritzcall"
 void FRITZCALL_Menu::FRITZCALLSettings()
 {
 	loadSettings();
-	int fritzcall = access(DOTFILE_FRITZCALL) ? 0 : 1;
+	int fritzcall = settings.fritzcall ? 1 : 0;
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
@@ -1310,12 +1313,12 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 		if (fritzcall == 1)
 		{
 			//FRITZCALL STARTEN
-			touch(DOTFILE_FRITZCALL);
+			settings.fritzcall = true;
 			system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
 		} else {
 			//FRITZCALL BEENDEN
-			unlink(DOTFILE_FRITZCALL);
+			settings.fritzcall = false;
 			system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
 		}
