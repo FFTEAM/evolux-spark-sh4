@@ -1292,7 +1292,7 @@ void FRITZCALL_Menu::hide()
 #define DOTFILE_FRITZCALL "/etc/.fritzcall"
 void FRITZCALL_Menu::FRITZCALLSettings()
 {
-	int fritzcall = access(DOTFILE_FRITZCALL, X_OK) ? 0 : 1;
+	int fritzcall = access(DOTFILE_FRITZCALL, R_OK) ? 0 : 1;
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
