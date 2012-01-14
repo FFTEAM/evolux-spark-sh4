@@ -359,7 +359,7 @@ endif
 	mkdir -p $(prefix)/release_neutrino/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/keys
-	mkdir -p $(prefix)/release_neutrino/var/tuxbox/config
+	mkdir -p $(prefix)/release_neutrino/var/tuxbox #/config
 	mkdir -p $(prefix)/release_neutrino/share/tuxbox
 	mkdir -p $(prefix)/release_neutrino/var/share/icons
 #	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
