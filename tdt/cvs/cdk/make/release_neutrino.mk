@@ -367,9 +367,10 @@ endif
 	mkdir -p $(prefix)/release_neutrino/media/net
 #	( cd $(prefix)/release_neutrino/var && ln -s ../usr/bin emu )
 	( cd $(prefix)/release_neutrino/var && ln -s ../usr/keys keys )
-	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/neutrino.conf )
-	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/Sportster.conf )
-	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/nhttpd.conf )
+	( cd $(prefix)/release_neutrino/var/tuxbox && ln -s ../../../usr/local/share/config )
+#	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/neutrino.conf )
+#	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/Sportster.conf )
+#	( cd $(prefix)/release_neutrino/var/tuxbox/config && ln -s ../../../usr/local/share/config/nhttpd.conf )
 	( cd $(prefix)/release_neutrino/share/tuxbox && ln -s /usr/local/share/neutrino )
 	( cd $(prefix)/release_neutrino/var/share/icons/ && ln -s /usr/local/share/neutrino/icons/logo )
 	( cd $(prefix)/release_neutrino/ && ln -s /usr/local/share/neutrino/icons/logo logos )
@@ -505,6 +506,8 @@ endif
 
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino/usr/bin/
+	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release_neutrino/bin/
+	cp -RP $(targetprefix)/usr/lib/tuxbox/plugins/* $(prefix)/release_neutrino/var/plugins/
 
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko $(prefix)/release_neutrino/lib/modules || true

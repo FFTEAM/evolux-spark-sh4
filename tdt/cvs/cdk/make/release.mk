@@ -645,6 +645,7 @@ endif
 	rm $(prefix)/release/bin/stslave
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
+	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release_neutrino/bin/
 
 if STM22
 	cp $(kernelprefix)/linux/arch/sh/boot/uImage $(prefix)/release/boot/
