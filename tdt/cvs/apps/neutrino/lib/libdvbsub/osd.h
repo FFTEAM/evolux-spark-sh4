@@ -134,6 +134,7 @@ public:
   bool Intersects(int x1, int y1, int x2, int y2) const;
   bool Dirty(int &x1, int &y1, int &x2, int &y2);
   void Clean(void);
+  void Resize(int x_old, int y_old, int x_new, int y_new);
 };
 
 struct tArea {

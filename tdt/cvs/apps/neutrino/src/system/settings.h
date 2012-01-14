@@ -84,7 +84,6 @@ struct SNeutrinoSettings
 	int scale_display_type;
 	#endif
 	int play_button_action;
-	int dvb_subtitle_placement;
 
 	//audio
 	int audio_AnalogMode;

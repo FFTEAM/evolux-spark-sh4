@@ -402,6 +402,8 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 	pmt_stop_update_filter(&pmt_update_fd);
 	stopPlayBack(true);
 
+	dvbsub_stop();
+
 	/* store the new channel */
 	if ((!channel) || (channel_id != channel->getChannelID()))
 		channel = &(cit->second);
