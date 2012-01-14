@@ -1290,7 +1290,7 @@ void FRITZCALL_Menu::hide()
 }
 
 #define DOTFILE_FRITZCALL "/etc/.fritzcall"
-void FRITZCALL_/home/pinky/pingulux-git-stm23/tdt/cvs/apps/neutrino/src/guiMenu::FRITZCALLSettings()
+void FRITZCALL_Menu::FRITZCALLSettings()
 {
 	int fritzcall = access(DOTFILE_FRITZCALL, R_OK) ? 0 : 1;
 	int old_fritzcall=fritzcall;
