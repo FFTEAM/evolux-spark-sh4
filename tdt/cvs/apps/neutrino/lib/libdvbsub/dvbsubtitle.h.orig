@@ -36,7 +36,7 @@ private:
   int ExtractSegment(const uchar *Data, int Length, int64_t Pts);
   void FinishPage(cDvbSubtitlePage *Page);
   bool running;
-//  int min_x, min_y, max_x, max_y;
+  int min_x, min_y, max_x, max_y;
   cTimeMs Timeout;
   pthread_mutex_t mutex;
 public:

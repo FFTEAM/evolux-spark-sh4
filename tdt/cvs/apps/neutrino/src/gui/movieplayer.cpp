@@ -78,9 +78,6 @@
 #endif
 #include <playback_cs.h>
 
-int dvbsub_start(int pid);
-int dvbsub_pause();
-
 extern cVideo * videoDecoder;
 #ifdef __sh__
 extern cAudio * audioDecoder;
@@ -272,7 +269,6 @@ void CMoviePlayerGui::cutNeutrino()
 
 	g_Zapit->stopPlayBack();
 	g_Zapit->setStandby(true);
-	dvbsub_pause();
 	g_Sectionsd->setPauseScanning(true);
 
 	CNeutrinoApp::getInstance()->handleMsg(NeutrinoMessages::CHANGEMODE, NeutrinoMessages::mode_ts);
@@ -415,7 +411,6 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 	restoreNeutrino();
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 	//g_RCInput->postMsg(NeutrinoMessages::SHOW_INFOBAR, 0);
-	//dvbsub_start(0);
 
 	if (bookmarkmanager)
 		delete bookmarkmanager;

@@ -346,7 +346,6 @@ extern int dvbsub_pause();
 extern int dvbsub_stop();
 extern int dvbsub_getpid();
 extern int dvbsub_start(int pid);
-extern void dvbsub_setup_changed(void);
 
 int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0)
 {
@@ -355,7 +354,6 @@ int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool 
 	bool failed = false;
 
 DBG("[zapit] zapto channel id %llx diseqcType %d nvod %d\n", channel_id, diseqcType, in_nvod);
-fprintf(stderr, "[zapit] zapto channel id %llx diseqcType %d nvod %d\n", channel_id, diseqcType, in_nvod); //FIXME
 
 	sig_delay = 2;
         if (!firstzap && channel) {
@@ -403,6 +401,8 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 
 	pmt_stop_update_filter(&pmt_update_fd);
 	stopPlayBack(true);
+
+	dvbsub_stop();
 
 	/* store the new channel */
 	if ((!channel) || (channel_id != channel->getChannelID()))
@@ -600,8 +600,6 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 #endif
 		}
 	}
-
-	dvbsub_setup_changed();
 
 	return 0;
 }

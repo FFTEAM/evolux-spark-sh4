@@ -735,7 +735,7 @@ printf("CChannelList::show *********** res %d\n", res);
 
 void CChannelList::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x, y, width + 1, height+ info_height+ 5);
+	frameBuffer->paintBackgroundBoxRel(x, y, width, height+ info_height+ 5);
         clearItem2DetailsLine ();
 }
 

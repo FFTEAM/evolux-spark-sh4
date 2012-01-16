@@ -288,26 +288,22 @@ const tIndex *cBitmap::Data(int x, int y)
 
 void cBitmap::Resize(int x_old, int y_old, int x_new, int y_new)
 {
-  if (x_old == x_new && y_old == y_new)
-    return;
-
   int numColors;
   Colors(numColors);
 
-  if (numColors < 257) {
+  if (numColors == 16) {
     int width_new = (width * x_new) / x_old;
     int height_new = (height * y_new) / y_old;
     tIndex *bm = MALLOC(tIndex, width_new * height_new);
     if(!bm)
        return;
 
-    for(int y=0;y<height_new;y++) {
-	int y_old = y * height / height_new;
+    for(int y=0;y<height_new;y++)
 	for (int x=0;x<width_new;x++) {
-	    int x_old = x * width / width_new;
-	    bm[y * width_new + x] = bitmap[y_old * width + x_old];
+		int y_old = y * height / height_new;
+	  	int x_old = x * width / width_new;
+	  bm[y * width_new + x] = bitmap[y_old * width + x_old];
 	}
-    }
 
     free(bitmap);
     bitmap = bm;

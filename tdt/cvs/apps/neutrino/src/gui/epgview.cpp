@@ -866,7 +866,7 @@ void CEpgData::hide()
 		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->setSize((int)(g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->getSize() / BIG_FONT_FAKTOR));
 	}
 
-	frameBuffer->paintBackgroundBox (sx, sy- toph, sx+ ox + 1, sy+ oy);
+	frameBuffer->paintBackgroundBox (sx, sy- toph, sx+ ox, sy+ oy);
         showTimerEventBar (false);
 }
 

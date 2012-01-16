@@ -20,7 +20,6 @@ extern "C" {
 #include <sys/mman.h>
 }
 #include "driver/framebuffer.h"
-#include "video_cs.h"
 
 #ifdef __sh__
 #define FB "/dev/fb0"
@@ -40,7 +39,7 @@ extern int fb_fd;
 
 // Set these to 'true' for debug output:
 #if 1
-static bool DebugConverter = true;
+static bool DebugConverter = false; //FIXME
 static bool DebugSegments = false;
 static bool DebugPages = false;
 static bool DebugRegions = false;
@@ -671,78 +670,44 @@ void cDvbSubtitleBitmaps::AddBitmap(cBitmap *Bitmap)
   dbgconverter("cDvbSubtitleBitmaps::AddBitmap size %d PTS: %lld\n", bitmaps.Size(), pts);
 }
 
+static int min_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenX());		/* startX */
+static int min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());		/* startY */
+static int max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());	/* screen width */
+static int max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());	/* screen height */
 static bool needs_clear = false;
-static int min_y;
-static int max_x;
-static int max_y;
 
 void cDvbSubtitleBitmaps::Clear()
 {
 	dbgconverter("cDvbSubtitleBitmaps::Draw: clear\n");
 	if(needs_clear) {
-		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, max_x, max_y);
+		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, min_x + max_x, min_y + max_y);
 #ifdef __sh__	
-//		CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
+//		CFrameBuffer::getInstance()->blit(0, 0, min_x + max_x, min_y + max_y);
 #endif
 		needs_clear = false;
 	}
 }
-
-static int picture_xres = 0, picture_yres = 0;
 
 void cDvbSubtitleBitmaps::Draw()
 {
     if (!bitmaps.Size())
 	return;
 
-    dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
-
-    if(!picture_xres || !picture_yres) {
-	int framerate;
-	extern cVideo *videoDecoder;
-	videoDecoder->getPictureInfo(picture_xres, picture_yres, framerate);
-	dbgconverter("cDvbSubtitleBitmaps::Draw: screen: %dx%d picture: %dx%d\n", max_x, max_y, picture_xres, picture_yres);
-    }
-    if(!picture_xres || !picture_yres)
-	return;
-
-    static CFrameBuffer* fb = CFrameBuffer::getInstance();
     static tColor save_colors[MAXNUMCOLORS];
+    min_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenX());
+    min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());
+    max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
+    max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());
 
-    int stride = fb->scaleX(fb->getScreenWidth(true));
-    uint32_t *sublfb = fb->getFrameBufferPointer();
+    int stride = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
+    uint32_t *sublfb = CFrameBuffer::getInstance()->getFrameBufferPointer();
 
-    int y_start = max_y;
-    int y_end = 0;
-    for (int i = 0; i < bitmaps.Size(); i++) {
-#if 0
-	dbgconverter("cDvbSubtitleBitmaps::Draw: pre bitmap=%d x=%d y=%d, w=%d, h=%d\n",
-		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), bitmaps[i]->Width(), bitmaps[i]->Height());
-	dbgconverter("cDvbSubtitleBitmaps::Draw: Resize %d %d => %d %d\n",
-		picture_xres, picture_yres, max_x, max_y);
-#endif
-	bitmaps[i]->Resize(picture_xres, picture_yres, max_x, max_y);
-#if 0
-	dbgconverter("cDvbSubtitleBitmaps::Draw: post bitmap=%d x=%d y=%d, w=%d, h=%d\n",
-		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), bitmaps[i]->Width(), bitmaps[i]->Height());
-#endif
+    dbgconverter("cDvbSubtitleBitmaps::Draw: %d bitmaps, x= %d, width= %d end=%d stride %d\n",
+	bitmaps.Size(), min_x, max_x, min_y + max_y, stride);
 
-	// Work around badly calculated received Y-axis values, part 1
-	y_start = min (y_start, bitmaps[i]->Y0());
-	y_end = max(y_end, bitmaps[i]->Y0() + bitmaps[i]->Height());
-    }
-
-    // Work around badly calculated received Y-axis values, part 2
-    int y_off = 0;
-    if ((y_start > 200 && y_end > max_x - 200) || (y_end > max_y - min_y)) {
-	// assume alignment at bottom of screen
-	y_off = max_y - min_y - y_end + y_start;
-    }
-    if (y_start < min_y)
-	y_off = min_y;
-
-    dbgconverter("cDvbSubtitleBitmaps::Draw: min_y=%d max_y=%d y_start=%d y_end=%d y_off=%d\n", min_y, max_y, y_start, y_end, y_off);
-
+    if (bitmaps[0]->Width() == 720)
+		for (int i = 0; i < bitmaps.Size(); i++)
+				bitmaps[i]->Resize(720, 576, 1280, 720);
     Clear();
 
     for (int i = 0; i < bitmaps.Size(); i++) {
@@ -751,22 +716,22 @@ void cDvbSubtitleBitmaps::Draw()
 	if (Colors)
 	    memcpy(save_colors, Colors, sizeof(tColor)*NumColors);
 
-	int y = (y_off + bitmaps[i]->Y0()) * stride + bitmaps[i]->X0();
+	int xoff = bitmaps[i]->X0();
+	int y = bitmaps[i]->Y0() * stride;
 
 	int bih = bitmaps[i]->Height();
 	int biw = bitmaps[i]->Width();
 		
-	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
-		i, bitmaps[i]->X0(), y_off + bitmaps[i]->Y0(), biw, bih, NumColors);
-
 	if (y > bih)
 	    for (int y2 = 0; y2 < bih; y2++, y += stride)
 		for (int x2 = 0; x2 < biw; x2++)
-		    *(sublfb + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
+		    *(sublfb + xoff + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
     }
 
+    if(bitmaps.Size())
+	dbgconverter("cDvbSubtitleBitmaps::Draw: finish, min/max screen: x=% d y= %d, w= %d, h= %d\n",
+		min_x, min_y, max_x-min_x, max_y-min_y);
     needs_clear = true;
-    dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
 }
 
 // --- cDvbSubtitleConverter -------------------------------------------------
@@ -792,7 +757,6 @@ cDvbSubtitleConverter::~cDvbSubtitleConverter()
 //  Cancel(3);
 //  delete dvbSubtitleAssembler;
   delete bitmaps;
-  picture_xres = picture_yres = 0;
 //  delete pages;
 }
 
@@ -809,7 +773,6 @@ void cDvbSubtitleConverter::Unlock(void)
 void cDvbSubtitleConverter::Pause(bool pause)
 {
 	dbgconverter("cDvbSubtitleConverter::Pause: %s\n", pause ? "pause" : "resume");
-	picture_xres = picture_yres = 0;
 	if(pause) {
 		if(!running)
 			return;
@@ -820,43 +783,36 @@ void cDvbSubtitleConverter::Pause(bool pause)
 		//Reset();
 	} else {
 		running = true;
-		min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());
-		max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
-		max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight(true));
 	}
 }
 
 void cDvbSubtitleConverter::Clear(void)
 {
-	dbgconverter("cDvbSubtitleBitmaps::%s\n", __func__);
+	dbgconverter("cDvbSubtitleBitmaps::Draw: clear\n");
 	if(needs_clear) {
-		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, max_x, max_y);
+		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, min_x + max_x, min_y + max_y);
 		CFrameBuffer::getInstance()->ClearFrameBuffer();
 #ifdef __sh__	
-//		CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
+//		CFrameBuffer::getInstance()->blit(0, 0, min_x + max_x, min_y + max_y);
 #endif
 		needs_clear = false;
 	}
-	dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
 }
 
 void cDvbSubtitleConverter::SetupChanged(void)
 {
-  picture_xres = picture_yres = 0;
   setupLevel++;
 }
 
 void cDvbSubtitleConverter::Reset(void)
 {
-  dbgconverter("cDvbSubtitleConverter::%s\n", __func__);
+  dbgconverter("Converter reset -----------------------\n");
   dvbSubtitleAssembler->Reset();
   Lock();
   pages->Clear();
   bitmaps->Clear();
   Unlock();
   Timeout.Set(0xFFFF*1000);
-  picture_xres = picture_yres = 0;
-  dbgconverter("cDvbSubtitleConverter::%s: done\n", __func__);
 }
 
 int cDvbSubtitleConverter::ConvertFragments(const uchar *Data, int Length, int64_t pts)
@@ -966,7 +922,7 @@ int cDvbSubtitleConverter::Action(void)
 		dbgconverter("cDvbSubtitleConverter::Action: Got %d bitmaps, showing #%d\n", bitmaps->Count(), sb->Index() + 1);
 		if (running) {
 			sb->Draw();
-//			CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
+//			CFrameBuffer::getInstance()->blit(min_x, min_y, max_x, max_y);
 			Timeout.Set(sb->Timeout() *400);
 		}
 

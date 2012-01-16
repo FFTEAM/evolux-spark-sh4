@@ -73,7 +73,7 @@ int dvbsub_init() {
 int dvbsub_pause()
 {
 	if(reader_running) {
-		if(dvbSubtitleConverter && !dvbsub_paused) {
+		if(dvbSubtitleConverter) {
 			dvbSubtitleConverter->Pause(true);
 		}
 		dvbsub_paused = true;
@@ -366,10 +366,4 @@ void dvbsub_get_stc(int64_t * STC)
 {
 	if(dmx)
 		dmx->getSTC(STC);
-}
-
-void dvbsub_setup_changed(void)
-{
-	if(dvbSubtitleConverter)
-		dvbSubtitleConverter->SetupChanged();
 }

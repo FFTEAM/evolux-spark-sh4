@@ -2711,12 +2711,17 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 		if( ( mode == mode_tv ) || ( ( mode == mode_radio ) ) ) {
 			if( (msg == NeutrinoMessages::SHOW_EPG) /* || (msg == CRCInput::RC_info) */ ) {
 				//g_EpgData->show( g_Zapit->getCurrentServiceID() );
+				dvbsub_pause();
 				g_EpgData->show(live_channel_id);
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_epg ) {
+				dvbsub_pause();
 				g_EventList->exec(live_channel_id, channelList->getActiveChannelName());
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_text) {
+				dvbsub_pause();
 				g_RCInput->clearRCMsg();
 				if(g_settings.mode_clock)
 					InfoClock->StopClock();
@@ -2731,6 +2736,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				AudioMute(current_muted, true);
 				if(g_settings.mode_clock)
 					InfoClock->StartClock();
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_setup ) {
 				if(!g_settings.minimode) {
@@ -2798,7 +2804,8 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( (msg == (neutrino_msg_t) g_settings.key_timeshift) || msg == CRCInput::RC_rewind) {
 			   if((g_settings.recording_type == RECORDING_FILE) && !g_settings.minimode) {
-printf("[neutrino] timeshift try, recordingstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
+				printf("[neutrino] timeshift try, recordingstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n",
+					recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
 				std::string tmode;
 				if(msg == CRCInput::RC_rewind)
 					tmode = "rtimeshift"; // rewind
@@ -2808,12 +2815,10 @@ printf("[neutrino] timeshift try, recordingstatus %d, rec dir %s, timeshift dir 
 					tmode = "timeshift"; // record just started
 
 				if(g_RemoteControl->is_video_started) {
+					dvbsub_pause();
 					if(recordingstatus) {
-						//dvbsub_pause();
 						moviePlayerGui->exec(NULL, tmode);
-						//dvbsub_start(0);
 					} else if(msg != CRCInput::RC_rewind) {
-						//dvbsub_pause();
 						if(g_settings.temp_timeshift) {
 							startAutoRecord(true);
 						} else {
@@ -2821,16 +2826,15 @@ printf("[neutrino] timeshift try, recordingstatus %d, rec dir %s, timeshift dir 
 							doGuiRecord(g_settings.network_nfs_recordingdir, true);
 						}
 						if(recordingstatus) {
-							//dvbsub_pause();
 							moviePlayerGui->exec(NULL, tmode);
-							//dvbsub_start(0);
 						}
 					}
+					dvbsub_start(0);
 				}
 			   }
 			}
 			else if( msg == CRCInput::RC_record || msg == CRCInput::RC_stop ) {
-printf("[neutrino] direct record\n");
+				printf("[neutrino] direct record\n");
 				if(recordingstatus) {
 					if(ShowLocalizedMessage(LOCALE_MESSAGEBOX_INFO, LOCALE_SHUTDOWN_RECODING_QUERY, 
 						CMessageBox::mbrYes, CMessageBox::mbYes | CMessageBox::mbNo, NULL, 450, 30, true) == CMessageBox::mbrYes)
@@ -2841,17 +2845,25 @@ printf("[neutrino] direct record\n");
 				}
 			}
 			else if( msg == CRCInput::RC_red ) {
+				dvbsub_pause();
 				showUserMenu(SNeutrinoSettings::BUTTON_RED);
+				dvbsub_start(0);
 			}
 			else if( (msg == CRCInput::RC_green) || ((msg == CRCInput::RC_audio) && !g_settings.audio_run_player) )
 			{
+				dvbsub_pause();
 				showUserMenu(SNeutrinoSettings::BUTTON_GREEN);
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_yellow ) {       // NVODs
+				dvbsub_pause();
 				showUserMenu(SNeutrinoSettings::BUTTON_YELLOW);
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_blue ) {
+				dvbsub_pause();
 				showUserMenu(SNeutrinoSettings::BUTTON_BLUE);
+				dvbsub_start(0);
 			}
 			else if( (msg == CRCInput::RC_audio) && g_settings.audio_run_player) {
 				dvbsub_pause();
@@ -2860,13 +2872,13 @@ printf("[neutrino] direct record\n");
 			}
 			else if( msg == CRCInput::RC_video || msg == CRCInput::RC_play ) {
 				bool show = true;
+				dvbsub_pause();
 				if ((g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_ONSIGNAL) || (g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_CHANGETOLOCKED)) {
                                         CZapProtection* zapProtection = new CZapProtection( g_settings.parentallock_pincode, 0x100 );
                                         show = zapProtection->check();
 					delete zapProtection;
 				}
 				if(show) {
-					//dvbsub_pause();
 /*					if( mode == mode_radio )
 						videoDecoder->StopPicture(); */
 					if ( g_settings.play_button_action == 0 )
@@ -2879,12 +2891,14 @@ printf("[neutrino] direct record\n");
 #else
 						videoDecoder->ShowPicture(DATADIR "/neutrino/icons/radiomode.jpg");
 #endif */
-					//dvbsub_start(0);
 				}
+				dvbsub_start(0);
 			}
 			else if (CRCInput::isNumeric(msg) && g_RemoteControl->director_mode ) {
 				g_RemoteControl->setSubChannel(CRCInput::getNumericValue(msg));
+				dvbsub_pause();
 				g_InfoViewer->showSubchan();
+				dvbsub_start(0);
 			}
 			else if (CRCInput::isNumeric(msg)) {
 				channelList->numericZap( msg );
@@ -2892,16 +2906,16 @@ printf("[neutrino] direct record\n");
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
 						( msg == NeutrinoMessages::SHOW_INFOBAR ) )
 			{
+				dvbsub_pause();
 				bool show_info = ((msg != NeutrinoMessages::SHOW_INFOBAR) || (g_InfoViewer->is_visible || g_settings.timing[SNeutrinoSettings::TIMING_INFOBAR] != 0));
 			         // turn on LCD display
 				CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO); 
 
 				// show Infoviewer
 				if(show_info && channelList->getSize()) {
-					dvbsub_pause();
 					g_InfoViewer->showTitle(channelList->getActiveChannelNumber(), channelList->getActiveChannelName(), channelList->getActiveSatellitePosition(), channelList->getActiveChannel_ChannelID()); // UTF-8
-					dvbsub_start(0);
 				}
+				dvbsub_start(0);
 			}
 #if 0
 			else if( msg == CRCInput::RC_shift_blue ) {
@@ -2930,9 +2944,11 @@ printf("[neutrino] direct record\n");
 			} 
 #endif
 			else {
+				dvbsub_pause();
 				if (msg == CRCInput::RC_home)
   					CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 				handleMsg(msg, data);
+				dvbsub_start(0);
 			}
 		}
 		else {
