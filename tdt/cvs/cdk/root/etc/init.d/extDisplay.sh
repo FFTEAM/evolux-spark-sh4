@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ -e /etc/.extDisplay ] && [ ! -e /etc/.start_enigma2 ]; then
+if [ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ]; then
 	hturl="http://127.0.0.1"
 	sid=$(wget -q -O - $hturl/control/zapto | cut -b13-16)
 	channame=`wget -q -O - $hturl/control/getubouquetsxml | grep "i=\"$sid\"" | cut -d '"' -f4`
