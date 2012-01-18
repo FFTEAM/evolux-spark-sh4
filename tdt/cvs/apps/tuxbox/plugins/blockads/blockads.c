@@ -408,19 +408,6 @@ FILE *fh1,*fh2;
 		if(volume)
 		{
 			volume=0;
-			if(!HTTP_downloadFile("127.0.0.1",80,"/control/volume?status", ZAP_FILE, 0, 1))
-			{
-				if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
-				{
-					while((fgets(line_buffer, sizeof(line_buffer), fh1)>0) && !strlen(line_buffer));
-					if(strlen(line_buffer)>=1)
-					{
-						Trim_String(line_buffer);
-						sscanf(line_buffer,"%d",&mute);
-					}
-					fclose(fh1);
-				}
-			}
 			if(!HTTP_downloadFile("127.0.0.1",80,"/control/volume", ZAP_FILE, 0, 1))
 			{
 				if((fh1=fopen(ZAP_FILE,"r"))!=NULL)

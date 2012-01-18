@@ -326,19 +326,6 @@ char zstr[150];
 FILE *fh1;
 int avol, amut;
 
-	if(!HTTP_downloadFile("127.0.0.1",80,"/control/volume?status", ZAP_FILE, 0, 1))
-	{
-		if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
-		{
-			while((fgets(zstr, sizeof(zstr), fh1)>0) && !strlen(zstr));
-			if(strlen(zstr)>=1)
-			{
-				Trim_String(zstr);
-				sscanf(zstr,"%d",&amut);
-			}
-			fclose(fh1);
-		}
-	}
 	if(!HTTP_downloadFile("127.0.0.1",80,"/control/volume", ZAP_FILE, 0, 1))
 	{
 		if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
