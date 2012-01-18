@@ -1,14 +1,28 @@
 #!/bin/sh
 hturl="http://127.0.0.1"
-while [ 1 ]
+sid=$(wget -q -O - $hturl/control/zapto | cut -b13-16)
+channame=`wget -q -O - $hturl/control/getubouquetsxml | grep "i=\"$sid\"" | cut -d '"' -f4`
+echo "$channame" > /tmp/.channame
+
+isRunning=`pidof lcd4linux`
+while [ -z $isRunning ]
 do
-	watchchan=`cat /tmp/.channame`
-	watchchan_old=""
+	sleep 30
+	isRunning=`pidof lcd4linux`
+	if [ -z $isRunning ]; then
+		lcd4linux &
+	fi
+done
+
+until false
+do
+	watchchan=$(wget -q -O - $hturl/control/zapto)
+	watchchan_old=00000000
 	if [ "$watchchan" != "$watchchan_old" ]; then
 		sid=$(wget -q -O - $hturl/control/zapto | cut -b13-16)
 		#channame=`wget -q -O - $hturl/control/getbouquetsxml | grep $sid | grep 's="192"' | cut -d '"' -f4`
 		channame=`wget -q -O - $hturl/control/getubouquetsxml | grep "i=\"$sid\"" | cut -d '"' -f4`
-		echo $channame > /tmp/.channame
+		echo "$channame" > /tmp/.channame
 		watchchan_old="$watchchan"
 		sleep 5
 	fi
