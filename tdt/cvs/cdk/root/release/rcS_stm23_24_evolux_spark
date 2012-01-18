@@ -162,7 +162,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	[ -n "$START_NEUTRINO" ] && [ -e /etc/.time ] && (sleep 20; /etc/init.d/DisplayTime.sh) &
 	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
-
+	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
 	# green led off
 
 	(sleep 10;/bin/fp_control -l 1 0) &
