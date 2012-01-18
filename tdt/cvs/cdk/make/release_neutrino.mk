@@ -507,6 +507,11 @@ endif
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release_neutrino/bin/
+	cp -RP $(buildprefix)/root/bin/lcd4linux $(prefix)/release_neutrino/bin/
+	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release_neutrino/usr/lib/
+	cp -RP $(buildprefix)/root/usr/lib/libjpeg* $(prefix)/release_neutrino/usr/lib/
+	cp -RP $(buildprefix)/root/usr/lib/libusb* $(prefix)/release_neutrino/usr/lib/
+	cp -RP $(buildprefix)/root/usr/lib/libgd* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/tuxbox/plugins/* $(prefix)/release_neutrino/var/plugins/
 	rm $(prefix)/release_neutrino/var/plugins/*.la
 	cp -RP $(targetprefix)/usr/var/tuxbox/config/* $(prefix)/release_neutrino/usr/local/share/config/
