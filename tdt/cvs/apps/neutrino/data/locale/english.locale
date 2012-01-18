@@ -1443,6 +1443,10 @@ extramenu.fritzcall Fritzcall Menue
 extramenu.fritzcall.select Fritzcallmonitor
 extramenu.fritzcall.on On
 extramenu.fritzcall.off Off
+extramenu.extdisplay External Display Menue
+extramenu.extdisplay.select External Display
+extramenu.extdisplay.on On
+extramenu.extdisplay.off Off
 setting.saved Settings saved
 dvb.subtitle.placement Subtitle placement
 dvb.subtitle.placement.bottom bottom

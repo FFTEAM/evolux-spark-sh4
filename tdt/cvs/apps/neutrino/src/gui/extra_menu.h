@@ -319,4 +319,25 @@ class FRITZCALL_Menu : public CMenuTarget
 
 };
 
+class EXTDISPLAY_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	public:
+
+	EXTDISPLAY_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void EXTDISPLAYSettings();
+
+};
+
 #endif //__emumenu__

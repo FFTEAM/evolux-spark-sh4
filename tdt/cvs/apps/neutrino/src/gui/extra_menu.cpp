@@ -1292,7 +1292,7 @@ void FRITZCALL_Menu::hide()
 #define DOTFILE_FRITZCALL "/etc/.fritzcall"
 void FRITZCALL_Menu::FRITZCALLSettings()
 {
-	int fritzcall = access(DOTFILE_FRITZCALL, X_OK) ? 0 : 1;
+	int fritzcall = access(DOTFILE_FRITZCALL, R_OK) ? 0 : 1;
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
@@ -1325,3 +1325,75 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 }
 ////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////
 
+////////////////////////////// EXTDISPLAY Menu ANFANG ////////////////////////////////////
+#define EXTDISPLAY_OPTION_COUNT 2
+const CMenuOptionChooser::keyval EXTDISPLAY_OPTIONS[EXTDISPLAY_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_EXTDISPLAY_OFF },
+	{ 1, LOCALE_EXTRAMENU_EXTDISPLAY_ON }
+};
+
+EXTDISPLAY_Menu::EXTDISPLAY_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+
+int EXTDISPLAY_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+		parent->hide();
+
+	EXTDISPLAYSettings();
+
+	return res;
+}
+
+void EXTDISPLAY_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+#define DOTFILE_EXTDISPLAY "/etc/.extdisplay"
+void EXTDISPLAY_Menu::EXTDISPLAYSettings()
+{
+	int extdisplay = access(DOTFILE_EXTDISPLAY, R_OK) ? 0 : 1;
+	int old_extdisplay=extdisplay;
+
+	//MENU AUFBAUEN
+	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EXTDISPLAY, "settings.raw");
+	ExtraMenuSettings->addItem(GenericMenuSeparator);
+	ExtraMenuSettings->addItem(GenericMenuBack);
+	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EXTDISPLAY_SELECT, &extdisplay, EXTDISPLAY_OPTIONS, EXTDISPLAY_OPTION_COUNT,true);
+	ExtraMenuSettings->addItem( oj1 );
+	ExtraMenuSettings->exec (NULL, "");
+	ExtraMenuSettings->hide ();
+	delete ExtraMenuSettings;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_extdisplay!=extdisplay)
+	{
+		if (extdisplay == 1)
+		{
+			//EXTDISPLAY STARTEN
+			touch(DOTFILE_EXTDISPLAY);
+			system("/etc/init.d/extDisplay.sh >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "EXTDISPLAY activated!", 450, 2); // UTF-8("")
+		} else {
+			//EXTDISPLAY BEENDEN
+			unlink(DOTFILE_EXTDISPLAY);
+			system("killall extDisplay.sh >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "EXTDISPLAY deactivated!", 450, 2); // UTF-8("")
+		}
+	}
+	//ENDE EXTDISPLAY
+}
+////////////////////////////// EXTDISPLAY Menu ENDE //////////////////////////////////////
