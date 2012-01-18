@@ -516,6 +516,7 @@ endif
 	cp -RP $(buildprefix)/root/etc/init.d/extDisplay.sh $(prefix)/release_neutrino/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/lcd4linux.conf $(prefix)/release_neutrino/etc/
 	cp -RP $(targetprefix)/usr/lib/tuxbox/plugins/* $(prefix)/release_neutrino/var/plugins/
+	rm -rf $(prefix)/release_neutrino/usr/lib/tuxbox/plugins/*
 	rm $(prefix)/release_neutrino/var/plugins/*.la
 	cp -RP $(targetprefix)/usr/var/tuxbox/config/* $(prefix)/release_neutrino/usr/local/share/config/
 	cp -RP $(targetprefix)/usr/bin/blockad $(prefix)/release_neutrino/bin/
