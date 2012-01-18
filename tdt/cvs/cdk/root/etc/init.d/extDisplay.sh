@@ -5,8 +5,9 @@ do
 	watchchan=`cat /tmp/.channame`
 	watchchan_old=""
 	if [ "$watchchan" != "$watchchan_old" ]; then
-		sid=`wget -q -O - $hturl/control/getonidsid | cut -b8-11`
-		channame=`wget -q -O - $hturl/control/getbouquetsxml | grep $sid | grep 's="192"' | cut -d '"' -f4`
+		sid=$(wget -q -O - $hturl/control/zapto | cut -b13-16)
+		#channame=`wget -q -O - $hturl/control/getbouquetsxml | grep $sid | grep 's="192"' | cut -d '"' -f4`
+		channame=`wget -q -O - $hturl/control/getubouquetsxml | grep "i=\"$sid\"" | cut -d '"' -f4`
 		echo $channame > /tmp/.channame
 		watchchan_old="$watchchan"
 		sleep 5
