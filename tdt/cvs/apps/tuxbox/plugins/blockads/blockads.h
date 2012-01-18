@@ -107,7 +107,7 @@
 
 //freetype stuff
 
-#define FONT FONTDIR "/neutrino.ttf"
+#define FONT "/usr/share/fonts/neutrino.ttf"
 
 enum {FILL, GRID};
 enum {LEFT, CENTER, RIGHT};
