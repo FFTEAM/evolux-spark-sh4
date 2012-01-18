@@ -156,6 +156,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
 		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
 		/bin/evremote2 $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
+		rm -f /etc/.extdisplay >/dev/null 2>&1
 	else
 		/bin/evremote2 &
 	fi
