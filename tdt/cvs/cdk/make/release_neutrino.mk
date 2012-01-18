@@ -511,8 +511,10 @@ endif
 	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libjpeg* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libusb* $(prefix)/release_neutrino/usr/lib/
+	cp -RP $(buildprefix)/root/usr/lib/libpng15* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libgd* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/extDisplay.sh $(prefix)/release_neutrino/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/lcd4linux.conf $(prefix)/release_neutrino/etc/
 	cp -RP $(targetprefix)/usr/lib/tuxbox/plugins/* $(prefix)/release_neutrino/var/plugins/
 	rm $(prefix)/release_neutrino/var/plugins/*.la
 	cp -RP $(targetprefix)/usr/var/tuxbox/config/* $(prefix)/release_neutrino/usr/local/share/config/
