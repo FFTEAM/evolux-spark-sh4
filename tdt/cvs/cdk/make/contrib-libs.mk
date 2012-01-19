@@ -615,6 +615,7 @@ $(DEPDIR)/libiconv: \
 $(DEPDIR)/%libiconv: $(DEPDIR)/libiconv.do_compile
 	cd @DIR_libiconv@ && \
 		@INSTALL_libiconv@
+#	sed "s@libdir='/usr/lib'@libdir='\$(targetprefix)/usr/lib'@g" -i $(targetprefix)/usr/lib/libiconv.la
 #	@DISTCLEANUP_libiconv@
 	@[ "x$*" = "x" ] && touch $@ || true
 
@@ -2066,3 +2067,27 @@ $(DEPDIR)/%libalsa: $(DEPDIR)/libalsa.do_compile
 		@INSTALL_libalsa@
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+#
+# GD
+#
+$(DEPDIR)/GD.do_prepare: bootstrap @DEPENDS_GD@
+	@PREPARE_GD@
+	touch $@
+
+$(DEPDIR)/GD.do_compile: $(DEPDIR)/GD.do_prepare
+	cd @DIR_GD@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE)
+	touch $@
+
+$(DEPDIR)/min-GD $(DEPDIR)/std-GD $(DEPDIR)/max-GD $(DEPDIR)/ipk-GD \
+$(DEPDIR)/GD: \
+$(DEPDIR)/%GD: $(DEPDIR)/GD.do_compile
+	cd @DIR_GD@ && \
+		@INSTALL_GD@
+#	@DISTCLEANUP_GD@
+	@[ "x$*" = "x" ] && touch $@ || true

@@ -4037,7 +4037,7 @@ diff -Nur --exclude=.git --exclude=tuxtxt enigma2-nightly.org/lib/gdi/Makefile.a
 diff -Nur --exclude=.git --exclude=tuxtxt enigma2-nightly.org/lib/gdi/picload.cpp enigma2-nightly.patched/lib/gdi/picload.cpp
 --- enigma2-nightly.org/lib/gdi/picload.cpp	2011-10-03 18:20:16.000000000 +0200
 +++ enigma2-nightly.patched/lib/gdi/picload.cpp	2011-10-03 18:20:17.000000000 +0200
-@@ -3,6 +3,7 @@
+@@ -5,6 +5,7 @@
  
  #include <lib/gdi/picload.h>
  #include <lib/gdi/picexif.h>
@@ -4045,6 +4045,18 @@ diff -Nur --exclude=.git --exclude=tuxtxt enigma2-nightly.org/lib/gdi/picload.cp
  
  extern "C" {
  #include <jpeglib.h>
+@@ -279,7 +280,11 @@
+ 		return NULL;
+ 	}
+ 
++#if (PNG_LIBPNG_VER < 10500)
+ 	if (setjmp(png_ptr->jmpbuf))
++#else
++	if (setjmp(png_jmpbuf(png_ptr)))
++#endif
+ 	{
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 		fclose(fh);
 @@ -589,8 +590,47 @@
  
  void ePicLoad::decodePic()
@@ -8599,3 +8611,41 @@ diff -Nur --exclude=.git --exclude=tuxtxt enigma2-nightly.org/RecordTimer.py eni
  			return True
  
  	def setAutoincreaseEnd(self, entry = None):
+diff -Nur '--exclude=.git' '--exclude=tuxtxt' enigma2-nightly.org/lib/gdi/epng.cpp enigma2-nightly.patched/lib/gdi/epng.cpp
+--- enigma2-nightly.org/lib/gdi/epng.cpp	2011-09-03 18:23:25.360022298 +0200
++++ enigma2-nightly.patched/lib/gdi/epng.cpp	2011-09-03 18:23:47.240032937 +0200
+@@ -4,6 +4,10 @@
+ #include <lib/gdi/epng.h>
+ #include <unistd.h>
+ 
++#if (PNG_LIBPNG_VER > 10500)
++#include "zlib.h"
++#endif
++
+ extern "C" {
+ #include <jpeglib.h>
+ }
+@@ -54,7 +58,11 @@
+ 		fclose(fp);
+ 		return 0;
+ 	 }
++#if (PNG_LIBPNG_VER < 10500)
+ 	if (setjmp(png_ptr->jmpbuf))
++#else
++	if (setjmp(png_jmpbuf(png_ptr)))
++#endif
+ 	{
+ 		eDebug("das war wohl nix");
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+@@ -264,7 +272,11 @@
+ 		PNG_COLOR_TYPE_RGB_ALPHA, 
+ 		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+ 
++#if (PNG_LIBPNG_VER < 10500)
+ 	if (setjmp(png_ptr->jmpbuf))
++#else
++	if (setjmp(png_jmpbuf(png_ptr)))
++#endif
+ 	{
+ 		eDebug("error :/");
+ 		png_destroy_write_struct(&png_ptr, &info_ptr);
