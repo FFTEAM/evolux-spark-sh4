@@ -159,7 +159,7 @@ gst-ffmpeg-0.10.13.tar.bz2;http://gstreamer.freedesktop.org/src/gst-ffmpeg/
 BroFS1.2.tgz;http://www.avalpa.com/assets/freesoft/other/
 
 alsa-lib-1.0.21a.tar.bz2;ftp://ftp.alsa-project.org/pub/lib/
-libusb-0.1.12.tar.gz;http://downloads.sourceforge.net/libusb/
+libusb-1.0.0.tar.bz2;http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.0/
  
 #
 # net apps
