@@ -70,6 +70,7 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libusb* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release/usr/lib/
+	cp -RP $(buildprefix)/root/usr/lib/libpng* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
 
 if STM23
