@@ -1464,3 +1464,5 @@ extramenu.glcd.size_epg EPG height
 extramenu.glcd.size_bar Progress bar height
 extramenu.glcd.size_time Time height
 extramenu.glcd.restart Rescan
+extramenu.onoff.on Ein
+extramenu.onoff.off Aus

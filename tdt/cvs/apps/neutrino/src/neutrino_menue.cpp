@@ -810,7 +810,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	int extrashortcut = 1;
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
 #ifdef WITH_GRAPHLCD
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Emu Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 #endif
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu

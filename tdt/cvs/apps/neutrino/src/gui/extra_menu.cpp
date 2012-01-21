@@ -47,13 +47,12 @@
 
 #include "extra_menu.h"
 
-/*#define EXTRAMENU_ONOFF_OPTION_COUNT 2
+#define EXTRAMENU_ONOFF_OPTION_COUNT 2
 
-const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] =
-{
-{ 0, LOCALE_EXTRAMENU_ONOFF_OFF },
-{ 1, LOCALE_EXTRAMENU_ONOFF_ON },
-}; */
+const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] = {
+	{ 0, LOCALE_EXTRAMENU_ONOFF_OFF },
+	{ 1, LOCALE_EXTRAMENU_ONOFF_ON },
+};
 
 static int touch(const char *filename) {
 	int fn = open(filename, O_RDWR | O_CREAT, 0644);
@@ -67,6 +66,9 @@ static int touch(const char *filename) {
 static struct {
 #define EXTRA_CAM_SELECTED "cam_selected"
         std::string	cam_selected;
+#ifdef WITH_GRAPHLCD
+#define GLCD_ENABLE "glcd_enable"
+        int	glcd_enable;
 #define GLCD_COLOR_FG "glcd_color_fg"
         uint32_t	glcd_color_fg;
 #define GLCD_COLOR_BG "glcd_color_bg"
@@ -83,6 +85,7 @@ static struct {
         int		glcd_percent_bar;
 #define GLCD_SIZE_TIME "glcd_percent_time"
         int		glcd_percent_time;
+#endif
 } settings;
 
 CConfigFile *configfile = NULL;
@@ -90,6 +93,8 @@ CConfigFile *configfile = NULL;
 static bool saveSettings() {
 	if (configfile) {
 		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
+#ifdef WITH_GRAPHLCD
+		configfile->setInt32(GLCD_ENABLE, settings.glcd_enable);
 		configfile->setInt32(GLCD_COLOR_FG, settings.glcd_color_fg);
 		configfile->setInt32(GLCD_COLOR_BG, settings.glcd_color_bg);
 		configfile->setInt32(GLCD_COLOR_BAR, settings.glcd_color_bar);
@@ -98,6 +103,7 @@ static bool saveSettings() {
 		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
 		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
 		configfile->setString(GLCD_FONT, settings.glcd_font);
+#endif
 		configfile->saveConfig(EXTRA_SETTINGS_FILE);
 		return true;
 	}
@@ -106,6 +112,17 @@ static bool saveSettings() {
 
 static bool initSettings() {
 	settings.cam_selected = "disabled";
+#ifdef WITH_GRAPHLCD
+	settings.glcd_enable = 0;
+	settings.glcd_color_fg = GLCD::cColor::White;
+	settings.glcd_color_bg = GLCD::cColor::Blue;
+	settings.glcd_color_bar = GLCD::cColor::Red;
+	settings.glcd_percent_channel = 18;
+	settings.glcd_percent_epg = 8;
+	settings.glcd_percent_bar = 6;
+	settings.glcd_percent_time = 22;
+	settings.glcd_font = FONTDIR "/neutrino.ttf";
+#endif
 }
 
 static bool loadSettings() {
@@ -114,6 +131,8 @@ static bool loadSettings() {
 		configfile = new CConfigFile('=');
 		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
 			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
+#ifdef WITH_GRAPHLCD
+			settings.glcd_enable = configfile->getInt32(GLCD_ENABLE, 0);
 			settings.glcd_color_fg = configfile->getInt32(GLCD_COLOR_FG, GLCD::cColor::White);
 			settings.glcd_color_bg = configfile->getInt32(GLCD_COLOR_BG, GLCD::cColor::Blue);
 			settings.glcd_color_bar = configfile->getInt32(GLCD_COLOR_BAR, GLCD::cColor::Red);
@@ -122,6 +141,7 @@ static bool loadSettings() {
 			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
 			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
 			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
+#endif
 			return true;
 		}
 	}
@@ -1395,8 +1415,15 @@ nGLCD::nGLCD() {
 	lcd = NULL;
 	Channel = "EvoLux";
 	Epg = "Neutrino";
+
 	sem_init(&sem, 0, 1);
 
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
+        pthread_mutex_init(&mutex, &attr);
+
+	channelLocked = false;
 	doRestart = false;
         fontsize_channel = 0;
         fontsize_epg = 0;
@@ -1413,15 +1440,40 @@ nGLCD::nGLCD() {
 
 	nglcd = this;
 
-	Init();
+	if (settings.glcd_enable)
+		if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
+			fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
 }
 
-void nGLCD::Init() {
-        if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
-		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
+void nGLCD::Lock(void)
+{
+  pthread_mutex_lock(&mutex);
+}
+
+void nGLCD::Unlock(void)
+{
+  pthread_mutex_unlock(&mutex);
+}
+
+void nGLCD::mainLock(void)
+{
+  pthread_mutex_lock(&mainMutex);
+}
+
+void nGLCD::mainUnlock(void)
+{
+  pthread_mutex_unlock(&mainMutex);
 }
 
 nGLCD::~nGLCD() {
+	Restart();
+	if (!settings.glcd_enable) {
+		void *res;
+		pthread_join(thrGLCD, &res);
+	}
+	mainLock(); // thrGLCD will unlock upon exit
+	nglcd = NULL;
+	mainUnlock();
 	if (lcd) {
 		lcd->DeInit();
 		delete lcd;
@@ -1433,6 +1485,11 @@ void nGLCD::Exec() {
 		return;
 
 	bitmap->Clear(settings.glcd_color_bg);
+
+	if (CNeutrinoApp::getInstance()->recordingstatus) {
+		bitmap->DrawRectangle(0, 0, bitmap->Width() - 1, bitmap->Height() - 1, settings.glcd_color_bar, false);
+		bitmap->DrawRectangle(1, 1, bitmap->Width() - 2, bitmap->Height() - 2, settings.glcd_color_bar, false);
+	}
 
 	int off = 0;
 
@@ -1554,18 +1611,20 @@ void nGLCD::updateFonts() {
 
 void* nGLCD::Run(void *)
 {
+	nglcd->mainLock();
 	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
 		fprintf(stderr, "Error loading config file!\n");
+		nglcd->mainUnlock();
 		return NULL;
 	}
 	if ((GLCD::Config.driverConfigs.size() < 1)) {
 		fprintf(stderr, "No driver config found!\n");
+		nglcd->mainUnlock();
 		return NULL;
 	}
 
 	struct timespec ts;
-	CSectionsdClient::CurrentNextInfo info_CurrentNext;
-	CChannelEventList               evtlist;
+	CChannelEventList evtlist;
 	t_channel_id channel_id = -1;
 	nglcd->fonts_initialized = false;
 	bool broken = false;
@@ -1580,12 +1639,14 @@ void* nGLCD::Run(void *)
 		}
 		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
 		if (!nglcd->lcd) {
+			fprintf(stderr, "CreateDriver failed.\n");
 			broken = true;
 			continue;
 		}
 		if (nglcd->lcd->Init() != 0) {
 			delete nglcd->lcd;
 			nglcd->lcd = NULL;
+			fprintf(stderr, "LCD init failed.\n");
 			broken = true;
 			continue;
 		}
@@ -1594,6 +1655,7 @@ void* nGLCD::Run(void *)
 
 		sem_post(&nglcd->sem);
 
+		nglcd->Lock();
 		do  {
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
@@ -1608,63 +1670,69 @@ void* nGLCD::Run(void *)
 				ts.tv_nsec = 0;
 			}
 
+			nglcd->Unlock();
 			sem_timedwait(&nglcd->sem, &ts);
 			while(!sem_trywait(&nglcd->sem));
+			nglcd->Lock();
 
-			if(nglcd->doRestart) {
+			if(nglcd->doRestart)
 				break;
-			}
 
 			nglcd->updateFonts();
 
-			int s = -1;
+			if (nglcd->channelLocked)
+				channel_id = -1;
+			else {
+				CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
+				if (!channelList)
+					continue;
+				t_channel_id new_channel_id = channelList->getActiveChannel_ChannelID ();
+				if (new_channel_id < 0)
+					continue;
 
-			CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
-			if (!channelList)
-				continue;
-			t_channel_id new_channel_id = channelList->getActiveChannel_ChannelID ();
-			if (new_channel_id < 0)
-				continue;
-
-			if (new_channel_id != channel_id) {
-				nglcd->Channel = channelList->getActiveChannelName ();
-				nglcd->Epg = "";
-			}
-
-			if ((channel_id != new_channel_id) || (evtlist.empty())) {
-				evtlist.clear();
-				sectionsd_getEventsServiceKey(new_channel_id & 0xFFFFFFFFFFFFULL, evtlist);
-				if (!evtlist.empty())
-					sort(evtlist.begin(),evtlist.end(), sortByDateTime);
-			}
-			channel_id = new_channel_id;
-
-			if (!evtlist.empty()) {
-				CChannelEventList::iterator eli;
-				for ( eli=evtlist.begin(); eli!=evtlist.end(); ++eli ) {
-					if ((uint)eli->startTime + eli->duration > ts.tv_sec)
-						break;
-				}
-				if (eli == evtlist.end()) // the end is not valid, so go back
-					--eli;
-
-				nglcd->Epg = eli->description;
-
-				if (eli->duration > 0)
-					nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
-				if (nglcd->Scale > 100)
-					nglcd->Scale = 100;
-				else if (nglcd->Scale < 0)
+				if ((new_channel_id != channel_id)) {
+					nglcd->Channel = channelList->getActiveChannelName ();
+					nglcd->Epg = "";
 					nglcd->Scale = 0;
+				}
+
+				if ((channel_id != new_channel_id) || (evtlist.empty())) {
+					evtlist.clear();
+					sectionsd_getEventsServiceKey(new_channel_id & 0xFFFFFFFFFFFFULL, evtlist);
+					if (!evtlist.empty())
+						sort(evtlist.begin(),evtlist.end(), sortByDateTime);
+				}
+				channel_id = new_channel_id;
+
+				if (!evtlist.empty()) {
+					CChannelEventList::iterator eli;
+					for ( eli=evtlist.begin(); eli!=evtlist.end(); ++eli ) {
+						if ((uint)eli->startTime + eli->duration > ts.tv_sec)
+							break;
+					}
+					if (eli == evtlist.end()) // the end is not valid, so go back
+						--eli;
+
+					nglcd->Epg = eli->description;
+
+					if (eli->duration > 0)
+					nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
+					if (nglcd->Scale > 100)
+						nglcd->Scale = 100;
+					else if (nglcd->Scale < 0)
+						nglcd->Scale = 0;
+				}
 			}
 
-		} while(true);
+		} while(settings.glcd_enable);
+		nglcd->Unlock();
 		nglcd->doRestart = false;
 		nglcd->lcd->DeInit();
 		delete nglcd->lcd;
 		nglcd->lcd = NULL;
-	} while(true);
+	} while(settings.glcd_enable);
 
+	nglcd->mainUnlock();
 	return NULL;
 }
 
@@ -1687,6 +1755,26 @@ void nGLCD::Restart() {
 	}
 }
 
+void nGLCD::lockChannel(string c)
+{
+	if(nglcd) {
+		nglcd->Lock();
+		nglcd->channelLocked = true;
+		nglcd->Channel = c;
+		nglcd->Epg = "";
+		nglcd->Unlock();
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::unlockChannel(void)
+{
+	if(nglcd) {
+		nglcd->channelLocked = false;
+		sem_post(&nglcd->sem);
+	}
+}
+
 #define KEY_GLCD_BLACK			0
 #define KEY_GLCD_WHITE			1
 #define KEY_GLCD_RED			2
@@ -1698,7 +1786,7 @@ void nGLCD::Restart() {
 #define GLCD_COLOR_OPTION_COUNT 	8
 static const CMenuOptionChooser::keyval GLCD_COLOR_OPTIONS[GLCD_COLOR_OPTION_COUNT] =
 {
-	  { KEY_GLCD_BLACK,	LOCALE_GLCD_COLOR_BLACK }
+	{ KEY_GLCD_BLACK,	LOCALE_GLCD_COLOR_BLACK }
 	, { KEY_GLCD_WHITE,	LOCALE_GLCD_COLOR_WHITE }
 	, { KEY_GLCD_RED,	LOCALE_GLCD_COLOR_RED }
 	, { KEY_GLCD_GREEN,	LOCALE_GLCD_COLOR_GREEN }
@@ -1730,22 +1818,22 @@ int GLCD_Menu::color2index(uint32_t color) {
 
 uint32_t GLCD_Menu::index2color(int i) {
 	switch(i) {
-	case KEY_GLCD_BLACK:
-		return GLCD::cColor::Black;
-	case KEY_GLCD_WHITE:
-		return GLCD::cColor::White;
-	case KEY_GLCD_RED:
-		return GLCD::cColor::Red;
-	case KEY_GLCD_GREEN:
-		return GLCD::cColor::Green;
-	case KEY_GLCD_BLUE:
-		return GLCD::cColor::Blue;
-	case KEY_GLCD_MAGENTA:
-		return GLCD::cColor::Magenta;
-	case KEY_GLCD_CYAN:
-		return GLCD::cColor::Cyan;
-	case KEY_GLCD_YELLOW:
-		return GLCD::cColor::Yellow;
+		case KEY_GLCD_BLACK:
+			return GLCD::cColor::Black;
+		case KEY_GLCD_WHITE:
+			return GLCD::cColor::White;
+		case KEY_GLCD_RED:
+			return GLCD::cColor::Red;
+		case KEY_GLCD_GREEN:
+			return GLCD::cColor::Green;
+		case KEY_GLCD_BLUE:
+			return GLCD::cColor::Blue;
+		case KEY_GLCD_MAGENTA:
+			return GLCD::cColor::Magenta;
+		case KEY_GLCD_CYAN:
+			return GLCD::cColor::Cyan;
+		case KEY_GLCD_YELLOW:
+			return GLCD::cColor::Yellow;
 	}
 	return GLCD::cColor::ERRCOL;
 }
@@ -1759,12 +1847,13 @@ GLCD_Menu::GLCD_Menu()
 	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 	height = hheight+13*mheight+ 10;
 
-	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
-	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+	x=(((g_settings.screen_EndX - g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY - g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
 
-	notifier = new GLCD_Menu_Notifier;
+	notifier = new GLCD_Menu_Notifier();
 
-	nglcd = new nGLCD;
+	if (!nglcd && settings.glcd_enable)
+		new nGLCD;
 }
 
 
@@ -1773,7 +1862,9 @@ int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	int res = menu_return::RETURN_REPAINT;
 	if(actionKey == "restart") {
 		nglcd->Restart();
-	} else if(actionKey == "select_font") {
+		return res;
+	}
+	if(actionKey == "select_font") {
 		parent->hide();
 		CFileBrowser fileBrowser;
 		CFileFilter fileFilter;
@@ -1786,6 +1877,7 @@ int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				nglcd->Restart();
 			}
 		}
+		return res;
 	}
 
 	if (parent)
@@ -1809,7 +1901,7 @@ GLCD_Menu_Notifier::GLCD_Menu_Notifier ()
 bool
 GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
 {
-	if (!nglcd || !Data)
+	if (!Data)
 		return false;
 	switch(OptionName) {
 	case LOCALE_EXTRAMENU_GLCD_SELECT_FG:
@@ -1821,6 +1913,11 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 	case LOCALE_EXTRAMENU_GLCD_SELECT_BAR:
 		settings.glcd_color_bar = GLCD_Menu::index2color(*((int *) Data));
 		break;
+	case LOCALE_EXTRAMENU_GLCD:
+		if (!nglcd && settings.glcd_enable)
+			new nGLCD;
+		else if (nglcd && !settings.glcd_enable)
+			delete nglcd;
 	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
@@ -1830,7 +1927,8 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 		return false;
 	}
 
-	nglcd->Update();
+	if (nglcd)
+		nglcd->Update();
 	return true;
 }
 
@@ -1839,37 +1937,41 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	int color_bg = color2index(settings.glcd_color_bg);
 	int color_fg = color2index(settings.glcd_color_fg);
 	int color_bar = color2index(settings.glcd_color_bar);
-	int shortcut = 1;
 
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings.raw");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD, &settings.glcd_enable,
+				EXTRAMENU_ONOFF_OPTIONS, EXTRAMENU_ONOFF_OPTION_COUNT, true, notifier));
+	int shortcut = 1;
+	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_FG, &color_fg,
-		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
+				CRCInput::convertDigitToKey(shortcut++)));
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BG, &color_bg,
-		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
+				CRCInput::convertDigitToKey(shortcut++)));
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BAR, &color_bar,
-		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
+				CRCInput::convertDigitToKey(shortcut++)));
 	menu->addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font",
-		CRCInput::convertDigitToKey(shortcut++)));
+				CRCInput::convertDigitToKey(shortcut++)));
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
-		&settings.glcd_percent_channel, true, 0, 100, notifier));
+				&settings.glcd_percent_channel, true, 0, 100, notifier));
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
-		&settings.glcd_percent_epg, true, 0, 100, notifier));
+				&settings.glcd_percent_epg, true, 0, 100, notifier));
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
-		&settings.glcd_percent_bar, true, 0, 100, notifier));
+				&settings.glcd_percent_bar, true, 0, 100, notifier));
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
-		&settings.glcd_percent_time, true, 0, 100, notifier));
+				&settings.glcd_percent_time, true, 0, 100, notifier));
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "restart",
-		CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+				CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	menu->exec(NULL, "");
 	menu->hide();
 	delete menu;
 
-	if (nglcd)
-		nglcd->Restart();
 	saveSettings();
 }
 #endif

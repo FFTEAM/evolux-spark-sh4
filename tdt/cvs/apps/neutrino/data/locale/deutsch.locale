@@ -1463,3 +1463,5 @@ extramenu.glcd.size_epg EPG-Größe
 extramenu.glcd.size_bar Fortschrittsbalken-Größe
 extramenu.glcd.size_time Uhrzeit-Größe
 extramenu.glcd.restart Neu erkennen
+extramenu.onoff.on Ein
+extramenu.onoff.off Aus

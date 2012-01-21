@@ -356,13 +356,21 @@ class nGLCD
         time_t now;
         struct tm *tm;
 	bool doRestart;
+	bool channelLocked;
 	pthread_t thrGLCD;
+	pthread_mutex_t mutex;
+	pthread_mutex_t mainMutex;
 	void updateFonts();
 	void Exec();
     public:
 	nGLCD();
 	~nGLCD();
-	void Init();
+	void Lock();
+	void Unlock();
+	void mainLock();
+	void mainUnlock();
+	static void lockChannel(string txt);
+	static void unlockChannel();
 	static void* Run(void *);
 	static void Update();
 	void Restart();
@@ -370,8 +378,12 @@ class nGLCD
 	sem_t sem;
 };
 
+class GLCD_Menu;
+
 class GLCD_Menu_Notifier : public CChangeObserver
 {
+    private:
+	GLCD_Menu* parent;
     public:
 	GLCD_Menu_Notifier();
 	bool changeNotify(const neutrino_locale_t, void *);
@@ -388,7 +400,6 @@ class GLCD_Menu : public CMenuTarget
 	int width;
 	int height;
 	int hheight,mheight; // head/menu font height
-
 	static int color2index(uint32_t color);
 	GLCD_Menu_Notifier *notifier;
 

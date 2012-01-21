@@ -1464,6 +1464,8 @@ const char *locale_real_names[] = {
 	"extramenu.glcd.size_epg",
 	"extramenu.glcd.size_bar",
 	"extramenu.glcd.size_time",
-	"extramenu.glcd.restart"
+	"extramenu.glcd.restart",
+	"extramenu.onoff.on",
+	"extramenu.onoff.off"
 };
 #endif

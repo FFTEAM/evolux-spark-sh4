@@ -110,7 +110,7 @@
 #include "gui/timerlist.h"
 #include "gui/alphasetup.h"
 #include "gui/audioplayer.h"
-#include "gui/extra_menu.h" // Emu Menu
+#include "gui/extra_menu.h"
 #include "gui/imageinfo.h"
 #include "gui/movieplayer.h"
 #include "gui/nfs.h"
@@ -2161,6 +2161,9 @@ printf("*********************************** startAutoRecord: dir %s\n", timeshif
 		CNeutrinoApp::getInstance()->recording_id = g_Timerd->addImmediateRecordTimerEvent(eventinfo.channel_id, now, now+g_settings.record_hours*60*60, eventinfo.epgID, eventinfo.epg_starttime, eventinfo.apids);
 	}
 //printf("startAutoRecord: recording_id = %d\n", CNeutrinoApp::getInstance()->recording_id);
+#ifdef WITH_GRAPHLCD
+	nGLCD::Update();
+#endif
 	return 0;
 }
 void stopAutoRecord()
@@ -2275,6 +2278,9 @@ printf("CNeutrinoApp::doGuiRecord: start to dir %s\n", recDir);
 			}
 			if(!doRecord || (CVCRControl::getInstance()->Record(&eventinfo)==false)) {
 				recordingstatus=0;
+#ifdef WITH_GRAPHLCD
+				nGLCD::Update();
+#endif
 				if(doRecord)
 					return true;// try to refresh gui if record was not ok ?
 				return refreshGui;
@@ -2792,8 +2798,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				// Zap-History "Bouquet"
 				dvbsub_pause();
 				int res = channelList->numericZap( msg );
-				if(res < 0)
+				if(res < 0) {
 					dvbsub_start(0);
+				}
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_lastchannel ) {
 				// Quick Zap
@@ -2816,6 +2823,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 
 				if(g_RemoteControl->is_video_started) {
 					dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+					nGLCD::lockChannel("MoviePlayer");
+#endif
 					if(recordingstatus) {
 						moviePlayerGui->exec(NULL, tmode);
 					} else if(msg != CRCInput::RC_rewind) {
@@ -2823,12 +2833,18 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 							startAutoRecord(true);
 						} else {
 							recordingstatus = 1;
+#ifdef WITH_GRAPHLCD
+							nGLCD::Update();
+#endif
 							doGuiRecord(g_settings.network_nfs_recordingdir, true);
 						}
 						if(recordingstatus) {
 							moviePlayerGui->exec(NULL, tmode);
 						}
 					}
+#ifdef WITH_GRAPHLCD
+					nGLCD::unlockChannel();
+#endif
 					dvbsub_start(0);
 				}
 			   }
@@ -2841,6 +2857,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 							g_Timerd->stopTimerEvent(recording_id);
 				} else if(msg != CRCInput::RC_stop ) {
 					recordingstatus = 1;
+#ifdef WITH_GRAPHLCD
+					nGLCD::Update();
+#endif
 					doGuiRecord(g_settings.network_nfs_recordingdir, true);
 				}
 			}
@@ -2867,11 +2886,20 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( (msg == CRCInput::RC_audio) && g_settings.audio_run_player) {
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::lockChannel("AudioPlayer");
+#endif
 				audioPlayer->exec(NULL, "");
+#ifdef WITH_GRAPHLCD
+				nGLCD::unlockChannel();
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_video || msg == CRCInput::RC_play ) {
 				bool show = true;
+#ifdef WITH_GRAPHLCD
+				nGLCD::lockChannel("MoviePlayer");
+#endif
 				dvbsub_pause();
 				if ((g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_ONSIGNAL) || (g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_CHANGETOLOCKED)) {
                                         CZapProtection* zapProtection = new CZapProtection( g_settings.parentallock_pincode, 0x100 );
@@ -2893,6 +2921,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #endif */
 				}
 				dvbsub_start(0);
+#ifdef WITH_GRAPHLCD
+				nGLCD::unlockChannel();
+#endif
 			}
 			else if (CRCInput::isNumeric(msg) && g_RemoteControl->director_mode ) {
 				g_RemoteControl->setSubChannel(CRCInput::getNumericValue(msg));
@@ -3253,6 +3284,9 @@ _repeat:
 		if( mode == mode_standby && data )
 			was_record = 1;
 		recordingstatus = data;
+#ifdef WITH_GRAPHLCD
+		nGLCD::Update();
+#endif
 		if( ( !g_InfoViewer->is_visible ) && data && !autoshift)
 			g_RCInput->postMsg( NeutrinoMessages::SHOW_INFOBAR, 0 );
 
@@ -3265,6 +3299,9 @@ _repeat:
 		if(autoshift) {
 			stopAutoRecord();
 			recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+			nGLCD::Update();
+#endif
 		}
 		puts("[neutrino.cpp] executing " NEUTRINO_RECORDING_START_SCRIPT ".");
 		if (system(NEUTRINO_RECORDING_START_SCRIPT) != 0)
@@ -3291,6 +3328,9 @@ _repeat:
 				{
 					CVCRControl::getInstance()->Stop();
 					recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+					nGLCD::Update();
+#endif
 					autoshift = 0;
 				}
 				else
@@ -3410,6 +3450,9 @@ _repeat:
 			if(autoshift) {
 				stopAutoRecord();
 				recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+				nGLCD::Update();
+#endif
 			}
 			if(has_hdd) {
 				system("(rm /media/hdd/.wakeup; touch /media/hdd/.wakeup; sync) > /dev/null  2> /dev/null &"); // wakeup hdd
@@ -3878,6 +3921,9 @@ void CNeutrinoApp::tvMode( bool rezap )
 //printf("standby on: autoshift ! stopping ...\n");
 		stopAutoRecord();
 		recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+		nGLCD::Update();
+#endif
 	}
 
 	frameBuffer->useBackground(false);
@@ -3940,6 +3986,9 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 			stopAutoRecord();
 			wasshift = true;
 			recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+			nGLCD::Update();
+#endif
 		}
 		if( mode == mode_scart ) {
 			//g_Controld->setScartMode( 0 );
@@ -4055,6 +4104,9 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 //printf("standby on: autoshift ! stopping ...\n");
 		stopAutoRecord();
 		recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+		nGLCD::Update();
+#endif
 	}
 
 	g_RemoteControl->radioMode();
@@ -4120,6 +4172,9 @@ printf("CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
 				recordingstatus = 1;
 			else
 				recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+			nGLCD::Update();
+#endif
 		}
 		else
 			puts("[neutrino.cpp] no recording devices");
@@ -4134,8 +4189,8 @@ printf("CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
 	}
 }
 /**************************************************************************************
-*          CNeutrinoApp -  exec, menuitem callback (shutdown)                         *
-**************************************************************************************/
+ *          CNeutrinoApp -  exec, menuitem callback (shutdown)                         *
+ **************************************************************************************/
 void SaveMotorPositions();
 int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 {
@@ -4327,16 +4382,16 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 		b.Dir_Mode=true;
 		if (b.exec(g_settings.network_nfs_recordingdir)) {
 			const char * newdir = b.getSelectedFile()->Name.c_str();
-printf("New recordingdir: selected %s\n", newdir);
+			printf("New recordingdir: selected %s\n", newdir);
 			if(check_dir(newdir))
 				printf("Wrong/unsupported recording dir %s\n", newdir);
 			else {
 				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1);
-printf("New recordingdir: %s (timeshift %s)\n", g_settings.network_nfs_recordingdir, g_settings.timeshiftdir);
+				printf("New recordingdir: %s (timeshift %s)\n", g_settings.network_nfs_recordingdir, g_settings.timeshiftdir);
 				if(strlen(g_settings.timeshiftdir) == 0) {
 					sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
 					safe_mkdir(timeshiftDir);
-printf("New timeshift dir: %s\n", timeshiftDir);
+					printf("New timeshift dir: %s\n", timeshiftDir);
 				}
 			}
 		}
@@ -4348,22 +4403,22 @@ printf("New timeshift dir: %s\n", timeshiftDir);
 		b.Dir_Mode=true;
 		if (b.exec(g_settings.timeshiftdir)) {
 			const char * newdir = b.getSelectedFile()->Name.c_str();
-printf("New timeshift: selected %s\n", newdir);
+			printf("New timeshift: selected %s\n", newdir);
 			if(check_dir(newdir))
 				printf("Wrong/unsupported recording dir %s\n", newdir);
 			else {
-printf("New timeshift dir: old %s (record %s)\n", g_settings.timeshiftdir, g_settings.network_nfs_recordingdir);
+				printf("New timeshift dir: old %s (record %s)\n", g_settings.timeshiftdir, g_settings.network_nfs_recordingdir);
 				if(strcmp(newdir, g_settings.network_nfs_recordingdir)) {
-printf("New timeshift != rec dir\n");
+					printf("New timeshift != rec dir\n");
 					strncpy(g_settings.timeshiftdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.timeshiftdir)-1);
 					strcpy(timeshiftDir, g_settings.timeshiftdir);
 				} else {
 					sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
 					strcpy(g_settings.timeshiftdir, newdir);
 					safe_mkdir(timeshiftDir);
-printf("New timeshift == rec dir\n");
+					printf("New timeshift == rec dir\n");
 				}
-printf("New timeshift dir: %s\n", timeshiftDir);
+				printf("New timeshift dir: %s\n", timeshiftDir);
 			}
 		}
 		return menu_return::RETURN_REPAINT;
@@ -4558,8 +4613,8 @@ printf("New timeshift dir: %s\n", timeshiftDir);
 }
 
 /**************************************************************************************
-*          changeNotify - features menu recording start / stop                        *
-**************************************************************************************/
+ *          changeNotify - features menu recording start / stop                        *
+ **************************************************************************************/
 bool CNeutrinoApp::changeNotify(const neutrino_locale_t OptionName, void *data)
 {
 	if ((ARE_LOCALES_EQUAL(OptionName, LOCALE_MAINMENU_RECORDING_START)) || (ARE_LOCALES_EQUAL(OptionName, LOCALE_MAINMENU_RECORDING)))
@@ -4570,6 +4625,9 @@ bool CNeutrinoApp::changeNotify(const neutrino_locale_t OptionName, void *data)
 		}
 		else {
 			recordingstatus = 0;
+#ifdef WITH_GRAPHLCD
+			nGLCD::Update();
+#endif
 			return false;
 		}
 	}
