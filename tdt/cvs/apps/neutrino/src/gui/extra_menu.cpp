@@ -1,3 +1,5 @@
+#define __USE_FILE_OFFSET64 1
+#include <gui/filebrowser.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +18,6 @@
 #include <string>
 
 #include <unistd.h>
-#include <fcntl.h>
 
 #include <system/debug.h>
 
@@ -65,7 +66,23 @@ static int touch(const char *filename) {
 
 static struct {
 #define EXTRA_CAM_SELECTED "cam_selected"
-        std::string     cam_selected;
+        std::string	cam_selected;
+#define GLCD_COLOR_FG "glcd_color_fg"
+        uint32_t	glcd_color_fg;
+#define GLCD_COLOR_BG "glcd_color_bg"
+        uint32_t	glcd_color_bg;
+#define GLCD_COLOR_BAR "glcd_color_bar"
+        uint32_t	glcd_color_bar;
+#define GLCD_FONT "glcd_font"
+        string		glcd_font;
+#define GLCD_SIZE_CHANNEL "glcd_percent_channel"
+        int		glcd_percent_channel;
+#define GLCD_SIZE_EPG "glcd_percent_epg"
+        int		glcd_percent_epg;
+#define GLCD_SIZE_BAR "glcd_percent_bar"
+        int		glcd_percent_bar;
+#define GLCD_SIZE_TIME "glcd_percent_time"
+        int		glcd_percent_time;
 } settings;
 
 CConfigFile *configfile = NULL;
@@ -73,6 +90,14 @@ CConfigFile *configfile = NULL;
 static bool saveSettings() {
 	if (configfile) {
 		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
+		configfile->setInt32(GLCD_COLOR_FG, settings.glcd_color_fg);
+		configfile->setInt32(GLCD_COLOR_BG, settings.glcd_color_bg);
+		configfile->setInt32(GLCD_COLOR_BAR, settings.glcd_color_bar);
+		configfile->setInt32(GLCD_SIZE_CHANNEL, settings.glcd_percent_channel);
+		configfile->setInt32(GLCD_SIZE_EPG, settings.glcd_percent_epg);
+		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
+		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
+		configfile->setString(GLCD_FONT, settings.glcd_font);
 		configfile->saveConfig(EXTRA_SETTINGS_FILE);
 		return true;
 	}
@@ -89,6 +114,14 @@ static bool loadSettings() {
 		configfile = new CConfigFile('=');
 		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
 			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
+			settings.glcd_color_fg = configfile->getInt32(GLCD_COLOR_FG, GLCD::cColor::White);
+			settings.glcd_color_bg = configfile->getInt32(GLCD_COLOR_BG, GLCD::cColor::Blue);
+			settings.glcd_color_bar = configfile->getInt32(GLCD_COLOR_BAR, GLCD::cColor::Red);
+			settings.glcd_percent_channel = configfile->getInt32(GLCD_SIZE_CHANNEL, 18);
+			settings.glcd_percent_epg = configfile->getInt32(GLCD_SIZE_EPG, 8);
+			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
+			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
+			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
 			return true;
 		}
 	}
@@ -1325,15 +1358,400 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 }
 ////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////
 
-////////////////////////////// EXTDISPLAY Menu ANFANG ////////////////////////////////////
-#define EXTDISPLAY_OPTION_COUNT 2
-const CMenuOptionChooser::keyval EXTDISPLAY_OPTIONS[EXTDISPLAY_OPTION_COUNT] =
+/*
+	Neutrino graphlcd daemon thread
+
+	(/) 2012 by martii, with portions shamelessly copied from infoviewer.cpp
+
+
+	License: GPL
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
+#ifdef WITH_GRAPHLCD
+
+void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey, CChannelEventList &eList, char search = 0, std::string search_text = "");
+void sectionsd_getCurrentNextServiceKey(t_channel_id uniqueServiceKey, CSectionsdClient::responseGetCurrentNextInfoChannelID& current_next );
+
+#include <string>
+#include <algorithm>
+
+static nGLCD *nglcd = NULL;
+
+nGLCD::nGLCD() {
+	lcd = NULL;
+	Channel = "EvoLux";
+	Epg = "Neutrino";
+	sem_init(&sem, 0, 1);
+
+	doRestart = false;
+        fontsize_channel = 0;
+        fontsize_epg = 0;
+        fontsize_time = 0;
+        percent_channel = 0;
+        percent_time = 0;
+        percent_epg = 0;
+        percent_bar = 0;
+        percent_time = 0;
+        percent_space = 0;
+        Scale = 0;
+	bitmap = NULL;
+	loadSettings();
+
+	nglcd = this;
+
+	Init();
+}
+
+void nGLCD::Init() {
+        if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
+		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
+}
+
+nGLCD::~nGLCD() {
+	if (lcd) {
+		lcd->DeInit();
+		delete lcd;
+	}
+}
+
+void nGLCD::Exec() {
+	if (!lcd)
+		return;
+
+	bitmap->Clear(settings.glcd_color_bg);
+
+	int off = 0;
+
+	if (percent_channel) {
+		off += percent_space;
+		int fw = font_channel.Width(Channel);
+		if (fw)
+			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
+				off * bitmap->Height()/100, bitmap->Width() - 4, Channel,
+				&font_channel, settings.glcd_color_fg, GLCD::cColor::Transparent);
+		off += percent_channel;
+		off += percent_space;
+	}
+
+	if (percent_epg) {
+		off += percent_space;
+		int fw = font_epg.Width(Epg);
+		if (fw)
+			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
+				off * bitmap->Height()/100, bitmap->Width() - 4, Epg,
+				&font_epg, settings.glcd_color_fg, GLCD::cColor::Transparent);
+		off += percent_epg;
+		off += percent_space;
+	}
+
+	if (percent_bar) {
+		off += percent_space;
+		int bar_top = off * bitmap->Height()/100;
+		off += percent_bar;
+		int bar_bottom = off * bitmap->Height()/100;
+		bitmap->DrawHLine(0, bar_top, bitmap->Width(), settings.glcd_color_fg);
+		bitmap->DrawHLine(0, bar_bottom, bitmap->Width(), settings.glcd_color_fg);
+		if (Scale)
+			bitmap->DrawRectangle(0, bar_top + 1, Scale * (bitmap->Width() - 1)/100,
+				bar_bottom - 1, settings.glcd_color_bar, true);
+		off += percent_space;
+	}
+
+	if (percent_time) {
+		off += percent_space;
+		char timebuf[10];
+		strftime(timebuf, sizeof(timebuf), "%H:%M", tm);
+
+		std::string Time = std::string(timebuf);
+
+		bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - font_time.Width(Time))/2),
+			off * bitmap->Height()/100, bitmap->Width() - 1, Time,
+			&font_time, settings.glcd_color_fg, GLCD::cColor::Transparent);
+	}
+
+	lcd->SetScreen(bitmap->Data(), bitmap->Width(), bitmap->Height());
+	lcd->Refresh(true);
+}
+
+static bool sortByDateTime (const CChannelEvent& a, const CChannelEvent& b)
 {
-	{ 0, LOCALE_EXTRAMENU_EXTDISPLAY_OFF },
-	{ 1, LOCALE_EXTRAMENU_EXTDISPLAY_ON }
+	return a.startTime < b.startTime;
+}
+
+void nGLCD::updateFonts() {
+	bool changed = false;
+	int percent = settings.glcd_percent_channel + settings.glcd_percent_epg + settings.glcd_percent_bar + settings.glcd_percent_time;
+
+	if (percent < 100)
+		percent = 100;
+
+	// normalize values
+	percent_channel = settings.glcd_percent_channel * 100 / percent;
+	percent_epg = settings.glcd_percent_epg * 100 / percent;
+	percent_bar = settings.glcd_percent_bar * 100 / percent;
+	percent_time = settings.glcd_percent_time * 100 / percent;
+
+	// calculate height
+	int fontsize_channel_new = percent_channel * nglcd->lcd->Height() / 100;
+	int fontsize_epg_new = percent_epg * nglcd->lcd->Height() / 100;
+	int fontsize_time_new = percent_time * nglcd->lcd->Height() / 100;
+
+	if (!fonts_initialized || (fontsize_channel_new != fontsize_channel)) {
+		fontsize_channel = fontsize_channel_new;
+		if (!font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel)) {
+			settings.glcd_font = FONTDIR "/neutrino.ttf";
+			font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel);
+		}
+		changed = true;
+	}
+	if (!fonts_initialized || (fontsize_epg_new != fontsize_epg)) {
+		fontsize_epg = fontsize_epg_new;
+		if (!font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg)) {
+			settings.glcd_font = FONTDIR "/neutrino.ttf";
+			font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg);
+		}
+		changed = true;
+	}
+	if (!fonts_initialized || (fontsize_time_new != fontsize_time)) {
+		fontsize_time = fontsize_time_new;
+		if (!font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time)) {
+			settings.glcd_font = FONTDIR "/neutrino.ttf";
+			font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time);
+		}
+		changed = true;
+	}
+
+	if (!changed)
+		return;
+
+	int div = 0;
+	if (percent_channel)
+		div += 2;
+	if (percent_epg)
+		div += 2;
+	if (percent_bar)
+		div += 2;
+	if (percent_time)
+		div += 2;
+	percent_space = (100 - percent_channel - percent_time - percent_epg - percent_bar) / div;
+
+	fonts_initialized = true;
+}
+
+void* nGLCD::Run(void *)
+{
+	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
+		fprintf(stderr, "Error loading config file!\n");
+		return NULL;
+	}
+	if ((GLCD::Config.driverConfigs.size() < 1)) {
+		fprintf(stderr, "No driver config found!\n");
+		return NULL;
+	}
+
+	struct timespec ts;
+	CSectionsdClient::CurrentNextInfo info_CurrentNext;
+	CChannelEventList               evtlist;
+	t_channel_id channel_id = -1;
+	nglcd->fonts_initialized = false;
+	bool broken = false;
+
+	do {
+		int firstRun = 5;
+		if (broken) {
+			fprintf(stderr, "No graphlcd display found ... sleeping 30 seconds\n");
+			sleep (30);
+			broken = false;
+			continue;
+		}
+		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
+		if (!nglcd->lcd) {
+			broken = true;
+			continue;
+		}
+		if (nglcd->lcd->Init() != 0) {
+			delete nglcd->lcd;
+			nglcd->lcd = NULL;
+			broken = true;
+			continue;
+		}
+
+		nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
+
+		sem_post(&nglcd->sem);
+
+		do  {
+			clock_gettime(CLOCK_REALTIME, &ts);
+			nglcd->tm = localtime(&ts.tv_sec);
+			nglcd->Exec();
+			clock_gettime(CLOCK_REALTIME, &ts);
+			nglcd->tm = localtime(&ts.tv_sec);
+			if (firstRun > 0) {
+				ts.tv_sec += 4;
+				firstRun--;
+			} else {
+				ts.tv_sec += 60 - nglcd->tm->tm_sec;
+				ts.tv_nsec = 0;
+			}
+
+			sem_timedwait(&nglcd->sem, &ts);
+			while(!sem_trywait(&nglcd->sem));
+
+			if(nglcd->doRestart) {
+				break;
+			}
+
+			nglcd->updateFonts();
+
+			int s = -1;
+
+			CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
+			if (!channelList)
+				continue;
+			t_channel_id new_channel_id = channelList->getActiveChannel_ChannelID ();
+			if (new_channel_id < 0)
+				continue;
+
+			if (new_channel_id != channel_id) {
+				nglcd->Channel = channelList->getActiveChannelName ();
+				nglcd->Epg = "";
+			}
+
+			if ((channel_id != new_channel_id) || (evtlist.empty())) {
+				evtlist.clear();
+				sectionsd_getEventsServiceKey(new_channel_id & 0xFFFFFFFFFFFFULL, evtlist);
+				if (!evtlist.empty())
+					sort(evtlist.begin(),evtlist.end(), sortByDateTime);
+			}
+			channel_id = new_channel_id;
+
+			if (!evtlist.empty()) {
+				CChannelEventList::iterator eli;
+				for ( eli=evtlist.begin(); eli!=evtlist.end(); ++eli ) {
+					if ((uint)eli->startTime + eli->duration > ts.tv_sec)
+						break;
+				}
+				if (eli == evtlist.end()) // the end is not valid, so go back
+					--eli;
+
+				nglcd->Epg = eli->description;
+
+				if (eli->duration > 0)
+					nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
+				if (nglcd->Scale > 100)
+					nglcd->Scale = 100;
+				else if (nglcd->Scale < 0)
+					nglcd->Scale = 0;
+			}
+
+		} while(true);
+		nglcd->doRestart = false;
+		nglcd->lcd->DeInit();
+		delete nglcd->lcd;
+		nglcd->lcd = NULL;
+	} while(true);
+
+	return NULL;
+}
+
+void nGLCD::Update() {
+	if (nglcd) {
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nglcd_update() {
+	if (nglcd) {
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::Restart() {
+	if (nglcd) {
+		doRestart = true;
+		sem_post(&sem);
+	}
+}
+
+#define KEY_GLCD_BLACK			0
+#define KEY_GLCD_WHITE			1
+#define KEY_GLCD_RED			2
+#define KEY_GLCD_GREEN			3
+#define KEY_GLCD_BLUE			4
+#define KEY_GLCD_MAGENTA		5
+#define KEY_GLCD_CYAN			6
+#define KEY_GLCD_YELLOW			7
+#define GLCD_COLOR_OPTION_COUNT 	8
+static const CMenuOptionChooser::keyval GLCD_COLOR_OPTIONS[GLCD_COLOR_OPTION_COUNT] =
+{
+	  { KEY_GLCD_BLACK,	LOCALE_GLCD_COLOR_BLACK }
+	, { KEY_GLCD_WHITE,	LOCALE_GLCD_COLOR_WHITE }
+	, { KEY_GLCD_RED,	LOCALE_GLCD_COLOR_RED }
+	, { KEY_GLCD_GREEN,	LOCALE_GLCD_COLOR_GREEN }
+	, { KEY_GLCD_BLUE,	LOCALE_GLCD_COLOR_BLUE }
+	, { KEY_GLCD_MAGENTA,	LOCALE_GLCD_COLOR_MAGENTA }
+	, { KEY_GLCD_CYAN,	LOCALE_GLCD_COLOR_CYAN }
+	, { KEY_GLCD_YELLOW,	LOCALE_GLCD_COLOR_YELLOW }
 };
 
-EXTDISPLAY_Menu::EXTDISPLAY_Menu()
+int GLCD_Menu::color2index(uint32_t color) {
+	if (color == GLCD::cColor::Black)
+		return KEY_GLCD_BLACK;
+	if (color == GLCD::cColor::White)
+		return KEY_GLCD_WHITE;
+	if (color == GLCD::cColor::Red)
+		return KEY_GLCD_RED;
+	if (color == GLCD::cColor::Green)
+		return KEY_GLCD_GREEN;
+	if (color == GLCD::cColor::Blue)
+		return KEY_GLCD_BLUE;
+	if (color == GLCD::cColor::Magenta)
+		return KEY_GLCD_MAGENTA;
+	if (color == GLCD::cColor::Cyan)
+		return KEY_GLCD_CYAN;
+	if (color == GLCD::cColor::Yellow)
+		return KEY_GLCD_YELLOW;
+	return KEY_GLCD_BLACK;
+}
+
+uint32_t GLCD_Menu::index2color(int i) {
+	switch(i) {
+	case KEY_GLCD_BLACK:
+		return GLCD::cColor::Black;
+	case KEY_GLCD_WHITE:
+		return GLCD::cColor::White;
+	case KEY_GLCD_RED:
+		return GLCD::cColor::Red;
+	case KEY_GLCD_GREEN:
+		return GLCD::cColor::Green;
+	case KEY_GLCD_BLUE:
+		return GLCD::cColor::Blue;
+	case KEY_GLCD_MAGENTA:
+		return GLCD::cColor::Magenta;
+	case KEY_GLCD_CYAN:
+		return GLCD::cColor::Cyan;
+	case KEY_GLCD_YELLOW:
+		return GLCD::cColor::Yellow;
+	}
+	return GLCD::cColor::ERRCOL;
+}
+
+
+GLCD_Menu::GLCD_Menu()
 {
 	frameBuffer = CFrameBuffer::getInstance();
 	width = 600;
@@ -1343,57 +1761,115 @@ EXTDISPLAY_Menu::EXTDISPLAY_Menu()
 
 	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
 	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+
+	notifier = new GLCD_Menu_Notifier;
+
+	nglcd = new nGLCD;
 }
 
-int EXTDISPLAY_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+
+int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
+	if(actionKey == "restart") {
+		nglcd->Restart();
+	} else if(actionKey == "select_font") {
+		parent->hide();
+		CFileBrowser fileBrowser;
+		CFileFilter fileFilter;
+		fileFilter.addFilter("ttf");
+		fileBrowser.Filter = &fileFilter;
+		if (fileBrowser.exec(FONTDIR) == true) {
+			settings.glcd_font = fileBrowser.getSelectedFile()->Name;
+			if (nglcd) {
+				nglcd->fonts_initialized = false;
+				nglcd->Restart();
+			}
+		}
+	}
 
 	if (parent)
 		parent->hide();
 
-	EXTDISPLAYSettings();
+	GLCD_Menu_Settings();
+	saveSettings();
 
 	return res;
 }
 
-void EXTDISPLAY_Menu::hide()
+void GLCD_Menu::hide()
 {
 	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
 }
 
-#define DOTFILE_EXTDISPLAY "/etc/.extdisplay"
-void EXTDISPLAY_Menu::EXTDISPLAYSettings()
+GLCD_Menu_Notifier::GLCD_Menu_Notifier ()
 {
-	int extdisplay = access(DOTFILE_EXTDISPLAY, R_OK) ? 0 : 1;
-	int old_extdisplay=extdisplay;
-
-	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EXTDISPLAY, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EXTDISPLAY_SELECT, &extdisplay, EXTDISPLAY_OPTIONS, EXTDISPLAY_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_extdisplay!=extdisplay)
-	{
-		if (extdisplay == 1)
-		{
-			//EXTDISPLAY STARTEN
-			touch(DOTFILE_EXTDISPLAY);
-			system("/etc/init.d/extDisplay.sh >/dev/null 2>&1 &");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "EXTDISPLAY activated!", 450, 2); // UTF-8("")
-		} else {
-			//EXTDISPLAY BEENDEN
-			unlink(DOTFILE_EXTDISPLAY);
-			system("killall extDisplay.sh >/dev/null 2>&1 &");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "EXTDISPLAY deactivated!", 450, 2); // UTF-8("")
-		}
-	}
-	//ENDE EXTDISPLAY
 }
-////////////////////////////// EXTDISPLAY Menu ENDE //////////////////////////////////////
+
+bool
+GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
+{
+	if (!nglcd || !Data)
+		return false;
+	switch(OptionName) {
+	case LOCALE_EXTRAMENU_GLCD_SELECT_FG:
+		settings.glcd_color_fg = GLCD_Menu::index2color(*((int *) Data));
+		break;
+	case LOCALE_EXTRAMENU_GLCD_SELECT_BG:
+		settings.glcd_color_bg = GLCD_Menu::index2color(*((int *) Data));
+		break;
+	case LOCALE_EXTRAMENU_GLCD_SELECT_BAR:
+		settings.glcd_color_bar = GLCD_Menu::index2color(*((int *) Data));
+		break;
+	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
+	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
+	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
+	case LOCALE_EXTRAMENU_GLCD_SIZE_TIME:
+		break;
+	default:
+		return false;
+	}
+
+	nglcd->Update();
+	return true;
+}
+
+void GLCD_Menu::GLCD_Menu_Settings()
+{
+	int color_bg = color2index(settings.glcd_color_bg);
+	int color_fg = color2index(settings.glcd_color_fg);
+	int color_bar = color2index(settings.glcd_color_bar);
+	int shortcut = 1;
+
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_FG, &color_fg,
+		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BG, &color_bg,
+		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BAR, &color_bar,
+		GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier, CRCInput::convertDigitToKey(shortcut++)));
+	menu->addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font",
+		CRCInput::convertDigitToKey(shortcut++)));
+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
+		&settings.glcd_percent_channel, true, 0, 100, notifier));
+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
+		&settings.glcd_percent_epg, true, 0, 100, notifier));
+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
+		&settings.glcd_percent_bar, true, 0, 100, notifier));
+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
+		&settings.glcd_percent_time, true, 0, 100, notifier));
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "restart",
+		CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->exec(NULL, "");
+	menu->hide();
+	delete menu;
+
+	if (nglcd)
+		nglcd->Restart();
+	saveSettings();
+}
+#endif

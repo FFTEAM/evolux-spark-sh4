@@ -809,10 +809,13 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 	int extrashortcut = 1;
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EXTDISPLAY, true, NULL, new EXTDISPLAY_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // extDisplay Menu
+#ifdef WITH_GRAPHLCD
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Emu Menu
+#endif
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOT_HEAD, true, NULL, new BOOT_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
+
 	/*}
 	else
 	{

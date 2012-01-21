@@ -72,11 +72,14 @@ int zapit_ready;
 int abort_zapit;
 int v_mode;
 
+#ifdef WITH_GRAPHLCD
+extern void nglcd_update(void);
+#endif
+
 extern void send_ca_id(int);
 cDvbCi * ci;
 //cDvbCiSlot *one, *two;
 extern cDemux * pmtDemux;
-
 #define AUDIO_CONFIG_FILE CONFIGDIR "/zapit/audio.conf"
 map<t_channel_id, audio_map_set_t> audio_map;
 map<t_channel_id, audio_map_set_t>::iterator audio_map_it;
@@ -348,14 +351,13 @@ extern int dvbsub_getpid();
 extern int dvbsub_start(int pid);
 extern void dvbsub_setup_changed(void);
 
-int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0)
+int zapit_real(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0)
 {
 	bool transponder_change = false;
 	tallchans_iterator cit;
 	bool failed = false;
 
 DBG("[zapit] zapto channel id %llx diseqcType %d nvod %d\n", channel_id, diseqcType, in_nvod);
-fprintf(stderr, "[zapit] zapto channel id %llx diseqcType %d nvod %d\n", channel_id, diseqcType, in_nvod); //FIXME
 
 	sig_delay = 2;
         if (!firstzap && channel) {
@@ -604,6 +606,14 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 	dvbsub_setup_changed();
 
 	return 0;
+}
+
+int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0) {
+	int res = zapit_real(channel_id, in_nvod, forupdate, nowait);
+#ifdef WITH_GRAPHLCD
+	nglcd_update();
+#endif
+	return res;
 }
 
 int change_audio_pid(uint8_t index)

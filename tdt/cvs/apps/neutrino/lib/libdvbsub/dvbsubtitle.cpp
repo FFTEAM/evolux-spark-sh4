@@ -40,7 +40,7 @@ extern int fb_fd;
 
 // Set these to 'true' for debug output:
 #if 1
-static bool DebugConverter = true;
+static bool DebugConverter = false;
 static bool DebugSegments = false;
 static bool DebugPages = false;
 static bool DebugRegions = false;
@@ -734,7 +734,7 @@ void cDvbSubtitleBitmaps::Draw()
 
     // Work around badly calculated received Y-axis values, part 2
     int y_off = 0;
-    if ((y_start > 200 && y_end > max_x - 200) || (y_end > max_y - min_y)) {
+    if ((y_start > 200 && y_end > max_y - 200) || (y_end > max_y - min_y)) {
 	// assume alignment at bottom of screen
 	y_off = max_y - min_y - y_end + y_start;
     }

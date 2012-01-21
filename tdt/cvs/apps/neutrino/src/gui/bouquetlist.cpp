@@ -450,7 +450,7 @@ int CBouquetList::show(bool bShowChannelList)
 
 void CBouquetList::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height+10);
+	frameBuffer->paintBackgroundBoxRel(x,y, width+1,height+10);
 }
 
 void CBouquetList::paintItem(int pos)

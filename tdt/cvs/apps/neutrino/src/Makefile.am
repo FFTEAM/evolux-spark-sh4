@@ -15,6 +15,7 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/libupnpclient \
 	-I$(top_srcdir)/../../driver/bpamem/ \
 	@FREETYPE_CFLAGS@ \
+	@GRAPHLCD_CFLAGS@ \
 	@LIBCS_CFLAGS@
 
 
@@ -61,6 +62,7 @@ neutrino_LDADD = \
 	$(top_builddir)/lib/libupnpclient/libtuxbox-upnpclient.a \
 	@CURL_LIBS@ \
 	@FREETYPE_LIBS@ \
+	@GRAPHLCD_LIBS@ \
 	@PNG_LIBS@ \
 	@MAD_LIBS@ \
 	@ID3TAG_LIBS@ \

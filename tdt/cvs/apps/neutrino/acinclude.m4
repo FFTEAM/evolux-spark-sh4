@@ -235,6 +235,16 @@ AC_SUBST($1_CFLAGS)
 AC_SUBST($1_LIBS)
 ])
 
+AC_DEFUN([GRAPHLCD_CONFIG],[
+GLCDBASE=`cd ../../cdk/graphlcd-base 2>/dev/null && pwd`
+if test -f $GLCDBASE/glcdgraphics/glcd.h ; then
+	GRAPHLCD_CFLAGS="-DWITH_GRAPHLCD -I$GLCDBASE"
+	GRAPHLCD_LIBS="-L$GLCDBASE/glcdgraphics -L$GLCDBASE/glcddrivers -lglcddrivers -lglcdgraphics"
+fi
+AC_SUBST(GRAPHLCD_CFLAGS)
+AC_SUBST(GRAPHLCD_LIBS)
+])
+
 AC_DEFUN([TUXBOX_APPS_LIB_CONFIG],[
 _TUXBOX_APPS_LIB_CONFIG($1,$2,ERROR)
 if test "$$1_CONFIG" = "no"; then

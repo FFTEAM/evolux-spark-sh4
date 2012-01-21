@@ -319,7 +319,66 @@ class FRITZCALL_Menu : public CMenuTarget
 
 };
 
-class EXTDISPLAY_Menu : public CMenuTarget
+
+#ifdef WITH_GRAPHLCD
+#include <time.h>
+#include <string>
+#include <semaphore.h>
+
+#include <glcdgraphics/bitmap.h>
+#include <glcdgraphics/font.h>
+#include <glcddrivers/config.h>
+#include <glcddrivers/driver.h>
+#include <glcddrivers/drivers.h>
+
+static const char * kDefaultConfigFile = "/etc/graphlcd.conf";
+
+#define MAX(a,b)(((a)<(b)) ? (b) : (a))
+
+class nGLCD
+{
+	GLCD::cDriver * lcd;
+	GLCD::cFont font_channel;
+	GLCD::cFont font_epg;
+	GLCD::cFont font_time;
+	int fontsize_channel;
+	int fontsize_epg;
+	int fontsize_time;
+	int percent_channel;
+	int percent_time;
+	int percent_epg;
+	int percent_bar;
+	int percent_space;
+	GLCD::cBitmap * bitmap;
+	std::string Channel;
+	std::string Epg;
+	int Scale;
+        time_t now;
+        struct tm *tm;
+	bool doRestart;
+	pthread_t thrGLCD;
+	void updateFonts();
+	void Exec();
+    public:
+	nGLCD();
+	~nGLCD();
+	void Init();
+	static void* Run(void *);
+	static void Update();
+	void Restart();
+	bool fonts_initialized;
+	sem_t sem;
+};
+
+class GLCD_Menu_Notifier : public CChangeObserver
+{
+    public:
+	GLCD_Menu_Notifier();
+	bool changeNotify(const neutrino_locale_t, void *);
+};
+
+
+class GLCD_Menu : public CMenuTarget
 {
 	private:
 
@@ -330,14 +389,17 @@ class EXTDISPLAY_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 
+	static int color2index(uint32_t color);
+	GLCD_Menu_Notifier *notifier;
+
 	public:
 
-	EXTDISPLAY_Menu();
-
+	static uint32_t index2color(int i);
+	GLCD_Menu();
 	void hide();
 	int exec(CMenuTarget* parent, const std::string & actionKey);
-	void EXTDISPLAYSettings();
-
+	void GLCD_Menu_Settings();
 };
 
+#endif // WITH_GRAPHLCD
 #endif //__emumenu__

@@ -15,6 +15,7 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/libupnpclient \
 	@CURL_CFLAGS@ \
 	@FREETYPE_CFLAGS@ \
+	@GRAPHLCD_CFLAGS@ \
 	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/../misc/tools/libeplayer3/include

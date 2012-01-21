@@ -33,6 +33,8 @@ TUXBOX_APPS_LIB_PKGCONFIG(PNG,libpng)
 #TUXBOX_APPS_LIB_PKGCONFIG(MPEGTOOLS,tuxbox-mpegtools)
 #TUXBOX_APPS_LIB_PKGCONFIG(TUXTXT,tuxbox-tuxtxt)
 
+GRAPHLCD_CONFIG
+
 AC_ARG_ENABLE(keyboard-no-rc,
          [  --enable-keyboard-no-rc             enable keyboard control, disable rc control],
          [AC_DEFINE(KEYBOARD_INSTEAD_OF_REMOTE_CONTROL,1,[enable keyboard control, disable rc control])])

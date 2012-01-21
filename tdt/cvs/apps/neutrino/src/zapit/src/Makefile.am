@@ -10,7 +10,8 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/xmltree \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/lib/libcoolstream \
-	-I$(top_srcdir)/../misc/tools/libeplayer3/include
+	-I$(top_srcdir)/../misc/tools/libeplayer3/include \
+	@GRAPHLCD_CFLAGS@
 
 noinst_LIBRARIES = libzapit.a
 

@@ -1442,11 +1442,24 @@ extramenu.fritzcall Fritzcall Menue
 extramenu.fritzcall.select Fritzcallmonitor
 extramenu.fritzcall.on Ein
 extramenu.fritzcall.off Aus
-extramenu.extdisplay Externes Display Menue
-extramenu.extdisplay.select Externes Display
-extramenu.extdisplay.on Ein
-extramenu.extdisplay.off Aus
 setting.saved Einstellungen gespeichert
 dvb.subtitle.placement Untertitelanzeige
 dvb.subtitle.placement.bottom unten
 dvb.subtitle.placement.top oben
+extramenu.glcd.color.black Schwarz
+extramenu.glcd.color.white Weiss
+extramenu.glcd.color.red Rot
+extramenu.glcd.color.green Grün
+extramenu.glcd.color.blue Blau
+extramenu.glcd.color.magenta Magenta
+extramenu.glcd.color.cyan Blaugrün
+extramenu.glcd.color.yellow Gelb
+extramenu.glcd GraphLCD
+extramenu.glcd.select.fg Vordergrund-Farbe
+extramenu.glcd.select.bg Hintergrund-Farbe
+extramenu.glcd.select.bar Fortschrittsbalken-Farbe
+extramenu.glcd.size_channel Sender-Größe
+extramenu.glcd.size_epg EPG-Größe
+extramenu.glcd.size_bar Fortschrittsbalken-Größe
+extramenu.glcd.size_time Uhrzeit-Größe
+extramenu.glcd.restart Neu erkennen
