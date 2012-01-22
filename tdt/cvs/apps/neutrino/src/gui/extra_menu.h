@@ -108,17 +108,14 @@ class EMU_Menu : public CMenuTarget
 	struct emu_list
 	{
 		const char *procname;
-		const neutrino_locale_t loctxt;
 		const char *start_command;
 		const char *stop_command;
 		bool installed;
-		char version[8];
 	};
 
 	int get_installed_count();
 
 	EMU_Menu();
-	bool CamdReset();
 	void hide();
 	int exec(CMenuTarget* parent, const std::string & actionKey);
 	void EMU_Menu_Settings();
@@ -352,29 +349,36 @@ class nGLCD
 	GLCD::cBitmap * bitmap;
 	std::string Channel;
 	std::string Epg;
+	std::string stagingChannel;
+	std::string stagingEpg;
 	int Scale;
         time_t now;
         struct tm *tm;
-	bool doRestart;
 	bool channelLocked;
+	bool doRestart;
+	bool doShutdown;
+	bool doExit;
 	pthread_t thrGLCD;
 	pthread_mutex_t mutex;
-	pthread_mutex_t mainMutex;
 	void updateFonts();
 	void Exec();
     public:
+	bool fonts_initialized;
 	nGLCD();
 	~nGLCD();
-	void Lock();
-	void Unlock();
+	void DeInit();
+	static void Lock();
+	static void Unlock();
 	void mainLock();
 	void mainUnlock();
 	static void lockChannel(string txt);
 	static void unlockChannel();
 	static void* Run(void *);
 	static void Update();
+	static void Shutdown();
+	static void Resume();
+	static void Exit();
 	void Restart();
-	bool fonts_initialized;
 	sem_t sem;
 };
 
@@ -392,8 +396,7 @@ class GLCD_Menu_Notifier : public CChangeObserver
 
 class GLCD_Menu : public CMenuTarget
 {
-	private:
-
+    private:
 	CFrameBuffer *frameBuffer;
 	int x;
 	int y;
@@ -402,9 +405,7 @@ class GLCD_Menu : public CMenuTarget
 	int hheight,mheight; // head/menu font height
 	static int color2index(uint32_t color);
 	GLCD_Menu_Notifier *notifier;
-
-	public:
-
+    public:
 	static uint32_t index2color(int i);
 	GLCD_Menu();
 	void hide();
@@ -413,4 +414,25 @@ class GLCD_Menu : public CMenuTarget
 };
 
 #endif // WITH_GRAPHLCD
+
+class EVOLUXUPDATE_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	public:
+
+	EVOLUXUPDATE_Menu();
+	bool CheckUpdate();
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void EVOLUXUPDATESettings();
+
+};
 #endif //__emumenu__

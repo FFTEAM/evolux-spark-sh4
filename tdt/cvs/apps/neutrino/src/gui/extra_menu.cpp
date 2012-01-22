@@ -200,15 +200,15 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 	}
 	int old_corrVol=corrVol;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_CORRECTVOLUME, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CORRECTVOLUME, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_CORRECTVOLUME_SELECT, &corrVol, CORRECTVOLUME_OPTIONS, CORRECTVOLUME_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_corrVol!=corrVol)
 	{
@@ -284,14 +284,14 @@ void TUNERRESET_Menu::hide()
 void TUNERRESET_Menu::TUNERRESETSettings()
 {
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, "", this, "tunerreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, "", this, "tunerreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 }
 bool TUNERRESET_Menu::TunerReset()
 {
@@ -365,15 +365,15 @@ void AMOUNT_Menu::AMOUNTSettings()
 	}
 	int old_amount=amount;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_AMOUNT, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_AMOUNT, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_AMOUNT_SELECT, &amount, AMOUNT_OPTIONS, AMOUNT_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_amount!=amount)
 	{
@@ -449,15 +449,15 @@ void CHECKFS_Menu::CHECKFSSettings()
 	int checkfs = access(DOTFILE_CHECKFS, R_OK) ? 0 : 1;
 	int old_checkfs=checkfs;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_CHECKFS_SELECT, &checkfs, CHECKFS_OPTIONS, CHECKFS_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_checkfs!=checkfs)
 	{
@@ -479,50 +479,19 @@ void CHECKFS_Menu::CHECKFSSettings()
 ////////////////////////////// EMU choose Menu ANFANG ////////////////////////////////////
 
 #define EMU_OPTION_COUNT 7
-static const CMenuOptionChooser::keyval EMU_OPTIONS[EMU_OPTION_COUNT] =
-{
-#define KEY_EMU_NONE	0
-#define KEY_EMU_MGCAMD	1
-#define KEY_EMU_INCUBUS	2
-#define KEY_EMU_CAMD3	3
-#define KEY_EMU_MBOX	4
-#define KEY_EMU_OSCAM	5
-#define KEY_EMU_SPCS	6
-	{ KEY_EMU_NONE,		LOCALE_EXTRAMENU_EMU_NONE },
-	{ KEY_EMU_MGCAMD,	LOCALE_EXTRAMENU_EMU_MGCAMD },
-	{ KEY_EMU_INCUBUS,	LOCALE_EXTRAMENU_EMU_INCUBUS },
-	{ KEY_EMU_CAMD3,	LOCALE_EXTRAMENU_EMU_CAMD3 },
-	{ KEY_EMU_MBOX,		LOCALE_EXTRAMENU_EMU_MBOX },
-	{ KEY_EMU_OSCAM,	LOCALE_EXTRAMENU_EMU_OSCAM },
-	{ KEY_EMU_SPCS,		LOCALE_EXTRAMENU_EMU_SPCS }
-};
-
 static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
 {
-	  { "disabled", LOCALE_EXTRAMENU_EMU_NONE }
-	, { "mgcamd", LOCALE_EXTRAMENU_EMU_MGCAMDVERSION,
-		"rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &",
-		"kill -9 $(pidof mgcamd)", false, false }
-	, { "incubusCamd", LOCALE_EXTRAMENU_EMU_INCUBUSVERSION,
-		"rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &",
-		"kill -9 $(pidof incubusCamd)",
-		false, false }
-	, { "camd3", LOCALE_EXTRAMENU_EMU_CAMD3VERSION,
-		"/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &",
-		"kill -9 $(pidof camd3)",
-		false, false }
-	, { "mbox", LOCALE_EXTRAMENU_EMU_MBOXVERSION,
-		"/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &"
-		"kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null",
-		false, false }
-	, { "oscam", LOCALE_EXTRAMENU_EMU_OSCAMVERSION,
-		"/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &",
-		"kill -9 $(pidof oscam)",
-		false, false }
-	, { "spcs", LOCALE_EXTRAMENU_EMU_SPCSVERSION,
-		"/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &",
-		"kill -9 $(pidof spcs)",
-		false, false }
+	  { "disabled" }
+	, { "mgcamd", "rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &",
+		"kill -9 $(pidof mgcamd)", false }
+	, { "incubusCamd", "rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &",
+		"kill -9 $(pidof incubusCamd)", false }
+	, { "camd3", "/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &",
+		"kill -9 $(pidof camd3)", false }
+	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &"
+		"kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
+	, { "oscam", "/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof oscam)", false }
+	, { "spcs", "/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof spcs)", false }
 };
 
 int EMU_Menu::get_installed_count() {
@@ -541,23 +510,6 @@ int EMU_Menu::update_installed()
 		}
 	}
 
-	for (int i = 1; i < EMU_OPTION_COUNT; i++)
-		strncpy(EMU_list[i].version, "N/A", 8);
-
-	if (FILE *ev = fopen("/usr/bin/versions.txt", "r"))
-	{
-		char buffer[120];
-		while(fgets(buffer, sizeof(buffer), ev))
-		{
-			sscanf(buffer, "mgcamd=%7s", EMU_list[KEY_EMU_MGCAMD].version);
-			sscanf(buffer, "incubuscamd=%7s", EMU_list[KEY_EMU_INCUBUS].version);
-			sscanf(buffer, "camd3=%7s", EMU_list[KEY_EMU_CAMD3].version);
-			sscanf(buffer, "mbox=%7s", EMU_list[KEY_EMU_MBOX].version);
-			sscanf(buffer, "oscam=%7s", EMU_list[KEY_EMU_OSCAM].version);
-			sscanf(buffer, "spcs=%7s", EMU_list[KEY_EMU_SPCS].version);
-		}
-		fclose(ev);
-	}
 	return installed_count;
 }
 
@@ -620,9 +572,41 @@ EMU_Menu::EMU_Menu()
 int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
-	if(actionKey == "camdreset") {
-		this->CamdReset();
-		return res;
+
+	bool doReset = false;
+	int emu = selected;
+
+	if(actionKey == "disable")
+		emu = 0;
+	else if (actionKey == "reset") {
+		doReset = true;
+		emu = selected;
+	} else
+		for (emu = 1; emu < EMU_OPTION_COUNT; emu++)
+			if (!strcmp(EMU_list[emu].procname, actionKey.c_str()))
+				break;
+
+	if (emu < EMU_OPTION_COUNT) {
+		int emu_old = selected;
+		if ((emu_old != emu) || doReset) {
+			if (emu_old) {
+				system(EMU_list[emu_old].stop_command);
+				string m = " " + string(EMU_list[emu_old].procname) + " is now inactive ";
+				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+			}
+			if (emu) {
+				system(EMU_list[emu].start_command);
+
+				string cmd = "(" + string(EMU_list[emu].start_command);
+				if (is_scrambled())
+					system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
+				string m = " " + string(EMU_list[emu].procname) + " is now active ";
+				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+			}
+			settings.cam_selected = string(EMU_list[emu].procname);
+			selected = emu;
+		}
+		return menu_return::RETURN_EXIT_ALL;
 	}
 
 	if (parent)
@@ -645,46 +629,29 @@ void EMU_Menu::EMU_Menu_Settings()
 
 	update_installed();
 
-	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_EMU_SELECT, &emu, EMU_OPTIONS, EMU_OPTION_COUNT, true);
-	ExtraMenuSettings->addItem(oj2);
-	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "camdreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 
+	int shortcut = 1;
 	for (int i = 1; i < EMU_OPTION_COUNT; i++)
 		if (EMU_list[i].installed)
-			ExtraMenuSettings->addItem( new CMenuForwarder(EMU_list[i].loctxt, false, EMU_list[i].version));
+			menu->addItem(new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
+				(i == selected) ? g_Locale->getText(LOCALE_EXTRAMENU_ONOFF_ON)
+						: g_Locale->getText(LOCALE_EXTRAMENU_ONOFF_OFF),
+				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++)),
+				(i == selected));
 
-	ExtraMenuSettings->exec(NULL, "");
-	ExtraMenuSettings->hide();
-	delete ExtraMenuSettings;
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "reset",
+			CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_DISABLE, true, "", this, "disable",
+			CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE));
 
-	if(emu > 0 && !EMU_list[emu].installed) {
-		string m = " " + string(EMU_list[emu].procname) + " is not installed ";
-		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-	} else if (emu_old != emu) {
-		if (emu_old) {
-			// stop currently running emu
-			system(EMU_list[emu_old].stop_command);
-			string m = " " + string(EMU_list[emu_old].procname) + " is now inactive ";
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-		}
-		if (emu) {
-			system(EMU_list[emu].start_command);
-
-			string cmd = "(" + string(EMU_list[emu].start_command);
-			if (is_scrambled())
-				system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
-			string m = " " + string(EMU_list[emu].procname) + " is now active ";
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-		}
-		settings.cam_selected = string(EMU_list[emu].procname);
-		selected = emu;
-	}
+	menu->exec(NULL, "");
+        menu->hide();
+        delete menu;
 
 	saveSettings();
 }
@@ -707,24 +674,6 @@ void EMU_Menu::resume()
 	}
 }
 
-//EMU RESTARTEN
-bool EMU_Menu::CamdReset()
-{
-	string m = "Please wait for " +  string(EMU_list[selected].procname) + " to restart.";
-	CHintBox * CamdResetBox = new CHintBox(LOCALE_EXTRAMENU_EMU_RESTART, m.c_str());
-	CamdResetBox->paint();
-	system(EMU_list[selected].stop_command);
-	sleep(1);
-	system(EMU_list[selected].start_command);
-	CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
-	int curnum = channelList->getActiveChannelNumber();
-	CZapitChannel *channel = channelList->getChannel(curnum);
-	if (is_scrambled)
-		system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
-	CamdResetBox->hide();
-	delete CamdResetBox;
-	return true;
-}
 ////////////////////////////// EMU Menu ENDE //////////////////////////////////////
 
 ////////////////////////////// DISPLAYTIME Menu ANFANG ////////////////////////////////////
@@ -769,15 +718,15 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	int displaytime = access(DOTFILE_DISPLAYTIME, R_OK) ? 0 : 1;
 	int old_displaytime=displaytime;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_DISPLAYTIME_SELECT, &displaytime, DISPLAYTIME_OPTIONS, DISPLAYTIME_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_displaytime!=displaytime)
 	{
@@ -847,15 +796,15 @@ void WWWDATE_Menu::WWWDATESettings()
 	}
 	int old_wwwdate=wwwdate;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_WWWDATE, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WWWDATE, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_WWWDATE_SELECT, &wwwdate, WWWDATE_OPTIONS, WWWDATE_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_wwwdate!=wwwdate)
 	{
@@ -1016,18 +965,18 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	int old_swap_onoff=swap_onoff;
 
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_SWAP, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_SWAP, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_ONOFF, &swap_onoff, SWAP_ONOFF_OPTIONS, 		SWAP_ONOFF_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	menu->addItem( oj1 );
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_SELECT, &swap, SWAP_OPTIONS, SWAP_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj2 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj2 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if ((old_swap != swap) && (swap_onoff == 1)) {
@@ -1125,19 +1074,19 @@ void BOOT_Menu::BOOTSettings()
 		boot = BOOT_E2;
 	int old_boot = boot;
 
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_SELECT, &boot, BOOT_OPTIONS, BOOT_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
+	menu->addItem( oj1 );
 #if 0
-	ExtraMenuSettings->addItem(new CMenuForwarder(LOCALE_MAINMENU_REBOOT, true, "", this, "reboot", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_MAINMENU_REBOOT, true, "", this, "reboot", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->addItem(GenericMenuSeparatorLine);
 #endif
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 
 	if ((boot != old_boot)
          && (ShowLocalizedMessage (LOCALE_EXTRAMENU_BOOT_HEAD, LOCALE_MESSAGEBOX_ACCEPT, CMessageBox::mbrYes, CMessageBox::mbYes | CMessageBox::mbCancel) != CMessageBox::mbrCancel))
@@ -1214,15 +1163,15 @@ void FSCK_Menu::FSCKSettings()
 	int fsck = access(DOTFILE_FSCK, R_OK) ? 0 : 1;
 	int old_fsck=fsck;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FSCK_SELECT, &fsck, FSCK_OPTIONS, FSCK_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_fsck!=fsck)
 	{
@@ -1279,15 +1228,15 @@ void STMFB_Menu::STMFBSettings()
 	int stmfb = access(DOTFILE_STMFB, R_OK) ? 0 : 1;
 	int old_stmfb=stmfb;
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_STMFB_SELECT, &stmfb, STMFB_OPTIONS, STMFB_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_stmfb!=stmfb)
 	{
@@ -1349,15 +1298,15 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
-	CMenuWidget* ExtraMenuSettings = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings.raw");
-	ExtraMenuSettings->addItem(GenericMenuSeparator);
-	ExtraMenuSettings->addItem(GenericMenuBack);
-	ExtraMenuSettings->addItem(GenericMenuSeparatorLine);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FRITZCALL_SELECT, &fritzcall, FRITZCALL_OPTIONS, FRITZCALL_OPTION_COUNT,true);
-	ExtraMenuSettings->addItem( oj1 );
-	ExtraMenuSettings->exec (NULL, "");
-	ExtraMenuSettings->hide ();
-	delete ExtraMenuSettings;
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
 	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
 	if (old_fritzcall!=fritzcall)
 	{
@@ -1423,8 +1372,12 @@ nGLCD::nGLCD() {
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
         pthread_mutex_init(&mutex, &attr);
 
+	stagingChannel = "";
+	stagingEpg = "";
 	channelLocked = false;
 	doRestart = false;
+	doShutdown = false;
+	doExit = false;
         fontsize_channel = 0;
         fontsize_epg = 0;
         fontsize_time = 0;
@@ -1440,40 +1393,30 @@ nGLCD::nGLCD() {
 
 	nglcd = this;
 
-	if (settings.glcd_enable)
-		if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
-			fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
+	if (!settings.glcd_enable)
+		doShutdown = true;
+
+	if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
+		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
 }
 
 void nGLCD::Lock(void)
 {
-  pthread_mutex_lock(&mutex);
+	if (nglcd)
+		pthread_mutex_lock(&nglcd->mutex);
 }
 
 void nGLCD::Unlock(void)
 {
-  pthread_mutex_unlock(&mutex);
-}
-
-void nGLCD::mainLock(void)
-{
-  pthread_mutex_lock(&mainMutex);
-}
-
-void nGLCD::mainUnlock(void)
-{
-  pthread_mutex_unlock(&mainMutex);
+	if (nglcd)
+		pthread_mutex_unlock(&nglcd->mutex);
 }
 
 nGLCD::~nGLCD() {
-	Restart();
-	if (!settings.glcd_enable) {
-		void *res;
-		pthread_join(thrGLCD, &res);
-	}
-	mainLock(); // thrGLCD will unlock upon exit
+	Shutdown();
+	void *res;
+	pthread_join(thrGLCD, &res);
 	nglcd = NULL;
-	mainUnlock();
 	if (lcd) {
 		lcd->DeInit();
 		delete lcd;
@@ -1611,15 +1554,12 @@ void nGLCD::updateFonts() {
 
 void* nGLCD::Run(void *)
 {
-	nglcd->mainLock();
 	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
 		fprintf(stderr, "Error loading config file!\n");
-		nglcd->mainUnlock();
 		return NULL;
 	}
 	if ((GLCD::Config.driverConfigs.size() < 1)) {
 		fprintf(stderr, "No driver config found!\n");
-		nglcd->mainUnlock();
 		return NULL;
 	}
 
@@ -1630,7 +1570,10 @@ void* nGLCD::Run(void *)
 	bool broken = false;
 
 	do {
-		int firstRun = 5;
+		while (nglcd->doShutdown)
+			sem_wait(&nglcd->sem);
+
+		int warmUp = 5;
 		if (broken) {
 			fprintf(stderr, "No graphlcd display found ... sleeping 30 seconds\n");
 			sleep (30);
@@ -1655,34 +1598,37 @@ void* nGLCD::Run(void *)
 
 		sem_post(&nglcd->sem);
 
-		nglcd->Lock();
 		do  {
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
 			nglcd->Exec();
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
-			if (firstRun > 0) {
+			if (warmUp > 0) {
 				ts.tv_sec += 4;
-				firstRun--;
+				warmUp--;
 			} else {
 				ts.tv_sec += 60 - nglcd->tm->tm_sec;
 				ts.tv_nsec = 0;
 			}
 
-			nglcd->Unlock();
 			sem_timedwait(&nglcd->sem, &ts);
 			while(!sem_trywait(&nglcd->sem));
-			nglcd->Lock();
-
-			if(nglcd->doRestart)
+			if(nglcd->doRestart || nglcd->doShutdown)
 				break;
+
+			nglcd->Lock();
+			if (nglcd->channelLocked) {
+				nglcd->Channel = nglcd->stagingChannel;
+				nglcd->Epg = nglcd->stagingEpg;
+				nglcd->Scale = 0;
+				channel_id = -1;
+			}
+			nglcd->Unlock();
 
 			nglcd->updateFonts();
 
-			if (nglcd->channelLocked)
-				channel_id = -1;
-			else {
+			if (!nglcd->channelLocked) {
 				CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
 				if (!channelList)
 					continue;
@@ -1694,6 +1640,7 @@ void* nGLCD::Run(void *)
 					nglcd->Channel = channelList->getActiveChannelName ();
 					nglcd->Epg = "";
 					nglcd->Scale = 0;
+					warmUp = 1;
 				}
 
 				if ((channel_id != new_channel_id) || (evtlist.empty())) {
@@ -1725,19 +1672,35 @@ void* nGLCD::Run(void *)
 			}
 
 		} while(settings.glcd_enable);
-		nglcd->Unlock();
+		// either disabled, or restart, or shutdown permanently.
+
+		if(!settings.glcd_enable || nglcd->doShutdown) {
+			// for restart, don't blacken screen
+			nglcd->bitmap->Clear(GLCD::cColor::Black);
+			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
+			nglcd->lcd->Refresh(true);
+		}
 		nglcd->doRestart = false;
 		nglcd->lcd->DeInit();
 		delete nglcd->lcd;
 		nglcd->lcd = NULL;
-	} while(settings.glcd_enable);
+	} while(!nglcd->doExit);
 
-	nglcd->mainUnlock();
+	delete nglcd;
+
 	return NULL;
 }
 
 void nGLCD::Update() {
 	if (nglcd) {
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::Exit() {
+	if (nglcd) {
+		nglcd->doShutdown = true;
+		nglcd->doExit = true;
 		sem_post(&nglcd->sem);
 	}
 }
@@ -1751,7 +1714,21 @@ void nglcd_update() {
 void nGLCD::Restart() {
 	if (nglcd) {
 		doRestart = true;
-		sem_post(&sem);
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::Shutdown() {
+	if (nglcd) {
+		nglcd->doShutdown = true;
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::Resume() {
+	if (nglcd) {
+		nglcd->doShutdown = false;
+		sem_post(&nglcd->sem);
 	}
 }
 
@@ -1760,8 +1737,8 @@ void nGLCD::lockChannel(string c)
 	if(nglcd) {
 		nglcd->Lock();
 		nglcd->channelLocked = true;
-		nglcd->Channel = c;
-		nglcd->Epg = "";
+		nglcd->stagingChannel = c;
+		nglcd->stagingEpg = "";
 		nglcd->Unlock();
 		sem_post(&nglcd->sem);
 	}
@@ -1818,22 +1795,22 @@ int GLCD_Menu::color2index(uint32_t color) {
 
 uint32_t GLCD_Menu::index2color(int i) {
 	switch(i) {
-		case KEY_GLCD_BLACK:
-			return GLCD::cColor::Black;
-		case KEY_GLCD_WHITE:
-			return GLCD::cColor::White;
-		case KEY_GLCD_RED:
-			return GLCD::cColor::Red;
-		case KEY_GLCD_GREEN:
-			return GLCD::cColor::Green;
-		case KEY_GLCD_BLUE:
-			return GLCD::cColor::Blue;
-		case KEY_GLCD_MAGENTA:
-			return GLCD::cColor::Magenta;
-		case KEY_GLCD_CYAN:
-			return GLCD::cColor::Cyan;
-		case KEY_GLCD_YELLOW:
-			return GLCD::cColor::Yellow;
+	case KEY_GLCD_BLACK:
+		return GLCD::cColor::Black;
+	case KEY_GLCD_WHITE:
+		return GLCD::cColor::White;
+	case KEY_GLCD_RED:
+		return GLCD::cColor::Red;
+	case KEY_GLCD_GREEN:
+		return GLCD::cColor::Green;
+	case KEY_GLCD_BLUE:
+		return GLCD::cColor::Blue;
+	case KEY_GLCD_MAGENTA:
+		return GLCD::cColor::Magenta;
+	case KEY_GLCD_CYAN:
+		return GLCD::cColor::Cyan;
+	case KEY_GLCD_YELLOW:
+		return GLCD::cColor::Yellow;
 	}
 	return GLCD::cColor::ERRCOL;
 }
@@ -1914,10 +1891,12 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 		settings.glcd_color_bar = GLCD_Menu::index2color(*((int *) Data));
 		break;
 	case LOCALE_EXTRAMENU_GLCD:
-		if (!nglcd && settings.glcd_enable)
-			new nGLCD;
-		else if (nglcd && !settings.glcd_enable)
-			delete nglcd;
+		if (nglcd) {
+			if (settings.glcd_enable)
+				nglcd->Resume();
+			else
+				nglcd->Shutdown();
+		}
 	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
@@ -1975,3 +1954,89 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	saveSettings();
 }
 #endif
+
+////////////////////////////// EVOLUXUPDATE Menu ANFANG ////////////////////////////////////
+#define EVOLUXUPDATE_OPTION_COUNT 2
+const CMenuOptionChooser::keyval EVOLUXUPDATE_OPTIONS[EVOLUXUPDATE_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_EVOLUXUPDATE_OFF },
+	{ 1, LOCALE_EXTRAMENU_EVOLUXUPDATE_ON },
+};
+
+EVOLUXUPDATE_Menu::EVOLUXUPDATE_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+
+int EVOLUXUPDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+	if(actionKey == "checkupdate") 
+	{
+		this->CheckUpdate();
+		return res;
+	}
+
+	if (parent)
+		parent->hide();
+
+	EVOLUXUPDATESettings();
+
+	return res;
+}
+
+void EVOLUXUPDATE_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
+{
+	//MENU AUFBAUEN
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EVOLUXUPDATE, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, true, "", this, "checkupdate", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
+}
+bool EVOLUXUPDATE_Menu::CheckUpdate()
+{
+	//EVOLUXUPDATE STARTEN
+	system("if [ -e /tmp/EvoluxUpdatevailable ]; then rm /tmp/EvoluxUpdatevailable;fi; if [ -e /tmp/version ]; then rm /tmp/version;fi;cd /tmp;wget -q http://tinyurl.com/7gz7jpo; mv 7gz7jpo version; oVersion=`cat /tmp/version | grep version | cut -d = -f2`;lVersion=`cat /etc/.version | grep version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
+	FILE* fd1 = fopen("/tmp/EvoluxUpdatevailable", "r");
+	if(fd1)
+	{
+	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, doing update now...");
+	CheckUpdateBox->paint();
+	system("oVersion=`cat /tmp/version | grep version | cut -d = -f2`; cd /tmp; wget -q http://tinyurl.com/7fjrnm3; mv 7fjrnm3 update.evolux.yaffs2.tar.gz; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm /tmp/update.evolux.yaffs2.tar.gz; rm /tmp/EvoluxUpdatevailable; rm /tmp/version");
+	CheckUpdateBox->hide();
+	delete CheckUpdateBox;
+	CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
+	CheckUpdateBox->paint();
+	system("sleep 3");
+	CheckUpdateBox->hide();
+	delete CheckUpdateBox;
+	fclose(fd1);
+	}
+	else
+	{
+	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
+	CheckUpdateBox->paint();
+	system("rm /tmp/version; sleep 3");
+	CheckUpdateBox->hide();
+	delete CheckUpdateBox;
+	}
+}
+//ENDE EVOLUXUPDATE
+
+////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////

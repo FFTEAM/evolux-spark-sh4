@@ -1409,14 +1409,8 @@ extramenu.emu.mbox Mbox
 extramenu.emu.oscam Oscam
 extramenu.emu.spcs Spcs
 extramenu.emu.select Emu Auswahl
-extramenu.emu.restart Emu Restart
-extramenu.emu.mgcamdversion MGCamd Version
-extramenu.emu.incubusversion Incubus Version
-extramenu.emu.camd3version Camd3 Version
-extramenu.emu.mboxversion Mbox Version
-extramenu.emu.oscamversion Oscam Version
-extramenu.emu.spcsversion Spcs Version
-extramenu.emu.newcsversion NewCS Version
+extramenu.emu.restart Emu neu starten
+extramenu.emu.disable Emu deaktivieren
 extramenu.swap Swap Menue
 extramenu.swap.swapram SWAPRAM
 extramenu.swap.swappart SWAPPART
@@ -1463,5 +1457,10 @@ extramenu.glcd.size_epg EPG-Größe
 extramenu.glcd.size_bar Fortschrittsbalken-Größe
 extramenu.glcd.size_time Uhrzeit-Größe
 extramenu.glcd.restart Neu erkennen
+extramenu.evoluxupdate Evolux OnlineUpdate
+extramenu.evoluxupdate.select OnlineUpdate
+extramenu.evoluxupdate.on On
+extramenu.evoluxupdate.off Off
+extramenu.evoluxupdate.update OnlineUpdate ausführen
 extramenu.onoff.on Ein
 extramenu.onoff.off Aus

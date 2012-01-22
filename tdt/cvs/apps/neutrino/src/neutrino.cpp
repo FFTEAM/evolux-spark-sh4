@@ -4677,6 +4677,9 @@ void stop_daemons(bool stopall)
 			delete powerManager;
 		}
 	}
+#ifdef WITH_GRAPHLCD
+	nGLCD::Exit();
+#endif
 }
 
 void sighandler (int signum)
