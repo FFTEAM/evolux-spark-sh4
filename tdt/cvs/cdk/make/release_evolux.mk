@@ -72,6 +72,8 @@ $(DEPDIR)/%release_evolux:
 		$(prefix)/host/bin/mkfs.jffs2 -r $(prefix)/release_evolux_with_dev -o $(prefix)/e2jffs2.img -e 0x20000 -n; \
 		( cd $(prefix) && tar -czvf EvoLux_on_Pingulux_v$(EVOLUXVERSION)-JFFS2.tar.gz e2jffs2.img uImage ); \
 	fi;
-
+	if [ -e $(buildprefix)/makeUpdatePack.sh ] ; then \
+		$(buildprefix)/makeUpdatePack.sh; \
+	fi;
 	touch $@
 
