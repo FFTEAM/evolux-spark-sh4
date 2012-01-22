@@ -1984,8 +1984,8 @@ do
 			makedev dvb/adapter$i/dvr0      c 212 `math 64 \* $i + 5` $video
 			makedev dvb/adapter$i/dvr1      c 212 `math 64 \* $i + 21` $video
 			makedev dvb/adapter$i/ca0       c 212 `math 64 \* $i + 6` $video
-#			ln -s ca0 dvb/adapter$i/ca1
-			makedev dvb/adapter$i/ca1       c 212 `math 64 \* $i + 6` $video
+			ln -s ca0 dvb/adapter$i/ca1
+#			makedev dvb/adapter$i/ca1       c 212 `math 64 \* $i + 6` $video
 			makedev dvb/adapter$i/net0      c 212 `math 64 \* $i + 7` $video
 			makedev dvb/adapter$i/osd0      c 212 `math 64 \* $i + 8` $video
 #			makedev dvb/adapter$i/ci0      c 212 `math 64 \* $i + 9` $video
