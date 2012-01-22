@@ -362,6 +362,10 @@ class nGLCD
 	pthread_mutex_t mutex;
 	void updateFonts();
 	void Exec();
+	std::string scrollChannel;
+	std::string scrollEpg;
+	bool doScrollChannel;
+	bool doScrollEpg;
     public:
 	bool fonts_initialized;
 	nGLCD();
@@ -435,4 +439,5 @@ class EVOLUXUPDATE_Menu : public CMenuTarget
 	void EVOLUXUPDATESettings();
 
 };
-#endif //__emumenu__
+
+#endif //__extramenu__
