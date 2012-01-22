@@ -68,4 +68,6 @@ v.2.2.4
 - boot neutrino option add
 v.2.2.5
 - new cam add (Spark only)
+v.2.2.6
+- onlineUpdate add (Spark only)
 ####################################################

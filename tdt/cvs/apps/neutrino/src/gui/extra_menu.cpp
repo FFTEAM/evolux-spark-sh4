@@ -1364,6 +1364,8 @@ nGLCD::nGLCD() {
 	lcd = NULL;
 	Channel = "EvoLux";
 	Epg = "Neutrino";
+	scrollChannel = "EvoLux";
+	scrollEpg = "Neutrino";
 
 	sem_init(&sem, 0, 1);
 
@@ -1438,24 +1440,32 @@ void nGLCD::Exec() {
 
 	if (percent_channel) {
 		off += percent_space;
-		int fw = font_channel.Width(Channel);
+		int fw = font_channel.Width(scrollChannel);
 		if (fw)
 			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
-				off * bitmap->Height()/100, bitmap->Width() - 4, Channel,
+				off * bitmap->Height()/100, bitmap->Width() - 4, scrollChannel,
 				&font_channel, settings.glcd_color_fg, GLCD::cColor::Transparent);
 		off += percent_channel;
 		off += percent_space;
+		if (scrollChannel.length() > Channel.length())
+			scrollChannel = scrollChannel.substr(1);
+		else
+			doScrollChannel = false;
 	}
 
 	if (percent_epg) {
 		off += percent_space;
-		int fw = font_epg.Width(Epg);
+		int fw = font_epg.Width(scrollEpg);
 		if (fw)
 			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
-				off * bitmap->Height()/100, bitmap->Width() - 4, Epg,
+				off * bitmap->Height()/100, bitmap->Width() - 4, scrollEpg,
 				&font_epg, settings.glcd_color_fg, GLCD::cColor::Transparent);
 		off += percent_epg;
 		off += percent_space;
+		if (scrollEpg.length() > Epg.length())
+			scrollEpg = scrollEpg.substr(1);
+		else
+			doScrollEpg = false;
 	}
 
 	if (percent_bar) {
@@ -1612,8 +1622,11 @@ void* nGLCD::Run(void *)
 				ts.tv_nsec = 0;
 			}
 
-			sem_timedwait(&nglcd->sem, &ts);
+			if (!nglcd->doScrollChannel && !nglcd->doScrollEpg)
+				sem_timedwait(&nglcd->sem, &ts);
+
 			while(!sem_trywait(&nglcd->sem));
+
 			if(nglcd->doRestart || nglcd->doShutdown)
 				break;
 
@@ -1621,6 +1634,8 @@ void* nGLCD::Run(void *)
 			if (nglcd->channelLocked) {
 				nglcd->Channel = nglcd->stagingChannel;
 				nglcd->Epg = nglcd->stagingEpg;
+				nglcd->scrollChannel = nglcd->Channel;
+				nglcd->scrollEpg = nglcd->Epg;
 				nglcd->Scale = 0;
 				channel_id = -1;
 			}
@@ -1640,6 +1655,14 @@ void* nGLCD::Run(void *)
 					nglcd->Channel = channelList->getActiveChannelName ();
 					nglcd->Epg = "";
 					nglcd->Scale = 0;
+					nglcd->scrollEpg = nglcd->Epg;
+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4) {
+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
+						nglcd->doScrollChannel = true;
+					} else {
+						nglcd->scrollChannel = nglcd->Channel;
+						nglcd->doScrollChannel = false;
+					}
 					warmUp = 1;
 				}
 
@@ -1659,8 +1682,16 @@ void* nGLCD::Run(void *)
 					}
 					if (eli == evtlist.end()) // the end is not valid, so go back
 						--eli;
-
-					nglcd->Epg = eli->description;
+					if (eli->description.compare(nglcd->Epg)) {
+						nglcd->Epg = eli->description;
+						if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4) {
+							nglcd->scrollEpg = nglcd->Epg + "      " + nglcd->Epg + "      " + nglcd->Epg;
+							nglcd->doScrollEpg = true;
+						} else {
+							nglcd->scrollEpg = nglcd->Epg;
+							nglcd->doScrollEpg = false;
+						}
+					}
 
 					if (eli->duration > 0)
 					nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
