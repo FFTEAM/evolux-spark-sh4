@@ -98,10 +98,10 @@ esac
 
 echo -e "\nKernel:"
 echo " Maintained:"
-echo "    4) STM 23 P0123"
-echo "    6) STM 24 P0205"
-echo "    8) STM 24 P0207 (Recommended)"
-echo "   10) STM 24 P0209 (only spark)"
+#echo "    4) STM 23 P0123"
+#echo "    6) STM 24 P0205"
+#echo "    8) STM 24 P0207 (Recommended)"
+echo "   10) STM 24 P0209 (Recommended)"
 
 case $2 in
         [1-9] | 1[0-9]) REPLY=$2
@@ -143,7 +143,7 @@ cd -
 ##############################################
 
 echo -e "\nPlayer:"
-echo "   2) Player 179"
+#echo "   2) Player 179"
 echo "   3) Player 191 (Recommended)"
 case $4 in
         [1-3]) REPLY=$4
@@ -232,7 +232,7 @@ esac
 ##############################################
 
 echo -e "\nMulticom:"
-echo "   1) Multicom 3.2.2     (Recommended for Player179)"
+#echo "   1) Multicom 3.2.2     (Recommended for Player179)"
 echo "   2) Multicom 3.2.4 rc3 (Recommended for Player191)"
 case $5 in
         [1-2]) REPLY=$5
