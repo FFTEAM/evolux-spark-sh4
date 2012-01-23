@@ -14,7 +14,6 @@
 #	echo "4) inactive"; \
 #	echo "6) Wed,  6 Jul 2011 11:17 - E2 V3.1 gstreamer  388dcd814d4e99720cb9a6c769611be4951e4ad4"; \
 #	echo "7) current inactive... comming soon, here is the next stable (case 7 == DIFF=7)"; \
-
 $(DEPDIR)/enigma2-nightly.do_prepare:
 	REVISION=""; \
 	DIFF="0"; \
