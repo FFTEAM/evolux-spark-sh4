@@ -286,7 +286,7 @@ esac
 
 echo -e "\nMedia Framework:"
 echo "   1) eplayer3  (Recommended)"
-echo "   2) gstreamer (Only working with enigma2 diff0 at the moment)"
+#echo "   2) gstreamer (Only working with enigma2 diff0 at the moment)"
 case $5 in
         [1-2]) REPLY=$6
         echo -e "\nSelected media framwork: $REPLY\n"
@@ -351,11 +351,11 @@ echo $CONFIGPARAM >lastChoice
 echo "-----------------------"
 echo "Your build enivroment is ready :-)"
 echo "Your next step could be:"
-echo "make yaud-enigma2"
+#echo "make yaud-enigma2"
 echo "make yaud-enigma2-nightly"
 echo "make yaud-neutrino"
-echo "make yaud-vdr"
-echo "make yaud-enigma1-hd"
+#echo "make yaud-vdr"
+#echo "make yaud-enigma1-hd"
 echo "make evolux"
 echo "make evolux-full"
 echo "-----------------------"
