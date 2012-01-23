@@ -984,7 +984,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
  <widget name="liste" position="10,10" scrollbarMode="showOnDemand" size="580,480" zPosition="3"/>
  </screen>
  <!-- LCD/OLED Screens -->
- <screen name="ChannelSelection_summary" position="0,0" size="132,64">
+ <!-- <screen name="ChannelSelection_summary" position="0,0" size="132,64">
  <widget font="Regular;16" halign="center" position="6,3" render="Label" size="120,34" source="parent.ServiceEvent" valign="top">
  <convert type="ServiceName">Name</convert>
  </widget>
@@ -995,7 +995,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
  <widget font="Regular;20" halign="left" position="6,44" render="Label" size="58,18" source="global.CurrentTime" valign="top">
  <convert type="ClockToText">Format:%H:%M</convert>
  </widget>
- </screen>
+ </screen> -->
  <screen name="InfoBarSummary" position="0,0" size="132,64">
  <widget font="Regular;16" halign="center" position="6,3" render="Label" size="120,34" source="session.CurrentService" valign="top">
  <convert type="ServiceName">Name</convert>
@@ -1012,12 +1012,12 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
  <convert type="ConditionalShowHide">Blink</convert>
  </widget>
  </screen>
- <screen name="MenuSummary" position="0,0" size="132,64">
+ <!-- <screen name="MenuSummary" position="0,0" size="132,64">
  <widget font="Regular;14" halign="center" position="6,0" render="Label" size="120,32" source="parent.title" valign="center"/>
  <widget font="Regular;15" halign="center" position="6,32" render="Label" size="120,32" source="parent.menu" valign="center">
  <convert type="StringListSelection"/>
  </widget>
- </screen>
+ </screen> -->
  <screen name="InfoBarMoviePlayerSummary" position="0,0" size="132,64">
  <widget font="Regular;16" halign="center" position="6,3" render="Label" size="120,34" source="session.CurrentService" valign="center">
  <convert type="ServiceName">Name</convert>
@@ -1034,14 +1034,14 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
  <convert type="ConditionalShowHide">Blink</convert>
  </widget>
  </screen>
- <screen name="SetupSummary" position="0,0" size="132,64">
+ <!-- <screen name="SetupSummary" position="0,0" size="132,64">
  <widget font="Regular;14" name="SetupTitle" position="6,0" size="120,16"/>
  <widget font="Regular;13" name="SetupEntry" position="6,18" size="120,30"/>
  <widget font="Regular;13" name="SetupValue" position="6,48" size="120,16"/>
  </screen>
  <screen name="SimpleSummary" position="0,0" size="132,64">
  <widget font="Regular;16" halign="center" position="6,0" size="120,64" valign="center"/>
- </screen>
+ </screen> -->
  <screen name="StandbySummary" position="0,0" size="132,64">
  <widget font="Regular;22" halign="center" position="6,4" render="Label" size="120,24" source="global.CurrentTime" valign="center">
  <convert type="ClockToText">Format:%d.%m.%Y</convert>

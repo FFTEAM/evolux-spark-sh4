@@ -1165,7 +1165,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 
 	<!-- LCD/OLED Screens -->
 
-	<!-- LCD screen (channelselection) -->
+	<!-- LCD screen (channelselection)
 	<screen name="ChannelSelection_summary" position="0,0" size="320,240" id="1">
 		<widget source="parent.ServiceEvent" render="Label" position="2,96" size="316,85" font="LCD;48" halign="center" valign="center" >
 			<convert type="ServiceName">Name</convert>
@@ -1179,8 +1179,8 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 		<widget source="global.CurrentTime" render="Label" position="122,34" zPosition="1" size="34,34" font="LCD;32" valign="top">
 			<convert type="ClockToText">Format:%S</convert>
 		</widget>
-	</screen> 
-	<!-- Color OLED screen (ChannelSelection) -->
+	</screen>  -->
+	<!-- Color OLED screen (ChannelSelection)
 	<screen name="ChannelSelection_summary" position="0,0" size="96,64" id="2">
 		<widget source="parent.ServiceEvent" render="Label" position="0,0" size="96,28" font="Regular;16" halign="center" valign="center" >
 			<convert type="ServiceName">Name</convert>
@@ -1191,7 +1191,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 		<widget source="global.CurrentTime" render="Label" position="0,38" size="96,26" font="Regular;32" halign="center" valign="center" foregroundColor="#FFFFFF" backgroundColor="#000000" >
 			<convert type="ClockToText">Format:%H:%M</convert>
 		</widget>
-	</screen>
+	</screen> -->
 	<!-- LCD screen (main) -->
 	<screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
 		<widget source="session.CurrentService" render="Label" position="2,116" size="316,56" font="LCD;54" halign="center" valign="center" >
@@ -1215,7 +1215,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 			<convert type="ConditionalShowHide">Blink</convert>
 		</widget>
 	</screen>
-	<!-- Color OLED screen (main) -->
+	<!-- Color OLED screen (main)
 	<screen name="InfoBarSummary" position="0,0" size="96,64" id="2">
 		<widget source="session.CurrentService" render="Label" position="0,0" size="96,28" font="Regular;16" halign="center" valign="center" >
 			<convert type="ServiceName">Name</convert>
@@ -1230,7 +1230,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
 			<convert type="ConditionalShowHide">Blink</convert>
 		</widget>
-	</screen>
+	</screen> -->
 	<!-- LCD screen (movieplayer) -->
 	<screen name="InfoBarMoviePlayerSummary" position="0,0" size="320,240" id="1">
 		<widget source="session.CurrentService" render="Label" position="6,0" size="120,25" font="Regular;14" halign="center" valign="center" >
@@ -1263,70 +1263,70 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 			<convert type="ConditionalShowHide">Blink</convert>
 		</widget>
 	</screen>
-	<!-- LCD screen (ChoiceBox) -->
+	<!-- LCD screen (ChoiceBox)
 	<screen name="ChoiceBox_summary" position="0,0" size="320,240" id="1">
 		<widget source="parent.summary_list" render="Label" position="2,0" size="316,200" font="LCD;48" />
-	</screen>
-	<!-- Color OLED screen (ChoiceBox) -->
+	</screen> -->
+	<!-- Color OLED screen (ChoiceBox)
 	<screen name="ChoiceBox_summary" position="0,0" size="96,64" id="2">
 		<widget source="parent.summary_list" render="Label" position="0,0" size="96,64" font="Regular;10" />
-	</screen>	
-	<!-- LCD screen (MessageBox) -->
+	</screen>	 -->
+	<!-- LCD screen (MessageBox)
 	<screen name="MessageBox_summary" position="0,0" size="320,240" id="1">
 		<widget source="parent.Text" render="Label" position="2,0" size="316,200" font="LCD;48" halign="center" valign="center" />
 		<widget source="parent.selectedChoice" render="Label" position="6,205" size="120,30" font="LCD;28" halign="center" valign="center" />
-	</screen>
-	<!-- Color OLED screen (MessageBox) -->
+	</screen> -->
+	<!-- Color OLED screen (MessageBox)
 	<screen name="MessageBox_summary" position="0,0" size="96,64" id="2">
 		<widget source="parent.Text" render="Label" position="0,0" size="96,52" font="Regular;10" halign="center" valign="center" />
 		<widget source="parent.selectedChoice" render="Label" position="0,50" size="96,14" font="Regular;12" halign="center" valign="center" />
-	</screen>
-	<!-- LCD screen (menus) -->
+	</screen> -->
+	<!-- LCD screen (menus)
 	<screen name="MenuSummary" position="0,0" size="320,240" id="1">
 		<widget source="parent.title" render="Label" position="6,0" size="120,32" font="Regular;14" halign="center" valign="center"/>
 		<widget source="parent.menu" render="Label" position="6,32" size="120,32" font="Regular;16" halign="center" valign="center">
 			<convert type="StringListSelection" />
 		</widget>
-	</screen> 
-	<!-- Color OLED screen (menus) -->
+	</screen>  -->
+	<!-- Color OLED screen (menus)
 	<screen name="MenuSummary" position="0,0" size="96,64" id="2">
 		<widget source="parent.title" render="Label" position="0,0" size="96,32" font="Regular;15" halign="center" valign="center"/>
 		<widget source="parent.menu" render="Label" position="0,32" size="96,32" font="Regular;16" halign="center" valign="top">
 			<convert type="StringListSelection" />
 		</widget>
-	</screen>	
-	<!-- LCD screen (ServiceScan) -->
+	</screen>	 -->
+	<!-- LCD screen (ServiceScan)
 	<screen name="ServiceScanSummary" position="0,0" size="320,240" id="1">
 		<widget name="Title" position="6,4" size="120,42" font="Regular;16" transparent="1" />
 		<widget name="Service" position="6,22" size="120,26" font="Regular;12" transparent="1" />
 		<widget name="scan_progress" position="6,50" zPosition="1" borderWidth="1" size="56,12" backgroundColor="dark" />
-	</screen>
-	<!-- Color OLED screen (ServiceScan) -->
+	</screen> -->
+	<!-- Color OLED screen (ServiceScan)
 	<screen name="ServiceScanSummary" position="0,0" size="96,64" id="2">
 		<widget name="Title" position="0,0" size="96,30" font="Regular;14" transparent="1" />
 		<widget name="Service" position="0,30" size="96,20" font="Regular;10" transparent="1" />
 		<widget name="scan_progress" position="0,50" zPosition="1" borderWidth="1" size="96,12" backgroundColor="dark" />
-	</screen>
-	<!-- LCD screen (setup) -->
+	</screen> -->
+	<!-- LCD screen (setup)
 	<screen name="SetupSummary" position="0,0" size="132,64" id="1">
 		<widget source="SetupTitle" render="Label" position="6,0" size="120,16" font="Regular;12" />
 		<widget source="SetupEntry" render="Label" position="6,16" size="120,32" font="Regular;12" />
 		<widget source="SetupValue" render="Label" position="6,48" size="120,16" font="Regular;12" />
-	</screen>
-	<!-- Color OLED screen (setup) -->
+	</screen> -->
+	<!-- Color OLED screen (setup)
 	<screen name="SetupSummary" position="0,0" size="320,240" id="1">
 		<widget source="SetupTitle" render="Label" position="0,0" size="96,16" font="Regular;10" />
 		<widget source="SetupEntry" render="Label" position="0,16" size="96,32" font="Regular;10" />
 		<widget source="SetupValue" render="Label" position="0,48" size="96,16" font="Regular;10" />
-	</screen>
-	<!-- LCD screen (misc) -->
+	</screen> -->
+	<!-- LCD screen (misc)
 	<screen name="SimpleSummary" position="0,0" size="132,64" id="1">
 		<widget source="parent.Title" render="Label" position="6,0" size="120,64" font="Regular;16" halign="center" valign="center" />
-	</screen>
-	<!-- Color OLED screen (misc) -->
+	</screen> -->
+	<!-- Color OLED screen (misc)
 	<screen name="SimpleSummary" position="0,0" size="320,240" id="1">
 		<widget source="parent.Title" render="Label" position="0,0" size="96,64" font="Regular;14" halign="center" valign="center" />
-	</screen>
+	</screen> -->
 	<!-- LCD screen (standby) -->
 	<screen name="StandbySummary" position="0,0" size="320,240" id="1">
 		<widget source="global.CurrentTime" render="Label" position="6,0" size="120,64" font="Regular;40" halign="center" valign="center">
@@ -1347,7 +1347,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 			<convert type="ConditionalShowHide">Blink</convert>
 		</widget>
 	</screen>
-	<!-- LCD screen (JobView) -->
+	<!-- LCD screen (JobView)
 	<screen name="JobView_summary" position="0,0" size="320,240" id="1">
 		<widget source="parent.summary_job_name" render="Label" position="6,4" size="120,42" font="Regular;16" />
 		<widget source="parent.summary_job_task" render="Label" position="6,22" size="120,26" font="Regular;12" />
@@ -1355,8 +1355,8 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 		<widget source="parent.summary_job_progress" render="Label" position="66,50" size="50,12" font="Regular;12" zPosition="2" halign="center" transparent="1"  >
 			<convert type="ProgressToText" />
 		</widget>
-	</screen>
-	<!-- Color OLED screen (JobView) -->
+	</screen> -->
+	<!-- Color OLED screen (JobView)
 	<screen name="JobView_summary" position="0,0" size="96,64" id="2">
 		<widget source="parent.summary_job_name" render="Label" position="0,4" size="96,42" font="Regular;14" />
 		<widget source="parent.summary_job_task" render="Label" position="0,22" size="96,26" font="Regular;10" />
@@ -1364,7 +1364,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 		<widget source="parent.summary_job_progress" render="Label" position="60,50" size="36,12" font="Regular;10" zPosition="2" halign="center" transparent="1"  >
 			<convert type="ProgressToText" />
 		</widget>
-	</screen>
+	</screen> -->
 	<!-- LCD screen (Wizard) -->
 	<screen name="WizardSummary" position="0,0" size="320,240" id="1">
 		<widget source="text" render="Label" position="6,0" size="120,16" font="Regular;16" transparent="1" />
