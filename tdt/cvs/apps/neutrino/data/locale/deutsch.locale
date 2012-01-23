@@ -1375,7 +1375,6 @@ zapit.scantype.tv Nur TV
 zapit.scantype.tvradio Nur TV & Radio
 zaptotimer.announce In einer Minute wird umgeschaltet.
 mainmenu.extramenu Extras
-extramenu.emu Emu Menue
 extramenu.tunerreset Tuner Menue
 extramenu.tunerreset.select Tuner Reset
 extramenu.tunerreset.on Ein
@@ -1401,6 +1400,7 @@ extramenu.checkfs CheckFS Menue
 extramenu.checkfs.select CheckFS
 extramenu.checkfs.on Ein
 extramenu.checkfs.off Aus
+extramenu.emu Cam Menue
 extramenu.emu.none Nicht aktiv
 extramenu.emu.mgcamd MGCamd
 extramenu.emu.incubus IncubusCamd
@@ -1408,9 +1408,9 @@ extramenu.emu.camd3 Camd3
 extramenu.emu.mbox Mbox
 extramenu.emu.oscam Oscam
 extramenu.emu.spcs Spcs
-extramenu.emu.select Emu Auswahl
-extramenu.emu.restart Emu neu starten
-extramenu.emu.disable Emu deaktivieren
+extramenu.emu.select Cam Auswahl
+extramenu.emu.restart Cam neu starten
+extramenu.emu.disable Cam deaktivieren
 extramenu.swap Swap Menue
 extramenu.swap.swapram SWAPRAM
 extramenu.swap.swappart SWAPPART
