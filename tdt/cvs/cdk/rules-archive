@@ -90,7 +90,7 @@ freetype-2.3.5.tar.bz2;http://download.savannah.gnu.org/releases/freetype
 #freetype-2.4.8.tar.bz2;http://download.savannah.gnu.org/releases/freetype
 lirc-0.8.2.tar.gz;http://prdownloads.sourceforge.net/lirc
 jpegsrc.v8d.tar.gz;http://www.ijg.org/files
-libpng-1.5.8beta01.tar.bz2;http://freefr.dl.sourceforge.net/project/libpng/libpng15/1.5.8beta01/
+libpng-1.5.8rc01.tar.bz2;http://ignum.dl.sourceforge.net/project/libpng/libpng15/1.5.8rc01/
 libungif-4.1.3.tar.bz2;http://dietmarw.trale.de/Archive
 giflib-4.1.6.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib
 #curl-7.19.7.tar.gz;http://curl.haxx.se/download
