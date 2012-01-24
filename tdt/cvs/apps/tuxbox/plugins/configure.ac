@@ -46,5 +46,6 @@ Makefile
 include/Makefile
 blockads/Makefile
 pluginx/Makefile
+aio-grab/Makefile
 tuxbox-plugins.pc
 ])

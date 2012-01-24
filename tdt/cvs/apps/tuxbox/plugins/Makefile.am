@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = gnu
 
 SUBDIRS = \
-	include blockads
+	include blockads aio-grab
 
 SUBDIRS += pluginx
 
