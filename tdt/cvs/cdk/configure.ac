@@ -1021,6 +1021,7 @@ TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
 TUXBOX_RULES_MAKE(libalsa)
 TUXBOX_RULES_MAKE(libusb)
+TUXBOX_RULES_MAKE(rtmpdump)
 
 #
 # GUI

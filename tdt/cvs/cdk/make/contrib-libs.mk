@@ -1320,6 +1320,8 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass $(DEPDIR)/ffmpeg.do_prepare
 		--enable-decoder=iff_byterun1 \
 		--enable-pthreads \
 		--enable-bzlib \
+		--enable-librtmp \
+		--pkg-config=pkg-config \
 		--cross-prefix=$(target)- \
 		--target-os=linux \
 		--arch=sh4 \
@@ -1856,6 +1858,28 @@ $(DEPDIR)/%gst_ffmpeg: $(DEPDIR)/gst_ffmpeg.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+# GST-PLUGINS-FLUENDO-MPEGDEMUX
+$(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_prepare: bootstrap gstreamer gst_plugins_base @DEPENDS_gst_plugins_fluendo_mpegdemux@
+	@PREPARE_gst_plugins_fluendo_mpegdemux@
+	touch $@
+
+$(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_compile: $(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_gst_plugins_fluendo_mpegdemux@ && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr --with-check=no
+	touch $@
+
+$(DEPDIR)/min-gst_plugins_fluendo_mpegdemux $(DEPDIR)/std-gst_plugins_fluendo_mpegdemux $(DEPDIR)/max-gst_plugins_fluendo_mpegdemux \
+$(DEPDIR)/gst_plugins_fluendo_mpegdemux: \
+$(DEPDIR)/%gst_plugins_fluendo_mpegdemux: $(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_compile
+	cd @DIR_gst_plugins_fluendo_mpegdemux@ && \
+		@INSTALL_gst_plugins_fluendo_mpegdemux@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
+
 # GST-PLUGINS-DVBMEDIASINK
 $(DEPDIR)/gst_plugins_dvbmediasink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugins_dvbmediasink@
 	@PREPARE_gst_plugins_dvbmediasink@
@@ -2091,3 +2115,27 @@ $(DEPDIR)/%GD: $(DEPDIR)/GD.do_compile
 		@INSTALL_GD@
 #	@DISTCLEANUP_GD@
 	@[ "x$*" = "x" ] && touch $@ || true
+
+#
+# rtmpdump
+#
+$(DEPDIR)/rtmpdump.do_prepare: bootstrap openssl openssl-dev @DEPENDS_rtmpdump@
+	@PREPARE_rtmpdump@
+	touch $@
+
+$(DEPDIR)/rtmpdump.do_compile: $(DEPDIR)/rtmpdump.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_rtmpdump@ && \
+	cp $(hostprefix)/share/libtool/config/ltmain.sh .. && \
+	libtoolize -f -c && \
+	$(BUILDENV) \
+		make CROSS_COMPILE=$(target)-
+	touch $@
+
+$(DEPDIR)/min-rtmpdump $(DEPDIR)/std-rtmpdump $(DEPDIR)/max-rtmpdump \
+$(DEPDIR)/rtmpdump: \
+$(DEPDIR)/%rtmpdump: $(DEPDIR)/rtmpdump.do_compile
+	cd @DIR_rtmpdump@ && \
+		@INSTALL_rtmpdump@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
