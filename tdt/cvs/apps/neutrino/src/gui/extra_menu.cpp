@@ -1732,6 +1732,9 @@ void nGLCD::Exit() {
 	if (nglcd) {
 		nglcd->doShutdown = true;
 		nglcd->doExit = true;
+		nglcd->bitmap->Clear(GLCD::cColor::Black);
+		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
+		nglcd->lcd->Refresh(true);
 		sem_post(&nglcd->sem);
 	}
 }
@@ -1745,6 +1748,9 @@ void nglcd_update() {
 void nGLCD::Restart() {
 	if (nglcd) {
 		doRestart = true;
+		nglcd->bitmap->Clear(GLCD::cColor::Black);
+		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
+		nglcd->lcd->Refresh(true);
 		sem_post(&nglcd->sem);
 	}
 }
@@ -1752,6 +1758,9 @@ void nGLCD::Restart() {
 void nGLCD::Shutdown() {
 	if (nglcd) {
 		nglcd->doShutdown = true;
+		nglcd->bitmap->Clear(GLCD::cColor::Black);
+		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
+		nglcd->lcd->Refresh(true);
 		sem_post(&nglcd->sem);
 	}
 }
