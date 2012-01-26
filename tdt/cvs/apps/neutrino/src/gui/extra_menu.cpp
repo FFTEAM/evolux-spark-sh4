@@ -1735,7 +1735,9 @@ void nGLCD::Exit() {
 		nglcd->bitmap->Clear(GLCD::cColor::Black);
 		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
 		nglcd->lcd->Refresh(true);
-		sem_post(&nglcd->sem);
+		delete nglcd->lcd;
+		nglcd->lcd = NULL;
+		//sem_post(&nglcd->sem);
 	}
 }
 
@@ -1751,7 +1753,9 @@ void nGLCD::Restart() {
 		nglcd->bitmap->Clear(GLCD::cColor::Black);
 		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
 		nglcd->lcd->Refresh(true);
-		sem_post(&nglcd->sem);
+		delete nglcd->lcd;
+		nglcd->lcd = NULL;
+		//sem_post(&nglcd->sem);
 	}
 }
 
@@ -1761,6 +1765,8 @@ void nGLCD::Shutdown() {
 		nglcd->bitmap->Clear(GLCD::cColor::Black);
 		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
 		nglcd->lcd->Refresh(true);
+		delete nglcd->lcd;
+		nglcd->lcd = NULL;
 		sem_post(&nglcd->sem);
 	}
 }
