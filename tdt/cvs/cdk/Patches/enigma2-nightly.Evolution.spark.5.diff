@@ -366,3 +366,98 @@
  
  if ENABLE_TF7700
  SUBDIRS += TopfieldVFD
+
+--- enigma2-nightly.org/lib/python/Screens/TimerEntry.py	2012-01-23 20:01:21.561871909 +0100
++++ enigma2-nightly/lib/python/Screens/TimerEntry.py	2012-01-27 16:56:38.133298338 +0100
+@@ -55,7 +55,6 @@
+ 			afterevent = {
+ 				AFTEREVENT.NONE: "nothing",
+ 				AFTEREVENT.DEEPSTANDBY: "deepstandby",
+-				AFTEREVENT.STANDBY: "standby",
+ 				AFTEREVENT.AUTO: "auto"
+ 				}[self.timer.afterEvent]
+ 
+@@ -99,7 +98,7 @@
+ 				shutdownString = _("go to deep standby")
+ 			else:
+ 				shutdownString = _("shut down")
+-			self.timerentry_afterevent = ConfigSelection(choices = [("nothing", _("do nothing")), ("standby", _("go to standby")), ("deepstandby", shutdownString), ("auto", _("auto"))], default = afterevent)
++			self.timerentry_afterevent = ConfigSelection(choices = [("nothing", _("do nothing")), ("deepstandby", shutdownString), ("auto", _("auto"))], default = afterevent)
+ 			self.timerentry_type = ConfigSelection(choices = [("once",_("once")), ("repeated", _("repeated"))], default = type)
+ 			self.timerentry_name = ConfigText(default = self.timer.name, visible_width = 50, fixed_size = False)
+ 			self.timerentry_description = ConfigText(default = self.timer.description, visible_width = 50, fixed_size = False)
+@@ -291,7 +290,6 @@
+ 		self.timer.afterEvent = {
+ 			"nothing": AFTEREVENT.NONE,
+ 			"deepstandby": AFTEREVENT.DEEPSTANDBY,
+-			"standby": AFTEREVENT.STANDBY,
+ 			"auto": AFTEREVENT.AUTO
+ 			}[self.timerentry_afterevent.value]
+ 		self.timer.service_ref = self.timerentry_service_ref
+
+--- enigma2-nightly.org/RecordTimer.py	2012-01-27 17:35:24.228832823 +0100
++++ enigma2-nightly/RecordTimer.py	2012-01-27 17:35:12.612775226 +0100
+@@ -43,9 +43,8 @@
+ 
+ class AFTEREVENT:
+ 	NONE = 0
+-	STANDBY = 1
+-	DEEPSTANDBY = 2
+-	AUTO = 3
++	DEEPSTANDBY = 1
++	AUTO = 2
+ 
+ # please do not translate log messages
+ class RecordTimerEntry(timer.TimerEntry, object):
+@@ -295,10 +294,7 @@
+ 			if not self.justplay:
+ 				NavigationInstance.instance.stopRecordService(self.record_service)
+ 				self.record_service = None
+-			if self.afterEvent == AFTEREVENT.STANDBY:
+-				if not Screens.Standby.inStandby: # not already in standby
+-					Notifications.AddNotificationWithCallback(self.sendStandbyNotification, MessageBox, _("A finished record timer wants to set your\nDreambox to standby. Do that now?"), timeout = 20)
+-			elif self.afterEvent == AFTEREVENT.DEEPSTANDBY:
++			if self.afterEvent == AFTEREVENT.DEEPSTANDBY:
+ 				if not Screens.Standby.inTryQuitMainloop: # not a shutdown messagebox is open
+ 					if Screens.Standby.inStandby: # in standby
+ 						RecordTimerEntry.TryQuitMainloop() # start shutdown handling without screen
+@@ -417,7 +413,6 @@
+ 	afterevent = str(xml.get("afterevent") or "nothing")
+ 	afterevent = {
+ 		"nothing": AFTEREVENT.NONE,
+-		"standby": AFTEREVENT.STANDBY,
+ 		"deepstandby": AFTEREVENT.DEEPSTANDBY,
+ 		"auto": AFTEREVENT.AUTO
+ 		}[afterevent]
+@@ -588,7 +583,6 @@
+ 			list.append(' description="' + str(stringToXML(timer.description)) + '"')
+ 			list.append(' afterevent="' + str(stringToXML({
+ 				AFTEREVENT.NONE: "nothing",
+-				AFTEREVENT.STANDBY: "standby",
+ 				AFTEREVENT.DEEPSTANDBY: "deepstandby",
+ 				AFTEREVENT.AUTO: "auto"
+ 				}[timer.afterEvent])) + '"')
+
+--- enigma2-nightly.org/lib/python/Plugins/SystemPlugins/SkinSelector/plugin.py	2012-01-27 18:02:48.320985440 +0100
++++ enigma2-nightly/lib/python/Plugins/SystemPlugins/SkinSelector/plugin.py	2012-01-27 18:02:35.712922915 +0100
+@@ -11,7 +11,8 @@
+ from Plugins.Plugin import PluginDescriptor
+ from Components.config import config
+ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+-from os import path, walk
++from os import path, walk, system
++from Components.config import *
+ 
+ class SkinSelector(Screen):
+ 	# for i18n:
+@@ -118,7 +119,9 @@
+ 
+ 	def restartGUI(self, answer):
+ 		if answer is True:
+-			self.session.open(TryQuitMainloop, 3)
++			configfile.save()
++			system("killall enigma2")
++			#self.session.open(TryQuitMainloop, 3)
+ 
+ def SkinSelMain(session, **kwargs):
+ 	session.open(SkinSelector)
