@@ -63,6 +63,27 @@ static int touch(const char *filename) {
 	return 0;
 }
 
+static int safe_system(const char *command) {
+	pid_t child = fork();
+	switch(child){
+		case -1:
+			return -1;
+		case 0:
+			for(int i = 3; i < 256 /* arbitrary, but high enough */; i++)
+				close(i);
+			signal(SIGTERM, SIG_DFL);
+			signal(SIGINT, SIG_DFL);
+			signal(SIGHUP, SIG_DFL);
+			execl("/bin/sh", "sh", "-c", command, NULL);
+			exit(-1);
+		default:
+			int status;
+			waitpid(child, &status, WNOHANG);
+			return status;
+	}
+}
+
+
 static struct {
 #define EXTRA_CAM_SELECTED "cam_selected"
         std::string	cam_selected;
@@ -85,6 +106,8 @@ static struct {
         int		glcd_percent_bar;
 #define GLCD_SIZE_TIME "glcd_percent_time"
         int		glcd_percent_time;
+#define GLCD_MIRROR_OSD "glcd_mirror_osd"
+        int		glcd_mirror_osd;
 #endif
 } settings;
 
@@ -102,6 +125,7 @@ static bool saveSettings() {
 		configfile->setInt32(GLCD_SIZE_EPG, settings.glcd_percent_epg);
 		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
 		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
+		configfile->setInt32(GLCD_MIRROR_OSD, settings.glcd_mirror_osd);
 		configfile->setString(GLCD_FONT, settings.glcd_font);
 #endif
 		configfile->saveConfig(EXTRA_SETTINGS_FILE);
@@ -121,6 +145,7 @@ static bool initSettings() {
 	settings.glcd_percent_epg = 8;
 	settings.glcd_percent_bar = 6;
 	settings.glcd_percent_time = 22;
+	settings.glcd_mirror_osd = 0;
 	settings.glcd_font = FONTDIR "/neutrino.ttf";
 #endif
 }
@@ -140,6 +165,7 @@ static bool loadSettings() {
 			settings.glcd_percent_epg = configfile->getInt32(GLCD_SIZE_EPG, 8);
 			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
 			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
+			settings.glcd_mirror_osd = configfile->getInt32(GLCD_MIRROR_OSD, 0);
 			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
 #endif
 			return true;
@@ -223,7 +249,7 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 	{
 	//CORRECTVOLUME STARTEN
 	system("touch /etc/.corrVol");
-	system("/etc/init.d/corrVol.sh &");
+	safe_system("/etc/init.d/corrVol.sh &");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CORRECTVOLUME Activated!", 450, 2); // UTF-8("")
 	}
 	if (corrVol==0)
@@ -299,7 +325,7 @@ bool TUNERRESET_Menu::TunerReset()
 	CHintBox * TunerResetBox = new CHintBox(LOCALE_EXTRAMENU_TUNERRESET_RESTART, "bitte warten, Tuner wird resettet");
 	TunerResetBox->paint();
 
-	system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
+	safe_system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
 	TunerResetBox->hide();
 	delete TunerResetBox;
 }
@@ -388,7 +414,7 @@ void AMOUNT_Menu::AMOUNTSettings()
 	{
 	//AMOUNT STARTEN
 	system("touch /etc/.byLabel");
-	system("/etc/init.d/amount.sh &");
+	safe_system("/etc/init.d/amount.sh &");
 	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "AMOUNT byLabel Activated!", 450, 2); // UTF-8("")
 	}
 	if (amount==0)
@@ -565,7 +591,7 @@ EMU_Menu::EMU_Menu()
 		string cmd = "(" + string(EMU_list[selected].start_command)
 			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
 			+ " >/dev/null 2>&1) &";
-		system(cmd.c_str());
+		safe_system(cmd.c_str());
 	}
 }
 
@@ -590,16 +616,16 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		int emu_old = selected;
 		if ((emu_old != emu) || doReset) {
 			if (emu_old) {
-				system(EMU_list[emu_old].stop_command);
+				safe_system(EMU_list[emu_old].stop_command);
 				string m = " " + string(EMU_list[emu_old].procname) + " is now inactive ";
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 			}
 			if (emu) {
-				system(EMU_list[emu].start_command);
+				safe_system(EMU_list[emu].start_command);
 
 				string cmd = "(" + string(EMU_list[emu].start_command);
 				if (is_scrambled())
-					system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
+					safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
 				string m = " " + string(EMU_list[emu].procname) + " is now active ";
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 			}
@@ -659,7 +685,7 @@ void EMU_Menu::EMU_Menu_Settings()
 void EMU_Menu::suspend()
 {
 	if (selected && !suspended) {
-		system(EMU_list[selected].stop_command);
+		safe_system(EMU_list[selected].stop_command);
 		suspended = true;
 	}
 }
@@ -667,9 +693,9 @@ void EMU_Menu::suspend()
 void EMU_Menu::resume()
 {
 	if (selected && suspended) {
-		system(EMU_list[selected].start_command);
+		safe_system(EMU_list[selected].start_command);
 		if (is_scrambled())
-			system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
+			safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
 		suspended = false;
 	}
 }
@@ -734,12 +760,12 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 		{
 			//DisplayTime STARTEN
 			touch("/etc/.time");
-			system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
 		} else {
 			//DisplayTime BEENDEN
 			unlink("/etc/.time");
-			system("killall -9 DisplayTime.sh");
+			safe_system("killall -9 DisplayTime.sh");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -885,13 +911,13 @@ void SWAP_Menu::hide()
 string SWAP_Menu::start_swap(int swaptype) {
 	switch(swaptype) {
 		case KEY_SWAP_SWAPRAM:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP-RAM activated";
 		case KEY_SWAP_SWAPPART:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP partition activated";
 		case KEY_SWAP_SWAPFILE:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP file activated";
 		default:
 			return "Internal error.";
@@ -1098,12 +1124,12 @@ void BOOT_Menu::BOOTSettings()
 		}
 		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
-			system("fw_setenv -s /etc/bootargs_orig");
+			safe_system("fw_setenv -s /etc/bootargs_orig");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
-			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
+			safe_system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
 		}
 		if(b) {
 			b->hide();
@@ -1314,12 +1340,12 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 		{
 			//FRITZCALL STARTEN
 			touch(DOTFILE_FRITZCALL);
-			system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
+			safe_system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
 		} else {
 			//FRITZCALL BEENDEN
 			unlink(DOTFILE_FRITZCALL);
-			system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
+			safe_system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -1377,9 +1403,12 @@ nGLCD::nGLCD() {
 	stagingChannel = "";
 	stagingEpg = "";
 	channelLocked = false;
-	doRestart = false;
-	doShutdown = false;
+	doRescan = false;
+	doStandby = false;
+	doShowVolume = false;
+	doSuspend = false;
 	doExit = false;
+	doMirrorOSD = false;
         fontsize_channel = 0;
         fontsize_epg = 0;
         fontsize_time = 0;
@@ -1396,7 +1425,7 @@ nGLCD::nGLCD() {
 	nglcd = this;
 
 	if (!settings.glcd_enable)
-		doShutdown = true;
+		doSuspend = true;
 
 	if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
 		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
@@ -1415,9 +1444,7 @@ void nGLCD::Unlock(void)
 }
 
 nGLCD::~nGLCD() {
-	Shutdown();
-	void *res;
-	pthread_join(thrGLCD, &res);
+	Suspend();
 	nglcd = NULL;
 	if (lcd) {
 		lcd->DeInit();
@@ -1580,7 +1607,7 @@ void* nGLCD::Run(void *)
 	bool broken = false;
 
 	do {
-		while (nglcd->doShutdown)
+		while (nglcd->doSuspend || nglcd->doStandby)
 			sem_wait(&nglcd->sem);
 
 		int warmUp = 5;
@@ -1609,6 +1636,92 @@ void* nGLCD::Run(void *)
 		sem_post(&nglcd->sem);
 
 		do  {
+			if (nglcd->doMirrorOSD) {
+				nglcd->bitmap->Clear(GLCD::cColor::Black);
+				ts.tv_sec = 0; // don't wait
+				static CFrameBuffer* fb = CFrameBuffer::getInstance();
+				int fb_width = fb->scaleX(fb->getScreenWidth(true));
+				int fb_height = fb->scaleX(fb->getScreenHeight(true));
+				int lcd_width = nglcd->bitmap->Width();
+				int lcd_height = nglcd->bitmap->Height();
+				uint32_t *fbp = fb->getFrameBufferPointer();
+
+				// determine OSD frame geometry
+
+				int y_min = 0;
+				for (int y = 0; y < fb_height && !y_min; y++) {
+					for (int x = 0; x < fb_width; x++) {
+						if (*(fbp + fb_width * y + x)) {
+							y_min = y;
+							break;
+						}
+					}
+				}
+				int y_max = 0;
+				for (int y = fb_height - 1; y_min < y && !y_max; y--) {
+					for (int x = 0; x < fb_width; x++) {
+						if (*(fbp + fb_width * y + x)) { 
+							y_max = y;
+							break;
+						}
+					}
+				}
+				int x_min = fb_width - 1;
+				for (int y = y_min; y < y_max; y++) {
+					for (int x = 0; x < fb_width; x++) {
+						if (*(fbp + fb_width * y + x) && x < x_min) {
+							x_min = x;
+							break;
+						}
+					}
+				}
+				int x_max = x_min;
+				for (int y = y_min; y < y_max; y++) {
+					for (int x = fb_width - 1; x > x_min; x--) {
+						if (*(fbp + fb_width * y + x) && x > x_max) {
+							x_max= x;
+							break;
+						}
+					}
+				}
+
+				int fb_w = x_max - x_min;
+				int fb_h = y_max - y_min;
+
+				if (!fb_w || !fb_w) {
+					usleep(500000);
+					continue;
+				}
+
+				// Keep aspect by using the smallest up-scaling factor
+				if (fb_width * fb_h > fb_height * fb_w) {
+					int fb_w2 = fb_width * fb_h/fb_height;
+					x_min += (fb_w - fb_w2)/2;
+					fb_w = fb_w2;
+				} else {
+					int fb_h2 = fb_height * fb_w/fb_width;
+					y_min += (fb_h - fb_h2)/2;
+					fb_h = fb_h2;
+				}
+				// Compensate for rounding errors
+				if (x_min < 0)
+					x_min = 0;
+				if (y_min < 0)
+					y_min = 0;
+
+				for (int y = 0; y < lcd_height; y++) {
+					int ystride = y_min * fb_width;
+					for (int x = 0; x < lcd_width; x++) {
+						nglcd->bitmap->DrawPixel(x, y, *(fbp + ystride + (y * fb_h / lcd_height) * fb_width
+										 + x_min + (x * fb_w / lcd_width)));
+					}
+				}
+
+				nglcd->lcd->SetScreen(nglcd->bitmap->Data(), lcd_width, lcd_height);
+				nglcd->lcd->Refresh(true);
+				continue;
+			}
+
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
 			nglcd->Exec();
@@ -1627,23 +1740,43 @@ void* nGLCD::Run(void *)
 
 			while(!sem_trywait(&nglcd->sem));
 
-			if(nglcd->doRestart || nglcd->doShutdown)
+			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby)
 				break;
-
-			nglcd->Lock();
-			if (nglcd->channelLocked) {
-				nglcd->Channel = nglcd->stagingChannel;
-				nglcd->Epg = nglcd->stagingEpg;
-				nglcd->scrollChannel = nglcd->Channel;
-				nglcd->scrollEpg = nglcd->Epg;
-				nglcd->Scale = 0;
-				channel_id = -1;
-			}
-			nglcd->Unlock();
 
 			nglcd->updateFonts();
 
-			if (!nglcd->channelLocked) {
+			if (nglcd->doShowVolume) {
+				nglcd->Epg = "";
+				if (nglcd->Channel.compare(g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME))) {
+					nglcd->Channel = g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME);
+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
+					else
+						nglcd->scrollChannel = nglcd->Channel;
+				}
+				nglcd->scrollEpg = nglcd->Epg;
+				nglcd->Scale = g_settings.current_volume;
+				channel_id = -1;
+			} else if (nglcd->channelLocked) {
+				nglcd->Lock();
+				if (nglcd->Epg.compare(nglcd->stagingEpg)) {
+					nglcd->Epg = nglcd->stagingEpg;
+					if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4)
+						nglcd->scrollEpg = nglcd->Epg + "      " + nglcd->Epg + "      " + nglcd->Epg;
+					else
+						nglcd->scrollEpg = nglcd->Epg;
+				}
+				if (nglcd->Channel.compare(nglcd->stagingChannel)) {
+					nglcd->Channel = nglcd->stagingChannel;
+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
+					else
+						nglcd->scrollChannel = nglcd->Channel;
+				}
+				nglcd->Scale = 0;
+				channel_id = -1;
+				nglcd->Unlock();
+			} else {
 				CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
 				if (!channelList)
 					continue;
@@ -1680,44 +1813,45 @@ void* nGLCD::Run(void *)
 						if ((uint)eli->startTime + eli->duration > ts.tv_sec)
 							break;
 					}
-					if (eli == evtlist.end()) // the end is not valid, so go back
-						--eli;
-					if (eli->description.compare(nglcd->Epg)) {
-						nglcd->Epg = eli->description;
-						if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4) {
-							nglcd->scrollEpg = nglcd->Epg + "      " + nglcd->Epg + "      " + nglcd->Epg;
-							nglcd->doScrollEpg = true;
-						} else {
-							nglcd->scrollEpg = nglcd->Epg;
-							nglcd->doScrollEpg = false;
-						}
-					}
-
-					if (eli->duration > 0)
-					nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
-					if (nglcd->Scale > 100)
-						nglcd->Scale = 100;
-					else if (nglcd->Scale < 0)
+					if (eli == evtlist.end()) {
+						nglcd->Epg = nglcd->scrollEpg = "";
 						nglcd->Scale = 0;
+					} else {
+						if (eli->description.compare(nglcd->Epg)) {
+							nglcd->Epg = eli->description;
+							if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4) {
+								nglcd->scrollEpg = nglcd->Epg + "    " + nglcd->Epg + "    " + nglcd->Epg;
+								nglcd->doScrollEpg = true;
+							} else {
+								nglcd->scrollEpg = nglcd->Epg;
+								nglcd->doScrollEpg = false;
+							}
+						}
+
+						if (eli->duration > 0)
+						nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
+						if (nglcd->Scale > 100)
+							nglcd->Scale = 100;
+						else if (nglcd->Scale < 0)
+							nglcd->Scale = 0;
+					}
 				}
 			}
 
 		} while(settings.glcd_enable);
 		// either disabled, or restart, or shutdown permanently.
 
-		if(!settings.glcd_enable || nglcd->doShutdown) {
+		if(!settings.glcd_enable || nglcd->doSuspend) {
 			// for restart, don't blacken screen
 			nglcd->bitmap->Clear(GLCD::cColor::Black);
 			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
 			nglcd->lcd->Refresh(true);
 		}
-		nglcd->doRestart = false;
+		nglcd->doRescan = false;
 		nglcd->lcd->DeInit();
 		delete nglcd->lcd;
 		nglcd->lcd = NULL;
 	} while(!nglcd->doExit);
-
-	delete nglcd;
 
 	return NULL;
 }
@@ -1728,16 +1862,36 @@ void nGLCD::Update() {
 	}
 }
 
+void nGLCD::StandbyMode(bool b) {
+	if (nglcd) {
+		nglcd->doStandby = b;
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::ShowVolume(bool b) {
+	if (nglcd) {
+		nglcd->doShowVolume = b;
+		sem_post(&nglcd->sem);
+	}
+}
+
+void nGLCD::MirrorOSD(bool b) {
+	if (nglcd && settings.glcd_mirror_osd) {
+		nglcd->doMirrorOSD = b;
+		sem_post(&nglcd->sem);
+	}
+}
+
 void nGLCD::Exit() {
 	if (nglcd) {
-		nglcd->doShutdown = true;
+		nglcd->doMirrorOSD = false;
+		nglcd->doSuspend = true;
 		nglcd->doExit = true;
-		nglcd->bitmap->Clear(GLCD::cColor::Black);
-		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
-		nglcd->lcd->Refresh(true);
-		delete nglcd->lcd;
-		nglcd->lcd = NULL;
-		//sem_post(&nglcd->sem);
+		sem_post(&nglcd->sem);
+		void *res;
+		pthread_join(nglcd->thrGLCD, &res);
+		delete nglcd;
 	}
 }
 
@@ -1747,33 +1901,23 @@ void nglcd_update() {
 	}
 }
 
-void nGLCD::Restart() {
+void nGLCD::Rescan() {
 	if (nglcd) {
-		doRestart = true;
-		nglcd->bitmap->Clear(GLCD::cColor::Black);
-		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
-		nglcd->lcd->Refresh(true);
-		delete nglcd->lcd;
-		nglcd->lcd = NULL;
-		//sem_post(&nglcd->sem);
+		doRescan = true;
+		sem_post(&nglcd->sem);
 	}
 }
 
-void nGLCD::Shutdown() {
+void nGLCD::Suspend() {
 	if (nglcd) {
-		nglcd->doShutdown = true;
-		nglcd->bitmap->Clear(GLCD::cColor::Black);
-		nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
-		nglcd->lcd->Refresh(true);
-		delete nglcd->lcd;
-		nglcd->lcd = NULL;
+		nglcd->doSuspend = true;
 		sem_post(&nglcd->sem);
 	}
 }
 
 void nGLCD::Resume() {
 	if (nglcd) {
-		nglcd->doShutdown = false;
+		nglcd->doSuspend = false;
 		sem_post(&nglcd->sem);
 	}
 }
@@ -1809,14 +1953,14 @@ void nGLCD::unlockChannel(void)
 #define GLCD_COLOR_OPTION_COUNT 	8
 static const CMenuOptionChooser::keyval GLCD_COLOR_OPTIONS[GLCD_COLOR_OPTION_COUNT] =
 {
-	{ KEY_GLCD_BLACK,	LOCALE_GLCD_COLOR_BLACK }
-	, { KEY_GLCD_WHITE,	LOCALE_GLCD_COLOR_WHITE }
-	, { KEY_GLCD_RED,	LOCALE_GLCD_COLOR_RED }
-	, { KEY_GLCD_GREEN,	LOCALE_GLCD_COLOR_GREEN }
-	, { KEY_GLCD_BLUE,	LOCALE_GLCD_COLOR_BLUE }
-	, { KEY_GLCD_MAGENTA,	LOCALE_GLCD_COLOR_MAGENTA }
-	, { KEY_GLCD_CYAN,	LOCALE_GLCD_COLOR_CYAN }
-	, { KEY_GLCD_YELLOW,	LOCALE_GLCD_COLOR_YELLOW }
+	  { KEY_GLCD_BLACK,	LOCALE_EXTRAMENU_GLCD_COLOR_BLACK }
+	, { KEY_GLCD_WHITE,	LOCALE_EXTRAMENU_GLCD_COLOR_WHITE }
+	, { KEY_GLCD_RED,	LOCALE_EXTRAMENU_GLCD_COLOR_RED }
+	, { KEY_GLCD_GREEN,	LOCALE_EXTRAMENU_GLCD_COLOR_GREEN }
+	, { KEY_GLCD_BLUE,	LOCALE_EXTRAMENU_GLCD_COLOR_BLUE }
+	, { KEY_GLCD_MAGENTA,	LOCALE_EXTRAMENU_GLCD_COLOR_MAGENTA }
+	, { KEY_GLCD_CYAN,	LOCALE_EXTRAMENU_GLCD_COLOR_CYAN }
+	, { KEY_GLCD_YELLOW,	LOCALE_EXTRAMENU_GLCD_COLOR_YELLOW }
 };
 
 int GLCD_Menu::color2index(uint32_t color) {
@@ -1883,8 +2027,8 @@ GLCD_Menu::GLCD_Menu()
 int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
-	if(actionKey == "restart") {
-		nglcd->Restart();
+	if(actionKey == "rescan") {
+		nglcd->Rescan();
 		return res;
 	}
 	if(actionKey == "select_font") {
@@ -1897,7 +2041,7 @@ int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			settings.glcd_font = fileBrowser.getSelectedFile()->Name;
 			if (nglcd) {
 				nglcd->fonts_initialized = false;
-				nglcd->Restart();
+				nglcd->Rescan();
 			}
 		}
 		return res;
@@ -1941,8 +2085,12 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 			if (settings.glcd_enable)
 				nglcd->Resume();
 			else
-				nglcd->Shutdown();
+				nglcd->Suspend();
 		}
+		break;
+	case LOCALE_EXTRAMENU_GLCD_MIRROR_OSD:
+		nglcd->doMirrorOSD = settings.glcd_mirror_osd;
+		break;
 	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
@@ -1991,7 +2139,11 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
 				&settings.glcd_percent_time, true, 0, 100, notifier));
 	menu->addItem(GenericMenuSeparatorLine);
-	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "restart",
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
+				EXTRAMENU_ONOFF_OPTIONS, EXTRAMENU_ONOFF_OPTION_COUNT, true, notifier,
+				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
+	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "rescan",
 				CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	menu->exec(NULL, "");
 	menu->hide();
@@ -2058,18 +2210,18 @@ void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 bool EVOLUXUPDATE_Menu::CheckUpdate()
 {
 	//EVOLUXUPDATE STARTEN
-	system("if [ -e /tmp/EvoluxUpdatevailable ]; then rm /tmp/EvoluxUpdatevailable;fi; if [ -e /tmp/version ]; then rm /tmp/version;fi;cd /tmp;wget -q http://tinyurl.com/7gz7jpo; mv 7gz7jpo version; oVersion=`cat /tmp/version | grep version | cut -d = -f2`;lVersion=`cat /etc/.version | grep version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
+	safe_system("rm -f /tmp/EvoluxUpdatevailable /tmp/version;cd /tmp;wget -q -O /tmp/version http://tinyurl.com/7gz7jpo; oVersion=`grep version /tmp/version | cut -d = -f2`;lVersion=`grep version /etc/.version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
 	FILE* fd1 = fopen("/tmp/EvoluxUpdatevailable", "r");
 	if(fd1)
 	{
 	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, doing update now...");
 	CheckUpdateBox->paint();
-	system("oVersion=`cat /tmp/version | grep version | cut -d = -f2`; cd /tmp; wget -q http://tinyurl.com/7fjrnm3; mv 7fjrnm3 update.evolux.yaffs2.tar.gz; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm /tmp/update.evolux.yaffs2.tar.gz; rm /tmp/EvoluxUpdatevailable; rm /tmp/version");
+	safe_system("oVersion=`grep version /tmp/version | cut -d = -f2`; cd /tmp; wget -O update.evolux.yaffs2.tar.gz -q http://tinyurl.com/7fjrnm3; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm -f /tmp/update.evolux.yaffs2.tar.gz /tmp/EvoluxUpdatevailable /tmp/version");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
 	CheckUpdateBox->paint();
-	system("sleep 3");
+	safe_system("sleep 3");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	fclose(fd1);
@@ -2078,7 +2230,7 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 	{
 	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
 	CheckUpdateBox->paint();
-	system("rm /tmp/version; sleep 3");
+	safe_system("rm -f /tmp/version; sleep 3");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	}

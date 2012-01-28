@@ -355,19 +355,22 @@ class nGLCD
         time_t now;
         struct tm *tm;
 	bool channelLocked;
-	bool doRestart;
-	bool doShutdown;
+	bool doRescan;
+	bool doSuspend;
+	bool doStandby;
 	bool doExit;
+	bool doScrollChannel;
+	bool doScrollEpg;
+	bool doShowVolume;
 	pthread_t thrGLCD;
 	pthread_mutex_t mutex;
 	void updateFonts();
 	void Exec();
 	std::string scrollChannel;
 	std::string scrollEpg;
-	bool doScrollChannel;
-	bool doScrollEpg;
     public:
 	bool fonts_initialized;
+	bool doMirrorOSD;
 	nGLCD();
 	~nGLCD();
 	void DeInit();
@@ -378,11 +381,14 @@ class nGLCD
 	static void lockChannel(string txt);
 	static void unlockChannel();
 	static void* Run(void *);
+	static void MirrorOSD(bool);
 	static void Update();
-	static void Shutdown();
+	static void Suspend();
+	static void StandbyMode(bool);
+	static void ShowVolume(bool);
 	static void Resume();
 	static void Exit();
-	void Restart();
+	void Rescan();
 	sem_t sem;
 };
 

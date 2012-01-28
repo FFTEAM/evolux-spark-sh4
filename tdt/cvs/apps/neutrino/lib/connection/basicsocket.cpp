@@ -48,10 +48,12 @@ bool send_data(int fd, const void * data, const size_t size, const timeval timeo
 		
 		if (rc == -1)
 		{
+#if 0
 			perror("[basicsocket] send_data");
 char * buf = (char *) data;
 printf("send_data: errno %d data %X\n", errno, buf[0]);
 			//if (errno == EPIPE)
+#endif
 			if (errno == EPIPE || errno == ESPIPE)
 				return false;
 			

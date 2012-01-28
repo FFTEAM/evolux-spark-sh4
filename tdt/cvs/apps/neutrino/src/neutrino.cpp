@@ -2718,16 +2718,31 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			if( (msg == NeutrinoMessages::SHOW_EPG) /* || (msg == CRCInput::RC_info) */ ) {
 				//g_EpgData->show( g_Zapit->getCurrentServiceID() );
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				g_EpgData->show(live_channel_id);
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_epg ) {
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				g_EventList->exec(live_channel_id, channelList->getActiveChannelName());
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_text) {
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				g_RCInput->clearRCMsg();
 				if(g_settings.mode_clock)
 					InfoClock->StopClock();
@@ -2742,11 +2757,17 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				AudioMute(current_muted, true);
 				if(g_settings.mode_clock)
 					InfoClock->StartClock();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_setup ) {
 				if(!g_settings.minimode) {
 					dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+					nGLCD::MirrorOSD(true);
+#endif
                                 	if(g_settings.mode_clock)
                                 	        InfoClock->StopClock();
 					mainMenu.exec(NULL, "");
@@ -2754,6 +2775,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 					AudioMute(current_muted, true);
                                 	if(g_settings.mode_clock)
                                 	        InfoClock->StartClock();
+#ifdef WITH_GRAPHLCD
+					nGLCD::MirrorOSD(false);
+#endif
 					dvbsub_start(0);
 					saveSetup(NEUTRINO_SETTINGS_FILE);
 				}
@@ -2865,23 +2889,47 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == CRCInput::RC_red ) {
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				showUserMenu(SNeutrinoSettings::BUTTON_RED);
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( (msg == CRCInput::RC_green) || ((msg == CRCInput::RC_audio) && !g_settings.audio_run_player) )
 			{
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				showUserMenu(SNeutrinoSettings::BUTTON_GREEN);
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_yellow ) {       // NVODs
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				showUserMenu(SNeutrinoSettings::BUTTON_YELLOW);
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_blue ) {
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(true);
+#endif
 				showUserMenu(SNeutrinoSettings::BUTTON_BLUE);
+#ifdef WITH_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 			else if( (msg == CRCInput::RC_audio) && g_settings.audio_run_player) {
@@ -2938,6 +2986,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 						( msg == NeutrinoMessages::SHOW_INFOBAR ) )
 			{
 				dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+//				nGLCD::MirrorOSD(true);
+#endif
 				bool show_info = ((msg != NeutrinoMessages::SHOW_INFOBAR) || (g_InfoViewer->is_visible || g_settings.timing[SNeutrinoSettings::TIMING_INFOBAR] != 0));
 			         // turn on LCD display
 				CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO); 
@@ -2945,8 +2996,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				// show Infoviewer
 				if(show_info && channelList->getSize()) {
 					g_InfoViewer->showTitle(channelList->getActiveChannelNumber(), channelList->getActiveChannelName(), channelList->getActiveSatellitePosition(), channelList->getActiveChannel_ChannelID()); // UTF-8
+#ifdef WITH_GRAPHLCD
+//				nGLCD::MirrorOSD(false);
+#endif
 				}
-				dvbsub_start(0);
 			}
 #if 0
 			else if( msg == CRCInput::RC_shift_blue ) {
@@ -2975,10 +3028,16 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			} 
 #endif
 			else {
+#ifdef WITH_GRAPHLCD
+//				nGLCD::MirrorOSD(true);
+#endif
 				dvbsub_pause();
 				if (msg == CRCInput::RC_home)
   					CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 				handleMsg(msg, data);
+#ifdef WITH_GRAPHLCD
+//				nGLCD::MirrorOSD(false);
+#endif
 				dvbsub_start(0);
 			}
 		}
@@ -3080,6 +3139,9 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t msg, neutrino_msg_data_t data)
 				InfoClock->StopClock();
 
 			dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+			nGLCD::MirrorOSD(true);
+#endif
 
 			int nNewChannel = -1;
 			int old_num = 0;
@@ -3129,6 +3191,9 @@ _repeat:
 				InfoClock->StartClock();
 			if(mode == mode_tv)
 				dvbsub_start(0);
+#ifdef WITH_GRAPHLCD
+			nGLCD::MirrorOSD(false);
+#endif
 			return messages_return::handled;
 		}
 	}
@@ -3779,6 +3844,7 @@ void CNeutrinoApp::setvol(int vol, int avs)
 void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool nowait)
 {
 	neutrino_msg_t msg = key;
+	bool doPaint = bDoPaint;
 
 	int dx = 256;
 	int dy = 40;
@@ -3793,6 +3859,9 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 		x = frameBuffer->getScreenX () + ((frameBuffer->getScreenWidth () - dx) >> 1);
 		y = frameBuffer->getScreenY () + ((frameBuffer->getScreenHeight () - dy) >> 1);
 		break;
+	case 2: // off
+		doPaint = false;
+		break;
 	default:
 		x = frameBuffer->getScreenX() + 10;
 		y = frameBuffer->getScreenY() + 10;
@@ -3805,12 +3874,12 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 #ifdef __sh__
 	int checkSize;
 	
-	if(bDoPaint) {
+	if(doPaint) {
 		pixbuf = frameBuffer->allocPixelBuffer(dx, dy);
 		if(pixbuf!= NULL)
 			checkSize = frameBuffer->SaveScreen(x, y, dx, dy, pixbuf);
 #else
-	if(bDoPaint) {
+	if(doPaint) {
 		pixbuf = new fb_pixel_t[dx * dy];
 		if(pixbuf!= NULL)
 			frameBuffer->SaveScreen(x, y, dx, dy, pixbuf);
@@ -3833,12 +3902,18 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 					g_settings.current_volume += g_settings.current_volume_step;
 				else
 					g_settings.current_volume = 100;
+#ifdef WITH_GRAPHLCD
+				nGLCD::ShowVolume(true);
+#endif
 			}
 			else if (msg == CRCInput::RC_minus || msg == CRCInput::RC_left) { //FIXME
 				if (g_settings.current_volume > g_settings.current_volume_step)
 					g_settings.current_volume -= g_settings.current_volume_step;
 				else
 					g_settings.current_volume = 0;
+#ifdef WITH_GRAPHLCD
+				nGLCD::ShowVolume(true);
+#endif
 			}
 			else {
 				g_RCInput->postMsg(msg, data);
@@ -3860,7 +3935,7 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 			break;
 		}
 
-		if (bDoPaint) {
+		if (doPaint) {
 			if(vol != g_settings.current_volume) {
 				vol = g_settings.current_volume;
 				g_volscale->paint(x + 41, y + 12, g_settings.current_volume);
@@ -3873,9 +3948,13 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 		}
 	} while (msg != CRCInput::RC_timeout);
 
+#ifdef WITH_GRAPHLCD
+	nGLCD::ShowVolume(false);
+#endif
+
 	//frameBuffer->paintBackgroundBoxRel(x, y, dx, dy); //FIXME osd bug
 
-	if( (bDoPaint) && (pixbuf!= NULL) ) {
+	if( (doPaint) && (pixbuf!= NULL) ) {
 #ifdef __sh__
 		frameBuffer->RestoreScreen(x, y, dx, dy, pixbuf, checkSize);
 #else
@@ -3986,10 +4065,11 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 			stopAutoRecord();
 			wasshift = true;
 			recordingstatus = 0;
-#ifdef WITH_GRAPHLCD
-			nGLCD::Update();
-#endif
 		}
+#ifdef WITH_GRAPHLCD
+		nGLCD::StandbyMode(bOnOff);
+		nGLCD::MirrorOSD(false);
+#endif
 		if( mode == mode_scart ) {
 			//g_Controld->setScartMode( 0 );
 		}
@@ -4078,6 +4158,9 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 		g_InfoViewer->lcdUpdateTimer = g_RCInput->addTimer( LCD_UPDATE_TIME_RADIO_MODE, false );
 		CVFD::getInstance()->ShowIcon(VFD_ICON_TV, false);
 		dvbsub_pause();
+#ifdef WITH_GRAPHLCD
+		nGLCD::MirrorOSD(true);
+#endif
 	}
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 	CVFD::getInstance()->ShowIcon(VFD_ICON_RADIO, true);

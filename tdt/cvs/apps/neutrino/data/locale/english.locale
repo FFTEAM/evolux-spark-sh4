@@ -25,6 +25,7 @@ audiomenu.volume_step Volumeslider width
 audiomenu.volume_position Volumeslider location
 audiomenu.volume_position.upperleft upper left
 audiomenu.volume_position.center center
+audiomenu.volume_position.hidden hidden
 audioplayer.add Add
 audioplayer.add_ic Icecast
 audioplayer.add_loc Local radio list
@@ -330,7 +331,7 @@ extra.zapit_make_bouquet Create bouquet "Others"
 extra.zapit_menu Zapit options
 extra.zapit_motor_speed Motor moving speed (10 = 1deg/sec)
 extra.zapit_restore Restore channels from /tmp
-extra.zapit_rezap_time Re-Zap on emu switch time
+extra.zapit_rezap_time Re-Zap on cam switch time
 extra.zapit_save_last_chan Save last channel
 extra.zapit_scan_sdt Scan SDT for updates
 extra.zapit_scanpids Scan/Use pids
@@ -1440,6 +1441,7 @@ setting.saved Settings saved
 dvb.subtitle.placement Subtitle placement
 dvb.subtitle.placement.bottom bottom
 dvb.subtitle.placement.top top
+extramenu.glcd.volume Volume
 extramenu.glcd.color.black Black
 extramenu.glcd.color.white White
 extramenu.glcd.color.red Red
@@ -1457,6 +1459,7 @@ extramenu.glcd.size_epg EPG height
 extramenu.glcd.size_bar Progress bar height
 extramenu.glcd.size_time Time height
 extramenu.glcd.restart Rescan
+extramenu.glcd.mirror_osd Show ALL on GraphLCD
 extramenu.evoluxupdate Evolux Update Menue
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On

@@ -24,7 +24,8 @@ audiomenu.stereo Stereo
 audiomenu.volume_step Lautstärke schrittweite
 audiomenu.volume_position Position Lautstärkeregler
 audiomenu.volume_position.upperleft links oben
-audiomenu.volume_position.center zentriert
+audiomenu.volume_position.center mittig
+audiomenu.volume_position.hidden unsichtbar
 audioplayer.add Hinzufügen
 audioplayer.add_ic Icecast
 audioplayer.add_loc Lokale Radioliste
@@ -330,7 +331,7 @@ extra.zapit_make_bouquet Bouquet "Andere" erstellen
 extra.zapit_menu Zapit Optionen
 extra.zapit_motor_speed Rotor Geschwindigkeit (10 = 1deg/sec)
 extra.zapit_restore Stelle Kanalliste wieder von /tmp wieder her
-extra.zapit_rezap_time Re-Zap bei EMU Umschaltzeit
+extra.zapit_rezap_time Re-Zap bei CAM Umschaltzeit
 extra.zapit_save_last_chan Letzten Kanal speichern
 extra.zapit_scan_sdt Scan SDT für Updates
 extra.zapit_scanpids Scan/Benutze Pids
@@ -1440,6 +1441,7 @@ setting.saved Einstellungen gespeichert
 dvb.subtitle.placement Untertitelanzeige
 dvb.subtitle.placement.bottom unten
 dvb.subtitle.placement.top oben
+extramenu.glcd.volume Lautstärke
 extramenu.glcd.color.black Schwarz
 extramenu.glcd.color.white Weiss
 extramenu.glcd.color.red Rot
@@ -1457,6 +1459,7 @@ extramenu.glcd.size_epg EPG-Größe
 extramenu.glcd.size_bar Fortschrittsbalken-Größe
 extramenu.glcd.size_time Uhrzeit-Größe
 extramenu.glcd.restart Neu erkennen
+extramenu.glcd.mirror_osd Alles auf GraphLCD anzeigen
 extramenu.evoluxupdate Evolux OnlineUpdate
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
