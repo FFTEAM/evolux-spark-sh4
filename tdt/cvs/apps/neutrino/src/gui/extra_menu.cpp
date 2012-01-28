@@ -2210,18 +2210,18 @@ void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 bool EVOLUXUPDATE_Menu::CheckUpdate()
 {
 	//EVOLUXUPDATE STARTEN
-	safe_system("rm -f /tmp/EvoluxUpdatevailable /tmp/version;cd /tmp;wget -q -O /tmp/version http://tinyurl.com/7gz7jpo; oVersion=`grep version /tmp/version | cut -d = -f2`;lVersion=`grep version /etc/.version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
+	system("rm -f /tmp/EvoluxUpdatevailable /tmp/version;cd /tmp;wget -q -O /tmp/version http://tinyurl.com/7gz7jpo; oVersion=`grep version /tmp/version | cut -d = -f2`;lVersion=`grep version /etc/.version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
 	FILE* fd1 = fopen("/tmp/EvoluxUpdatevailable", "r");
 	if(fd1)
 	{
 	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, doing update now...");
 	CheckUpdateBox->paint();
-	safe_system("oVersion=`grep version /tmp/version | cut -d = -f2`; cd /tmp; wget -O update.evolux.yaffs2.tar.gz -q http://tinyurl.com/7fjrnm3; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm -f /tmp/update.evolux.yaffs2.tar.gz /tmp/EvoluxUpdatevailable /tmp/version");
+	system("oVersion=`grep version /tmp/version | cut -d = -f2`; cd /tmp; wget -O update.evolux.yaffs2.tar.gz -q http://tinyurl.com/7fjrnm3; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm -f /tmp/update.evolux.yaffs2.tar.gz /tmp/EvoluxUpdatevailable /tmp/version");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
 	CheckUpdateBox->paint();
-	safe_system("sleep 3");
+	system("sleep 3");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	fclose(fd1);
@@ -2230,7 +2230,7 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 	{
 	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
 	CheckUpdateBox->paint();
-	safe_system("rm -f /tmp/version; sleep 3");
+	system("rm -f /tmp/version; sleep 3");
 	CheckUpdateBox->hide();
 	delete CheckUpdateBox;
 	}
