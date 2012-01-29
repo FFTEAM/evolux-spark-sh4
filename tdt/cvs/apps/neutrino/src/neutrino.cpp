@@ -959,21 +959,13 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.auto_timeshift = configfile.getInt32( "auto_timeshift", 0 );
 	g_settings.auto_delete = configfile.getInt32( "auto_delete", 1 );
 
-	if(strlen(g_settings.timeshiftdir) == 0) {
-		sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
-		safe_mkdir(timeshiftDir);
-	} else {
-		if(strcmp(g_settings.timeshiftdir, g_settings.network_nfs_recordingdir))
-			strncpy(timeshiftDir, g_settings.timeshiftdir, sizeof(timeshiftDir));
-		else
-			sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
-	}
-printf("***************************** rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
+	sprintf(timeshiftDir, "%s/.timeshift", strlen(g_settings.timeshiftdir) ? g_settings.timeshiftdir : g_settings.network_nfs_recordingdir);
+	safe_mkdir(timeshiftDir);
 
 	if(g_settings.auto_delete) {
 		if(strcmp(g_settings.timeshiftdir, g_settings.network_nfs_recordingdir)) {
 			char buf[512];
-			sprintf(buf, "rm -f %s/*_temp.ts %s/*_temp.xml &", timeshiftDir, timeshiftDir);
+			sprintf(buf, "(sleep 15;rm -f %s/*) &", timeshiftDir);
 			system(buf);
 		}
 	}
@@ -2867,7 +2859,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 							nGLCD::Update();
 #endif
-							doGuiRecord(g_settings.network_nfs_recordingdir, true);
+							doGuiRecord(timeshiftDir, true);
 						}
 						if(recordingstatus) {
 							moviePlayerGui->exec(NULL, tmode);
@@ -4478,11 +4470,10 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 			else {
 				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1);
 				printf("New recordingdir: %s (timeshift %s)\n", g_settings.network_nfs_recordingdir, g_settings.timeshiftdir);
-				if(strlen(g_settings.timeshiftdir) == 0) {
-					sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
-					safe_mkdir(timeshiftDir);
-					printf("New timeshift dir: %s\n", timeshiftDir);
-				}
+				sprintf(timeshiftDir, "%s/.timeshift",
+					strlen(g_settings.timeshiftdir) ? g_settings.timeshiftdir : g_settings.network_nfs_recordingdir);
+				safe_mkdir(timeshiftDir);
+				printf("New timeshift dir: %s\n", timeshiftDir);
 			}
 		}
 		return menu_return::RETURN_REPAINT;
@@ -4497,17 +4488,10 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 			if(check_dir(newdir))
 				printf("Wrong/unsupported recording dir %s\n", newdir);
 			else {
-				printf("New timeshift dir: old %s (record %s)\n", g_settings.timeshiftdir, g_settings.network_nfs_recordingdir);
-				if(strcmp(newdir, g_settings.network_nfs_recordingdir)) {
-					printf("New timeshift != rec dir\n");
-					strncpy(g_settings.timeshiftdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.timeshiftdir)-1);
-					strcpy(timeshiftDir, g_settings.timeshiftdir);
-				} else {
-					sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
-					strcpy(g_settings.timeshiftdir, newdir);
-					safe_mkdir(timeshiftDir);
-					printf("New timeshift == rec dir\n");
-				}
+				strcpy(g_settings.timeshiftdir, newdir);
+				sprintf(timeshiftDir, "%s/.timeshift",
+					strlen(g_settings.timeshiftdir) ? g_settings.timeshiftdir : g_settings.network_nfs_recordingdir);
+				safe_mkdir(timeshiftDir);
 				printf("New timeshift dir: %s\n", timeshiftDir);
 			}
 		}
