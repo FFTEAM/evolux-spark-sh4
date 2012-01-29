@@ -78,7 +78,7 @@ static int safe_system(const char *command) {
 			exit(-1);
 		default:
 			int status;
-			waitpid(child, &status, WNOHANG);
+			waitpid(child, &status, 0);
 			return status;
 	}
 }
@@ -472,7 +472,7 @@ void CHECKFS_Menu::hide()
 void CHECKFS_Menu::CHECKFSSettings()
 {
 #define DOTFILE_CHECKFS "/etc/.checkfs"
-	int checkfs = access(DOTFILE_CHECKFS, R_OK) ? 0 : 1;
+	int checkfs = access(DOTFILE_CHECKFS, F_OK) ? 0 : 1;
 	int old_checkfs=checkfs;
 	//MENU AUFBAUEN
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings.raw");
@@ -742,7 +742,7 @@ void DISPLAYTIME_Menu::hide()
 void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 {
 #define DOTFILE_DISPLAYTIME "/etc/.time"
-	int displaytime = access(DOTFILE_DISPLAYTIME, R_OK) ? 0 : 1;
+	int displaytime = access(DOTFILE_DISPLAYTIME, F_OK) ? 0 : 1;
 	int old_displaytime=displaytime;
 	//MENU AUFBAUEN
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings.raw");
@@ -971,14 +971,14 @@ void SWAP_Menu::touch_dotfile(int swaptype) {
 
 void SWAP_Menu::SWAP_Menu_Settings()
 {
-	int swap_onoff = access(DOTFILE_SWAPON, R_OK) ? 0 : 1;
+	int swap_onoff = access(DOTFILE_SWAPON, F_OK) ? 0 : 1;
 	int swap=0;
 
-	if (!access(DOTFILE_SWAPRAM, R_OK))
+	if (!access(DOTFILE_SWAPRAM, F_OK))
 		swap = KEY_SWAP_SWAPRAM;
-	else if (!access(DOTFILE_SWAPPART, R_OK))
+	else if (!access(DOTFILE_SWAPPART, F_OK))
 		swap = KEY_SWAP_SWAPPART;
-	else if (!access(DOTFILE_SWAPFILE, R_OK))
+	else if (!access(DOTFILE_SWAPFILE, F_OK))
 		swap = KEY_SWAP_SWAPFILE;
 
 	int old_swap=swap;
@@ -1088,9 +1088,9 @@ void BOOT_Menu::BOOTSettings()
 #define DOTFILE_BOOTE2 "/etc/.start_enigma2"
 #define DOTFILE_BOOTSPARK "/etc/.start_spark"
 	int boot = BOOT_NEUTRINO;
-	if (!access(DOTFILE_BOOTSPARK, R_OK))
+	if (!access(DOTFILE_BOOTSPARK, F_OK))
 		boot = BOOT_SPARK;
-	else if (!access(DOTFILE_BOOTE2, R_OK))
+	else if (!access(DOTFILE_BOOTE2, F_OK))
 		boot = BOOT_E2;
 	int old_boot = boot;
 
@@ -1180,7 +1180,7 @@ void FSCK_Menu::hide()
 void FSCK_Menu::FSCKSettings()
 {
 #define DOTFILE_FSCK "/etc/.fsck"
-	int fsck = access(DOTFILE_FSCK, R_OK) ? 0 : 1;
+	int fsck = access(DOTFILE_FSCK, F_OK) ? 0 : 1;
 	int old_fsck=fsck;
 	//MENU AUFBAUEN
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
@@ -1245,7 +1245,7 @@ void STMFB_Menu::hide()
 void STMFB_Menu::STMFBSettings()
 {
 #define DOTFILE_STMFB "/etc/.15m"
-	int stmfb = access(DOTFILE_STMFB, R_OK) ? 0 : 1;
+	int stmfb = access(DOTFILE_STMFB, F_OK) ? 0 : 1;
 	int old_stmfb=stmfb;
 	//MENU AUFBAUEN
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
@@ -1314,7 +1314,7 @@ void FRITZCALL_Menu::hide()
 #define DOTFILE_FRITZCALL "/etc/.fritzcall"
 void FRITZCALL_Menu::FRITZCALLSettings()
 {
-	int fritzcall = access(DOTFILE_FRITZCALL, R_OK) ? 0 : 1;
+	int fritzcall = access(DOTFILE_FRITZCALL, F_OK) ? 0 : 1;
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
@@ -1334,12 +1334,12 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 		{
 			//FRITZCALL STARTEN
 			touch(DOTFILE_FRITZCALL);
-			system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
+			safe_system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
 		} else {
 			//FRITZCALL BEENDEN
 			unlink(DOTFILE_FRITZCALL);
-			system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
+			safe_system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -1403,16 +1403,18 @@ nGLCD::nGLCD() {
 	doSuspend = false;
 	doExit = false;
 	doMirrorOSD = false;
-        fontsize_channel = 0;
-        fontsize_epg = 0;
-        fontsize_time = 0;
-        percent_channel = 0;
-        percent_time = 0;
-        percent_epg = 0;
-        percent_bar = 0;
-        percent_time = 0;
-        percent_space = 0;
-        Scale = 0;
+	fontsize_channel = 0;
+	fontsize_epg = 0;
+	fontsize_time = 0;
+	doScrollChannel = false;
+	doScrollEpg = false;
+	percent_channel = 0;
+	percent_time = 0;
+	percent_epg = 0;
+	percent_bar = 0;
+	percent_time = 0;
+	percent_space = 0;
+	Scale = 0;
 	bitmap = NULL;
 	loadSettings();
 
@@ -2202,32 +2204,35 @@ void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 	menu->hide ();
 	delete menu;
 }
+
+#include <errno.h>
 bool EVOLUXUPDATE_Menu::CheckUpdate()
 {
 	//EVOLUXUPDATE STARTEN
-	system("rm -f /tmp/EvoluxUpdatevailable /tmp/version;cd /tmp;wget -q -O /tmp/version http://tinyurl.com/7gz7jpo; oVersion=`grep version /tmp/version | cut -d = -f2`;lVersion=`grep version /etc/.version | cut -d = -f2`;if [ $lVersion != $oVersion ]; then touch /tmp/EvoluxUpdatevailable;fi");
-	FILE* fd1 = fopen("/tmp/EvoluxUpdatevailable", "r");
-	if(fd1)
-	{
-	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, doing update now...");
-	CheckUpdateBox->paint();
-	system("oVersion=`grep version /tmp/version | cut -d = -f2`; cd /tmp; wget -O update.evolux.yaffs2.tar.gz -q http://tinyurl.com/7fjrnm3; tar -xzvf /tmp/update.evolux.yaffs2.tar.gz -C /; rm -f /tmp/update.evolux.yaffs2.tar.gz /tmp/EvoluxUpdatevailable /tmp/version");
-	CheckUpdateBox->hide();
-	delete CheckUpdateBox;
-	CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
-	CheckUpdateBox->paint();
-	system("sleep 3");
-	CheckUpdateBox->hide();
-	delete CheckUpdateBox;
-	fclose(fd1);
+	unlink("/tmp/EvoluxUpdatevailable");
+	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
+		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
+		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
+	if(!access("/tmp/EvoluxUpdatevailable", F_OK)) {
+		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
+		CheckUpdateBox->paint();
+		safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
+		unlink("/tmp/EvoluxUpdatevailable");
+		unlink("/tmp/update.tar.gz");
+		CheckUpdateBox->hide();
+		delete CheckUpdateBox;
+		CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
+		CheckUpdateBox->paint();
+		sleep(3);
+		CheckUpdateBox->hide();
+		delete CheckUpdateBox;
 	}
-	else
-	{
-	CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
-	CheckUpdateBox->paint();
-	system("rm -f /tmp/version; sleep 3");
-	CheckUpdateBox->hide();
-	delete CheckUpdateBox;
+	else {
+		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
+		CheckUpdateBox->paint();
+		sleep(3);
+		CheckUpdateBox->hide();
+		delete CheckUpdateBox;
 	}
 }
 //ENDE EVOLUXUPDATE
