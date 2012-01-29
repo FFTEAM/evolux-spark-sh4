@@ -365,7 +365,7 @@ endif
 #	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons
 #	mkdir -p $(prefix)/release_neutrino/media/net
-	( cd $(prefix)/release_neutrino/media && ln -sf /mnt/nfs /medi/net )
+	( cd $(prefix)/release_neutrino/media && ln -sf /mnt/nfs /media/net )
 #	( cd $(prefix)/release_neutrino/var && ln -s ../usr/bin emu )
 	( cd $(prefix)/release_neutrino/var && ln -s ../usr/keys keys )
 	( cd $(prefix)/release_neutrino/var/tuxbox && ln -s ../../../usr/local/share/config )
