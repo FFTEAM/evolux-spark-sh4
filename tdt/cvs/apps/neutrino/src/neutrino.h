@@ -40,6 +40,7 @@
 #include <system/setting_helpers.h>
 #include <system/configure_network.h>
 #include <gui/timerlist.h>
+#include <gui/adzap.h>
 #include <timerdclient/timerdtypes.h>
 #include <gui/channellist.h>          /* CChannelList */
 #include <gui/rc_lock.h>
@@ -148,6 +149,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CRCLock                         *rcLock;
                 // USERMENU
                 CTimerList                      *Timerlist;
+		CAdZapMenu			*AdZapChanger;
 
                 bool showUserMenu(int button);
                 bool getNVODMenu(CMenuWidget* menu);

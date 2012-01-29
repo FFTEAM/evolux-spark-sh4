@@ -1316,6 +1316,7 @@ usermenu.item_bar --- Trennung ---
 usermenu.item_epg_misc EPG Funktionen
 usermenu.item_none --- Frei ---
 usermenu.item_vtxt Videotext
+usermenu.item_adzap Werbezapper
 usermenu.name Name
 video_mode_ok Video-Einstellungen ok ?
 videomenu.43mode 4:3 Inhalt anzeigen als
@@ -1418,8 +1419,6 @@ extramenu.swap.swappart SWAPPART
 extramenu.swap.swapfile SWAPFILE
 extramenu.swap.select Swap Auswahl
 extramenu.swap.onoff SWAP
-extramenu.swap.onoff.on Ein
-extramenu.swap.onoff.off Aus
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.unchanged Unverändert
@@ -1459,11 +1458,21 @@ extramenu.glcd.size_epg EPG-Größe
 extramenu.glcd.size_bar Fortschrittsbalken-Größe
 extramenu.glcd.size_time Uhrzeit-Größe
 extramenu.glcd.restart Neu erkennen
-extramenu.glcd.mirror_osd Alles auf GraphLCD anzeigen
+extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
 extramenu.evoluxupdate Evolux OnlineUpdate
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
 extramenu.evoluxupdate.off Off
 extramenu.evoluxupdate.update OnlineUpdate ausführen
-extramenu.onoff.on Ein
-extramenu.onoff.off Aus
+onoff.on Ein
+onoff.off Aus
+adzap Werbezapper
+adzap.announce In 15 Sekunden wird umgeschaltet auf
+adzap.cancel Deaktiviert
+adzap.enable Einmalig aktivieren
+adzap.disable Deaktivieren
+adzap.monitor Daueraktiv bei aktueller Sendung
+adzap.minute Minute
+adzap.minutes Minuten
+adzap.switchback Zurückschalten nach
+adzap.commit (Nach Zeitänderung (OK) drücken)

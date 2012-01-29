@@ -47,11 +47,11 @@
 
 #include "extra_menu.h"
 
-#define EXTRAMENU_ONOFF_OPTION_COUNT 2
+#define ONOFF_OPTION_COUNT 2
 
-const CMenuOptionChooser::keyval EXTRAMENU_ONOFF_OPTIONS[EXTRAMENU_ONOFF_OPTION_COUNT] = {
-	{ 0, LOCALE_EXTRAMENU_ONOFF_OFF },
-	{ 1, LOCALE_EXTRAMENU_ONOFF_ON },
+const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
+	{ 0, LOCALE_ONOFF_OFF },
+	{ 1, LOCALE_ONOFF_ON },
 };
 
 static int touch(const char *filename) {
@@ -325,7 +325,7 @@ bool TUNERRESET_Menu::TunerReset()
 	CHintBox * TunerResetBox = new CHintBox(LOCALE_EXTRAMENU_TUNERRESET_RESTART, "bitte warten, Tuner wird resettet");
 	TunerResetBox->paint();
 
-	safe_system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
+	system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
 	TunerResetBox->hide();
 	delete TunerResetBox;
 }
@@ -632,6 +632,8 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			settings.cam_selected = string(EMU_list[emu].procname);
 			selected = emu;
 		}
+
+		g_RCInput->postMsg(CRCInput::RC_red, 0); // reenter menu // FIXME?
 		return menu_return::RETURN_EXIT_ALL;
 	}
 
@@ -664,8 +666,8 @@ void EMU_Menu::EMU_Menu_Settings()
 	for (int i = 1; i < EMU_OPTION_COUNT; i++)
 		if (EMU_list[i].installed)
 			menu->addItem(new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
-				(i == selected) ? g_Locale->getText(LOCALE_EXTRAMENU_ONOFF_ON)
-						: g_Locale->getText(LOCALE_EXTRAMENU_ONOFF_OFF),
+				(i == selected) ? g_Locale->getText(LOCALE_ONOFF_ON)
+						: g_Locale->getText(LOCALE_ONOFF_OFF),
 				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++)),
 				(i == selected));
 
@@ -678,7 +680,6 @@ void EMU_Menu::EMU_Menu_Settings()
 	menu->exec(NULL, "");
         menu->hide();
         delete menu;
-
 	saveSettings();
 }
 
@@ -760,12 +761,12 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 		{
 			//DisplayTime STARTEN
 			touch("/etc/.time");
-			safe_system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
+			system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
 		} else {
 			//DisplayTime BEENDEN
 			unlink("/etc/.time");
-			safe_system("killall -9 DisplayTime.sh");
+			system("killall -9 DisplayTime.sh");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -872,13 +873,6 @@ const CMenuOptionChooser::keyval SWAP_OPTIONS[SWAP_OPTION_COUNT] =
 	{ KEY_SWAP_SWAPFILE, LOCALE_EXTRAMENU_SWAP_SWAPFILE }
 };
 
-#define SWAP_ONOFF_OPTION_COUNT 2
-const CMenuOptionChooser::keyval SWAP_ONOFF_OPTIONS[SWAP_ONOFF_OPTION_COUNT] =
-{
-	{ 0, LOCALE_EXTRAMENU_SWAP_OFF },
-	{ 1, LOCALE_EXTRAMENU_SWAP_ON },
-};
-
 SWAP_Menu::SWAP_Menu()
 {
 	frameBuffer = CFrameBuffer::getInstance();
@@ -911,13 +905,13 @@ void SWAP_Menu::hide()
 string SWAP_Menu::start_swap(int swaptype) {
 	switch(swaptype) {
 		case KEY_SWAP_SWAPRAM:
-			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP-RAM activated";
 		case KEY_SWAP_SWAPPART:
-			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP partition activated";
 		case KEY_SWAP_SWAPFILE:
-			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP file activated";
 		default:
 			return "Internal error.";
@@ -995,7 +989,7 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_ONOFF, &swap_onoff, SWAP_ONOFF_OPTIONS, 		SWAP_ONOFF_OPTION_COUNT,true);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_ONOFF, &swap_onoff, ONOFF_OPTIONS, ONOFF_OPTION_COUNT,true);
 	menu->addItem( oj1 );
 	menu->addItem(GenericMenuSeparatorLine);
 	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_SELECT, &swap, SWAP_OPTIONS, SWAP_OPTION_COUNT,true);
@@ -1055,7 +1049,7 @@ const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 BOOT_Menu::BOOT_Menu()
 {
 	frameBuffer = CFrameBuffer::getInstance();
-	width = 600;
+	width = 500;
 	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
 	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 	height = hheight+13*mheight+ 10;
@@ -1100,7 +1094,7 @@ void BOOT_Menu::BOOTSettings()
 		boot = BOOT_E2;
 	int old_boot = boot;
 
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw", width);
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -1124,12 +1118,12 @@ void BOOT_Menu::BOOTSettings()
 		}
 		if (boot == BOOT_SPARK) {
 			touch(DOTFILE_BOOTSPARK);
-			safe_system("fw_setenv -s /etc/bootargs_orig");
+			system("fw_setenv -s /etc/bootargs_orig");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
-			safe_system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
+			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
 		}
 		if(b) {
 			b->hide();
@@ -1340,12 +1334,12 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 		{
 			//FRITZCALL STARTEN
 			touch(DOTFILE_FRITZCALL);
-			safe_system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
+			system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
 		} else {
 			//FRITZCALL BEENDEN
 			unlink(DOTFILE_FRITZCALL);
-			safe_system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
+			system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -2032,7 +2026,8 @@ int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		return res;
 	}
 	if(actionKey == "select_font") {
-		parent->hide();
+		if(parent)
+			parent->hide();
 		CFileBrowser fileBrowser;
 		CFileFilter fileFilter;
 		fileFilter.addFilter("ttf");
@@ -2116,7 +2111,7 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD, &settings.glcd_enable,
-				EXTRAMENU_ONOFF_OPTIONS, EXTRAMENU_ONOFF_OPTION_COUNT, true, notifier));
+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
 	int shortcut = 1;
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_FG, &color_fg,
@@ -2140,7 +2135,7 @@ void GLCD_Menu::GLCD_Menu_Settings()
 				&settings.glcd_percent_time, true, 0, 100, notifier));
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
-				EXTRAMENU_ONOFF_OPTIONS, EXTRAMENU_ONOFF_OPTION_COUNT, true, notifier,
+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
 				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "rescan",
@@ -2238,3 +2233,4 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 //ENDE EVOLUXUPDATE
 
 ////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
+// vim:ts=4

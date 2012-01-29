@@ -1136,6 +1136,7 @@ const char *locale_real_names[] = {
 	"usermenu.item_epg_misc",
 	"usermenu.item_none",
 	"usermenu.item_vtxt",
+	"usermenu.item_adzap",
 	"usermenu.name",
 	"videomenu.csync",
 	"videomenu.head",
@@ -1414,8 +1415,6 @@ const char *locale_real_names[] = {
 	"extramenu.swap.swapfile",
 	"extramenu.swap.select",
 	"extramenu.swap.onoff",
-	"extramenu.swap.onoff.on",
-	"extramenu.swap.onoff.off",
 	"extramenu.boot.head",
 	"extramenu.boot.select",
 	"extramenu.boot.unchanged",
@@ -1467,7 +1466,17 @@ const char *locale_real_names[] = {
 	"extramenu.evoluxupdate.on",
 	"extramenu.evoluxupdate.off",
 	"extramenu.evoluxupdate.update",
-	"extramenu.onoff.on",
-	"extramenu.onoff.off"
+	"onoff.on",
+	"onoff.off",
+	"adzap",
+	"adzap.announce",
+	"adzap.cancel",
+	"adzap.enable",
+	"adzap.disable",
+	"adzap.monitor",
+	"adzap.minute",
+	"adzap.minutes",
+	"adzap.switchback",
+	"adzap.commit"
 };
 #endif

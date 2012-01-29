@@ -294,7 +294,7 @@ const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_AUTO_OPTIONS[VIDEOMENU_VIDE
 #include "videosettings.h"
 CVideoSettings * videoSettings;
 
-CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video.raw"), RGBCSyncControler(LOCALE_VIDEOMENU_RGB_CENTERING, &g_settings.video_csync)
+CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video.raw", 500), RGBCSyncControler(LOCALE_VIDEOMENU_RGB_CENTERING, &g_settings.video_csync)
 {
 	addItem(GenericMenuSeparator);
 	addItem(GenericMenuBack);
@@ -3153,6 +3153,15 @@ bool CNeutrinoApp::showUserMenu(int button)
 				menu_prev = SNeutrinoSettings::ITEM_VTXT;
 				keyhelper.get(&key,&icon);
 				menu_item = new CMenuForwarder(LOCALE_USERMENU_ITEM_VTXT, true, NULL, StreamFeaturesChanger, "teletext", key, icon);
+				menu->addItem(menu_item, 0);
+
+                                break;
+			case SNeutrinoSettings::ITEM_ADZAP:
+				menu_items++;
+				menu_prev = SNeutrinoSettings::ITEM_ADZAP;
+                                keyhelper.get(&key,&icon,CRCInput::RC_blue);
+				//keyhelper.get(&key,&icon);
+				menu_item = new CMenuForwarder(LOCALE_USERMENU_ITEM_ADZAP, true, NULL, AdZapChanger, "adzap", key, icon);
 				menu->addItem(menu_item, 0);
 
                                 break;

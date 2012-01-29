@@ -1316,6 +1316,7 @@ usermenu.item_bar ---- Border ----
 usermenu.item_epg_misc EPG functions
 usermenu.item_none Nothing
 usermenu.item_vtxt Videotext
+usermenu.item_adzap AdZap
 usermenu.name Name
 video_mode_ok Is this video mode working ok ?
 videomenu.43mode 4:3 Content mode
@@ -1418,8 +1419,6 @@ extramenu.swap.swappart SWAPPART
 extramenu.swap.swapfile SWAPFILE
 extramenu.swap.select Swap Select
 extramenu.swap.onoff SWAP
-extramenu.swap.onoff.on On
-extramenu.swap.onoff.off Off
 extramenu.boot.head Boot Settings
 extramenu.boot.select System to start on reboot
 extramenu.boot.unchanged Unchanged
@@ -1459,11 +1458,21 @@ extramenu.glcd.size_epg EPG height
 extramenu.glcd.size_bar Progress bar height
 extramenu.glcd.size_time Time height
 extramenu.glcd.restart Rescan
-extramenu.glcd.mirror_osd Show ALL on GraphLCD
+extramenu.glcd.mirror_osd Show menue on GraphLCD
 extramenu.evoluxupdate Evolux Update Menue
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
 extramenu.evoluxupdate.off Off
 extramenu.evoluxupdate.update Do OnlineUpdate
-extramenu.onoff.on Ein
-extramenu.onoff.off Aus
+onoff.on Ein
+onoff.off Aus
+adzap AdZap
+adzap.announce In 15 seconds, the channel will be switched to
+adzap.cancel Timer was cancelled
+adzap.enable Once activate
+adzap.disable Deactivate
+adzap.monitor Stay active during current broadcast
+adzap.minute minute
+adzap.minutes minutes
+adzap.switchback Switch back after
+adzap.commit (Press (OK) after changing time)

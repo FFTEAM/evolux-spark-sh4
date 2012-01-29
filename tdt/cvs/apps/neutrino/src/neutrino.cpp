@@ -1147,6 +1147,9 @@ printf("***************************** rec dir %s timeshift dir %s\n", g_settings
 		g_settings.filebrowser_sortmethod = 0;
 	g_settings.filebrowser_denydirectoryleave = configfile.getBool("filebrowser_denydirectoryleave", false);
 
+	//AdZap
+	g_settings.adzap_zapBackPeriod = configfile.getInt32("adzap_zapBackPeriod", 180);
+
         // USERMENU -> in system/settings.h
         //-------------------------------------------
         // this is as the current neutrino usermen
@@ -1682,6 +1685,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32("filebrowser_showrights", g_settings.filebrowser_showrights);
 	configfile.setInt32("filebrowser_sortmethod", g_settings.filebrowser_sortmethod);
 	configfile.setBool("filebrowser_denydirectoryleave", g_settings.filebrowser_denydirectoryleave);
+
+	//AdZap
+	configfile.setInt32("adzap_zapBackPeriod", g_settings.adzap_zapBackPeriod);
 
         // USERMENU
         //---------------------------------------
@@ -2523,6 +2529,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	rcLock                    = new CRCLock();
 	//USERMENU
 	Timerlist                 = new CTimerList;
+	AdZapChanger              = new CAdZapMenu;
 
 	// setup recording device
 	if (g_settings.recording_type != RECORDING_OFF)

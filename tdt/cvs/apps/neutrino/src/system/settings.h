@@ -453,6 +453,10 @@ struct SNeutrinoSettings
 	int	sms_channel;
 	char	font_file[100];
 	char	update_dir[100];
+
+	// adzap
+	int	adzap_zapBackPeriod;
+
         // USERMENU
         typedef enum
         {
@@ -480,9 +484,10 @@ struct SNeutrinoSettings
                 ITEM_TECHINFO = 13,
                 ITEM_PLUGIN = 14,
                 ITEM_VTXT = 15,
+                ITEM_ADZAP = 16,
 #if 0
-                ITEM_MOVIEPLAYER_TS = 16,
-		ITEM_RESTART_CAMD = 17,
+                ITEM_MOVIEPLAYER_TS = 17,
+		ITEM_RESTART_CAMD = 18,
 #endif
                 ITEM_MAX   // MUST be always the last in the list
         }USER_ITEM;
