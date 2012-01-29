@@ -325,7 +325,7 @@ bool TUNERRESET_Menu::TunerReset()
 	CHintBox * TunerResetBox = new CHintBox(LOCALE_EXTRAMENU_TUNERRESET_RESTART, "bitte warten, Tuner wird resettet");
 	TunerResetBox->paint();
 
-	system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
+	safe_system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
 	TunerResetBox->hide();
 	delete TunerResetBox;
 }
@@ -761,12 +761,12 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 		{
 			//DisplayTime STARTEN
 			touch("/etc/.time");
-			system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
 		} else {
 			//DisplayTime BEENDEN
 			unlink("/etc/.time");
-			system("killall -9 DisplayTime.sh");
+			safe_system("killall -9 DisplayTime.sh");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
 		}
 	}
@@ -905,13 +905,13 @@ void SWAP_Menu::hide()
 string SWAP_Menu::start_swap(int swaptype) {
 	switch(swaptype) {
 		case KEY_SWAP_SWAPRAM:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP-RAM activated";
 		case KEY_SWAP_SWAPPART:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP partition activated";
 		case KEY_SWAP_SWAPFILE:
-			system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
+			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
 			return "SWAP file activated";
 		default:
 			return "Internal error.";
