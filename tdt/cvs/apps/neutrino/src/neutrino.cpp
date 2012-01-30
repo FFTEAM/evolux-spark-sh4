@@ -955,7 +955,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/net/movies" ).c_str() );
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
-	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 0 );
+	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 1 );
 	g_settings.auto_timeshift = configfile.getInt32( "auto_timeshift", 0 );
 	g_settings.auto_delete = configfile.getInt32( "auto_delete", 1 );
 
@@ -963,11 +963,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	safe_mkdir(timeshiftDir);
 
 	if(g_settings.auto_delete) {
-		if(strcmp(g_settings.timeshiftdir, g_settings.network_nfs_recordingdir)) {
-			char buf[512];
-			sprintf(buf, "(sleep 15;rm -f %s/*) &", timeshiftDir);
-			system(buf);
-		}
+		char buf[512];
+		sprintf(buf, "(sleep 15;rm -f %s/*) &", timeshiftDir);
+		system(buf);
 	}
 	g_settings.record_hours = configfile.getInt32( "record_hours", 4 );
 
@@ -2159,9 +2157,6 @@ printf("*********************************** startAutoRecord: dir %s\n", timeshif
 		CNeutrinoApp::getInstance()->recording_id = g_Timerd->addImmediateRecordTimerEvent(eventinfo.channel_id, now, now+g_settings.record_hours*60*60, eventinfo.epgID, eventinfo.epg_starttime, eventinfo.apids);
 	}
 //printf("startAutoRecord: recording_id = %d\n", CNeutrinoApp::getInstance()->recording_id);
-#ifdef WITH_GRAPHLCD
-	nGLCD::Update();
-#endif
 	return 0;
 }
 void stopAutoRecord()
@@ -2852,18 +2847,30 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 					if(recordingstatus) {
 						moviePlayerGui->exec(NULL, tmode);
 					} else if(msg != CRCInput::RC_rewind) {
+						bool isAutoRecord = false;
 						if(g_settings.temp_timeshift) {
 							startAutoRecord(true);
+							isAutoRecord = true;
 						} else {
 							recordingstatus = 1;
+							doGuiRecord(g_settings.network_nfs_recordingdir, true);
+						}
+						if(recordingstatus) {
 #ifdef WITH_GRAPHLCD
 							nGLCD::Update();
 #endif
-							doGuiRecord(timeshiftDir, true);
-						}
-						if(recordingstatus) {
 							moviePlayerGui->exec(NULL, tmode);
+							if (isAutoRecord) {
+								stopAutoRecord();
+								recordingstatus = 0;
+								char buf[512];
+								sprintf(buf, "rm -f %s/* &", timeshiftDir);
+								system(buf);
+							}
 						}
+#ifdef WITH_GRAPHLCD
+						nGLCD::Update();
+#endif
 					}
 #ifdef WITH_GRAPHLCD
 					nGLCD::unlockChannel();
@@ -4146,6 +4153,10 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 		}
 		wasshift = false;
 		dvbsub_start(0);
+#ifdef WITH_GRAPHLCD
+		nGLCD::StandbyMode(bOnOff);
+		nGLCD::MirrorOSD(true);
+#endif
 	}
 }
 

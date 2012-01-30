@@ -105,7 +105,7 @@ int slow = 0;
 static off64_t fullposition;	// cur. position including all parts played
 //static off64_t fulllength = 0;	// len of all parts
 int startposition;
-int timeshift;
+int timeshift = 0;
 off64_t minuteoffset;
 off64_t secondoffset;
 
@@ -186,6 +186,7 @@ CMoviePlayerGui::CMoviePlayerGui()
 void CMoviePlayerGui::Init(void)
 {
 	stopped = false;
+	cam_stopped = false;
 	hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_MOVIEPLAYER_PLEASEWAIT));	// UTF-8
 
 	frameBuffer = CFrameBuffer::getInstance();
@@ -265,6 +266,7 @@ void CMoviePlayerGui::cutNeutrino()
 		emu_menu->suspend();
 		if (!access(MOVIEPLAYER_START_SCRIPT, X_OK))
 			system(MOVIEPLAYER_START_SCRIPT);
+		cam_stopped = true;
 	}
 
 	g_Zapit->stopPlayBack();
@@ -296,10 +298,11 @@ void CMoviePlayerGui::restoreNeutrino()
 
 	stopped = false;
 
-	if (!timeshift && emu_menu) {
+	if (cam_stopped) {
 		emu_menu->resume();
 		if (!access(MOVIEPLAYER_END_SCRIPT, X_OK))
 			system(MOVIEPLAYER_END_SCRIPT);
+		cam_stopped = false;
 	}
 }
 
@@ -357,6 +360,7 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		PlayFile();
 	} else
 #endif
+
 	if (actionKey == "tsmoviebrowser") {
 		isMovieBrowser = true;// TESTTTTTTTTTTTTTTT
 		timeshift = 0;
@@ -368,18 +372,18 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		PlayFile();
 	}
 	else if (actionKey == "timeshift") {
-		cutNeutrino();
 		timeshift = 1;
+		cutNeutrino();
 		PlayFile();
 	} 
 	else if (actionKey == "ptimeshift") {
-		cutNeutrino();
 		timeshift = 2;
+		cutNeutrino();
 		PlayFile();
 	} 
 	else if (actionKey == "rtimeshift") {
-		cutNeutrino();
 		timeshift = 3;
+		cutNeutrino();
 		PlayFile();
 	} 
 #if 0
@@ -565,6 +569,11 @@ void CMoviePlayerGui::PlayFile(void)
 			FileTime.SetMode(CTimeOSD::MODE_DESC);
 			FileTime.show(position / 1000);
 			FileTime.updatePos(file_prozent);
+			if (g_settings.mode_clock)
+				InfoClock->StartClock();
+			else
+				InfoClock->StopClock();
+			FileTime.hide();
 		}
 
 		if (isBookmark) {

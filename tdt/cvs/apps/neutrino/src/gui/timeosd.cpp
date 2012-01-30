@@ -34,8 +34,8 @@
 static CScale * timescale;
 
 #define TIMEOSD_FONT SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME
-#define TIMEBARH 38
-#define BARLEN 200
+#define TIMEBARH 10 // 38
+#define BARLEN 100 // 200
 CTimeOSD::CTimeOSD()
 {
 	frameBuffer = CFrameBuffer::getInstance();
@@ -43,7 +43,7 @@ CTimeOSD::CTimeOSD()
 	m_mode=MODE_ASC;
 	GetDimensions();
 	if(!timescale)
-		timescale = new CScale(200, 32, 40, 100, 70, true);
+		timescale = new CScale(BARLEN, TIMEBARH - 6, 40, 100, 70, true);
 }
 
 CTimeOSD::~CTimeOSD()

@@ -79,6 +79,7 @@ class CMoviePlayerGui : public CMenuTarget
 	int            m_LastMode;	
 	const char     *filename;
 	bool		stopped;
+	bool		cam_stopped;
 
 	std::string Path_local;
 	std::string Path_vlc;

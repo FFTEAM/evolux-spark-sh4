@@ -1837,13 +1837,16 @@ void* nGLCD::Run(void *)
 		} while(settings.glcd_enable);
 		// either disabled, or restart, or shutdown permanently.
 
-		if(!settings.glcd_enable || nglcd->doSuspend) {
+		if(!settings.glcd_enable || nglcd->doSuspend || nglcd->doStandby) {
 			// for restart, don't blacken screen
 			nglcd->bitmap->Clear(GLCD::cColor::Black);
 			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
 			nglcd->lcd->Refresh(true);
 		}
-		nglcd->doRescan = false;
+		if (nglcd->doRescan) {
+		    nglcd->doRescan = false;
+			nglcd->Update();
+	    }
 		nglcd->lcd->DeInit();
 		delete nglcd->lcd;
 		nglcd->lcd = NULL;
