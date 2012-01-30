@@ -1864,6 +1864,7 @@ void nGLCD::Update() {
 void nGLCD::StandbyMode(bool b) {
 	if (nglcd) {
 		nglcd->doStandby = b;
+		nglcd->doMirrorOSD = false;
 		sem_post(&nglcd->sem);
 	}
 }

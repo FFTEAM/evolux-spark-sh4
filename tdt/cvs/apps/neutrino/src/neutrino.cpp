@@ -4155,7 +4155,6 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 		dvbsub_start(0);
 #ifdef WITH_GRAPHLCD
 		nGLCD::StandbyMode(bOnOff);
-		nGLCD::MirrorOSD(true);
 #endif
 	}
 }
