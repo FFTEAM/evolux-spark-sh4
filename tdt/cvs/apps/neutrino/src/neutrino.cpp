@@ -4373,7 +4373,7 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 	else if(actionKey=="recording") {
 		setupRecordingDevice();
 	}
-	else if(actionKey=="reloadchannels") {
+/*	else if(actionKey=="reloadchannels") {
 		//reloadhintBox->paint();
 		g_Zapit->reinitChannels();
 #if 0
@@ -4383,7 +4383,7 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 #endif
 		//reloadhintBox->hide();
 
-	}
+	} */
 	else if(actionKey=="reloadplugins") {
 		CHintBox * hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_SERVICEMENU_GETPLUGINS_HINT));
 		hintBox->paint();
@@ -4393,7 +4393,7 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 		hintBox->hide();
 		delete hintBox;
 	}
-	else if(actionKey=="restart") {
+	else if((actionKey=="restart") || (actionKey=="reloadchannels")) {
 		if (recordingstatus)
 			DisplayErrorMessage(g_Locale->getText(LOCALE_SERVICEMENU_RESTART_REFUSED_RECORDING));
 		else {
