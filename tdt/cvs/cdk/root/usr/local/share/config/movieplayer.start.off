@@ -1,6 +1,0 @@
-#!/bin/sh
-if [ ! -e /etc/.movieplayer.start ]; then
-echo 'stopping Cam now...'; echo '';mycams='oscam gbox spcs camd3 incubusCamd mbox mgcamd';for i in $mycams;do if pidof $i > /dev/null;then kill `pidof $i`;fi;done;for i in $mycams;do if pidof $i > /dev/null;then kill -9 `pidof $i`;fi;done;touch /etc/.movieplayer.start
-fi
-exit
-

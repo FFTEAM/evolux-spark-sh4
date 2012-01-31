@@ -1,0 +1,4 @@
+#!/bin/sh
+/usr/local/bin/pzapit -n "Das Erste"
+exit
+

@@ -1,0 +1,4 @@
+#!/bin/sh
+(sleep 5;/usr/local/bin/pzapit -n "Das Erste") &
+exit
+

@@ -955,7 +955,8 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/net/movies" ).c_str() );
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
-	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 1 );
+//	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 1 );
+	g_settings.temp_timeshift = 1;
 	g_settings.auto_timeshift = configfile.getInt32( "auto_timeshift", 0 );
 	g_settings.auto_delete = configfile.getInt32( "auto_delete", 1 );
 
