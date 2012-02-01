@@ -55,10 +55,10 @@ void CVFD::openDevice()
 	fd = open("/dev/vfd", O_RDWR);
 	if(fd < 0)
 	{
-	    printf("failed to open vfd\n");
+	    perror("opening vfd failed");
 	    fd = open("/dev/fplarge", O_RDWR);
 	    if (fd < 0)
-	      printf("failed to open fplarge\n");
+	      perror("opening fplarge failed");
         }
 }
 
@@ -249,7 +249,6 @@ void CVFD::showTime(bool force)
 		return;
 
 	if (showclock) {
-//		if (mode == MODE_STANDBY) {
 		if (mode == MODE_STANDBY) {
 			char timestr[21];
 			struct timeb tm;
@@ -265,7 +264,6 @@ void CVFD::showTime(bool force)
 				ShowText((char *) timestr);
 			}
 		} 
-//		} 
 	}
 
 	if (CNeutrinoApp::getInstance ()->recordingstatus) {
@@ -645,7 +643,11 @@ void CVFD::ShowIcon(vfd_icon icon, bool show)
 
 void CVFD::ShowText(char * str)
 {
+	if (!str)
+		return;
 	int len = strlen(str);
+	if (len < 1)
+		return;
 	int i, ret;
 
         printf("CVFD::ShowText: [%s]\n", str);
@@ -671,14 +673,15 @@ void CVFD::ShowText(char * str)
         openDevice();
 	
 	if (fd < 0)
-	   printf("opening vfd failes\n");
-	   
-	ret = write(fd , str, len>16?16:len);
+		perror("opening vfd failed");
+	else {
+		ret = write(fd , str, len>16?16:len);
 
-	if(ret < 0)
-		perror("write to vfd failed");
+		if(ret < 0)
+			perror("write to vfd failed");
 
-        closeDevice();
+		closeDevice();
+	}
 
 #else
 	ret = ioctl(fd, IOC_VFD_SET_TEXT, len ? str : NULL);
