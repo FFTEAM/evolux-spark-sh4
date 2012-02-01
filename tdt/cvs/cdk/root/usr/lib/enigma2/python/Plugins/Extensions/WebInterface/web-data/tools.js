@@ -1099,7 +1099,7 @@ function getScreenShot(what) {
 
 	switch(what){
 	case "o":
-		what = "&o=&n=";
+		what = " -o";
 		break;
 	case "v":
 		what = "&v=";
@@ -1110,8 +1110,9 @@ function getScreenShot(what) {
 	}
 
 	downloadStart = new Date().getTime();
-	buffer.src = '/grab?format=jpg&r=720&' + what + '&filename=/tmp/' + downloadStart;
+	buffer.src = '/grab' + what;
 }
+
 
 function getVideoShot() {
 	getScreenShot("v");

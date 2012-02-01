@@ -480,6 +480,7 @@ endif
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/
 	cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/bin/grab $(prefix)/release/usr/bin/
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/
 
 	$(INSTALL_DIR) $(prefix)/release/usr/tuxtxt
