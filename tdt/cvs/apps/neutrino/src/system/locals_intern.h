@@ -143,6 +143,7 @@ const char *locale_real_names[] = {
 	"audiomenu.stereo",
 	"audiomenu.hdmi_dd",
 	"audiomenu.spdif_dd",
+	"audiomenu.ac3downmix",
 	"audiomenu.avsync",
 	"audiomenu.avsync_am",
 	"audiomenu.clockrec",

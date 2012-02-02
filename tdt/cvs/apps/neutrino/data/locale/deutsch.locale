@@ -13,6 +13,7 @@ audiomenu.avsync_am Audio master
 audiomenu.clockrec Uhrzeit Aufnehmen
 audiomenu.dolbydigital Dolby Digital automatisch
 audiomenu.hdmi_dd DD über HDMI
+audiomenu.ac3downmix AC3 downmix
 audiomenu.head Audio-Einstellungen
 audiomenu.lirc lirc
 audiomenu.monoleft mono links

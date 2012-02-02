@@ -838,7 +838,19 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	//audio
 	g_settings.audio_AnalogMode = configfile.getInt32( "audio_AnalogMode", 0 );
 	g_settings.audio_DolbyDigital    = configfile.getBool("audio_DolbyDigital"   , false);
-
+	g_settings.audio_ac3downmix = configfile.getInt32("audio_ac3downmix", 1); // default downmix
+	switch (g_settings.audio_ac3downmix) {
+		case 0:
+			system("echo passthrough > /proc/stb/audio/ac3");
+			break;
+		  
+		case 1:
+			system("echo downmix > /proc/stb/audio/ac3");
+			break;
+		  
+		default:
+			system("echo downmix > /proc/stb/audio/ac3");
+	}
 	g_settings.audio_avs_Control = false;
 	g_settings.audio_english = configfile.getInt32( "audio_english", 0 );
 	g_settings.zap_cycle = configfile.getInt32( "zap_cycle", 1 );
@@ -1398,7 +1410,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32( "audio_avs_Control", g_settings.audio_avs_Control );
 	configfile.setInt32( "audio_english", g_settings.audio_english );
 	configfile.setString( "audio_PCMOffset", g_settings.audio_PCMOffset );
-
+	configfile.setInt32( "audio_ac3downmix", g_settings.audio_ac3downmix );
 	//vcr
 	configfile.setBool("vcr_AutoSwitch"       , g_settings.vcr_AutoSwitch       );
 

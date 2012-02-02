@@ -13,6 +13,7 @@ audiomenu.avsync_am Audio master
 audiomenu.clockrec Clockrec
 audiomenu.dolbydigital Dolby Digital
 audiomenu.hdmi_dd Encoded DD on HDMI
+audiomenu.ac3downmix AC3 downmix
 audiomenu.head Audio Settings
 audiomenu.lirc Lirc
 audiomenu.monoleft Mono left
