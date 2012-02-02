@@ -1603,8 +1603,10 @@ void* nGLCD::Run(void *)
 	bool broken = false;
 
 	do {
-		while (nglcd->doSuspend || nglcd->doStandby)
+		while ((nglcd->doSuspend || nglcd->doStandby) && !nglcd->doExit && !settings.glcd_enable)
 			sem_wait(&nglcd->sem);
+		if (nglcd->doExit)
+			break;
 
 		int warmUp = 5;
 		if (broken) {
@@ -1629,9 +1631,9 @@ void* nGLCD::Run(void *)
 
 		nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
 
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 
-		do  {
+		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
 			if (nglcd->doMirrorOSD) {
 				nglcd->bitmap->Clear(GLCD::cColor::Black);
 				ts.tv_sec = 0; // don't wait
@@ -1716,7 +1718,7 @@ void* nGLCD::Run(void *)
 				nglcd->lcd->SetScreen(nglcd->bitmap->Data(), lcd_width, lcd_height);
 				nglcd->lcd->Refresh(true);
 				continue;
-			}
+			} // end of fb mirroring
 
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
@@ -1736,7 +1738,7 @@ void* nGLCD::Run(void *)
 
 			while(!sem_trywait(&nglcd->sem));
 
-			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby)
+			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit)
 				break;
 
 			nglcd->updateFonts();
@@ -1833,11 +1835,9 @@ void* nGLCD::Run(void *)
 					}
 				}
 			}
+		}
 
-		} while(settings.glcd_enable);
-		// either disabled, or restart, or shutdown permanently.
-
-		if(!settings.glcd_enable || nglcd->doSuspend || nglcd->doStandby) {
+		if(!settings.glcd_enable || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit) {
 			// for restart, don't blacken screen
 			nglcd->bitmap->Clear(GLCD::cColor::Black);
 			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
@@ -1856,39 +1856,38 @@ void* nGLCD::Run(void *)
 }
 
 void nGLCD::Update() {
-	if (nglcd) {
+	if (nglcd)
 		sem_post(&nglcd->sem);
-	}
 }
 
 void nGLCD::StandbyMode(bool b) {
 	if (nglcd) {
 		nglcd->doStandby = b;
 		nglcd->doMirrorOSD = false;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::ShowVolume(bool b) {
 	if (nglcd) {
 		nglcd->doShowVolume = b;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::MirrorOSD(bool b) {
 	if (nglcd && settings.glcd_mirror_osd) {
 		nglcd->doMirrorOSD = b;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::Exit() {
 	if (nglcd) {
 		nglcd->doMirrorOSD = false;
-		nglcd->doSuspend = true;
+		nglcd->doSuspend = false;
 		nglcd->doExit = true;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 		void *res;
 		pthread_join(nglcd->thrGLCD, &res);
 		delete nglcd;
@@ -1897,28 +1896,28 @@ void nGLCD::Exit() {
 
 void nglcd_update() {
 	if (nglcd) {
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::Rescan() {
 	if (nglcd) {
 		doRescan = true;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::Suspend() {
 	if (nglcd) {
 		nglcd->doSuspend = true;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
 void nGLCD::Resume() {
 	if (nglcd) {
 		nglcd->doSuspend = false;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
@@ -1930,7 +1929,7 @@ void nGLCD::lockChannel(string c)
 		nglcd->stagingChannel = c;
 		nglcd->stagingEpg = "";
 		nglcd->Unlock();
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
@@ -1938,7 +1937,7 @@ void nGLCD::unlockChannel(void)
 {
 	if(nglcd) {
 		nglcd->channelLocked = false;
-		sem_post(&nglcd->sem);
+		nglcd->Update();
 	}
 }
 
@@ -2019,7 +2018,7 @@ GLCD_Menu::GLCD_Menu()
 
 	notifier = new GLCD_Menu_Notifier();
 
-	if (!nglcd && settings.glcd_enable)
+	if (!nglcd)
 		new nGLCD;
 }
 
@@ -2028,7 +2027,8 @@ int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 	if(actionKey == "rescan") {
-		nglcd->Rescan();
+		if (nglcd)
+		    nglcd->Rescan();
 		return res;
 	}
 	if(actionKey == "select_font") {
@@ -2087,10 +2087,12 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 				nglcd->Resume();
 			else
 				nglcd->Suspend();
+			return true;
 		}
 		break;
 	case LOCALE_EXTRAMENU_GLCD_MIRROR_OSD:
-		nglcd->doMirrorOSD = settings.glcd_mirror_osd;
+		if (nglcd)
+				nglcd->doMirrorOSD = settings.glcd_mirror_osd;
 		break;
 	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:

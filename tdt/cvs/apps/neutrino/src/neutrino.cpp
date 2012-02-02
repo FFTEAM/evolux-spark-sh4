@@ -839,18 +839,6 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.audio_AnalogMode = configfile.getInt32( "audio_AnalogMode", 0 );
 	g_settings.audio_DolbyDigital    = configfile.getBool("audio_DolbyDigital"   , false);
 	g_settings.audio_ac3downmix = configfile.getInt32("audio_ac3downmix", 1); // default downmix
-	switch (g_settings.audio_ac3downmix) {
-		case 0:
-			system("echo passthrough > /proc/stb/audio/ac3");
-			break;
-		  
-		case 1:
-			system("echo downmix > /proc/stb/audio/ac3");
-			break;
-		  
-		default:
-			system("echo downmix > /proc/stb/audio/ac3");
-	}
 	g_settings.audio_avs_Control = false;
 	g_settings.audio_english = configfile.getInt32( "audio_english", 0 );
 	g_settings.zap_cycle = configfile.getInt32( "zap_cycle", 1 );
@@ -2450,6 +2438,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	audioDecoder->SetSpdifDD(g_settings.spdif_dd ? true : false);
 	videoDecoder->SetDBDR(g_settings.video_dbdr);
 	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AVSYNC, NULL);
+	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AC3DOWNMIX, NULL);
 
 	if(display_language_selection)
 #ifdef __sh__
@@ -3767,8 +3756,7 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 
 			stop_daemons(false);
 
-			system("/bin/sync");
-			system("/bin/umount -a");
+			system("/bin/sync ; /bin/umount -a");
 			cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 			powerManager->SetStandby(true, true);
 			if (funNotifier) {
