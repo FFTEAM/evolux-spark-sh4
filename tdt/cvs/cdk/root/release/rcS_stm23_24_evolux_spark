@@ -168,9 +168,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/bin/evremote2 &
 	fi
 
-	[ -n "$START_NEUTRINO" ] && [ -e /etc/.time ] && (sleep 20; /etc/init.d/DisplayTime.sh) &
 	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
-	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.EVOfirstboot ] && (sleep 20; /etc/init.d/extDisplay.sh) &
+	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
 	# green led off
 
 	(sleep 10;/bin/fp_control -l 1 0) &
@@ -215,6 +214,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 			pzapit --pal
 		fi
 	fi
+
+	[ -n "$START_NEUTRINO" ] && [ -e /etc/.time ] && (sleep 20; /etc/init.d/DisplayTime.sh) &
 
 	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &
 
