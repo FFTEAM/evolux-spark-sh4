@@ -195,6 +195,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		if [ -e /etc/.EVOfirstboot ]; then
 			echo "SCART 1 JA EXIT" > /dev/vfd
 			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
+			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
 			case $TASTE in
 				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.hdmi
 					mv /usr/local/share/config/neutrino.scart /usr/local/share/config/neutrino.conf
