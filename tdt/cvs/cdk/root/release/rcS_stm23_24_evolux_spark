@@ -73,7 +73,12 @@ if [ ! -e /var/etc/.firstboot ]; then
 		MEMSIZE=12m
 		[ -e /etc/.15m ] && MEMSIZE=15m
 	fi	
-	insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv
+	isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+	if [ "$isactive1" = 2 ]; then
+	        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
+	else
+		insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv;#HDMI
+	fi
 
 	echo "LOADING MODULES"   
 	echo "LOAD" > /dev/vfd
@@ -130,7 +135,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
 	stfbcontrol a 0
-
 	echo "init lircd"
 	/usr/bin/lircd
 
@@ -185,6 +189,30 @@ if [ ! -e /var/etc/.firstboot ]; then
 	      echo "Booting from nfs, don't set network"
 	else
 		/etc/init.d/setupETH.sh &
+	fi
+
+	if [ -n "$START_NEUTRINO" ]; then
+		if [ -e /etc/.EVOfirstboot ]; then
+			echo "SCART 1 JA EXIT" > /dev/vfd
+			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
+			case $TASTE in
+				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.hdmi
+					mv /usr/local/share/config/neutrino.scart /usr/local/share/config/neutrino.conf
+					echo "SCART aktiv" > /dev/vfd;;
+				*) if [ -e /usr/local/share/config/neutrino.hdmi ]; then
+					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.scart
+					mv /usr/local/share/config/neutrino.hdmi /usr/local/share/config/neutrino.conf
+				fi
+				echo "HDMI aktiv" > /dev/vfd;;
+			esac
+			sleep 3
+			rm /etc/.EVOfirstboot
+		fi
+		isactive2=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+		if [ "$isactive2" = 2 ]; then #2=pal by osd!
+			stfbcontrol rf cc cy cs #hd=hdmi-off, rf=full-rgb, fa=adaptive flicker on, cc=cvbs-out on, cr=component-out on
+			pzapit --pal
+		fi
 	fi
 
 	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &

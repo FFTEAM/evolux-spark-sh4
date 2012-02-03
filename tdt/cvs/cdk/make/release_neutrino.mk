@@ -522,6 +522,7 @@ endif
 	cp -RP $(targetprefix)/usr/var/tuxbox/config/* $(prefix)/release_neutrino/usr/local/share/config/
 #	cp -RP $(targetprefix)/usr/bin/blockad $(prefix)/release_neutrino/bin/
 	rm $(prefix)/release_neutrino/var/plugins/blockad*
+	touch $(prefix)/release_neutrino/etc/.EVOfirstboot
 
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko $(prefix)/release_neutrino/lib/modules || true
