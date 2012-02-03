@@ -196,12 +196,12 @@ if [ ! -e /var/etc/.firstboot ]; then
 			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
 			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
 			case $TASTE in
-				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.hdmi
-					mv /usr/local/share/config/neutrino.scart /usr/local/share/config/neutrino.conf
+				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
+					mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
 					echo "SCART aktiv" > /dev/vfd;;
-				*) if [ -e /usr/local/share/config/neutrino.hdmi ]; then
-					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.scart
-					mv /usr/local/share/config/neutrino.hdmi /usr/local/share/config/neutrino.conf
+				*) if [ -e /usr/local/share/config/neutrino.conf.hdmi ]; then
+					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.scart
+					mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
 				fi
 				echo "HDMI aktiv" > /dev/vfd;;
 			esac
