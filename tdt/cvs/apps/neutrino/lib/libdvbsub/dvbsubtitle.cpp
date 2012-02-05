@@ -727,21 +727,9 @@ void cDvbSubtitleBitmaps::Draw()
 		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), bitmaps[i]->Width(), bitmaps[i]->Height());
 #endif
 
-	// Work around badly calculated received Y-axis values, part 1
-	y_start = min (y_start, bitmaps[i]->Y0());
-	y_end = max(y_end, bitmaps[i]->Y0() + bitmaps[i]->Height());
     }
 
-    // Work around badly calculated received Y-axis values, part 2
-    int y_off = 0;
-    if ((y_start > 200 && y_end > max_y - 200) || (y_end > max_y - min_y)) {
-	// assume alignment at bottom of screen
-	y_off = max_y - min_y - y_end + y_start;
-    }
-    if (y_start < min_y)
-	y_off = min_y;
-
-    dbgconverter("cDvbSubtitleBitmaps::Draw: min_y=%d max_y=%d y_start=%d y_end=%d y_off=%d\n", min_y, max_y, y_start, y_end, y_off);
+    dbgconverter("cDvbSubtitleBitmaps::Draw: min_y=%d max_y=%d y_start=%d y_end=%d\n", min_y, max_y, y_start, y_end);
 
     Clear();
 
@@ -751,13 +739,13 @@ void cDvbSubtitleBitmaps::Draw()
 	if (Colors)
 	    memcpy(save_colors, Colors, sizeof(tColor)*NumColors);
 
-	int y = (y_off + bitmaps[i]->Y0()) * stride + bitmaps[i]->X0();
+	int y = (bitmaps[i]->Y0()) * stride + bitmaps[i]->X0();
 
 	int bih = bitmaps[i]->Height();
 	int biw = bitmaps[i]->Width();
 		
 	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
-		i, bitmaps[i]->X0(), y_off + bitmaps[i]->Y0(), biw, bih, NumColors);
+		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), biw, bih, NumColors);
 
 	if (y > bih)
 	    for (int y2 = 0; y2 < bih; y2++, y += stride)

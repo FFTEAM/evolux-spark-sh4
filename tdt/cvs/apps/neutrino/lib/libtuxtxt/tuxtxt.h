@@ -51,10 +51,6 @@
 #else
 /* variables and functions from libtuxtxt */
 extern tuxtxt_cache_struct tuxtxt_cache;
-extern int tuxtxt_init();
-extern void tuxtxt_close();
-extern void tuxtxt_start(int tpid);  // Start caching
-extern int  tuxtxt_stop(); // Stop caching
 extern void tuxtxt_next_dec(int *i); /* skip to next decimal */
 extern void tuxtxt_prev_dec(int *i); /* counting down */
 extern int tuxtxt_is_dec(int i);
@@ -83,16 +79,16 @@ int ymosaic[4];
 int displaywidth;
 #define fontwidth_small_lcd 8
 
-#define TV43STARTX (ex-350)
-#define TV169FULLSTARTX ((sx+ex)/2)
-#define TVENDX ex
+#define TV43STARTX (dx-350)
+#define TV169FULLSTARTX ((sx+dx)/2)
+#define TVENDX dx
 #define TVENDY (StartY+25*fontheight)
 #define TV43WIDTH 348 /* 120 */
 #define TV43HEIGHT 150 /* 96 */
 #define TV43STARTY (TVENDY-TV43HEIGHT)
-#define TV169FULLSTARTY ((sy+ey)/2)
-#define TV169FULLWIDTH  ((ex-sx)/2)
-#define TV169FULLHEIGHT (ey-sy)
+#define TV169FULLSTARTY ((sy+dy)/2)
+#define TV169FULLWIDTH  ((dx-sx)/2)
+#define TV169FULLHEIGHT (dy-sy)
 
 #define TOPMENUSTARTX (TV43STARTX+2)
 #define TOPMENUENDX TVENDX
@@ -367,12 +363,12 @@ char versioninfo[16];
 int hotlist[10];
 int maxhotlist;
 
-int pig, rc, fb, lcd;
-int sx, ex, sy, ey;
+int pig, rc, /*fb,*/ lcd;
+int sx, ex, sy, ey, x0, y0, dx, dy, vx, vy;
 int PosX, PosY, StartX, StartY;
 int lastpage;
 int inputcounter;
-int zoommode, screenmode, transpmode, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode;
+int zoommode, screenmode, transpmode = 0, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode;
 char dumpl25;
 int catch_row, catch_col, catched_page, pagecatching;
 int prev_100, prev_10, next_10, next_100;
@@ -1444,7 +1440,7 @@ void CatchNextPage(int, int);
 void GetNextPageOne(int up);
 void GetNextSubPage(int offset);
 void SwitchZoomMode();
-void SwitchScreenMode(int newscreenmode);
+void SwitchScreenMode(int newscreenmode, int offset);
 void SwitchTranspMode();
 void SwitchHintMode();
 void CreateLine25();
@@ -1457,8 +1453,8 @@ void RenderMessage(int Message);
 void RenderPage();
 void DecodePage();
 void UpdateLCD();
-int  Init();
-int  GetNationalSubset(char *country_code);
+int  Init(int source);
+int  GetNationalSubset(const char *country_code);
 int  GetTeletextPIDs();
 int  GetRCCode();
 int  eval_triplet(int iOData, tstCachedPage *pstCachedPage,

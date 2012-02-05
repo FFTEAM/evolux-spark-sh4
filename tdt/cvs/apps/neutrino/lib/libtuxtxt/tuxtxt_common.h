@@ -11,6 +11,7 @@
 #include <zlib.h>
 #endif
 
+//#include <zapit/include/dmx.h>
 #include <dmx_cs.h>
 
 tuxtxt_cache_struct tuxtxt_cache;
@@ -90,14 +91,14 @@ void tuxtxt_compress_page(int p, int sp, unsigned char* buffer)
 void tuxtxt_decompress_page(int p, int sp, unsigned char* buffer)
 {
 	pthread_mutex_lock(&tuxtxt_cache_lock);
-    tstCachedPage* pg = tuxtxt_cache.astCachetable[p][sp];
+	tstCachedPage* pg = tuxtxt_cache.astCachetable[p][sp];
 	memset(buffer,' ',23*40);
-    if (!pg)
-    {
+	if (!pg)
+	{
 		printf("tuxtxt: trying to decompress a not allocated page!!\n");
 		pthread_mutex_unlock(&tuxtxt_cache_lock);
 		return;
-    }
+	}
 #if TUXTXT_COMPRESS == 1
 	if (pg->pData)
 	{
@@ -347,7 +348,7 @@ int tuxtxt_GetSubPage(int page, int subpage, int offset)
  * clear_cache                                                                *
  ******************************************************************************/
 
-void tuxtxt_clear_cache()
+void tuxtxt_clear_cache(void)
 {
 	pthread_mutex_lock(&tuxtxt_cache_lock);
 	int clear_page, clear_subpage, d26;
@@ -417,12 +418,14 @@ void tuxtxt_clear_cache()
  * init_demuxer                                                               *
  ******************************************************************************/
 static cDemux * dmx = NULL;
-int tuxtxt_init_demuxer()
+int tuxtxt_init_demuxer(int source = 0);
+int tuxtxt_init_demuxer(int source)
 {
 
 	if(dmx == NULL) {
-		dmx = new cDemux(0);
+		dmx = new cDemux(source);
 		dmx->Open(DMX_PES_CHANNEL, NULL, 2* 3008 * 62 /*64*1024*/);
+		printf("TuxTxt: source demux %d\n", source);
 	}
 #if TUXTXT_DEBUG
 	printf("TuxTxt: initialized\n");
@@ -498,25 +501,46 @@ void tuxtxt_decode_p2829(unsigned char *vtxt_row, tstExtData **ptExtData)
 
 void tuxtxt_erase_page(int magazine)
 {
-	pthread_mutex_lock(&tuxtxt_cache_lock);
-    tstCachedPage* pg = tuxtxt_cache.astCachetable[tuxtxt_cache.current_page[magazine]][tuxtxt_cache.current_subpage[magazine]];
+	tstCachedPage* pg = tuxtxt_cache.astCachetable[tuxtxt_cache.current_page[magazine]][tuxtxt_cache.current_subpage[magazine]];
 	if (pg)
 	{
 		memset(&(pg->pageinfo), 0, sizeof(tstPageinfo));	/* struct pageinfo */
 		memset(pg->p0, ' ', 24);
 #if TUXTXT_COMPRESS == 1
-    	if (pg->pData) {free(pg->pData); pg->pData = NULL;}
+		if (pg->pData) {
+			free(pg->pData);
+			pg->pData = NULL;
+		}
 #elif TUXTXT_COMPRESS == 2
 		memset(pg->bitmask, 0, 23*5);
 #else
 		memset(pg->data, ' ', 23*40);
 #endif
 	}
+}
+
+void tuxtxt_clear_p26(tstExtData* extData)
+{
+	pthread_mutex_lock(&tuxtxt_cache_lock);
+
+	for(int i = 0; i < 16; ++i)
+	{
+		if(0 != extData->p26[i])
+		{
+			memset(extData->p26[i], 0x00, 13 * 3);
+		}
+	}
+
 	pthread_mutex_unlock(&tuxtxt_cache_lock);
 }
 
 void tuxtxt_allocate_cache(int magazine)
 {
+	// Lock here as we have a possible race here with
+	// tuxtxt_clear_cache(). We should not be allocating and
+	// freeing at the same time.
+	pthread_mutex_lock(&tuxtxt_cache_lock);
+
 	/* check cachetable and allocate memory if needed */
 	if (tuxtxt_cache.astCachetable[tuxtxt_cache.current_page[magazine]][tuxtxt_cache.current_subpage[magazine]] == 0)
 	{
@@ -530,14 +554,19 @@ void tuxtxt_allocate_cache(int magazine)
 			tuxtxt_erase_page(magazine);
 			tuxtxt_cache.cached_pages++;
 		}
+		else // Be a little verbose in case a crash is going to happen.
+		{
+			printf("tuxtxt: memory allocation failed!!! expect a crash\n");
+		}
 	}
+	pthread_mutex_unlock(&tuxtxt_cache_lock);
 }
+
 /******************************************************************************
  * CacheThread                                                                *
  ******************************************************************************/
-//#define TUXTXT_DEBUG 1 //FIXME
 static int stop_cache = 0;
-void *tuxtxt_CacheThread(void *arg)
+void *tuxtxt_CacheThread(void * /*arg*/)
 {
 	const unsigned char rev_lut[32] = {
 		0x00,0x08,0x04,0x0c, /*  upper nibble */
@@ -558,7 +587,7 @@ void *tuxtxt_CacheThread(void *arg)
 	unsigned char pagedata[9][23*40];
 	tstPageinfo *pageinfo_thread;
 
-	printf("TuxTxt running thread...(%03x)\n",tuxtxt_cache.vtxtpid);
+	printf("TuxTxt running thread...(%04x)\n",tuxtxt_cache.vtxtpid);
 	tuxtxt_cache.receiving = 1;
 	nice(3);
 	while (!stop_cache)
@@ -566,7 +595,8 @@ void *tuxtxt_CacheThread(void *arg)
 		/* check stopsignal */
 		pthread_testcancel();
 
-		if (!tuxtxt_cache.receiving) continue;
+		if (!tuxtxt_cache.receiving)
+			continue;
 
 		/* read packet */
 		ssize_t readcnt;
@@ -619,14 +649,14 @@ void *tuxtxt_CacheThread(void *arg)
 				if (!magazine) magazine = 8;
 
 				if (packet_number == 0 && tuxtxt_cache.current_page[magazine] != -1 && tuxtxt_cache.current_subpage[magazine] != -1)
- 				    tuxtxt_compress_page(tuxtxt_cache.current_page[magazine],tuxtxt_cache.current_subpage[magazine],pagedata[magazine]);
+					tuxtxt_compress_page(tuxtxt_cache.current_page[magazine],tuxtxt_cache.current_subpage[magazine],pagedata[magazine]);
 
-//printf("********************** receiving packet %d page %03x subpage %02x\n",packet_number, tuxtxt_cache.current_page[magazine],tuxtxt_cache.current_subpage[magazine]);//FIXME
+				//printf("********************** receiving packet %d page %03x subpage %02x\n",packet_number, tuxtxt_cache.current_page[magazine],tuxtxt_cache.current_subpage[magazine]);//FIXME
 
 				/* analyze row */
 				if (packet_number == 0)
 				{
-    					/* get pagenumber */
+					/* get pagenumber */
 					b2 = dehamming[vtxt_row[3]];
 					b3 = dehamming[vtxt_row[2]];
 
@@ -1022,18 +1052,20 @@ void *tuxtxt_CacheThread(void *arg)
 #endif
 		}
 	}
-	return 0;
+
+	pthread_exit(NULL);
 }
 /******************************************************************************
  * start_thread                                                               *
  ******************************************************************************/
-int tuxtxt_start_thread()
+int tuxtxt_start_thread(int source = 0);
+int tuxtxt_start_thread(int source)
 {
-	if (tuxtxt_cache.vtxtpid == -1) return 0;
-
+	if (tuxtxt_cache.vtxtpid == -1)
+		return 0;
 
 	tuxtxt_cache.thread_starting = 1;
-	tuxtxt_init_demuxer();
+	tuxtxt_init_demuxer(source);
 
 	dmx->pesFilter(tuxtxt_cache.vtxtpid);
 	dmx->Start();

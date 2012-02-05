@@ -55,19 +55,25 @@ int tuxtxt_stop()
 	return tuxtxt_stop_thread();
 }
 
-void tuxtxt_start(int tpid)
+void tuxtxt_start(int tpid, int source)
 {
+	if (tpid == -1)
+	{
+		printf("tuxtxt: invalid PID!\n");
+		return;
+	}
+
 	if (tuxtxt_cache.vtxtpid != tpid)
 	{
 		tuxtxt_stop();
 		tuxtxt_clear_cache();
 		tuxtxt_cache.page = 0x100;
 		tuxtxt_cache.vtxtpid = tpid;
-		tuxtxt_start_thread();
+		tuxtxt_start_thread(source);
 	}
 	else if (!tuxtxt_cache.thread_starting && !tuxtxt_cache.receiving)
 	{
-		tuxtxt_start_thread();
+		tuxtxt_start_thread(source);
 	}
 }
 
@@ -79,7 +85,7 @@ void tuxtxt_close()
 	tuxtxt_stop();
 #if 0
 	if (tuxtxt_cache.dmx != -1)
-    	    close(tuxtxt_cache.dmx);
+		close(tuxtxt_cache.dmx);
 #endif
 	tuxtxt_cache.dmx = -1;
 	tuxtxt_clear_cache();
