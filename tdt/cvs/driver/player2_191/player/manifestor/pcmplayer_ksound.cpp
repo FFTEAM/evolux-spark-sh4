@@ -237,7 +237,8 @@ PlayerStatus_t PcmPlayer_Ksound_c::MapSamples(unsigned int SampleCount, bool Non
 		PCMPLAYER_ERROR("Underrun before mapping buffer (%d) for %s\n", -Result, Identity);
 		Status = DeployUnderrunRecovery();
 		if (PlayerNoError != Status)
-		        return Status;
+//		        return Status;
+		        return PlayerNoError;
 	}
 	
 	// TODO: fail it SoundcardMappedSamples != SampleCount...
@@ -351,7 +352,8 @@ PlayerStatus_t PcmPlayer_Ksound_c::SetParameters(PcmPlayerSurfaceParameters_t *P
                 // this is not a 'hard' error hence this message is neither _TRACEd nor _ERRORed.
                 // our caller knows that if we return an error it has to wait until the samples are unmapped...
                 PCMPLAYER_DEBUG("Not safe to update soundcard parameters for %s at this point\n", Identity);
-    		return PlayerError;
+//    		return PlayerError;
+    		return PlayerNoError;
 	}
 	
 	// calculate the resampling factor
