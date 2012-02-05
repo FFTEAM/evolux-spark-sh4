@@ -63,6 +63,9 @@
 #include <audio_cs.h>
 #include <video_cs.h>
 
+#include "libtuxtxt/teletext.h"
+
+
 #ifdef __sh__
 #include <driver/framebuffer.h>
 #endif
@@ -245,8 +248,8 @@ void saveZapitSettings(bool write, bool write_a)
                 FILE *audio_config_file = fopen(AUDIO_CONFIG_FILE, "w");
                 if (audio_config_file) {
                   for (audio_map_it = audio_map.begin(); audio_map_it != audio_map.end(); audio_map_it++) {
-                        fprintf(audio_config_file, "%llx %d %d %d %d\n", (uint64_t) audio_map_it->first,
-                                (int) audio_map_it->second.apid, (int) audio_map_it->second.mode, (int) audio_map_it->second.volume, (int) audio_map_it->second.subpid);
+                        fprintf(audio_config_file, "%llx %d %d %d %d %d %d\n", (uint64_t) audio_map_it->first,
+                                (int) audio_map_it->second.apid, (int) audio_map_it->second.mode, (int) audio_map_it->second.volume, (int) audio_map_it->second.subpid, (int) audio_map_it->second.ttxpid, (int) audio_map_it->second.ttxpage);
                   }
 		  fdatasync(fileno(audio_config_file));
                   fclose(audio_config_file);
@@ -260,17 +263,20 @@ void load_audio_map()
 	audio_map.clear();
         if (audio_config_file) {
           t_channel_id chan;
-          int apid = 0, subpid = 0;
+          int apid = 0, subpid = 0, ttxpid = 0, ttxpage = 0;
           int mode = 0;
           int volume = 0;
           char s[1000];
           while (fgets(s, 1000, audio_config_file)) {
-            sscanf(s, "%llx %d %d %d %d", &chan, &apid, &mode, &volume, &subpid);
+            sscanf(s, "%llx %d %d %d %d %d %d", &chan, &apid, &mode, &volume, &subpid, &ttxpid, &ttxpage);
 //printf("**** Old channelinfo: %llx %d\n", chan, apid);
             audio_map[chan].apid = apid;
             audio_map[chan].subpid = subpid;
             audio_map[chan].mode = mode;
             audio_map[chan].volume = volume;
+	    audio_map[chan].ttxpid = ttxpid;
+	    audio_map[chan].ttxpage = ttxpage;
+
           }
           fclose(audio_config_file);
         }
@@ -367,6 +373,7 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
                 audio_map[channel->getChannelID()].mode = audio_mode;
                 audio_map[channel->getChannelID()].volume = audioDecoder->getVolume();
                 audio_map[channel->getChannelID()].subpid = dvbsub_getpid();
+		tuxtx_subtitle_running(&audio_map[channel->getChannelID()].ttxpid, &audio_map[channel->getChannelID()].ttxpage, NULL);
         }
 
 	if (in_nvod) {
@@ -403,6 +410,8 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 		}
 	}
 
+	tuxtx_stop_subtitle();
+	dvbsub_stop();
 	pmt_stop_update_filter(&pmt_update_fd);
 	stopPlayBack(true);
 
@@ -413,7 +422,7 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 	live_channel_id = channel->getChannelID();
 	saveZapitSettings(false, false);
 
-	printf("[zapit] zap to %s(%llx)\n", channel->getName().c_str(), live_channel_id);
+	fprintf(stderr, "[zapit] zap to %s(%llx)\n", channel->getName().c_str(), live_channel_id);
 
         /* have motor move satellite dish to satellite's position if necessary */
 	if (!(currentMode & RECORD_MODE)) {
@@ -518,8 +527,26 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 #endif
                 volume_left = volume_right = audio_map_it->second.volume;
                 audio_mode = audio_map_it->second.mode;
+
 		if(audio_map_it->second.subpid > 0)
 			dvbsub_start(audio_map_it->second.subpid);
+
+		std::string tmplang;
+
+                for (int i = 0 ; i < (int)channel->getSubtitleCount() ; ++i) {
+                        CZapitAbsSub* s = channel->getChannelSub(i);
+                        if(s->pId == audio_map_it->second.ttxpid) {
+                                tmplang = s->ISO639_language_code;
+                                break;
+                        }
+                }
+		if(tmplang.empty())
+			tuxtx_set_pid(audio_map_it->second.ttxpid, audio_map_it->second.ttxpage, (char *) channel->getTeletextLang());
+		else
+			tuxtx_set_pid(audio_map_it->second.ttxpid, audio_map_it->second.ttxpage, (char *) tmplang.c_str());
+
+		if ((audio_map_it->second.subpid < 1) && audio_map_it->second.ttxpid && audio_map_it->second.ttxpage)
+			tuxtx_main(-1, audio_map_it->second.ttxpid, audio_map_it->second.ttxpage);
         } else {
                 volume_left = volume_right = def_volume_left;
                 audio_mode = def_audio_mode;
@@ -1926,11 +1953,13 @@ in record mode we stop onle cam1, while cam continue to decrypt recording channe
 
 	playing = false;
 
-	if(standby)
+	if(standby) {
 		dvbsub_pause();
-	else
+		tuxtx_pause_subtitle(true);
+	} else {
 		dvbsub_stop();
-
+		tuxtx_stop_subtitle();
+	}
 
 	return 0;
 }

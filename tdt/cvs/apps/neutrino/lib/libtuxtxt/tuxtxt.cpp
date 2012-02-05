@@ -1877,6 +1877,10 @@ extern int infoViewer_is_visible(void);
 void CleanUp() {
 	int curscreenmode = screenmode;
 
+	/* clear screen */
+	memset(lfb, 0, dx * dy * 4);
+	Clear(transp);
+
 	if (!reader_running) {
 		/* hide and close pig */
 		if (screenmode)
@@ -1889,13 +1893,6 @@ void CleanUp() {
 			close(tuxtxt_cache.dmx);
 		tuxtxt_cache.dmx = -1;
 #endif
-
-		if (use_gui) {
-			/* clear screen */
-			memset(lfb, 0, dx * dy * 4);
-			Clear(transp);
-		}
-
 		/* close freetype */
 		FTC_Manager_Done(manager);
 		FT_Done_FreeType(library);
@@ -4073,7 +4070,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset) {
 		return;
 	}
 
-	if (!(glyph = FT_Get_Char_Index(face, Char & 0xff))) {
+	if (!(glyph = FT_Get_Char_Index(face, Char))) {
 		fprintf(stderr, "TuxTxt <FT_Get_Char_Index for Char %d %x \"%c\" failed\n", Char, Char, Char & 0xFF );
 
 		FillRect(PosX, PosY + yoffset, curfontwidth, factor*fontheight, bgcolor);
@@ -5549,6 +5546,7 @@ static void* reader_thread(void * /*arg*/)
 	system("date >&2");
 	reader_running = true;
 	ttx_sleep = 5000000;
+	transpmode = 1;
 
 	while(reader_running) {
 		if(infoViewer_is_visible()) {
@@ -5583,6 +5581,7 @@ void tuxtx_pause_subtitle(bool pause, int delay)
 				reader_running, sub_pid, sub_page);
 #endif
 			ttx_paused = 0;
+			transpmode = 1;
 			use_gui = false;
 			if (delay < 0)
 				delay = 5;

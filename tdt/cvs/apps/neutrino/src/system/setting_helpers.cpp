@@ -59,6 +59,7 @@
 #include <video_cs.h>
 #include <dmx_cs.h>
 #include <pwrmngr.h>
+#include "libtuxtxt/teletext.h"
 
 extern CPlugins       * g_PluginList;    /* neutrino.cpp */
 extern CRemoteControl * g_RemoteControl; /* neutrino.cpp */
@@ -604,11 +605,30 @@ int CSubtitleChangeExec::exec(CMenuTarget* parent, const std::string & actionKey
 {
 printf("CSubtitleChangeExec::exec: action %s\n", actionKey.c_str());
 	if(actionKey == "off") {
+		tuxtx_stop_subtitle();
 		dvbsub_stop();
-	} else {
-		int pid = atoi(actionKey.c_str());
+		return menu_return::RETURN_EXIT;
+	}
+	if(!strncmp(actionKey.c_str(), "DVB", 3)) {
+		char const * pidptr = strchr(actionKey.c_str(), ':');
+		int pid = atoi(pidptr+1);
+		tuxtx_stop_subtitle();
 		dvbsub_pause();
 		dvbsub_start(pid);
+	} else {
+		char const * ptr = strchr(actionKey.c_str(), ':');
+		ptr++;
+		int pid = atoi(ptr);
+		ptr = strchr(ptr, ':');
+		ptr++;
+		int page = strtol(ptr, NULL, 16);
+		ptr = strchr(ptr, ':');
+		ptr++;
+fprintf(stderr, "CSubtitleChangeExec::exec: TTX, pid %x page %x lang %s\n", pid, page, ptr);
+		tuxtx_stop_subtitle();
+		tuxtx_set_pid(pid, page, ptr);
+		dvbsub_stop();
+		tuxtx_main(-1, pid, page);
 	}
         return menu_return::RETURN_EXIT;
 }

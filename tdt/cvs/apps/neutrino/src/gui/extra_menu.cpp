@@ -1603,18 +1603,20 @@ void* nGLCD::Run(void *)
 	bool broken = false;
 
 	do {
-		while ((nglcd->doSuspend || nglcd->doStandby) && !nglcd->doExit && !settings.glcd_enable)
-			sem_wait(&nglcd->sem);
+		if (broken) {
+			fprintf(stderr, "No graphlcd display found ... sleeping 30 seconds\n");
+			clock_gettime(CLOCK_REALTIME, &ts);
+			ts.tv_sec += 30;
+			sem_timedwait(&nglcd->sem, &ts);
+			broken = false;
+		} else
+				while ((nglcd->doSuspend || nglcd->doStandby) && !nglcd->doExit && !settings.glcd_enable)
+					sem_wait(&nglcd->sem);
+
 		if (nglcd->doExit)
 			break;
 
 		int warmUp = 5;
-		if (broken) {
-			fprintf(stderr, "No graphlcd display found ... sleeping 30 seconds\n");
-			sleep (30);
-			broken = false;
-			continue;
-		}
 		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
 		if (!nglcd->lcd) {
 			fprintf(stderr, "CreateDriver failed.\n");

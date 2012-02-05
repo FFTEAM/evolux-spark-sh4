@@ -162,7 +162,7 @@ void CZapitChannel::addTTXSubtitle(const unsigned int pid, const std::string lan
 	CZapitTTXSub* tmpSub = 0;
 	unsigned char mag_nr = magazine_number ? magazine_number : 8;
 
-printf("[subtitle] TTXSub: PID=0x%04x, lang=%3.3s, page=%1X%02X\n", pid, langCode.c_str(), mag_nr, page_number);
+fprintf(stderr, "[subtitle] TTXSub: PID=0x%04x, lang=%3.3s, page=%1X%02X\n", pid, langCode.c_str(), mag_nr, page_number);
 	std::vector<CZapitAbsSub*>::iterator subI;
 	for (subI=channelSubs.begin(); subI!=channelSubs.end();subI++){
 		if ((*subI)->thisSubType==CZapitAbsSub::TTX){
@@ -200,7 +200,7 @@ void CZapitChannel::addDVBSubtitle(const unsigned int pid, const std::string lan
 	CZapitDVBSub* oldSub = 0;
 	CZapitDVBSub* tmpSub = 0;
 	std::vector<CZapitAbsSub*>::iterator subI;
-printf("[subtitles] DVBSub: PID=0x%04x, lang=%3.3s, cpageid=%04x, apageid=%04x\n", pid, langCode.c_str(), composition_page_id, ancillary_page_id);
+fprintf(stderr, "[subtitles] DVBSub: PID=0x%04x, lang=%3.3s, cpageid=%04x, apageid=%04x\n", pid, langCode.c_str(), composition_page_id, ancillary_page_id);
 	for (subI=channelSubs.begin(); subI!=channelSubs.end();subI++){
 		if ((*subI)->thisSubType==CZapitAbsSub::DVB){
 			tmpSub=reinterpret_cast<CZapitDVBSub*>(*subI);

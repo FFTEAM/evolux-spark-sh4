@@ -140,6 +140,8 @@
 #include <linux/reboot.h>
 #include <sys/reboot.h>
 
+#include "libtuxtxt/teletext.h"
+
 int old_b_id = -1;
 CHintBox * reloadhintBox = 0;
 uint32_t sec_timer;
@@ -160,11 +162,6 @@ uint32_t shift_timer;
 uint32_t scrambled_timer;
 char recDir[255];
 char timeshiftDir[255];
-
-extern int  tuxtxt_init();
-extern void tuxtxt_start(int tpid);
-extern int  tuxtxt_stop();
-extern void tuxtxt_close();
 
 int dvbsub_init();
 int dvbsub_stop();
@@ -733,6 +730,7 @@ const lcd_setting_struct_t lcd_setting[LCD_SETTING_COUNT] =
 /**************************************************************************************
 *          CNeutrinoApp -  loadSetup, load the application-settings                   *
 **************************************************************************************/
+
 int CNeutrinoApp::loadSetup(const char * fname)
 {
 	char cfg_key[81];
@@ -2690,7 +2688,6 @@ int CNeutrinoApp::run(int argc, char **argv)
 	return 0;
 }
 
-int tuxtx_main(int _rc, void * _fb, int pid, int x, int y, int w, int h);
 
 void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 {
@@ -2713,7 +2710,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 		if( ( mode == mode_tv ) || ( ( mode == mode_radio ) ) ) {
 			if( (msg == NeutrinoMessages::SHOW_EPG) /* || (msg == CRCInput::RC_info) */ ) {
 				//g_EpgData->show( g_Zapit->getCurrentServiceID() );
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2721,10 +2718,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_epg ) {
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2732,10 +2729,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_text) {
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2743,8 +2740,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				if(g_settings.mode_clock)
 					InfoClock->StopClock();
 
-				tuxtx_main(g_RCInput->getFileHandle(), frameBuffer->getFrameBufferPointer(), g_RemoteControl->current_PIDs.PIDs.vtxtpid,
-					frameBuffer->getScreenX(), frameBuffer->getScreenY(), frameBuffer->getScreenWidth(), frameBuffer->getScreenHeight());
+				tuxtx_main(g_RCInput->getFileHandle(), g_RemoteControl->current_PIDs.PIDs.vtxtpid);
 
 				frameBuffer->paintBackground();
 				//if(!g_settings.cacheTXT)
@@ -2756,11 +2752,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_setup ) {
 				if(!g_settings.minimode) {
-					dvbsub_pause();
+					SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 					nGLCD::MirrorOSD(true);
 #endif
@@ -2774,7 +2770,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 					nGLCD::MirrorOSD(false);
 #endif
-					dvbsub_start(0);
+					ResumeSubtitles();
 					saveSetup(NEUTRINO_SETTINGS_FILE);
 				}
 			}
@@ -2816,11 +2812,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_zaphistory ) {
 				// Zap-History "Bouquet"
-				dvbsub_pause();
 				int res = channelList->numericZap( msg );
-				if(res < 0) {
-					dvbsub_start(0);
-				}
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_lastchannel ) {
 				// Quick Zap
@@ -2842,7 +2834,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 					tmode = "timeshift"; // record just started
 
 				if(g_RemoteControl->is_video_started) {
-					dvbsub_pause();
+					SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 					nGLCD::lockChannel("MoviePlayer");
 #endif
@@ -2877,7 +2869,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 					nGLCD::unlockChannel();
 #endif
-					dvbsub_start(0);
+					ResumeSubtitles();
 				}
 			   }
 			}
@@ -2896,7 +2888,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				}
 			}
 			else if( msg == CRCInput::RC_red ) {
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2904,11 +2896,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( (msg == CRCInput::RC_green) || ((msg == CRCInput::RC_audio) && !g_settings.audio_run_player) )
 			{
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2916,10 +2908,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_yellow ) {       // NVODs
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2927,10 +2919,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_blue ) {
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2938,10 +2930,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( (msg == CRCInput::RC_audio) && g_settings.audio_run_player) {
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::lockChannel("AudioPlayer");
 #endif
@@ -2949,14 +2941,14 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::unlockChannel();
 #endif
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_video || msg == CRCInput::RC_play ) {
 				bool show = true;
 #ifdef WITH_GRAPHLCD
 				nGLCD::lockChannel("MoviePlayer");
 #endif
-				dvbsub_pause();
+				SuspendSubtitles();
 				if ((g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_ONSIGNAL) || (g_settings.parentallock_prompt == PARENTALLOCK_PROMPT_CHANGETOLOCKED)) {
                                         CZapProtection* zapProtection = new CZapProtection( g_settings.parentallock_pincode, 0x100 );
                                         show = zapProtection->check();
@@ -2976,16 +2968,16 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 						videoDecoder->ShowPicture(DATADIR "/neutrino/icons/radiomode.jpg");
 #endif */
 				}
-				dvbsub_start(0);
+				ResumeSubtitles();
 #ifdef WITH_GRAPHLCD
 				nGLCD::unlockChannel();
 #endif
 			}
 			else if (CRCInput::isNumeric(msg) && g_RemoteControl->director_mode ) {
 				g_RemoteControl->setSubChannel(CRCInput::getNumericValue(msg));
-				dvbsub_pause();
+				SuspendSubtitles();
 				g_InfoViewer->showSubchan();
-				dvbsub_start(0);
+				ResumeSubtitles();
 			}
 			else if (CRCInput::isNumeric(msg)) {
 				channelList->numericZap( msg );
@@ -2993,7 +2985,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
 						( msg == NeutrinoMessages::SHOW_INFOBAR ) )
 			{
-				dvbsub_pause();
+				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 //				nGLCD::MirrorOSD(true);
 #endif
@@ -3005,9 +2997,10 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				if(show_info && channelList->getSize()) {
 					g_InfoViewer->showTitle(channelList->getActiveChannelNumber(), channelList->getActiveChannelName(), channelList->getActiveSatellitePosition(), channelList->getActiveChannel_ChannelID()); // UTF-8
 #ifdef WITH_GRAPHLCD
-//				nGLCD::MirrorOSD(false);
+//					nGLCD::MirrorOSD(false);
 #endif
 				}
+				ResumeSubtitles();
 			}
 #if 0
 			else if( msg == CRCInput::RC_shift_blue ) {
@@ -3036,17 +3029,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			} 
 #endif
 			else {
-#ifdef WITH_GRAPHLCD
-//				nGLCD::MirrorOSD(true);
-#endif
-				dvbsub_pause();
 				if (msg == CRCInput::RC_home)
   					CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 				handleMsg(msg, data);
-#ifdef WITH_GRAPHLCD
-//				nGLCD::MirrorOSD(false);
-#endif
-				dvbsub_start(0);
 			}
 		}
 		else {
@@ -3146,7 +3131,7 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t msg, neutrino_msg_data_t data)
 			if(g_settings.mode_clock)
 				InfoClock->StopClock();
 
-			dvbsub_pause();
+			SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 			nGLCD::MirrorOSD(true);
 #endif
@@ -3198,7 +3183,9 @@ _repeat:
 			if(g_settings.mode_clock)
 				InfoClock->StartClock();
 			if(mode == mode_tv)
-				dvbsub_start(0);
+{ fprintf(stderr, "# %d\n", __LINE__);
+				ResumeSubtitles();
+}
 #ifdef WITH_GRAPHLCD
 			nGLCD::MirrorOSD(false);
 #endif
@@ -3533,7 +3520,6 @@ _repeat:
 		}
 		if( g_settings.recording_zap_on_announce ) {
 			if(recordingstatus==0) {
-				dvbsub_stop(); //FIXME if same channel ?
 				t_channel_id channel_id=((CTimerd::RecordingInfo*)data)->channel_id;
 				g_Zapit->zapTo_serviceID_NOWAIT(channel_id); 
 			}
@@ -3979,7 +3965,9 @@ void CNeutrinoApp::tvMode( bool rezap )
 		g_InfoViewer->lcdUpdateTimer = g_RCInput->addTimer( LCD_UPDATE_TIME_TV_MODE, false );
 		CVFD::getInstance()->ShowIcon(VFD_ICON_RADIO, false);
 		if(!rezap)
-			dvbsub_start(0);
+{ fprintf(stderr, "# %d\n", __LINE__);
+			ResumeSubtitles();
+}
 	}
 
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
@@ -4080,7 +4068,7 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 		if( mode == mode_scart ) {
 			//g_Controld->setScartMode( 0 );
 		}
-		dvbsub_pause();
+		SuspendSubtitles();
 
 		frameBuffer->useBackground(false);
 		frameBuffer->paintBackground();
@@ -4153,7 +4141,7 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 			startAutoRecord(true);
 		}
 		wasshift = false;
-		dvbsub_start(0);
+		ResumeSubtitles();
 #ifdef WITH_GRAPHLCD
 		nGLCD::StandbyMode(bOnOff);
 #endif
@@ -4167,7 +4155,7 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 		g_RCInput->killTimer(g_InfoViewer->lcdUpdateTimer);
 		g_InfoViewer->lcdUpdateTimer = g_RCInput->addTimer( LCD_UPDATE_TIME_RADIO_MODE, false );
 		CVFD::getInstance()->ShowIcon(VFD_ICON_TV, false);
-		dvbsub_pause();
+		SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
 		nGLCD::MirrorOSD(true);
 #endif
@@ -4750,6 +4738,7 @@ void stop_daemons(bool stopall)
 	pthread_join(sections_thread, NULL);
 	printf("sectionsd shutdown done\n");
 #endif
+	tuxtx_stop_subtitle();
 	printf("zapit shutdown\n");
 	g_Zapit->shutdown();
 	pthread_join(zapit_thread, NULL);
@@ -5036,4 +5025,26 @@ void CNeutrinoApp::saveKeys(const char * fname)
 	tconfig.setString( "repeat_blocker", g_settings.repeat_blocker );
 	tconfig.setString( "repeat_genericblocker", g_settings.repeat_genericblocker );
 	tconfig.saveConfig(fname);
+}
+
+int dvbsub_getpid();
+
+void CNeutrinoApp::SuspendSubtitles()
+{
+	fprintf(stderr, "> %s\n", __FUNCTION__);
+	dvbsub_pause();
+	tuxtx_pause_subtitle(true);
+	fprintf(stderr, "< %s\n", __FUNCTION__);
+}
+
+void CNeutrinoApp::ResumeSubtitles(int delayed)
+{
+	fprintf(stderr, "> %s\n", __FUNCTION__);
+	dvbsub_start(0);
+	tuxtx_pause_subtitle(false, delayed);
+	fprintf(stderr, "< %s\n", __FUNCTION__);
+}
+
+int infoViewer_is_visible(void){
+	return g_InfoViewer && g_InfoViewer->is_visible;
 }

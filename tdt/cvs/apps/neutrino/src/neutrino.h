@@ -214,7 +214,6 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void loadKeys(const char * fname);
 		void saveKeys(const char * fname);
 		CNeutrinoApp();
-
 	public:
 		void saveSetup(const char * fname);
 		int loadSetup(const char * fname);
@@ -252,7 +251,8 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void SendSectionsdConfig(void);
 		int GetChannelMode(void) { return g_settings.channel_mode; };
 		void SetChannelMode(int mode);
-
+		void SuspendSubtitles();
+		void ResumeSubtitles(int delay = 0);
 		void ExitRun(const bool write_si = true, int retcode = 0);
 };
 #endif
