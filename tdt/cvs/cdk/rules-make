@@ -87,6 +87,7 @@ freetype;2.3.5;freetype-2.3.5;freetype-2.3.5.tar.bz2;extract:freetype-2.3.5.tar.
 #freetype;2.4.8;freetype-2.4.8;freetype-2.4.8.tar.bz2;extract:freetype-2.4.8.tar.bz2
 lirc;0.8.2;lirc-0.8.2;lirc-0.8.2.tar.gz:lirc.diff;extract:lirc-0.8.2.tar.gz;patch:lirc.diff
 jpeg;8d;jpeg-8d;jpegsrc.v8d.tar.gz:jpeg.diff;extract:jpegsrc.v8d.tar.gz;patch:jpeg.diff
+libpng;1.5.6;libpng-1.5.6;libpng-1.5.6.tar.gz:libpng.diff;extract:libpng-1.5.6.tar.gz
 libpng;1.5.8;libpng-1.5.8;libpng-1.5.8.tar.bz2:libpng.diff;extract:libpng-1.5.8.tar.bz2
 libungif;4.1.3;libungif-4.1.3;libungif-4.1.3.tar.bz2;extract:libungif-4.1.3.tar.bz2
 libgif;4.1.6;giflib-4.1.6;giflib-4.1.6.tar.bz2;extract:giflib-4.1.6.tar.bz2
@@ -105,7 +106,7 @@ GD;1.14;GD-2.46;GD-2.46.tar.gz;extract:GD-2.46.tar.gz
 libmng;1.0.10;libmng-1.0.10;libmng-1.0.10.tar.bz2;extract:libmng-1.0.10.tar.bz2
 lcms;1.17;lcms-1.17;lcms-1.17.tar.gz:lcms.diff;extract:lcms-1.17.tar.gz;patch:lcms.diff
 openssl;0.9.6m;openssl-0.9.6m;openssl-0.9.6m.tar.gz;extract:openssl-0.9.6m.tar.gz
-directfb;1.4.11;DirectFB-1.4.11;DirectFB-1.4.11.tar.gz:directfb-1.4.11+STM2010.12.15-4.diff:directfb-1.4.11+STM2010.12.15-4.no-vt.diff;extract:DirectFB-1.4.11.tar.gz;patch:directfb-1.4.11+STM2010.12.15-4.diff;patch:directfb-1.4.11+STM2010.12.15-4.no-vt.diff
+directfb;1.4.11;DirectFB-1.4.11;DirectFB-1.4.11.tar.gz:directfb-1.4.11+STM2010.12.15-4.diff:directfb-1.4.11+STM2010.12.15-4.no-vt.diff:directfb-libpng.diff;extract:DirectFB-1.4.11.tar.gz;patch:directfb-1.4.11+STM2010.12.15-4.diff;patch:directfb-1.4.11+STM2010.12.15-4.no-vt.diff;patch:directfb-libpng.diff
 dfbpp;1.0.0;DFB++-1.0.0;DFB++-1.0.0.tar.gz;extract:DFB++-1.0.0.tar.gz
 webkitdfb;2010-11-18;webkitdfb_2010-11-18;webkitdfb_2010-11-18.tar.gz:webkitdfb.diff;extract:webkitdfb_2010-11-18.tar.gz;patch:webkitdfb.diff
 icu4c;4_4_1;icu/source;icu4c-4_4_1-src.tgz:icu4c-4_4_1_locales.patch;extract:icu4c-4_4_1-src.tgz
