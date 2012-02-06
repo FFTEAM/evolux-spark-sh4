@@ -4070,7 +4070,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset) {
 		return;
 	}
 
-	if (!(glyph = FT_Get_Char_Index(face, Char))) {
+	if (!(glyph = FT_Get_Char_Index(face, Char & 0xff))) {
 		fprintf(stderr, "TuxTxt <FT_Get_Char_Index for Char %d %x \"%c\" failed\n", Char, Char, Char & 0xFF );
 
 		FillRect(PosX, PosY + yoffset, curfontwidth, factor*fontheight, bgcolor);
