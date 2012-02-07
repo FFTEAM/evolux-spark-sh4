@@ -387,7 +387,8 @@ static tButton *pSparkGetButton(char *pData)
 	}
 	else if (!strncasecmp(pData, SPARK_RC09_PREDATA, sizeof(SPARK_RC09_PREDATA)))
 	{
-		pButtons = cButtonsSparkRc09;
+//		pButtons = cButtonsSparkRc09;
+		pButtons = cButtonsEdisionSpark;
 	}
 	else if (!strncasecmp(pData, SPARK_DEFAUYLT_PREDATA, sizeof(SPARK_DEFAUYLT_PREDATA)))
 	{
