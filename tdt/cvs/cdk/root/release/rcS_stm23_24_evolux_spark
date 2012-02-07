@@ -135,6 +135,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
 	stfbcontrol a 0
+	whichbox=`cat /proc/cmdline | grep "hwaddr:" | awk -F "hwaddr:" '{print $2}' | cut -f1 -d " " | cut -f3 -d ":"`
+	case $whichbox in
+		07|08)
+			;;
+		*) rm /bin/evremote2 && mv /bin/evremote2.amiko /bin/evremote2
+		   rm /etc/lircd.conf && mv /etc/lircd.conf.amiko /etc/lircd.conf ;;
+	esac
 	echo "init lircd"
 	/usr/bin/lircd
 
