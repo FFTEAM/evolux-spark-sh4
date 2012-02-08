@@ -681,9 +681,6 @@ void cDvbSubtitleBitmaps::Clear()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: clear\n");
 	if(needs_clear) {
 		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, max_x, max_y);
-#ifdef __sh__	
-//		CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
-#endif
 		needs_clear = false;
 	}
 }
@@ -721,6 +718,14 @@ void cDvbSubtitleBitmaps::Draw()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: Resize %d %d => %d %d\n",
 		picture_xres, picture_yres, max_x, max_y);
 #endif
+
+	switch(bitmaps[i]->Width()) {
+	case 720:
+		picture_xres = 720;
+		picture_yres = 576;
+		break;
+	}
+
 	bitmaps[i]->Resize(picture_xres, picture_yres, max_x, max_y);
 #if 0
 	dbgconverter("cDvbSubtitleBitmaps::Draw: post bitmap=%d x=%d y=%d, w=%d, h=%d\n",
@@ -820,9 +825,6 @@ void cDvbSubtitleConverter::Clear(void)
 	if(needs_clear) {
 		CFrameBuffer::getInstance()->paintBackgroundBoxRel (0, 0, max_x, max_y);
 		CFrameBuffer::getInstance()->ClearFrameBuffer();
-#ifdef __sh__	
-//		CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
-#endif
 		needs_clear = false;
 	}
 	dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
@@ -954,7 +956,6 @@ int cDvbSubtitleConverter::Action(void)
 		dbgconverter("cDvbSubtitleConverter::Action: Got %d bitmaps, showing #%d\n", bitmaps->Count(), sb->Index() + 1);
 		if (running) {
 			sb->Draw();
-//			CFrameBuffer::getInstance()->blit(0, 0, max_x, max_y);
 			Timeout.Set(sb->Timeout() *400);
 		}
 
