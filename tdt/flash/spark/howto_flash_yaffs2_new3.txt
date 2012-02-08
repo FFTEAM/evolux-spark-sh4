@@ -52,7 +52,7 @@ that takes around 1-2 minutes
 till finished box reboot auto 
      and Evolux-Neutrino-YAFFS2 should booting...
 
-
+on firstboot when asked 1 or exit (1=scart, exit=hdmi) make your choice
 
 
 ###############################################################
@@ -151,7 +151,7 @@ dauert ca. 1-2 minuten
 wenn fertig bootet box automatisch neu
      und Evolux-Neutrino-YAFFS2 sollte booten...
 
-
+bei firstboot wenn nach 1 / exit fragt (1=scart, exit=hdmi) trefft eure wahl!
 
 
 ###############################################################
