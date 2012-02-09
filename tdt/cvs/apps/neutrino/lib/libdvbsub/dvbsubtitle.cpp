@@ -685,23 +685,12 @@ void cDvbSubtitleBitmaps::Clear()
 	}
 }
 
-static int picture_xres = 0, picture_yres = 0;
-
 void cDvbSubtitleBitmaps::Draw()
 {
     if (!bitmaps.Size())
 	return;
 
-    dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
-
-    if(!picture_xres || !picture_yres) {
-	int framerate;
-	extern cVideo *videoDecoder;
-	videoDecoder->getPictureInfo(picture_xres, picture_yres, framerate);
-	dbgconverter("cDvbSubtitleBitmaps::Draw: screen: %dx%d picture: %dx%d\n", max_x, max_y, picture_xres, picture_yres);
-    }
-    if(!picture_xres || !picture_yres)
-	return;
+    dbgconverter("cDvbSubtitleBitmaps::%s: start\n", __func__);
 
     static CFrameBuffer* fb = CFrameBuffer::getInstance();
     static tColor save_colors[MAXNUMCOLORS];
@@ -711,6 +700,23 @@ void cDvbSubtitleBitmaps::Draw()
 
     int y_start = max_y;
     int y_end = 0;
+
+    int picture_xres = 0, picture_yres = 0;
+
+    switch(bitmaps[0]->Height()) {
+    case 44:	// 720x44
+	picture_xres = 720;
+	picture_yres = 576;
+	break;
+    case 48:	// 1280x48
+	picture_xres = 1280;
+	picture_yres = 720;
+	break;
+    default:	// assume default
+	picture_xres = 720;
+	picture_yres = 576;
+    }
+
     for (int i = 0; i < bitmaps.Size(); i++) {
 #if 0
 	dbgconverter("cDvbSubtitleBitmaps::Draw: pre bitmap=%d x=%d y=%d, w=%d, h=%d\n",
@@ -718,13 +724,6 @@ void cDvbSubtitleBitmaps::Draw()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: Resize %d %d => %d %d\n",
 		picture_xres, picture_yres, max_x, max_y);
 #endif
-
-	switch(bitmaps[i]->Width()) {
-	case 720:
-		picture_xres = 720;
-		picture_yres = 576;
-		break;
-	}
 
 	bitmaps[i]->Resize(picture_xres, picture_yres, max_x, max_y);
 #if 0
@@ -785,7 +784,6 @@ cDvbSubtitleConverter::~cDvbSubtitleConverter()
 //  Cancel(3);
 //  delete dvbSubtitleAssembler;
   delete bitmaps;
-  picture_xres = picture_yres = 0;
 //  delete pages;
 }
 
@@ -802,7 +800,6 @@ void cDvbSubtitleConverter::Unlock(void)
 void cDvbSubtitleConverter::Pause(bool pause)
 {
 	dbgconverter("cDvbSubtitleConverter::Pause: %s\n", pause ? "pause" : "resume");
-	picture_xres = picture_yres = 0;
 	if(pause) {
 		if(!running)
 			return;
@@ -832,7 +829,6 @@ void cDvbSubtitleConverter::Clear(void)
 
 void cDvbSubtitleConverter::SetupChanged(void)
 {
-  picture_xres = picture_yres = 0;
   setupLevel++;
 }
 
@@ -845,7 +841,6 @@ void cDvbSubtitleConverter::Reset(void)
   bitmaps->Clear();
   Unlock();
   Timeout.Set(0xFFFF*1000);
-  picture_xres = picture_yres = 0;
   dbgconverter("cDvbSubtitleConverter::%s: done\n", __func__);
 }
 
