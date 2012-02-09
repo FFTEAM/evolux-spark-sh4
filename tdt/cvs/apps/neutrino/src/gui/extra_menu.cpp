@@ -1610,7 +1610,7 @@ void* nGLCD::Run(void *)
 			sem_timedwait(&nglcd->sem, &ts);
 			broken = false;
 		} else
-				while ((nglcd->doSuspend || nglcd->doStandby) && !nglcd->doExit && !settings.glcd_enable)
+				while ((nglcd->doSuspend || nglcd->doStandby || !settings.glcd_enable) && !nglcd->doExit)
 					sem_wait(&nglcd->sem);
 
 		if (nglcd->doExit)
