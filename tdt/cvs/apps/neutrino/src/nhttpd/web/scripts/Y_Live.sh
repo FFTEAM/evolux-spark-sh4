@@ -1,8 +1,8 @@
 #!/bin/sh
 # -----------------------------------------------------------
 # Live (yjogol)
-# $Date: 2007-11-26 22:11:19 $
-# $Revision: 1.11 $
+# $Date: 2007/02/21 17:41:04 $
+# $Revision: 1.2 $
 # -----------------------------------------------------------
 
 . ./_Y_Globals.sh
@@ -87,12 +87,15 @@ case "$1" in
 		;;
 		
 	udp_stream)
+echo "udp stream"
 		if [ "$2" = "start" ]
 		then
 			shift 2
+echo "kill all streams"
 			killall streamts
 			killall streampes
 			killall udpstreamts
+echo "start udpstream"
 			if [ -e /var/bin/udpstreamts ]
 			then
 				/var/bin/udpstreamts $* &
