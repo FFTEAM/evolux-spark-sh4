@@ -88,6 +88,7 @@ $(DEPDIR)/%release_neutrino:
 	cp $(buildprefix)/root/release/reboot $(prefix)/release_neutrino/etc/init.d/ && \
 	echo "576i50" > $(prefix)/release_neutrino/etc/videomode && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_neutrino_spark $(prefix)/release_neutrino/etc/init.d/rcS && \
+	cp $(buildprefix)/root/etc/init.d/bu_restore.sh $(prefix)/release_neutrino/etc/init.d/ && \
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release_neutrino/etc/init.d/ && \
