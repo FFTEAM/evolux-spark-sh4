@@ -263,7 +263,7 @@ void CMoviePlayerGui::cutNeutrino()
 		return;
 
 	if (!timeshift && emu_menu) {
-		emu_menu->suspend();
+		// emu_menu->suspend();
 		if (!access(MOVIEPLAYER_START_SCRIPT, X_OK))
 			system(MOVIEPLAYER_START_SCRIPT);
 		cam_stopped = true;
@@ -299,7 +299,7 @@ void CMoviePlayerGui::restoreNeutrino()
 	stopped = false;
 
 	if (cam_stopped) {
-		emu_menu->resume();
+		// emu_menu->resume();
 		if (!access(MOVIEPLAYER_END_SCRIPT, X_OK))
 			system(MOVIEPLAYER_END_SCRIPT);
 		cam_stopped = false;
