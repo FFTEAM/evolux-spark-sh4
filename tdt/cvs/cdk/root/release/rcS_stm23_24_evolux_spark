@@ -47,6 +47,18 @@ startVideoTuneEnhanced() {
 	echo $config_psi_hue > /proc/stb/video/plane/psi_tint
 }
 
+dualTuner() {
+insmod $MODDIR/dvb-usb.ko
+insmod $MODDIR/dvb-pll.ko
+insmod $MODDIR/mt2060.ko
+insmod $MODDIR/mxl5005s.ko
+insmod $MODDIR/qt1010.ko
+insmod $MODDIR/tda18218.ko
+insmod $MODDIR/tda18271.ko
+insmod af9013.ko
+insmod dvb-usb-af9015.ko
+}
+
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 (cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
@@ -176,6 +188,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/bin/evremote2 &
 	fi
 
+	[ -e /etc/.dualTuner ] && [ -e /etc/.start_enigma2 ] && dualTuner &
 	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
 	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
 	# green led off
