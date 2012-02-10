@@ -1631,7 +1631,8 @@ void* nGLCD::Run(void *)
 			continue;
 		}
 
-		nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
+		if (!nglcd->bitmap)
+				nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
 
 		nglcd->Update();
 
@@ -1809,7 +1810,7 @@ void* nGLCD::Run(void *)
 
 				if (!evtlist.empty()) {
 					CChannelEventList::iterator eli;
-					for ( eli=evtlist.begin(); eli!=evtlist.end(); ++eli ) {
+					for (eli=evtlist.begin(); eli!=evtlist.end(); ++eli) {
 						if ((uint)eli->startTime + eli->duration > ts.tv_sec)
 							break;
 					}

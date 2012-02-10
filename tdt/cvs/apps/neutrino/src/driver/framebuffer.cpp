@@ -608,78 +608,86 @@ void CFrameBuffer::paintBoxRel(const int x, const int y, const int dx, const int
 #endif
 
 #ifdef __sh__
-void CFrameBuffer::paintBoxRel(const int _x, const int _y, const int _dx, const int _dy, const fb_pixel_t col, int _radius, int type)
+void CFrameBuffer::paintBoxRel(const int _x, const int _y, const int _dx, const int _dy, const fb_pixel_t col, int _radius, int type, bool applyScaling)
 #else
 void CFrameBuffer::paintBoxRel(const int x, const int y, const int dx, const int dy, const fb_pixel_t col, int radius, int type)
 #endif
 {
-#ifdef __sh__
     int x, y, dx, dy, radius;
-    x = scaleX(_x);
-    y = scaleY(_y);
-    dx = scaleX(_dx);
-    dy = scaleY(_dy);
-    radius = scaleX(_radius);
+    if(applyScaling) {
+#ifdef __sh__
+	x = scaleX(_x);
+	y = scaleY(_y);
+	dx = scaleX(_dx);
+	dy = scaleY(_dy);
+	radius = scaleX(_radius);
 #endif
+    } else {
+	x = _x;
+	y = _y;
+	dx = _dx;
+	dy = _dy;
+	radius = _radius;
+    }
 
-    /* draw a filled rectangle (with additional round corners) */
+/* draw a filled rectangle (with additional round corners) */
 
-    if (!getActive())
-        return;
+if (!getActive())
+return;
 
 
 #ifdef USE_NEVIS_GXA
-    /* this table contains the x coordinates for a quarter circle (the bottom right quarter) with fixed 
-       radius of 540 px which is the half of the max HD graphics size of 1080 px. So with that table we
-       ca draw boxes with round corners and als circles by just setting dx = dy = radius (max 540). */
-    int q_circle[541] = {
-	540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 
-        540, 540, 540, 540, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 
-        539, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 537, 537, 537, 537, 537, 537, 537, 
-        537, 537, 536, 536, 536, 536, 536, 536, 536, 536, 535, 535, 535, 535, 535, 535, 535, 535, 534, 534, 
-	534, 534, 534, 534, 533, 533, 533, 533, 533, 533, 532, 532, 532, 532, 532, 532, 531, 531, 531, 531, 
-        531, 531, 530, 530, 530, 530, 529, 529, 529, 529, 529, 529, 528, 528, 528, 528, 527, 527, 527, 527, 
-	527, 526, 526, 526, 526, 525, 525, 525, 525, 524, 524, 524, 524, 523, 523, 523, 523, 522, 522, 522, 
-	522, 521, 521, 521, 521, 520, 520, 520, 519, 519, 519, 518, 518, 518, 518, 517, 517, 517, 516, 516, 
-	516, 515, 515, 515, 515, 514, 514, 514, 513, 513, 513, 512, 512, 512, 511, 511, 511, 510, 510, 510, 
-	509, 509, 508, 508, 508, 507, 507, 507, 506, 506, 506, 505, 505, 504, 504, 504, 503, 503, 502, 502, 
-	502, 501, 501, 500, 500, 499, 499, 499, 498, 498, 498, 497, 497, 496, 496, 496, 495, 495, 494, 494, 
-	493, 493, 492, 492, 491, 491, 490, 490, 490, 489, 489, 488, 488, 487, 487, 486, 486, 485, 485, 484, 
-	484, 483, 483, 482, 482, 481, 481, 480, 480, 479, 479, 478, 478, 477, 477, 476, 476, 475, 475, 474, 
-	473, 473, 472, 472, 471, 471, 470, 470, 469, 468, 468, 467, 466, 466, 465, 465, 464, 464, 463, 462, 
-	462, 461, 460, 460, 459, 459, 458, 458, 457, 456, 455, 455, 454, 454, 453, 452, 452, 451, 450, 450, 
-	449, 449, 448, 447, 446, 446, 445, 445, 444, 443, 442, 441, 441, 440, 440, 439, 438, 437, 436, 436, 
-	435, 435, 434, 433, 432, 431, 431, 430, 429, 428, 427, 427, 426, 425, 425, 424, 423, 422, 421, 421, 
-	420, 419, 418, 417, 416, 416, 415, 414, 413, 412, 412, 411, 410, 409, 408, 407, 406, 405, 404, 403, 
-	403, 402, 401, 400, 399, 398, 397, 397, 395, 394, 393, 393, 392, 391, 390, 389, 388, 387, 386, 385, 
-	384, 383, 382, 381, 380, 379, 378, 377, 376, 375, 374, 373, 372, 371, 369, 368, 367, 367, 365, 364, 
-	363, 362, 361, 360, 358, 357, 356, 355, 354, 353, 352, 351, 350, 348, 347, 346, 345, 343, 342, 341, 
-	340, 339, 337, 336, 335, 334, 332, 331, 329, 328, 327, 326, 324, 323, 322, 321, 319, 317, 316, 315, 
-	314, 312, 310, 309, 308, 307, 305, 303, 302, 301, 299, 297, 296, 294, 293, 291, 289, 288, 287, 285, 
-	283, 281, 280, 278, 277, 275, 273, 271, 270, 268, 267, 265, 263, 261, 259, 258, 256, 254, 252, 250, 
-	248, 246, 244, 242, 240, 238, 236, 234, 232, 230, 228, 225, 223, 221, 219, 217, 215, 212, 210, 207, 
-	204, 202, 200, 197, 195, 192, 190, 187, 184, 181, 179, 176, 173, 170, 167, 164, 160, 157, 154, 150, 
-	147, 144, 140, 136, 132, 128, 124, 120, 115, 111, 105, 101,  95,  89,  83,  77,  69,  61,  52,  40, 
-	 23};
+/* this table contains the x coordinates for a quarter circle (the bottom right quarter) with fixed 
+radius of 540 px which is the half of the max HD graphics size of 1080 px. So with that table we
+ca draw boxes with round corners and als circles by just setting dx = dy = radius (max 540). */
+int q_circle[541] = {
+540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 540, 
+540, 540, 540, 540, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 539, 
+539, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 538, 537, 537, 537, 537, 537, 537, 537, 
+537, 537, 536, 536, 536, 536, 536, 536, 536, 536, 535, 535, 535, 535, 535, 535, 535, 535, 534, 534, 
+534, 534, 534, 534, 533, 533, 533, 533, 533, 533, 532, 532, 532, 532, 532, 532, 531, 531, 531, 531, 
+531, 531, 530, 530, 530, 530, 529, 529, 529, 529, 529, 529, 528, 528, 528, 528, 527, 527, 527, 527, 
+527, 526, 526, 526, 526, 525, 525, 525, 525, 524, 524, 524, 524, 523, 523, 523, 523, 522, 522, 522, 
+522, 521, 521, 521, 521, 520, 520, 520, 519, 519, 519, 518, 518, 518, 518, 517, 517, 517, 516, 516, 
+516, 515, 515, 515, 515, 514, 514, 514, 513, 513, 513, 512, 512, 512, 511, 511, 511, 510, 510, 510, 
+509, 509, 508, 508, 508, 507, 507, 507, 506, 506, 506, 505, 505, 504, 504, 504, 503, 503, 502, 502, 
+502, 501, 501, 500, 500, 499, 499, 499, 498, 498, 498, 497, 497, 496, 496, 496, 495, 495, 494, 494, 
+493, 493, 492, 492, 491, 491, 490, 490, 490, 489, 489, 488, 488, 487, 487, 486, 486, 485, 485, 484, 
+484, 483, 483, 482, 482, 481, 481, 480, 480, 479, 479, 478, 478, 477, 477, 476, 476, 475, 475, 474, 
+473, 473, 472, 472, 471, 471, 470, 470, 469, 468, 468, 467, 466, 466, 465, 465, 464, 464, 463, 462, 
+462, 461, 460, 460, 459, 459, 458, 458, 457, 456, 455, 455, 454, 454, 453, 452, 452, 451, 450, 450, 
+449, 449, 448, 447, 446, 446, 445, 445, 444, 443, 442, 441, 441, 440, 440, 439, 438, 437, 436, 436, 
+435, 435, 434, 433, 432, 431, 431, 430, 429, 428, 427, 427, 426, 425, 425, 424, 423, 422, 421, 421, 
+420, 419, 418, 417, 416, 416, 415, 414, 413, 412, 412, 411, 410, 409, 408, 407, 406, 405, 404, 403, 
+403, 402, 401, 400, 399, 398, 397, 397, 395, 394, 393, 393, 392, 391, 390, 389, 388, 387, 386, 385, 
+384, 383, 382, 381, 380, 379, 378, 377, 376, 375, 374, 373, 372, 371, 369, 368, 367, 367, 365, 364, 
+363, 362, 361, 360, 358, 357, 356, 355, 354, 353, 352, 351, 350, 348, 347, 346, 345, 343, 342, 341, 
+340, 339, 337, 336, 335, 334, 332, 331, 329, 328, 327, 326, 324, 323, 322, 321, 319, 317, 316, 315, 
+314, 312, 310, 309, 308, 307, 305, 303, 302, 301, 299, 297, 296, 294, 293, 291, 289, 288, 287, 285, 
+283, 281, 280, 278, 277, 275, 273, 271, 270, 268, 267, 265, 263, 261, 259, 258, 256, 254, 252, 250, 
+248, 246, 244, 242, 240, 238, 236, 234, 232, 230, 228, 225, 223, 221, 219, 217, 215, 212, 210, 207, 
+204, 202, 200, 197, 195, 192, 190, 187, 184, 181, 179, 176, 173, 170, 167, 164, 160, 157, 154, 150, 
+147, 144, 140, 136, 132, 128, 124, 120, 115, 111, 105, 101,  95,  89,  83,  77,  69,  61,  52,  40, 
+ 23};
 
-    int line = 0;
-    unsigned int cmd = GXA_CMD_NOT_TEXT | GXA_SRC_BMP_SEL(2) | GXA_DST_BMP_SEL(2) | GXA_PARAM_COUNT(2) | GXA_CMD_NOT_ALPHA;
+int line = 0;
+unsigned int cmd = GXA_CMD_NOT_TEXT | GXA_SRC_BMP_SEL(2) | GXA_DST_BMP_SEL(2) | GXA_PARAM_COUNT(2) | GXA_CMD_NOT_ALPHA;
 
-    _write_gxa(gxa_base, GXA_FG_COLOR_REG, (unsigned int) col);		/* setup the drawing color */
-    _write_gxa(gxa_base, GXA_LINE_CONTROL_REG, 0x00000404); 		/* X is major axis, skip last pixel */
+_write_gxa(gxa_base, GXA_FG_COLOR_REG, (unsigned int) col);		/* setup the drawing color */
+_write_gxa(gxa_base, GXA_LINE_CONTROL_REG, 0x00000404); 		/* X is major axis, skip last pixel */
 
-    if ((type) && (radius))
-    {
-	#define MUL 32768	/* just an multiplicator for all math to reduce rounding errors */
-	int ofs, scf, scl;
+if ((type) && (radius))
+{
+#define MUL 32768	/* just an multiplicator for all math to reduce rounding errors */
+int ofs, scf, scl;
 
-	/* limit the radius */
-	if (radius > dx)
-	    radius = dx;
-	if (radius > dy)
-	    radius = dy;
-	if (radius > 540)
-	    radius = 540;
+/* limit the radius */
+if (radius > dx)
+    radius = dx;
+if (radius > dy)
+    radius = dy;
+if (radius > 540)
+    radius = 540;
 
 	scf = (540 * MUL) / radius;
 
@@ -820,22 +828,20 @@ void CFrameBuffer::paintBoxRel(const int x, const int y, const int dx, const int
     }
 #endif
 #endif /* USE_NEVIS_GXA */
-#ifdef __sh__
-//printf("%s - %d %d %d %d - %d\n", __FUNCTION__, x, y, dx, dy, type);
-    blit(x, y, dx, dy);
-#endif
 }
 
-void CFrameBuffer::paintVLine(int x, int ya, int yb, const fb_pixel_t col)
+void CFrameBuffer::paintVLine(int x, int ya, int yb, const fb_pixel_t col, bool applyScaling)
 {
 	if (!getActive())
 		return;
 
+	if (applyScaling) {
 #ifdef __sh__
-	x = scaleX(x);
-	ya = scaleY(ya);
-	yb = scaleY(yb);
+		x = scaleX(x);
+		ya = scaleY(ya);
+		yb = scaleY(yb);
 #endif
+	}
 
 #ifdef USE_NEVIS_GXA
     /* draw a single vertical line from point x/ya to x/yb */
@@ -859,22 +865,20 @@ void CFrameBuffer::paintVLine(int x, int ya, int yb, const fb_pixel_t col)
 	}
 #endif
 #endif	/* USE_NEVIS_GXA */
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(x, ya, 1, dy);
-#endif
 }
 
-void CFrameBuffer::paintVLineRel(int x, int y, int dy, const fb_pixel_t col)
+void CFrameBuffer::paintVLineRel(int x, int y, int dy, const fb_pixel_t col, bool applyScaling)
 {	
 	if (!getActive())
 		return;
 
+	if (applyScaling) {
 #ifdef __sh__
-	x = scaleX(x);
-	y = scaleY(y);
-	dy = scaleY(dy);
+		x = scaleX(x);
+		y = scaleY(y);
+		dy = scaleY(dy);
 #endif
+	}
 
 #ifdef USE_NEVIS_GXA
     /* draw a single vertical line from point x/y with hight dx */
@@ -896,22 +900,20 @@ void CFrameBuffer::paintVLineRel(int x, int y, int dy, const fb_pixel_t col)
 	}
 #endif
 #endif /* USE_NEVIS_GXA */
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(x, y, 1, dy);
-#endif
 }
 
-void CFrameBuffer::paintHLine(int xa, int xb, int y, const fb_pixel_t col)
+void CFrameBuffer::paintHLine(int xa, int xb, int y, const fb_pixel_t col, bool applyScaling)
 {	
 	if (!getActive())
 		return;
 
+	if (applyScaling) {
 #ifdef __sh__
-	xa = scaleX(xa);
-	xb = scaleX(xb);
-	y = scaleY(y);
+		xa = scaleX(xa);
+		xb = scaleX(xb);
+		y = scaleY(y);
 #endif
+	}
 
 #ifdef USE_NEVIS_GXA
 	/* draw a single horizontal line from point xa/y to xb/y */
@@ -934,22 +936,20 @@ void CFrameBuffer::paintHLine(int xa, int xb, int y, const fb_pixel_t col)
 		*(dest++) = col;
 #endif
 #endif /* USE_NEVIS_GXA */
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(xa, y, dx, 1);
-#endif
 }
 
-void CFrameBuffer::paintHLineRel(int x, int dx, int y, const fb_pixel_t col)
+void CFrameBuffer::paintHLineRel(int x, int dx, int y, const fb_pixel_t col, bool applyScaling)
 {
 	if (!getActive())
 		return;
 
+	if (applyScaling) {
 #ifdef __sh__
-	x = scaleX(x);
-	dx = scaleX(dx);
-	y = scaleY(y);
+		x = scaleX(x);
+		dx = scaleX(dx);
+		y = scaleY(y);
 #endif
+	}
 
 #ifdef USE_NEVIS_GXA
 	/* draw a single horizontal line from point x/y with width dx */
@@ -970,10 +970,6 @@ void CFrameBuffer::paintHLineRel(int x, int dx, int y, const fb_pixel_t col)
 		*(dest++) = col;
 #endif
 #endif /* USE_NEVIS_GXA */
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(x, y, dx, 1);
-#endif
 }
 
 void CFrameBuffer::setIconBasePath(const std::string & iconPath)
@@ -991,6 +987,7 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const i
 		return false;
 
 #ifdef __sh__
+//FIXME
 	int x, y;
 	x = scaleX(_x);
 	y = scaleY(_y);
@@ -1067,11 +1064,6 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const i
 	if (d2) d2 = NULL;
 	close(fd);
 
-#ifdef __sh__
-//printf("%s: %d %d\n", __FUNCTION__, width, height);
-    blit(x, y, width, height);
-#endif
-
 	return true;
 }
 
@@ -1081,6 +1073,7 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		return false;
 
 #ifdef __sh__
+//FIXME
 	int x, y;
 	x = scaleX(_x);
 	y = scaleY(_y);
@@ -1184,11 +1177,6 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	if (d2) d2 = NULL;
 	close(fd);
 
-#ifdef __sh__
-//printf("%s: %d %d\n", __FUNCTION__, width, height);
-    blit(x, y, width, height);
-#endif
-
 	return true;
 }
 
@@ -1231,25 +1219,19 @@ void CFrameBuffer::loadPal(const std::string & filename, const unsigned char off
 	close(fd);
 }
 
-void CFrameBuffer::paintPixel(const int _x, const int _y, const fb_pixel_t col, bool applyScaling)
+void CFrameBuffer::paintPixel(int x, int y, const fb_pixel_t col, bool applyScaling)
 {
-#ifdef __sh__
-	int x, y;
-	if(applyScaling)
-	{
-		x = scaleX(_x);
-		y = scaleY(_y);
-	}
-	else
-	{
-		x = _x;
-		y = _y;
-	}
-#endif
-	
 	if (!getActive())
 		return;
 
+	if(applyScaling)
+	{
+#ifdef __sh__
+		x = scaleX(x);
+		y = scaleY(y);
+#endif
+	}
+	
 	#ifdef USE_NEVIS_GXA
 	paintHLineRel(x, 1, y, col);
 	#else
@@ -1261,17 +1243,19 @@ void CFrameBuffer::paintPixel(const int _x, const int _y, const fb_pixel_t col, 
 	#endif
 }
 
-void CFrameBuffer::paintLine(int xa, int ya, int xb, int yb, const fb_pixel_t col)
+void CFrameBuffer::paintLine(int xa, int ya, int xb, int yb, const fb_pixel_t col, bool applyScaling)
 {
 	if (!getActive())
 		return;
 
+	if (applyScaling) {
 #ifdef __sh__
-	xa = scaleX(xa);
-	xb = scaleX(xb);
-	ya = scaleY(ya);
-	yb = scaleY(yb);
+		xa = scaleX(xa);
+		xb = scaleX(xb);
+		ya = scaleY(ya);
+		yb = scaleY(yb);
 #endif
+	}
 
 //printf("%s(%d, %d, %d, %d, %.8X)\n", __FUNCTION__, xa, ya, xb, yb, col);
 
@@ -1373,11 +1357,6 @@ void CFrameBuffer::paintLine(int xa, int ya, int xb, int yb, const fb_pixel_t co
 #endif
 		}
 	}
-
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(xa, ya, dx, dy);
-#endif
 
 }
 
@@ -1534,11 +1513,6 @@ bool CFrameBuffer::loadBackground(const std::string & filename, const unsigned c
 		}
 	backgroundFilename = filename;
 
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit();
-#endif
-
 	return true;
 }
 
@@ -1643,10 +1617,6 @@ void CFrameBuffer::paintBackgroundBoxRel(int x, int y, int dx, int dy)
 #endif
 		}
 	}
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(x, y, dx, dy);
-#endif
 }
 
 void CFrameBuffer::paintBackground()
@@ -1669,12 +1639,6 @@ void CFrameBuffer::paintBackground()
 	{
 		paintBoxRel(0, 0, xRes, yRes, backgroundColor);
 	}
-
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit();
-#endif
-
 }
 
 #ifdef __sh__
@@ -1761,10 +1725,6 @@ void CFrameBuffer::RestoreScreen(int x, int y, int dx, int dy, fb_pixel_t * cons
 		fbpos += stride;
 		bkpos += dx;
 	}
-#ifdef __sh__
-//printf("%s\n", __FUNCTION__);
-    blit(x, y, dx, dy);
-#endif
 }
 
 void CFrameBuffer::switch_signal (int signal)
@@ -1858,7 +1818,7 @@ if (width == 0 || height == 0) return;
 	bltData.srcFormat  = SURF_ARGB8888;
 	bltData.dstMemBase = STMFBGP_FRAMEBUFFER;
 	bltData.srcMemBase = STMFBGP_FRAMEBUFFER;
-	bltData.colour     = color; 
+	bltData.colour     = color;
 
 	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
 		perror("FBIO_BLIT");
@@ -1964,77 +1924,12 @@ void CFrameBuffer::blitRGBtoFB(int pan_x, int pan_y, int original_width, int ori
 
 void CFrameBuffer::blit()
 {
-	//blit(0, 0, DEFAULT_XRES, DEFAULT_YRES);
-
-	STMFBIO_BLT_DATA  bltData; 
-	memset(&bltData, 0, sizeof(STMFBIO_BLT_DATA)); 
-
-	bltData.operation  = BLT_OP_COPY; 
-	bltData.srcOffset  = 1920*1080*4; 
-	bltData.srcPitch   = DEFAULT_XRES * 4; 
-
-	bltData.dstOffset  = 0; 
-	bltData.dstPitch   = xDestRes * 4; 
-
-	bltData.src_top    = 0; 
-	bltData.src_left   = 0; 
-	bltData.src_right  = DEFAULT_XRES; 
-	bltData.src_bottom = DEFAULT_YRES; 
-
-	bltData.dst_top    = 0; 
-	bltData.dst_left   = 0; 
-	bltData.dst_right  = xDestRes; 
-	bltData.dst_bottom = yDestRes; 
-
-/*	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
-	{ 
-		perror("FBIO_BLIT"); 
-	} */
+	blitRect(0, 0, DEFAULT_XRES, DEFAULT_YRES, 0);
 }
 
 void CFrameBuffer::blit(int x, int y, int dx, int dy)
 {
-	if(dx > 0 && dy > 0) {
-		int srcXa = x<10?0:x-10;
-		int srcYa = y<10?0:y-10;
-
-		int srcXb = x + dx + 20;
-		int srcYb = y + dy + 20;
-
-		int desXa = srcXa * xFactor;
-		int desYa = srcYa * yFactor;
-
-		int desXb = srcXb * xFactor;
-		int desYb = srcYb * yFactor;
-
-		//printf("### BLIT %d %d %d %d (%d %d)-> %d %d %d %d ###\n", srcXa, srcYa, srcXb, srcYb, dx, dy,
-		//	desXa, desYa, desXb, desYb);
-
-		STMFBIO_BLT_DATA  bltData; 
-		memset(&bltData, 0, sizeof(STMFBIO_BLT_DATA)); 
-
-		bltData.operation  = BLT_OP_COPY; 
-		bltData.srcOffset  = 1920*1080*4; 
-		bltData.srcPitch   = DEFAULT_XRES * 4; 
-
-		bltData.src_left   = srcXa; 
-		bltData.src_top    = srcYa; 
-		bltData.src_right  = srcXb; 
-		bltData.src_bottom = srcYb; 
-
-		bltData.dstOffset  = 0; 
-		bltData.dstPitch   = xDestRes * 4; 
-
-		bltData.dst_left   = desXa; 
-		bltData.dst_top    = desYa; 
-		bltData.dst_right  = desXb; 
-		bltData.dst_bottom = desYb; 
-
-/*		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
-		{ 
-			perror("FBIO_BLIT"); 
-		} */
-	}
+	blitRect(0, 0, scaleX(dx), scaleY(dy), 0);
 }
 
 void CFrameBuffer::resize(int format)
@@ -2055,7 +1950,6 @@ void CFrameBuffer::resize(int format)
 	{"VIDEO_STD_AUTO", "1080i50"}
 	};
 
-	printf("###RESIZE###\n");
 	printf("video_system=%s\n", aVideoSystems[format][0]);
 
 	int iaVideoSystems[][2] = {
@@ -2079,8 +1973,6 @@ void CFrameBuffer::resize(int format)
 	yRes = iaVideoSystems[format][1];
 	bpp = 32;
 	stride = xRes * bpp / 8;
-
-	blit();
 }
 #endif
 

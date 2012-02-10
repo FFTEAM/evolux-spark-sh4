@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -31,7 +32,7 @@
 
 #include <linux/fb.h>
 
-#include <linux/input.h>
+#include <src/driver/rcinput.h>
 #include <linux/videodev.h>
 
 #include <sys/ioctl.h>
@@ -194,7 +195,8 @@ const char *ObjectType[] = {
 #define NoServicesFound 3
 
 /* framebuffer stuff */
-static unsigned char *lfb = 0;
+uint32_t *lfb = NULL;
+
 struct fb_fix_screeninfo fix_screeninfo;
 
 /* freetype stuff */
@@ -368,7 +370,7 @@ int sx, ex, sy, ey, x0, y0, dx, dy, vx, vy;
 int PosX, PosY, StartX, StartY;
 int lastpage;
 int inputcounter;
-int zoommode, screenmode, transpmode = 0, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode;
+int zoommode, screenmode, transpmode = 0, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode, boxed_screenmode;
 char dumpl25;
 int catch_row, catch_col, catched_page, pagecatching;
 int prev_100, prev_10, next_10, next_100;
@@ -950,18 +952,18 @@ const unsigned short defaultcolors[] = { /* 0x0bgr */
 	0x420, 0x210, 0x420, 0x000, 0x000
 };
 
-/* 32bit colortable */
-unsigned char bgra[][5] = {
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xFF",
-"\0\0\0\xFF", "\0\0\0\xFF", "\0\0\0\xC0", "\0\0\0\x00",
-"\0\0\0\x33" };
+uint32_t coltab32[] = {
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xc0000000, 0x00000000,
+	0x33000000
+};
 
 /* old 8bit color table */
 unsigned short rd0[] = {0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0x00<<8, 0x00<<8, 0x00<<8, 0,      0      };
@@ -1439,7 +1441,7 @@ void PageCatching();
 void CatchNextPage(int, int);
 void GetNextPageOne(int up);
 void GetNextSubPage(int offset);
-void SwitchZoomMode();
+void SwitchZoomMode(int);
 void SwitchScreenMode(int newscreenmode, int offset);
 void SwitchTranspMode();
 void SwitchHintMode();
@@ -1448,6 +1450,7 @@ void CopyBB2FB();
 void RenderCatchedPage();
 void RenderCharFB(int Char, tstPageAttr *Attribute);
 void RenderCharBB(int Char, tstPageAttr *Attribute);
+void RenderCharNoZoom(int Char, tstPageAttr *Attribute);
 void RenderCharLCD(int Digit, int XPos, int YPos);
 void RenderMessage(int Message);
 void RenderPage();

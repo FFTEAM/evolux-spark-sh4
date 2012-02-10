@@ -89,10 +89,7 @@ class CFrameBuffer
 		std::string     backgroundFilename;
 		bool            useBackgroundPaint;
 		unsigned int	xRes, yRes, stride, bpp;
-#ifdef __sh__
-		unsigned int	xDestRes, yDestRes;
-		double          xFactor, yFactor;
-#endif
+
 		t_fb_var_screeninfo screeninfo, oldscreen;
 		fb_cmap cmap;
 		__u16 red[256], green[256], blue[256], trans[256];
@@ -156,24 +153,18 @@ class CFrameBuffer
 				*dest = realcolor[color];
 #endif
 			};
-#ifdef __sh__
 		void paintPixel(int x, int y, const fb_pixel_t col, bool applyScaling = true);
-#else
-		void paintPixel(int x, int y, const fb_pixel_t col);
-#endif
-
-		void paintBoxRel(const int x, const int y, const int dx, const int dy, const fb_pixel_t col, int radius = 0, int type = 0);
+		void paintBoxRel(const int x, const int y, const int dx, const int dy, const fb_pixel_t col, int radius = 0, int type = 0, bool applyScaling = true);
 		inline void paintBox(int xa, int ya, int xb, int yb, const fb_pixel_t col) { paintBoxRel(xa, ya, xb - xa, yb - ya, col); }
-		inline void paintBox(int xa, int ya, int xb, int yb, const fb_pixel_t col, int radius, int type) { paintBoxRel(xa, ya, xb - xa, yb - ya, col, radius, type); }
+		inline void paintBox(int xa, int ya, int xb, int yb, const fb_pixel_t col, int radius, int type, bool applyScaling = true) { paintBoxRel(xa, ya, xb - xa, yb - ya, col, radius, type, applyScaling); }
 
-		void paintLine(int xa, int ya, int xb, int yb, const fb_pixel_t col);
+		void paintLine(int xa, int ya, int xb, int yb, const fb_pixel_t col, bool applyScaling = true);
 
-		void paintVLine(int x, int ya, int yb, const fb_pixel_t col);
-		void paintVLineRel(int x, int y, int dy, const fb_pixel_t col);
+		void paintVLine(int x, int ya, int yb, const fb_pixel_t col, bool applyScaling = true);
+		void paintVLineRel(int x, int y, int dy, const fb_pixel_t col, bool applyScaling = true);
 
-		void paintHLine(int xa, int xb, int y, const fb_pixel_t col);
-		void paintHLineRel(int x, int dx, int y, const fb_pixel_t col);
-
+		void paintHLine(int xa, int xb, int y, const fb_pixel_t col, bool applyScaling = true);
+		void paintHLineRel(int x, int dx, int y, const fb_pixel_t col, bool applyScaling = true);
 
 		void setIconBasePath(const std::string & iconPath);
 
