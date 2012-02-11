@@ -143,9 +143,10 @@ void cDemux::SignalRead(int len)
 bool cDemux::sectionFilter(unsigned short Pid, const unsigned char * const Tid, 
 	const unsigned char * const Mask, int len, int Timeout, const unsigned char * const nMask )
 {
-	printf("%s:%s (type=%s) - Pid=%d Tid= Mask= len=%d Timeout=%d nMask=\n", FILENAME, __FUNCTION__,
-		aDMXCHANNELTYPE[type], Pid, len, Timeout);
-	
+#if 0
+	fprintf(stderr, "%s:%s (type=%s) - Pid=%d Tid= Mask= len=%d Timeout=%d nMask=\n",
+		FILENAME, __FUNCTION__, aDMXCHANNELTYPE[type], Pid, len, Timeout);
+#endif
 
 	/*if(Tid != NULL) {
 		printf("Tid {\n");
@@ -173,7 +174,6 @@ bool cDemux::sectionFilter(unsigned short Pid, const unsigned char * const Tid,
 	dmx_sct_filter_params sct;
 	memset(&sct, 0, sizeof(dmx_sct_filter_params));
 	sct.pid     = pid;
-	sct.timeout = Timeout;
 	sct.flags   = DMX_IMMEDIATE_START;
 
 	//There seems to be something wrong, the given array is not 0 initialisied
@@ -185,12 +185,88 @@ bool cDemux::sectionFilter(unsigned short Pid, const unsigned char * const Tid,
 	if(nMask)
 		memcpy(sct.filter.mode, nMask/*mask.mode*/, /*DMX_FILTER_SIZE*/len * sizeof(unsigned char));
 
+	if(Tid) {
+		switch (*Tid) {
+		case 0x00: // program_association_section
+			sct.timeout = 2000;
+			break;
+		case 0x01: // conditional_access_section
+			sct.timeout = 6000;
+			break;
+		case 0x02: // program_map_section
+			sct.timeout = 1500;
+			break;
+		case 0x03: // transport_stream_description_section
+			sct.timeout = 10000;
+			break;
+		// 0x04 - 0x3F: reserved
+		case 0x40: // network_information_section - actual_network
+			sct.timeout = 10000;
+			break;
+		case 0x41: // network_information_section - other_network
+			sct.timeout = 15000;
+			break;
+		case 0x42: // service_description_section - actual_transport_stream
+			sct.timeout = 10000;
+			break;
+		// 0x43 - 0x45: reserved for future use
+		case 0x46: // service_description_section - other_transport_stream
+			sct.timeout = 10000;
+			break;
+		// 0x47 - 0x49: reserved for future use
+		case 0x4A: // bouquet_association_section
+			sct.timeout = 11000;
+			break;
+		// 0x4B - 0x4D: reserved for future use
+		case 0x4E: // event_information_section - actual_transport_stream, present/following
+			sct.timeout = 2000;
+			break;
+		case 0x4F: // event_information_section - other_transport_stream, present/following
+			sct.timeout = 10000;
+			break;
+		case 0x70: // time_date_section (UTC)
+			//sct.flags &= (~DMX_CHECK_CRC); // section has no CRC
+			sct.pid = 0x0014;
+			sct.timeout = 31000;
+			break;
+		case 0x71: // running_status_section
+			//sct.flags &= (~DMX_CHECK_CRC); // section has no CRC
+			sct.timeout = 0;
+			break;
+		case 0x72: // stuffing_section
+			//sct.flags &= (~DMX_CHECK_CRC); // section has no CRC
+			sct.timeout = 0;
+			break;
+		case 0x73: // time_offset_section UTC)
+			sct.pid = 0x0014;
+			sct.timeout = 31000;
+			break;
+		// 0x74 - 0x7D: reserved for future use
+		case 0x7E: // discontinuity_information_section
+			//sct.flags &= (~DMX_CHECK_CRC); // section has no CRC
+			sct.timeout = 0;
+			break;
+		case 0x7F: // selection_information_section
+			sct.timeout = 0;
+			break;
+		// 0x80 - 0x8F: ca_message_section
+		// 0x90 - 0xFE: user defined
+		// 0xFF: reserved
+		default:
+			//return -1;
+			break;
+		}
+	}
+
+#if 1
+	fprintf(stderr, "%s:%s (type=%s) - Pid=%d Tid= Mask= len=%d Timeout=%d nMask=\n",
+		FILENAME, __FUNCTION__, aDMXCHANNELTYPE[type], Pid, len, sct.timeout);
+#endif
 	if (ioctl(privateData->m_fd_demux, DMX_SET_FILTER, &sct) < 0)
 	{
-		printf("failed (%m)\n");
+		fprintf(stderr, "DMX_SET_FILTER failed (%m)\n");
 		return false;
 	}
-	printf("ok\n");
 
 	return true;
 }
