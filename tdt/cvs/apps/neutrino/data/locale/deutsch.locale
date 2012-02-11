@@ -145,7 +145,7 @@ colorthememenu.dblue_theme DarkBlue Theme
 colorthememenu.dvb2k_theme DVB2000 Theme
 colorthememenu.gray Grau Theme
 colorthememenu.head Theme auswählen
-colorthememenu.neutrino_theme Neutrino Theme
+colorthememenu.neutrino_theme Ntrino Theme
 colorthememenu.red_theme Simply Red
 cpu.freq CPU Frequenz
 cpu.freq_default Standard Frequenz
@@ -936,7 +936,7 @@ networkmenu.setupnow Netzwerkeinstellungen jetzt zuweisen
 networkmenu.setuponstartup Beim Starten Netzwerk setzen
 networkmenu.show aktive Netzwerkeinstellungen zeigen
 networkmenu.test Netzwerk testen
-neutrino_starting Neutrino wird gestartet...
+neutrino_starting Ntrino wird gestartet...
 nfs.alreadymounted Verzeichnis bereits gemountet.
 nfs.automount Beim Start mounten
 nfs.dir Verzeichnis/Freigabe
@@ -1153,16 +1153,16 @@ servicemenu.head Service
 servicemenu.imageinfo Image-Info
 servicemenu.reload Kanallisten neu laden
 servicemenu.reload_hint Kanallisten werden neu geladen,\nbitte warten...
-servicemenu.restart Neutrino neu starten
-servicemenu.restart_failed Neustart von Neutrino schlug fehl
-servicemenu.restart_hint Neutrino wird neu gestartet...
+servicemenu.restart Ntrino neu starten
+servicemenu.restart_failed Neustart von Ntrino schlug fehl
+servicemenu.restart_hint Ntrino wird neu gestartet...
 servicemenu.restart_refused_recording Aufnahme läuft. Restart nicht möglich.
 servicemenu.scants Kanalsuche
 servicemenu.ucodecheck UCodes überprüfen
 servicemenu.update Software-Aktualisierung
 settings.help Help
-settings.missingoptionsconffile Die Neutrino-Einstellungen wurden erweitert.\nDie neuen Werte werden auf Standard gesetzt.
-settings.noconffile Die Neutrino-Einstellungen wurden nicht\ngefunden. Es werden Standardwerte benutzt.
+settings.missingoptionsconffile Die Ntrino-Einstellungen wurden erweitert.\nDie neuen Werte werden auf Standard gesetzt.
+settings.noconffile Die Ntrino-Einstellungen wurden nicht\ngefunden. Es werden Standardwerte benutzt.
 settings.pos_bottom_left unten links
 settings.pos_bottom_right unten rechts
 settings.pos_top_left oben links
@@ -1186,7 +1186,7 @@ streaminfo.not_available nicht verfügbar
 streaminfo.resolution Auflösung
 streaminfo.signal Empfangssignal
 streaming.buffer_overflow Die Aufnahme wurde leider abgebrochen,\nda die Daten nicht schnell genug geschrieben werden konnten.
-streaming.busy Ein oder mehrere Aufnahmeprozesse sind aktiv.\nSollte die Aufnahme eigentlich beendet sein,\nschafft ein Neustart von Neutrino Abhilfe.
+streaming.busy Ein oder mehrere Aufnahmeprozesse sind aktiv.\nSollte die Aufnahme eigentlich beendet sein,\nschafft ein Neustart von Ntrino Abhilfe.
 streaming.dir_not_writable Das Aufnahmeverzeichnis ist nicht beschreibbar.\nAufnahmen sind daher nicht möglich.
 streaming.success Die Aufnahme wurde erfolgreich beendet.
 streaming.write_error Die Aufnahme wurde leider abgebrochen,\nda ein Fehler beim Schreiben der Daten auftrat.

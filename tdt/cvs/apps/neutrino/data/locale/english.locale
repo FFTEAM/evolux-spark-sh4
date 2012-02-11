@@ -145,7 +145,7 @@ colorthememenu.dblue_theme DarkBlue Theme
 colorthememenu.dvb2k_theme DVB2000 Theme
 colorthememenu.gray Gray Theme
 colorthememenu.head Theme Selector
-colorthememenu.neutrino_theme Neutrino Theme
+colorthememenu.neutrino_theme Ntrino Theme
 colorthememenu.red_theme Simply Red
 cpu.freq Cpu frequency
 cpu.freq_default Default frequency
@@ -936,7 +936,7 @@ networkmenu.setupnow Setup Network now
 networkmenu.setuponstartup Setup Network on Startup
 networkmenu.show Show active network settings
 networkmenu.test Test network now
-neutrino_starting Neutrino starting...
+neutrino_starting Ntrino starting...
 nfs.alreadymounted directory already mounted
 nfs.automount Mount on startup
 nfs.dir directory/share
@@ -1186,7 +1186,7 @@ streaminfo.not_available not available
 streaminfo.resolution Resolution
 streaminfo.signal Receipt signal
 streaming.buffer_overflow The recording was aborted,\nsince the data could not be written fast enough.
-streaming.busy One or several recording processes are active.\nIf you encounter this message and no recording is active, please restart Neutrino.
+streaming.busy One or several recording processes are active.\nIf you encounter this message and no recording is active, please restart Ntrino.
 streaming.dir_not_writable The recording directory is not writable.\nRecording will not work.
 streaming.success The recording has ended successfully.
 streaming.write_error The recording was aborted,\nsince an error occured during the writing process.
