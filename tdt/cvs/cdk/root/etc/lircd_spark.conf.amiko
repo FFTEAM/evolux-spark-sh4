@@ -55,8 +55,8 @@ begin remote
           RECALL                   0x807F
           SAT                      0x629D
           FAV                      0xBA45
-          VOL-                     0x22dd
-          VOL+                     0x38c7
+          VOL-                     0x38c7
+          VOL+                     0x22dd
           PG-                      0xA05F
           PG+                      0xF807
           INFO                     0xE21D
