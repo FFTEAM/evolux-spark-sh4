@@ -2128,7 +2128,7 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 		if(!pids.APIDs.empty())
 			apid = pids.APIDs[0].pid;
 		
-		xpids = string_printf("0x%04x",apid);		
+		xpids = string_printf("0x%04x,0x%04x,0x%04x",pids.PIDs.pmtpid,0,apid);
 	}
 	else
 		hh->SendError();
@@ -2138,9 +2138,9 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 		url = "http://"+hh->ParamList["host"];
 	else
 		url = "http://"+hh->HeaderList["Host"];
-	url += (mode == CZapitClient::MODE_TV) ? ":31339/0," : ":31338/";
+	url += ":31339/0,";
 	url += xpids;
-printf("Live url: %s\n", url.c_str());
+	fprintf(stderr, "Live url: %s\n", url.c_str());
 	// response url
 	if(hh->ParamList["vlc_link"] == "avcodec")
 	{

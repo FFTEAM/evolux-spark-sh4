@@ -50,9 +50,7 @@ buildStreamingRawURL()
 # -----------------------------------------------------------
 buildStreamingAudioURL()
 {
-	localIP=`buildLocalIP`
-	Y_APid=`call_webserver "control/yweb?radio_stream_pid"`
-	echo "http:\/\/$localIP:31338\/$Y_APid"
+buildStreamingURL
 }
 
 # -----------------------------------------------------------
@@ -60,9 +58,7 @@ buildStreamingAudioURL()
 # -----------------------------------------------------------
 buildStreamingAudioRawURL()
 {
-	localIP=`buildLocalIP`
-	Y_APid=`call_webserver "control/yweb?radio_stream_pid"`
-	echo "http://$localIP:31338/$Y_APid"
+buildStreamingRawURL
 }
 
 # -----------------------------------
