@@ -1,0 +1,9 @@
+card=1
+freq=818
+dont_send_sdt=1
+multicast=0
+unicast=1
+port_http=1234
+ip_http=0.0.0.0
+sap=1
+autoconfiguration=full
