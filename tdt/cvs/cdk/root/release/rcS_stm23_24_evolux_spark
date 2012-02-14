@@ -67,8 +67,8 @@ insmod $MODDIR/mxl5005s.ko
 insmod $MODDIR/qt1010.ko
 insmod $MODDIR/tda18218.ko
 insmod $MODDIR/tda18271.ko
-insmod af9013.ko
-insmod dvb-usb-af9015.ko
+insmod $MODDIR/af9013.ko
+insmod $MODDIR/dvb-usb-af9015.ko
 }
 
 /etc/init.d/mountvirtfs start
