@@ -56,6 +56,7 @@ if [ ! -e /dev/dvb/adapter1 ]; then
 	mknod /dev/dvb/adapter1/demux0 c 212 68
 	mknod /dev/dvb/adapter1/dvr0 c 212 69
 	mknod /dev/dvb/adapter1/ca0 c 212 70
+	ln -s /dev/dvb/adapter1/ca0 /dev/dvb/adapter1/ca1
 	mknod /dev/dvb/adapter1/net0 c 212 71
 	mknod /dev/dvb/adapter1/osd0 c 212 72
 fi
