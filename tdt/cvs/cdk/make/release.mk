@@ -162,6 +162,8 @@ endif
 	fi; 
 	ln -sf ../init.d/Swap.sh $(prefix)/release/etc/rc.d/rc3.d/S51swap
 	ln -sf ../init.d/ntpupdate.sh $(prefix)/release/etc/rc.d/rc3.d/S52ntpupdate
+	cp -RP $(buildprefix)/root/etc/mumudvb $(prefix)/release/etc/
+	cp -RP $(buildprefix)/root/bin/mumudvb $(prefix)/release/bin/
 ### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
 	rm -f $(prefix)/release/lib/libeplayer2*
