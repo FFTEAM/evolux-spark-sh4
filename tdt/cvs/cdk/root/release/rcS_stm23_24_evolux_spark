@@ -48,6 +48,17 @@ startVideoTuneEnhanced() {
 }
 
 dualTuner() {
+if [ ! -e /dev/dvb/adapter1 ]; then
+	mkdir /dev/dvb/adapter1
+	mknod /dev/dvb/adapter1/video0 c 212 64
+	mknod /dev/dvb/adapter1/audio0 c 212 65
+	mknod /dev/dvb/adapter1/frontend0 c 212 67
+	mknod /dev/dvb/adapter1/demux0 c 212 68
+	mknod /dev/dvb/adapter1/dvr0 c 212 69
+	mknod /dev/dvb/adapter1/ca0 c 212 70
+	mknod /dev/dvb/adapter1/net0 c 212 71
+	mknod /dev/dvb/adapter1/osd0 c 212 72
+fi
 insmod $MODDIR/dvb-usb.ko
 insmod $MODDIR/dvb-pll.ko
 insmod $MODDIR/mt2060.ko
