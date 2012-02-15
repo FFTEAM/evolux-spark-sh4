@@ -60,6 +60,9 @@ if [ ! -e /dev/dvb/adapter1 ]; then
 	mknod /dev/dvb/adapter1/net0 c 212 71
 	mknod /dev/dvb/adapter1/osd0 c 212 72
 fi
+if [ ! -e /var/run/mumudvb ]; then
+	mkdir -p /var/run/mumudvb
+fi
 insmod $MODDIR/dvb-usb.ko
 insmod $MODDIR/dvb-pll.ko
 insmod $MODDIR/mt2060.ko
