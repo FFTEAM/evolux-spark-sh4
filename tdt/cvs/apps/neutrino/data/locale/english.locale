@@ -610,7 +610,7 @@ keybindingmenu.quickzap Quickzap
 keybindingmenu.RC Key repeat-blocker
 keybindingmenu.repeatblock repeat delay
 keybindingmenu.repeatblockgeneric generic delay
-keybindingmenu.sort change sort order
+keybindingmenu.sort change EPG sort order
 keybindingmenu.subchanneldown subchannel down
 keybindingmenu.subchannelup subchannel up
 keybindingmenu.tvradiomode TV/Radio-mode
