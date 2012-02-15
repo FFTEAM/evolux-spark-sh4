@@ -59,6 +59,7 @@
 #include <fstream>
 #include <string>
 
+#include <execinfo.h>
 
 #include "global.h"
 #include "neutrino.h"
@@ -283,9 +284,9 @@ int safe_mkdir(char * path)
 {
 	struct statfs s;
 	int ret = 0;
-	if(!strncmp(path, "/hdd", 4)) {
-		ret = statfs("/hdd", &s);
-		if((ret != 0) || (s.f_type == 0x72b6)) 
+	if(!strncmp(path, "/media/hdd", 10)) {
+		ret = statfs("/media/hdd", &s);
+		if((ret != 0) || ((s.f_type == 0x72b6 /* JFFS2_MAGIC */ ) || (s.f_type == 0x24051905 /* UBIFS_MAGIC */) || (s.f_type == 0x5941ff53 /* YAFFS_MAGIC */))) 
 			ret = -1;
 		else 
 			mkdir(path, 0755);
@@ -4769,11 +4770,23 @@ void sighandler (int signum)
         }
 }
 
+void segvhandler (int signum)
+{
+	void *array[40];
+	int len = backtrace(array, 40);
+	char **c = backtrace_symbols(array, len);
+	fprintf(stderr, "backtrace start\n");
+	while (len-- > 0)
+		fprintf(stderr, "%d %s\n", len, c[len]);
+	fprintf(stderr, "backtrace end\n");
+}
+
 int main(int argc, char **argv)
 {
 	setDebugLevel(DEBUG_NORMAL);
         signal(SIGTERM, sighandler);
         signal(SIGINT, sighandler);
+	signal(SIGSEGV, segvhandler);
         signal(SIGHUP, SIG_IGN);
 	signal(SIGPIPE, SIG_IGN);
 

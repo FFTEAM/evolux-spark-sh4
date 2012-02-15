@@ -343,7 +343,7 @@ int UTF8ToUnicode(const char * &text, const bool utf8_encoded) // returns -1 on 
 }
 
 #ifdef __sh__
-void Font::RenderString(int x, int y, const int _width, const char *text, const unsigned char color, const int _boxheight, const bool utf8_encoded)
+void Font::RenderString(int x, int y, const int _width, const char *text, const unsigned char color, const int _boxheight, const bool utf8_encoded, uint32_t _fgcol)
 {
 	FTC_ScalerRec  tempScaler;
 	FTC_ImageTypeRec tempFont;
@@ -365,7 +365,7 @@ void Font::RenderString(int x, int y, const int _width, const char *text, const 
 	tempFont.width = frameBuffer->scaleX(font.width);
 	tempFont.height = frameBuffer->scaleY(font.height);
 #else
-void Font::RenderString(int x, int y, const int width, const char *text, const unsigned char color, const int boxheight, const bool utf8_encoded)
+void Font::RenderString(int x, int y, const int width, const char *text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol)
 {
 #endif
 	if (!frameBuffer->getActive())
@@ -418,6 +418,7 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 	// caution: this only works if we print a single line of text
 	// if we have multiple lines, don't use boxheight or specify boxheight==0.
 	// if boxheight is !=0, we further adjust y, so that text is y-centered in the box
+
 	if(boxheight)
 	{
 		if(boxheight>step_y)			// this is a real box (bigger than text)
@@ -433,8 +434,18 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 	static fb_pixel_t oldbgcolor = 0, oldfgcolor = 0;
 	static fb_pixel_t colors[256];
 
-	fb_pixel_t bgcolor = frameBuffer->realcolor[color];
-	fb_pixel_t fgcolor = frameBuffer->realcolor[(((((int)color) + 2) | 7) - 2)];
+	fb_pixel_t bgcolor;
+	fb_pixel_t fgcolor;
+
+
+	if (_fgcol) {
+		uint32_t *lfb = frameBuffer->getFrameBufferPointer();
+		bgcolor = *(lfb + y * frameBuffer->getStride()/sizeof(fb_pixel_t) + x);
+		fgcolor = _fgcol;
+	} else {
+		bgcolor = frameBuffer->realcolor[color];
+		fgcolor = frameBuffer->realcolor[(((((int)color) + 2) | 7) - 2)];
+	}
 
 	if((oldbgcolor != bgcolor) || (oldfgcolor != fgcolor)) {
 
@@ -587,9 +598,9 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 	pthread_mutex_unlock( &renderer->render_mutex );
 }
 
-void Font::RenderString(int x, int y, const int width, const std::string & text, const unsigned char color, const int boxheight, const bool utf8_encoded)
+void Font::RenderString(int x, int y, const int width, const std::string & text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol)
 {
-	RenderString(x, y, width, text.c_str(), color, boxheight, utf8_encoded);
+	RenderString(x, y, width, text.c_str(), color, boxheight, utf8_encoded, _fgcol);
 }
 
 int Font::getRenderWidth(const char *text, const bool utf8_encoded)

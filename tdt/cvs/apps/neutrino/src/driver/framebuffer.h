@@ -168,9 +168,9 @@ class CFrameBuffer
 
 		void setIconBasePath(const std::string & iconPath);
 
-		bool paintIcon (const char * const filename, const int x, const int y, const unsigned char offset = 1);
-		bool paintIcon (const std::string & filename, const int x, const int y, const unsigned char offset = 1);
-		bool paintIcon8(const std::string & filename, const int x, const int y, const unsigned char offset = 0);
+		bool paintIcon (const char * const filename, const int x, const int y, const unsigned char offset = 1, bool applyScaling = 1);
+		bool paintIcon (const std::string & filename, const int x, const int y, const unsigned char offset = 1, bool applyScaling = 1);
+		bool paintIcon8(const std::string & filename, const int x, const int y, const unsigned char offset = 0, bool applyScaling = 1);
 		void loadPal   (const std::string & filename, const unsigned char offset = 0, const unsigned char endidx = 255);
 
 		bool loadPicture2Mem        (const std::string & filename, fb_pixel_t * const memp);

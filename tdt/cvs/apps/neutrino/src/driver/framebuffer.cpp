@@ -977,21 +977,21 @@ void CFrameBuffer::setIconBasePath(const std::string & iconPath)
 	iconBasePath = iconPath;
 }
 
-#ifdef __sh__
-bool CFrameBuffer::paintIcon8(const std::string & filename, const int _x, const int _y, const unsigned char offset)
-#else
-bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const int y, const unsigned char offset)
-#endif
+bool CFrameBuffer::paintIcon8(const std::string & filename, const int _x, const int _y, const unsigned char offset, bool applyScaling)
 {
 	if (!getActive())
 		return false;
 
-#ifdef __sh__
-//FIXME
 	int x, y;
-	x = scaleX(_x);
-	y = scaleY(_y);
+	if (applyScaling) {
+#ifdef __sh__
+		x = scaleX(_x);
+		y = scaleY(_y);
 #endif
+	} else {
+		x = _x;
+		y = _y;
+	}
 
 //printf("%s(file, %d, %d, %d)\n", __FUNCTION__, x, y, offset);
 
@@ -1002,7 +1002,7 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const i
 	fd = open((iconBasePath + filename).c_str(), O_RDONLY);
 
 	if (fd == -1) {
-		printf("paintIcon8: error while loading icon: %s%s\n", iconBasePath.c_str(), filename.c_str());
+		fprintf(stderr, "paintIcon8: error while loading icon: %s%s\n", iconBasePath.c_str(), filename.c_str());
 		return false;
 	}
 
@@ -1067,17 +1067,21 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const i
 	return true;
 }
 
-bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const int _y, const unsigned char offset)
+bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const int _y, const unsigned char offset, bool applyScaling)
 {
 	if (!getActive())
 		return false;
 
-#ifdef __sh__
-//FIXME
 	int x, y;
+	if (applyScaling) {
+#ifdef __sh__
 	x = scaleX(_x);
 	y = scaleY(_y);
 #endif
+	} else {
+		x = _x;
+		y = _y;
+	}
 
 //printf("%s(file, %d, %d, %d)\n", __FUNCTION__, x, y, offset);
 #ifdef __sh__
@@ -1104,7 +1108,7 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	fd = open((iconBasePath + filename).c_str(), O_RDONLY);
 
 	if (fd == -1) {
-		printf("paintIcon: error while loading icon: %s%s\n", iconBasePath.c_str(), filename.c_str());
+		fprintf(stderr, "paintIcon: error while loading icon: %s%s\n", iconBasePath.c_str(), filename.c_str());
 		return false;
 	}
 
@@ -1180,7 +1184,7 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	return true;
 }
 
-bool CFrameBuffer::paintIcon(const char * const filename, const int x, const int y, const unsigned char offset)
+bool CFrameBuffer::paintIcon(const char * const filename, const int x, const int y, const unsigned char offset, bool applyScaling)
 {
 //printf("%s(%s, %d, %d, %d)\n", __FUNCTION__, filename, x, y, offset);
 	return paintIcon(std::string(filename), x, y, offset);
@@ -1199,7 +1203,7 @@ void CFrameBuffer::loadPal(const std::string & filename, const unsigned char off
 	fd = open((iconBasePath + filename).c_str(), O_RDONLY);
 
 	if (fd == -1) {
-		printf("error while loading palette: %s%s\n", iconBasePath.c_str(), filename.c_str());
+		fprintf(stderr, "error while loading palette: %s%s\n", iconBasePath.c_str(), filename.c_str());
 		return;
 	}
 

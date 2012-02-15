@@ -96,7 +96,7 @@ stream2file_error_msg_t start_recording(const char * const filename,
 	char * dir = strdup(buf);
 	int ret = statfs(dirname(dir), &s);
 	free(dir);
-	if((ret != 0) || (s.f_type == 0x72b6) || (s.f_type == 0x24051905)) {
+	if((ret != 0) || (s.f_type == 0x72b6 /* JFFS2_MAGIC */) || (s.f_type == 0x24051905 /* UBIFS_MAGIC */) || (s.f_type == 0x5941ff53 /* YAFFS_MAGIC */)) {
 		return STREAM2FILE_INVALID_DIRECTORY;
 	}
 	if ((fd = open(buf, O_SYNC | O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) >= 0) {
