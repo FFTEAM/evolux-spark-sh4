@@ -402,7 +402,6 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 			}
 		} else {
 			frameBuffer->paintBox (ChanInfoX, BoxEndInfoY-2, BoxEndX, BoxEndY-20, COL_INFOBAR_PLUS_0);
-			frameBuffer->paintBox (BoxEndX - 300, BoxEndInfoY-2, BoxEndX, BoxEndY-20, COL_BLACK);
 		}
 		#else
 		{ // FIXME
@@ -1277,96 +1276,60 @@ int CInfoViewerHandler::exec (CMenuTarget * parent, const std::string & actionke
   return res;
 }
 
-
-
-#define ICON_H 16
-#define ICON_Y_2 (16 + 2 + ICON_H)
-#define MAX_EW 146
-
-
-void CInfoViewer::paint_ca_icons(int caid, char * icon)
-{
-	char buf[20];
-	int endx = ChanInfoX - 8 + ((BoxEndX - ChanInfoX)/4)*4;
-	int py = BoxEndY - InfoHeightY_Info;
-	int px = 0;
-
-	switch ( caid & 0xFF00 ) {
-		case 0x0E00: 
-			px = endx - 48 - 38 - 9*10 - 7*14 - 10; sprintf(buf, "%s_%s.raw", "powervu", icon);
-			break;
-		case 0x4A00: 
-			px = endx - 48 - 38 - 8*10 - 6*14 - 10; sprintf(buf, "%s_%s.raw", "d", icon);
-			break;
-		case 0x2600: 
-			px = endx - 48 - 38 - 7*10 - 5*14 - 10; sprintf(buf, "%s_%s.raw", "biss", icon);
-			break;
-		case 0x600: 
-		case 0x602: 
-		case 0x1700: 
-			px = endx - 48 - 38 - 6*10 - 4*14 - 10; sprintf(buf, "%s_%s.raw", "ird", icon);
-			break;
-		case 0x100: 
-			px = endx - 48 - 38 - 5*10 - 4*14; sprintf(buf, "%s_%s.raw", "seca", icon);
-			break;
-		case 0x500: 
-			px = endx - 48 - 38 - 4*10 - 3*14; sprintf(buf, "%s_%s.raw", "via", icon);
-			break;
-		case 0x1800: 
-		case 0x1801: 
-			px = endx - 48 - 38 - 3*10 - 2*14; sprintf(buf, "%s_%s.raw", "nagra", icon);
-			break;
-		case 0xB00: 
-			px = endx - 48 - 38 - 2*10 - 1*14; sprintf(buf, "%s_%s.raw", "conax", icon);
-			break;
-		case 0xD00: 
-			px = endx - 48 - 38 - 1*10; sprintf(buf, "%s_%s.raw", "cw", icon);
-			break;
-		case 0x900: 
-			px = endx - 48; sprintf(buf, "%s_%s.raw", "nds", icon);
-			break;
-		default: 
-			break;
-         }/*case*/
-	 if(px) {
-		frameBuffer->paintIcon(buf, px, py ); 
-	}
-}
-
-static char * gray = (char *) "white";
-static char * green = (char *) "green";
-static char * white = (char *) "yellow";
 extern int pmt_caids[10];
+
+#define COL_white 0xffffffff 	// white
+#define COL_green 0xff00ff00	// green
+#define COL_yellow 0xffffff00	// yellow
 
 void CInfoViewer::showIcon_CA_Status (int notfirst)
 {
- FILE *f;
- char input[256];
- char *buf;
- int py = BoxEndY - InfoHeightY_Info;
- int i = 0;
- int acaid = 0;
- int caids[] = { 0x1700, 0x0100, 0x0500, 0x1800, 0xB00, 0xD00, 0x900, 0x2600, 0x4a00, 0x0E00 };
- if(!notfirst) {
-	f = fopen("/tmp/ecm.info", "rt");
-	if (f != NULL) {
-		buf = (char*) malloc(50);
-		if (buf) {
-			if (fgets(buf, 50, f) != NULL) {
-				while (buf[i] != '0')
-					i++;
-				sscanf(&buf[i], "%X", &acaid);
+	FILE *f;
+	char input[256];
+	char *buf;
+	int py = BoxEndY - InfoHeightY_Info;
+	int i = 0;
+	int acaid = 0;
+	int caids[] = { 0x1700, 0x0100, 0x0500, 0x1800, 0xB00, 0xD00, 0x900, 0x2600, 0x4a00, 0x0E00 };
+	const char *catxt[] = { "NB", "S", "I", "N", "C", "CW", "NDS", "V", "D", "P" };
+//	const char *catxt[] = { "P", "D", "V", "NDS", "CW", "C", "N", "I", "S", "B" };
+	if(!notfirst) {
+		f = fopen("/tmp/ecm.info", "rt");
+		if (f != NULL) {
+			buf = (char*) malloc(50);
+			if (buf) {
+				if (fgets(buf, 50, f) != NULL) {
+					while (buf[i] != '0')
+						i++;
+					sscanf(&buf[i], "%X", &acaid);
+				}
+				free(buf);
 			}
-			free(buf);
+			fclose(f);
 		}
-		fclose(f);
-	}
 
-	for(i=0; i < (int)(sizeof(caids)/sizeof(int)); i++) {
-			if ((caids[i] & 0xFF00) == (acaid & 0xFF00) || (caids[i] == 0x1700 && (acaid & 0xFF00) == 0x0600)) {
-				paint_ca_icons(caids[i], green); }
+		int endx = ChanInfoX - 8 + ((BoxEndX - ChanInfoX)/4)*4;
+		int py = BoxEndY - InfoHeightY_Info;
+		int px = 0;
+
+		for(i=0; i < (int)(sizeof(caids)/sizeof(int)); i++) {
+			uint32_t col = 0;
+			if ((caids[i] & 0xFF00) == (acaid & 0xFF00) || (caids[i] == 0x1700 && (acaid & 0xFF00) == 0x0600))
+				col = COL_green;
+			else if (pmt_caids[i])
+				col = COL_yellow;
+
 			else
-				paint_ca_icons(caids[i], (char *) (pmt_caids[i] ? white : gray));
+				col = COL_white;
+
+
+			if (col) {
+				int w = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getRenderWidth(catxt[i]);
+				endx -= w;
+				if (i)
+					endx -= 4;
+				g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString (endx, py + 15, w, catxt[i], 0, 0, true, col);
 			}
- }
+		}
+	}
 }
