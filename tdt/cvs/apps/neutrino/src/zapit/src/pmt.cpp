@@ -431,12 +431,12 @@ int parse_pmt(CZapitChannel * const channel)
 					if(buffer[ia]==0x09 && buffer[ia+1]>0) {
 						switch(buffer[ia+2]) {
 							case 0x06: pmt_caids[0] = 1;
-							case 0x17: pmt_caids[0] = 1;
 								   break;
 							case 0x01: pmt_caids[1] = 1;
 								   break;
 							case 0x05: pmt_caids[2] = 1;
 								   break;
+							case 0x17: pmt_caids[3] = 1;
 							case 0x18: pmt_caids[3] = 1;
 								   break;
 							case 0x0B: pmt_caids[4] = 1;

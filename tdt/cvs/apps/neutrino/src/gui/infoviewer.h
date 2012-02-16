@@ -92,7 +92,6 @@ class CInfoViewer
 	void showIcon_16_9();
 #ifndef SKIP_CA_STATUS
 	void showIcon_CA_Status(int);
-	void paint_ca_icons(int, char*);
 #endif
 	void showIcon_VTXT()      const;
 	void showRecordIcon(const bool show);

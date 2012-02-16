@@ -1288,16 +1288,15 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 	char input[256];
 	char *buf;
 	int py = BoxEndY - InfoHeightY_Info;
-	int i = 0;
 	int acaid = 0;
-	int caids[] = { 0x1700, 0x0100, 0x0500, 0x1800, 0xB00, 0xD00, 0x900, 0x2600, 0x4a00, 0x0E00 };
-	const char *catxt[] = { "NB", "S", "I", "N", "C", "CW", "NDS", "V", "D", "P" };
-//	const char *catxt[] = { "P", "D", "V", "NDS", "CW", "C", "N", "I", "S", "B" };
+	int caids[] = { 0x0600, 0x0100, 0x0500, 0x1800, 0x0B00, 0x0D00, 0x0900, 0x2600, 0x4a00, 0x0E00 };
+	const char *catxt[] = { "I", "S", "V", "N", "C", "CW", "NDS", "B", "D", "P" };
 	if(!notfirst) {
 		f = fopen("/tmp/ecm.info", "rt");
 		if (f != NULL) {
-			buf = (char*) malloc(50);
+			char *buf = (char*) malloc(50);
 			if (buf) {
+				int i = 0;
 				if (fgets(buf, 50, f) != NULL) {
 					while (buf[i] != '0')
 						i++;
@@ -1308,28 +1307,26 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 			fclose(f);
 		}
 
-		int endx = ChanInfoX - 8 + ((BoxEndX - ChanInfoX)/4)*4;
+		int endx = BoxEndX - LEFT_OFFSET;
 		int py = BoxEndY - InfoHeightY_Info;
 		int px = 0;
+		int space = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->getRenderWidth(" ");
 
-		for(i=0; i < (int)(sizeof(caids)/sizeof(int)); i++) {
-			uint32_t col = 0;
-			if ((caids[i] & 0xFF00) == (acaid & 0xFF00) || (caids[i] == 0x1700 && (acaid & 0xFF00) == 0x0600))
+		acaid &= 0xff00;
+		if (acaid == 0x1700)
+			acaid = 0x1800;
+
+		for(int i = (int)(sizeof(caids)/sizeof(int)) - 1; i > -1 ; i--) {
+			uint32_t col = COL_white;
+			if (caids[i] == acaid)
 				col = COL_green;
 			else if (pmt_caids[i])
 				col = COL_yellow;
 
-			else
-				col = COL_white;
-
-
-			if (col) {
-				int w = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getRenderWidth(catxt[i]);
-				endx -= w;
-				if (i)
-					endx -= 4;
-				g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString (endx, py + 15, w, catxt[i], 0, 0, true, col);
-			}
+			int w = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->getRenderWidth(catxt[i]);
+			endx -= w;
+			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->RenderString (endx, py + 15, w, catxt[i], 0, 0, true, col);
+			endx -= space;
 		}
 	}
 }
