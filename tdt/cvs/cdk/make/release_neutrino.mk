@@ -181,6 +181,7 @@ if ENABLE_SPARK
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release_neutrino/etc/lircd.conf.amiko
 	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
+	cp -f $(buildprefix)/lirc-0.8.2/tools/.libs/irexec $(prefix)/release/usr/bin/
 
 if STM23
 	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt2870sta.ko

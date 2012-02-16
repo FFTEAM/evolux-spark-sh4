@@ -156,6 +156,7 @@ endif
 	cp -f $(buildprefix)/root/etc/bootargs_* $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release/bin/
+	cp -f $(buildprefix)/lirc-0.8.2/tools/.libs/irexec $(prefix)/release/usr/bin/
 	touch $(prefix)/release/etc/.fsck
 	if [ ! -e $(prefix)/release/etc/rc.d/rc3.d ]; then \
 		mkdir -p $(prefix)/release/etc/rc.d/rc3.d; \
