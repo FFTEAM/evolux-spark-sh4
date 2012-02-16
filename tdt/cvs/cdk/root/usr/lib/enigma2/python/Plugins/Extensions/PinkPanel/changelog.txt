@@ -70,4 +70,7 @@ v.2.2.5
 - new cam add (Spark only)
 v.2.2.6
 - onlineUpdate add (Spark only)
+-v.2.2.7
+- oupdate fix (only possible if real evolux-full is in flash) (Spark only)
+- boot other gui fix (Spark only)
 ####################################################
