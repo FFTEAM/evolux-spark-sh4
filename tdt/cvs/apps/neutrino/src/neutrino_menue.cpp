@@ -813,7 +813,12 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 #endif
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
+	FILE* fd1 = fopen("/etc/enigma2/settings", "r");
+	if(fd1)
+	{
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL, new EVOLUXUPDATE_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Evolux Oupdate Menu
+	fclose(fd1);
+	}
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOT_HEAD, true, NULL, new BOOT_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
 
