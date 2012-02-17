@@ -172,6 +172,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	esac
 	echo "init lircd"
 	/usr/bin/lircd
+	/usr/bin/irexec -d /etc/lircrc
 
 	mknod /dev/rc c 147 1 2>/dev/null
 	mknod /dev/sci0 c 169 0 2>/dev/null

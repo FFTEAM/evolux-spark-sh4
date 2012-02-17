@@ -1,0 +1,10 @@
+begin
+     button = USB
+     prog   = irexec
+     config = /usr/bin/functions.sh 0
+     mode   = mode
+     repeat = 0
+     delay  = 0
+     flags  = once 
+end
+

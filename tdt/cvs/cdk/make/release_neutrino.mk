@@ -176,9 +176,12 @@ if ENABLE_SPARK
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release_neutrino/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release_neutrino/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release_neutrino/usr/lib/
+	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release_neutrino/etc/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
+	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release_neutrino/etc/lircd.conf.amiko
+	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
 	cp -f $(buildprefix)/lirc-0.8.2/tools/.libs/irexec $(prefix)/release/usr/bin/
