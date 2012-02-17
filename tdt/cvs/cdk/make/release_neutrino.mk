@@ -501,7 +501,7 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/
 	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release_neutrino/etc/auto.usb
-	echo 'sda1   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release_neutrino/etc/auto.usb
+	echo 'hdd   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release_neutrino/etc/auto.usb
 	echo 'sda2   -fstype=auto,noatime,nodiratime          :/dev/sda2' >> $(prefix)/release_neutrino/etc/auto.usb
 	echo 'sda3   -fstype=auto,noatime,nodiratime          :/dev/sda3' >> $(prefix)/release_neutrino/etc/auto.usb
 #

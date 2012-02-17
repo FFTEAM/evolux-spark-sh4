@@ -185,10 +185,9 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	echo 1 > /proc/sys/kernel/panic
 
-	( sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
+	( sleep 5; /usr/sbin/automount --timeout=30 /media file /etc/auto.usb) &
 	( sleep 10
-	  if [ -e /autofs/sda1 ]; then
-		mount -o bind /autofs/sda1 /media/hdd
+	  if [ ! -e /media/hdd/epg]; then
 		cd /media/hdd && mkdir movie music picture swap epg
 	  fi
 	) &
