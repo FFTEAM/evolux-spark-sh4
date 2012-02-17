@@ -354,7 +354,7 @@ CFlashVersionInfo::CFlashVersionInfo(const std::string & versionString)
 
 	for(int i = 0; i < 20; i++)
 //	releaseCycle[i] = versionString[i];
-	//SBBBYYYYMMTTHHMM -- formatsting
+	//SBBBBYYYYMMTTHHMM -- formatsting
 
 	// recover type
 	snapshot = versionString[0];
@@ -365,27 +365,29 @@ CFlashVersionInfo::CFlashVersionInfo(const std::string & versionString)
 
 	releaseCycle[2] = versionString[2];
 	releaseCycle[3] = versionString[3];
-	releaseCycle[4] = '\0';
+	releaseCycle[4] = '.';
+	releaseCycle[5] = versionString[4];
+	releaseCycle[6] = '\0';
 
 	// recover date
-	date[0] = versionString[10]; //Day
-	date[1] = versionString[11]; //Day
+	date[0] = versionString[11]; //Day
+	date[1] = versionString[12]; //Day
 	date[2] = '.';
-	date[3] = versionString[8]; //Month
-	date[4] = versionString[9]; //Month
+	date[3] = versionString[9]; //Month
+	date[4] = versionString[10]; //Month
 	date[5] = '.';
-	date[6] = versionString[4]; //Year
-	date[7] = versionString[5]; //Year
-	date[8] = versionString[6]; //Year
-	date[9] = versionString[7]; //Year
+	date[6] = versionString[5]; //Year
+	date[7] = versionString[6]; //Year
+	date[8] = versionString[7]; //Year
+	date[9] = versionString[8]; //Year
 	date[10] = '\0';
 
 	// recover time stamp
-	time[0] = versionString[12]; //Hours
-	time[1] = versionString[13]; //Hours
+	time[0] = versionString[13]; //Hours
+	time[1] = versionString[14]; //Hours
 	time[2] = ':';
-	time[3] = versionString[14]; //Minutes
-	time[4] = versionString[15]; //Minutes
+	time[3] = versionString[15]; //Minutes
+	time[4] = versionString[16]; //Minutes
 	time[5] = '\0';
 }
 
