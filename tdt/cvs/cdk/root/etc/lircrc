@@ -5,6 +5,6 @@ begin
      mode   = mode_USB
      repeat = 0
      delay  = 0
-     flags  = once 
+     flags  = mode 
 end
 
