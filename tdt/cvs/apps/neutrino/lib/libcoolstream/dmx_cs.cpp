@@ -258,7 +258,7 @@ bool cDemux::sectionFilter(unsigned short Pid, const unsigned char * const Tid,
 		}
 	}
 
-#if 1
+#if 0
 	fprintf(stderr, "%s:%s (type=%s) - Pid=%d Tid= Mask= len=%d Timeout=%d nMask=\n",
 		FILENAME, __FUNCTION__, aDMXCHANNELTYPE[type], Pid, len, sct.timeout);
 #endif

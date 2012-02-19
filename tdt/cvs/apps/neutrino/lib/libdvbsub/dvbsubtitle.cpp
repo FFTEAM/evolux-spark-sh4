@@ -694,6 +694,7 @@ void cDvbSubtitleBitmaps::Draw()
 
     static CFrameBuffer* fb = CFrameBuffer::getInstance();
     static tColor save_colors[MAXNUMCOLORS];
+    bool split3D = fb->getSplit3D();
 
     int stride = fb->scaleX(fb->getScreenWidth(true));
     uint32_t *sublfb = fb->getFrameBufferPointer();
@@ -751,10 +752,17 @@ void cDvbSubtitleBitmaps::Draw()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), biw, bih, NumColors);
 
-	if (y > bih)
-	    for (int y2 = 0; y2 < bih; y2++, y += stride)
-		for (int x2 = 0; x2 < biw; x2++)
-		    *(sublfb + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
+	if (y > bih) {
+		if (split3D) {
+		    for (int y2 = 0; y2 < bih; y2++, y += stride)
+			for (int x2 = 0; x2 < biw; x2++)
+			    fb->paintPixel(x2, y, save_colors[*(bitmaps[i]->Data(x2, y2))], false);
+		} else {
+		    for (int y2 = 0; y2 < bih; y2++, y += stride)
+			for (int x2 = 0; x2 < biw; x2++)
+			    *(sublfb + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
+		}
+	}
     }
 
     needs_clear = true;

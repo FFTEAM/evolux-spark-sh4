@@ -59,6 +59,7 @@ static int ttx_req_pause = 0;
 static int sub_pid = 0, sub_page = 0;
 static bool use_gui = true;
 static int yzoom = 1;
+static bool split3D = false;
 
 #define debugf(i, arg...) \
 	if (i < log_level) \
@@ -68,17 +69,23 @@ void setPIG(int left, int top, int width, int height);
 
 static void* reader_thread(void *);
 
-static inline void setPixel(int x, int y, int color) {
-	*(lfb + y * dx + x) = coltab32[color];
-}
-
 static inline int Yzoom(int y) {
 	if (yzoom == 2)
 		return y * 2 - y0;
 	return y;
 }
 
-static inline void setPixelZ(int x, int y, int color) {
+static void setPixel(int x, int y, int color) {
+    if (split3D) {
+		if (yzoom == 1) {
+	        frameBuffer->paintPixel(x, y, coltab32[color], false);
+		} else {
+	        y = Yzoom(y);
+	        frameBuffer->paintPixel(x, y, coltab32[color], false);
+	        frameBuffer->paintPixel(x, y + 1, coltab32[color], false);
+		}
+		return;
+    }
 	if (yzoom == 1) {
 		*(lfb + y * dx + x) = coltab32[color];
 	} else {
@@ -89,10 +96,14 @@ static inline void setPixelZ(int x, int y, int color) {
 }
 
 static void FillRectNoZoom(int x, int y, int w, int h, int color) {
+	if (split3D)
+		w+2;
 	frameBuffer->paintBoxRel(x, y , w, h, coltab32[color], 0, 0, false);
 }
 
 static void FillRect(int x, int y, int w, int h, int color) {
+	if (split3D)
+		w+=2;
 	frameBuffer->paintBoxRel(x, Yzoom(y), w, h * yzoom, coltab32[color], 0, 0, false);
 }
 
@@ -109,7 +120,7 @@ static void DrawHLine(int x, int y, int l, int color) {
 
 void FillBorder(int color) {
 	if (screenmode == SCREENMODE_FULL)
-		FillRectNoZoom(0, 0, dx, dy , color);
+		FillRectNoZoom(0, 0, dx, dy, color);
 	else {
 		FillRectNoZoom(0     , 0                     , StartX      , ey                       , color);
 		FillRectNoZoom(StartX, 0                     , displaywidth, StartY                   , color);
@@ -1371,8 +1382,11 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	if (rc > -1)
 		fcntl(rc, F_SETFL, fcntl(rc, F_GETFL) | O_EXCL | O_NONBLOCK);
 
-	if (!frameBuffer)
-		frameBuffer = CFrameBuffer::getInstance();
+	frameBuffer = CFrameBuffer::getInstance();
+    split3D = frameBuffer->getSplit3D();
+
+	if (split3D)
+		SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
 
 	lfb = frameBuffer->getFrameBufferPointer();
 
@@ -1535,10 +1549,12 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 				ColorKey(next_100);
 				break;
 			case RC_PLUS:
-				SwitchScreenMode(0, +1);
+				if (!split3D)
+				    SwitchScreenMode(0, +1);
 				break;
 			case RC_MINUS:
-				SwitchScreenMode(0, -1);
+				if (!split3D)
+				    SwitchScreenMode(0, -1);
 				break;
 			case RC_MUTE:
 				SwitchTranspMode();
@@ -1768,7 +1784,6 @@ int Init(int source) {
 			aydrcs[i] = (fontheight * i + 5) / 10;
 	}
 
-	//FIXME center
 	/* center screen */
 	StartX = sx + (((ex-sx) - 40*fontwidth) / 2);
 	StartY = sy + (((ey-sy) - 25*fontheight) / 2);
@@ -3519,11 +3534,11 @@ void RenderDRCS(
 
 				if (ax[x+1] > ax[x])
 					for (int ltmp=0 ; ltmp < (ax[x+1]-ax[x]); ltmp++)
-						setPixelZ(_x + ax[x] + ltmp, _y + i, f1);
+						setPixel(_x + ax[x] + ltmp, _y + i, f1);
 
 				if (ax[x+7] > ax[x+6])
 					for (int ltmp=0 ; ltmp < (ax[x+7]-ax[x+6]); ltmp++)
-						setPixelZ(_x + ax[x+6] +ltmp, _y + i, f2);
+						setPixel(_x + ax[x+6] +ltmp, _y + i, f2);
 
 			}
 		}
@@ -3535,7 +3550,7 @@ void FillRectMosaicSeparated(int x, int y, int w, int h, int fgcolor, int bgcolo
 	//debugf(20, "%s: >\n", __func__);
 
 	FillRect(x, y, w, h, bgcolor);
-	if (set)
+	if (set && w > 2 && h > 2)
 		FillRect(x+1, y+1, w-2, h-2, fgcolor);
 
 	//debugf(20, "%s: <\n", __func__);
@@ -3555,36 +3570,64 @@ void FillTrapez(int x0, int y0, int l0, int xoffset1, int h, int l1, int color) 
 }
 
 void FlipHorz(int x, int y, int w, int h) {
-	//debugf(20, "%s: >\n", __func__);
+	debugf(20, "%s: >\n", __func__);
 
 	y = Yzoom(y);
 	h *= yzoom;
+
+	if (split3D) {
+		x >>=1;
+		w >>=1;
+	}
 
 	uint32_t buf[w];
 	uint32_t *p = lfb + x + y * dx;
 
-	for (int h1 = 0 ; h1 < h ; h1++) {
-		memcpy(buf,p,w * 4);
-		for (int w1 = 0 ; w1 < w ; w1++) {
-			if (w1 + x > dx)
-				fprintf(stderr, "%s: x=%d out of bounds\n", __func__, w1 + x);
-			else
-				*(p + w1) = *(buf + w - w1 - 1);
-		}
-		p += dx;
+	if (split3D) {
+		for (int h1 = 0 ; h1 < h ; h1++) {
+			memcpy(buf, p, w * 4);
+			for (int w1 = 0 ; w1 < w ; w1++) {
+				if (w1 + x > (dx>>1))
+					fprintf(stderr, "%s: x=%d out of bounds\n", __func__, w1 + x);
+				else {
+					*(p + w1) = *(buf + w - w1 - 1);
+					*(p + w1 + (dx>>1)) = *(buf + w - w1 - 1);
+				}
+			}
+			p += dx;
 
-		if (h1 + y > dy)
-			fprintf(stderr, "%s: y=%d out of bounds\n", __func__, h1 + y);
+			if (h1 + y > dy)
+				fprintf(stderr, "%s: y=%d out of bounds\n", __func__, h1 + y);
+		}
+	} else {
+		for (int h1 = 0 ; h1 < h ; h1++) {
+			memcpy(buf, p, w * 4);
+			for (int w1 = 0 ; w1 < w ; w1++) {
+				if (w1 + x > dx)
+					fprintf(stderr, "%s: x=%d out of bounds\n", __func__, w1 + x);
+				else
+					*(p + w1) = *(buf + w - w1 - 1);
+			}
+			p += dx;
+
+			if (h1 + y > dy)
+				fprintf(stderr, "%s: y=%d out of bounds\n", __func__, h1 + y);
+		}
 	}
 
-	//debugf(20, "%s: <\n", __func__);
+	debugf(20, "%s: <\n", __func__);
 }
 
 void FlipVert(int x, int y, int w, int h) {
-	//debugf(20, "%s: >\n", __func__);
+	debugf(20, "%s: >\n", __func__);
 
 	y = Yzoom(y);
 	h *= yzoom;
+
+	if (split3D) {
+		x >>=1;
+		w >>=1;
+	}
 
 	uint32_t buf[w];
 	uint32_t *p = lfb + x + y * dx, *p1, *p2;
@@ -3600,13 +3643,17 @@ void FlipVert(int x, int y, int w, int h) {
 		else if (h1 + y > dy)
 			fprintf(stderr, "%s y1=%d out of bounds y1\n", __func__, h1 + y);
 		else {
-			memcpy(buf,p1,w * 4);
-			memcpy(p1,p2,w * 4);
-			memcpy(p2,buf,w * 4);
+			memcpy(buf, p1, w * 4);
+			if (split3D) {
+				memcpy(p1 + (dx>>1),p2,w * 4);
+				memcpy(p2 + (dx>>1),buf,w * 4);
+			}
+			memcpy(p1, p2, w * 4);
+			memcpy(p2, buf, w * 4);
 		}
 	}
 
-	//debugf(20, "%s: <\n", __func__);
+	debugf(20, "%s: <\n", __func__);
 }
 
 int ShapeCoord(int param, int curfontwidth, int curfontheight) {
@@ -3829,7 +3876,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 					for (f=0; f<factor; f++) {
 						for (x=0; x<curfontwidth*xfactor;x++) {
 							c = (y&4 ? (x/3)&1 :((x+3)/3)&1);
-							setPixelZ(x + PosX, y + PosY, (c ? fgcolor : bgcolor));
+							setPixel(x + PosX, y + PosY, (c ? fgcolor : bgcolor));
 						}
 					}
 				}
@@ -4083,7 +4130,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 
 		for (Bit = xfactor * (sbit->left + TTFShiftX); Bit > 0; Bit--) { /* fill left margin */
 			for (f = factor-1; f >= 0; f--)
-				setPixelZ(x, saveRow + f + PosY + ((sbit->height - Row) * factor), bgcolor);
+				setPixel(x, saveRow + f + PosY + ((sbit->height - Row) * factor), bgcolor);
 			x += 1;
 			if (!usettf)
 					pixtodo--;
@@ -4102,11 +4149,11 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 					color = bgcolor;
 
 					for (f = factor-1; f >= 0; f--)
-						setPixelZ(x, saveRow + f + PosY + ((sbit->height - Row) * factor), color);
+						setPixel(x, saveRow + f + PosY + ((sbit->height - Row) * factor), color);
 					x+=1;
 					if (xfactor > 1) { /* double width */
 						for (f = factor-1; f >= 0; f--)
-							setPixelZ(x, saveRow + f + PosY + ((sbit->height - Row) * factor), color);
+							setPixel(x, saveRow + f + PosY + ((sbit->height - Row) * factor), color);
 						x+=1;
 
 					if (!usettf)
@@ -4119,7 +4166,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 		  Bit > 0; Bit--) /* fill rest of char width */
 		{
 			for (f = factor-1; f >= 0; f--)
-				setPixelZ(x, saveRow + f + PosY + ((sbit->height - Row) * factor), bgcolor);
+				setPixel(x, saveRow + f + PosY + ((sbit->height - Row) * factor), bgcolor);
 			x+=1;
 		}
 	}
@@ -4641,7 +4688,7 @@ void showlink(int column, int linkpage) {
 		if (l > 9) /* smaller font, if no space for one half space at front and end */
 			setfontwidth(oldfontwidth * 10 / (l+1));
 		FillRect(PosX, PosY, width+(displaywidth%4), fontheight, atrtable[ATR_L250 + column].bg);
-		PosX += ((width) - (l*fontwidth+l*fontwidth/abx))/2; /* center */
+		PosX += (width - (l*fontwidth+l*fontwidth/abx))>>1; /* center */
 		for (p = tuxtxt_cache.adip[linkpage]; *p; p++)
 			RenderCharBB(*p, &atrtable[ATR_L250 + column]);
 		setfontwidth(oldfontwidth);

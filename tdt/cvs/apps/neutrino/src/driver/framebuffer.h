@@ -99,6 +99,7 @@ class CFrameBuffer
 		int 	kd_mode;
 		struct	vt_mode vt_mode;
 		bool	active;
+		bool	split3D;
 		static	void switch_signal (int);
 
 		#ifdef USE_NEVIS_GXA
@@ -120,7 +121,8 @@ class CFrameBuffer
 		void init(const char * const fbDevice = "/dev/fb/0");
 #endif
 		int setMode(unsigned int xRes, unsigned int yRes, unsigned int bpp);
-
+		void setSplit3D(bool b = true);
+		int getSplit3D(void);
 
 		int getFileHandle() const; //only used for plugins (games) !!
 		t_fb_var_screeninfo *getScreenInfo();

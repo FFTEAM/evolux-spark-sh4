@@ -1220,7 +1220,12 @@ void CInfoViewer::killTitle ()
 {
   if (is_visible) {
 	is_visible = false;
+#if 0
 	frameBuffer->paintBackgroundBox (BoxStartX, BoxStartY, BoxEndX + SHADOW_OFFSET, BoxEndY + SHADOW_OFFSET);
+#else
+	// clear complete width to cope with leftovers from switching from/to 3D
+	frameBuffer->paintBackgroundBoxRel (0, BoxStartY, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true) - BoxStartY);
+#endif
   }
 }
 

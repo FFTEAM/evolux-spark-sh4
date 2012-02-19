@@ -161,7 +161,7 @@ CFrameBuffer::CFrameBuffer()
 	backgroundFilename = "";
 	fd  = 0;
 	tty = 0;
-//FIXME: test
+	split3D = false;
 	memset(red, 0, 256*sizeof(__u16));
 	memset(green, 0, 256*sizeof(__u16));
 	memset(blue, 0, 256*sizeof(__u16));
@@ -460,6 +460,16 @@ t_fb_var_screeninfo *CFrameBuffer::getScreenInfo()
 	return &screeninfo;
 }
 
+void CFrameBuffer::setSplit3D(bool b) {
+	if (b != split3D)
+		blit();
+	split3D = b;
+}
+
+int CFrameBuffer::getSplit3D(void) {
+	return split3D;
+}
+
 int CFrameBuffer::setMode(unsigned int nxRes, unsigned int nyRes, unsigned int nbpp)
 {
 	if (!available&&!active)
@@ -613,6 +623,9 @@ void CFrameBuffer::paintBoxRel(const int _x, const int _y, const int _dx, const 
 void CFrameBuffer::paintBoxRel(const int x, const int y, const int dx, const int dy, const fb_pixel_t col, int radius, int type)
 #endif
 {
+    if (!getActive())
+	return;
+
     int x, y, dx, dy, radius;
     if(applyScaling) {
 #ifdef __sh__
@@ -630,11 +643,12 @@ void CFrameBuffer::paintBoxRel(const int x, const int y, const int dx, const int
 	radius = _radius;
     }
 
+    if (split3D) {
+	x >>=1;
+	dx >>=1;
+    }
+
 /* draw a filled rectangle (with additional round corners) */
-
-if (!getActive())
-return;
-
 
 #ifdef USE_NEVIS_GXA
 /* this table contains the x coordinates for a quarter circle (the bottom right quarter) with fixed 
@@ -729,10 +743,6 @@ if (radius > 540)
 
 #else
     int F,R=radius,sx,sy,dxx=dx,dyy=dy,rx,ry,wx,wy;
-
-    if (!getActive())
-        return;
-
     uint8_t *pos = ((uint8_t *)getFrameBufferPointer()) + x*sizeof(fb_pixel_t) + stride*y;
     uint8_t *pos0 = 0, *pos1 = 0, *pos2 = 0, *pos3 = 0;
 
@@ -781,18 +791,30 @@ if (radius > 540)
             dest0=(fb_pixel_t *)(pos0+rx*sizeof(fb_pixel_t));
             dest1=(fb_pixel_t *)(pos1+rx*sizeof(fb_pixel_t));
             for (int i=0; i<(dxx-wx); i++) {
+		if (split3D) {
+			if(type & 2)
+				*(dest0 + (stride>>3))=col;	// bottom 1
+			if(type & 1)
+				*(dest1 + (stride>>3))=col;	// top 1
+            	}
 		if(type & 2)
-                	*(dest0++)=col;	//bottom 1
+                	*(dest0++)=col;	// bottom 1
 		if(type & 1)
                 	*(dest1++)=col;	// top 1
             }
             dest0=(fb_pixel_t *)(pos2+ry*sizeof(fb_pixel_t));
             dest1=(fb_pixel_t *)(pos3+ry*sizeof(fb_pixel_t));
             for (int i=0; i<(dxx-wy); i++) {
+		if (split3D) {
+			if(type & 1)
+				*(dest0 + (stride>>3))=col;	// top 2
+			if(type & 2)
+				*(dest1 + (stride>>3))=col;	// bottom 2
+            	}
 		if(type & 1)
                 	*(dest0++)=col;	// top 2
 		if(type & 2)
-                	*(dest1++)=col;	//bottom 2
+                	*(dest1++)=col;	// bottom 2
             }
             sx++;
             pos2-=stride;
@@ -818,7 +840,11 @@ if (radius > 540)
 	end = dyy+ (R ? 1 : 0);
 
 #ifdef __sh__
-	blitRect(x, y + start, dx, end - start, col);
+    if (split3D) { // revert right shift
+	x <<=1;
+	dx <<=1;
+    }
+    blitRect(x, y + start, dx, end - start, col);
 #else
     for (int count= start; count < end; count++) {
         dest0=(fb_pixel_t *)pos;
@@ -926,6 +952,7 @@ void CFrameBuffer::paintHLine(int xa, int xb, int y, const fb_pixel_t col, bool 
 #else /* USE_NEVIS_GXA */
 #ifdef __sh__
 	int dx = xb -xa;
+
 	blitRect(xa, y, dx, 1, col);
 #else
 	uint8_t * pos = ((uint8_t *)getFrameBufferPointer()) + xa * sizeof(fb_pixel_t) + stride * y;
@@ -1075,8 +1102,8 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	int x, y;
 	if (applyScaling) {
 #ifdef __sh__
-	x = scaleX(_x);
-	y = scaleY(_y);
+		x = scaleX(_x);
+		y = scaleY(_y);
 #endif
 	} else {
 		x = _x;
@@ -1241,9 +1268,16 @@ void CFrameBuffer::paintPixel(int x, int y, const fb_pixel_t col, bool applyScal
 	#else
 	fb_pixel_t * pos = getFrameBufferPointer();
 	pos += (stride / sizeof(fb_pixel_t)) * y;
-	pos += x;
-
-	*pos = col;
+	if (split3D) {
+		x >>=1;
+		pos += x;
+		*pos = col;
+		pos += stride>>3;
+		*pos = col;
+	} else {
+		pos += x;
+		*pos = col;
+	}
 	#endif
 }
 
@@ -1604,21 +1638,45 @@ void CFrameBuffer::paintBackgroundBoxRel(int x, int y, int dx, int dy)
 		y = scaleY(y);
 		dx = scaleX(dx);
 		dy = scaleY(dy);
-		uint8_t * fbpos = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
+		if (split3D) {
+			x >>= 1;
+			dx >>= 1;
+			uint8_t * fbpos = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
+			uint8_t * fbpos2 = fbpos + (stride>>1);
 #ifdef __sh__
-		fb_pixel_t * bkpos = background + x + xRes * y;
+			fb_pixel_t * bkpos = background + x + xRes * y;
 #else
-		fb_pixel_t * bkpos = background + x + BACKGROUNDIMAGEWIDTH * y;
+			fb_pixel_t * bkpos = background + x + BACKGROUNDIMAGEWIDTH * y;
 #endif
-		for(int count = 0;count < dy; count++)
-		{
-			memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t));
-			fbpos += stride;
+			for(int count = 0;count < dy; count++)
+			{
+				memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t));
+				memcpy(fbpos2, bkpos, dx * sizeof(fb_pixel_t));
+				fbpos += stride;
+				fbpos2 += stride;
 #ifdef __sh__
-			bkpos += xRes;
+				bkpos += xRes;
 #else
-			bkpos += BACKGROUNDIMAGEWIDTH;
+				bkpos += BACKGROUNDIMAGEWIDTH;
 #endif
+			}
+		} else {
+			uint8_t * fbpos = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
+#ifdef __sh__
+			fb_pixel_t * bkpos = background + x + xRes * y;
+#else
+			fb_pixel_t * bkpos = background + x + BACKGROUNDIMAGEWIDTH * y;
+#endif
+			for(int count = 0;count < dy; count++)
+			{
+				memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t));
+				fbpos += stride;
+#ifdef __sh__
+				bkpos += xRes;
+#else
+				bkpos += BACKGROUNDIMAGEWIDTH;
+#endif
+			}
 		}
 	}
 }
@@ -1631,6 +1689,13 @@ void CFrameBuffer::paintBackground()
 	if (useBackgroundPaint && (background != NULL))
 	{
 #ifdef __sh__
+	    if (split3D) {
+		int xr = xRes>>1;
+		for (int i = 0; i < yRes; i++) {
+				memcpy(((uint8_t *)getFrameBufferPointer()) + i * stride, (background + i * xr), xr * sizeof(fb_pixel_t));
+				memcpy(((uint8_t *)getFrameBufferPointer()) + i * stride + (stride>>1), (background + i * xr), xr * sizeof(fb_pixel_t));
+			}
+	    } else
 		for (int i = 0; i < yRes; i++)
 			memcpy(((uint8_t *)getFrameBufferPointer()) + i * stride, (background + i * xRes), xRes * sizeof(fb_pixel_t));
 #else
@@ -1657,19 +1722,24 @@ int CFrameBuffer::SaveScreen(int x, int y, int dx, int dy, fb_pixel_t * const me
 void CFrameBuffer::SaveScreen(int x, int y, int dx, int dy, fb_pixel_t * const memp)
 #endif
 {
-#ifdef __sh__
-	x = scaleX(x);
-	dx = scaleX(dx);
-	y = scaleY(y);
-	dy = scaleY(dy);
-#endif
-	
 	if (!getActive())
 #ifdef __sh__
 		return -1;
 #else
 		return;
 #endif
+
+#ifdef __sh__
+	x = scaleX(x);
+	dx = scaleX(dx);
+	y = scaleY(y);
+	dy = scaleY(dy);
+#endif
+
+	if (split3D) {
+		x >>= 1;
+		dx >>= 1;
+	}
 
 	uint8_t * pos = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
 	fb_pixel_t * bkpos = memp;
@@ -1703,10 +1773,6 @@ void CFrameBuffer::SaveScreen(int x, int y, int dx, int dy, fb_pixel_t * const m
 #ifdef __sh__
 void CFrameBuffer::RestoreScreen(int x, int y, int dx, int dy, fb_pixel_t * const memp, int checkSize)
 {
-	x = scaleX(x);
-	dx = scaleX(dx);
-	y = scaleY(y);
-	dy = scaleY(dy);
 
 #else
 void CFrameBuffer::RestoreScreen(int x, int y, int dx, int dy, fb_pixel_t * const memp)
@@ -1715,19 +1781,50 @@ void CFrameBuffer::RestoreScreen(int x, int y, int dx, int dy, fb_pixel_t * cons
 	if (!getActive())
 		return;
 
+#ifdef __sh__
+	x = scaleX(x);
+	dx = scaleX(dx);
+	y = scaleY(y);
+	dy = scaleY(dy);
+#endif
+
+	if (split3D) {
+		x >>= 1;
+		dx >>= 1;
+	}
+
 	uint8_t * fbpos = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
 	fb_pixel_t * bkpos = memp;
-	for (int count = 0; count < dy; count++)
-	{
+	if (split3D) {
+		uint8_t * fbpos2 = fbpos + (stride>>1);
+		for (int count = 0; count < dy; count++)
+		{
 #ifdef __sh__
-		if(dx * dy * bpp / 4 != checkSize)  // to prevent restoring when the buffersize changed
-			for(int w = 0; w < dx; w++) // TODO: copy to blitter and resize the image to fit
-				*fbpos = 0;	    // (but practically this only occurs when the screen is black during boot...)
-		else
+			if(dx * dy * bpp / 4 != checkSize)  // to prevent restoring when the buffersize changed
+				for(int w = 0; w < dx; w++) // TODO: copy to blitter and resize the image to fit
+					*(fbpos + w) = 0,   // (but practically this only occurs when the screen is black during boot...)
+					*(fbpos2 + w) = 0;
+			else
 #endif
-			memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t));
-		fbpos += stride;
-		bkpos += dx;
+				memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t)),
+				memcpy(fbpos2, bkpos, dx * sizeof(fb_pixel_t));
+			fbpos += stride;
+			fbpos2 += stride;
+			bkpos += dx;
+		}
+	} else {
+		for (int count = 0; count < dy; count++)
+		{
+#ifdef __sh__
+			if(dx * dy * bpp / 4 != checkSize)  // to prevent restoring when the buffersize changed
+				for(int w = 0; w < dx; w++) // TODO: copy to blitter and resize the image to fit
+					*(fbpos + w) = 0;   // (but practically this only occurs when the screen is black during boot...)
+			else
+#endif
+				memcpy(fbpos, bkpos, dx * sizeof(fb_pixel_t));
+			fbpos += stride;
+			bkpos += dx;
+		}
 	}
 }
 
@@ -1804,7 +1901,20 @@ void CFrameBuffer::showFrame(const std::string & filename)
 void CFrameBuffer::blitRect(int x, int y, int width, int height, unsigned long color)
 {
 //printf ("[fb - blitRect]: x=%d, y=%d, width=%d, height=%d, x+width=%d, y+height=%d\n", x, y, width, height, x+width, y+height);
-if (width == 0 || height == 0) return;
+	if (width == 0 || height == 0) return;
+
+	int loop = 1;
+	if (split3D) {
+		loop = 2;
+		x >>= 1;
+		width >>= 1;
+		if (width == 0 || height == 0) return;
+	}
+
+	if (height == 1 && width == 1) {
+		paintPixel(x, y, color, false);
+		return;
+	}
 
 	STMFBIO_BLT_DATA  bltData;
 	memset(&bltData, 0, sizeof(STMFBIO_BLT_DATA));
@@ -1824,24 +1934,38 @@ if (width == 0 || height == 0) return;
 	bltData.srcMemBase = STMFBGP_FRAMEBUFFER;
 	bltData.colour     = color;
 
-	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
-		perror("FBIO_BLIT");
-	else
-		ioctl(fd, STMFBIO_SYNC_BLITTER);
+	while (loop) {
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
+			perror("FBIO_BLIT");
+		else
+			ioctl(fd, STMFBIO_SYNC_BLITTER);
+		loop--;
+		if (loop) {
+			x += xRes>>1;
+			bltData.dst_left   = x;
+			bltData.dst_right  = x + width;
+		}
+	}
 }
 
 void CFrameBuffer::blitIcon(int original_width, int original_height, int fb_x, int fb_y, int width, int height)
 {
+	int loop = 1;
+	if (split3D) {
+		loop = 2;
+		fb_x >>= 1;
+		width >>= 1;
+	}
 	STMFBIO_BLT_EXTERN_DATA blt_data;
 	memset(&blt_data, 0, sizeof(STMFBIO_BLT_EXTERN_DATA));
 	blt_data.operation  = BLT_OP_COPY;
 	blt_data.ulFlags    = BLT_OP_FLAGS_BLEND_SRC_ALPHA | BLT_OP_FLAGS_BLEND_DST_MEMORY;	// we need alpha blending
-	blt_data.srcOffset  = 0;
+	//blt_data.srcOffset  = 0;
 	blt_data.srcPitch   = original_width * 4;
-	blt_data.dstOffset  = 0;
+	//blt_data.dstOffset  = 0;
 	blt_data.dstPitch   = stride;
-	blt_data.src_top    = 0;
-	blt_data.src_left   = 0;
+	//blt_data.src_top    = 0;
+	//blt_data.src_left   = 0;
 	blt_data.src_right  = original_width;
 	blt_data.src_bottom = original_height;
 	blt_data.dst_left   = fb_x;
@@ -1857,11 +1981,18 @@ void CFrameBuffer::blitIcon(int original_width, int original_height, int fb_x, i
 	
 	// icons are so small that they will still be in cache
 	msync(icon_space, ICON_TEMP_SIZE * ICON_TEMP_SIZE * 4, MS_SYNC);
-	
-	if(ioctl(fd, STMFBIO_BLT_EXTERN, &blt_data) < 0)
-		perror("FBIO_BLIT");
-	else
-		ioctl(fd, STMFBIO_SYNC_BLITTER);
+	while (loop) { 	
+		if(ioctl(fd, STMFBIO_BLT_EXTERN, &blt_data) < 0)
+			perror("FBIO_BLIT");
+		else
+			ioctl(fd, STMFBIO_SYNC_BLITTER);
+		loop--;
+		if (loop) {
+			fb_x += xRes>>1;
+			blt_data.dst_left   = fb_x;
+			blt_data.dst_right  = fb_x + width;
+		}
+	}
 }
 
 void CFrameBuffer::blitRGBtoRGB(int original_width, int original_height, int height, int width, char *original_data, char *dest_data)
@@ -1869,17 +2000,17 @@ void CFrameBuffer::blitRGBtoRGB(int original_width, int original_height, int hei
 	STMFBIO_BLT_EXTERN_DATA blt_data;
 	memset(&blt_data, 0, sizeof(STMFBIO_BLT_EXTERN_DATA));
 	blt_data.operation  = BLT_OP_COPY;
-	blt_data.ulFlags    = 0;
-	blt_data.srcOffset  = 0;
+	//blt_data.ulFlags    = 0;
+	//blt_data.srcOffset  = 0;
 	blt_data.srcPitch   = original_width * 3;
-	blt_data.dstOffset  = 0;
+	//blt_data.dstOffset  = 0;
 	blt_data.dstPitch   = width * 3;
-	blt_data.src_top    = 0;
-	blt_data.src_left   = 0;
+	//blt_data.src_top    = 0;
+	//blt_data.src_left   = 0;
 	blt_data.src_right  = original_width;
 	blt_data.src_bottom = original_height;
-	blt_data.dst_left   = 0;
-	blt_data.dst_top    = 0;
+	//blt_data.dst_left   = 0;
+	//blt_data.dst_top    = 0;
 	blt_data.dst_right  = width;
 	blt_data.dst_bottom = height;
 	blt_data.srcFormat  = SURF_RGB888;
@@ -1897,16 +2028,22 @@ void CFrameBuffer::blitRGBtoRGB(int original_width, int original_height, int hei
 
 void CFrameBuffer::blitRGBtoFB(int pan_x, int pan_y, int original_width, int original_height, int fb_x, int fb_y, int width, int height, char *bpaData)
 {
+	int loop = 1;
+	if (split3D) {
+		loop = 2;
+		fb_x >>= 1;
+		width >>= 1;
+	}
 	STMFBIO_BLT_EXTERN_DATA blt_data;
 	memset(&blt_data, 0, sizeof(STMFBIO_BLT_EXTERN_DATA));
 	blt_data.operation  = BLT_OP_COPY;
-	blt_data.ulFlags    = 0;
-	blt_data.srcOffset  = 0;
+	//blt_data.ulFlags    = 0;
+	//blt_data.srcOffset  = 0;
 	blt_data.srcPitch   = original_width * 3;
-	blt_data.dstOffset  = 0;
+	//blt_data.dstOffset  = 0;
 	blt_data.dstPitch   = stride;
-	blt_data.src_top    = pan_x;
-	blt_data.src_left   = pan_y;
+	blt_data.src_left   = pan_x;
+	blt_data.src_top    = pan_y;
 	blt_data.src_right  = pan_x + original_width;
 	blt_data.src_bottom = pan_y + original_height;
 	blt_data.dst_left   = fb_x;
@@ -1920,10 +2057,21 @@ void CFrameBuffer::blitRGBtoFB(int pan_x, int pan_y, int original_width, int ori
 	blt_data.srcMemSize = (pan_x + original_width) * (pan_y + original_height) * 3; // we don't need to know the actual mem size
 	blt_data.dstMemSize = stride * yRes;
 	
-	if(ioctl(fd, STMFBIO_BLT_EXTERN, &blt_data) < 0)
-		perror("FBIO_BLIT");
-	else
-		ioctl(fd, STMFBIO_SYNC_BLITTER);
+	while (loop) { 	
+		if(ioctl(fd, STMFBIO_BLT_EXTERN, &blt_data) < 0)
+			perror("FBIO_BLIT");
+		else
+			ioctl(fd, STMFBIO_SYNC_BLITTER);
+		loop--;
+		if (loop) {
+			fb_x += xRes>>1;
+			pan_x += xRes>>1;
+			blt_data.src_left   = pan_x;
+			blt_data.src_right  = pan_x + original_width;
+			blt_data.dst_left   = fb_x;
+			blt_data.dst_right  = fb_x + width;
+		}
+	}
 }
 
 void CFrameBuffer::blit()
@@ -1933,7 +2081,18 @@ void CFrameBuffer::blit()
 
 void CFrameBuffer::blit(int x, int y, int dx, int dy)
 {
-	blitRect(0, 0, scaleX(dx), scaleY(dy), 0);
+	x = scaleX(x);
+	y = scaleX(y);
+	dx = scaleX(dx);
+	dy = scaleX(dy);
+
+	if (split3D) {
+		x >>= 1;
+		dx >>= 1;
+		blitRect(x, y, dx, dy, 0);
+		x += xRes>>1;
+	}
+	blitRect(x, y, dx, dy, 0);
 }
 
 void CFrameBuffer::resize(int format)

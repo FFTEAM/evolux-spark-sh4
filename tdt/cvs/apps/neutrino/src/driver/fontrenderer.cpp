@@ -440,7 +440,7 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 
 	if (_fgcol) {
 		uint32_t *lfb = frameBuffer->getFrameBufferPointer();
-		bgcolor = *(lfb + y * frameBuffer->getStride()/sizeof(fb_pixel_t) + x);
+		bgcolor = *(lfb + y * frameBuffer->getStride()/sizeof(fb_pixel_t) + x / (frameBuffer->getSplit3D() ? 2 : 1));
 		fgcolor = _fgcol;
 	} else {
 		bgcolor = frameBuffer->realcolor[color];
@@ -486,6 +486,8 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 		if (spread_by < 1)
 			spread_by = 1;
 	}
+
+	bool split3D = frameBuffer->getSplit3D();
 
 	for (; *text; text++)
 	{
@@ -551,7 +553,10 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 					/* not nice (and also slower), but currently the easiest way to prevent visible errors */
 					frameBuffer->paintPixel(x + glyph->left + ax, y - glyph->top + ay, colors[*s++]);
 					#else
-					*td++= colors[*s++];
+					if (split3D)
+						frameBuffer->paintPixel(x + glyph->left + ax, y - glyph->top + ay, colors[*s++], false);
+					else
+						*td++= colors[*s++];
 					#endif
 				}
 				else
@@ -575,7 +580,10 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 					#ifdef USE_NEVIS_GXA
 					frameBuffer->paintPixel(x + glyph->left + ax, y - glyph->top + ay, colors[color]);
 					#else
-					*td++= colors[color];
+					if (split3D)
+						frameBuffer->paintPixel(x + glyph->left + ax, y - glyph->top + ay, colors[color], false);
+					else
+						*td++= colors[color];
 					#endif
 					s++;
 				}

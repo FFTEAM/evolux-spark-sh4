@@ -4775,10 +4775,14 @@ void segvhandler (int signum)
 	void *array[40];
 	int len = backtrace(array, 40);
 	char **c = backtrace_symbols(array, len);
-	fprintf(stderr, "backtrace start\n");
-	while (len-- > 0)
-		fprintf(stderr, "%d %s\n", len, c[len]);
-	fprintf(stderr, "backtrace end\n");
+	fprintf(stderr, "SIGSEGV received.\n");
+	if (len > 1) {
+		fprintf(stderr, "backtrace start\n");
+		while (len-- > 0)
+			fprintf(stderr, "%d %s\n", len, c[len]);
+		fprintf(stderr, "backtrace end\n");
+	}
+	exit(139);
 }
 
 int main(int argc, char **argv)
@@ -5044,18 +5048,18 @@ int dvbsub_getpid();
 
 void CNeutrinoApp::SuspendSubtitles()
 {
-	fprintf(stderr, "> %s\n", __FUNCTION__);
+//	fprintf(stderr, "> %s\n", __FUNCTION__);
 	dvbsub_pause();
 	tuxtx_pause_subtitle(true);
-	fprintf(stderr, "< %s\n", __FUNCTION__);
+//	fprintf(stderr, "< %s\n", __FUNCTION__);
 }
 
 void CNeutrinoApp::ResumeSubtitles(int delayed)
 {
-	fprintf(stderr, "> %s\n", __FUNCTION__);
+//	fprintf(stderr, "> %s\n", __FUNCTION__);
 	dvbsub_start(0);
 	tuxtx_pause_subtitle(false, delayed);
-	fprintf(stderr, "< %s\n", __FUNCTION__);
+//	fprintf(stderr, "< %s\n", __FUNCTION__);
 }
 
 int infoViewer_is_visible(void){
