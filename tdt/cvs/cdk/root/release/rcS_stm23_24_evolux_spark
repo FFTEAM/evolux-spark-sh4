@@ -188,12 +188,14 @@ if [ ! -e /var/etc/.firstboot ]; then
 	( sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
 	( sleep 10
 	  if [ -e /autofs/sda1 ]; then
+		rm -rf /media/hdd
 		ln -sf /autofs/sda1 /media/hdd
 		if [ ! -e /media/hdd/movie ]; then
 			cd /media/hdd && mkdir movie music picture swap epg
 		fi
 	  fi
 	  if [ -e /autofs/sdb1 ]; then
+		rm -rf /media/hdd2
 		ln -sf /autofs/sdb1 /media/hdd2
 		if [ ! -e /media/hdd/movie ]; then
 			cd /media/hdd && mkdir movie music picture swap epg
