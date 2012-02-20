@@ -2076,7 +2076,7 @@ void CFrameBuffer::blitRGBtoFB(int pan_x, int pan_y, int original_width, int ori
 
 void CFrameBuffer::blit()
 {
-	blitRect(0, 0, DEFAULT_XRES, DEFAULT_YRES, 0);
+	blit(0, 0, DEFAULT_XRES, DEFAULT_YRES);
 }
 
 void CFrameBuffer::blit(int x, int y, int dx, int dy)
