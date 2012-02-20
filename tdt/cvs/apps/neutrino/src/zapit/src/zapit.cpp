@@ -424,6 +424,35 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 
 	fprintf(stderr, "[zapit] zap to %s(%llx)\n", channel->getName().c_str(), live_channel_id);
 
+{
+// FIXME -- start of 3D support hack
+//	We currently have no way to get access to the 3d information supported in the video stream.
+//	For now, we'll cheat and look up 3D enabled channel names in a manually maintained file.
+//	Channel names need to match exactly. Side-by-Side 3D is implied.
+//
+//	This does admittedly suck badly. --martii
+
+	CFrameBuffer::getInstance()->setSplit3D(false);
+	const char *chan = channel->getName().c_str();
+	FILE *F = fopen ("/usr/local/share/config/3dchannels.list", "r");
+	if (F) {
+		char buf[80];
+		while (fgets(buf, sizeof(buf), F)) {
+			if (buf[0] == '#')
+				continue;
+			char *nl = strchr(buf, '\n');
+			if (nl)
+				*nl = 0;
+			if (strcmp(chan, buf))
+				continue;
+			CFrameBuffer::getInstance()->setSplit3D(true);
+			break;
+		}
+		fclose(F);
+	}
+// FIXME -- end of 3D support hack
+}
+
         /* have motor move satellite dish to satellite's position if necessary */
 	if (!(currentMode & RECORD_MODE)) {
 		transponder_change = frontend->setInput(channel, current_is_nvod);
