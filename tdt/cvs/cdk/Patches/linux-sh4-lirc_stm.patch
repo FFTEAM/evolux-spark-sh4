@@ -1,5 +1,5 @@
---- lirc_stm.c	2012-01-08 19:13:04.000000000 +0100
-+++ lirc_stm.c.new	2012-02-21 12:00:05.695416629 +0100
+--- linux-sh4/drivers/char/lirc/lirc_stm.c	2012-01-08 19:13:04.000000000 +0100
++++ linux-sh4/drivers/char/lirc/lirc_stm.c	2012-02-21 12:00:05.695416629 +0100
 @@ -132,7 +132,7 @@
  
  #define LIRC_STM_MINOR			0
