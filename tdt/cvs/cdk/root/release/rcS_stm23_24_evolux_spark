@@ -76,6 +76,9 @@ insmod $MODDIR/dvb-usb-af9015.ko
 
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
+if [ ! -e /etc/.dualTuner ] && [ -e /dev/dvb/adapter1 ]; then
+	rm -rf /dev/dvb/adapter1 >/dev/null 2>&1
+fi
 (cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
 (if [ -e /media/net ]; then rm -rf /media/net;fi;ln -sf /mnt/nfs /media/net) &
 awk -f /etc/init.d/getfb.awk /dev/input/event1 &
