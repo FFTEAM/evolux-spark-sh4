@@ -27,6 +27,9 @@ audiomenu.volume_position Position Lautstärkeregler
 audiomenu.volume_position.upperleft links oben
 audiomenu.volume_position.center mittig
 audiomenu.volume_position.hidden unsichtbar
+audiomenu.volume_adjustment Lautstärkekorrektur
+audiomenu.volume_adjustment.ac3 Lautstärkekorrektur AC3
+audiomenu.volume_adjustment.pcm Lautstärkekorrektur PCM
 audioplayer.add Hinzufügen
 audioplayer.add_ic Icecast
 audioplayer.add_loc Lokale Radioliste

@@ -672,6 +672,8 @@ int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool 
 	return res;
 }
 
+extern void setvolume(bool isAC3);
+
 int change_audio_pid(uint8_t index)
 {
 	if ((!audioDemux) || (!audioDecoder) || (!channel))
@@ -700,6 +702,8 @@ int change_audio_pid(uint8_t index)
 		audioDecoder->SetStreamType(AUDIO_FMT_DOLBY_DIGITAL);
 	else
 		audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
+
+	setvolume (currentAudioChannel->isAc3);
 
 	printf("[zapit] change apid to 0x%x\n", channel->getAudioPid());
 	/* set demux filter */
@@ -1912,6 +1916,7 @@ int startPlayBack(CZapitChannel *thisChannel)
 			audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
 
 		printf("[zapit] starting %s audio\n", thisChannel->getAudioChannel()->isAc3 ? "AC3" : "MPEG2");
+		setvolume (thisChannel->getAudioChannel()->isAc3);
 		audioDemux->Start();
 		audioDecoder->Start();
 	}

@@ -173,7 +173,6 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void scartMode( bool bOnOff );
 		void standbyMode( bool bOnOff );
 		void AudioMute( int newValue, bool isEvent= false );
-		void setvol(int vol, int avs);
 		void saveEpg();
 
 		void RealRun(CMenuWidget &mainSettings);
@@ -254,5 +253,6 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void SuspendSubtitles();
 		void ResumeSubtitles(int delay = 0);
 		void ExitRun(const bool write_si = true, int retcode = 0);
+		void setvol(int vol, int avs);
 };
 #endif
