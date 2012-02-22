@@ -1837,7 +1837,7 @@ void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNoti
 #endif
 
 	audioSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_VOLUME_ADJUSTMENT));
-	audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_VOLUME_ADJUSTMENT_AC3, &g_settings.volume_adjustment_ac3, true, -99, 99, audioSetupNotifier));
+	//audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_VOLUME_ADJUSTMENT_AC3, &g_settings.volume_adjustment_ac3, true, -99, 99, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_VOLUME_ADJUSTMENT_PCM, &g_settings.volume_adjustment_pcm, true, -99, 99, audioSetupNotifier));
 #if 0
 	CStringInput * audio_PCMOffset = new CStringInput(LOCALE_AUDIOMENU_PCMOFFSET, g_settings.audio_PCMOffset, 2, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "0123456789 ", audioSetupNotifier);

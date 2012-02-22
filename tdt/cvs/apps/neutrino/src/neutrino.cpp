@@ -3844,7 +3844,7 @@ void setvolume(bool isAC3) {
 
 void CNeutrinoApp::setvol(int vol, int avs)
 {
-	int v = vol + (audioIsAC3 ? g_settings.volume_adjustment_ac3 : g_settings.volume_adjustment_pcm);
+	int v = vol + (audioIsAC3 ? 0 : g_settings.volume_adjustment_pcm);
 	if (v < 0)
 		v = 0;
 	else if (v > 100)
