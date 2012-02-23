@@ -274,7 +274,10 @@ release_base:
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release/etc/ && \
-	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release/etc/ && \
+	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release/etc/inetd.conf && \
+	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release/etc/inetd.conf && \
+	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release/etc/inetd.conf && \
+	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release/etc/vsftpd.conf && \
 	cp -dp $(targetprefix)/etc/image-version $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release/etc/network/ && \
 	cp -dp $(targetprefix)/etc/network/options $(prefix)/release/etc/network/ && \
