@@ -802,7 +802,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.srs_ref_volume = configfile.getInt32( "srs_ref_volume", 40);//FIXME
 	g_settings.srs_nmgr_enable = configfile.getInt32( "srs_nmgr_enable", 0);
 	g_settings.volume_percent_pcm = configfile.getInt32("volume_percent_pcm", 100);
-	g_settings.volume_percent_ac3 = configfile.getInt32("volume_percent_ac3", 135);
+	g_settings.volume_percent_ac3 = configfile.getInt32("volume_percent_ac3", 100);
 	g_settings.hdmi_dd = configfile.getInt32( "hdmi_dd", 0);
 	g_settings.spdif_dd = configfile.getInt32( "spdif_dd", 1);
 	g_settings.avsync = configfile.getInt32( "avsync", 1);
@@ -950,10 +950,10 @@ int CNeutrinoApp::loadSetup(const char * fname)
 		sprintf(cfg_key, "network_nfs_mac_%d", i);
 		strcpy( g_settings.network_nfs_mac[i], configfile.getString( cfg_key, "11:22:33:44:55:66").c_str() );
 	}
-	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/net/music" ).c_str() );
-	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/net/pictures" ).c_str() );
-	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/net/movies" ).c_str() );
-	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/net/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/mnt/nfs/music" ).c_str() );
+	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/mnt/nfs/pictures" ).c_str() );
+	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/mnt/nfs/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/mnt/nfs/movies" ).c_str() );
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
 //	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 1 );

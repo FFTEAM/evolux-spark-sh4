@@ -28,8 +28,8 @@ audiomenu.volume_position.upperleft upper left
 audiomenu.volume_position.center center
 audiomenu.volume_position.hidden hidden
 audiomenu.volume_adjustment Volume adjustment
-audiomenu.volume_adjustment.ac3 Volume adjustment AC3
-audiomenu.volume_adjustment.pcm Volume adjustment PCM
+audiomenu.volume_adjustment.ac3 Volume AC3 (%)
+audiomenu.volume_adjustment.pcm Volume PCM (%)
 audioplayer.add Add
 audioplayer.add_ic Icecast
 audioplayer.add_loc Local radio list

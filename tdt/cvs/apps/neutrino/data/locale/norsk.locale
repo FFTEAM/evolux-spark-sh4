@@ -28,8 +28,8 @@ audiomenu.volume_position.upperleft oppe til venstre
 audiomenu.volume_position.center senter
 audiomenu.volume_position.hidden skjult
 audiomenu.volume_adjustment Volum justering
-audiomenu.volume_adjustment.ac3 Volum justering AC3
-audiomenu.volume_adjustment.pcm Volum justering PCM
+audiomenu.volume_adjustment.ac3 Volum AC3 (%)
+audiomenu.volume_adjustment.pcm Volum PCM (%)
 audioplayer.add Legge til
 audioplayer.add_ic Icecast
 audioplayer.add_loc Lokal radio liste
