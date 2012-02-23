@@ -78,11 +78,11 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release_neutrino/etc/ && \
+	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release_neutrino/etc/vsftpd.conf && \
 	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release_neutrino/etc/inetd.conf && \
-	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release_neutrino/etc/vsftpd.conf && \
 	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release_neutrino/etc/network/ && \
 	cp -dp $(targetprefix)/etc/network/options $(prefix)/release_neutrino/etc/network/ && \
