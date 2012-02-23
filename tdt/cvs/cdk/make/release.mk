@@ -261,7 +261,6 @@ release_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
-	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release/etc/ && \
@@ -274,6 +273,7 @@ release_base:
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release/etc/ && \
+	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release/etc/inetd.conf && \
 	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release/etc/inetd.conf && \
 	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release/etc/inetd.conf && \
 	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release/etc/inetd.conf && \

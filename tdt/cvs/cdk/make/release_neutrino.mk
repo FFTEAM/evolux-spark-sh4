@@ -66,7 +66,6 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release_neutrino/etc/ && \
-	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release_neutrino/etc/ && \
@@ -79,6 +78,7 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release_neutrino/etc/ && \
+	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release_neutrino/etc/inetd.conf && \
 	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release_neutrino/etc/inetd.conf && \
