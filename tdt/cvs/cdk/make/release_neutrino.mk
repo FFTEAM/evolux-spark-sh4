@@ -184,6 +184,7 @@ if ENABLE_SPARK
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release_neutrino/etc/init.d/
 
 if STM23
 	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt2870sta.ko

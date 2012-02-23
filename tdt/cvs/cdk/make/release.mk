@@ -72,6 +72,7 @@ release_spark:
 	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libpng* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release/etc/init.d/
 
 if STM23
 	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release/lib/modules/rt2870sta.ko
