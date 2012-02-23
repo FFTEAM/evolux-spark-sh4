@@ -802,7 +802,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.srs_ref_volume = configfile.getInt32( "srs_ref_volume", 40);//FIXME
 	g_settings.srs_nmgr_enable = configfile.getInt32( "srs_nmgr_enable", 0);
 	g_settings.volume_percent_pcm = configfile.getInt32("volume_percent_pcm", 100);
-	g_settings.volume_percent_ac3 = configfile.getInt32("volume_percent_ac3", 100);
+	//g_settings.volume_percent_ac3 = configfile.getInt32("volume_percent_ac3", 100);
 	g_settings.hdmi_dd = configfile.getInt32( "hdmi_dd", 0);
 	g_settings.spdif_dd = configfile.getInt32( "spdif_dd", 1);
 	g_settings.avsync = configfile.getInt32( "avsync", 1);
@@ -3844,7 +3844,7 @@ void setvolume(bool isAC3) {
 
 void CNeutrinoApp::setvol(int vol, int avs)
 {
-	int v = vol * (audioIsAC3 ? g_settings.volume_percent_ac3 : g_settings.volume_percent_pcm) / 100;
+	int v = vol * (audioIsAC3 ? 100 : g_settings.volume_percent_pcm) / 100;
 	if (v > 100)
 		v = 100;
 	audioDecoder->setVolume(v, v);
