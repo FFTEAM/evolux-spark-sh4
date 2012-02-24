@@ -27,9 +27,7 @@ audiomenu.volume_position Volumeslider location
 audiomenu.volume_position.upperleft upper left
 audiomenu.volume_position.center center
 audiomenu.volume_position.hidden hidden
-audiomenu.volume_adjustment Volume adjustment
-audiomenu.volume_adjustment.ac3 Volume AC3 (%)
-audiomenu.volume_adjustment.pcm Volume PCM (%)
+audiomenu.volume_adjustment Volume adjustment (%)
 audioplayer.add Add
 audioplayer.add_ic Icecast
 audioplayer.add_loc Local radio list
@@ -647,7 +645,7 @@ mainmenu.head Main Menu
 mainmenu.movieplayer Movieplayer
 mainmenu.pausesectionsd Read EPG
 mainmenu.pictureviewer Picture viewer
-mainmenu.radiomode Radio-Mode/Clock
+mainmenu.radiomode Radio-Mode
 mainmenu.reboot Reboot
 mainmenu.recording Recording
 mainmenu.recording_start start
@@ -658,7 +656,7 @@ mainmenu.service Service
 mainmenu.settings Settings
 mainmenu.shutdown Shutdown
 mainmenu.sleeptimer SleepTimer
-mainmenu.tvmode TV-Mode/Clock
+mainmenu.tvmode TV-Mode
 mainsettings.audio Audio
 mainsettings.head Settings
 mainsettings.keybinding Key Setup

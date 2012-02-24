@@ -151,6 +151,17 @@ int CAudioSelectMenuHandler::doMenu ()
 			tuxtx_stop_subtitle();
 		}
 	}
+	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_VOLUME_ADJUSTMENT));
+
+	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
+	CZapitClient zapit;
+	for(count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) {
+		zapit.getVolumePercent((unsigned int *) &percent[count], g_RemoteControl->current_PIDs.APIDs[count].pid);
+		AudioSelector.addItem(new CMenuOptionNumberChooser(NONEXISTANT_LOCALE, &percent[count],
+			count == g_RemoteControl->current_PIDs.PIDs.selected_apid,
+			0, 999, audioSetupNotifier, 0, 0, NONEXISTANT_LOCALE,
+			g_RemoteControl->current_PIDs.APIDs[count].desc));
+	}
 
 	return AudioSelector.exec(NULL, "");
 }

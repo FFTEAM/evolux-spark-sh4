@@ -304,7 +304,7 @@ printf("%s:%s >\n", __FILE__, __FUNCTION__);
 		unsetPesFilter(demuxfd[--demuxfd_count]);
 
 #ifdef needed
-fixme: do we need it?
+//fixme: do we need it?
 	CEventServer eventServer;
 	eventServer.registerEvent2(NeutrinoMessages::EVT_RECORDING_ENDED, CEventServer::INITID_NEUTRINO, "/tmp/neutrino.sock");
 	stream2file_status2_t s;

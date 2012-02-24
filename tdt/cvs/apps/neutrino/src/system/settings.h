@@ -96,8 +96,7 @@ struct SNeutrinoSettings
 	int srs_algo;
 	int srs_ref_volume;
 	int srs_nmgr_enable;
-	int volume_percent_ac3;
-	int volume_percent_pcm;
+	int volume_percent;
 	int hdmi_dd;
 	int spdif_dd;
 	int video_dbdr;

@@ -27,9 +27,7 @@ audiomenu.volume_position Volum lokasjon
 audiomenu.volume_position.upperleft oppe til venstre 
 audiomenu.volume_position.center senter
 audiomenu.volume_position.hidden skjult
-audiomenu.volume_adjustment Volum justering
-audiomenu.volume_adjustment.ac3 Volum AC3 (%)
-audiomenu.volume_adjustment.pcm Volum PCM (%)
+audiomenu.volume_adjustment Volumjustering (%)
 audioplayer.add Legge til
 audioplayer.add_ic Icecast
 audioplayer.add_loc Lokal radio liste
@@ -646,7 +644,7 @@ mainmenu.head Hovud Meny
 mainmenu.movieplayer Film spiller
 mainmenu.pausesectionsd Les EPG
 mainmenu.pictureviewer Bilde viser
-mainmenu.radiomode Radio-Modus/Klokke
+mainmenu.radiomode Radio-Modus
 mainmenu.reboot Restarte
 mainmenu.recording Opptak
 mainmenu.recording_start start
@@ -657,7 +655,7 @@ mainmenu.service Tjeneste
 mainmenu.settings Innstillinger
 mainmenu.shutdown Slå av
 mainmenu.sleeptimer Sov Timer
-mainmenu.tvmode TV-Modus/Klokke
+mainmenu.tvmode TV-Modus
 mainsettings.audio Audio
 mainsettings.head Innstillinger
 mainsettings.keybinding Taste oppsett

@@ -153,8 +153,6 @@ const char *locale_real_names[] = {
 	"audiomenu.volume_position.center",
 	"audiomenu.volume_position.hidden",
 	"audiomenu.volume_adjustment",
-	"audiomenu.volume_adjustment.ac3",
-	"audiomenu.volume_adjustment.pcm",
 	"audioplayer.add",
 	"audioplayer.add_ic",
 	"audioplayer.add_loc",

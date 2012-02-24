@@ -801,8 +801,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.srs_algo = configfile.getInt32( "srs_algo", 1);
 	g_settings.srs_ref_volume = configfile.getInt32( "srs_ref_volume", 40);//FIXME
 	g_settings.srs_nmgr_enable = configfile.getInt32( "srs_nmgr_enable", 0);
-	g_settings.volume_percent_pcm = configfile.getInt32("volume_percent_pcm", 100);
-	//g_settings.volume_percent_ac3 = configfile.getInt32("volume_percent_ac3", 100);
+	g_settings.volume_percent = 75;
 	g_settings.hdmi_dd = configfile.getInt32( "hdmi_dd", 0);
 	g_settings.spdif_dd = configfile.getInt32( "spdif_dd", 1);
 	g_settings.avsync = configfile.getInt32( "avsync", 1);
@@ -1361,8 +1360,6 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32( "srs_algo", g_settings.srs_algo);
 	configfile.setInt32( "srs_ref_volume", g_settings.srs_ref_volume);
 	configfile.setInt32( "srs_nmgr_enable", g_settings.srs_nmgr_enable);
-	configfile.setInt32( "volume_percent_ac3", g_settings.volume_percent_ac3);
-	configfile.setInt32( "volume_percent_pcm", g_settings.volume_percent_pcm);
 	configfile.setInt32( "hdmi_dd", g_settings.hdmi_dd);
 	configfile.setInt32( "spdif_dd", g_settings.spdif_dd);
 	configfile.setInt32( "avsync", g_settings.avsync);
@@ -3033,6 +3030,15 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				CVCRControl::getInstance()->Screenshot(g_RemoteControl->current_channel_id);
 			} 
 #endif
+			else if (msg == CRCInput::RC_timeshift) {
+                		if(g_settings.mode_clock) {
+					InfoClock->StopClock();
+					g_settings.mode_clock=false;
+				} else {
+					InfoClock->StartClock();
+					g_settings.mode_clock=true;
+				}
+			}
 			else {
 				if (msg == CRCInput::RC_home)
   					CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
@@ -3827,7 +3833,7 @@ printf("AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, is
 	if( isEvent && ( mode != mode_scart ) && ( mode != mode_audio) && ( mode != mode_pic))
 	{
 		if( current_muted ) {
-			frameBuffer->paintBoxRel(x, y, dx, dy, COL_INFOBAR_PLUS_0);
+  			// frameBuffer->paintBoxRel(x, y, dx, dy, COL_INFOBAR_PLUS_0);
 			frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MUTE, x+5, y+5);
 		}
 		else
@@ -3835,16 +3841,14 @@ printf("AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, is
 	}
 }
 
-static bool audioIsAC3 = false;
-
-void setvolume(bool isAC3) {
-	audioIsAC3 = isAC3;
+void setvolume(int percent) {
+	g_settings.volume_percent = percent;
 	CNeutrinoApp::getInstance()->setvol(g_settings.current_volume ,(g_settings.audio_avs_Control));
 }
 
 void CNeutrinoApp::setvol(int vol, int avs)
 {
-	int v = vol * (audioIsAC3 ? 100 : g_settings.volume_percent_pcm) / 100;
+	int v = vol * g_settings.volume_percent / 100;
 	if (v > 100)
 		v = 100;
 	audioDecoder->setVolume(v, v);
@@ -3989,6 +3993,7 @@ void CNeutrinoApp::tvMode( bool rezap )
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 	CVFD::getInstance()->ShowIcon(VFD_ICON_TV, true);
 
+#if 0
         if( mode == mode_tv ) {
                 if(g_settings.mode_clock) {
                         InfoClock->StopClock();
@@ -4000,7 +4005,9 @@ void CNeutrinoApp::tvMode( bool rezap )
                 return;
 	} else if( mode == mode_scart ) {
 		//g_Controld->setScartMode( 0 );
-	} else if( mode == mode_standby ) {
+	} else
+#endif
+	if( mode == mode_standby ) {
 		CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 		videoDecoder->Standby(false);
 	}
@@ -4179,6 +4186,7 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 	CVFD::getInstance()->ShowIcon(VFD_ICON_RADIO, true);
 
+#if 0
 	if( mode==mode_radio ) {
                 if(g_settings.mode_clock) {
                         InfoClock->StopClock();
@@ -4192,7 +4200,9 @@ printf("radioMode: rezap %s\n", rezap ? "yes" : "no");
 	else if( mode == mode_scart ) {
 		//g_Controld->setScartMode( 0 );
 	}
-	else if( mode == mode_standby ) {
+	else
+#endif
+	if( mode == mode_standby ) {
 		CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
 		videoDecoder->Standby(false);
 	}

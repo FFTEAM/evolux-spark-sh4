@@ -143,7 +143,9 @@ class CZapitMessages
 			CMD_SETCONFIG		  = 98,
 			CMD_SCANSTOP                      = 99,
                         CMD_GET_VOLUME          = 104,
-                        CMD_GET_AUDIO_MODE      = 105
+                        CMD_GET_AUDIO_MODE      = 105,
+			CMD_SET_VOLUME_PERCENT		    = 106,
+                        CMD_GET_VOLUME_PERCENT              = 107
 
 		};
 
@@ -155,6 +157,12 @@ class CZapitMessages
 	struct commandInt
 	{
 		int val;
+	};
+
+	struct commandVolumePercent
+	{
+		unsigned int apid;
+		unsigned int percent;
 	};
 
 	struct commandVolume

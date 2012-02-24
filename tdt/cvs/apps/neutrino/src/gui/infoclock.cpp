@@ -12,9 +12,6 @@
 #include <sys/param.h>
 #include "infoclock.h"
 
-#define XOFF 10
-#define YOFF 0
-
 CInfoClock::CInfoClock()
 {
 	frameBuffer      = CFrameBuffer::getInstance();
@@ -35,19 +32,19 @@ CInfoClock::~CInfoClock()
 
 void CInfoClock::paintTime( bool show_dot)
 {
-	int x = g_settings.screen_EndX - XOFF;
-	int y = g_settings.screen_StartY + YOFF;
+        int dx = 40; // the mute icon might be placed here, see current_muted
+        int x = g_settings.screen_EndX - dx;
+        int y = g_settings.screen_StartY;
 
 	char timestr[10];
 	time_t tm;
 
 	tm = time(0);
-	if(show_dot)
-		strftime((char*) &timestr, 20, "%H:%M:%S", localtime(&tm));
-	else
-		strftime((char*) &timestr, 20, "%H.%M:%S", localtime(&tm));
-	frameBuffer->paintBoxRel(x - time_width - 15, y, time_width, time_height, COL_MENUCONTENT_PLUS_0, 7, 3);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString(x - time_width- 10, y+ time_height, time_width, timestr, COL_MENUCONTENT);
+	strftime((char*) &timestr, sizeof(timestr), show_dot ? "%H:%M:%S" : "%H.%M:%S", localtime(&tm));
+	x -= time_width;
+	frameBuffer->paintBoxRel(x, y, time_width, time_height, 0x22000000 /* black, but mostly transparent */);
+	int len = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->getRenderWidth(timestr);
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString(x + ((time_width - len)>>1), y + time_height, len, timestr, COL_MENUCONTENT, 0, false, 0xffffffff /* white */);
 }
 
 void* CInfoClock::TimerProc(void *arg)
@@ -77,11 +74,13 @@ void CInfoClock::StartClock()
 
 void CInfoClock::StopClock()
 {
-	int x = g_settings.screen_EndX - XOFF;
-	int y = g_settings.screen_StartY + YOFF;
 	if(thrTimer) {
+        	int dx = 40; // the mute icon might be placed here, see current_muted
+		int x = g_settings.screen_EndX - dx;
+		int y = g_settings.screen_StartY;
+		x -= time_width;
 		pthread_cancel(thrTimer);
 		thrTimer = 0;
-		frameBuffer->paintBackgroundBoxRel(x - time_width - 15, y, time_width, time_height);
+		frameBuffer->paintBackgroundBoxRel(x, y, time_width, time_height);
 	}
 }

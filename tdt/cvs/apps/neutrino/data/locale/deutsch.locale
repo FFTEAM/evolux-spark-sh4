@@ -27,9 +27,7 @@ audiomenu.volume_position Position Lautstärkeregler
 audiomenu.volume_position.upperleft links oben
 audiomenu.volume_position.center mittig
 audiomenu.volume_position.hidden unsichtbar
-audiomenu.volume_adjustment Lautstärkekorrektur
-audiomenu.volume_adjustment.ac3 Lautstärke AC3 (%)
-audiomenu.volume_adjustment.pcm Lautstärke PCM (%)
+audiomenu.volume_adjustment Lautstärkeanpassung (%)
 audioplayer.add Hinzufügen
 audioplayer.add_ic Icecast
 audioplayer.add_loc Lokale Radioliste
@@ -647,7 +645,7 @@ mainmenu.head Hauptmenü
 mainmenu.movieplayer Movieplayer
 mainmenu.pausesectionsd EPG auslesen
 mainmenu.pictureviewer Bildbetrachter
-mainmenu.radiomode Radio-Modus/Uhr
+mainmenu.radiomode Radio-Modus
 mainmenu.reboot Neustart
 mainmenu.recording Aufnehmen
 mainmenu.recording_start Start
@@ -658,7 +656,7 @@ mainmenu.service Service
 mainmenu.settings Einstellungen
 mainmenu.shutdown Ausschalten
 mainmenu.sleeptimer SleepTimer
-mainmenu.tvmode TV-Modus/Uhr
+mainmenu.tvmode TV-Modus
 mainsettings.audio Audio
 mainsettings.head Einstellungen
 mainsettings.keybinding Tasten Einstellungen

@@ -358,6 +358,10 @@ class CZapitClient:public CBasicClient
 	void setVolume(const unsigned int left, const unsigned int right);
 	void getVolume(unsigned int *left, unsigned int *right);
 
+	/* set audio adjustement in percent */
+	void setVolumePercent(const unsigned int percent, const unsigned int apid = 0);
+	void getVolumePercent(unsigned int *percent, const unsigned int apid = 0);
+
 	/* get dvb transmission type */
 	delivery_system_t getDeliverySystem(void);
 

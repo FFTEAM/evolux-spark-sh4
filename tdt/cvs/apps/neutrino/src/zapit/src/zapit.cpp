@@ -84,10 +84,14 @@ cDvbCi * ci;
 //cDvbCiSlot *one, *two;
 extern cDemux * pmtDemux;
 #define AUDIO_CONFIG_FILE CONFIGDIR "/zapit/audio.conf"
+#define VOLUME_CONFIG_FILE CONFIGDIR "/zapit/audiovolume.conf"
 map<t_channel_id, audio_map_set_t> audio_map;
 map<t_channel_id, audio_map_set_t>::iterator audio_map_it;
 unsigned int volume_left = 0, volume_right = 0;
 unsigned int def_volume_left = 0, def_volume_right = 0;
+typedef pair<t_channel_id, int> t_chan_apid;
+map<t_chan_apid, int> volume_map;
+map<t_chan_apid, int>::iterator volume_map_it;
 int audio_mode = 0;
 int def_audio_mode = 0;
 t_channel_id live_channel_id;
@@ -254,6 +258,14 @@ void saveZapitSettings(bool write, bool write_a)
 		  fdatasync(fileno(audio_config_file));
                   fclose(audio_config_file);
                 }
+                FILE *volume_config_file = fopen(VOLUME_CONFIG_FILE, "w");
+                if (volume_config_file) {
+                  for (volume_map_it = volume_map.begin(); volume_map_it != volume_map.end(); volume_map_it++) {
+                        fprintf(volume_config_file, "%llx %d %d\n", (uint64_t) volume_map_it->first.first, (int) volume_map_it->first.second, (int) volume_map_it->second);
+                  }
+		  fdatasync(fileno(volume_config_file));
+                  fclose(volume_config_file);
+                }
         }
 }
 
@@ -278,6 +290,23 @@ void load_audio_map()
 	    audio_map[chan].ttxpage = ttxpage;
 
           }
+          fclose(audio_config_file);
+        }
+
+        FILE *volume_config_file = fopen(VOLUME_CONFIG_FILE, "r");
+	volume_map.clear();
+        if (volume_config_file) {
+          t_channel_id chan;
+          char s[1000];
+          while (fgets(s, 1000, audio_config_file)) {
+		t_channel_id chan;
+		int apid, percent;
+		if (3 == sscanf(s, "%llx %d %d", &chan, &apid, &percent)) {
+//printf("**** Old channelinfo: %llx %d\n", chan, apid);
+		    volume_map[make_pair(chan, apid)] = percent;
+
+		} 
+	  }
           fclose(audio_config_file);
         }
 }
@@ -356,6 +385,9 @@ extern int dvbsub_stop();
 extern int dvbsub_getpid();
 extern int dvbsub_start(int pid);
 extern void dvbsub_setup_changed(void);
+
+static int volume_percent;
+extern void setvolume(int volume_percent);
 
 int zapit_real(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0)
 {
@@ -580,10 +612,19 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
                 volume_left = volume_right = def_volume_left;
                 audio_mode = def_audio_mode;
         }
-        if(audioDecoder) {
+        //if(audioDecoder) {
                 //audioDecoder->setVolume(volume_left, volume_right);
                 //audioDecoder->setChannel(audio_mode); //FIXME
-        }
+        //}
+
+	t_chan_apid chan_apid = make_pair(live_channel_id, channel->getAudioPid());
+        volume_map_it = volume_map.find(chan_apid);
+        if((volume_map_it != volume_map.end()) )
+		volume_percent = volume_map_it->second;
+	else
+		volume_percent = channel->getAudioChannel()->isAc3 ? 100 : 75;
+
+	setvolume(volume_percent);
 
 	if (!we_playing)
 		startPlayBack(channel);
@@ -672,8 +713,6 @@ int zapit(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool 
 	return res;
 }
 
-extern void setvolume(bool isAC3);
-
 int change_audio_pid(uint8_t index)
 {
 	if ((!audioDemux) || (!audioDecoder) || (!channel))
@@ -703,7 +742,7 @@ int change_audio_pid(uint8_t index)
 	else
 		audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
 
-	setvolume (currentAudioChannel->isAc3);
+	setvolume (volume_percent);
 
 	printf("[zapit] change apid to 0x%x\n", channel->getAudioPid());
 	/* set demux filter */
@@ -1617,6 +1656,38 @@ DBG("NVOD insert %llx\n", CREATE_CHANNEL_ID_FROM_SERVICE_ORIGINALNETWORK_TRANSPO
                 break;
         }
 
+	case CZapitMessages::CMD_SET_VOLUME_PERCENT: {
+		CZapitMessages::commandVolumePercent msgVolumePercent;
+		CBasicServer::receive_data(connfd, &msgVolumePercent, sizeof(msgVolumePercent));
+                if (!msgVolumePercent.apid)
+			msgVolumePercent.apid = channel->getAudioPid();
+                volume_percent = msgVolumePercent.percent;
+		volume_map[make_pair(live_channel_id, msgVolumePercent.apid)] = volume_percent;
+		setvolume(volume_percent);
+		break;
+	}
+        case CZapitMessages::CMD_GET_VOLUME_PERCENT: {
+		CZapitMessages::commandVolumePercent msgVolumePercent;
+		CBasicServer::receive_data(connfd, &msgVolumePercent, sizeof(msgVolumePercent));
+                if (!msgVolumePercent.apid)
+			msgVolumePercent.apid = channel->getAudioPid();
+		t_chan_apid chan_apid = make_pair(live_channel_id, msgVolumePercent.apid);
+            	volume_map_it = volume_map.find(chan_apid);
+		if (volume_map_it != volume_map.end())
+			msgVolumePercent.percent = volume_map[chan_apid];
+		else {
+			for (int  i = 0; i < channel->getAudioChannelCount(); i++) {
+				if (msgVolumePercent.apid == channel->getAudioPid(i)) {
+					msgVolumePercent.percent = channel->getAudioChannel(i)->isAc3 ? 100 : 75;
+		    			volume_map[chan_apid] = msgVolumePercent.percent;
+					break;
+				}
+			}
+		}
+                CBasicServer::send_data(connfd, &msgVolumePercent, sizeof(msgVolumePercent));
+                break;
+        }
+
 	case CZapitMessages::CMD_SET_STANDBY: {
 		CZapitMessages::commandBoolean msgBoolean;
 		CBasicServer::receive_data(connfd, &msgBoolean, sizeof(msgBoolean));
@@ -1916,7 +1987,7 @@ int startPlayBack(CZapitChannel *thisChannel)
 			audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
 
 		printf("[zapit] starting %s audio\n", thisChannel->getAudioChannel()->isAc3 ? "AC3" : "MPEG2");
-		setvolume (thisChannel->getAudioChannel()->isAc3);
+		setvolume (volume_percent);
 		audioDemux->Start();
 		audioDecoder->Start();
 	}
@@ -2241,6 +2312,7 @@ int zapit_main_thread(void *data)
 		audio_map[channel->getChannelID()].apid = channel->getAudioPid();
 		audio_map[channel->getChannelID()].mode = audio_mode;
 		audio_map[channel->getChannelID()].volume = volume_right;
+                volume_map[make_pair(channel->getChannelID(), channel->getAudioPid())] = volume_percent;
 	}
 
 	stopPlaying();

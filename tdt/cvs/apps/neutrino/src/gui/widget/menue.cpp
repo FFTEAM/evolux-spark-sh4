@@ -579,9 +579,11 @@ int CMenuOptionNumberChooser::exec(CMenuTarget*)
 		else
 			(*optionValue)++;
 	}
-	paint(true);
+
 	if(observ)
 		observ->changeNotify(optionName, optionValue);
+
+	paint(true);
 
 	return menu_return::RETURN_NONE;
 }

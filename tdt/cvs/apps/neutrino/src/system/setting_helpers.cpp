@@ -473,7 +473,7 @@ bool CColorSetupNotifier::changeNotify(const neutrino_locale_t, void *)
 	return false;
 }
 
-bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void *)
+bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void *data)
 {
 	//printf("notify: %d\n", OptionName);
 #if 0 //FIXME to do ? manual audio delay
@@ -508,8 +508,30 @@ bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void 
 			write(proc_stb_audio_ac3, cmd.c_str(), cmd.length());
 			close(proc_stb_audio_ac3);
 		}
-	} else { // FIXME atm used for SRS
-		audioDecoder->SetSRS(g_settings.srs_enable, g_settings.srs_nmgr_enable, g_settings.srs_algo, g_settings.srs_ref_volume);
+	} else {
+		// audio_select.cpp, set channel specific volume
+		// FIXME. May need a separate notifier for this in the future.
+
+		g_settings.volume_percent = *((int *) (data));
+
+		// assume steps of 5.
+		if ((g_settings.volume_percent % 5) == 1)
+			g_settings.volume_percent += 4;
+		else
+			g_settings.volume_percent -= 4;
+
+		if (g_settings.volume_percent < 0)
+			g_settings.volume_percent = 0;
+		else if (g_settings.volume_percent > 999)
+			g_settings.volume_percent = 999;
+
+		g_settings.volume_percent /= 5;
+		g_settings.volume_percent *= 5;
+		*((int *) (data)) = g_settings.volume_percent;
+
+		CZapitClient zapit;
+		zapit.setVolumePercent(g_settings.volume_percent);
+		CNeutrinoApp::getInstance()->setvol(g_settings.current_volume ,(g_settings.audio_avs_Control));
 	}
 	return true;
 }

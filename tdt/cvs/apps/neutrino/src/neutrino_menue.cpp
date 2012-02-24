@@ -1834,12 +1834,7 @@ void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNoti
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_SRS_ALGO, &g_settings.srs_algo, AUDIOMENU_SRS_OPTIONS, AUDIOMENU_SRS_OPTION_COUNT, true, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionChooser(LOCALE_SRS_NMGR, &g_settings.srs_nmgr_enable, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, audioSetupNotifier));
 	audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_SRS_VOLUME, &g_settings.srs_ref_volume, true, 1, 100, audioSetupNotifier));
-#endif
 
-	audioSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_VOLUME_ADJUSTMENT));
-	//audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_VOLUME_ADJUSTMENT_AC3, &g_settings.volume_percent_ac3, true, 0, 100, audioSetupNotifier));
-	audioSettings.addItem(new CMenuOptionNumberChooser(LOCALE_VOLUME_ADJUSTMENT_PCM, &g_settings.volume_percent_pcm, true, 0, 100, audioSetupNotifier));
-#if 0
 	CStringInput * audio_PCMOffset = new CStringInput(LOCALE_AUDIOMENU_PCMOFFSET, g_settings.audio_PCMOffset, 2, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "0123456789 ", audioSetupNotifier);
 	CMenuForwarder *mf = new CMenuForwarder(LOCALE_AUDIOMENU_PCMOFFSET, (g_settings.audio_avs_Control == CControld::TYPE_LIRC), g_settings.audio_PCMOffset, audio_PCMOffset );
 	audioSettings.addItem(mf);
