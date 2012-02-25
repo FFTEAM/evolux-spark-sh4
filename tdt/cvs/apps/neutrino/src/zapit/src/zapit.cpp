@@ -386,8 +386,9 @@ extern int dvbsub_getpid();
 extern int dvbsub_start(int pid);
 extern void dvbsub_setup_changed(void);
 
-static int volume_percent;
 extern void setvolume(int volume_percent);
+#define VOLUME_DEFAULT_PCM 75
+#define VOLUME_DEFAULT_AC3 100
 
 int zapit_real(const t_channel_id channel_id, bool in_nvod, bool forupdate = 0, bool nowait = 0)
 {
@@ -612,19 +613,19 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
                 volume_left = volume_right = def_volume_left;
                 audio_mode = def_audio_mode;
         }
-        //if(audioDecoder) {
-                //audioDecoder->setVolume(volume_left, volume_right);
-                //audioDecoder->setChannel(audio_mode); //FIXME
-        //}
+#if 0
+        if(audioDecoder) {
+                audioDecoder->setVolume(volume_left, volume_right);
+                audioDecoder->setChannel(audio_mode); //FIXME
+        }
+#endif
 
 	t_chan_apid chan_apid = make_pair(live_channel_id, channel->getAudioPid());
         volume_map_it = volume_map.find(chan_apid);
         if((volume_map_it != volume_map.end()) )
-		volume_percent = volume_map_it->second;
+		setvolume(volume_map_it->second);
 	else
-		volume_percent = channel->getAudioChannel()->isAc3 ? 100 : 75;
-
-	setvolume(volume_percent);
+		setvolume(channel->getAudioChannel()->isAc3 ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
 
 	if (!we_playing)
 		startPlayBack(channel);
@@ -742,7 +743,12 @@ int change_audio_pid(uint8_t index)
 	else
 		audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
 
-	setvolume (volume_percent);
+	t_chan_apid chan_apid = make_pair(live_channel_id, channel->getAudioPid());
+	volume_map_it = volume_map.find(chan_apid);
+	if (volume_map_it != volume_map.end())
+		setvolume(volume_map[chan_apid]);
+	else
+		setvolume(currentAudioChannel->isAc3 ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
 
 	printf("[zapit] change apid to 0x%x\n", channel->getAudioPid());
 	/* set demux filter */
@@ -1661,9 +1667,8 @@ DBG("NVOD insert %llx\n", CREATE_CHANNEL_ID_FROM_SERVICE_ORIGINALNETWORK_TRANSPO
 		CBasicServer::receive_data(connfd, &msgVolumePercent, sizeof(msgVolumePercent));
                 if (!msgVolumePercent.apid)
 			msgVolumePercent.apid = channel->getAudioPid();
-                volume_percent = msgVolumePercent.percent;
-		volume_map[make_pair(live_channel_id, msgVolumePercent.apid)] = volume_percent;
-		setvolume(volume_percent);
+		volume_map[make_pair(live_channel_id, msgVolumePercent.apid)] = msgVolumePercent.percent;
+                setvolume(msgVolumePercent.percent);
 		break;
 	}
         case CZapitMessages::CMD_GET_VOLUME_PERCENT: {
@@ -1678,7 +1683,7 @@ DBG("NVOD insert %llx\n", CREATE_CHANNEL_ID_FROM_SERVICE_ORIGINALNETWORK_TRANSPO
 		else {
 			for (int  i = 0; i < channel->getAudioChannelCount(); i++) {
 				if (msgVolumePercent.apid == channel->getAudioPid(i)) {
-					msgVolumePercent.percent = channel->getAudioChannel(i)->isAc3 ? 100 : 75;
+					msgVolumePercent.percent = channel->getAudioChannel(i)->isAc3 ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM;
 		    			volume_map[chan_apid] = msgVolumePercent.percent;
 					break;
 				}
@@ -1987,7 +1992,14 @@ int startPlayBack(CZapitChannel *thisChannel)
 			audioDecoder->SetStreamType(AUDIO_FMT_MPEG);
 
 		printf("[zapit] starting %s audio\n", thisChannel->getAudioChannel()->isAc3 ? "AC3" : "MPEG2");
-		setvolume (volume_percent);
+
+		t_chan_apid chan_apid = make_pair(live_channel_id, channel->getAudioPid());
+		volume_map_it = volume_map.find(chan_apid);
+		if((volume_map_it != volume_map.end()) )
+			setvolume(volume_map_it->second);
+		else
+			setvolume(channel->getAudioChannel()->isAc3 ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
+
 		audioDemux->Start();
 		audioDecoder->Start();
 	}
@@ -2312,7 +2324,6 @@ int zapit_main_thread(void *data)
 		audio_map[channel->getChannelID()].apid = channel->getAudioPid();
 		audio_map[channel->getChannelID()].mode = audio_mode;
 		audio_map[channel->getChannelID()].volume = volume_right;
-                volume_map[make_pair(channel->getChannelID(), channel->getAudioPid())] = volume_percent;
 	}
 
 	stopPlaying();
