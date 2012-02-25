@@ -438,7 +438,7 @@ void CMovieBrowser::init(void)
 	m_pcFontFoot  = FOOT_FONT;
 	m_pcFontTitle = TITLE_FONT;
 	
-	m_textTitle = g_Locale->getText(LOCALE_MOVIEBROWSER_HEAD);
+	// m_textTitle = g_Locale->getText(LOCALE_MOVIEBROWSER_HEAD);
 	
 	m_currentStartPos = 0;
 	
@@ -1086,7 +1086,7 @@ int CMovieBrowser::paint(void)
 	Font* font = NULL;
 
 	m_pcBrowser = new CListFrame(&m_browserListLines, font, CListFrame::SCROLL | CListFrame::HEADER_LINE, 
-			&m_cBoxFrameBrowserList);
+			&m_cBoxFrameBrowserList, g_Locale->getText(LOCALE_MOVIEBROWSER_HEAD));
 	m_pcLastPlay = new CListFrame(&m_playListLines, font, CListFrame::SCROLL | CListFrame::HEADER_LINE | CListFrame::TITLE, 
 			&m_cBoxFrameLastPlayList, g_Locale->getText(LOCALE_MOVIEBROWSER_HEAD_PLAYLIST),
 			g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]);
@@ -1494,7 +1494,7 @@ void CMovieBrowser::refreshTitle(void)
 	m_pcWindow->paintBoxRel(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX, m_cBoxFrame.iY+	m_cBoxFrameTitleRel.iY, 
 				m_cBoxFrameTitleRel.iWidth, m_cBoxFrameTitleRel.iHeight, TITLE_BACKGROUND_COLOR, ROUND_RADIUS, 1);
 
-	m_pcFontTitle->RenderString(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX + TEXT_BORDER_WIDTH, m_cBoxFrame.iY+m_cBoxFrameTitleRel.iY + m_cBoxFrameTitleRel.iHeight, m_cBoxFrameTitleRel.iWidth - (TEXT_BORDER_WIDTH << 1), m_textTitle.c_str(), TITLE_FONT_COLOR, 0, true); // UTF-8
+	//m_pcFontTitle->RenderString(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX + TEXT_BORDER_WIDTH, m_cBoxFrame.iY+m_cBoxFrameTitleRel.iY + m_cBoxFrameTitleRel.iHeight, m_cBoxFrameTitleRel.iWidth - (TEXT_BORDER_WIDTH << 1), m_textTitle.c_str(), TITLE_FONT_COLOR, 0, true); // UTF-8
 }
 
 #define ADD_FOOT_HEIGHT 4
