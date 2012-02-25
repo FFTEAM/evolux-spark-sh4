@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libavformat/avformat.h>
+
 #include "manager.h"
 #include "common.h"
 
@@ -214,6 +216,18 @@ static int Command(void  *_context, ManagerCmd_t command, void * argument) {
     case MANAGER_SET: {
         int id = *((int*)argument);
 
+#if 1
+	// FIXME
+	// What's the argument supposed to be? apid or local index? --martii
+
+	if (id >= TrackCount) {
+		int apid = id;
+		for (id = 0; id < TrackCount; id++) {
+			if (((AVStream *) (Tracks[id].stream))->id == apid)
+				break;
+		}
+	}
+#endif
         audio_mgr_printf(20, "%s::%s MANAGER_SET id=%d\n", FILENAME, __FUNCTION__, id);
 
         if (id < TrackCount)
