@@ -558,7 +558,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release/usr/lib
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release/usr/lib/
 	rm -rf $(prefix)/release/usr/lib/engines
-	[ -e $(prefix)/release/usr/lib/tuxbox ] && rm -rf $(prefix)/release/usr/lib/tuxbox
+#	[ -e $(prefix)/release/usr/lib/tuxbox ] && rm -rf $(prefix)/release/usr/lib/tuxbox
 	rm -rf $(prefix)/release/usr/lib/enigma2
 	rm -rf $(prefix)/release/usr/lib/gconv
 	rm -rf $(prefix)/release/usr/lib/libxslt-plugins
