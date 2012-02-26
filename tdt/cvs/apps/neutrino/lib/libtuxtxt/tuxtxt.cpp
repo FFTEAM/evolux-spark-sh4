@@ -49,7 +49,7 @@ void CopyBB2FB();
 extern cVideo *videoDecoder;
 CFrameBuffer *frameBuffer = NULL;
 
-int log_level = 5;
+int log_level = 0;
 
 static pthread_t ttx_sub_thread = 0;
 static int reader_running = 0;
@@ -1400,19 +1400,18 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	sx = x0;
 	sy = y0;
 
-	int vframerate;
-	videoDecoder->getPictureInfo(vx, vy, vframerate);
-
 	/* initialisations */
 	if (transpmode == TRANSPMODE_TV)
 		transpmode = TRANSPMODE_TEXT;
 
-	if (Init(source) == 0)
+	if (Init(source) == 0) {
+		setPIG(0, 0, 720, 576);
 		return 0;
+	}
 	if(!use_gui) {
 		if (reader_running)
 			tuxtx_set_pid(sub_pid, sub_page, NULL);
-		setPIG(0, 0, vx, vy);
+		setPIG(0, 0, 720, 576);
 		pthread_create(&ttx_sub_thread, 0, reader_thread, (void *) NULL);
 		return 1;
 	}
@@ -1584,7 +1583,7 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	if ( initialized )
 		tuxtxt_close();
 
-	setPIG(0, 0, vx, vy);
+	setPIG(0, 0, 720, 576);
 
  	printf("Tuxtxt: plugin ended\n");
 	return 1;
@@ -2042,6 +2041,15 @@ skip_pid:
 					}
 				}
 			}
+			if (1 == GetRCCode(false)) {
+				switch (RCCode) {
+				case RC_TEXT:
+				case RC_HOME:
+					getpidsdone = 0;
+					delete dmx;
+					return 0;
+				}
+			}
 		}
 	}
 
@@ -2051,6 +2059,7 @@ skip_pid:
 
 		RenderMessage(NoServicesFound);
 		sleep(3);
+
 		delete dmx;
 		return 0;
 	}
@@ -2108,6 +2117,15 @@ skip_pid:
 					}
 
 					pid_table[pid_test].service_name_len += diff;
+				}
+				if (1 == GetRCCode(false)) {
+					switch (RCCode) {
+					case RC_TEXT:
+					case RC_HOME:
+						getpidsdone = 0;
+						delete dmx;
+						return 0;
+					}
 				}
 			}
 		}
@@ -2339,11 +2357,12 @@ void Menu_Init(char *menu, int current_pid, int menuitem, int hotindex) {
 		menu[MenuLine[M_PID]*Menu_Width + 28] = ' ';
 
 #if 0
-	/* set 16:9 modi, colors & national subset */
+	/* set 16:9 modi */
 	memcpy(&menu[Menu_Width*MenuLine[M_SC1] + Menu_Width - 5], &configonoff[menulanguage][screen_mode1  ? 3 : 0], 3);
 	memcpy(&menu[Menu_Width*MenuLine[M_SC2] + Menu_Width - 5], &configonoff[menulanguage][screen_mode2  ? 3 : 0], 3);
 #endif
 
+	/* set colors & national subset */
 	menu[MenuLine[M_COL]*Menu_Width +  1] = (color_mode == 1  ? ' ' : 'í');
 	menu[MenuLine[M_COL]*Menu_Width + 28] = (color_mode == 24 ? ' ' : 'î');
 	memset(&menu[Menu_Width*MenuLine[M_COL] + 3             ], 0x7f,color_mode);
@@ -2387,7 +2406,7 @@ void Menu_Init(char *menu, int current_pid, int menuitem, int hotindex) {
 }
 
 void ConfigMenu(int Init) {
-printf("[tuxtxt] Menu\n");
+	// printf("[tuxtxt] Menu\n");
 	int val, menuitem = M_Start;
 	int current_pid = 0;
 	int hotindex;
@@ -3456,7 +3475,7 @@ void SwitchScreenMode(int newscreenmode, int offset) {
  ******************************************************************************/
 
 void SwitchTranspMode() {
-	debugf(1, "%s: >\n", __func__);
+	// debugf(1, "%s: >\n", __func__);
 
 	if (screenmode != SCREENMODE_FULL) 
 		SwitchScreenMode(SCREENMODE_FULL, 0);
@@ -3482,7 +3501,7 @@ void SwitchTranspMode() {
 		Clear(transp);
 	}
 
-	debugf(1, "%s: <\n", __func__);
+	// debugf(1, "%s: <\n", __func__);
 }
 
 /******************************************************************************
@@ -5330,7 +5349,7 @@ printf("decode\n");
  * GetRCCode                                                                  *
  ******************************************************************************/
 
-int GetRCCode() {
+int GetRCCode(bool do_sleep) {
 	struct input_event ev;
 	static __u16 rc_last_key = KEY_RESERVED;
 
@@ -5341,51 +5360,56 @@ int GetRCCode() {
 	/* get code */
 	if (read(rc, &ev, sizeof(ev)) == sizeof(ev)) {
 		if (ev.value) {
-			if (ev.code != rc_last_key) {
-				rc_last_key = ev.code;
-				switch (ev.code) {
-				case KEY_UP:		RCCode = RC_UP;		break;
-				case KEY_DOWN:		RCCode = RC_DOWN;	break;
-				case KEY_LEFT:		RCCode = RC_LEFT;	break;
-				case KEY_RIGHT:		RCCode = RC_RIGHT;	break;
-				case KEY_OK:		RCCode = RC_OK;		break;
-				case KEY_0:		RCCode = RC_0;		break;
-				case KEY_1:		RCCode = RC_1;		break;
-				case KEY_2:		RCCode = RC_2;		break;
-				case KEY_3:		RCCode = RC_3;		break;
-				case KEY_4:		RCCode = RC_4;		break;
-				case KEY_5:		RCCode = RC_5;		break;
-				case KEY_6:		RCCode = RC_6;		break;
-				case KEY_7:		RCCode = RC_7;		break;
-				case KEY_8:		RCCode = RC_8;		break;
-				case KEY_9:		RCCode = RC_9;		break;
-				case KEY_RED:		RCCode = RC_RED;	break;
-				case KEY_GREEN:		RCCode = RC_GREEN;	break;
-				case KEY_YELLOW:	RCCode = RC_YELLOW;	break;
-				case KEY_BLUE:		RCCode = RC_BLUE;	break;
-				case KEY_VOLUMEUP:	RCCode = RC_PLUS;	break;
-				case KEY_VOLUMEDOWN:	RCCode = RC_MINUS;	break;
-				case KEY_MUTE:		RCCode = RC_MUTE;	break;
-				case KEY_TEXT:		RCCode = RC_TEXT;	break;
-				case KEY_PAGEUP:	RCCode = CRCInput::RC_page_up;	break; // ZOOM
-				case KEY_PAGEDOWN:	RCCode = CRCInput::RC_page_down;break; // ZOOM
-				case KEY_INFO:		RCCode = RC_HELP;	break;
-				case KEY_MENU:		RCCode = RC_DBOX;	break;
-				case KEY_EXIT:		RCCode = RC_HOME;	break;
-				case KEY_HOME:		RCCode = RC_HOME;	break;
-				case KEY_POWER:		RCCode = RC_STANDBY;	break;
+			switch (ev.code) { // permit repeat for quick cycling through pages
+				case KEY_UP:				RCCode = RC_UP;		break;
+				case KEY_DOWN:				RCCode = RC_DOWN;	break;
+			default:
+				if (ev.code != rc_last_key) {
+					rc_last_key = ev.code;
+					switch (ev.code) {
+						case KEY_LEFT:		RCCode = RC_LEFT;	break;
+						case KEY_RIGHT:		RCCode = RC_RIGHT;	break;
+						case KEY_OK:		RCCode = RC_OK;		break;
+						case KEY_0:			RCCode = RC_0;		break;
+						case KEY_1:			RCCode = RC_1;		break;
+						case KEY_2:			RCCode = RC_2;		break;
+						case KEY_3:			RCCode = RC_3;		break;
+						case KEY_4:			RCCode = RC_4;		break;
+						case KEY_5:			RCCode = RC_5;		break;
+						case KEY_6:			RCCode = RC_6;		break;
+						case KEY_7:			RCCode = RC_7;		break;
+						case KEY_8:			RCCode = RC_8;		break;
+						case KEY_9:			RCCode = RC_9;		break;
+						case KEY_RED:		RCCode = RC_RED;	break;
+						case KEY_GREEN:		RCCode = RC_GREEN;	break;
+						case KEY_YELLOW:	RCCode = RC_YELLOW;	break;
+						case KEY_BLUE:		RCCode = RC_BLUE;	break;
+						case KEY_VOLUMEUP:	RCCode = RC_PLUS;	break;
+						case KEY_VOLUMEDOWN:	RCCode = RC_MINUS;	break;
+						case KEY_MUTE:		RCCode = RC_MUTE;	break;
+						case KEY_TEXT:		RCCode = RC_TEXT;	break;
+						case KEY_PAGEUP:	RCCode = CRCInput::RC_page_up;	break; // ZOOM
+						case KEY_PAGEDOWN:	RCCode = CRCInput::RC_page_down;break; // ZOOM
+						case KEY_INFO:		RCCode = RC_HELP;	break;
+						case KEY_MENU:		RCCode = RC_DBOX;	break;
+						case KEY_EXIT:		RCCode = RC_HOME;	break;
+						case KEY_HOME:		RCCode = RC_HOME;	break;
+						case KEY_POWER:		RCCode = RC_STANDBY;	break;
+					}
 				}
-				fprintf(stderr, "[tuxtxt] new key, code %X %d\n", RCCode, ev.code);
-				return 1;
 			}
+			// fprintf(stderr, "[tuxtxt] new key, code %X %d\n", RCCode, ev.code);
+			return 1;
 		} else {
-			RCCode = -1;
+			// undesired key repetition
 			rc_last_key = KEY_RESERVED;
 		}
 	}
 
 	RCCode = -1;
-	usleep(1000000/100);
+
+	if (do_sleep)
+		usleep(1000000/100);
 
 	return 0;
 }

@@ -365,8 +365,8 @@ char versioninfo[16];
 int hotlist[10];
 int maxhotlist;
 
-int pig, rc, /*fb,*/ lcd;
-int sx, ex, sy, ey, x0, y0, dx, dy, vx, vy;
+int pig, rc, lcd;
+int sx, ex, sy, ey, x0, y0, dx, dy;
 int PosX, PosY, StartX, StartY;
 int lastpage;
 int inputcounter;
@@ -1459,7 +1459,7 @@ void UpdateLCD();
 int  Init(int source);
 int  GetNationalSubset(const char *country_code);
 int  GetTeletextPIDs();
-int  GetRCCode();
+int  GetRCCode(bool do_sleep = true);
 int  eval_triplet(int iOData, tstCachedPage *pstCachedPage,
 			unsigned char *pAPx, unsigned char *pAPy,
 			unsigned char *pAPx0, unsigned char *pAPy0,

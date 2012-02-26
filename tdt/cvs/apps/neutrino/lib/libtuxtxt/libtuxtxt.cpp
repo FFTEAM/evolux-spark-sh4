@@ -92,6 +92,15 @@ void tuxtxt_close()
 	tuxtxt_initialized=0;
 }
 
+void tuxtxt_check_death()
+{
+	// dmx->Read() will hang if we allow zapit to switch channels while dmx is in use
+
+	tuxtxt_stop();
+	while (tuxtxt_cache.thread_id)
+		usleep(50000);
+}
+
 /* Local Variables: */
 /* indent-tabs-mode:t */
 /* tab-width:3 */

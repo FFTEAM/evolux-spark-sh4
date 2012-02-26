@@ -602,12 +602,13 @@ void *tuxtxt_CacheThread(void * /*arg*/)
 		ssize_t readcnt;
 
 		readcnt = dmx->Read(pes_packet, sizeof (pes_packet), 1000);
+
 		//if (readcnt != sizeof(pes_packet))
 		if ((readcnt <= 0) || (readcnt % 184))
 		{
 #if TUXTXT_DEBUG
 			if(readcnt > 0)
-				printf ("TuxTxt: readerror: %d\n", readcnt);
+				fprintf (stderr, "TuxTxt: readerror: %d\n", readcnt);
 #endif
 			continue;
 		}
@@ -1078,7 +1079,7 @@ int tuxtxt_start_thread(int source)
 		tuxtxt_cache.thread_starting = 0;
 		return 0;
 	}
-#if 1//TUXTXT_DEBUG
+#if TUXTXT_DEBUG
 	printf("TuxTxt service started %x\n", tuxtxt_cache.vtxtpid);
 #endif
 	tuxtxt_cache.receiving = 1;
@@ -1092,7 +1093,7 @@ int tuxtxt_start_thread(int source)
 int tuxtxt_stop_thread()
 {
 	/* stop decode-thread */
-	if (tuxtxt_cache.thread_id != 0)
+	if (tuxtxt_cache.thread_id && !stop_cache)
 	{
 #if 0
 		if (pthread_cancel(tuxtxt_cache.thread_id) != 0)
@@ -1123,8 +1124,8 @@ int tuxtxt_stop_thread()
   	}
 //	tuxtxt_cache.dmx = -1;
 #endif
-#if 1//TUXTXT_DEBUG
-	printf("TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
+#if TUXTXT_DEBUG
+	fprintf(stderr, "TuxTxt stopped service %x\n", tuxtxt_cache.vtxtpid);
 #endif
 	return 1;
 }

@@ -444,6 +444,7 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 	}
 
 	tuxtx_stop_subtitle();
+	tuxtxt_check_death();
 	dvbsub_stop();
 	pmt_stop_update_filter(&pmt_update_fd);
 	stopPlayBack(true);
