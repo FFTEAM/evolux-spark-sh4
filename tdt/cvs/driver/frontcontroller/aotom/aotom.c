@@ -223,6 +223,7 @@ void draw_thread(void *arg)
   unsigned char buf[9];
   int count = 0;
   int pos = 0;
+  if (!arg) return;
 
 
   data = (struct vfd_ioctl_data *)arg;
