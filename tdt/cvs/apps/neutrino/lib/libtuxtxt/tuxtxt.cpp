@@ -4087,7 +4087,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 		return;
 	}
 
-	if (!(glyph = FT_Get_Char_Index(face, Char & 0xff))) {
+	if (!(glyph = FT_Get_Char_Index(face, Char))) {
 		fprintf(stderr, "TuxTxt <FT_Get_Char_Index for Char %d %x \"%c\" failed\n", Char, Char, Char & 0xFF );
 
 		FillRect(PosX, PosY , curfontwidth, factor*fontheight, bgcolor);
@@ -5417,7 +5417,6 @@ int GetRCCode(bool do_sleep) {
 static void* reader_thread(void * /*arg*/)
 {
 	fprintf(stderr, "TuxTxt subtitle thread started\n");
-	system("date >&2");
 	reader_running = true;
 	ttx_sleep = 5000000;
 	transpmode = TRANSPMODE_BGTRANS;

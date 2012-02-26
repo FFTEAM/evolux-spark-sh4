@@ -40,6 +40,7 @@ class CStreamInfo2 : public CMenuTarget
 		int width;
 		int height;
 		int hheight,iheight,sheight; 	// head/info/small font height
+		int xd;
 
 		int  max_height;	// Frambuffer 0.. max
 		int  max_width;	
@@ -50,6 +51,10 @@ class CStreamInfo2 : public CMenuTarget
 		int  font_head;
 		int  font_info;
 		int  font_small;
+
+		int  fgcolor;
+		int  fgcolor_head;
+		int  bgcolor;
 
 		int   sigBox_x;
 		int   sigBox_y;
@@ -63,15 +68,12 @@ class CStreamInfo2 : public CMenuTarget
 		int   sig_text_rate_x;
 
 		struct feSignal {
-			unsigned long	ber, old_ber, max_ber, min_ber;
-			unsigned long	sig, old_sig, max_sig, min_sig;
-			unsigned long	snr, old_snr, max_snr, min_snr;
+			long long	ber, old_ber, max_ber, min_ber;
+			long long	sig, old_sig, max_sig, min_sig;
+			long long	snr, old_snr, max_snr, min_snr;
+			long long	rate, old_rate, max_rate, min_rate;
 		} signal;
 		
-		struct bitrate {
-			unsigned int short_average, max_short_average, min_short_average;
-		} rate;
-
 		int  doSignalStrengthLoop();
 
 		int dvrfd, dmxfd;
@@ -88,9 +90,9 @@ class CStreamInfo2 : public CMenuTarget
 		void paint_pig(int x, int y, int w, int h);
 		void paint_techinfo(int x, int y);
 		void paint_signal_fe_box(int x, int y, int w, int h);
-		void paint_signal_fe(struct bitrate rate, struct feSignal s);
+		void paint_signal_fe(struct feSignal s);
 		int  y_signal_fe(unsigned long value, unsigned long max_range, int max_y);
-		void SignalRenderStr (unsigned int value, int x, int y);
+		void SignalRenderStr (long long value, int x, int y);
 		CScale *sigscale;
 		CScale *snrscale;
 		void showSNR ();
