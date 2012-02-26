@@ -223,7 +223,6 @@ void draw_thread(void *arg)
   unsigned char buf[9];
   int count = 0;
   int pos = 0;
-  if (!arg) return;
 
 
   data = (struct vfd_ioctl_data *)arg;
@@ -442,13 +441,13 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
       return -ERESTARTSYS;
 
       	data.length = len;
-	if (kernel_buf[len-1] == '\n')
+	if (len > 0 && kernel_buf[len-1] == '\n')
 	{
 	  kernel_buf[len-1] = 0;
 	  data.length--;
 	}
 
-	if(len <0)
+	if(len < 1)
 	{
 	  res = -1;
 	  dprintk(2, "empty string\n");
@@ -705,7 +704,7 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		if (mode == 0)
 		{
 	 	  struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
-		  if(data->length <0)
+		  if(data->length <1)
 	            {
 	              res = -1;
 	              dprintk(2, "empty string\n");

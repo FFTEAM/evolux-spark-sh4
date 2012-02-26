@@ -434,7 +434,7 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
 	  data.length--;
 	}
 
-	if(len <0)
+	if(len <1)
 	{
 	  res = -1;
 	  dprintk(2, "empty string\n");
