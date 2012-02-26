@@ -104,8 +104,8 @@ static void combine(unsigned char *output,
 		    const unsigned char *video, const unsigned char *osd,
 		    unsigned int xres, unsigned int yres);
 
-enum {UNKNOWN,PALLAS,VULCAN,XILLEON,BRCM7401,BRCM7400,BRCM7405};
-static const char *stb_name[]={"unknown","Pallas","Vulcan","Xilleon","Brcm7401","Brcm7400","Brcm7405"};
+enum {UNKNOWN,PALLAS,VULCAN,SPARK,XILLEON,BRCM7401,BRCM7400,BRCM7405};
+static const char *stb_name[]={"unknown","Pallas","Vulcan","Spark","Xilleon","Brcm7401","Brcm7400","Brcm7405"};
 static int stb_type=UNKNOWN;
 
 static const char *file_getline(const char *filename)
@@ -190,7 +190,7 @@ static int file_scanf_lines(const char *filename, const char *fmt, ...)
 
 int main(int argc, char **argv) {
 
-	printf("AiO Dreambox Screengrabber \n\n");
+	printf("AiO Spark Screengrabber \n\n");
 
 	unsigned int xres_v = 0,yres_v = 0,xres_o,yres_o,xres,yres,aspect,width;
 	int c,osd_only,video_only,use_osd_res,use_png,use_jpg,jpg_quality,no_aspect,use_letterbox;
@@ -216,24 +216,8 @@ int main(int argc, char **argv) {
 		const char *line = file_getline("/proc/stb/info/model");
 		if (line == NULL)
 			return 1;
-		if (!strcmp(line, "dm8000"))
-			stb_type = BRCM7400;
-		else if (!strcmp(line, "dm800"))
-			stb_type = BRCM7401;
-		else if (!strcmp(line, "spark"))
-			stb_type = BRCM7401;
-		else if (!strcmp(line, "dm500hd") ||
-			 !strcmp(line, "dm800se") ||
-			 !strcmp(line, "dm7020hd"))
-			stb_type = BRCM7405;
-/*	} else if (strstr(line, "xilleonfb")) {
-		stb_type = XILLEON;
-	} else if (strstr(line, "Pallas FB")) {
-		stb_type = PALLAS;
-	} else if (strstr(line, "vulcanfb")) {
-		stb_type = VULCAN;
-	}
-*/
+		stb_type = SPARK;
+
 	if (stb_type == UNKNOWN) {
 		printf("Unknown STB .. quit.\n");
 		return 1;
@@ -311,17 +295,11 @@ int main(int argc, char **argv) {
 		strcpy(filename, argv[optind]);
 
 	unsigned int mallocsize = 1920 * 1080;
-	if (stb_type == VULCAN || stb_type == PALLAS)
-		mallocsize = 720 * 576;
-
 	video = malloc(mallocsize * 3);
 	assert(video);
 	osd = malloc(mallocsize * 4);
 	assert(osd);
 
-	if ((stb_type == VULCAN || stb_type == PALLAS) && width > 720)
-		mallocsize = width * (width * 0.8 + 1);
-	
 	output = malloc(mallocsize * 4);
 	assert(output);
 
@@ -335,10 +313,7 @@ int main(int argc, char **argv) {
 		return 1;
 
 	// get aspect ratio
-	if (stb_type == VULCAN || stb_type == PALLAS)
-		file_scanf_lines("/proc/bus/bitstream", "A_RATIO: %d", &aspect);
-	else
-		file_scanf_line("/proc/stb/vmpeg/0/aspect", "%x", &aspect);
+	file_scanf_line("/proc/stb/vmpeg/0/aspect", "%x", &aspect);
 
 	// resizing
  	if (video_only)
@@ -569,174 +544,7 @@ static bool getvideo(unsigned char *video, unsigned int *xres, unsigned int *yre
 		return false;
 	}
 
-	if (stb_type == BRCM7401 || stb_type == BRCM7400 || stb_type == BRCM7405)
-	{
-		// grab brcm7401 pic from decoder memory
-		unsigned char *memory = mmap(0, 100, PROT_READ, MAP_SHARED, mem_fd, 0x10100000);
-		if (memory == MAP_FAILED) {
-			perror("mmap");
-			return false;
-		}
-
-		unsigned char data[100];
-
-		unsigned int adr,adr2,ofs,ofs2,offset/*,vert_start,vert_end*/;
-		unsigned int xsub,ytmp;
-		unsigned int xtmp;
-
-		memcpy(data,memory,100); 
-		//vert_start=data[0x1B]<<8|data[0x1A];
-		//vert_end=data[0x19]<<8|data[0x18];
-		stride=data[0x15]<<8|data[0x14];	
-		ofs=(data[0x28]<<8|data[0x27])>>4;
-		ofs2=(data[0x2c]<<8|data[0x2b])>>4;
-		adr=(data[0x1f]<<24|data[0x1e]<<16|data[0x1d]<<8|data[0x1c])&0xFFFFFF00;
-		adr2=(data[0x23]<<24|data[0x22]<<16|data[0x21]<<8|data[0x20])&0xFFFFFF00;
-		offset=adr2-adr;
-		
-		munmap(memory, 100);
-
-		// printf("Stride: %d Res: %d\n",stride,res);
-		// printf("Adr: %X Adr2: %X OFS: %d %d\n",adr,adr2,ofs,ofs2);
-
-		// Check that obtained values are sane and prevent segfaults.
-		if ((adr == 0) || (adr2 == 0) || (adr2 <= adr))
-		{
-			printf("Got or invalid 'adr' offsets, aborting (%x,%x)\n", adr, adr2);
-			return false;
-		}
-
-		file_scanf_line("/proc/stb/vmpeg/0/yres", "%x", &res);
-
-		luma = malloc(stride * ofs);
-		assert(luma);
-		chroma = malloc(stride * (ofs2 + 64));
-		assert(chroma);
-
-		// grabbing luma & chroma plane from the decoder memory
-		if (stb_type == BRCM7401 || stb_type == BRCM7405) {
-			// on dm800/dm500hd we have direct access to the decoder memory
-			memory = mmap(0, offset + stride*(ofs2+64), PROT_READ, MAP_SHARED, mem_fd, adr);
-			if (memory == MAP_FAILED) {
-				perror("mmap");
-				return false;
-			}
-			
-			usleep(50000); 	// we try to get a full picture, its not possible to get a sync from the decoder so we use a delay
-					// and hope we get a good timing. dont ask me why, but every DM800 i tested so far produced a good
-					// result with a 50ms delay
-		} else if (stb_type == BRCM7400) { 
-			// on dm8000 we have to use dma, so dont change anything here until you really know what you are doing !
-			
-			unsigned int i = 0;
-			unsigned int tmp_len = DMA_BLOCKSIZE;
-			unsigned int tmp_size = offset + stride * (ofs2 + 64);
-			if (tmp_size > 2 * DMA_BLOCKSIZE)
-			{
-				printf("DMA length exceeds maximum (0x%x)\n", tmp_size);
-				return false;
-			}
-
-			memory = mmap(0, DMA_BLOCKSIZE + 0x1000, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, SPARE_RAM);
-			if (memory == MAP_FAILED) {
-				perror("mmap");
-				return false;
-			}
-
-			volatile unsigned long *mem_dma;
-			mem_dma = mmap(0, 0x1000, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, 0x10c02000);
-			if (mem_dma == MAP_FAILED) {
-				perror("mmap");
-				return false;
-			}
-
-			for (i=0; i < tmp_size; i += DMA_BLOCKSIZE)
-			{
-				unsigned long *descriptor = (void*)memory;
-
-				if (i + DMA_BLOCKSIZE > tmp_size)
-					tmp_len = tmp_size - i;
-				
-				descriptor[0] = /* READ */ adr + i;
-				descriptor[1] = /* WRITE */ SPARE_RAM + 0x1000;
-				descriptor[2] = 0x40000000 | /* LEN */ tmp_len;
-				descriptor[3] = 0;
-				descriptor[4] = 0;
-				descriptor[5] = 0;
-				descriptor[6] = 0;
-				descriptor[7] = 0;
-				mem_dma[1] = /* FIRST_DESCRIPTOR */ SPARE_RAM;
-				mem_dma[3] = /* DMA WAKE CTRL */ 3;
-				mem_dma[2] = 1;
-				while (mem_dma[5] == 1)
-					usleep(2);
-				mem_dma[2] = 0;
-			}
-
-			munmap((void *)mem_dma, 0x1000);
-			memory += 0x1000;
-		}
-
-		unsigned int t = 0, t2 = 0, dat1 = 0;
-		unsigned int chr_luma_stride = 0x40;
- 		unsigned int sw;
-
-		if (stb_type == BRCM7405)
-			chr_luma_stride *= 2;
-
-		xsub=chr_luma_stride;
-
-		// decode luma & chroma plane or lets say sort it
-		for (xtmp=0; xtmp < stride; xtmp+=chr_luma_stride)
-		{
-			if ((stride-xtmp) <= chr_luma_stride)
-				xsub=stride-xtmp;
-
-			dat1=xtmp;
-			sw=1;
-			for (ytmp = 0; ytmp < ofs; ytmp++) 
-			{
-				memcpy(luma + dat1, memory + t, xsub); // luma
-				t += chr_luma_stride;
-
-				switch (ofs2-ytmp) // the two switch commands are much faster than one if statement
-				{
-					case 0:
-						sw=0;
-						break;
-				}
-				switch (sw)
-				{
-					case 1:
-						memcpy(chroma + dat1, memory + offset + t2, xsub); // chroma
-						t2 += chr_luma_stride;
-						break;
-				}
-				dat1+=stride;
-			}
-		}
-
-		if (stb_type == BRCM7401 || stb_type == BRCM7405)
-			munmap(memory, offset + stride * (ofs2 + 64));
-		else if (stb_type == BRCM7400) {
-			memory -= 0x1000;
-			munmap(memory, DMA_BLOCKSIZE + 0x1000);
-		}
-
-		for (t=0; t< stride*ofs;t+=4)
-		{
-			SWAP(luma[t],luma[t+3]);
-			SWAP(luma[t+1],luma[t+2]);
-
-			if (t< stride*(ofs>>1))
-			{ 
-				SWAP(chroma[t],chroma[t+3]);
-				SWAP(chroma[t+1],chroma[t+2]);			
-			}
-		
-		}
-	} else if (stb_type == XILLEON) {
-		// grab xilleon pic from decoder memory
+		// grab spark pic from decoder memory
 		unsigned char *memory = mmap(0, 1920*1152*6, PROT_READ, MAP_SHARED, mem_fd, 0x6000000);
 		if (memory == MAP_FAILED) {
 			perror("mmap");
@@ -802,107 +610,12 @@ static bool getvideo(unsigned char *video, unsigned int *xres, unsigned int *yre
 		}
 		free(frame_l);
 		free(frame_c);
-	} else if (stb_type == VULCAN || stb_type == PALLAS)
-	{
-		// grab via v4l device (ppc boxes)
-		
-		unsigned char *memory = malloc(720 * 576 * 3 + 16);
-		assert(memory);
-
-		int fd_video = open(VIDEO_DEV, O_RDONLY);
-		if (fd_video < 0) {
-			perror(VIDEO_DEV);
-			return false;
-		}
-
-		ssize_t r = read(fd_video, memory, 720 * 576 * 3 + 16);
-		if (r < 16) {
-			perror("read");
-			close(fd_video);
-			return false;
-		}
-		close(fd_video);
-
-		int *size = (int*)memory;
-		stride = size[0];
-		res = size[1];
-
-		luma = malloc(stride * res);
-		assert(luma);
-		chroma = malloc(stride * res);
-		assert(chroma);
-
-		memcpy(luma, memory + 16, stride * res);
-		memcpy(chroma, memory + 16 + stride * res, stride * res);
-
-		free(memory);
-	}
 
 	close(mem_fd);	
 	
 	int Y, U, V, y ,x, out1, pos, RU, GU, GV, BV, rgbstride, t;
 	Y=U=V=0;
 		
-	// yuv2rgb conversion (4:2:0)
-	printf("... converting Video from YUV to RGB color space\n");
-	out1=pos=t=0;
-	rgbstride=stride*3;
-	
-	for (y=res; y != 0; y-=2)
-	{
-		for (x=stride; x != 0; x-=2)
-		{
-			U=chroma[t++];
-			V=chroma[t++];
-			
-			RU=yuv2rgbtable_ru[U]; // use lookup tables to speedup the whole thing
-			GU=yuv2rgbtable_gu[U];
-			GV=yuv2rgbtable_gv[V];
-			BV=yuv2rgbtable_bv[V];
-			
-			switch (stb_type) //on xilleon we use bgr instead of rgb so simply swap the coeffs
-			{
-				case XILLEON:
-					SWAP(RU,BV);
-					break;
-			}
-
-			// now we do 4 pixels on each iteration this is more code but much faster 
-			Y=yuv2rgbtable_y[luma[pos]]; 
-
-			video[out1]=CLAMP((Y + RU)>>16);
-			video[out1+1]=CLAMP((Y - GV - GU)>>16);
-			video[out1+2]=CLAMP((Y + BV)>>16);
-			
-			Y=yuv2rgbtable_y[luma[stride+pos]];
-
-			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
-			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
-			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-
-			pos++;
-			out1+=3;
-			
-			Y=yuv2rgbtable_y[luma[pos]];
-
-			video[out1]=CLAMP((Y + RU)>>16);
-			video[out1+1]=CLAMP((Y - GV - GU)>>16);
-			video[out1+2]=CLAMP((Y + BV)>>16);
-			
-			Y=yuv2rgbtable_y[luma[stride+pos]];
-
-			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
-			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
-			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-			
-			out1+=3;
-			pos++;
-		}
-		out1+=rgbstride;
-		pos+=stride;
-
-	}
-
 	*xres=stride;
 	*yres=res;
 	printf("... Video-Size: %d x %d\n",*xres,*yres);
@@ -926,11 +639,8 @@ static bool getosd(unsigned char *osd, unsigned int *xres, unsigned int *yres)
 
 	fb = open("/dev/fb0", O_RDWR);
 	if (fb == -1) {
-		fb = open("/dev/fb/0", O_RDWR);
-		if (fb == -1) {
-			perror("fbdev");
-			return false;
-		}
+		perror("fbdev");
+		return false;
 	}
 
 	if (ioctl(fb, FBIOGET_FSCREENINFO, &fix_screeninfo) == -1) {
