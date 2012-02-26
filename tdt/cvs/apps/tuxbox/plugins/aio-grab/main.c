@@ -613,8 +613,7 @@ static bool getvideo(unsigned char *video, unsigned int *xres, unsigned int *yre
 
 	close(mem_fd);	
 	
-	int Y, U, V, y ,x, out1, pos, RU, GU, GV, BV, rgbstride, t;
-	Y=U=V=0;
+
 		
 	*xres=stride;
 	*yres=res;
