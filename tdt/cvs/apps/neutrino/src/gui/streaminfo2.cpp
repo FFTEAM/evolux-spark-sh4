@@ -272,77 +272,51 @@ void CStreamInfo2::paint_pig (int x, int y, int w, int h)
 
 void CStreamInfo2::paint_signal_fe_box(int _x, int _y, int w, int h)
 {
-	int y1, y2;
-	xd = w/5;
+	xd = 2 * w/9;
 
-	g_Font[font_small]->RenderString(_x, _y+iheight+15, width-10, g_Locale->getText(LOCALE_STREAMINFO_SIGNAL), COL_MENUCONTENTDARK, 0, true, fgcolor);
+	g_Font[font_info]->RenderString(_x, _y+iheight, width-10, g_Locale->getText(LOCALE_STREAMINFO_SIGNAL), COL_MENUCONTENTDARK, 0, true, fgcolor);
 
 	sigBox_x = _x;
 	sigBox_y = _y+iheight+15;
 	sigBox_w = w;
-	sigBox_h = h-iheight*3;
+	sigBox_h = h-sheight*5;
 	frameBuffer->paintBoxRel(sigBox_x,sigBox_y,sigBox_w+2,sigBox_h, COL_BLACK);
 
-	y1 = _y + h + iheight + iheight+iheight-8;
-	y2 = _y + h - sheight+8;
+	sig_text_y = sigBox_y + sigBox_h + sheight;
 
-	frameBuffer->paintBoxRel(_x+xd,y2- 12,16,2, COL_RED); //red
-	g_Font[font_small]->RenderString(_x+20+xd,
-		y2, 50, "BER", COL_MENUCONTENTDARK, 0, true);
+	int maxmin_x = _x + 5;
+	g_Font[font_small]->RenderString(maxmin_x, sig_text_y + sheight, 50, "max", COL_MENUCONTENTDARK, 0, true, fgcolor);
+	g_Font[font_small]->RenderString(maxmin_x, sig_text_y + 3 * sheight, 50, "min", COL_MENUCONTENTDARK, 0, true, fgcolor);
 
-	frameBuffer->paintBoxRel(_x+xd*2,y2- 12,16,2,COL_BLUE); //blue
-	g_Font[font_small]->RenderString(_x+20+xd*2,
-		y2, 50, "SNR", COL_MENUCONTENTDARK, 0, true, fgcolor);
+	_x -= w/9;
 
-	frameBuffer->paintBoxRel(_x+xd*3,y2- 12,16,2, COL_GREEN); //green
-	g_Font[font_small]->RenderString(_x+20+xd*3,
-		y2, 50, "SIG", COL_MENUCONTENTDARK, 0, true, fgcolor);
+	frameBuffer->paintBoxRel(_x+xd,sig_text_y- 12,16,2, COL_RED); //red
+	g_Font[font_small]->RenderString(_x+20+xd, sig_text_y, xd, "BER", COL_MENUCONTENTDARK, 0, true);
 
-	frameBuffer->paintBoxRel(_x+xd*4,y2- 12,16,2,COL_YELLOW); // near yellow
-	g_Font[font_small]->RenderString(_x+20+xd*4,
-		y2, 50, "Bitrate", COL_MENUCONTENTDARK, 0, true, fgcolor);
+	frameBuffer->paintBoxRel(_x+xd*2,sig_text_y- 12,16,2,COL_BLUE); //blue
+	g_Font[font_small]->RenderString(_x+20+xd*2, sig_text_y, xd, "SNR", COL_MENUCONTENTDARK, 0, true, fgcolor);
+
+	frameBuffer->paintBoxRel(_x+xd*3,sig_text_y- 12,16,2, COL_GREEN); //green
+	g_Font[font_small]->RenderString(_x+20+xd*3, sig_text_y, xd, "SIG", COL_MENUCONTENTDARK, 0, true, fgcolor);
+
+	frameBuffer->paintBoxRel(_x+xd*4,sig_text_y- 12,16,2,COL_YELLOW); // near yellow
+	g_Font[font_small]->RenderString(_x+20+xd*4, sig_text_y, xd, "Bitrate", COL_MENUCONTENTDARK, 0, true, fgcolor);
 	
-	sig_text_y = y1 - iheight;
 	sig_text_ber_x =  _x + 5 +  xd;
 	sig_text_snr_x =  _x + 5 +  xd * 2;
 	sig_text_sig_x =  _x + 5 +  xd * 3;
 	sig_text_rate_x = _x + 5 +  xd * 4;
-		
-	int maxmin_x; // x-position of min and max
-	if (paint_mode == 0) {
-#if 0
-		maxmin_x = sig_text_ber_x-40;
-#else
-		maxmin_x = _x + 5 + xd * 0;
-#endif
-	}
-	else {
-#if 0
-		maxmin_x = _x + 40 + xd * 3 + 45;
-#else
-		maxmin_x = _x + 5 + xd * 0;
-#endif
-	}
-	g_Font[font_small]->RenderString(maxmin_x, y1 - 1 * sheight, 50, "min", COL_MENUCONTENTDARK, 0, true, fgcolor);
-	g_Font[font_small]->RenderString(maxmin_x, y1 - 3 * sheight, 50, "max", COL_MENUCONTENTDARK, 0, true, fgcolor);
 
 	sigBox_pos = 0;
-
 	signal.old_sig = 1;
 	signal.old_snr = 1;
 	signal.old_ber = 1;
 	signal.old_rate = 1;
-
-#if 0
-	feSignal s = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	paint_signal_fe(signal);
-#endif
 }
 
 void CStreamInfo2::paint_signal_fe(struct feSignal s)
 {
 	int   x_now = sigBox_pos;
-	int   yt = sig_text_y;
 	int   yd, yd_old;
 	static int old_x=0,old_y=0;
 	sigBox_pos = (++sigBox_pos) % sigBox_w;
@@ -354,9 +328,9 @@ void CStreamInfo2::paint_signal_fe(struct feSignal s)
 
 	if (s.ber > -1) {
 		if (s.ber != s.old_ber) {
-			SignalRenderStr(s.max_ber, sig_text_ber_x, yt - 2 * sheight);
-			SignalRenderStr(s.ber,     sig_text_ber_x, yt - sheight);
-			SignalRenderStr(s.min_ber, sig_text_ber_x, yt);
+			SignalRenderStr(s.max_ber, sig_text_ber_x, sig_text_y + sheight);
+			SignalRenderStr(s.ber,     sig_text_ber_x, sig_text_y + 2 * sheight);
+			SignalRenderStr(s.min_ber, sig_text_ber_x, sig_text_y + 3 * sheight);
 		}
 		yd = y_signal_fe (s.ber, 4000, sigBox_h);
 		yd_old = y_signal_fe (s.old_ber, 4000, sigBox_h);
@@ -368,12 +342,12 @@ void CStreamInfo2::paint_signal_fe(struct feSignal s)
 
 	if (s.sig > -1) {
 		if (s.sig != s.old_sig) {
-			SignalRenderStr(s.max_sig, sig_text_sig_x, yt - 2 * sheight);
-			SignalRenderStr(s.sig,     sig_text_sig_x, yt - sheight);
-			SignalRenderStr(s.min_sig, sig_text_sig_x, yt);
+			SignalRenderStr(s.max_sig, sig_text_sig_x, sig_text_y + sheight);
+			SignalRenderStr(s.sig,     sig_text_sig_x, sig_text_y + 2 * sheight);
+			SignalRenderStr(s.min_sig, sig_text_sig_x, sig_text_y + 3 * sheight);
 		}
-		yd = y_signal_fe (s.sig, 65000, sigBox_h);
-		yd_old = y_signal_fe (s.old_sig, 65000, sigBox_h);
+		yd = y_signal_fe (s.sig, 0xFFFF, sigBox_h);
+		yd_old = y_signal_fe (s.old_sig, 0xFFFF, sigBox_h);
 		if (sigBox_pos < 2)
 			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_GREEN);
 		else
@@ -382,12 +356,12 @@ void CStreamInfo2::paint_signal_fe(struct feSignal s)
 
 	if (s.snr > -1) {
 		if (s.snr != s.old_snr) {
-			SignalRenderStr(s.max_snr, sig_text_snr_x, yt - 2 * sheight);
-			SignalRenderStr(s.snr,     sig_text_snr_x, yt - sheight);
-			SignalRenderStr(s.min_snr, sig_text_snr_x, yt);
+			SignalRenderStr(s.max_snr, sig_text_snr_x, sig_text_y + sheight);
+			SignalRenderStr(s.snr,     sig_text_snr_x, sig_text_y + 2 * sheight);
+			SignalRenderStr(s.min_snr, sig_text_snr_x, sig_text_y + 3 * sheight);
 		}
-		yd = y_signal_fe (s.snr, 65000, sigBox_h);
-		yd_old = y_signal_fe (s.old_snr, 65000, sigBox_h);
+		yd = y_signal_fe (s.snr, 0xFFFF, sigBox_h);
+		yd_old = y_signal_fe (s.old_snr, 0xFFFF, sigBox_h);
 		if (sigBox_pos < 2)
 			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_BLUE);
 		else
@@ -396,13 +370,13 @@ void CStreamInfo2::paint_signal_fe(struct feSignal s)
 
 	if (s.rate > -1) {
 		if (s.rate != s.old_rate) {
-			SignalRenderStr(s.max_rate, sig_text_rate_x, yt - 2 * sheight);
-			SignalRenderStr(s.rate,     sig_text_rate_x, yt - sheight);
-			SignalRenderStr(s.min_rate, sig_text_rate_x, yt);
+			SignalRenderStr(s.max_rate, sig_text_rate_x, sig_text_y + sheight);
+			SignalRenderStr(s.rate,     sig_text_rate_x, sig_text_y + 2 * sheight);
+			SignalRenderStr(s.min_rate, sig_text_rate_x, sig_text_y + 3 * sheight);
 		}
 		if ( g_RemoteControl->current_PIDs.PIDs.vpid > 0 ){
-			yd = y_signal_fe (s.rate/1000, 20000, sigBox_h);
-			yd_old = y_signal_fe (s.old_rate/1000, 20000, sigBox_h);
+			yd = y_signal_fe (s.rate/1000, 25000, sigBox_h);
+			yd_old = y_signal_fe (s.old_rate/1000, 25000, sigBox_h);
 		} else {
 			yd = y_signal_fe (s.rate/1000, 512, sigBox_h);
 			yd_old = y_signal_fe (s.old_rate/1000, 512, sigBox_h);
@@ -433,9 +407,9 @@ void CStreamInfo2::SignalRenderStr(long long value, int _x, int _y)
 {
 	char str[30];
 
-	frameBuffer->paintBoxRel(_x, _y - sheight + 5, xd, sheight - 1, bgcolor);
+	frameBuffer->paintBoxRel(_x, _y - sheight, xd, sheight - 1, bgcolor);
 	sprintf(str,"%8lld", value);
-	g_Font[font_small]->RenderString(_x, _y + 5, xd, str, COL_MENUCONTENTDARK, 0, true, fgcolor);
+	g_Font[font_small]->RenderString(_x, _y, xd, str, COL_MENUCONTENTDARK, 0, true, fgcolor);
 }
 
 void CStreamInfo2::paint (int mode)
@@ -449,38 +423,33 @@ void CStreamInfo2::paint (int mode)
 	int ypos = y + 5;
 	int xpos = x + 10;
 
-	if (paint_mode == 0) {
+	// -- tech Infos, PIG, small signal graph
+	head_string = g_Locale->getText (LOCALE_STREAMINFO_HEAD);
+	CVFD::getInstance ()->setMode (CVFD::MODE_MENU_UTF8, head_string);
 
-		// -- tech Infos, PIG, small signal graph
-		head_string = g_Locale->getText (LOCALE_STREAMINFO_HEAD);
-		CVFD::getInstance ()->setMode (CVFD::MODE_MENU_UTF8, head_string);
+	// paint backround, title pig, etc.
+	frameBuffer->paintBoxRel (0, 0, max_width, max_height, bgcolor);
+	g_Font[font_head]->RenderString (xpos, ypos + hheight + 1, width, head_string, COL_MENUHEAD, 0, true, fgcolor_head);	// UTF-8
+	ypos += hheight;
 
-		// paint backround, title pig, etc.
-		frameBuffer->paintBoxRel (0, 0, max_width, max_height, bgcolor);
-		g_Font[font_head]->RenderString (xpos, ypos + hheight + 1, width, head_string, COL_MENUHEAD, 0, true, fgcolor_head);	// UTF-8
-		ypos += hheight;
+	paint_techinfo (xpos, ypos);
 
-		// paint PIG
-		//paint_pig (width - 240, y + 10, 240, 190);
-		//paint_pig (width - width/3 - 10, y + 10, width/3, height/3);
+	paint_signal_fe_box (width - 2 * width/5 - 10, ypos + iheight, 2 * width/5, 2 * height/5);
+}
 
-		// Info Output
-		//ypos += (iheight >> 1);
-		//ypos += iheight;
-		paint_techinfo (xpos, ypos);
+void CStreamInfo2::paint_techinfo_line(int xpos, int ypos, const neutrino_locale_t loc, const char *txt, int xpos2, const char *txt2)
+{
+	if (!txt2)
+		return;
+	if (loc != NONEXISTANT_LOCALE)
+		txt = g_Locale->getText(loc);
+	if (!txt)
+		return;
 
-		//paint_signal_fe_box (width - 240, (y + 190 + hheight), 240, 190);
-		paint_signal_fe_box (width - width/3 - 10, (y + 10 + height/3 + hheight - 50), width/3, height/3 + hheight - 50);
-	} else {
-		// --  small PIG, small signal graph
-		// -- paint backround, title pig, etc.
-		frameBuffer->paintBoxRel (0, 0, max_width, max_height, bgcolor);
-
-		// -- paint large signal graph
-		paint_signal_fe_box (x, y-50, width, height-100);
-
-	}
-
+	char buf[100];
+	snprintf(buf, sizeof(buf), "%s: ", txt);
+	g_Font[font_info]->RenderString (xpos, ypos, width - xpos, txt, 0, 0, true, fgcolor);
+	g_Font[font_info]->RenderString (xpos + xpos2, ypos, width - xpos - xpos2, txt2, 0, 0, true, fgcolor);
 }
 
 void CStreamInfo2::paint_techinfo(int xpos, int ypos)
@@ -489,111 +458,96 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	int xres, yres, aspectRatio, framerate;
 	// paint labels
 	int spaceoffset = 0,i = 0;
-	int array[4]={g_Font[font_info]->getRenderWidth(g_Locale->getText (LOCALE_STREAMINFO_RESOLUTION)),
-		      g_Font[font_info]->getRenderWidth(g_Locale->getText (LOCALE_STREAMINFO_ARATIO)),
-		      g_Font[font_info]->getRenderWidth(g_Locale->getText (LOCALE_STREAMINFO_FRAMERATE)),
-		      g_Font[font_info]->getRenderWidth(g_Locale->getText (LOCALE_STREAMINFO_AUDIOTYPE))}; 
-	for(i=0 ; i<4; i++)
-	{
-		if(spaceoffset < array[i])
-			spaceoffset = array[i];
-	}
-	spaceoffset+=4;
 
-	videoDecoder->getPictureInfo(xres, yres, framerate);
-	aspectRatio = videoDecoder->getAspectRatio();
+	{
+		neutrino_locale_t n_arr[] = {
+			LOCALE_STREAMINFO_RESOLUTION, LOCALE_STREAMINFO_ARATIO, LOCALE_STREAMINFO_FRAMERATE,
+			LOCALE_STREAMINFO_ARATIO, LOCALE_STREAMINFO_FRAMERATE,LOCALE_STREAMINFO_AUDIOTYPE,
+			LOCALE_SATSETUP_SATELLITE, LOCALE_TIMERLIST_CHANNEL, NONEXISTANT_LOCALE
+		};
+
+		neutrino_locale_t *i = n_arr;
+		while (*i != NONEXISTANT_LOCALE) {
+			int w = g_Font[font_info]->getRenderWidth(g_Locale->getText (*i));
+			if (w > spaceoffset)
+				spaceoffset = w;
+			i++;
+		}
+	}
+
+	{
+		char const *s_arr[] = {
+			"Tp. Freq.", "ONid", "Sid", "TSid", "PMTpid", "Vpid", "Apid(s)", "VTXTpid", NULL
+		};
+
+		const char **i = s_arr;
+		while (*i) {
+			int w = g_Font[font_info]->getRenderWidth(*i);
+			if (w > spaceoffset)
+				spaceoffset = w;
+			i++;
+		}
+	}
+
+	spaceoffset += g_Font[font_info]->getRenderWidth(": ");
+	ypos += iheight;
+
 	//Video RESOLUTION
 	ypos += iheight;
-	sprintf ((char *) buf, "%s:",g_Locale->getText (LOCALE_STREAMINFO_RESOLUTION));
-	g_Font[font_info]->RenderString (xpos, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	videoDecoder->getPictureInfo(xres, yres, framerate);
 	sprintf ((char *) buf, "%dx%d", xres, yres);
-	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	paint_techinfo_line(xpos, ypos, LOCALE_STREAMINFO_RESOLUTION, NULL, spaceoffset, buf);
 
-#if 0
-  ypos += iheight;
-  sprintf ((char *) buf, "%s: %d bits/sec", g_Locale->getText (LOCALE_STREAMINFO_BITRATE), (int) bitInfo[4] * 50);
-  g_Font[font_info]->RenderString (xpos, ypos, width*2/3 - 10, buf, COL_MENUCONTENT, 0, true);	// UTF-8
-
-#endif
 	//audio rate
+	const char *ar;
 	ypos += iheight;
-	sprintf ((char *) buf, "%s:",g_Locale->getText (LOCALE_STREAMINFO_ARATIO));
-	g_Font[font_info]->RenderString (xpos, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	aspectRatio = videoDecoder->getAspectRatio();
 	switch (aspectRatio) {
-		case 0:
-			sprintf ((char *) buf, "4:3");
-		break;
-		case 1:
-			sprintf ((char *) buf, "16:9");
-		break;
-		case 2:
-			sprintf ((char *) buf, "14:9");
-		break;
-		case 4:
-			sprintf ((char *) buf, "20:9");
-		break;
-		default:
-			strncpy (buf, g_Locale->getText (LOCALE_STREAMINFO_ARATIO_UNKNOWN), sizeof (buf));
+		case 0: ar = "4:3"; break;
+		case 1: ar = "16:9"; break;
+		case 2: ar = "14:9"; break;
+		case 4: ar = "20:9"; break;
+		default: ar = g_Locale->getText (LOCALE_STREAMINFO_ARATIO_UNKNOWN);
 	}
-	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	paint_techinfo_line(xpos, ypos, LOCALE_STREAMINFO_ARATIO, NULL, spaceoffset, ar);
 
 	//Video FRAMERATE
 	ypos += iheight;
-	sprintf ((char *) buf, "%s:", g_Locale->getText (LOCALE_STREAMINFO_FRAMERATE));
-	g_Font[font_info]->RenderString (xpos, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
 	snprintf (buf, sizeof(buf), "%dfps", framerate);
-
-	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	paint_techinfo_line(xpos, ypos, LOCALE_STREAMINFO_FRAMERATE, NULL, spaceoffset, buf);
 
 	//AUDIOTYPE
 	ypos += iheight;
+#if 0
 	int type, layer, freq, mode, bitrate;
 	audioDecoder->getAudioInfo(type, layer, freq, bitrate, mode);
-#if 0
-	const char *layernames[4] = { "res", "III", "II", "I" };
-	const char *sampfreqnames[4] = { "44,1k", "48k", "32k", "res" };
-	const char *modenames[4] = { "stereo", "joint_st", "dual_ch", "single_ch" };
-
-	sprintf ((char *) buf, "%s: %s (%s/%s) %s", g_Locale->getText (LOCALE_STREAMINFO_AUDIOTYPE), modenames[stereo], sampfreqnames[sampfreq], layernames[layer], copy ? "c" : "");
-  }
-#endif
 	const char *mpegmodes[4] = { "stereo", "joint_st", "dual_ch", "single_ch" };
 	const char *ddmodes[8] = { "CH1/CH2", "C", "L/R", "L/C/R", "L/R/S", "L/C/R/S", "L/R/SL/SR", "L/C/R/SL/SR" };
 
-	sprintf ((char *) buf, "%s:", g_Locale->getText (LOCALE_STREAMINFO_AUDIOTYPE));
-	g_Font[font_info]->RenderString (xpos, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
-
-	/* create segfault error 
 	if(type == 0) {
 		sprintf ((char *) buf, "MPEG %s (%d)", mpegmodes[mode], freq);
 	} else {
 		sprintf ((char *) buf, "DD %s (%d)", ddmodes[mode], freq);
 	}
-	*/
-	sprintf ((char *) buf, "%s", g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].desc);
-	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+#endif
+
+	paint_techinfo_line(xpos, ypos, LOCALE_STREAMINFO_AUDIOTYPE, NULL, spaceoffset, g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].desc);
 
 	//satellite
 	t_satellite_position satellitePosition = CNeutrinoApp::getInstance ()->channelList->getActiveSatellitePosition ();
 	sat_iterator_t sit = satellitePositions.find(satellitePosition);
 	if(sit != satellitePositions.end()) {
-		ypos += iheight;
-		sprintf ((char *) buf, "%s:",g_Locale->getText (LOCALE_SATSETUP_SATELLITE));//swiped locale
-		g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-		sprintf ((char *) buf, "%s", sit->second.name.c_str());
-		g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	ypos += iheight;
+		paint_techinfo_line(xpos, ypos, LOCALE_SATSETUP_SATELLITE, NULL, spaceoffset, sit->second.name.c_str());
 	}
+
+	//channel
+	ypos += iheight;
 	CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
 	int curnum = channelList->getActiveChannelNumber();
 	CZapitChannel * channel = channelList->getChannel(curnum);
 	CZapitClient::CCurrentServiceInfo si = g_Zapit->getCurrentServiceInfo ();
-
-	//channel
-	ypos += iheight;
-	sprintf ((char *) buf, "%s:",g_Locale->getText (LOCALE_TIMERLIST_CHANNEL));//swiped locale
-	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, buf , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	sprintf((char*) buf, "%s" ,channelList->getActiveChannelName().c_str());
-	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, width*2/3 - 10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor);	// UTF-8
+	paint_techinfo_line(xpos, ypos, LOCALE_TIMERLIST_CHANNEL, NULL, spaceoffset, channelList->getActiveChannelName().c_str());
 
 	//tsfrequenz
 	ypos += iheight;
@@ -601,49 +555,41 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	if(frontend->getInfo()->type == FE_QPSK) {
 		frontend->getDelSys((fe_code_rate_t)si.fec, dvbs_get_modulation((fe_code_rate_t)si.fec), f, s, m);
 		sprintf ((char *) buf,"%d.%d (%c) %d %s %s %s", si.tsfrequency / 1000, si.tsfrequency % 1000, si.polarisation ? 'V' : 'H', si.rate / 1000,f,m,s=="DVB-S2"?"S2":"S1");
-		g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Tp. Freq.:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-		g_Font[font_info]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8	
+		paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Tp. Freq.", spaceoffset, buf);
 	}
-	// paint labels
-	spaceoffset = 68;
 
 	//onid
-	ypos+= sheight;
+	ypos+= iheight;
 	sprintf((char*) buf, "0x%04x (%i)", si.onid, si.onid);
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "ONid:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "ONid", spaceoffset, buf);
 
 	//sid
-	ypos+= sheight;
+	ypos+= iheight;
 	sprintf((char*) buf, "0x%04x (%i)", si.sid, si.sid);
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "Sid:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Sid", spaceoffset, buf);
 
 	//tsid
-	ypos+= sheight;
+	ypos+= iheight;
 	sprintf((char*) buf, "0x%04x (%i)", si.tsid, si.tsid);
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "TSid:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "TSid", spaceoffset, buf);
 	
 	//pmtpid
-	ypos+= sheight;
+	ypos+= iheight;
 	sprintf((char*) buf, "0x%04x (%i)", si.pmtpid, si.pmtpid);
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "PMTpid:", COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8 
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "PMTpid", spaceoffset, buf);
 
 	//vpid
-	ypos+= sheight;
+	ypos+= iheight;
 	if ( g_RemoteControl->current_PIDs.PIDs.vpid > 0 ){
 		sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.PIDs.vpid, g_RemoteControl->current_PIDs.PIDs.vpid );
 	} else {
 		sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	}
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "Vpid:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Vpid", spaceoffset, buf);
 
 	//apid
-	ypos+= sheight;
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "Apid(s):" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	ypos+= iheight;
+	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Apid(s):" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
 	if (g_RemoteControl->current_PIDs.APIDs.empty()){
 		sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	} else {
@@ -652,27 +598,26 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 		{
 			sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.APIDs[i].pid, g_RemoteControl->current_PIDs.APIDs[i].pid );
 			if (i == g_RemoteControl->current_PIDs.PIDs.selected_apid){
-				g_Font[font_small]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUHEAD, 0, true, fgcolor_head); // UTF-8
+				g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUHEAD, 0, true, fgcolor_head); // UTF-8
 			}
 			else{
-				g_Font[font_small]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+				g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
 			}
-			sw = g_Font[font_small]->getRenderWidth(buf)+sw+10;
+			sw = g_Font[font_info]->getRenderWidth(buf)+sw+10;
 			if (((i+1)%3 == 0) &&(g_RemoteControl->current_PIDs.APIDs.size()-1 > i)){ // if we have lots of apids, put "intermediate" line with pids
-				ypos+= sheight;
+				ypos+= iheight;
 				sw=spaceoffset;
 			}
 		}
 	}
 
 	//vtxtpid
-	ypos += sheight;
+	ypos += iheight;
 	if ( g_RemoteControl->current_PIDs.PIDs.vtxtpid == 0 )
         	sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	else
         	sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.PIDs.vtxtpid, g_RemoteControl->current_PIDs.PIDs.vtxtpid );
-	g_Font[font_small]->RenderString(xpos, ypos, width*2/3-10, "VTXTpid:" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-	g_Font[font_small]->RenderString(xpos+spaceoffset, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "VTXTpid", spaceoffset, buf);
 
 	yypos = ypos;
 }
