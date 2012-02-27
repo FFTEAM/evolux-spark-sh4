@@ -107,7 +107,6 @@ endif
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release/usr/bin/
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
@@ -300,6 +299,7 @@ release_base:
 	cp $(buildprefix)/root/release/vsftpd $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/bootclean.sh $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/networking $(prefix)/release/etc/init.d/ && \
+	mkdir -p $(prefix)/release/var/run/lirc && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release/lib/ && \
 	rm -f $(prefix)/release/lib/*.a && \
 	rm -f $(prefix)/release/lib/*.o && \

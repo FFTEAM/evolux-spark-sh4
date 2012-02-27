@@ -186,7 +186,6 @@ if ENABLE_SPARK
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release_neutrino/etc/lircd.conf.amiko
-	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
@@ -373,6 +372,7 @@ endif
 	mkdir -p $(prefix)/release_neutrino/usr/lib/tuxbox
 	mkdir -p $(prefix)/release_neutrino/usr/keys
 	mkdir -p $(prefix)/release_neutrino/var/tuxbox #/config
+	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 	mkdir -p $(prefix)/release_neutrino/share/tuxbox
 	mkdir -p $(prefix)/release_neutrino/var/share/icons
 #	mkdir -p $(prefix)/release_neutrino/var/usr/local/share/config
