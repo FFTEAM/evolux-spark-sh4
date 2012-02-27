@@ -107,6 +107,7 @@ endif
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release/usr/bin/
+	mkdir -p $(prefix)/release_neutrino/var/run/lirc
 
 	$(INSTALL_DIR) $(prefix)/release/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release/usr/share/fonts/
