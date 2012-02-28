@@ -132,7 +132,7 @@ static tButton cButtonsEdisionSparkPlus[] = {
     {"RECALL"         , "CF", KEY_BACK},
     {"CHANNEL+"       , "ED", KEY_UP},
     {"CHANNEL-"       , "DD", KEY_DOWN},
-    {"PAGE+"          , "E7", KEY_PAGEup},
+    {"PAGE+"          , "E7", KEY_PAGEUP},
     {"PAGE-"          , "7B", KEY_PAGEDOWN},
     {"FIND"           , "4D", KEY_FIND},
     {"FOLDER"         , "FB", KEY_ARCHIVE},
