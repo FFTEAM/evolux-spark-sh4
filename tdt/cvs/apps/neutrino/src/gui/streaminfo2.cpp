@@ -252,8 +252,8 @@ void CStreamInfo2::paint_signal_fe_box(int _x, int _y, int w, int h)
 
 	for (int i = 0; i < FESIG_MAX; i++) {
 		fesig[i].x = _x + 5 + xd * (i + 1);
-		frameBuffer->paintBoxRel(_x+xd,sig_text_y- 12,16,2, fesig[i].color);
-		g_Font[font_small]->RenderString(_x+20+xd * (i + 1), sig_text_y, xd, fesig[i].title, COL_MENUCONTENTDARK, 0, true);
+		frameBuffer->paintBoxRel(_x+xd *(i + 1), sig_text_y - 12,16,2, fesig[i].color);
+		g_Font[font_small]->RenderString(_x+20+xd * (i + 1), sig_text_y, xd, fesig[i].title, COL_MENUCONTENTDARK, 0, true, fgcolor);
 	}
 
 	sigBox_pos = 0;
