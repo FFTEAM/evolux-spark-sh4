@@ -67,12 +67,25 @@ class CStreamInfo2 : public CMenuTarget
 		int   sig_text_snr_x;
 		int   sig_text_rate_x;
 
+		#define FESIG_BER 0
+		#define FESIG_SIG 1
+		#define FESIG_SNR 2
+		#define FESIG_RATE 3
+		#define FESIG_MAX 4
+
 		struct feSignal {
-			long long	ber, old_ber, max_ber, min_ber;
-			long long	sig, old_sig, max_sig, min_sig;
-			long long	snr, old_snr, max_snr, min_snr;
-			long long	rate, old_rate, max_rate, min_rate;
-		} signal;
+			#define FESIG_VAL_MAX 0
+			#define FESIG_VAL_CUR 1
+			#define FESIG_VAL_MIN 2
+			long long val[3];
+			long long old;
+			long long limit;
+			int x;
+			int yd_old;
+			int oldpercent;
+			int color;
+			const char *title;
+		} fesig[4];
 		
 		int  doSignalStrengthLoop();
 
@@ -87,12 +100,11 @@ class CStreamInfo2 : public CMenuTarget
 		int ts_close();
 
 		void paint(int mode);
-		void paint_pig(int x, int y, int w, int h);
 		void paint_techinfo(int x, int y);
 		void paint_techinfo_line(int xpos, int ypos, const neutrino_locale_t loc, const char *txt, int xpos2, const char *txt2);
 		void paint_signal_fe_box(int x, int y, int w, int h);
-		void paint_signal_fe(struct feSignal s);
-		int  y_signal_fe(unsigned long value, unsigned long max_range, int max_y);
+		void paint_signal_fe();
+		int  y_signal_fe(long long value, long long max_range, int max_y);
 		void SignalRenderStr (long long value, int x, int y);
 		CScale *sigscale;
 		CScale *snrscale;

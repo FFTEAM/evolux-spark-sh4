@@ -80,9 +80,6 @@ CStreamInfo2::CStreamInfo2 ()
 	iheight = g_Font[font_info]->getHeight ();
 	sheight = g_Font[font_small]->getHeight ();
 
-	//max_height = SCREEN_Y - 1;
-	//max_width = SCREEN_X - 1;
-
 	max_width = frameBuffer->getScreenWidth(true);
 	max_height = frameBuffer->getScreenHeight(true);
 
@@ -91,25 +88,11 @@ CStreamInfo2::CStreamInfo2 ()
 	x = frameBuffer->getScreenX();
 	y = frameBuffer->getScreenY();
 
-	//x = (((g_settings.screen_EndX - g_settings.screen_StartX) - width) / 2) + g_settings.screen_StartX;
-	//y = (((g_settings.screen_EndY - g_settings.screen_StartY) - height) / 2) + g_settings.screen_StartY;
-
 	sigBox_pos = 0;
 	paint_mode = 0;
 
-	//b_total = 0;
 	bit_s = 0;
 	abit_s = 0;
-
-	signal.max_sig = -1;
-	signal.max_snr = -1;
-	signal.max_ber = -1;
-	signal.max_rate = -1;
-
-	signal.min_sig = -1;
-	signal.min_snr = -1;
-	signal.min_ber = -1;
-	signal.min_rate = -1;
 }
 
 CStreamInfo2::~CStreamInfo2 ()
@@ -162,9 +145,11 @@ int CStreamInfo2::doSignalStrengthLoop ()
 	maxb = minb = lastb = 0;
 	int mm = g_Font[font_info]->getRenderWidth ("Max");//max min lenght
 
-	int pid = (g_RemoteControl->current_PIDs.PIDs.vpid > 0) ? g_RemoteControl->current_PIDs.PIDs.vpid : g_RemoteControl->current_PIDs.PIDs.selected_apid;
+	int pid = (g_RemoteControl->current_PIDs.PIDs.vpid > 0)
+		? g_RemoteControl->current_PIDs.PIDs.vpid
+		: g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].pid;
 
-	if (!bw_thread)
+	if (!bw_thread && (pid > 0))
 		pthread_create(&bw_thread, 0, bandwidth_thread, (void *) &pid);
 
 	while (1) {
@@ -177,42 +162,26 @@ int CStreamInfo2::doSignalStrengthLoop ()
 		ssnr = frontend->getSignalNoiseRatio();
 		ber = frontend->getBitErrorRate();
 
-		signal.sig = ssig & 0xFFFF;
-		signal.snr = ssnr & 0xFFFF;
-		signal.ber = ber;
-		signal.rate = rate;
+		fesig[FESIG_SIG].val[FESIG_VAL_CUR] = ssig & 0xFFFF;
+		fesig[FESIG_SNR].val[FESIG_VAL_CUR] = ssnr & 0xFFFF;
+		fesig[FESIG_BER].val[FESIG_VAL_CUR] = ber;
+		fesig[FESIG_RATE].val[FESIG_VAL_CUR] = rate;
 
-		if (paint_mode == 0) {
-			if(snrscale && sigscale)
-				showSNR ();
-		}
+		if(snrscale && sigscale)
+			showSNR ();
 
-		if (signal.max_ber < signal.ber)
-			signal.max_ber = signal.ber;
-		if ((signal.min_ber < 0) || (signal.min_ber > signal.ber))
-			signal.min_ber = signal.ber;
+		for (int i = 0; i < FESIG_MAX; i++)
+			if (fesig[i].val[FESIG_VAL_CUR] > -1) {
+				if (fesig[i].val[FESIG_VAL_MAX] < fesig[i].val[FESIG_VAL_CUR])
+					fesig[i].val[FESIG_VAL_MAX] = fesig[i].val[FESIG_VAL_CUR];
+				if (fesig[i].val[FESIG_VAL_MIN] < fesig[i].val[FESIG_VAL_CUR])
+					fesig[i].val[FESIG_VAL_MIN] = fesig[i].val[FESIG_VAL_CUR];
+			}
 
-		if (signal.max_sig < signal.sig)
-			signal.max_sig = signal.sig;
-		if ((signal.min_sig < 0) || (signal.min_sig > signal.sig))
-			signal.min_sig = signal.sig;
+		paint_signal_fe();
 
-		if (signal.max_snr < signal.snr)
-			signal.max_snr = signal.snr;
-		if ((signal.min_snr < 0) || (signal.min_snr > signal.snr))
-			signal.min_snr = signal.snr;
-
-		if (signal.max_rate < signal.rate)
-			signal.max_rate = signal.rate;
-		if ((signal.min_rate < 0) || (signal.min_rate > signal.rate))
-			signal.min_rate = signal.rate;
-
-		paint_signal_fe(signal);
-
-		signal.old_sig = signal.sig;
-		signal.old_snr = signal.snr;
-		signal.old_ber = signal.ber;
-		signal.old_rate = signal.rate;
+		for (int i = 0; i < FESIG_MAX; i++)
+			fesig[i].old = fesig[i].val[FESIG_VAL_CUR];
 
 #if 0
 		// switch paint mode
@@ -247,7 +216,7 @@ int CStreamInfo2::doSignalStrengthLoop ()
 	}
 	bw_thread_running = false;
 
-	if (bw_thread) {
+	if (bw_thread && (pid > 0)) {
 		pthread_join(bw_thread, NULL);
 		bw_thread = 0;
 	}
@@ -257,17 +226,8 @@ int CStreamInfo2::doSignalStrengthLoop ()
 
 void CStreamInfo2::hide ()
 {
-  videoDecoder->Pig(-1, -1, -1, -1);
+  videoDecoder->Pig(-1, -1, -1, -1); // FIXME -- needed?
   frameBuffer->paintBackgroundBoxRel (0, 0, max_width, max_height);
-}
-
-void CStreamInfo2::paint_pig (int x, int y, int w, int h)
-{
-	frameBuffer->paintBackgroundBoxRel (x-5, y, w+105, h+65);
-	printf("CStreamInfo2::paint_pig x %d y %d w %d h %d osd_w %d osd_w %d\n", x, y, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
-//	videoDecoder->Pig(x, y, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
-// 	use osd adjust then is the size correctly @obi
-	videoDecoder->Pig(x / 2, y, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
 }
 
 void CStreamInfo2::paint_signal_fe_box(int _x, int _y, int w, int h)
@@ -290,117 +250,47 @@ void CStreamInfo2::paint_signal_fe_box(int _x, int _y, int w, int h)
 
 	_x -= w/9;
 
-	frameBuffer->paintBoxRel(_x+xd,sig_text_y- 12,16,2, COL_RED); //red
-	g_Font[font_small]->RenderString(_x+20+xd, sig_text_y, xd, "BER", COL_MENUCONTENTDARK, 0, true);
-
-	frameBuffer->paintBoxRel(_x+xd*2,sig_text_y- 12,16,2,COL_BLUE); //blue
-	g_Font[font_small]->RenderString(_x+20+xd*2, sig_text_y, xd, "SNR", COL_MENUCONTENTDARK, 0, true, fgcolor);
-
-	frameBuffer->paintBoxRel(_x+xd*3,sig_text_y- 12,16,2, COL_GREEN); //green
-	g_Font[font_small]->RenderString(_x+20+xd*3, sig_text_y, xd, "SIG", COL_MENUCONTENTDARK, 0, true, fgcolor);
-
-	frameBuffer->paintBoxRel(_x+xd*4,sig_text_y- 12,16,2,COL_YELLOW); // near yellow
-	g_Font[font_small]->RenderString(_x+20+xd*4, sig_text_y, xd, "Bitrate", COL_MENUCONTENTDARK, 0, true, fgcolor);
-	
-	sig_text_ber_x =  _x + 5 +  xd;
-	sig_text_snr_x =  _x + 5 +  xd * 2;
-	sig_text_sig_x =  _x + 5 +  xd * 3;
-	sig_text_rate_x = _x + 5 +  xd * 4;
+	for (int i = 0; i < FESIG_MAX; i++) {
+		fesig[i].x = _x + 5 + xd * (i + 1);
+		frameBuffer->paintBoxRel(_x+xd,sig_text_y- 12,16,2, fesig[i].color);
+		g_Font[font_small]->RenderString(_x+20+xd * (i + 1), sig_text_y, xd, fesig[i].title, COL_MENUCONTENTDARK, 0, true);
+	}
 
 	sigBox_pos = 0;
-	signal.old_sig = 1;
-	signal.old_snr = 1;
-	signal.old_ber = 1;
-	signal.old_rate = 1;
 }
 
-void CStreamInfo2::paint_signal_fe(struct feSignal s)
+void CStreamInfo2::paint_signal_fe()
 {
 	int   x_now = sigBox_pos;
-	int   yd, yd_old;
-	static int old_x=0,old_y=0;
 	sigBox_pos = (++sigBox_pos) % sigBox_w;
 
-	//frameBuffer->paintVLine(sigBox_x+sigBox_pos, sigBox_y, sigBox_y+sigBox_h, COL_WHITE);
-	//frameBuffer->paintVLine(sigBox_x+x_now, sigBox_y, sigBox_y+sigBox_h+1, COL_BLACK);
 	frameBuffer->paintBoxRel(sigBox_x+x_now, sigBox_y, 2, sigBox_h, COL_BLACK);
 	frameBuffer->paintBoxRel(sigBox_x+sigBox_pos, sigBox_y, 1, sigBox_h, COL_WHITE);
 
-	if (s.ber > -1) {
-		if (s.ber != s.old_ber) {
-			SignalRenderStr(s.max_ber, sig_text_ber_x, sig_text_y + sheight);
-			SignalRenderStr(s.ber,     sig_text_ber_x, sig_text_y + 2 * sheight);
-			SignalRenderStr(s.min_ber, sig_text_ber_x, sig_text_y + 3 * sheight);
-		}
-		yd = y_signal_fe (s.ber, 4000, sigBox_h);
-		yd_old = y_signal_fe (s.old_ber, 4000, sigBox_h);
-		if (sigBox_pos < 2)
-			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_RED);
-		else
-			frameBuffer->paintLine(sigBox_x+x_now - 1, sigBox_y+sigBox_h-yd_old, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_RED);
-	}
+	for (int i = 0; i < FESIG_MAX; i++)
+		if(fesig[i].val[FESIG_VAL_CUR] > -1) {
+			if (fesig[i].old != fesig[i].val[FESIG_VAL_CUR])
+				for (int j = 0; j <= FESIG_VAL_MIN; j++)
+					SignalRenderStr(fesig[i].val[j], fesig[i].x, sig_text_y + (j + 1) * sheight);
 
-	if (s.sig > -1) {
-		if (s.sig != s.old_sig) {
-			SignalRenderStr(s.max_sig, sig_text_sig_x, sig_text_y + sheight);
-			SignalRenderStr(s.sig,     sig_text_sig_x, sig_text_y + 2 * sheight);
-			SignalRenderStr(s.min_sig, sig_text_sig_x, sig_text_y + 3 * sheight);
+			int yd = y_signal_fe (fesig[i].val[FESIG_VAL_CUR], fesig[i].limit, sigBox_h);
+			if (sigBox_pos < 2)
+				frameBuffer->paintPixel(sigBox_x + x_now, sigBox_y + sigBox_h - yd, fesig[i].color);
+			else
+				frameBuffer->paintLine(sigBox_x + x_now - 1, sigBox_y + sigBox_h - fesig[i].yd_old,
+						       sigBox_x + x_now, sigBox_y + sigBox_h - yd, fesig[i].color);
+			fesig[i].yd_old = yd;
 		}
-		yd = y_signal_fe (s.sig, 0xFFFF, sigBox_h);
-		yd_old = y_signal_fe (s.old_sig, 0xFFFF, sigBox_h);
-		if (sigBox_pos < 2)
-			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_GREEN);
-		else
-			frameBuffer->paintLine(sigBox_x+x_now - 1, sigBox_y+sigBox_h-yd_old, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_GREEN);
-	}
-
-	if (s.snr > -1) {
-		if (s.snr != s.old_snr) {
-			SignalRenderStr(s.max_snr, sig_text_snr_x, sig_text_y + sheight);
-			SignalRenderStr(s.snr,     sig_text_snr_x, sig_text_y + 2 * sheight);
-			SignalRenderStr(s.min_snr, sig_text_snr_x, sig_text_y + 3 * sheight);
-		}
-		yd = y_signal_fe (s.snr, 0xFFFF, sigBox_h);
-		yd_old = y_signal_fe (s.old_snr, 0xFFFF, sigBox_h);
-		if (sigBox_pos < 2)
-			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_BLUE);
-		else
-			frameBuffer->paintLine(sigBox_x+x_now - 1, sigBox_y+sigBox_h-yd_old, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_BLUE);
-	}
-
-	if (s.rate > -1) {
-		if (s.rate != s.old_rate) {
-			SignalRenderStr(s.max_rate, sig_text_rate_x, sig_text_y + sheight);
-			SignalRenderStr(s.rate,     sig_text_rate_x, sig_text_y + 2 * sheight);
-			SignalRenderStr(s.min_rate, sig_text_rate_x, sig_text_y + 3 * sheight);
-		}
-		if ( g_RemoteControl->current_PIDs.PIDs.vpid > 0 ){
-			yd = y_signal_fe (s.rate/1000, 25000, sigBox_h);
-			yd_old = y_signal_fe (s.old_rate/1000, 25000, sigBox_h);
-		} else {
-			yd = y_signal_fe (s.rate/1000, 512, sigBox_h);
-			yd_old = y_signal_fe (s.old_rate/1000, 512, sigBox_h);
-		}
-		if (sigBox_pos < 2 || s.old_rate < 0)
-			frameBuffer->paintPixel(sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_YELLOW);
-		else
-			frameBuffer->paintLine(sigBox_x+x_now - 1, sigBox_y+sigBox_h-yd_old, sigBox_x+x_now, sigBox_y+sigBox_h-yd, COL_YELLOW);
-	}
 }
 
 // -- calc y from max_range and max_y
-int CStreamInfo2::y_signal_fe (unsigned long value, unsigned long max_value, int max_y)
+int CStreamInfo2::y_signal_fe (long long value, long long max_value, int max_y)
 {
-	long l;
-
 	if (!max_value)
 		max_value = 1;
 
-	l = ((long) max_y * (long) value) / (long) max_value;
-	if (l > max_y)
-		l = max_y;
-
-	return (int) l;
+	int l = ((long) max_y * (long) value) / (long) max_value;
+	return (l > max_y) ? max_y : l;
 }
 
 void CStreamInfo2::SignalRenderStr(long long value, int _x, int _y)
@@ -408,13 +298,12 @@ void CStreamInfo2::SignalRenderStr(long long value, int _x, int _y)
 	char str[30];
 
 	frameBuffer->paintBoxRel(_x, _y - sheight, xd, sheight - 1, bgcolor);
-	sprintf(str,"%8lld", value);
+	snprintf(str, sizeof(str), "%8lld", value);
 	g_Font[font_small]->RenderString(_x, _y, xd, str, COL_MENUCONTENTDARK, 0, true, fgcolor);
 }
 
 void CStreamInfo2::paint (int mode)
 {
-	const char *head_string;
 
 	width =  frameBuffer->getScreenWidth();
 	height = frameBuffer->getScreenHeight();
@@ -423,16 +312,38 @@ void CStreamInfo2::paint (int mode)
 	int ypos = y + 5;
 	int xpos = x + 10;
 
-	// -- tech Infos, PIG, small signal graph
-	head_string = g_Locale->getText (LOCALE_STREAMINFO_HEAD);
+	// -- tech Infos, small signal graph
+	const char *head_string = g_Locale->getText (LOCALE_STREAMINFO_HEAD);
 	CVFD::getInstance ()->setMode (CVFD::MODE_MENU_UTF8, head_string);
 
-	// paint backround, title pig, etc.
+	// paint backround, title, etc.
 	frameBuffer->paintBoxRel (0, 0, max_width, max_height, bgcolor);
 	g_Font[font_head]->RenderString (xpos, ypos + hheight + 1, width, head_string, COL_MENUHEAD, 0, true, fgcolor_head);	// UTF-8
 	ypos += hheight;
 
 	paint_techinfo (xpos, ypos);
+
+	fesig[FESIG_BER].limit = 4000;
+	fesig[FESIG_SIG].limit = 0xFFFF;
+	fesig[FESIG_SNR].limit = 0xFFFF;
+	fesig[FESIG_RATE].limit = (g_RemoteControl->current_PIDs.PIDs.vpid > 0) ? 25000000 : 512000;
+
+	fesig[FESIG_BER].color = COL_RED;
+	fesig[FESIG_SIG].color = COL_GREEN;
+	fesig[FESIG_SNR].color = COL_BLUE;
+	fesig[FESIG_RATE].color = COL_YELLOW;
+
+	fesig[FESIG_BER].title = "BER";
+	fesig[FESIG_SIG].title = "SNR";
+	fesig[FESIG_SNR].title = "SIG";
+	fesig[FESIG_RATE].title = "Bitrate";
+
+	for (int i = 0; i < FESIG_MAX; i++) {
+		fesig[i].old = -1;
+		fesig[i].val[FESIG_VAL_MAX] = 0;
+		fesig[i].val[FESIG_VAL_MIN] = 0;
+		fesig[i].yd_old = 0;
+	}
 
 	paint_signal_fe_box (width - 2 * width/5 - 10, ypos + iheight, 2 * width/5, 2 * height/5);
 }
@@ -454,10 +365,10 @@ void CStreamInfo2::paint_techinfo_line(int xpos, int ypos, const neutrino_locale
 
 void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 {
-	char buf[100], buf2[100];
+	char buf[100];
 	int xres, yres, aspectRatio, framerate;
 	// paint labels
-	int spaceoffset = 0,i = 0;
+	int spaceoffset = 0;
 
 	{
 		neutrino_locale_t n_arr[] = {
@@ -495,7 +406,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	//Video RESOLUTION
 	ypos += iheight;
 	videoDecoder->getPictureInfo(xres, yres, framerate);
-	sprintf ((char *) buf, "%dx%d", xres, yres);
+	snprintf (buf, sizeof(buf), "%dx%d", xres, yres);
 	paint_techinfo_line(xpos, ypos, LOCALE_STREAMINFO_RESOLUTION, NULL, spaceoffset, buf);
 
 	//audio rate
@@ -519,15 +430,16 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	//AUDIOTYPE
 	ypos += iheight;
 #if 0
+	// FIXME Our getAudioInfo in libcoolstream is a stub.
 	int type, layer, freq, mode, bitrate;
 	audioDecoder->getAudioInfo(type, layer, freq, bitrate, mode);
 	const char *mpegmodes[4] = { "stereo", "joint_st", "dual_ch", "single_ch" };
 	const char *ddmodes[8] = { "CH1/CH2", "C", "L/R", "L/C/R", "L/R/S", "L/C/R/S", "L/R/SL/SR", "L/C/R/SL/SR" };
 
 	if(type == 0) {
-		sprintf ((char *) buf, "MPEG %s (%d)", mpegmodes[mode], freq);
+		snprintf (buf, sizeof(buf), "MPEG %s (%d)", mpegmodes[mode], freq);
 	} else {
-		sprintf ((char *) buf, "DD %s (%d)", ddmodes[mode], freq);
+		snprintf (buf,  sizeof(buf),"DD %s (%d)", ddmodes[mode], freq);
 	}
 #endif
 
@@ -554,57 +466,57 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	char * f=NULL, *s=NULL, *m=NULL;
 	if(frontend->getInfo()->type == FE_QPSK) {
 		frontend->getDelSys((fe_code_rate_t)si.fec, dvbs_get_modulation((fe_code_rate_t)si.fec), f, s, m);
-		sprintf ((char *) buf,"%d.%d (%c) %d %s %s %s", si.tsfrequency / 1000, si.tsfrequency % 1000, si.polarisation ? 'V' : 'H', si.rate / 1000,f,m,s=="DVB-S2"?"S2":"S1");
+		snprintf (buf, sizeof(buf), "%d.%d (%c) %d %s %s %s", si.tsfrequency / 1000, si.tsfrequency % 1000,
+			si.polarisation ? 'V' : 'H', si.rate / 1000,f,m,s=="DVB-S2"?"S2":"S1");
 		paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Tp. Freq.", spaceoffset, buf);
 	}
 
 	//onid
 	ypos+= iheight;
-	sprintf((char*) buf, "0x%04x (%i)", si.onid, si.onid);
+	snprintf(buf, sizeof(buf), "0x%04x (%i)", si.onid, si.onid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "ONid", spaceoffset, buf);
 
 	//sid
 	ypos+= iheight;
-	sprintf((char*) buf, "0x%04x (%i)", si.sid, si.sid);
+	snprintf(buf, sizeof(buf), "0x%04x (%i)", si.sid, si.sid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Sid", spaceoffset, buf);
 
 	//tsid
 	ypos+= iheight;
-	sprintf((char*) buf, "0x%04x (%i)", si.tsid, si.tsid);
+	snprintf(buf, sizeof(buf), "0x%04x (%i)", si.tsid, si.tsid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "TSid", spaceoffset, buf);
 	
 	//pmtpid
 	ypos+= iheight;
-	sprintf((char*) buf, "0x%04x (%i)", si.pmtpid, si.pmtpid);
+	snprintf(buf, sizeof(buf), "0x%04x (%i)", si.pmtpid, si.pmtpid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "PMTpid", spaceoffset, buf);
 
 	//vpid
 	ypos+= iheight;
-	if ( g_RemoteControl->current_PIDs.PIDs.vpid > 0 ){
-		sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.PIDs.vpid, g_RemoteControl->current_PIDs.PIDs.vpid );
-	} else {
-		sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
-	}
+	if (g_RemoteControl->current_PIDs.PIDs.vpid > 0 )
+		snprintf(buf, sizeof(buf),  "0x%04x (%i)",
+			g_RemoteControl->current_PIDs.PIDs.vpid, g_RemoteControl->current_PIDs.PIDs.vpid );
+	else
+		snprintf(buf, sizeof(buf),  "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
+
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Vpid", spaceoffset, buf);
 
 	//apid
 	ypos+= iheight;
-	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Apid(s):" , COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
+	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Apid(s):" , COL_MENUCONTENTDARK, 0, true, fgcolor);
 	if (g_RemoteControl->current_PIDs.APIDs.empty()){
-		sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
+		snprintf(buf, sizeof(buf), "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	} else {
-		unsigned int i=0,j=0,sw=spaceoffset;
-		for (i= 0; (i<g_RemoteControl->current_PIDs.APIDs.size()) && (i<10); i++)
+		unsigned int sw=spaceoffset;
+		for (int i= 0; (i<g_RemoteControl->current_PIDs.APIDs.size()) && (i<10); i++)
 		{
-			sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.APIDs[i].pid, g_RemoteControl->current_PIDs.APIDs[i].pid );
-			if (i == g_RemoteControl->current_PIDs.PIDs.selected_apid){
-				g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUHEAD, 0, true, fgcolor_head); // UTF-8
-			}
-			else{
-				g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, COL_MENUCONTENTDARK, 0, true, fgcolor); // UTF-8
-			}
+			snprintf(buf, sizeof(buf), "0x%04x (%i)", g_RemoteControl->current_PIDs.APIDs[i].pid,
+				g_RemoteControl->current_PIDs.APIDs[i].pid );
+			g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, 0, 0, true,
+			(i == g_RemoteControl->current_PIDs.PIDs.selected_apid) ? fgcolor_head : fgcolor);
 			sw = g_Font[font_info]->getRenderWidth(buf)+sw+10;
-			if (((i+1)%3 == 0) &&(g_RemoteControl->current_PIDs.APIDs.size()-1 > i)){ // if we have lots of apids, put "intermediate" line with pids
+			if (((i+1)%3 == 0) &&(g_RemoteControl->current_PIDs.APIDs.size()-1 > i)){
+				// if we have lots of apids, put "intermediate" line with pids
 				ypos+= iheight;
 				sw=spaceoffset;
 			}
@@ -614,9 +526,10 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	//vtxtpid
 	ypos += iheight;
 	if ( g_RemoteControl->current_PIDs.PIDs.vtxtpid == 0 )
-        	sprintf((char*) buf, "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
+        	snprintf((char*) buf, sizeof(buf), "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	else
-        	sprintf((char*) buf, "0x%04x (%i)", g_RemoteControl->current_PIDs.PIDs.vtxtpid, g_RemoteControl->current_PIDs.PIDs.vtxtpid );
+        	snprintf((char*) buf, sizeof(buf), "0x%04x (%i)", g_RemoteControl->current_PIDs.PIDs.vtxtpid,
+			g_RemoteControl->current_PIDs.PIDs.vtxtpid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "VTXTpid", spaceoffset, buf);
 
 	yypos = ypos;
@@ -639,38 +552,34 @@ int CStreamInfo2Handler::exec(CMenuTarget* parent, const std::string &actionkey)
 
 void CStreamInfo2::showSNR ()
 {
-	char percent[10];
-	int barwidth = 150;
-	uint16_t ssig, ssnr;
-	int sig, snr;
-	int posx, posy;
-	int sw;
-
-	snr = (signal.snr & 0xFFFF) * 100 / 65535;
-	sig = (signal.sig & 0xFFFF) * 100 / 65535;
-
+	char percent[40];
 	int mheight = g_Font[font_info]->getHeight();
-	if(sigscale->getPercent() != sig) {
-	  	posy = yypos + (mheight/2) +50;
-		posx = x + 10;
-		sprintf(percent, "%d%% SIG", sig);
-		sw = g_Font[font_info]->getRenderWidth (percent);
-		sigscale->paint(posx - 1, posy, sig);
+	int perc;
 
-		posx = posx + barwidth + 3;
+	perc = ((fesig[FESIG_SIG].val[FESIG_VAL_CUR] & 0xFFFF) * 100) >> 16;
+	if(perc != fesig[FESIG_SIG].oldpercent) {
+	  	int posy = yypos + (mheight/2) +50;
+		int posx = x + 10;
+		snprintf(percent, sizeof(percent), "%d%% %s", perc, fesig[FESIG_SIG].title);
+		int sw = g_Font[font_info]->getRenderWidth (percent);
+		sigscale->paint(posx - 1, posy, perc);
+		posx = posx + BAR_WIDTH + 3;
 		frameBuffer->paintBoxRel(posx, posy -1, sw, mheight-8, bgcolor);
-		g_Font[font_info]->RenderString (posx+2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0 , false, fgcolor);
+		g_Font[font_info]->RenderString(posx + 2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0, false, fgcolor);
+		fesig[FESIG_SIG].oldpercent = perc;
 	}
-	if(snrscale->getPercent() != snr) {
-	  	posy = yypos + mheight + 4;
-		posx = x + 10;
-		sprintf(percent, "%d%% SNR", snr);
-		sw = g_Font[font_info]->getRenderWidth (percent);
-		snrscale->paint(posx - 1, posy+2, snr);
 
-		posx = posx + barwidth + 3;
+	perc = ((fesig[FESIG_SNR].val[FESIG_VAL_CUR] & 0xFFFF) * 100) >> 16;
+	if(perc != fesig[FESIG_SNR].oldpercent) {
+	  	int posy = yypos + mheight + 4;
+		int posx = x + 10;
+		snprintf(percent, sizeof(percent),  "%d%% %s", perc, fesig[FESIG_SNR].title);
+		int sw = g_Font[font_info]->getRenderWidth (percent);
+		snrscale->paint(posx - 1, posy+2, perc);
+		posx = posx + BAR_WIDTH + 3;
 		frameBuffer->paintBoxRel(posx, posy - 1, sw, mheight-8, bgcolor, 0, true);
-		g_Font[font_info]->RenderString (posx + 2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0, true, fgcolor);
+		g_Font[font_info]->RenderString(posx + 2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0, false, fgcolor);
+		fesig[FESIG_SNR].oldpercent = perc;
 	}
 }
 
@@ -702,21 +611,19 @@ static int sync_ts (u_char *buf, int len)
         // find TS sync byte...
         // SYNC ...[188 len] ...SYNC...
 
-        for (i=0; i < len; i++) {
+        for (i=0; i < len; i++)
                 if (buf[i] == TS_SYNC_BYTE) {
                    if ((i+TS_LEN) < len) {
                       if (buf[i+TS_LEN] != TS_SYNC_BYTE) continue;
                    }
                    break;
                 }
-        }
         return i;
 }
 
 static void* bandwidth_thread(void *arg)
 {
 	bw_thread_running = true;
-
 	u_char 	 buf[TS_BUF_SIZE];
 	struct pollfd  pfd;
 	struct dmx_pes_filter_params flt;
@@ -735,6 +642,8 @@ static void* bandwidth_thread(void *arg)
 		close(pfd.fd);
     		pthread_exit(NULL);
 	}
+
+	fcntl(pfd.fd, F_SETFL, O_NONBLOCK);
 
 	ioctl (dmxfd,DMX_SET_BUFFER_SIZE, sizeof(buf));
 	memset(&flt, 0, sizeof(flt));
@@ -756,13 +665,13 @@ static void* bandwidth_thread(void *arg)
 	while (bw_thread_running) {
 		int b_len = 0;
 
-		// -- we will poll the PID in 1 secs intervall
+		// -- we will poll the PID in 1 secs interval
 		int timeout_initial = 1000;
 		int timeout = timeout_initial;
 
 		unsigned long long b_total = 0;
 
-		while (timeout > 0) {
+		while (timeout > 0 && bw_thread_running) {
 
 			if ((poll(&pfd, 1, timeout)) > 0 &&  (pfd.revents & POLLIN)) {
 				b_len = read(pfd.fd, buf, sizeof(buf));
