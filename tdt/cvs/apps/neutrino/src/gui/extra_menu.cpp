@@ -1604,7 +1604,7 @@ void* nGLCD::Run(void *)
 
 	do {
 		if (broken) {
-			fprintf(stderr, "No graphlcd display found ... sleeping 30 seconds\n");
+			fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
 			clock_gettime(CLOCK_REALTIME, &ts);
 			ts.tv_sec += 30;
 			sem_timedwait(&nglcd->sem, &ts);
@@ -1634,6 +1634,7 @@ void* nGLCD::Run(void *)
 		if (!nglcd->bitmap)
 				nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
 
+		nglcd->updateFonts();
 		nglcd->Update();
 
 		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
