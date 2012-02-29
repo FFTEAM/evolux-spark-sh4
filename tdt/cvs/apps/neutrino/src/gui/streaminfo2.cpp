@@ -130,20 +130,10 @@ int CStreamInfo2::doSignalStrengthLoop ()
 #define BAR_WIDTH 150 
 #define BAR_HEIGHT 12 
 
-	sigscale = new CScale(BAR_WIDTH, BAR_HEIGHT, RED_BAR, GREEN_BAR, YELLOW_BAR);
-	snrscale = new CScale(BAR_WIDTH, BAR_HEIGHT, RED_BAR, GREEN_BAR, YELLOW_BAR);
+	fesig[FESIG_SIG].scale = new CScale(BAR_WIDTH, BAR_HEIGHT, RED_BAR, GREEN_BAR, YELLOW_BAR);
+	fesig[FESIG_SNR].scale = new CScale(BAR_WIDTH, BAR_HEIGHT, RED_BAR, GREEN_BAR, YELLOW_BAR);
 
 	neutrino_msg_t msg;
-	unsigned long long maxb, minb, lastb, tmp_rate;
-	int cnt = 0,i=0;
-	uint16_t ssig, ssnr;
-	uint32_t  ber;
-	char tmp_str[150];
-	int offset_tmp = 0;
-	int offset = g_Font[font_info]->getRenderWidth(g_Locale->getText (LOCALE_STREAMINFO_BITRATE));
-	int sw = g_Font[font_info]->getRenderWidth ("99999.999");
-	maxb = minb = lastb = 0;
-	int mm = g_Font[font_info]->getRenderWidth ("Max");//max min lenght
 
 	int pid = (g_RemoteControl->current_PIDs.PIDs.vpid > 0)
 		? g_RemoteControl->current_PIDs.PIDs.vpid
@@ -158,17 +148,12 @@ int CStreamInfo2::doSignalStrengthLoop ()
 		unsigned long long timeoutEnd = CRCInput::calcTimeoutEnd_MS (100);
 		g_RCInput->getMsgAbsoluteTimeout (&msg, &data, &timeoutEnd);
 
-		ssig = frontend->getSignalStrength();
-		ssnr = frontend->getSignalNoiseRatio();
-		ber = frontend->getBitErrorRate();
-
-		fesig[FESIG_SIG].val[FESIG_VAL_CUR] = ssig & 0xFFFF;
-		fesig[FESIG_SNR].val[FESIG_VAL_CUR] = ssnr & 0xFFFF;
-		fesig[FESIG_BER].val[FESIG_VAL_CUR] = ber;
+		fesig[FESIG_SIG].val[FESIG_VAL_CUR] = 0xFFFF & frontend->getSignalStrength();
+		fesig[FESIG_SNR].val[FESIG_VAL_CUR] = 0xFFFF & frontend->getSignalNoiseRatio();
+		fesig[FESIG_BER].val[FESIG_VAL_CUR] = frontend->getBitErrorRate();
 		fesig[FESIG_RATE].val[FESIG_VAL_CUR] = rate;
 
-		if(snrscale && sigscale)
-			showSNR ();
+		showScale();
 
 		for (int i = 0; i < FESIG_MAX; i++)
 			if (fesig[i].val[FESIG_VAL_CUR] > -1) {
@@ -183,20 +168,6 @@ int CStreamInfo2::doSignalStrengthLoop ()
 		for (int i = 0; i < FESIG_MAX; i++)
 			fesig[i].old = fesig[i].val[FESIG_VAL_CUR];
 
-#if 0
-		// switch paint mode
-		if (msg == CRCInput::RC_red || msg == CRCInput::RC_blue || msg == CRCInput::RC_green || msg == CRCInput::RC_yellow) {
-			hide ();
-			if(sigscale)
-				sigscale->reset();
-			if(snrscale)
-				snrscale->reset();
-
-			paint_mode = !paint_mode;
-			paint (paint_mode);
-			continue;
-		}
-#endif
 		// -- any key --> abort
 		if (msg <= CRCInput::RC_MaxRC) {
 			break;
@@ -206,15 +177,14 @@ int CStreamInfo2::doSignalStrengthLoop ()
 			CNeutrinoApp::getInstance ()->handleMsg (msg, data);
 		}
 	}
-	if(sigscale){
-		delete sigscale;
-		sigscale = NULL;
-	}
-	if(snrscale){
-		delete snrscale;
-		snrscale = NULL;
-	}
+
 	bw_thread_running = false;
+
+	for (int i = 0; i < FESIG_MAX; i++)
+		if (fesig[i].scale) {
+			delete fesig[i].scale;
+			fesig[i].scale = NULL;
+		}
 
 	if (bw_thread && (pid > 0)) {
 		pthread_join(bw_thread, NULL);
@@ -304,7 +274,6 @@ void CStreamInfo2::SignalRenderStr(long long value, int _x, int _y)
 
 void CStreamInfo2::paint (int mode)
 {
-
 	width =  frameBuffer->getScreenWidth();
 	height = frameBuffer->getScreenHeight();
 	x = frameBuffer->getScreenX();
@@ -343,6 +312,8 @@ void CStreamInfo2::paint (int mode)
 		fesig[i].val[FESIG_VAL_MAX] = 0;
 		fesig[i].val[FESIG_VAL_MIN] = 0;
 		fesig[i].yd_old = 0;
+		fesig[i].scale = NULL;
+		fesig[i].oldpercent = -1;
 	}
 
 	paint_signal_fe_box (width - 2 * width/5 - 10, ypos + iheight, 2 * width/5, 2 * height/5);
@@ -498,7 +469,6 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 			g_RemoteControl->current_PIDs.PIDs.vpid, g_RemoteControl->current_PIDs.PIDs.vpid );
 	else
 		snprintf(buf, sizeof(buf),  "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
-
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Vpid", spaceoffset, buf);
 
 	//apid
@@ -508,8 +478,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 		snprintf(buf, sizeof(buf), "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	} else {
 		unsigned int sw=spaceoffset;
-		for (int i= 0; (i<g_RemoteControl->current_PIDs.APIDs.size()) && (i<10); i++)
-		{
+		for (int i= 0; (i<g_RemoteControl->current_PIDs.APIDs.size()) && (i<10); i++) {
 			snprintf(buf, sizeof(buf), "0x%04x (%i)", g_RemoteControl->current_PIDs.APIDs[i].pid,
 				g_RemoteControl->current_PIDs.APIDs[i].pid );
 			g_Font[font_info]->RenderString(xpos+sw, ypos, width*2/3-10, buf, 0, 0, true,
@@ -550,36 +519,27 @@ int CStreamInfo2Handler::exec(CMenuTarget* parent, const std::string &actionkey)
 	return res;
 }
 
-void CStreamInfo2::showSNR ()
+void CStreamInfo2::showScale () {
+	showScale (FESIG_SIG, yypos + (iheight/2) +50);
+	showScale (FESIG_SNR, yypos + iheight + 4);
+}
+
+void CStreamInfo2::showScale (int i, int posy)
 {
-	char percent[40];
-	int mheight = g_Font[font_info]->getHeight();
-	int perc;
+	if (!fesig[i].scale)
+		return;
 
-	perc = ((fesig[FESIG_SIG].val[FESIG_VAL_CUR] & 0xFFFF) * 100) >> 16;
-	if(perc != fesig[FESIG_SIG].oldpercent) {
-	  	int posy = yypos + (mheight/2) +50;
+	int perc = ((fesig[i].val[i] & 0xFFFF) * 100) >> 16;
+	if(perc != fesig[i].oldpercent) {
+		char percent[40];
 		int posx = x + 10;
-		snprintf(percent, sizeof(percent), "%d%% %s", perc, fesig[FESIG_SIG].title);
+		snprintf(percent, sizeof(percent), "%d%% %s", perc, fesig[i].title);
 		int sw = g_Font[font_info]->getRenderWidth (percent);
-		sigscale->paint(posx - 1, posy, perc);
-		posx = posx + BAR_WIDTH + 3;
-		frameBuffer->paintBoxRel(posx, posy -1, sw, mheight-8, bgcolor);
-		g_Font[font_info]->RenderString(posx + 2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0, false, fgcolor);
-		fesig[FESIG_SIG].oldpercent = perc;
-	}
-
-	perc = ((fesig[FESIG_SNR].val[FESIG_VAL_CUR] & 0xFFFF) * 100) >> 16;
-	if(perc != fesig[FESIG_SNR].oldpercent) {
-	  	int posy = yypos + mheight + 4;
-		int posx = x + 10;
-		snprintf(percent, sizeof(percent),  "%d%% %s", perc, fesig[FESIG_SNR].title);
-		int sw = g_Font[font_info]->getRenderWidth (percent);
-		snrscale->paint(posx - 1, posy+2, perc);
-		posx = posx + BAR_WIDTH + 3;
-		frameBuffer->paintBoxRel(posx, posy - 1, sw, mheight-8, bgcolor, 0, true);
-		g_Font[font_info]->RenderString(posx + 2, posy + mheight-5, sw, percent, COL_MENUCONTENTDARK, 0, false, fgcolor);
-		fesig[FESIG_SNR].oldpercent = perc;
+		fesig[i].scale->paint(posx - 1, posy, perc);
+		posx += BAR_WIDTH + 3;
+		frameBuffer->paintBoxRel(posx, posy -1, sw, iheight-8, bgcolor);
+		g_Font[font_info]->RenderString(posx + 2, posy + iheight-5, sw, percent, COL_MENUCONTENTDARK, 0, false, fgcolor);
+		fesig[i].oldpercent = perc;
 	}
 }
 
@@ -628,7 +588,6 @@ static void* bandwidth_thread(void *arg)
 	struct pollfd  pfd;
 	struct dmx_pes_filter_params flt;
 	int 		 dmxfd;
-	long           b;
 
 	int pid = *((int *)arg);
 
@@ -642,8 +601,6 @@ static void* bandwidth_thread(void *arg)
 		close(pfd.fd);
     		pthread_exit(NULL);
 	}
-
-	fcntl(pfd.fd, F_SETFL, O_NONBLOCK);
 
 	ioctl (dmxfd,DMX_SET_BUFFER_SIZE, sizeof(buf));
 	memset(&flt, 0, sizeof(flt));
@@ -675,17 +632,21 @@ static void* bandwidth_thread(void *arg)
 
 			if ((poll(&pfd, 1, timeout)) > 0 &&  (pfd.revents & POLLIN)) {
 				b_len = read(pfd.fd, buf, sizeof(buf));
-				if (b_len < 0)
+				if (b_len < 0) {
+					close(dmxfd);
+					close(pfd.fd);
 					pthread_exit(NULL);
+				}
 				struct timeval tv;
 				gettimeofday (&tv, NULL);
-				int b_start = 0;
-				if (b_len >= TS_LEN)
-					b_start = sync_ts (buf, b_len);
-				else
-					b_len = 0;
 
-				b = b_len - b_start;
+				int b_start = 0;
+				if (b_len < TS_LEN)
+					b_len = 0;
+				else
+					b_start = sync_ts (buf, b_len);
+
+				long b = b_len - b_start;
 				if (b < 0)
 					continue;
 

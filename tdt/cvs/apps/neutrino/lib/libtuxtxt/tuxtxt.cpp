@@ -2046,6 +2046,7 @@ skip_pid:
 				case RC_TEXT:
 				case RC_HOME:
 					getpidsdone = 0;
+					pids_found = 0;
 					delete dmx;
 					return 0;
 				}

@@ -85,6 +85,7 @@ class CStreamInfo2 : public CMenuTarget
 			int oldpercent;
 			int color;
 			const char *title;
+			CScale *scale;
 		} fesig[4];
 		
 		int  doSignalStrengthLoop();
@@ -106,9 +107,8 @@ class CStreamInfo2 : public CMenuTarget
 		void paint_signal_fe();
 		int  y_signal_fe(long long value, long long max_range, int max_y);
 		void SignalRenderStr (long long value, int x, int y);
-		CScale *sigscale;
-		CScale *snrscale;
-		void showSNR ();
+		void showScale ();
+		void showScale (int, int);
 
 	public:
 
