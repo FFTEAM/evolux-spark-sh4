@@ -1463,6 +1463,7 @@ const char *locale_real_names[] = {
 	"extramenu.glcd.size_time",
 	"extramenu.glcd.restart",
 	"extramenu.glcd.mirror_osd",
+	"extramenu.glcd.time_in_standby",
 	"extramenu.evoluxupdate",
 	"extramenu.evoluxupdate.select",
 	"extramenu.evoluxupdate.on",

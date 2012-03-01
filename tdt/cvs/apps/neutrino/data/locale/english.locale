@@ -1461,6 +1461,7 @@ extramenu.glcd.size_bar Progress bar height
 extramenu.glcd.size_time Time height
 extramenu.glcd.restart Rescan
 extramenu.glcd.mirror_osd Show menue on GraphLCD
+extramenu.glcd.time_in_standby Display time in standby
 extramenu.evoluxupdate Evolux Update Menue
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On

@@ -108,6 +108,8 @@ static struct {
         int		glcd_percent_time;
 #define GLCD_MIRROR_OSD "glcd_mirror_osd"
         int		glcd_mirror_osd;
+#define GLCD_TIME_IN_STANDBY "glcd_time_in_standby"
+        int		glcd_time_in_standby;
 #endif
 } settings;
 
@@ -126,6 +128,7 @@ static bool saveSettings() {
 		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
 		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
 		configfile->setInt32(GLCD_MIRROR_OSD, settings.glcd_mirror_osd);
+		configfile->setInt32(GLCD_TIME_IN_STANDBY, settings.glcd_time_in_standby);
 		configfile->setString(GLCD_FONT, settings.glcd_font);
 #endif
 		configfile->saveConfig(EXTRA_SETTINGS_FILE);
@@ -146,6 +149,7 @@ static bool initSettings() {
 	settings.glcd_percent_bar = 6;
 	settings.glcd_percent_time = 22;
 	settings.glcd_mirror_osd = 0;
+	settings.glcd_time_in_standby = 0;
 	settings.glcd_font = FONTDIR "/neutrino.ttf";
 #endif
 }
@@ -166,6 +170,7 @@ static bool loadSettings() {
 			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
 			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
 			settings.glcd_mirror_osd = configfile->getInt32(GLCD_MIRROR_OSD, 0);
+			settings.glcd_time_in_standby = configfile->getInt32(GLCD_TIME_IN_STANDBY, 0);
 			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
 #endif
 			return true;
@@ -1399,6 +1404,7 @@ nGLCD::nGLCD() {
 	channelLocked = false;
 	doRescan = false;
 	doStandby = false;
+	doStandbyTime = false;
 	doShowVolume = false;
 	doSuspend = false;
 	doExit = false;
@@ -1464,7 +1470,7 @@ void nGLCD::Exec() {
 	if (percent_channel) {
 		off += percent_space;
 		int fw = font_channel.Width(scrollChannel);
-		if (fw)
+		if (fw && !doStandbyTime)
 			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
 				off * bitmap->Height()/100, bitmap->Width() - 4, scrollChannel,
 				&font_channel, settings.glcd_color_fg, GLCD::cColor::Transparent);
@@ -1479,7 +1485,7 @@ void nGLCD::Exec() {
 	if (percent_epg) {
 		off += percent_space;
 		int fw = font_epg.Width(scrollEpg);
-		if (fw)
+		if (fw && !doStandbyTime)
 			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
 				off * bitmap->Height()/100, bitmap->Width() - 4, scrollEpg,
 				&font_epg, settings.glcd_color_fg, GLCD::cColor::Transparent);
@@ -1496,11 +1502,13 @@ void nGLCD::Exec() {
 		int bar_top = off * bitmap->Height()/100;
 		off += percent_bar;
 		int bar_bottom = off * bitmap->Height()/100;
-		bitmap->DrawHLine(0, bar_top, bitmap->Width(), settings.glcd_color_fg);
-		bitmap->DrawHLine(0, bar_bottom, bitmap->Width(), settings.glcd_color_fg);
-		if (Scale)
-			bitmap->DrawRectangle(0, bar_top + 1, Scale * (bitmap->Width() - 1)/100,
-				bar_bottom - 1, settings.glcd_color_bar, true);
+		if (!doStandbyTime) {
+			bitmap->DrawHLine(0, bar_top, bitmap->Width(), settings.glcd_color_fg);
+			bitmap->DrawHLine(0, bar_bottom, bitmap->Width(), settings.glcd_color_fg);
+			if (Scale)
+				bitmap->DrawRectangle(0, bar_top + 1, Scale * (bitmap->Width() - 1)/100,
+					bar_bottom - 1, settings.glcd_color_bar, true);
+		}
 		off += percent_space;
 	}
 
@@ -1864,7 +1872,10 @@ void nGLCD::Update() {
 
 void nGLCD::StandbyMode(bool b) {
 	if (nglcd) {
-		nglcd->doStandby = b;
+		if (settings.glcd_time_in_standby)
+			nglcd->doStandbyTime = b;
+		else
+		    nglcd->doStandby = b;
 		nglcd->doMirrorOSD = false;
 		nglcd->Update();
 	}
@@ -2096,6 +2107,7 @@ GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data
 		if (nglcd)
 				nglcd->doMirrorOSD = settings.glcd_mirror_osd;
 		break;
+	case LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
 	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
@@ -2144,6 +2156,8 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
 				&settings.glcd_percent_time, true, 0, 100, notifier));
 	menu->addItem(GenericMenuSeparatorLine);
+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY, &settings.glcd_time_in_standby,
+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
 				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
 				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));

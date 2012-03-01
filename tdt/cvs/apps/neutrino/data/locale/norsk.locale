@@ -1460,6 +1460,7 @@ extramenu.glcd.size_bar Fremgang linje høyde
 extramenu.glcd.size_time Tid høyde
 extramenu.glcd.restart Reskanne
 extramenu.glcd.mirror_osd Vis meny på GraphLCD
+extramenu.glcd.time_in_standby Vise klokkeslett i standby
 extramenu.evoluxupdate Evolux oppdaterings meny
 extramenu.evoluxupdate.select Online oppdatering
 extramenu.evoluxupdate.on På

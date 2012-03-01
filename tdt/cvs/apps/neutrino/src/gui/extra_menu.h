@@ -358,6 +358,7 @@ class nGLCD
 	bool doRescan;
 	bool doSuspend;
 	bool doStandby;
+	bool doStandbyTime;
 	bool doExit;
 	bool doScrollChannel;
 	bool doScrollEpg;

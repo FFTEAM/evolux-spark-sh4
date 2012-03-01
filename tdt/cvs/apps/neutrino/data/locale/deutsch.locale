@@ -1461,6 +1461,7 @@ extramenu.glcd.size_bar Fortschrittsbalken-Größe
 extramenu.glcd.size_time Uhrzeit-Größe
 extramenu.glcd.restart Neu erkennen
 extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
+extramenu.glcd.time_in_standby Zeitanzeige in Standby
 extramenu.evoluxupdate Evolux OnlineUpdate
 extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
