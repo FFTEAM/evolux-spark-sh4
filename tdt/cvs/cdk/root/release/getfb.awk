@@ -1,5 +1,6 @@
 BEGIN {
 code_ok="\x60"
+code_mu="\x71"
 code_pw="\x74"
 code_00="\x0b"
 code_01="\x02"
@@ -12,7 +13,10 @@ code_07="\x08"
 code_08="\x09"
 code_09="\x30"
 
+#ok + 4xPoweroff = not Reboot
+#ok + 2xMute = cam restart
 code_reset=code_ok code_pw code_pw code_pw code_pw
+code_cam=code_ok code_mu code_mu
 }
 
 
@@ -31,6 +35,11 @@ code_reset=code_ok code_pw code_pw code_pw code_pw
   if(ms==code_reset)
   {
    system("reboot -f")
+  }
+  if(ms==code_cam)
+  {
+   system("myCam='oscam';myOptions='-c /usr/keys';isCam=`pidof $myCam`;for i in $isCam; do kill $i;done;sleep 5;/usr/bin/${myCam} ${myOptions} &")
+   ms=code_mu
   }
   s=""
  }
