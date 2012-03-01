@@ -40,7 +40,7 @@ static int reader_running;
 static int dvbsub_running;
 static int dvbsub_paused = true;
 static int dvbsub_pid;
-static int dvbsub_stopped;
+static int dvbsub_stopped = 1;
 
 cDvbSubtitleConverter *dvbSubtitleConverter;
 

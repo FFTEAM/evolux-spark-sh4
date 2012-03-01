@@ -1,5 +1,5 @@
 /*
- * $Id: zapit.cpp,v 1.290.2.50 2003/06/13 10:53:15 digi_casi Exp $
+ * $id: zapit.cpp,v 1.290.2.50 2003/06/13 10:53:15 digi_casi exp $
  *
  * zapit - d-box2 linux project
  *
@@ -568,7 +568,6 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 	} else {
 		channel->getCaPmt()->ca_pmt_list_management = 0x04;
 	}
-
         audio_map_it = audio_map.find(live_channel_id);
         if((audio_map_it != audio_map.end()) ) {
 		printf("[zapit] channel found, audio pid %x, subtitle pid %x mode %d volume %d\n",
@@ -625,8 +624,9 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
         volume_map_it = volume_map.find(chan_apid);
         if((volume_map_it != volume_map.end()) )
 		setvolume(volume_map_it->second);
-	else
+	else if (channel->getAudioChannel()) {
 		setvolume(channel->getAudioChannel()->isAc3 ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
+	}
 
 	if (!we_playing)
 		startPlayBack(channel);

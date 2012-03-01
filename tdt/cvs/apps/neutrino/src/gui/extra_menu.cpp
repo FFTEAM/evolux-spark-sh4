@@ -1634,7 +1634,6 @@ void* nGLCD::Run(void *)
 		if (!nglcd->bitmap)
 				nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
 
-		nglcd->updateFonts();
 		nglcd->Update();
 
 		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
@@ -1726,6 +1725,7 @@ void* nGLCD::Run(void *)
 
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
+			nglcd->updateFonts();
 			nglcd->Exec();
 			clock_gettime(CLOCK_REALTIME, &ts);
 			nglcd->tm = localtime(&ts.tv_sec);
@@ -1744,8 +1744,6 @@ void* nGLCD::Run(void *)
 
 			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit)
 				break;
-
-			nglcd->updateFonts();
 
 			if (nglcd->doShowVolume) {
 				nglcd->Epg = "";
