@@ -50,6 +50,28 @@
  
  		self["TunerHeader"] = StaticText(_("Detected NIMs:"))
 
+--- enigma2-nightly.org/lib/python/Components/About.py	2012-03-01 12:19:14.777193469 +0100
++++ enigma2-nightly/lib/python/Components/About.py	2012-03-01 12:19:01.561127930 +0100
+@@ -22,11 +22,13 @@
+ 					version = splitted[1]
+ 					image_type = version[0] # 0 = release, 1 = experimental
+ 					major = version[1]
+-					minor = version[2]
+-					revision = version[3]
+-					year = version[4:8]
+-					month = version[8:10]
+-					day = version[10:12]
++					minor1 = version[2]
++					minor2 = version[3]
++					minor = "%s%s" % (minor1, minor2)
++					revision = version[4]
++					year = version[5:9]
++					month = version[9:11]
++					day = version[11:13]
+ 					date = '-'.join((year, month, day))
+ 					if image_type == '0':
+ 						image_type = "Release"
+
 --- enigma2-nightly.org/lib/python/Components/Language.py	2011-10-07 19:08:57.371873384 +0200
 +++ enigma2-nightly/lib/python/Components/Language.py	2011-10-07 19:09:07.563923919 +0200
 @@ -15,33 +15,9 @@
