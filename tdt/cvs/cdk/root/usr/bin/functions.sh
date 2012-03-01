@@ -1,4 +1,7 @@
 #!/bin/sh
+myCam="oscam"
+myOptions="-c /usr/keys"
+
 case $1 in
 0)
 	if [ ! -e /etc/.start_enigma2 ]; then
@@ -44,6 +47,9 @@ case $1 in
 	fi
 ;;
 
+1)
+	isCam=`pidof $myCam`;for i in $isCam; do kill $i;done;sleep 5;/usr/bin/${myCam} ${myOptions} &
+;;
 *)
 	exit
 ;;

@@ -7,4 +7,13 @@ begin
      delay  = 0
      flags  = mode 
 end
+begin
+     button = F3
+     prog   = irexec
+     config = /usr/bin/functions.sh 1
+     mode   = mode_F3
+     repeat = 0
+     delay  = 0
+     flags  = mode 
+end
 
