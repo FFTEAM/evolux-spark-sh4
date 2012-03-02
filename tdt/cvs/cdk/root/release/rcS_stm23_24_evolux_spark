@@ -161,9 +161,9 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/bpamem.ko
 	mknod /dev/bpamem c 153 0 
 	insmod $MODDIR/smartcard.ko
-	insmod $MODDIR/usbserial.ko
-	insmod $MODDIR/pl2303.ko
-	insmod $MODDIR/ftdi_sio.ko
+#	insmod $MODDIR/usbserial.ko
+#	insmod $MODDIR/pl2303.ko
+#	insmod $MODDIR/ftdi_sio.ko
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
 	stfbcontrol a 0
