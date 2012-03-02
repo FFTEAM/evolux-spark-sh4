@@ -509,20 +509,17 @@ void CHECKFS_Menu::CHECKFSSettings()
 
 ////////////////////////////// EMU choose Menu ANFANG ////////////////////////////////////
 
-#define EMU_OPTION_COUNT 7
+#define EMU_OPTION_COUNT 8
 static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
 {
 	  { "disabled" }
-	, { "mgcamd", "rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &",
-		"kill -9 $(pidof mgcamd)", false }
-	, { "incubusCamd", "rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &",
-		"kill -9 $(pidof incubusCamd)", false }
-	, { "camd3", "/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &",
-		"kill -9 $(pidof camd3)", false }
-	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &"
-		"kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
+	, { "mgcamd", "rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &", "kill -9 $(pidof mgcamd)", false }
+	, { "incubusCamd", "rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &", "kill -9 $(pidof incubusCamd)", false }
+	, { "camd3", "/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &", "kill -9 $(pidof camd3)", false }
+	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &", "kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
 	, { "oscam", "/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof oscam)", false }
 	, { "spcs", "/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof spcs)", false }
+	, { "gbox", "/usr/bin/gbox >/dev/null 2>&1 &", "kill -9 $(pidof gbox)", false }
 };
 
 int EMU_Menu::get_installed_count() {
