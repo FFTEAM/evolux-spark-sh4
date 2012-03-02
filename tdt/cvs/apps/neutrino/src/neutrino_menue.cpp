@@ -813,6 +813,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 #endif
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WLAN, true, NULL, new WLAN_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Wlan Menu
 	FILE* fd1 = fopen("/etc/enigma2/settings", "r");
 	if(fd1)
 	{

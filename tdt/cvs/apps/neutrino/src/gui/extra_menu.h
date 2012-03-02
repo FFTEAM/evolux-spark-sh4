@@ -187,6 +187,27 @@ class DISPLAYTIME_Menu : public CMenuTarget
 
 };
 
+class WLAN_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	public:
+
+	WLAN_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void WLANSettings();
+
+};
+
 class WWWDATE_Menu : public CMenuTarget
 {
 	private:

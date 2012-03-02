@@ -1396,6 +1396,10 @@ extramenu.displaytime DisplayTime Menue
 extramenu.displaytime.select DisplayTime
 extramenu.displaytime.on Ein
 extramenu.displaytime.off Aus
+extramenu.wlan Wlan Menue
+extramenu.wlan.select Wlan
+extramenu.wlan.on Ein
+extramenu.wlan.off Aus
 extramenu.wwwdate wwwDate Menue
 extramenu.wwwdate.select wwwDate
 extramenu.wwwdate.on Ein

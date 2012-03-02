@@ -2260,4 +2260,74 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 //ENDE EVOLUXUPDATE
 
 ////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
+
+////////////////////////////// WLAN Menu ANFANG ////////////////////////////////////
+#define WLAN_OPTION_COUNT 2
+const CMenuOptionChooser::keyval WLAN_OPTIONS[WLAN_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_WLAN_OFF },
+	{ 1, LOCALE_EXTRAMENU_WLAN_ON },
+};
+
+WLAN_Menu::WLAN_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+int WLAN_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+		parent->hide();
+
+	WLANSettings();
+
+	return res;
+}
+
+void WLAN_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void WLAN_Menu::WLANSettings()
+{
+#define DOTFILE_WLAN "/etc/.wlan"
+	int wlan = access(DOTFILE_WLAN, F_OK) ? 0 : 1;
+	int old_wlan=wlan;
+	//MENU AUFBAUEN
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WLAN, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_WLAN_SELECT, &wlan, WLAN_OPTIONS, WLAN_OPTION_COUNT,true);
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_wlan!=wlan)
+	{
+		if (wlan==1)
+		{
+			//Wlan STARTEN
+			touch("/etc/.wlan");
+			safe_system("/etc/init.d/setupETH.sh >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WLAN Activated!", 450, 2); // UTF-8("")
+		} else {
+			//Wlan BEENDEN
+			unlink("/etc/.wlan");
+			safe_system("/etc/init.d/setupETH.sh >/dev/null 2>&1 &");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WLAN Deactivated!", 450, 2); // UTF-8("")
+		}
+	}
+}
+////////////////////////////// DisplayTime Menu ENDE //////////////////////////////////////
 // vim:ts=4

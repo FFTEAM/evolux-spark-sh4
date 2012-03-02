@@ -1395,6 +1395,10 @@ extramenu.displaytime Vis tid meny
 extramenu.displaytime.select Vis tid
 extramenu.displaytime.on På
 extramenu.displaytime.off Av
+extramenu.wlan Wlan meny
+extramenu.wlan.select Wlan
+extramenu.wlan.on På
+extramenu.wlan.off Av
 extramenu.wwwdate wwwDato Meny
 extramenu.wwwdate.select wwwDato
 extramenu.wwwdate.on På
