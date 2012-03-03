@@ -36,7 +36,7 @@ bool send_data(int fd, const void * data, const size_t size, const timeval timeo
 	fd_set       writefds;
 	timeval      tv;
 	const void * buffer;
-	size_t       n;
+	int          n;
 	int          rc;
 
 	n = size;
@@ -87,11 +87,10 @@ bool receive_data(int fd, void * data, const size_t size, const timeval timeout)
 	fd_set    readfds;
 	timeval   tv;
 	void    * buffer;
-	size_t    n;
+	int       n;
 	int       rc;
 
 	n = size;
-
 	while (n > 0)
 	{
 		FD_ZERO(&readfds);
