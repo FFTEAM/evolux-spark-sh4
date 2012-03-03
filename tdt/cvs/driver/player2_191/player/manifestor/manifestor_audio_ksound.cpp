@@ -743,19 +743,20 @@ ManifestorStatus_t Manifestor_AudioKsound_c::FillOutInputBuffer(
     	{
     	    if (OutputState == PLAYING)
             {
+/* turned off for 1080i50hz
                 if (NumSamplesCurrentlyEnqueued < SamplesNeededForFadeOutBeforeResampling)
                 {
                     MANIFESTOR_ERROR("NumSamplesCurrentlyEnqueued is insufficient to de-pop (have %d, need %d)\n",
                                      NumSamplesCurrentlyEnqueued, SamplesNeededForFadeOutBeforeResampling);
                 }              
-
+*/
     	    	MixerFrameParams->Command = MIXER_PAUSE;
     	    	if (NumSamplesCurrentlyEnqueued >= EndOffsetBeforeResampling)
     	    	    MixerFrameParams->StartOffset = EndOffsetAfterResampling;
     	    	else
     	    	    MixerFrameParams->StartOffset =
     	    			(NumSamplesCurrentlyEnqueued / RescaleFactor).RoundedIntegerPart();
-
+/* turned off for 1080i50hz
                 if (Status == ManifestorWouldBlock)
                 {
                     MANIFESTOR_ERROR("Mixer has starved - injecting silence (sta:0x%x)\n",Status);
@@ -770,6 +771,7 @@ ManifestorStatus_t Manifestor_AudioKsound_c::FillOutInputBuffer(
                     MANIFESTOR_DEBUG("Deliberately muting mixer - injecting silence\n");
                     OutputState = MUTED;
                 }
+*/
             }
             else
             {
@@ -1027,9 +1029,9 @@ ManifestorStatus_t Manifestor_AudioKsound_c::FlushInputBuffer( MME_DataBuffer_t 
                                                                MME_MixerInputStatus_t *CodedInputStatus )
 {
     int BytesUsed = InputStatus->BytesUsed;
-
+/* turned off for 1080i50hz
     MANIFESTOR_ASSERT( OutputState != PLAYING );
-
+*/
     //
     // Work out which buffers can be marked as completed (and do so)
     //
