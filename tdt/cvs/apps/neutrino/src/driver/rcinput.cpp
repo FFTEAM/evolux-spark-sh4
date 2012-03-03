@@ -490,6 +490,8 @@ void CRCInput::getMsg_ms(neutrino_msg_t * msg, neutrino_msg_data_t * data, int T
 	getMsg_us(msg, data, (unsigned long long) Timeout * 1000, bAllowRepeatLR);
 }
 
+static bool firstKey = true;
+
 #define ENABLE_REPEAT_CHECK
 void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, unsigned long long Timeout, bool bAllowRepeatLR)
 {
@@ -1136,6 +1138,15 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 					printf("got keydown native key: %04x %04x, translate: %04x -%s-\n", ev.code, ev.code&0x1f, translate(ev.code, 0), getKeyName(translate(ev.code, 0)).c_str());
 					printf("rc_last_key %04x rc_last_repeat_key %04x\n\n", rc_last_key, rc_last_repeat_key);
 #endif
+					if (firstKey) {
+						firstKey = false;
+						int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
+						if (wtw > -1) {
+							write(wtw, "0\n", 2);
+							::close(wtw);
+						}
+					}
+
 					unsigned long long now_pressed;
 					bool keyok = true;
 
