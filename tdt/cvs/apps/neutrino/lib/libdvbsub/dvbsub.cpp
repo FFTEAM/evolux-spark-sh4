@@ -96,8 +96,9 @@ int dvbsub_start(int pid)
 		dvbsub_pid = pid;
 	}
 
-	while(!dvbsub_stopped)
-		usleep(10);
+
+	//while(!dvbsub_stopped)
+	//	usleep(10);
 
 	if(dvbsub_pid > 0) {
 		dvbsub_paused = false;
