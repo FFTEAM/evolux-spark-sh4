@@ -2424,11 +2424,15 @@ static void sendAllEvents(int connfd, t_channel_id serviceUniqueKey, bool oldFor
 							count++;
 	
 							if (count < MAX_SIZE_EVENTLIST) {
-								*((event_id_t *)liste) = (*e)->uniqueKey();
+								// *((event_id_t *)liste) = (*e)->uniqueKey();
+								event_id_t eid = (*e)->uniqueKey();
+								memcpy(liste, &eid, sizeof(event_id_t));
 								liste += sizeof(event_id_t);
-								*((unsigned *)liste) = t->startzeit;
+								//*((unsigned *)liste) = t->startzeit;
+								memcpy(liste, &t->startzeit, 4);
 								liste += 4;
-								*((unsigned *)liste) = t->dauer;
+								//*((unsigned *)liste) = t->dauer;
+								memcpy(liste, &t->dauer, 4);
 								liste += 4;
 								strcpy(liste, (*e)->getName().c_str());
 								liste += (*e)->getName().length();
