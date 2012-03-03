@@ -428,7 +428,7 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
       return -ERESTARTSYS;
 
       	data.length = len;
-	if (kernel_buf[len-1] == '\n')
+	if ((len > 0) && (kernel_buf[len-1] == '\n'))
 	{
 	  kernel_buf[len-1] = 0;
 	  data.length--;
@@ -451,9 +451,12 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
 
 	dprintk(10, "%s < res %d len %d\n", __func__, res, len);
 
+#if 0
+	// no point in returning an error
 	if (res < 0)
 	   return res;
 	else
+#endif
 	   return len;
 }
 
@@ -678,7 +681,6 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 	{
 #if defined(SPARK) || defined(SPARK7162)
 		u32 uTime = 0;
-		char cTime[5];
 		uTime = YWPANEL_FP_GetTime();
 		//printk("uTime = %d\n", uTime);
 		put_user(uTime, (int *) arg);
@@ -720,6 +722,19 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 #endif
 	case 0x5401:
 		break;
+	// --martii, 20120301
+	case VFDGETSTARTUPSTATE:
+	{
+dprintk(0, "%s >\n", __func__);
+		YWPANEL_STARTUPSTATE_t State;
+		if (YWPANEL_FP_GetStartUpState(&State))
+			put_user(State, (int *) arg);
+		else
+			res = -1;
+dprintk(0, "%s < res=%d\n", __func__,res);
+		break;
+	}
+
 	default:
 		printk("VFD/AOTOM: unknown IOCTL 0x%x\n", cmd);
 		mode = 0;

@@ -604,6 +604,7 @@ bool YWPANEL_FP_SetI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t   *I2CData)
 			I2CData->writeBuff[0] = YWPANEL_INIT_INSTR_GETSTARTUPSTATE;
 		}
 		break;
+
 		case  YWPANEL_DATATYPE_GETVFDSTATE:
 		{
 			I2CData->writeBuff[0] = YWPANEL_INIT_INSTR_GETVFDSTANDBYSTATE;
@@ -839,19 +840,19 @@ bool YWPANEL_FP_SetI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t   *I2CData)
 
 		case YWPANEL_DATATYPE_GETSTARTUPSTATE:
 		{
-			I2CData->writeBuff[2] = data->data.CpuState.state;
+			I2CData->writeBuff[2] = data->data.StartUpState.State;
 		}
 		break;
 
 		case YWPANEL_DATATYPE_SETVFDSTATE:
 		{
-		   I2CData->writeBuff[2] = data->data.CpuState.state;
+		   I2CData->writeBuff[2] = data->data.VfdStandbyState.On;
 		}
 		break;
 
 		case YWPANEL_DATATYPE_SETPOWERONSTATE:
 		{
-			I2CData->writeBuff[2] = data->data.CpuState.state;
+			I2CData->writeBuff[2] = data->data.PowerOnState.state;
 		}
 		break;
 
@@ -1209,15 +1210,16 @@ bool YWPANEL_FP_ParseI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t	 *I2CData
 
 		case YWPANEL_INIT_INSTR_GETVFDSTANDBYSTATE: /*get vfd state*/
 		{
-			   data->data.CpuState.state= I2CData->readBuff[2];
+			   data->data.VfdStandbyState.On = I2CData->readBuff[2];
 			   data->ack = true;
 		}
 		break;
+
 		case YWPANEL_INIT_INSTR_GETPOWERONSTATE: /*get power on  state*/
 		{
 		   if(data->dataType == YWPANEL_DATATYPE_GETPOWERONSTATE)
 		   {
-			   data->data.CpuState.state= I2CData->readBuff[2];
+			   data->data.PowerOnState.state= I2CData->readBuff[2];
 			   data->ack = true;
 		   }
 		   else
@@ -1228,6 +1230,12 @@ bool YWPANEL_FP_ParseI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t	 *I2CData
 		}
 		break;
 
+		case YWPANEL_INIT_INSTR_GETSTARTUPSTATE: /*get vfd state*/
+		{
+			   data->data.StartUpState.State = I2CData->readBuff[2];
+			   data->ack = true;
+		}
+		break;
 
 		case YWPANEL_INIT_INSTR_GETSTBYKEY1: /*get standby key*/
 		case YWPANEL_INIT_INSTR_GETSTBYKEY2: /*get standby key*/
@@ -1415,29 +1423,29 @@ YWPANEL_VFDSTATE_t YWPANEL_FP_GetVFDStatus(void)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d] \n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d] \n",__LINE__);
 		return false;
 	}
-	if((data.data.CpuState.state < YWPANEL_VFDSTATE_STANDBYOFF) ||(data.data.CpuState.state > YWPANEL_VFDSTATE_STANDBYON) )
+	if((data.data.VfdStandbyState.On < YWPANEL_VFDSTATE_STANDBYOFF) ||(data.data.VfdStandbyState.On > YWPANEL_VFDSTATE_STANDBYON) )
 	{
 		return YWPANEL_VFDSTATE_UNKNOW;
 	}
 
-	return data.data.CpuState.state;
+	return data.data.VfdStandbyState.On;
 }
 
-bool  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t state)
+bool  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t On)
 {
 	YWPANEL_FPData_t   data;
 
 
 	memset(&data, 0, sizeof(YWPANEL_FPData_t));
 	data.dataType = YWPANEL_DATATYPE_SETVFDSTATE;
-	data.data.CpuState.state = state;
+	data.data.VfdStandbyState.On = On;
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1452,15 +1460,15 @@ YWPANEL_POWERONSTATE_t YWPANEL_FP_GetPowerOnStatus(void)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
-	if((data.data.CpuState.state < YWPANEL_POWERONSTATE_RUNNING) ||(data.data.CpuState.state > YWPANEL_POWERONSTATE_CHECKPOWERBIT) )
+	if((data.data.PowerOnState.state < YWPANEL_POWERONSTATE_RUNNING) ||(data.data.PowerOnState.state > YWPANEL_POWERONSTATE_CHECKPOWERBIT) )
 	{
 		return YWPANEL_POWERONSTATE_UNKNOW;
 	}
 
-	return data.data.CpuState.state;
+	return data.data.PowerOnState.state;
 }
 
 bool  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state)
@@ -1470,11 +1478,11 @@ bool  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state)
 
 	memset(&data, 0, sizeof(YWPANEL_FPData_t));
 	data.dataType = YWPANEL_DATATYPE_SETPOWERONSTATE;
-	data.data.CpuState.state = state;
+	data.data.PowerOnState.state = state;
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1489,11 +1497,11 @@ bool YWPANEL_FP_GetStartUpState(YWPANEL_STARTUPSTATE_t *State)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-	  ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+	  ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 	  return false;
 	}
 
-	*State = data.data.CpuState.state;
+	*State = data.data.StartUpState.State;
 	return true;
 }
 
@@ -1506,7 +1514,7 @@ YWPANEL_CPUSTATE_t YWPANEL_FP_GetCpuStatus(void)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	if((data.data.CpuState.state <YWPANEL_CPUSTATE_RUNNING) ||(data.data.CpuState.state> YWPANEL_CPUSTATE_STANDBY) )
@@ -1528,7 +1536,7 @@ bool  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1545,7 +1553,7 @@ bool  YWPANEL_FP_GetVersion(YWPANEL_Version_t *version)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	//printk("%s:%d\n", __FUNCTION__, __LINE__);
@@ -1563,7 +1571,7 @@ u32  YWPANEL_FP_GetIRKey(void)
 	data.dataType = YWPANEL_DATATYPE_IRKEY;
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return (data.data.IrkeyData.dataCode|data.data.IrkeyData.customCode);
@@ -1580,7 +1588,7 @@ u32  YWPANEL_FP_GetStandByKey(u8 index)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	key = (u8)(data.data.stbyKey.key>>8);
@@ -1606,7 +1614,7 @@ bool  YWPANEL_FP_SetStandByKey(u8 index,u8 key)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1622,7 +1630,7 @@ u32  YWPANEL_FP_GetBlueKey(u8 index)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	key = (u8)(data.data.stbyKey.key>>8);
@@ -1647,7 +1655,7 @@ bool  YWPANEL_FP_SetBlueKey(u8 index,u8 key)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1662,7 +1670,7 @@ u32  YWPANEL_FP_GetTime(void)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return data.data.time.second;
@@ -1678,7 +1686,7 @@ bool  YWPANEL_FP_SetTime(u32 value)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return false;
 	}
 	return true;
@@ -1694,7 +1702,7 @@ bool  YWPANEL_FP_SetPowerOnTime(u32 Value)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 	}
 	return true;
 }
@@ -1708,7 +1716,7 @@ u32  YWPANEL_FP_GetPowerOnTime(void)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		return 0;
 	}
 	return data.data.time.second;
@@ -1724,7 +1732,7 @@ bool  YWPANEL_FP_ControlTimer(bool on)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]",__LINE__);
 		return false;
 	}
 	return true;
@@ -1750,7 +1758,7 @@ int YWPANEL_LBD_SetStatus(YWPANEL_LBDStatus_T  LBDStatus )
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		ErrorCode = -ETIME;
 	}
 	return ErrorCode;
@@ -1797,7 +1805,7 @@ int YWPANEL_VFD_SetLed(int which, int on)
 
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
-		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+		ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 		ErrorCode = -ETIME;
 	}
 	return ErrorCode;
@@ -2059,7 +2067,7 @@ int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 
 		if(YWPANEL_FP_SendData(&data) != true)
 		{
-			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 			ErrorCode = -ETIME;
 		}
 
@@ -2070,7 +2078,7 @@ int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 
 		if(YWPANEL_FP_SendData(&data) != true)
 		{
-			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 			ErrorCode = -ETIME;
 		}
 	}
@@ -2093,7 +2101,7 @@ int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 
 		if(YWPANEL_FP_SendData(&data) != true)
 		{
-			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 			ErrorCode = -ETIME;
 		}
 
@@ -2104,7 +2112,7 @@ int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 
 		if(YWPANEL_FP_SendData(&data) != true)
 		{
-			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not seccussfully!![%d]\n",__LINE__);
+			ywtrace_print(TRACE_ERROR,"YWPANEL_FP_SendData not successfully!![%d]\n",__LINE__);
 			ErrorCode = -ETIME;
 		}
 	}
