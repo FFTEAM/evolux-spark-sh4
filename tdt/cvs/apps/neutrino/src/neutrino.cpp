@@ -3195,9 +3195,7 @@ _repeat:
 			if(g_settings.mode_clock)
 				InfoClock->StartClock();
 			if(mode == mode_tv)
-{ fprintf(stderr, "# %d\n", __LINE__);
 				ResumeSubtitles();
-}
 #ifdef WITH_GRAPHLCD
 			nGLCD::MirrorOSD(false);
 #endif
@@ -3985,9 +3983,7 @@ void CNeutrinoApp::tvMode( bool rezap )
 		g_InfoViewer->lcdUpdateTimer = g_RCInput->addTimer( LCD_UPDATE_TIME_TV_MODE, false );
 		CVFD::getInstance()->ShowIcon(VFD_ICON_RADIO, false);
 		if(!rezap)
-{ fprintf(stderr, "# %d\n", __LINE__);
 			ResumeSubtitles();
-}
 	}
 
 	CVFD::getInstance()->setMode(CVFD::MODE_TVRADIO);
