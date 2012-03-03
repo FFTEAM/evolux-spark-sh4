@@ -108,6 +108,7 @@ int CAudioSelectMenuHandler::doMenu ()
 	bool sep_added = false;
 	if(cc) 
 	{
+		bool subs_running = false;
 		for (int i = 0 ; i < (int)cc->getSubtitleCount() ; ++i) 
 		{
 			CZapitAbsSub* s = cc->getChannelSub(i);
@@ -122,12 +123,14 @@ int CAudioSelectMenuHandler::doMenu ()
 				snprintf(spid,sizeof(spid), "DVB:%d", sd->pId);
 				char item[64];
 				snprintf(item,sizeof(item), "DVB: %s (pid %03X)", sd->ISO639_language_code.c_str(), sd->pId);
+				bool this_sub_running = (sd->pId == dvbsub_getpid());
+				subs_running |= this_sub_running;
 				AudioSelector.addItem(new CMenuForwarderNonLocalized(item /*sd->ISO639_language_code.c_str()*/,
-							sd->pId != dvbsub_getpid(), NULL, &SubtitleChanger, spid, CRCInput::convertDigitToKey(++count)));
-			} else if (s->thisSubType == CZapitAbsSub::TTX) 
-			{
+							!this_sub_running, NULL, &SubtitleChanger, spid, CRCInput::convertDigitToKey(++count)));
+			} else if (s->thisSubType == CZapitAbsSub::TTX) {
 				CZapitTTXSub* sd = reinterpret_cast<CZapitTTXSub*>(s);
-				fprintf(stderr, "[neutrino] adding TTX subtitle %s pid %X mag %d page %d\n", sd->ISO639_language_code.c_str(), sd->pId, sd->teletext_magazine_number, sd->teletext_page_number);
+				fprintf(stderr, "[neutrino] adding TTX subtitle %s pid %X mag %d page %d\n",
+					sd->ISO639_language_code.c_str(), sd->pId, sd->teletext_magazine_number, sd->teletext_page_number);
 				if(!sep_added) {
 					sep_added = true;
 					AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_SUBTITLES_HEAD));
@@ -138,14 +141,17 @@ int CAudioSelectMenuHandler::doMenu ()
 				snprintf(spid,sizeof(spid), "TTX:%d:%03X:%s", sd->pId, page, sd->ISO639_language_code.c_str()); 
 				char item[64];
 				snprintf(item,sizeof(item), "TTX: %s (pid %X page %03X)", sd->ISO639_language_code.c_str(), sd->pId, page);
+				bool this_sub_running = tuxtx_subtitle_running(&pid, &page, NULL);
+				subs_running |= this_sub_running;
 				AudioSelector.addItem(new CMenuForwarderNonLocalized(item /*sd->ISO639_language_code.c_str()*/,
-							!tuxtx_subtitle_running(&pid, &page, NULL), NULL, &SubtitleChanger, spid, CRCInput::convertDigitToKey(++count)));
+							!this_sub_running, NULL, &SubtitleChanger, spid, CRCInput::convertDigitToKey(++count)));
 			}
 		}
 		
-		if(sep_added) 
-			AudioSelector.addItem(new CMenuForwarder(LOCALE_SUBTITLES_STOP, true, NULL, &SubtitleChanger, "off", CRCInput::RC_stop));
-		else {
+		if(sep_added) {
+			if (subs_running)
+				AudioSelector.addItem(new CMenuForwarder(LOCALE_SUBTITLES_STOP, true, NULL, &SubtitleChanger, "off", CRCInput::RC_stop));
+		} else {
 			// subtitles might not be available, but started by zapit anyway, as it remembers pids
 			dvbsub_stop();
 			tuxtx_stop_subtitle();
