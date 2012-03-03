@@ -7,6 +7,7 @@
 #define false 0
 #endif
 
+#define VFDGETSTARTUPSTATE	0xc0425af8	// --martii, 20120301
 #define VFDGETTIME		0xc0425afa
 #define VFDSETTIME		0xc0425afb
 #define VFDSTANDBY		0xc0425afc

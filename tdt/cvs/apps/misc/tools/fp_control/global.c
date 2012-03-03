@@ -49,9 +49,9 @@ static time_t read_e2_timers(time_t curTime)
 	time_t recordTime = LONG_MAX;
 	FILE   *fd        = fopen (E2WAKEUPTIME, "r");
 
-	printf("Getting enigma2 wakeup time");
+	printf("Getting enigma2 wakeup time\n");
 
-	if (fd > 0)
+	if (fd)
 	{
 		fgets(line, 11, fd);
 		sscanf(line, "%ld", &recordTime);
@@ -76,7 +76,7 @@ static time_t read_e2_timers(time_t curTime)
 	time_t recordTime = LONG_MAX;
 	FILE   *fd        = fopen (E2TIMERSXML, "r");
 
-	printf("Getting enigma2 wakeup time");
+	printf("Getting enigma2 wakeup time\n");
 
 	if (fd > 0)
 	{
@@ -108,9 +108,9 @@ static time_t read_neutrino_timers(time_t curTime)
 	time_t recordTime = LONG_MAX;
 	FILE   *fd        = fopen (NEUTRINO_TIMERS, "r");
 
-	printf("Getting neutrino wakeup time");
+	printf("Getting neutrino wakeup time\n");
 
-	if (fd > 0)
+	if (fd)
 	{
 		printf("opening %s\n", NEUTRINO_TIMERS);
 		
@@ -118,7 +118,7 @@ static time_t read_neutrino_timers(time_t curTime)
 		{
 			line[999]='\0';
 
-			if (strstr(line, "ALARM_TIME_") != NULL )
+			if (!strncmp(line, "ALARM_TIME_", 11))
 			{
 				time_t tmp = 0;
 				char* str;
@@ -128,7 +128,7 @@ static time_t read_neutrino_timers(time_t curTime)
 				if (str != NULL)
 				{
 					tmp = atol(str + 1);
-					recordTime = (tmp < recordTime && tmp > curTime ? tmp : recordTime);
+					recordTime = ((tmp < recordTime && tmp > curTime) ? tmp : recordTime);
 				}
 			}
 		}
