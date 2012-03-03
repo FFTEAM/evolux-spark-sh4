@@ -189,6 +189,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	}
 
 	echo 1 > /proc/sys/kernel/panic
+	echo 2 > /proc/cpu/alignment
 
 	( sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
 	( sleep 10
@@ -224,6 +225,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
 	# green led off
 
+	/bin/fp_control -w
 	(sleep 10;/bin/fp_control -l 1 0) &
 
 	if [ -n "$START_E2" ]
