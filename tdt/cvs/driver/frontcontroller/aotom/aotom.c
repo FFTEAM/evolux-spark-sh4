@@ -441,7 +441,7 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
       return -ERESTARTSYS;
 
       	data.length = len;
-	if (len > 0 && kernel_buf[len-1] == '\n')
+	if ((len > 0) && (kernel_buf[len-1] == '\n'))
 	{
 	  kernel_buf[len-1] = 0;
 	  data.length--;
@@ -464,9 +464,12 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
 
 	dprintk(10, "%s < res %d len %d\n", __func__, res, len);
 
+#if 0
+	// no point in returning an error --martii
 	if (res < 0)
 	   return res;
 	else
+#endif
 	   return len;
 }
 
