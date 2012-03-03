@@ -62,9 +62,6 @@ void CTimerManager::Init(void)
 	m_saveEvents = false;
 	m_isTimeSet = false;
 	wakeup = 0;
-printf("[timerd] wakeup from standby: %s\n", wakeup ? "yes" : "no");
-	if(wakeup)
-		creat("/tmp/.wakeup", 0);
 
 	loadRecordingSafety();
 
@@ -714,6 +711,15 @@ bool CTimerManager::shutdown()
 void CTimerManager::shutdownOnWakeup(int currEventID)
 {
 	time_t nextAnnounceTime=0;
+
+	FILE *f = fopen ("/proc/stb/fp/was_timer_wakeup", "r");
+	if (f) {
+		fscanf(f, "%d", &wakeup);
+		fclose(f);
+	}
+
+	fprintf(stderr, "[timerd] wakeup from standby: %s\n", wakeup ? "yes" : "no");
+
 	if(wakeup == 0)
 		return;
 
