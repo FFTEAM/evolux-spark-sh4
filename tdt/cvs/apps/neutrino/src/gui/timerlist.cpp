@@ -1116,11 +1116,14 @@ int CTimerList::newTimer()
 
 	int ret=timerSettings.exec(this,"");
 
+#if 0
+// the clear() method will take care of deleting the elements by calling their destructors ... --martii
 	// delete dynamic created objects
 	for(unsigned int count=0;count<toDelete.size();count++)
 	{
 		delete toDelete[count];
 	}
+#endif
 	toDelete.clear();
 
 	return ret;
