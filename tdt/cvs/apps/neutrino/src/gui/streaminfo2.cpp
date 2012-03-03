@@ -259,7 +259,7 @@ int CStreamInfo2::y_signal_fe (long long value, long long max_value, int max_y)
 	if (!max_value)
 		max_value = 1;
 
-	int l = ((long) max_y * (long) value) / (long) max_value;
+	int l = (max_y * value) / max_value;
 	return (l > max_y) ? max_y : l;
 }
 
