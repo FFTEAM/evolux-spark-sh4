@@ -161,7 +161,7 @@ void EpgPlus::TimeLine::paint (time_t startTime, int duration)
 		  , toggleColor ? COL_MENUCONTENT_PLUS_2 : COL_MENUCONTENT_PLUS_1);
 
   this->fontDate->RenderString (this->x + 4, this->y + this->fontDate->getHeight ()
-	, this->width, EpgPlus::getTimeString (startTime, "%d-%b") , COL_MENUCONTENT, 0, true);	// UTF-8
+	, this->width, EpgPlus::getTimeString (startTime, "%d-%b") , COL_MENUCONTENT_P1, 0, true);	// UTF-8
 
   // paint ticks
   for (int i = 0; i < numberOfTicks; ++i, xPos += tickDist, tickTime += duration / numberOfTicks) {
@@ -177,7 +177,7 @@ void EpgPlus::TimeLine::paint (time_t startTime, int duration)
 	int textWidth = this->fontTime->getRenderWidth (timeStr, true);
 
 	this->fontTime->RenderString (xPos - textWidth - 4, this->y + this->fontTime->getHeight ()
-		  , textWidth, timeStr, toggleColor ? COL_MENUCONTENT_P1 : COL_MENUCONTENT_P2, 0, true);	// UTF-8
+		  , textWidth, timeStr, toggleColor ? COL_MENUCONTENT_P2 : COL_MENUCONTENT_P1, 0, true);	// UTF-8
 
 	timeStr = EpgPlus::getTimeString (tickTime, "%M");
 	textWidth = this->fontTime->getRenderWidth (timeStr, true);
