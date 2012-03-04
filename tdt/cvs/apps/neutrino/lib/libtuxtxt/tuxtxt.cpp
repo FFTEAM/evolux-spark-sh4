@@ -1774,6 +1774,7 @@ int Init(int source) {
 	if (firstRun) {
 		screenmode = SCREENMODE_SPLIT;
 		boxed_screenmode = screenmode;
+		prevscreenmode = screenmode;
 #if 0 
 		screen_mode1 = 0;
 		screen_mode2 = 0;
@@ -3429,7 +3430,7 @@ void SwitchScreenMode(int newscreenmode, int offset) {
 	if(boxed)
 		screenmode = boxed_screenmode;
 	else
-		prevscreenmode = screenmode;
+		screenmode = prevscreenmode;
 
 	if (offset) {
 		screenmode = screenmode + offset + 3;
@@ -3456,6 +3457,7 @@ void SwitchScreenMode(int newscreenmode, int offset) {
 		transpmode = TRANSPMODE_TEXT;
 		zoommode = ZOOMMODE_FULL;
 		yzoom = 1;
+		prevscreenmode = screenmode;
 	}
 
 	/* set mode */
@@ -3489,8 +3491,7 @@ void SwitchScreenMode(int newscreenmode, int offset) {
 		}
 		setPIG(0, 0, 720, 576);
 	}
-	if (!boxed)
-		boxed_screenmode = screenmode;
+
 	debugf(1, "%s: <\n", __func__);
 }
 

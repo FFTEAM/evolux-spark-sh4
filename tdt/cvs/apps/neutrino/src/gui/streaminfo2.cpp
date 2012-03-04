@@ -222,6 +222,7 @@ void CStreamInfo2::paint_signal_fe_box(int _x, int _y, int w, int h)
 
 	for (int i = 0; i < FESIG_MAX; i++) {
 		fesig[i].x = _x + 5 + xd * (i + 1);
+		frameBuffer->paintBoxRel(_x+xd *(i + 1) - 1, sig_text_y - 13,18,4, COL_BLACK);
 		frameBuffer->paintBoxRel(_x+xd *(i + 1), sig_text_y - 12,16,2, fesig[i].color);
 		g_Font[font_small]->RenderString(_x+20+xd * (i + 1), sig_text_y, xd, fesig[i].title, COL_MENUCONTENTDARK, 0, true, fgcolor);
 	}
@@ -299,7 +300,7 @@ void CStreamInfo2::paint (int mode)
 
 	fesig[FESIG_BER].color = COL_RED;
 	fesig[FESIG_SIG].color = COL_GREEN;
-	fesig[FESIG_SNR].color = COL_BLUE;
+	fesig[FESIG_SNR].color = COL_LIGHT_BLUE;
 	fesig[FESIG_RATE].color = COL_YELLOW;
 
 	fesig[FESIG_BER].title = "BER";
