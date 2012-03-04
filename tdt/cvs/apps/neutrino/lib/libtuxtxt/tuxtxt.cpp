@@ -1435,6 +1435,7 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 			setPIG(0, 0, 720, 576);
 			return 0;
 		}
+		SwitchScreenMode(screenmode, 0);
 	} else {
 		ttx_mutex_lock();
 		if (ttx_sub_thread)
@@ -1927,18 +1928,10 @@ int Init(int source) {
 extern int infoViewer_is_visible(void);
 
 void CleanUp() {
-	int curscreenmode = screenmode;
-
-	/* clear screen */
-//	Clear(transp);
-
-	/* hide and close pig */
-	if (screenmode != SCREENMODE_FULL) {
-		SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
-	}
-
 	if (!use_gui)
 		return;
+
+	int curscreenmode = screenmode;
 
 	/* close freetype */
 	deInitFonts();
