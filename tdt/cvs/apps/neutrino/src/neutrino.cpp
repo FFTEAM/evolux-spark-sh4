@@ -3437,6 +3437,7 @@ _repeat:
 			bool isTVMode = g_Zapit->isChannelTVChannel(eventinfo->channel_id);
 
 			dvbsub_stop();
+			tuxtx_stop_subtitle();
 
 			if ((!isTVMode) && (mode != mode_radio)) {
 				radioMode(false);

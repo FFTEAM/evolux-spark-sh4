@@ -443,7 +443,7 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 		}
 	}
 
-	tuxtx_stop_subtitle();
+	tuxtx_stop_subtitle(false);
 	tuxtxt_check_death();
 	dvbsub_stop();
 	pmt_stop_update_filter(&pmt_update_fd);
@@ -2076,7 +2076,7 @@ in record mode we stop onle cam1, while cam continue to decrypt recording channe
 		tuxtx_pause_subtitle(true);
 	} else {
 		dvbsub_stop();
-		tuxtx_stop_subtitle();
+		tuxtx_stop_subtitle(false);
 	}
 
 	return 0;

@@ -1339,6 +1339,27 @@ void eval_l25() {
 	debugf(20, "%s: <\n", __func__);
 }
 
+static pthread_mutex_t ttx_mutex;
+static bool mutex_initialized = false;
+
+void ttx_mutex_init(void) {
+	if (!mutex_initialized) {
+		mutex_initialized = true;
+		pthread_mutexattr_t attr;
+		pthread_mutexattr_init(&attr);
+		pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
+		pthread_mutex_init(&ttx_mutex, &attr);
+	}
+}
+
+void ttx_mutex_lock(void) {
+	pthread_mutex_lock(&ttx_mutex);
+}
+
+void ttx_mutex_unlock(void) {
+	pthread_mutex_unlock(&ttx_mutex);
+}
+
 /******************************************************************************
  * main loop                                                                  *
  ******************************************************************************/
@@ -1347,30 +1368,29 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	debugf(1, "%s: >\n", __func__);
 
 	char cvs_revision[] = "$Revision: 1.95$";
+	/* show versioninfo */
+	sscanf(cvs_revision, "%*s %[0-9.]", versioninfo);
+	fprintf(stderr, "TuxTxt %s for 32bpp framebuffer\n", versioninfo);
+
+	ttx_mutex_init();
 
 	use_gui = (_rc > -1);
 
 	boxed = 0;
-#if !TUXTXT_CFG_STANDALONE
+
 	int initialized = 0;
 
 	if (!reader_running)
 		initialized = tuxtxt_init();
-	if (reader_running || initialized )
+	if (reader_running || initialized)
 		tuxtxt_cache.page = 0x100;
 	if(_rc < 0) {
 		sub_page = tuxtxt_cache.page = page;
 		sub_pid = pid;
 		boxed = 1;
 	}
-#endif
 
 	rc = _rc;
-
-	/* show versioninfo */
-	sscanf(cvs_revision, "%*s %s", versioninfo);
-	printf("TuxTxt %s\n", versioninfo);
-	printf("for 32bpp framebuffer\n");
 
 	tuxtxt_cache.vtxtpid = pid;
 
@@ -1388,31 +1408,44 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	if (split3D)
 		SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
 
-	lfb = frameBuffer->getFrameBufferPointer();
+	static int firstRun = true;
+	if (firstRun) {
+		lfb = frameBuffer->getFrameBufferPointer();
+		x0 = frameBuffer->scaleX(frameBuffer->getScreenX());
+		y0 = frameBuffer->scaleY(frameBuffer->getScreenY());
+		dx = frameBuffer->scaleX(frameBuffer->getScreenWidth(true));
+		dy = frameBuffer->scaleY(frameBuffer->getScreenHeight(true));
+		ex = frameBuffer->scaleX(frameBuffer->getScreenWidth());
+		ey = frameBuffer->scaleY(frameBuffer->getScreenHeight());
 
-	x0 = frameBuffer->scaleX(frameBuffer->getScreenX());
-	y0 = frameBuffer->scaleY(frameBuffer->getScreenY());
-	dx = frameBuffer->scaleX(frameBuffer->getScreenWidth(true));
-	dy = frameBuffer->scaleY(frameBuffer->getScreenHeight(true));
-	ex = frameBuffer->scaleX(frameBuffer->getScreenWidth());
-	ey = frameBuffer->scaleY(frameBuffer->getScreenHeight());
+		sx = x0;
+		sy = y0;
+	}
 
-	sx = x0;
-	sy = y0;
+	firstRun = false;
 
 	/* initialisations */
 	if (transpmode == TRANSPMODE_TV)
-		transpmode = TRANSPMODE_TEXT;
+		transpmode = use_gui ? TRANSPMODE_BGTRANS : TRANSPMODE_TEXT;
 
-	if (Init(source) == 0) {
-		setPIG(0, 0, 720, 576);
-		return 0;
-	}
-	if(!use_gui) {
+	if (use_gui) {
 		if (reader_running)
+			tuxtx_pause_subtitle(true);
+		if (Init(source) == 0) {
+			setPIG(0, 0, 720, 576);
+			return 0;
+		}
+	} else {
+		ttx_mutex_lock();
+		if (ttx_sub_thread)
 			tuxtx_set_pid(sub_pid, sub_page, NULL);
+		else {
+			reader_running = true;
+			pthread_create(&ttx_sub_thread, 0, reader_thread, (void *) NULL);
+			fprintf(stderr, "ttx_sub_thread = %d\n", ttx_sub_thread);
+		}
+		ttx_mutex_unlock();
 		setPIG(0, 0, 720, 576);
-		pthread_create(&ttx_sub_thread, 0, reader_thread, (void *) NULL);
 		return 1;
 	}
 
@@ -1578,11 +1611,15 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 		RenderPage();
 	} while ((RCCode != RC_HOME) && (RCCode != RC_STANDBY));
 
-	CleanUp();
+	if (reader_running)
+		tuxtx_pause_subtitle(false, 0);
+	else
+		CleanUp();
 
-	if ( initialized )
+	if (initialized)
 		tuxtxt_close();
 
+	Clear(transp);
 	setPIG(0, 0, 720, 576);
 
  	printf("Tuxtxt: plugin ended\n");
@@ -1611,157 +1648,30 @@ FT_Error MyFaceRequester(FTC_FaceID face_id, FT_Library library, FT_Pointer requ
  * Init                                                                       *
  ******************************************************************************/
 
-int Init(int source) {
-	int error, i;
-	unsigned char magazine;
+static int fonts_initialized = 0;
+static int initFonts(){
+	int error;
 
-	/* init data */
-
-	inputcounter  = 2;
-
-	for (magazine = 1; magazine < 9; magazine++) {
-		tuxtxt_cache.current_page  [magazine] = -1;
-		tuxtxt_cache.current_subpage [magazine] = -1;
-	}
-#if TUXTXT_CFG_STANDALONE
-	/* init data */
-	memset(&tuxtxt_cache.astCachetable, 0, sizeof(tuxtxt_cache.astCachetable));
-	memset(&tuxtxt_cache.subpagetable, 0xFF, sizeof(tuxtxt_cache.subpagetable));
-	memset(&tuxtxt_cache.astP29, 0, sizeof(tuxtxt_cache.astP29));
-	memset(&tuxtxt_cache.basictop, 0, sizeof(tuxtxt_cache.basictop));
-	memset(&tuxtxt_cache.adip, 0, sizeof(tuxtxt_cache.adip));
-	memset(&tuxtxt_cache.flofpages, 0 , sizeof(tuxtxt_cache.flofpages));
-	tuxtxt_cache.maxadippg  = -1;
-	tuxtxt_cache.bttok      = 0;
-	maxhotlist = -1;
-
-	inputcounter  = 2;
-	tuxtxt_cache.cached_pages  = 0;
-	tuxtxt_cache.page_receiving = -1;
-	tuxtxt_cache.page       = 0x100;
-#endif
-	lastpage   = tuxtxt_cache.page;
-	prev_100   = 0x100;
-	prev_10    = 0x100;
-	next_100   = 0x100;
-	next_10    = 0x100;
-	tuxtxt_cache.subpage    = tuxtxt_cache.subpagetable[tuxtxt_cache.page];
-	if (tuxtxt_cache.subpage == 0xff)
-		tuxtxt_cache.subpage    = 0;
-	tuxtxt_cache.pageupdate = 0;
-	tuxtxt_cache.zap_subpage_manual = 0;
-
-	subtitledelay = 0;
-	delaystarted = 0;
-
-	/* config defaults */
-	screenmode = SCREENMODE_SPLIT;
-	boxed_screenmode = screenmode;
-#if 0 
-	screen_mode1 = 0;
-	screen_mode2 = 0;
-#endif
-	color_mode   = 10;
-	trans_mode   = 10;
-	menulanguage = 0;	/* german */
-	national_subset = 0;	/* default */
-	auto_national   = 1;
-	swapupdown      = 0;
-	showhex         = 0;
-	showflof        = 1;
-	show39          = 1;
-	showl25         = 1;
-	dumpl25         = 0;
-	usettf          = 0;
-	TTFWidthFactor16  = 28;
-	TTFHeightFactor16 = 16;
-	TTFShiftX         = 0;
-	TTFShiftY         = 0;
-
-	/* load config */
-	if ((conf = fopen(TUXTXTCONF, "rt")) == 0) {
-		printf("failed to open %s\n", TUXTXTCONF);
-		perror("TuxTxt <fopen tuxtxt.conf>");
-	} else {
-		while(1) {
-			char line[100];
-			int ival;
-
-			if (!fgets(line, sizeof(line), conf))
-				break;
-
-			if (1 == sscanf(line, "ScreenMode %i", &ival))
-				screenmode = ival;
-#if 0
-			else if (1 == sscanf(line, "ScreenMode16x9Normal %i", &ival))
-				screen_mode1 = ival & 1;
-			else if (1 == sscanf(line, "ScreenMode16x9Divided %i", &ival))
-				screen_mode2 = ival & 1;
-#endif
-			else if (1 == sscanf(line, "Brightness %i", &ival))
-				color_mode = ival;
-			else if (1 == sscanf(line, "AutoNational %i", &ival))
-				auto_national = ival & 1;
-			else if (1 == sscanf(line, "NationalSubset %i", &ival)) {
-				if (ival >= 0 && ival <= (int) MAX_NATIONAL_SUBSET)
-					national_subset = ival;
-			} else if (1 == sscanf(line, "MenuLanguage %i", &ival)) {
-				if (ival >= 0 && ival <= MAXMENULANGUAGE)
-					menulanguage = ival;
-			} else if (1 == sscanf(line, "SwapUpDown %i", &ival))
-				swapupdown = ival & 1;
-			else if (1 == sscanf(line, "ShowHexPages %i", &ival))
-				showhex = ival & 1;
-			else if (1 == sscanf(line, "Transparency %i", &ival))
-				trans_mode = ival;
-			else if (1 == sscanf(line, "TranspMode %i", &ival))
-				transpmode = ival;
-			else if (1 == sscanf(line, "TTFWidthFactor16 %i", &ival))
-				TTFWidthFactor16 = ival;
-			else if (1 == sscanf(line, "TTFHeightFactor16 %i", &ival))
-				TTFHeightFactor16 = ival;
-			else if (1 == sscanf(line, "TTFShiftX %i", &ival))
-				TTFShiftX = ival;
-			else if (1 == sscanf(line, "TTFShiftY %i", &ival))
-				TTFShiftY = ival;
-			else if (1 == sscanf(line, "Screenmode %i", &ival))
-				screenmode = ival;
-			else if (1 == sscanf(line, "ShowFLOF %i", &ival))
-				showflof = ival & 1;
-			else if (1 == sscanf(line, "Show39 %i", &ival))
-				show39 = ival & 1;
-			else if (1 == sscanf(line, "ShowLevel2p5 %i", &ival))
-				showl25 = ival & 1;
-			else if (1 == sscanf(line, "DumpLevel2p5 %i", &ival))
-				dumpl25 = ival & 1;
-			else if (1 == sscanf(line, "UseTTF %i", &ival))
-				usettf = ival & 1;
-		}
-		fclose(conf);
-	}
-	saveconfig = 0;
-	savedscreenmode = screenmode;
-	national_subset_secondary = NAT_DEFAULT;
-
+	if (fonts_initialized)
+		return 0;
 	/* init fontlibrary */
 	if ((error = FT_Init_FreeType(&library))) {
 		printf("TuxTxt <FT_Init_FreeType: 0x%.2X>", error);
-		return 0;
+		return -1;
 	}
 
 	if ((error = FTC_Manager_New(library, 7, 2, 0, &MyFaceRequester, NULL, &manager))) {
 		FT_Done_FreeType(library);
 		printf("TuxTxt <FTC_Manager_New: 0x%.2X>\n", error);
-		return 0;
+		return -1;
 	}
 
 	if ((error = FTC_SBitCache_New(manager, &cache))) {
 		FTC_Manager_Done(manager);
 		FT_Done_FreeType(library);
 		printf("TuxTxt <FTC_SBitCache_New: 0x%.2X>\n", error);
-		return 0;
+		return -1;
 	}
-
 	fontwidth = 0; /* initialize at first setting */
 
 	/* calculate font dimensions */
@@ -1818,11 +1728,150 @@ int Init(int source) {
 			ymosaic[0], ymosaic[1], ymosaic[2], StartX, StartY, ascender);
 #endif
 
+	fonts_initialized = 1;
+	return 0;
+}
+
+static int deInitFonts() {
+	if (fonts_initialized) {
+		FTC_Manager_Done(manager);
+		FT_Done_FreeType(library);
+		fonts_initialized = 0;
+	}
+	return 0;
+}
+
+int Init(int source) {
+	int i;
+	unsigned char magazine;
+
+	/* init data */
+
+	inputcounter  = 2;
+
+	for (magazine = 1; magazine < 9; magazine++) {
+		tuxtxt_cache.current_page  [magazine] = -1;
+		tuxtxt_cache.current_subpage [magazine] = -1;
+	}
+	lastpage   = tuxtxt_cache.page;
+	prev_100   = 0x100;
+	prev_10    = 0x100;
+	next_100   = 0x100;
+	next_10    = 0x100;
+	tuxtxt_cache.subpage    = tuxtxt_cache.subpagetable[tuxtxt_cache.page];
+	if (tuxtxt_cache.subpage == 0xff)
+		tuxtxt_cache.subpage    = 0;
+	tuxtxt_cache.pageupdate = 0;
+	tuxtxt_cache.zap_subpage_manual = 0;
+
+	subtitledelay = 0;
+	delaystarted = 0;
+
+	/* config defaults */
+
+	static bool firstRun = true;
+	if (firstRun) {
+		screenmode = SCREENMODE_SPLIT;
+		boxed_screenmode = screenmode;
+#if 0 
+		screen_mode1 = 0;
+		screen_mode2 = 0;
+#endif
+		color_mode   = 10;
+		trans_mode   = 10;
+		menulanguage = 0;	/* german */
+		national_subset = 0;	/* default */
+		auto_national   = 1;
+		swapupdown      = 0;
+		showhex         = 0;
+		showflof        = 1;
+		show39          = 1;
+		showl25         = 1;
+		dumpl25         = 0;
+		usettf          = 0;
+		TTFWidthFactor16  = 28;
+		TTFHeightFactor16 = 16;
+		TTFShiftX         = 0;
+		TTFShiftY         = 0;
+
+		/* load config */
+		if ((conf = fopen(TUXTXTCONF, "rt")) == 0) {
+			printf("failed to open %s\n", TUXTXTCONF);
+			perror("TuxTxt <fopen tuxtxt.conf>");
+		} else {
+			while(1) {
+				char line[100];
+				int ival;
+	
+				if (!fgets(line, sizeof(line), conf))
+					break;
+	
+				if (1 == sscanf(line, "ScreenMode %i", &ival))
+					screenmode = ival;
+#if 0
+				else if (1 == sscanf(line, "ScreenMode16x9Normal %i", &ival))
+					screen_mode1 = ival & 1;
+				else if (1 == sscanf(line, "ScreenMode16x9Divided %i", &ival))
+					screen_mode2 = ival & 1;
+#endif
+				else if (1 == sscanf(line, "Brightness %i", &ival))
+					color_mode = ival;
+				else if (1 == sscanf(line, "AutoNational %i", &ival))
+					auto_national = ival & 1;
+				else if (1 == sscanf(line, "NationalSubset %i", &ival)) {
+					if (ival >= 0 && ival <= (int) MAX_NATIONAL_SUBSET)
+						national_subset = ival;
+				} else if (1 == sscanf(line, "MenuLanguage %i", &ival)) {
+					if (ival >= 0 && ival <= MAXMENULANGUAGE)
+						menulanguage = ival;
+				} else if (1 == sscanf(line, "SwapUpDown %i", &ival))
+					swapupdown = ival & 1;
+				else if (1 == sscanf(line, "ShowHexPages %i", &ival))
+					showhex = ival & 1;
+				else if (1 == sscanf(line, "Transparency %i", &ival))
+					trans_mode = ival;
+				else if (1 == sscanf(line, "TranspMode %i", &ival))
+					transpmode = transpmode_gui = ival;
+				else if (1 == sscanf(line, "TTFWidthFactor16 %i", &ival))
+					TTFWidthFactor16 = ival;
+				else if (1 == sscanf(line, "TTFHeightFactor16 %i", &ival))
+					TTFHeightFactor16 = ival;
+				else if (1 == sscanf(line, "TTFShiftX %i", &ival))
+					TTFShiftX = ival;
+				else if (1 == sscanf(line, "TTFShiftY %i", &ival))
+					TTFShiftY = ival;
+				else if (1 == sscanf(line, "Screenmode %i", &ival))
+					screenmode = ival;
+				else if (1 == sscanf(line, "ShowFLOF %i", &ival))
+					showflof = ival & 1;
+				else if (1 == sscanf(line, "Show39 %i", &ival))
+					show39 = ival & 1;
+				else if (1 == sscanf(line, "ShowLevel2p5 %i", &ival))
+					showl25 = ival & 1;
+				else if (1 == sscanf(line, "DumpLevel2p5 %i", &ival))
+					dumpl25 = ival & 1;
+				else if (1 == sscanf(line, "UseTTF %i", &ival))
+					usettf = ival & 1;
+			}
+			fclose(conf);
+		}
+		saveconfig = 0;
+	}
+
+	savedscreenmode = screenmode;
+
+	national_subset_secondary = NAT_DEFAULT;
+
+	if (initFonts())
+		return 0;
+
 	/* set new colormap */
 	setcolors((unsigned short *)defaultcolors, 0, SIZECOLTABLE);
 
 	if (use_gui)
 		Clear((transpmode == TRANSPMODE_TEXT) ? black : transp); /* initialize backbuffer */
+	else
+		transpmode = TRANSPMODE_BGTRANS;
 
 	for (i = 0; i < 40 * 25; i++) {
 		page_char[i] = ' ';
@@ -1838,8 +1887,7 @@ int Init(int source) {
 		/* get all vtxt-pids */
 		getpidsdone = -1;				/* don't kill thread */
 		if (GetTeletextPIDs() == 0) {
-			FTC_Manager_Done(manager);
-			FT_Done_FreeType(library);
+			deInitFonts();
 			return 0;
 		}
 
@@ -1856,20 +1904,19 @@ int Init(int source) {
 		SDT_ready = 0;
 		getpidsdone = 0;
 	}
-#if TUXTXT_CFG_STANDALONE
-	tuxtxt_init_demuxer();
-	tuxtxt_start_thread();
-#else
 	tuxtxt_start(tuxtxt_cache.vtxtpid, source);
-#endif
 	if (rc > -1)
 		fcntl(rc, F_SETFL, O_NONBLOCK);
 	gethotlist();
-	SwitchScreenMode(use_gui ? screenmode : SCREENMODE_FULL, 0);
+
+	if (firstRun)
+			SwitchScreenMode(use_gui ? screenmode : SCREENMODE_FULL, 0);
 
 	fprintf(stderr, "TuxTxt: init ok\n");
 
 	/* init successful */
+
+	firstRun = false;
 	return 1;
 }
 
@@ -1883,31 +1930,24 @@ void CleanUp() {
 	int curscreenmode = screenmode;
 
 	/* clear screen */
-	Clear(transp);
+//	Clear(transp);
 
-	if (!reader_running) {
-		/* hide and close pig */
-		if (screenmode != SCREENMODE_FULL) {
-			SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
-		}
-
-#if TUXTXT_CFG_STANDALONE
-		tuxtxt_stop_thread();
-		tuxtxt_clear_cache();
-		if (tuxtxt_cache.dmx != -1)
-			close(tuxtxt_cache.dmx);
-		tuxtxt_cache.dmx = -1;
-#endif
-		/* close freetype */
-		FTC_Manager_Done(manager);
-		FT_Done_FreeType(library);
-
-		if (hotlistchanged)
-			savehotlist();
+	/* hide and close pig */
+	if (screenmode != SCREENMODE_FULL) {
+		SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
 	}
 
+	if (!use_gui)
+		return;
+
+	/* close freetype */
+	deInitFonts();
+
+	if (hotlistchanged)
+		savehotlist();
+
 	/* save config */
-	if (use_gui && (saveconfig || curscreenmode != savedscreenmode)) {
+	if (saveconfig || (curscreenmode != savedscreenmode)) {
 		if ((conf = fopen(TUXTXTCONF, "wt")) == 0) {
 			perror("TuxTxt <fopen tuxtxt.conf>");
 		} else {
@@ -2819,14 +2859,9 @@ void ConfigMenu(int Init) {
 							savehotlist();
 
 						if (Init || tuxtxt_cache.vtxtpid != pid_table[current_pid].vtxt_pid) {
-#if TUXTXT_CFG_STANDALONE
-							tuxtxt_stop_thread();
-							tuxtxt_clear_cache();
-#else
 							tuxtxt_stop();
 							if (Init)
 								tuxtxt_cache.vtxtpid = 0; // force clear cache
-#endif
 							/* reset data */
 							inputcounter = 2;
 							tuxtxt_cache.page = 0x100;
@@ -2851,12 +2886,7 @@ void ConfigMenu(int Init) {
 							if (auto_national)
 								national_subset = pid_table[current_pid].national_subset;
 
-#if TUXTXT_CFG_STANDALONE
-							tuxtxt_cache.vtxtpid = pid_table[current_pid].vtxt_pid;
-							tuxtxt_start_thread();
-#else
 							tuxtxt_start(pid_table[current_pid].vtxt_pid);
-#endif
 						}
 
 						Clear(use_gui ? black : transp);
@@ -3401,7 +3431,7 @@ void setPIG(int dst_left, int dst_top, int dst_width, int dst_height) {
 }
 
 void SwitchScreenMode(int newscreenmode, int offset) {
-	debugf(1, "%s: >\n", __func__);
+	debugf(1, "%s (%d, %d): >\n", __func__, newscreenmode, offset);
 
 	if(boxed)
 		screenmode = boxed_screenmode;
@@ -3483,6 +3513,8 @@ void SwitchTranspMode() {
 
 	transpmode++;
 	transpmode %= 3;
+
+	transpmode_gui = transpmode;
 
 #if TUXTXT_DEBUG
 	fprintf(stderr, "TuxTxt <SwitchTranspMode: %d>\n", transpmode);
@@ -4116,8 +4148,6 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 			Char = G2table[2][0x20+ Attribute->diacrit];
 		else if (national_subset_local == NAT_RU)
 			Char = G2table[1][0x20+ Attribute->diacrit];
-
-
 		else
 			Char = G2table[0][0x20+ Attribute->diacrit];
 		if ((glyph = FT_Get_Char_Index(face, Char & 0xff))) {
@@ -5418,19 +5448,30 @@ int GetRCCode(bool do_sleep) {
 static void* reader_thread(void * /*arg*/)
 {
 	fprintf(stderr, "TuxTxt subtitle thread started\n");
-	reader_running = true;
-	ttx_sleep = 5000000;
+	ttx_sleep = 5000000; // implement 5s delay
 	transpmode = TRANSPMODE_BGTRANS;
 
+	static bool initialized = false;
+
 	while(reader_running) {
-		if(infoViewer_is_visible()) {
-			usleep(200000);
-		} if (ttx_sleep > 0) {
+	//  not working, apparently
+	//	if(infoViewer_is_visible()) {
+	//		usleep(200000);
+	//	}
+		if (ttx_sleep > 0) {
 			usleep(200000);
 			ttx_sleep -= 200000;
-			if (ttx_sleep <= 0)
+			if (ttx_sleep <= 0) {
 				fprintf(stderr, "TuxTxt subtitle thread active\n");
-		} else if(ttx_paused)
+				int res = Init(0 /* unused */);
+				if (!res) {
+					tuxtxt_close();
+					setPIG(0, 0, 720, 576);
+					pthread_exit(NULL);
+					return 0;
+				}
+			}
+		} else if (ttx_paused)
 			usleep(200000);
 		else
 			RenderPage();
@@ -5441,7 +5482,6 @@ static void* reader_thread(void * /*arg*/)
 		}
 	}
 	CleanUp();
-	tuxtxt_close();
 	pthread_exit(NULL);
 }
 
@@ -5461,21 +5501,28 @@ void tuxtx_pause_subtitle(bool pause, int delay)
 			ttx_req_pause = 1;
 			while(!ttx_paused)
 				usleep(10);
+			Clear(transp);
 		}
 	} else
 		ttx_paused = pause;
 }
 
-void tuxtx_stop_subtitle()
+void tuxtx_stop_subtitle(bool clr)
 {
+	ttx_mutex_lock();
 	if(ttx_sub_thread) {
 		reader_running = false;
+		fprintf(stderr, "%s: pthread_join(%d)\n", __func__, ttx_sub_thread);
 		pthread_join(ttx_sub_thread, NULL);
-        	ttx_sub_thread = 0;
+		ttx_sub_thread = 0;
+		if (clr)
+				Clear(transp);
 	}
+	ttx_mutex_unlock();
 	reader_running = false;
-        sub_pid = sub_page = 0;
-        ttx_paused = 0;
+	sub_pid = sub_page = 0;
+	ttx_paused = 0;
+	transpmode = transpmode_gui;
 }
 
 void tuxtx_set_pid(int pid, int page, const char * cc)

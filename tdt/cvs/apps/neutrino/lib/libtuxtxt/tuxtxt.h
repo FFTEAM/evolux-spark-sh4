@@ -14,7 +14,6 @@
  *                                                                            *
  ******************************************************************************/
 
-#define TUXTXT_CFG_STANDALONE 0  // 1:plugin only 0:use library
 #define TUXTXT_DEBUG 0
 
 
@@ -47,9 +46,6 @@
 
 /* devices */
 
-#if TUXTXT_CFG_STANDALONE
-#include "tuxtxt_common.h"
-#else
 /* variables and functions from libtuxtxt */
 extern tuxtxt_cache_struct tuxtxt_cache;
 extern void tuxtxt_next_dec(int *i); /* skip to next decimal */
@@ -62,7 +58,6 @@ extern void tuxtxt_compress_page(int p, int sp, unsigned char* buffer);
 extern void tuxtxt_decompress_page(int p, int sp, unsigned char* buffer);
 #if TUXTXT_DEBUG
 extern int tuxtxt_get_zipsize(int p, int sp);
-#endif
 #endif
 
 #define TUXTXTCONF CONFIGDIR "/tuxtxt/tuxtxt2.conf"
@@ -370,7 +365,7 @@ int sx, ex, sy, ey, x0, y0, dx, dy;
 int PosX, PosY, StartX, StartY;
 int lastpage;
 int inputcounter;
-int zoommode, screenmode, transpmode = 0, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode, boxed_screenmode;
+int zoommode, screenmode, transpmode = 0, transpmode_gui, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode, boxed_screenmode;
 char dumpl25;
 int catch_row, catch_col, catched_page, pagecatching;
 int prev_100, prev_10, next_10, next_100;
