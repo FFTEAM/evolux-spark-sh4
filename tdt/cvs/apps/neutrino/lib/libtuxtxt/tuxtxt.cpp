@@ -1867,9 +1867,9 @@ int Init(int source) {
 	gethotlist();
 	SwitchScreenMode(use_gui ? screenmode : SCREENMODE_FULL, 0);
 
-	printf("TuxTxt: init ok\n");
+	fprintf(stderr, "TuxTxt: init ok\n");
 
-	/* init successfull */
+	/* init successful */
 	return 1;
 }
 
@@ -4120,7 +4120,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 
 		else
 			Char = G2table[0][0x20+ Attribute->diacrit];
-		if ((glyph = FT_Get_Char_Index(face, Char))) {
+		if ((glyph = FT_Get_Char_Index(face, Char & 0xff))) {
 			if ((error = FTC_SBitCache_Lookup(cache, &typettf, glyph, &sbit_diacrit, NULL)) == 0) {
 				sbitbuffer = localbuffer;
 				memcpy(sbitbuffer,sbit->buffer,sbit->pitch*sbit->height);
@@ -4192,7 +4192,7 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom) {
 	}
 
 	Row = ascender - sbit->top + sbit->height + TTFShiftY;
-	FillRect(PosX, PosY + Row*factor, curfontwidth, (fontheight - Row), bgcolor); /* fill lower margin */
+	FillRect(PosX, PosY + Row*factor, curfontwidth, factor * (fontheight - Row), bgcolor); /* fill lower margin */
 	if (Attribute->underline)
 		FillRect(PosX, PosY + (fontheight-2)* factor, curfontwidth,2, fgcolor); /* underline char */
 
@@ -5432,8 +5432,8 @@ static void* reader_thread(void * /*arg*/)
 				fprintf(stderr, "TuxTxt subtitle thread active\n");
 		} else if(ttx_paused)
 			usleep(200000);
-                else
-                        RenderPage();
+		else
+			RenderPage();
 
 		if(ttx_req_pause) {
 			ttx_req_pause = 0;
