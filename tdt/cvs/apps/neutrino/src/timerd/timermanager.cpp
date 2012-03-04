@@ -619,11 +619,13 @@ void CTimerManager::loadRecordingSafety()
 	{
 		/* set defaults if no configuration file exists */
 		dprintf("%s not found\n", CONFIGFILE);
+		m_extraTimeStart = 300;
+		m_extraTimeEnd  = 300;
 	}
 	else
 	{
-		m_extraTimeStart = config.getInt32 ("EXTRA_TIME_START",0);
-		m_extraTimeEnd  = config.getInt32 ("EXTRA_TIME_END",0);
+		m_extraTimeStart = config.getInt32 ("EXTRA_TIME_START", 300);
+		m_extraTimeEnd  = config.getInt32 ("EXTRA_TIME_END", 300);
 	}
 }
 // -------------------------------------------------------------------------------------
