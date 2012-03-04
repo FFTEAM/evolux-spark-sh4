@@ -539,14 +539,14 @@ int parse_pmt(CZapitChannel * const channel)
 		t_channel_id chan;
 		t_channel_id curChan =  channel->getChannelID();
 		char buf[128];
+		char tmp_Lang[4];
+		memset(tmp_Lang, 0, sizeof(tmp_Lang));
 		while (fgets(buf, sizeof(buf), SUPPIDS)) {
 			t_channel_id chan;
 			unsigned int desc, type;
 			char typespecific[128];
 			if ((buf[0] == '#') || !buf[0])
 				continue;
-			char tmp_Lang[4];
-			memset(tmp_Lang, 0, sizeof(tmp_Lang));
 			if (4 == sscanf(buf, "%llx %x %d %[^\n]", &chan, &desc, &type, typespecific)) {
 				if (chan == curChan) {
 					switch(desc) {
