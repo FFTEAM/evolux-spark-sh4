@@ -537,6 +537,7 @@ endif
 	rm $(prefix)/release_neutrino/var/plugins/blockad*
 #	rm $(prefix)/release_neutrino/usr/lib/tuxbox/plugins/blockad*
 	rm $(prefix)/release_neutrino/usr/local/share/config/blockad*
+	cp -f $(buildprefix)/root/usr/local/share/config/supplemental_pids.conf $(prefix)/release_neutrino/usr/local/share/config/
 	touch $(prefix)/release_neutrino/etc/.EVOfirstboot
 
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi_sio.ko || true
