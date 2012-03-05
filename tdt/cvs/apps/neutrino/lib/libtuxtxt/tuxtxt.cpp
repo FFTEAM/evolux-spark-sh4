@@ -4543,8 +4543,8 @@ void RenderPage() {
 			if (screenmode != SCREENMODE_FULL) {
 				SwitchScreenMode(boxed_screenmode, 0);
 			}
-		} else if (screenmode != boxed_screenmode)
-			SwitchScreenMode(boxed_screenmode, 0);
+		} else if (screenmode != prevscreenmode)
+			SwitchScreenMode(prevscreenmode, 0);
 
 		/* display first column?  */
 		nofirst = show39;
