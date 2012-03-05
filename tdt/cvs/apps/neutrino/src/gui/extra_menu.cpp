@@ -519,7 +519,7 @@ static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
 	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &", "kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
 	, { "oscam", "/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof oscam)", false }
 	, { "spcs", "/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof spcs)", false }
-	, { "gbox", "/usr/bin/gbox >/dev/null 2>&1 &", "kill -9 $(pidof gbox)", false }
+	, { "gbox", "/usr/bin/gbox >/dev/null 2>&1 &", "touch /tmp/gbox.kill", false }
 };
 
 int EMU_Menu::get_installed_count() {
