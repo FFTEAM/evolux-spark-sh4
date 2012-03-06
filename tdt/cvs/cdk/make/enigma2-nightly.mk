@@ -16,40 +16,41 @@
 #	echo "7) current inactive... comming soon, here is the next stable (case 7 == DIFF=7)"; 
 
 $(DEPDIR)/enigma2-nightly.do_prepare:
-	REVISION=""; \
-	DIFF="0"; \
-	rm -rf $(appsdir)/enigma2-nightly; \
-	rm -rf $(appsdir)/enigma2-nightly.org; \
-	rm -rf $(appsdir)/enigma2-nightly.newest; \
-	rm -rf $(appsdir)/enigma2-nightly.patched; \
-	clear; \
-	echo "Media Framwork: $(MEDIAFW)"; \
-	echo "Choose between the following revisions:"; \
-	echo "5) Fri,  5 Nov 2010 00:16 - E2 V2.4 libplayer3 7fd4241a1d7b8d7c36385860b24882636517473b"; \
-	read -p "Select: "; \
-	echo "Selection: " $$REPLY; \
-	[ "$$REPLY" == "0" ] && DIFF="0" && HEAD="experimental"; \
-	[ "$$REPLY" == "1" ] && DIFF="1" && HEAD="experimental" && REVISION="e013d09af0e010f15e225a12dcc217abc052ee19"; \
-	[ "$$REPLY" == "2" ] && DIFF="2" && HEAD="experimental" && REVISION=""; \
-	[ "$$REPLY" == "3" ] && DIFF="3" && HEAD="experimental" && REVISION=""; \
-	[ "$$REPLY" == "4" ] && DIFF="4" && HEAD="master" && REVISION="be8ccc9f63c4cd79f8dba84087c7348c23657865"; \
-	[ "$$REPLY" == "5" ] && DIFF="5" && HEAD="master" && REVISION="7fd4241a1d7b8d7c36385860b24882636517473b"; \
-	[ "$$REPLY" == "6" ] && DIFF="6" && HEAD="experimental" && REVISION="388dcd814d4e99720cb9a6c769611be4951e4ad4"; \
-	echo "Revision: " $$REVISION; \
-	[ -d "$(appsdir)/enigma2-nightly" ] && \
-	git pull $(appsdir)/enigma2-nightly $$HEAD;\
-	[ -d "$(appsdir)/enigma2-nightly" ] || \
-	git clone -b $$HEAD git://gitorious.org/open-duckbox-project-sh4/guigit.git $(appsdir)/enigma2-nightly; \
-	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.newest; \
-	[ "$$REVISION" == "" ] || (cd $(appsdir)/enigma2-nightly; git checkout "$$REVISION"; cd "$(buildprefix)";); \
-	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.org; \
-	cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.diff"; \
-	cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.$(MEDIAFW).diff"; \
-	cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.VideoEnhancement.$$DIFF.diff"; \
-	[ "$(EXTERNALLCD_DEP)" == "" ] || (cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.graphlcd.diff" ); \
-	$(if $(SPARK),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.Evolution.spark.$$DIFF.diff" ); \
-	cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.tuxtxt.diff"
-	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.patched
+	if [ ! -e $(appsdir)/enigma2-nightly ]; then \
+		REVISION=""; \
+		DIFF="0"; \
+		rm -rf $(appsdir)/enigma2-nightly.org; \
+		rm -rf $(appsdir)/enigma2-nightly.newest; \
+		rm -rf $(appsdir)/enigma2-nightly.patched; \
+		clear; \
+		echo "Media Framwork: $(MEDIAFW)"; \
+		echo "Choose between the following revisions:"; \
+		echo "5) Fri,  5 Nov 2010 00:16 - E2 V2.4 libplayer3 7fd4241a1d7b8d7c36385860b24882636517473b"; \
+		read -p "Select: "; \
+		echo "Selection: " $$REPLY; \
+		[ "$$REPLY" == "0" ] && DIFF="0" && HEAD="experimental"; \
+		[ "$$REPLY" == "1" ] && DIFF="1" && HEAD="experimental" && REVISION="e013d09af0e010f15e225a12dcc217abc052ee19"; \
+		[ "$$REPLY" == "2" ] && DIFF="2" && HEAD="experimental" && REVISION=""; \
+		[ "$$REPLY" == "3" ] && DIFF="3" && HEAD="experimental" && REVISION=""; \
+		[ "$$REPLY" == "4" ] && DIFF="4" && HEAD="master" && REVISION="be8ccc9f63c4cd79f8dba84087c7348c23657865"; \
+		[ "$$REPLY" == "5" ] && DIFF="5" && HEAD="master" && REVISION="7fd4241a1d7b8d7c36385860b24882636517473b"; \
+		[ "$$REPLY" == "6" ] && DIFF="6" && HEAD="experimental" && REVISION="388dcd814d4e99720cb9a6c769611be4951e4ad4"; \
+		echo "Revision: " $$REVISION; \
+		[ -d "$(appsdir)/enigma2-nightly" ] && \
+		git pull $(appsdir)/enigma2-nightly $$HEAD;\
+		[ -d "$(appsdir)/enigma2-nightly" ] || \
+		git clone -b $$HEAD git://gitorious.org/open-duckbox-project-sh4/guigit.git $(appsdir)/enigma2-nightly; \
+		cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.newest; \
+		[ "$$REVISION" == "" ] || (cd $(appsdir)/enigma2-nightly; git checkout "$$REVISION"; cd "$(buildprefix)";); \
+		cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.org; \
+		cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.diff"; \
+		cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.$(MEDIAFW).diff"; \
+		cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.VideoEnhancement.$$DIFF.diff"; \
+		[ "$(EXTERNALLCD_DEP)" == "" ] || (cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.$$DIFF.graphlcd.diff" ); \
+		$(if $(SPARK),cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.Evolution.spark.$$DIFF.diff" ); \
+		cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-nightly.tuxtxt.diff";
+		cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.patched; \
+	fi;
 	touch $@
 
 $(appsdir)/enigma2-nightly/config.status: bootstrap freetype expat fontconfig libpng jpeg libgif libfribidi libid3tag libmad libsigc libreadline \
@@ -88,10 +89,15 @@ $(DEPDIR)/enigma2-nightly: enigma2-nightly.do_prepare enigma2-nightly.do_compile
 	fi
 	touch $@
 
-enigma2-nightly-clean enigma2-nightly-distclean:
-	rm -f $(DEPDIR)/enigma2-nightly
-	rm -f $(DEPDIR)/enigma2-nightly.do_compile
-	rm -f $(DEPDIR)/enigma2-nightly.do_prepare
+enigma2-nightly-clean:
+	rm -f $(DEPDIR)/enigma2-nightly*
+	cd $(appsdir)/enigma2-nightly && \
+		$(MAKE) distclean && \
+		find $(appsdir)/enigma2-nightly -name "Makefile.in" -exec rm -rf {} \; && \
+		rm -rf $(appsdir)/enigma2-nightly/autom4te.cache
+
+enigma2-nightly-distclean:
+	rm -f $(DEPDIR)/enigma2-nightly*
 	rm -rf $(appsdir)/enigma2-nightly
 	rm -rf $(appsdir)/enigma2-nightly.newest
 	rm -rf $(appsdir)/enigma2-nightly.org
