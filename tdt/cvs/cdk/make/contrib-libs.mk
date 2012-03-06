@@ -1253,7 +1253,7 @@ endif
 #		--prefix=/usr
 #	touch $@
 
-$(DEPDIR)/ffmpeg.do_compile: bootstrap libass $(DEPDIR)/ffmpeg.do_prepare
+$(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepare
 	cd @DIR_ffmpeg@ && \
 	$(BUILDENV) \
 	./configure \
@@ -2121,7 +2121,7 @@ $(DEPDIR)/%GD: $(DEPDIR)/GD.do_compile
 #
 # rtmpdump
 #
-$(DEPDIR)/rtmpdump.do_prepare: bootstrap openssl openssl-dev @DEPENDS_rtmpdump@
+$(DEPDIR)/rtmpdump.do_prepare: bootstrap openssl openssl-dev libz @DEPENDS_rtmpdump@
 	@PREPARE_rtmpdump@
 	touch $@
 
@@ -2137,7 +2137,7 @@ $(DEPDIR)/rtmpdump.do_compile: $(DEPDIR)/rtmpdump.do_prepare
 $(DEPDIR)/min-rtmpdump $(DEPDIR)/std-rtmpdump $(DEPDIR)/max-rtmpdump \
 $(DEPDIR)/rtmpdump: \
 $(DEPDIR)/%rtmpdump: $(DEPDIR)/rtmpdump.do_compile
+	@[ "x$*" = "x" ] && touch $@ || true
 	cd @DIR_rtmpdump@ && \
 		@INSTALL_rtmpdump@
-	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
