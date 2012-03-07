@@ -5493,7 +5493,7 @@ void tuxtx_pause_subtitle(bool pause, int delay)
 		else {
 			displayModeIndex = MODE_PLAIN;
 			ttx_req_pause = 1;
-			while(!ttx_paused)
+			while(reader_running && !ttx_paused)
 				usleep(10);
 			Clear(transp);
 		}
@@ -5509,7 +5509,7 @@ void tuxtx_stop_subtitle(bool clr)
 		fprintf(stderr, "%s: pthread_join(%d)\n", __func__, ttx_sub_thread);
 		pthread_join(ttx_sub_thread, NULL);
 		ttx_sub_thread = 0;
-		if (clr)
+//		if (clr)
 				Clear(transp);
 	}
 	ttx_mutex_unlock();
