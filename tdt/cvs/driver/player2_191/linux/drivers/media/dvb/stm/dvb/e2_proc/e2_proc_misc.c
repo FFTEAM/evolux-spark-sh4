@@ -27,7 +27,7 @@ extern struct DeviceContext_s* DeviceContext;
 #endif
 
 static int output_stat = 0;
-struct stpio_pin *output_pin;
+struct stpio_pin *output_pin = NULL;
 
 int proc_misc_12V_output_write(struct file *file, const char __user *buf,
                            unsigned long count, void *data)
