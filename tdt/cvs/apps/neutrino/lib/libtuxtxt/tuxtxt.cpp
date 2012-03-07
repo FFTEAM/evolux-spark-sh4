@@ -1877,7 +1877,7 @@ int Init(int source) {
 				if (1 == sscanf(line, "TTFShiftX %d", &ttxcfg.TTFShiftX)) continue;
 				if (1 == sscanf(line, "TTFShiftY %d", &ttxcfg.TTFShiftY)) continue;
 				if (1 == sscanf(line, "ShowFLOF %d", &ttxcfg.showflof)) continue;
-				if (1 == sscanf(line, "Show39 %d", &ttxcfg.show39)) continue;
+				//if (1 == sscanf(line, "Show39 %d", &ttxcfg.show39)) continue;
 				if (1 == sscanf(line, "ShowLevel2p5 %d", &ttxcfg.showl25)) continue;
 				if (1 == sscanf(line, "DumpLevel2p5 %d", &ttxcfg.dumpl25)) continue;
 				if (1 == sscanf(line, "UseTTF %d", &ttxcfg.usettf)) continue;
@@ -2009,7 +2009,7 @@ void CleanUp() {
 			fprintf(conf, "TTFShiftX %d\n", ttxcfg.TTFShiftX);
 			fprintf(conf, "TTFShiftY %d\n", ttxcfg.TTFShiftY);
 			fprintf(conf, "ShowFLOF %d\n", ttxcfg.showflof);
-			fprintf(conf, "Show39 %d\n", ttxcfg.show39);
+			//fprintf(conf, "Show39 %d\n", ttxcfg.show39);
 			fprintf(conf, "ShowLevel2p5 %d\n", ttxcfg.showl25);
 			fprintf(conf, "DumpLevel2p5 %d\n", ttxcfg.dumpl25);
 			fprintf(conf, "UseTTF %d\n", ttxcfg.usettf);
@@ -4569,7 +4569,7 @@ void RenderPage() {
 		SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0);
 
 		/* display first column?  */
-		nofirst = ttxcfg.show39;
+		nofirst = !ttxcfg.show39;
 		for (row = 1; row < 24; row++) {
 			byte = page_char[row*40];
 			if (byte != ' '  && byte != 0x00 && byte != 0xFF && page_atrb[row*40].fg != page_atrb[row*40].bg) {
