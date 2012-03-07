@@ -69,7 +69,6 @@ extern int tuxtxt_get_zipsize(int p, int sp);
 #define TUXTXTTTFVAR "/var/tuxtxt/tuxtxt.ttf"
 #define TUXTXTOTBVAR "/var/tuxtxt/tuxtxt.otb"
 
-int TTFWidthFactor16, TTFHeightFactor16, TTFShiftX, TTFShiftY; /* parameters for adapting to various TTF fonts */
 int fontheight, fontwidth, fontwidth_normal, fontwidth_small, fontwidth_topmenumain, fontwidth_topmenusmall, ascender;
 int ymosaic[4];
 int displaywidth;
@@ -365,18 +364,15 @@ int sx, ex, sy, ey, x0, y0, dx, dy;
 int PosX, PosY, StartX, StartY;
 int lastpage;
 int inputcounter;
-int zoommode, screenmode, transpmode = 0, transpmode_gui, hintmode, boxed, nofirst, savedscreenmode, showflof, show39, showl25, prevscreenmode, boxed_screenmode;
-char dumpl25;
 int catch_row, catch_col, catched_page, pagecatching;
 int prev_100, prev_10, next_10, next_100;
-int screen_mode1, screen_mode2, color_mode, trans_mode, national_subset, national_subset_secondary, auto_national, swapupdown, showhex, menulanguage;
+int national_subset_secondary;
 int pids_found, current_service, getpidsdone;
 int SDT_ready;
 int pc_old_row, pc_old_col; /* for page catching */
 int temp_page; /* for page input */
-char saveconfig, hotlistchanged;
+char hotlistchanged;
 signed char clearbbcolor = -1;
-int usettf;
 short pop, gpop, drcs, gdrcs;
 unsigned char tAPx, tAPy; /* temporary offset to Active Position for objects */
 unsigned char axdrcs[12+1+10+1];
