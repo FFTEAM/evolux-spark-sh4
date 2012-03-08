@@ -2122,6 +2122,7 @@ $(DEPDIR)/%GD: $(DEPDIR)/GD.do_compile
 # rtmpdump
 #
 $(DEPDIR)/rtmpdump.do_prepare: bootstrap openssl openssl-dev libz @DEPENDS_rtmpdump@
+	[ -e rtmpdump-2.4 ] && rm -rf rtmpdump-2.4
 	@PREPARE_rtmpdump@
 	touch $@
 
