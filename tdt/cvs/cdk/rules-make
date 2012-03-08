@@ -168,7 +168,7 @@ libalsa;1.0.21a;alsa-lib-1.0.21a;alsa-lib-1.0.21a.tar.bz2:alsa-lib-1.0.21a-soft_
 
 libusb;0.1.12;libusb-0.1.12;libusb-0.1.12.tar.gz;extract:libusb-0.1.12.tar.gz
 #rtmpdump;2.3;rtmpdump-2.3;rtmpdump-2.3.tgz;extract:rtmpdump-2.3.tgz
-rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4
+rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz #;move:rtmpdump:rtmpdump-2.4
 #
 # net apps
 #
