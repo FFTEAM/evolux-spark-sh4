@@ -2734,7 +2734,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				ResumeSubtitles();
 			}
 			else if( msg == CRCInput::RC_text) {
-				SuspendSubtitles();
+				dvbsub_pause();
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(true);
 #endif
@@ -2754,7 +2754,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #ifdef WITH_GRAPHLCD
 				nGLCD::MirrorOSD(false);
 #endif
-				ResumeSubtitles();
+				dvbsub_start(0);
 			}
 			else if( msg == CRCInput::RC_setup ) {
 				if(!g_settings.minimode) {
@@ -2814,11 +2814,15 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_zaphistory ) {
 				// Zap-History "Bouquet"
-				int res = channelList->numericZap( msg );
+				SuspendSubtitles();
+				channelList->numericZap( msg );
+				ResumeSubtitles();
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_lastchannel ) {
 				// Quick Zap
+				SuspendSubtitles();
 				channelList->numericZap( msg );
+				ResumeSubtitles();
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_plugin ) {
 				g_PluginList->start_plugin_by_name(g_settings.onekey_plugin.c_str(), 0);
@@ -4799,11 +4803,13 @@ void segvhandler (int signum)
 	char **c = backtrace_symbols(array, len);
 	fprintf(stderr, "SIGSEGV received.\n");
 	if (len > 1) {
-		fprintf(stderr, "backtrace start\n");
+		fprintf(stderr, "EXECINFO: backtrace start\n");
 		while (len-- > 0)
-			fprintf(stderr, "%d %s\n", len, c[len]);
-		fprintf(stderr, "backtrace end\n");
+			fprintf(stderr, "EXECINFO: %d %s\n", len, c[len]);
+		fprintf(stderr, "EXECINFO: backtrace end\n");
 	}
+	fflush(stderr);
+
 	exit(139);
 }
 

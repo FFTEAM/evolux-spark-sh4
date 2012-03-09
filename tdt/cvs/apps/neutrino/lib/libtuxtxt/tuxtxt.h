@@ -1447,7 +1447,7 @@ void RenderMessage(int Message);
 void RenderPage();
 void DecodePage();
 void UpdateLCD();
-int  Init(int source);
+int  Init(int pid);
 int  GetNationalSubset(const char *country_code);
 int  GetTeletextPIDs();
 int  GetRCCode(bool do_sleep = true);
