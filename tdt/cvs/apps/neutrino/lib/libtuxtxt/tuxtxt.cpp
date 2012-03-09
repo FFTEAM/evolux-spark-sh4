@@ -1491,7 +1491,7 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 			tuxtx_set_pid(sub_pid, sub_page, NULL);
 		else {
 			reader_running = true;
-			pthread_create(&ttx_sub_thread, 0, reader_thread, (void *) NULL);
+			pthread_create(&ttx_sub_thread, 0, reader_thread, (void *) &pid);
 			fprintf(stderr, "ttx_sub_thread = %d\n", ttx_sub_thread);
 		}
 		ttx_mutex_unlock();
