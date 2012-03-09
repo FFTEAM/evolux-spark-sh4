@@ -172,8 +172,8 @@ rtmpdump-2.4.tar.gz;http://dev.gentoo.org/~hwoarang/distfiles/
 #
 portmap-6.0.tgz;http://fossies.org/unix/misc
 portmap_6.0-9.diff.gz;http://debian.osuosl.org/debian/pool/main/p/portmap/
-nfs-utils-1.1.1.tar.bz2;ftp://ftp.kernel.org/pub/linux/utils/nfs
-nfs-utils_1.1.1-12.diff.gz;http://ftp.de.debian.org/debian/pool/main/n/nfs-utils
+nfs-utils-1.1.1.tar.bz2;http://pkgs.fedoraproject.org/repo/pkgs/nfs-utils/nfs-utils-1.1.1.tar.bz2/d2a7815329405172b29f051fcffe3c94/
+nfs-utils_1.1.1-12.diff.gz;https://launchpadlibrarian.net/11192890/
 #autofs-4.1.4.tar.bz2;ftp://ftp.kernel.org/pub/linux/daemons/autofs/v4
 autofs-4.1.4.tar.bz2;http://pkgs.fedoraproject.org/repo/pkgs/autofs/autofs-4.1.4.tar.bz2/7e3949114c00665b4636f0c318179657
 #autofs-3.1.7.tar.bz2;ftp://ftp.kernel.org/pub/linux/daemons/autofs/v3
