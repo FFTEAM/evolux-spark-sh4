@@ -1389,9 +1389,9 @@ void eval_l25() {
 }
 
 static pthread_mutex_t ttx_mutex;
-static bool mutex_initialized = false;
 
-void ttx_mutex_init(void) {
+void ttx_mutex_lock(void) {
+	static bool mutex_initialized = false;
 	if (!mutex_initialized) {
 		mutex_initialized = true;
 		pthread_mutexattr_t attr;
@@ -1399,9 +1399,6 @@ void ttx_mutex_init(void) {
 		pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
 		pthread_mutex_init(&ttx_mutex, &attr);
 	}
-}
-
-void ttx_mutex_lock(void) {
 	pthread_mutex_lock(&ttx_mutex);
 }
 
@@ -1421,18 +1418,19 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	sscanf(cvs_revision, "%*s %[0-9.]", versioninfo);
 	fprintf(stderr, "TuxTxt %s for 32bpp framebuffer\n", versioninfo);
 
-	ttx_mutex_init();
-
 	use_gui = (_rc > -1);
 
 	boxed = 0;
 
 	int initialized = 0;
 
-	if (!reader_running)
+	if (reader_running)
+		tuxtx_pause_subtitle(true);
+	else
 		initialized = tuxtxt_init();
-	if (reader_running || initialized)
-		tuxtxt_cache.page = 0x100;
+
+	tuxtxt_cache.page = 0x100;
+
 	if(_rc < 0) {
 		sub_page = tuxtxt_cache.page = page;
 		sub_pid = pid;
@@ -1441,12 +1439,10 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 
 	rc = _rc;
 
-	tuxtxt_cache.vtxtpid = pid;
-
-	if(tuxtxt_cache.vtxtpid == 0)
+	if(pid == 0)
 		fprintf(stderr, "[tuxtxt] No PID given, so scanning for PIDs ...\n\n");
 	else
-		fprintf(stderr, "[tuxtxt] using PID %x page %x\n", tuxtxt_cache.vtxtpid, tuxtxt_cache.page);
+		fprintf(stderr, "[tuxtxt] using PID %x page %x\n", pid, tuxtxt_cache.page);
 
 	if (rc > -1)
 		fcntl(rc, F_SETFL, fcntl(rc, F_GETFL) | O_EXCL | O_NONBLOCK);
@@ -1483,7 +1479,7 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 		displayModeIndex = MODE_PLAIN;
 		if (reader_running)
 			tuxtx_pause_subtitle(true);
-		if (Init(source) == 0) {
+		if (Init(pid) == 0) {
 			Clear(transp);
 			setPIG(0, 0, 720, 576);
 			return 0;
@@ -1672,6 +1668,8 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 
 	if (initialized)
 		tuxtxt_close();
+	else
+		tuxtx_pause_subtitle(false);
 
 	Clear(transp);
 	setPIG(0, 0, 720, 576);
@@ -1795,7 +1793,7 @@ static int deInitFonts() {
 	return 0;
 }
 
-int Init(int source) {
+int Init(int pid) {
 	int i;
 	unsigned char magazine;
 
@@ -1950,7 +1948,7 @@ int Init(int source) {
 		getpidsdone = 0;
 	}
 
-	tuxtxt_start(tuxtxt_cache.vtxtpid, source);
+	tuxtxt_start(pid);
 	displayMode[MODE_PLAIN].zoommode = ZOOMMODE_FULL;
 	displayMode[MODE_BOXED].zoommode = ZOOMMODE_FULL;
 
@@ -5438,12 +5436,13 @@ int GetRCCode(bool do_sleep) {
 	return 0;
 }
 
-static void* reader_thread(void * /*arg*/)
+static void* reader_thread(void * arg)
 {
 	fprintf(stderr, "TuxTxt subtitle thread started\n");
 	ttx_sleep = 5000000; // implement 5s delay
 	displayModeIndex = MODE_BOXED;
 
+	int pid = *((int *)arg);
 	static bool initialized = false;
 
 	while(reader_running) {
@@ -5456,7 +5455,7 @@ static void* reader_thread(void * /*arg*/)
 			ttx_sleep -= 200000;
 			if (ttx_sleep <= 0) {
 				fprintf(stderr, "TuxTxt subtitle thread active\n");
-				int res = Init(0 /* unused */);
+				int res = Init(pid);
 				if (!res) {
 					tuxtxt_close();
 					setPIG(0, 0, 720, 576);
@@ -5509,7 +5508,7 @@ void tuxtx_stop_subtitle(bool clr)
 		fprintf(stderr, "%s: pthread_join(%d)\n", __func__, ttx_sub_thread);
 		pthread_join(ttx_sub_thread, NULL);
 		ttx_sub_thread = 0;
-//		if (clr)
+		if (clr)
 				Clear(transp);
 	}
 	ttx_mutex_unlock();
