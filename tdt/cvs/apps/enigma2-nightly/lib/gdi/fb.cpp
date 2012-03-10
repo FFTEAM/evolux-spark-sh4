@@ -238,8 +238,10 @@ void fbClass::blit()
 
 fbClass::~fbClass()
 {
+#if not defined(__sh__) 
 	if (available)
 		ioctl(fd, FBIOPUT_VSCREENINFO, &oldscreen);
+#endif
 	if (lfb)
 		munmap(lfb, available);
 	showConsole(1);
