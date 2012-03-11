@@ -1,9 +1,9 @@
 #!/bin/sh
 MODDIR=/lib/modules
-if [ ! -e /etc/.startenigma2 ] && [ -e /etc/.wlan ]; then
+if [ ! -e /etc/.start_enigma2 ] && [ -e /etc/.wlan ]; then
 	isWlan=true
 	. /usr/local/share/config/wlan.conf
-elif [ ! -e /etc/.startenigma2 ] && [ ! -e /etc/.wlan ]; then
+elif [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.wlan ]; then
 	isWlan=""
 else
 	isWlan=`grep -m1 config.plugins.PinkPanel.WlanOn /etc/enigma2/settings | cut -d = -f2`
