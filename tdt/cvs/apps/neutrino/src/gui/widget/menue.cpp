@@ -48,6 +48,7 @@
 
 
 #include <cctype>
+#include <algorithm>
 
 #define ROUND_RADIUS 9
 
@@ -831,7 +832,7 @@ CMenuOptionStringChooser::CMenuOptionStringChooser(const neutrino_locale_t Optio
 	height      = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 	optionName  = OptionName;
 	active      = Active;
-	optionValue = OptionValue;
+	optionValue = strdup(OptionValue ? OptionValue : "");
 	observ      = Observ;
 
 	directKey         = DirectKey;
@@ -843,12 +844,20 @@ CMenuOptionStringChooser::CMenuOptionStringChooser(const neutrino_locale_t Optio
 
 CMenuOptionStringChooser::~CMenuOptionStringChooser()
 {
+	free(optionValue);
 	options.clear();
 }
 
 void CMenuOptionStringChooser::addOption(const char * const value)
 {
-	options.push_back(std::string(value));
+	std::vector<std::string>::iterator it = find(options.begin(), options.end(), std::string(value));
+	if (it == options.end())
+		options.push_back(std::string(value));
+}
+
+void CMenuOptionStringChooser::clearOptions()
+{
+	options.clear();
 }
 
 int CMenuOptionStringChooser::exec(CMenuTarget* parent)
@@ -930,10 +939,11 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 
 	const char * l_optionName = g_Locale->getText(optionName);
 	int optionwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_optionName, true);
-	//int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true);
+	int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true);
 	int stringstartposName = x + offx + 10;
-	//int stringstartposOption = x + dx - stringwidth - 10; //+ offx
 	int stringstartposOption = x + offx + 10 + 10 + optionwidth;
+	if (stringstartposOption < x + dx - stringwidth - 10)
+		stringstartposOption = x + dx - stringwidth - 10;
 
 	if (!(iconName.empty()))
 	{

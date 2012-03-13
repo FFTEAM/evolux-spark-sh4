@@ -328,12 +328,12 @@ class Network:
 				self.lan_interfaces.append(iface)
 				return _("LAN connection") + " " + str(len(self.lan_interfaces))
 		else:
-			if iface not in self.wlan_interfaces and len(self.wlan_interfaces) == 0:
-				self.wlan_interfaces.append(iface)
+			if iface not in self.lan_interfaces and len(self.lan_interfaces) == 0:
+				self.lan_interfaces.append(iface)
 				return _("WLAN connection")
-			elif iface not in self.wlan_interfaces and len(self.wlan_interfaces) >= 1:
-				self.wlan_interfaces.append(iface)
-				return _("WLAN connection") + " " + str(len(self.wlan_interfaces))
+			elif iface not in self.lan_interfaces and len(self.lan_interfaces) >= 1:
+				self.lan_interfaces.append(iface)
+				return _("WLAN connection") + " " + str(len(self.lan_interfaces))
 
 	def getFriendlyAdapterDescription(self, iface):
 		if iface == 'eth0':

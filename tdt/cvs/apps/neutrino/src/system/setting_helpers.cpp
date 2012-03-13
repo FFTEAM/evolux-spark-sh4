@@ -203,20 +203,19 @@ bool CTP_scanNotifier::changeNotify(const neutrino_locale_t, void * Data)
 	}
 	return true;
 }
-CDHCPNotifier::CDHCPNotifier( CMenuForwarder* a1, CMenuForwarder* a2, CMenuForwarder* a3, CMenuForwarder* a4, CMenuForwarder* a5)
+
+CDHCPNotifier::CDHCPNotifier( CMenuForwarder* a1, CMenuForwarder* a2, CMenuForwarder* a3, CMenuForwarder* a4)
 {
 	toDisable[0] = a1;
 	toDisable[1] = a2;
 	toDisable[2] = a3;
 	toDisable[3] = a4;
-	toDisable[4] = a5;
 }
-
 
 bool CDHCPNotifier::changeNotify(const neutrino_locale_t, void * data)
 {
 	CNeutrinoApp::getInstance()->networkConfig.inet_static = ((*(int*)(data)) == 0);
-	for(int x=0;x<5;x++)
+	for(int x=0;x<4;x++)
 		toDisable[x]->setActive(CNeutrinoApp::getInstance()->networkConfig.inet_static);
 	return true;
 }
@@ -568,6 +567,35 @@ bool CIPChangeNotifier::changeNotify(const neutrino_locale_t, void * Data)
 	return true;
 }
 
+bool CInterfaceChangeNotifier::changeNotify(const neutrino_locale_t, void * Data)
+{
+	CNeutrinoApp::getInstance()->networkConfig.interface = std::string((char *) Data);
+	if (toDisable)
+		toDisable->setActive(CNeutrinoApp::getInstance()->networkConfig.isWireless());
+	CNeutrinoApp::getInstance()->networkConfig.getInterfaceConfig();
+	if (CNeutrinoApp::getInstance()->DHCPOptionChooser) {
+		CNeutrinoApp::getInstance()->DHCPOptionChooser->setOptionValue(
+			CNeutrinoApp::getInstance()->networkConfig.inet_static ? 0 : 1);
+		//CNeutrinoApp::getInstance()->DHCPOptionChooser->paint(true);
+		int o = CNeutrinoApp::getInstance()->networkConfig.inet_static ? 1 : 0;
+		CNeutrinoApp::getInstance()->changeNotify(NONEXISTANT_LOCALE, &o);
+	}
+
+	return true;
+}
+
+CInterfaceChangeNotifier::CInterfaceChangeNotifier(CMenuForwarder *wlan)
+{
+	toDisable = wlan;
+}
+
+bool CNetworkAutostartChangeNotifier::changeNotify(const neutrino_locale_t, void * Data)
+{
+	CNeutrinoApp::getInstance()->networkConfig.automatic_start = *((int *) Data);
+	return true;
+}
+
+
 bool CConsoleDestChangeNotifier::changeNotify(const neutrino_locale_t, void * Data)
 {
 	g_settings.uboot_console = *(int *)Data;
@@ -783,7 +811,7 @@ void testNetworkSettings(const char* ip, const char* netmask, const char* broadc
 		strcpy(our_nameserver,nameserver);
 	}
 	else {
-		netGetIP((char *) "eth0",our_ip,our_mask,our_broadcast);
+		netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),our_ip,our_mask,our_broadcast);
 		netGetDefaultRoute(our_gateway);
 		netGetNameserver(our_nameserver);
 	}
@@ -809,7 +837,7 @@ void testNetworkSettings(const char* ip, const char* netmask, const char* broadc
 	text += our_nameserver;
 	text += ' ';
 	text += mypinghost(our_nameserver);
-	text += "\ndboxupdate.berlios.de: ";
+	text += "\nunicorn.berlios.de: ";
 	text += mypinghost("195.37.77.138");
 
 	ShowMsgUTF(LOCALE_NETWORKMENU_TEST, text, CMessageBox::mbrBack, CMessageBox::mbBack); // UTF-8
@@ -824,14 +852,18 @@ void showCurrentNetworkSettings()
 	char nameserver[16];
 	std::string text;
 
-	netGetIP((char *) "eth0",ip,mask,broadcast);
+	netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),ip,mask,broadcast);
 	if (ip[0] == 0) {
 		text = "Network inactive\n";
 	}
 	else {
 		netGetNameserver(nameserver);
 		netGetDefaultRoute(router);
-		text  = g_Locale->getText(LOCALE_NETWORKMENU_IPADDRESS );
+		text  = g_Locale->getText(LOCALE_NETWORKMENU_INTERFACE );
+		text += ": ";
+		text += CNeutrinoApp::getInstance()->networkConfig.active_interface;
+		text += '\n';
+		text += g_Locale->getText(LOCALE_NETWORKMENU_IPADDRESS );
 		text += ": ";
 		text += ip;
 		text += '\n';

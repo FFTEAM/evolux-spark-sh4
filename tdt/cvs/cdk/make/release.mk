@@ -650,6 +650,7 @@ endif
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
+	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/FlashBackup
 #### displaytime plugin not longer needed so we remove it #####
 #	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
@@ -692,6 +693,7 @@ endif
 endif
 
 if STM24
+	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko $(prefix)/release/lib/modules/zd1201.ko || true
 	[ -e $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko ] && cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules || true

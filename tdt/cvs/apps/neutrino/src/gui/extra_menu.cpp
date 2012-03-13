@@ -2169,6 +2169,181 @@ void GLCD_Menu::GLCD_Menu_Settings()
 }
 #endif
 
+KernelOptions_Menu::KernelOptions_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+
+int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (actionKey == "reset") {
+		for (int i = 0; i < modules.size(); i++)
+			modules[i].active = modules[i].active_orig;
+		return res;
+	}
+
+	if (actionKey == "apply") {
+		for (int i = 0; i < modules.size(); i++)
+			if (modules[i].active != modules[i].active_orig) {
+				FILE *f = fopen("/etc/modules.extra", "w");
+					if (f) {
+						chmod("/etc/modules.extra", 0644);
+						for (int i = 0; i < modules.size(); i++) {
+							if (modules[i].active)
+								fprintf(f, "%s\n", modules[i].name.c_str());
+						}
+					fclose(f);
+				}
+				for (int i = 0; i < modules.size(); i++) {
+					char buf[80];
+					if (modules[i].active)
+						snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko", modules[i].name.c_str());
+					else
+						snprintf(buf, sizeof(buf), "rmmod %s", modules[i].name.c_str());
+					system(buf);
+					modules[i].active_orig = modules[i].active;
+				}
+				break;
+			}
+	}
+
+	if (actionKey == "apply" || actionKey == "lsmod") {
+		for (int i = 0; i < modules.size(); i++)
+			modules[i].installed = false;
+		FILE *f = fopen("/proc/modules", "r");
+		if (f) {
+			char buf[200];
+			while (fgets(buf, sizeof(buf), f)) {
+				char name[200];
+				if (1 == sscanf(buf, "%s", name))
+					for (int i = 0; i < modules.size(); i++) {
+						if (name == modules[i].name) {
+							modules[i].installed = true;
+							break;
+						}
+				}
+			}
+			fclose(f);
+		}
+
+		string text = "";
+		for (int i = 0; i < modules.size(); i++) {
+			text += modules[i].name;
+			// FIXME, localizations are missing (but rather not worth adding)
+			if (modules[i].active) {
+				if (modules[i].installed)
+					text += " is enabled and loaded\n";
+				else
+					text += " is enabled but not loaded\n";
+			} else {
+				if (modules[i].installed)
+					text += " is disabled but loaded\n";
+				else
+					text += " is disabled and not loaded\n";
+			}
+		}
+
+		ShowHintUTF(LOCALE_EXTRAMENU_KERNELOPTIONS_LSMOD, text.c_str());
+
+		return res;
+	}
+
+	if (parent)
+		parent->hide();
+
+	Settings();
+
+	return res;
+}
+
+void KernelOptions_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void KernelOptions_Menu::Settings()
+{
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings.raw");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES));
+
+	modules.clear();
+
+	FILE *f = fopen("/etc/modules.available", "r");
+	if (f) {
+		char buf[200];
+		module m;
+		m.active = m.active_orig = 0;
+		m.installed = false;
+		while (fgets(buf, sizeof(buf), f)) {
+			char *t = strchr(buf, '#');
+			if (t)
+				*t = 0;
+			char name[200];
+			if (1 == sscanf(buf, "%s", name)) {
+				m.name = string(name);
+				modules.push_back(m);
+			}
+		}
+		fclose(f);
+	}
+
+	f = fopen("/etc/modules.extra", "r");
+	if (f) {
+		char buf[200];
+		while (fgets(buf, sizeof(buf), f)) {
+			char *t = strchr(buf, '#');
+			if (t)
+				*t = 0;
+			char name[200];
+			if (1 == sscanf(buf, "%s", name)) {
+				int i;
+				for (i = 0; i < modules.size(); i++)
+					if (modules[i].name == name) {
+						modules[i].active = modules[i].active_orig = 1;
+						break;
+					}
+				if (i == modules.size()) {
+						module m;
+						m.active = m.active_orig = 1;
+						m.name = string(name);
+						modules.push_back(m);
+				}
+			}
+		}
+		fclose(f);
+	}
+
+	int shortcut = 0;
+
+	for (int i = 0; i < modules.size(); i++) {
+		menu->addItem(new CMenuOptionChooser(modules[i].name.c_str(), &modules[i].active,
+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true));
+	}
+
+	menu->addItem(GenericMenuSeparatorLine);
+
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_RESET, true, "", this,
+		"reset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_APPLY, true, "", this,
+		"apply", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_LSMOD, true, "", this,
+		"lsmod", CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW));
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
+}
+
 ////////////////////////////// EVOLUXUPDATE Menu ANFANG ////////////////////////////////////
 #define EVOLUXUPDATE_OPTION_COUNT 2
 const CMenuOptionChooser::keyval EVOLUXUPDATE_OPTIONS[EVOLUXUPDATE_OPTION_COUNT] =
@@ -2224,7 +2399,6 @@ void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 	delete menu;
 }
 
-#include <errno.h>
 bool EVOLUXUPDATE_Menu::CheckUpdate()
 {
 	//EVOLUXUPDATE STARTEN
@@ -2257,74 +2431,4 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 //ENDE EVOLUXUPDATE
 
 ////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
-
-////////////////////////////// WLAN Menu ANFANG ////////////////////////////////////
-#define WLAN_OPTION_COUNT 2
-const CMenuOptionChooser::keyval WLAN_OPTIONS[WLAN_OPTION_COUNT] =
-{
-	{ 0, LOCALE_EXTRAMENU_WLAN_OFF },
-	{ 1, LOCALE_EXTRAMENU_WLAN_ON },
-};
-
-WLAN_Menu::WLAN_Menu()
-{
-	frameBuffer = CFrameBuffer::getInstance();
-	width = 600;
-	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
-	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-	height = hheight+13*mheight+ 10;
-
-	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
-	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
-}
-int WLAN_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
-{
-	int res = menu_return::RETURN_REPAINT;
-
-	if (parent)
-		parent->hide();
-
-	WLANSettings();
-
-	return res;
-}
-
-void WLAN_Menu::hide()
-{
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
-}
-
-void WLAN_Menu::WLANSettings()
-{
-#define DOTFILE_WLAN "/etc/.wlan"
-	int wlan = access(DOTFILE_WLAN, F_OK) ? 0 : 1;
-	int old_wlan=wlan;
-	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WLAN, "settings.raw");
-	menu->addItem(GenericMenuSeparator);
-	menu->addItem(GenericMenuBack);
-	menu->addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_WLAN_SELECT, &wlan, WLAN_OPTIONS, WLAN_OPTION_COUNT,true);
-	menu->addItem( oj1 );
-	menu->exec (NULL, "");
-	menu->hide ();
-	delete menu;
-	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
-	if (old_wlan!=wlan)
-	{
-		if (wlan==1)
-		{
-			//Wlan STARTEN
-			touch("/etc/.wlan");
-			safe_system("/etc/init.d/setupETH.sh >/dev/null 2>&1 &");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WLAN Activated!", 450, 2); // UTF-8("")
-		} else {
-			//Wlan BEENDEN
-			unlink("/etc/.wlan");
-			safe_system("/etc/init.d/setupETH.sh >/dev/null 2>&1 &");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WLAN Deactivated!", 450, 2); // UTF-8("")
-		}
-	}
-}
-////////////////////////////// DisplayTime Menu ENDE //////////////////////////////////////
 // vim:ts=4

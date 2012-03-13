@@ -917,10 +917,11 @@ mpkey.plugin Starte Plugin
 mpkey.rewind Rücklauf
 mpkey.stop Stop
 mpkey.time Zeitanzeige
+networkmenu.interface Schnittstelle
 networkmenu.broadcast Broadcast
 networkmenu.dhcp DHCP
 networkmenu.gateway Standard Gateway
-networkmenu.head Netzwerk Einstellungen
+networkmenu.head Netzwerkeinstellungen
 networkmenu.ipaddress IP-Adresse
 networkmenu.mount NFS/CIFS/FTPFS
 networkmenu.nameserver Nameserver
@@ -937,6 +938,14 @@ networkmenu.setupnow Netzwerkeinstellungen jetzt zuweisen
 networkmenu.setuponstartup Beim Starten Netzwerk setzen
 networkmenu.show aktive Netzwerkeinstellungen zeigen
 networkmenu.test Netzwerk testen
+networkmenu.wlan WLAN-Setup
+networkmenu.wlan.essid Netzwerkname
+networkmenu.wlan.key Schlüssel
+networkmenu.wlan.mode Sicherheit
+networkmenu.wlan.apply Einstellungen übernehmen
+networkmenu.wlan.reset Einstellungen zurücksetzen
+networkmenu.setup_title Netzwerkeinstellungen
+networkmenu.setup_hint Netzwerkeinstellungen werden zugewiesen. Bitte warten ... 
 neutrino_starting Ntrino wird gestartet...
 nfs.alreadymounted Verzeichnis bereits gemountet.
 nfs.automount Beim Start mounten
@@ -1396,10 +1405,6 @@ extramenu.displaytime DisplayTime Menue
 extramenu.displaytime.select DisplayTime
 extramenu.displaytime.on Ein
 extramenu.displaytime.off Aus
-extramenu.wlan Wlan Menue
-extramenu.wlan.select Wlan
-extramenu.wlan.on Ein
-extramenu.wlan.off Aus
 extramenu.wwwdate wwwDate Menue
 extramenu.wwwdate.select wwwDate
 extramenu.wwwdate.on Ein
@@ -1471,6 +1476,11 @@ extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
 extramenu.evoluxupdate.off Off
 extramenu.evoluxupdate.update OnlineUpdate ausführen
+extramenu.kerneloptions Kernel-Optionen
+extramenu.kerneloptions.apply Einstellungen anwenden
+extramenu.kerneloptions.lsmod Status
+extramenu.kerneloptions.modules Kernel-Module
+extramenu.kerneloptions.reset Einstellungen zurücksetzen
 onoff.on Ein
 onoff.off Aus
 adzap Werbezapper

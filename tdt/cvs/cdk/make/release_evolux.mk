@@ -12,6 +12,7 @@ $(DEPDIR)/%release_evolux:
 	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
 		$(buildprefix)/doEVOLUX.sh; \
 	fi;
+	cp -RP $(prefix)/release_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_with_dev/lib/firmware/
 	cp -RP $(prefix)/release_with_dev/var $(prefix)/release_evolux_with_dev/
 	cp -RP $(prefix)/release_with_dev/sbin $(prefix)/release_evolux_with_dev/
 	cp -RP $(prefix)/release_with_dev/usr/bin $(prefix)/release_evolux_with_dev/usr/

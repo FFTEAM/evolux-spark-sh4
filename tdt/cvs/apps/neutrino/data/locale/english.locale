@@ -917,6 +917,7 @@ mpkey.plugin Run plugin
 mpkey.rewind Rewind
 mpkey.stop Stop
 mpkey.time Show time
+networkmenu.interface Interface
 networkmenu.broadcast Broadcast
 networkmenu.dhcp DHCP
 networkmenu.gateway Default Gateway
@@ -937,6 +938,14 @@ networkmenu.setupnow Setup Network now
 networkmenu.setuponstartup Setup Network on Startup
 networkmenu.show Show active network settings
 networkmenu.test Test network now
+networkmenu.wlan Configure WLAN
+networkmenu.wlan.essid Network Name
+networkmenu.wlan.key Network Key
+networkmenu.wlan.mode Network Security
+networkmenu.wlan.apply Apply
+networkmenu.wlan.reset Reset
+networkmenu.setup_title Network Setup
+networkmenu.setup_hint Network setup is in progress. One moment, please ...
 neutrino_starting Ntrino starting...
 nfs.alreadymounted directory already mounted
 nfs.automount Mount on startup
@@ -1396,10 +1405,6 @@ extramenu.displaytime DisplayTime Menue
 extramenu.displaytime.select DisplayTime
 extramenu.displaytime.on On
 extramenu.displaytime.off Off
-extramenu.wlan Wlan Menue
-extramenu.wlan.select Wlan
-extramenu.wlan.on On
-extramenu.wlan.off Off
 extramenu.wwwdate wwwDate Menue
 extramenu.wwwdate.select wwwDate
 extramenu.wwwdate.on On
@@ -1471,6 +1476,11 @@ extramenu.evoluxupdate.select OnlineUpdate
 extramenu.evoluxupdate.on On
 extramenu.evoluxupdate.off Off
 extramenu.evoluxupdate.update Do OnlineUpdate
+extramenu.kerneloptions Kernel Options
+extramenu.kerneloptions.apply Apply
+extramenu.kerneloptions.lsmod Status
+extramenu.kerneloptions.modules Kernel Modules
+extramenu.kerneloptions.reset Reset settings
 onoff.on Ein
 onoff.off Aus
 adzap AdZap

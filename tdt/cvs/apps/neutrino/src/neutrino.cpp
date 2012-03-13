@@ -2533,7 +2533,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	CMenuWidget    languageSettings    (LOCALE_LANGUAGESETUP_HEAD            , "language.raw"        );
 	CMenuWidget    audioSettings       (LOCALE_AUDIOMENU_HEAD                , "audio.raw"           );
 	CMenuWidget    parentallockSettings(LOCALE_PARENTALLOCK_PARENTALLOCK     , "lock.raw"            , 500);
-	CMenuWidget    networkSettings     (LOCALE_NETWORKMENU_HEAD              , "network.raw"         );
+	CMenuWidget_Network networkSettings(LOCALE_NETWORKMENU_HEAD              , "network.raw"         );
 	CMenuWidget    recordingSettings   (LOCALE_RECORDINGMENU_HEAD            , "recording.raw"       );
 	CMenuWidget    streamingSettings   (LOCALE_STREAMINGMENU_HEAD            , "streaming.raw"       );
 	//CMenuWidget    colorSettings       (LOCALE_COLORMENU_HEAD                , "colors.raw"          );
@@ -4332,13 +4332,19 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 		returnval = menu_return::RETURN_EXIT_ALL;
 	}
 	else if(actionKey=="network") {
+		CHintBox *hintBox = new CHintBox(LOCALE_NETWORKMENU_SETUP_TITLE, g_Locale->getText(LOCALE_NETWORKMENU_SETUP_HINT));
+		hintBox->paint();
 		networkConfig.automatic_start = (network_automatic_start == 1);
+		networkConfig.setBroadcast();
 		networkConfig.stopNetwork();
 		networkConfig.commitConfig();
 		networkConfig.startNetwork();
+		hintBox->hide();
+		delete hintBox;
 	}
 	else if(actionKey=="networktest") {
 		dprintf(DEBUG_INFO, "doing network test...\n");
+		networkConfig.setBroadcast();
 		testNetworkSettings(networkConfig.address.c_str(), networkConfig.netmask.c_str(), networkConfig.broadcast.c_str(), networkConfig.gateway.c_str(), networkConfig.nameserver.c_str(), networkConfig.inet_static);
 	}
 	else if(actionKey=="networkshow") {

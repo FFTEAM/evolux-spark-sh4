@@ -263,6 +263,7 @@ class CMenuOptionStringChooser : public CMenuItem
 		~CMenuOptionStringChooser();
 
 		void addOption(const char * value);
+		void clearOptions(void);
 		int paint(bool selected, bool last = 0);
 		int getHeight(void) const
 		{

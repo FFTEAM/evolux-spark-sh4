@@ -247,14 +247,10 @@ bool read_interface(const std::string filename, const std::string name, bool &au
 			{
 				if (s == std::string("auto"))
 				{
-					while (in >> s)
-					{
-						if (s == std::string(name))
-						{
-							automatic_start = true;
-							break;
-						}
-					}
+					if (!(in >> s))
+						continue;
+					if (s == std::string(name))
+						automatic_start = true;
 				}
 				continue;
 			}

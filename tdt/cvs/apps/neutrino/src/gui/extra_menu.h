@@ -187,27 +187,6 @@ class DISPLAYTIME_Menu : public CMenuTarget
 
 };
 
-class WLAN_Menu : public CMenuTarget
-{
-	private:
-
-	CFrameBuffer *frameBuffer;
-	int x;
-	int y;
-	int width;
-	int height;
-	int hheight,mheight; // head/menu font height
-
-	public:
-
-	WLAN_Menu();
-
-	void hide();
-	int exec(CMenuTarget* parent, const std::string & actionKey);
-	void WLANSettings();
-
-};
-
 class WWWDATE_Menu : public CMenuTarget
 {
 	private:
@@ -446,6 +425,29 @@ class GLCD_Menu : public CMenuTarget
 };
 
 #endif // WITH_GRAPHLCD
+
+class KernelOptions_Menu : public CMenuTarget
+{
+    private:
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+	struct module {
+		string name;
+		int active_orig;
+		int active;
+		bool installed;
+	};
+	std::vector<module> modules;
+    public:
+	KernelOptions_Menu();
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void Settings();
+};
 
 class EVOLUXUPDATE_Menu : public CMenuTarget
 {

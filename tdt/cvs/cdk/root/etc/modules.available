@@ -1,0 +1,9 @@
+# These drivers are available to the user for loading via
+# the Ntrino Extra menu, via /etc/modules.extra
+#
+rt2870sta	# Ralink 2870 USB WLAN
+rt3070sta	# Ralink 3070 USB WLAN
+zd1201		# ZYDAS  1201 USB WLAN
+usbserial	# USB-to-serial support
+pl2303		# Prolific PL-2303 USB-to-serial
+

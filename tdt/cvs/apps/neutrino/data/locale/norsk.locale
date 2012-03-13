@@ -916,6 +916,7 @@ mpkey.plugin Kjør plugin
 mpkey.rewind Spol tilbake
 mpkey.stop Stop
 mpkey.time Vis tid
+networkmenu.interface Interface
 networkmenu.broadcast Broadcast
 networkmenu.dhcp DHCP
 networkmenu.gateway Default Gateway
@@ -936,6 +937,14 @@ networkmenu.setupnow Oppsett Nettverk
 networkmenu.setuponstartup Oppsett Nettverk ved oppstart
 networkmenu.show Vis aktive nettverks innstillinger
 networkmenu.test Test nettverk nå
+networkmenu.wlan Oppsett WLAN
+networkmenu.wlan.essid Nettverksnavn
+networkmenu.wlan.key Nettverksnøkkel
+networkmenu.wlan.mode Nettverkssikkerhet
+networkmenu.wlan.apply Apply Aktivere
+networkmenu.wlan.reset Reset Reset
+networkmenu.setup_title Netverksoppsett
+networkmenu.setup_hint Nettverksoppsett pågår. Ett øyeblikk, vennligst ...
 neutrino_starting Ntrino starter...
 nfs.alreadymounted mappe allerede montert
 nfs.automount Mont på oppstart
@@ -1395,10 +1404,6 @@ extramenu.displaytime Vis tid meny
 extramenu.displaytime.select Vis tid
 extramenu.displaytime.on På
 extramenu.displaytime.off Av
-extramenu.wlan Wlan meny
-extramenu.wlan.select Wlan
-extramenu.wlan.on På
-extramenu.wlan.off Av
 extramenu.wwwdate wwwDato Meny
 extramenu.wwwdate.select wwwDato
 extramenu.wwwdate.on På
@@ -1470,6 +1475,11 @@ extramenu.evoluxupdate.select Online oppdatering
 extramenu.evoluxupdate.on På
 extramenu.evoluxupdate.off Av
 extramenu.evoluxupdate.update Gjør Online Oppdatering
+extramenu.kerneloptions Kernel Opsjoner
+extramenu.kerneloptions.apply Aktivere
+extramenu.kerneloptions.lsmod Status
+extramenu.kerneloptions.modules Kernel Moduler
+extramenu.kerneloptions.reset Reset
 onoff.on På
 onoff.off Av
 adzap AdZap

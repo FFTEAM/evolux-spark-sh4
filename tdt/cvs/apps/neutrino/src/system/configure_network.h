@@ -33,9 +33,15 @@ class CNetworkConfig
 	std::string orig_broadcast;
 	std::string orig_gateway;
 	std::string orig_nameserver;
+	std::string orig_interface;
 	bool        orig_inet_static;
 
+	std::string orig_wlan_essid;
+	std::string orig_wlan_key;
+	std::string orig_wlan_mode;
+
 	void copy_to_orig(void);
+	void copy_from_orig(void);
 	bool modified_from_orig(void);
 
  public:
@@ -45,14 +51,27 @@ class CNetworkConfig
 	std::string broadcast;
 	std::string gateway;
 	std::string nameserver;
+	std::string interface;
 	bool        inet_static;
 
+	std::string wlan_essid;
+	std::string wlan_key;
+	std::string wlan_mode;
+
+	std::string active_interface;
+
 	CNetworkConfig(void);
+
+	void getInterfaceConfig(bool = true);
 
 	void commitConfig(void);
 
 	void startNetwork(void);
 	void stopNetwork(void);
+
+	void setBroadcast(void);
+	int setWLAN(void);
+	bool isWireless (void);
 };
 
 #endif /* __configure_network_h__ */

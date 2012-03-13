@@ -539,7 +539,9 @@ endif
 	rm $(prefix)/release_neutrino/usr/local/share/config/blockad*
 	cp -f $(buildprefix)/root/usr/local/share/config/supplemental_pids.conf $(prefix)/release_neutrino/usr/local/share/config/
 	touch $(prefix)/release_neutrino/etc/.EVOfirstboot
+	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino/etc/
 
+	[ -e $(kernelprefix)/$(kernelpath)/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/net/wireless/zd1201.ko $(prefix)/release_neutrino/lib/modules/zd1201.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi_sio.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/pl2303.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/usbserial.ko $(prefix)/release_neutrino/lib/modules || true

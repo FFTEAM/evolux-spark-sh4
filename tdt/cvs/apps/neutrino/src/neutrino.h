@@ -83,6 +83,36 @@ typedef struct font_sizes_groups
         const char * const                          actionkey;
 } font_sizes_groups_struct;
 
+class CMenuWidget_Network : public CMenuWidget
+{
+    private:
+	CInterfaceChangeNotifier *MyInterfaceChanger;
+    public: 
+	CMenuOptionStringChooser *networkSettings_Interface;
+	CMenuForwarder *wlanMenuForw;
+	CMenuWidget_Network(const neutrino_locale_t Name, const std::string & Icon = "", const int mwidth = 400, const int mheight = 576);
+	void InitInterfaceList();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+};
+
+class WLAN_Menu : public CMenuTarget
+{
+    private:
+        CFrameBuffer *frameBuffer;
+        int x;
+        int y;
+        int width;
+        int height;
+        int hheight, mheight;
+	char tmp_essid[41];
+	char tmp_key[41];
+	int wlan_mode;
+    public:
+        WLAN_Menu();
+        void WLAN_Settings();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+};
+
 
 class CNeutrinoApp : public CMenuTarget, CChangeObserver
 {
@@ -144,6 +174,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CMoviePluginChangeExec 		*MoviePluginChanger;
 		COnekeyPluginChangeExec		*OnekeyPluginChanger;
 		CIPChangeNotifier		*MyIPChanger;
+		CInterfaceChangeNotifier	*MyInterfaceChanger;
 //		CVCRControl			*vcrControl;
 		CConsoleDestChangeNotifier	*ConsoleDestinationChanger;
 		CRCLock                         *rcLock;
@@ -187,7 +218,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void InitColorSettingsStatusBarColors(CMenuWidget &colorSettings_menuColors);
 		void InitColorSettingsTiming(CMenuWidget &colorSettings_timing);
 		void InitLcdSettings(CMenuWidget &lcdSettings);
-		void InitNetworkSettings(CMenuWidget &networkSettings);
+		void InitNetworkSettings(CMenuWidget_Network &networkSettings);
 		void AddFontSettingItem(CMenuWidget &fontSettings, const SNeutrinoSettings::FONT_TYPES number_of_fontsize_entry);
 		void InitFontSettings(CMenuWidget &fontSettings);
 		void InitRecordingSettings(CMenuWidget &recordingSettings);
@@ -228,6 +259,8 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CChannelList			*RADIOchannelList;
 		CChannelList			*channelList;
 		CNetworkConfig                  networkConfig;
+		CMenuOptionChooser		*DHCPOptionChooser;
+		CDHCPNotifier			*dhcpNotifier;
 
 		static CNeutrinoApp* getInstance();
 

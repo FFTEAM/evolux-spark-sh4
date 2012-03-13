@@ -83,7 +83,7 @@ class CDHCPNotifier : public CChangeObserver
 	private:
 		CMenuForwarder* toDisable[5];
 	public:
-		CDHCPNotifier( CMenuForwarder*, CMenuForwarder*, CMenuForwarder*, CMenuForwarder*, CMenuForwarder*);
+		CDHCPNotifier( CMenuForwarder*, CMenuForwarder*, CMenuForwarder*, CMenuForwarder*);
 		bool changeNotify(const neutrino_locale_t, void * data);
 };
 class CStreamingNotifier : public CChangeObserver
@@ -195,6 +195,21 @@ class CKeySetupNotifier : public CChangeObserver
 };
 
 class CIPChangeNotifier : public CChangeObserver
+{
+	public:
+		bool changeNotify(const neutrino_locale_t, void * Data);
+};
+
+class CInterfaceChangeNotifier : public CChangeObserver
+{
+	private:
+		CMenuForwarder* toDisable;
+	public:
+		bool changeNotify(const neutrino_locale_t, void * Data);
+		CInterfaceChangeNotifier (CMenuForwarder *);
+};
+
+class CNetworkAutostartChangeNotifier : public CChangeObserver
 {
 	public:
 		bool changeNotify(const neutrino_locale_t, void * Data);
