@@ -59,6 +59,7 @@ class CStringInput : public CMenuTarget
 		const char * validchars;
 		char *       value;
 		std::string  *valueString;
+		int          len;
 		int          size;
 		int          selected;
 		CChangeObserver * observ;
@@ -73,6 +74,7 @@ class CStringInput : public CMenuTarget
 		virtual void NormalKeyPressed(const neutrino_msg_t key);
 		virtual void keyBackspacePressed(void);
 		virtual void keyRedPressed();
+		virtual void keyGreenPressed();
 		virtual void keyYellowPressed();
 		virtual void keyBluePressed();
 		virtual void keyUpPressed();
@@ -108,7 +110,9 @@ class CStringInputSMS : public CStringInput
 		virtual void NormalKeyPressed(const neutrino_msg_t key);
 		virtual void keyBackspacePressed(void);
 		virtual void keyRedPressed();
+		virtual void keyGreenPressed();
 		virtual void keyYellowPressed();
+		virtual void keyBluePressed();
 		virtual void keyUpPressed();
 		virtual void keyDownPressed();
 		virtual void keyLeftPressed();

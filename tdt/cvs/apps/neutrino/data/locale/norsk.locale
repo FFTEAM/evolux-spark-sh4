@@ -1223,7 +1223,9 @@ streamingmenu.streaming_type Streamingserver
 streamingmenu.streaming_videorate Datarate Video
 streamingserver.noconnect Ingen tilkobling til streamingserver \nopptak kansellert.
 stringinput.caps capser / ingen caps
-stringinput.clear fjern alt
+stringinput.insert sette tegn
+stringinput.clear fjern brev
+stringinput.clear_all fjern alt
 subtitles.head Tekster
 subtitles.stop Stop Teksting
 timer.eventrecord.msg   ... Gjøres, eller ikke gjøres
