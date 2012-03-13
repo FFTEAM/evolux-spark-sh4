@@ -339,19 +339,19 @@ class Network:
 		if iface == 'eth0':
 			return _("Internal LAN adapter.")
 		else:
-			classdir = "/sys/class/net/" + iface + "/device/"
-			driverdir = "/sys/class/net/" + iface + "/device/driver/"
+			classdir = "/sys/class/net/"
+			driverdir = "/sys/class/net/" + iface
 			if os_path.exists(classdir):
 				files = listdir(classdir)
-				if 'driver' in files:
+				if iface in files:
 					if os_path.realpath(driverdir).endswith('ath_pci'):
 						return _("Atheros")+ " " + str(os_path.basename(os_path.realpath(driverdir))) + " " + _("WLAN adapter.") 
 					elif os_path.realpath(driverdir).endswith('zd1211b'):
 						return _("Zydas")+ " " + str(os_path.basename(os_path.realpath(driverdir))) + " " + _("WLAN adapter.") 
-					elif os_path.realpath(driverdir).endswith('rt73'):
-						return _("Ralink")+ " " + str(os_path.basename(os_path.realpath(driverdir))) + " " + _("WLAN adapter.") 
-					elif os_path.realpath(driverdir).endswith('rt73usb'):
-						return _("Ralink")+ " " + str(os_path.basename(os_path.realpath(driverdir))) + " " + _("WLAN adapter.") 
+					elif os_path.realpath(driverdir).endswith('ra0'):
+						return _("Ralink")+ "-3070 " + " " + _("WLAN adapter.") 
+					elif os_path.realpath(driverdir).endswith('wlan0'):
+						return _("Ralink")+ "-2870 " + " " + _("WLAN adapter.") 
 					else:
 						return str(os_path.basename(os_path.realpath(driverdir))) + " " + _("WLAN adapter.") 
 				else:
