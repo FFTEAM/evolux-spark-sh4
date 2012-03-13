@@ -187,23 +187,17 @@ if [ ! -e /var/etc/.firstboot ]; then
 	}
 
 	echo 1 > /proc/sys/kernel/panic
+	echo 2 > /proc/cpu/alignment
 
-	( sleep 5; /usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb) &
-	( sleep 10
-	  if [ -e /autofs/sda1 ]; then
-		rm -rf /media/hdd >/dev/null 2>&1
-		ln -sf /autofs/sda1 /media/hdd
-		if [ ! -e /media/hdd/movie ]; then
-			cd /media/hdd && mkdir movie music picture swap epg
-		fi
-	  fi
-	  if [ -e /autofs/sdb1 ]; then
-		rm -rf /media/hdd2 >/dev/null 2>&1
-		ln -sf /autofs/sdb1 /media/hdd2
-		if [ ! -e /media/hdd/movie ]; then
-			cd /media/hdd && mkdir movie music picture swap epg
-		fi
-	  fi
+	rm -rf /media/hdd /media/hdd2 >/dev/null 2>&1
+	ln -s /autofs/sda1 /media/hdd
+	ln -s /autofs/sdb1 /media/hdd2
+
+	(
+		/usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb
+		sleep 5
+		cd /media/hdd && mkdir movie music picture swap epg
+		cd /media/hdd2 && mkdir movie music picture swap epg
 	) &
 
 	# /bin/evremote2 05 30 &
