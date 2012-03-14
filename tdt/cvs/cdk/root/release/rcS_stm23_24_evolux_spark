@@ -173,9 +173,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 		*) [ -e /bin/evremote2.amiko ] && rm /bin/evremote2 && mv /bin/evremote2.amiko /bin/evremote2
 		   [ -e /etc/lircd.conf.amiko ] && rm /etc/lircd.conf && mv /etc/lircd.conf.amiko /etc/lircd.conf;;
 	esac
-	echo "init lircd"
-	/usr/bin/lircd
-	/usr/bin/irexec -d /etc/lircrc
 
 	mknod /dev/rc c 147 1 2>/dev/null
 	mknod /dev/sci0 c 169 0 2>/dev/null
@@ -207,17 +204,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 		fi
 	) &
 
-	# /bin/evremote2 05 30 &
-
-	if [ -n "$START_E2" ]; then
-		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
-		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
-		/bin/evremote2 $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
-		rm -f /etc/.extdisplay >/dev/null 2>&1
-	else
-		/bin/evremote2 &
-	fi
-
 	[ -e /etc/.dualTuner ] && [ -e /etc/.start_enigma2 ] && dualTuner &
 	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
 	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
@@ -242,6 +228,20 @@ if [ ! -e /var/etc/.firstboot ]; then
 	      echo "Booting from nfs, don't set network"
 	else
 		/etc/init.d/networking restart
+	fi
+
+	echo "init lircd"
+	/usr/bin/lircd
+	/usr/bin/irexec -d /etc/lircrc
+	# /bin/evremote2 05 30 &
+
+	if [ -n "$START_E2" ]; then
+		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
+		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
+		/bin/evremote2 $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
+		rm -f /etc/.extdisplay >/dev/null 2>&1
+	else
+		/bin/evremote2 &
 	fi
 
 	if [ -n "$START_NEUTRINO" ]; then
