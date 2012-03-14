@@ -3,7 +3,7 @@ DATE=`date +%Y%m%d`
 DIRECTORY="/media/hdd"
 mycams='oscam CCcam Scam gbox camd3 incubusCamd mbox mgcamd'
 
-ISHDD=`mount | grep "$DIRECTORY"`
+ISHDD=`mount | grep sda`
 if [ ! -z "$ISHDD" ]; then
 	case $1 in
 		backup)
