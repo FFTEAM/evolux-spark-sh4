@@ -1047,6 +1047,8 @@ const char *locale_real_names[] = {
 	"streamingserver.noconnect",
 	"stringinput.caps",
 	"stringinput.clear",
+	"stringinput.clear.all",
+	"stringinput.insert",
 	"timer.eventrecord.msg",
 	"timer.eventrecord.title",
 	"timer.eventtimed.msg",
