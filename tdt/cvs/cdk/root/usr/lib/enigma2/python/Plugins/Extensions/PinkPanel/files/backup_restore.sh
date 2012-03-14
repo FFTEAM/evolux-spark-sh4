@@ -1,6 +1,7 @@
 #!/bin/sh
 DATE=`date +%Y%m%d`
 DIRECTORY="/media/hdd"
+BUDIR="/tmp/myBU"
 mycams='oscam CCcam Scam gbox camd3 incubusCamd mbox mgcamd'
 
 ISHDD=`mount | grep sda`
@@ -12,30 +13,31 @@ if [ ! -z "$ISHDD" ]; then
 			fi
 			echo "copy settings, plugs to tmp now..."
 			sleep 2
-			mkdir -p /tmp/myBU/etc/enigma2
-			mkdir -p /tmp/myBU/etc/network
-			mkdir -p /tmp/myBU/usr/bin
-			mkdir -p /tmp/myBU/usr/keys
-			mkdir -p /tmp/myBU/usr/lib/enigma2/python/Plugins/Extensions
+			mkdir -p $BUDIR/etc/enigma2
+			mkdir -p $BUDIR/etc/network
+			mkdir -p $BUDIR/usr/bin
+			mkdir -p $BUDIR/usr/keys
+			mkdir -p $BUDIR/usr/lib/enigma2/python/Plugins/Extensions
 
 			for i in $mycams;do
-				find /usr/bin -name "$i" -exec cp -f {} /tmp/myBU/usr/bin/ \;
+				find /usr/bin -name "$i" -exec cp -f {} $BUDIR/usr/bin/ \;
 			done
-			cp -RP /usr/keys/* /tmp/myBU/usr/keys/ >/dev/null 2>&1
-			cp -RP /etc/enigma2/settings /tmp/myBU/etc/enigma2/ >/dev/null 2>&1
-			cp -RP /etc/fstab /tmp/myBU/etc/ >/dev/null 2>&1
-			cp -RP /etc/profile /tmp/myBU/etc/ >/dev/null 2>&1
-			cp -RP /etc/resolv.conf /tmp/myBU/etc/ >/dev/null 2>&1
-			cp -RP /etc/network/interfaces /tmp/myBU/etc/network/ >/dev/null 2>&1
-			cp -RP /usr/lib/enigma2/python/Plugins/Extensions/* /tmp/myBU/usr/lib/enigma2/python/Plugins/Extensions/ >/dev/null 2>&1
+			cp -RP /usr/keys/* $BUDIR/usr/keys/ >/dev/null 2>&1
+			cp -RP /etc/enigma2/settings $BUDIR/etc/enigma2/ >/dev/null 2>&1
+			cp -RP /etc/fstab $BUDIR/etc/ >/dev/null 2>&1
+			cp -RP /etc/profile $BUDIR/etc/ >/dev/null 2>&1
+			cp -RP /etc/resolv.conf $BUDIR/etc/ >/dev/null 2>&1
+			cp -RP /etc/network/interfaces $BUDIR/etc/network/ >/dev/null 2>&1
+			cp -RP /usr/lib/enigma2/python/Plugins/Extensions/* $BUDIR/usr/lib/enigma2/python/Plugins/Extensions/ >/dev/null 2>&1
+			rm -rf $BUDIR/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel >/dev/null 2>&1
 			echo "done!"
 			sleep 2
 			echo "create now $DIRECTORY/myBU/mySysBackup.tar.gz ..."
 			sleep 2
-			cd /tmp/myBU
+			cd $BUDIR
 			tar -czvf "$DIRECTORY/myBU/mySysBackup.tar.gz" ./ >/dev/null 2>&1
 			cd /
-			rm -rf /tmp/myBU
+			rm -rf $BUDIR
 			sync
 			echo "Backup finished!"
 			;;
