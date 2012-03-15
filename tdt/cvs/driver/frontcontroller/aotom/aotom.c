@@ -224,7 +224,9 @@ void draw_thread(void *arg)
   int count = 0;
   int pos = 0;
 
-
+//test
+  if (!arg) return;
+//end
   data = (struct vfd_ioctl_data *)arg;
 
   draw_data.length = data->length;
