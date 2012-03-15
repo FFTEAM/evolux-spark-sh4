@@ -1224,8 +1224,8 @@ streamingmenu.streaming_type Streamingserver
 streamingmenu.streaming_videorate Datarate Video
 streamingserver.noconnect No connection to streamingserver.\nRecording canceled.
 stringinput.caps caps / no caps
-stringinput.insert insert character
-stringinput.clear clear character
+stringinput.insert insert
+stringinput.clear clear
 stringinput.clear_all clear all
 subtitles.head Subtitles
 subtitles.stop Stop subtitles
