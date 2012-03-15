@@ -451,6 +451,7 @@ endif
 #	cp -aR $(targetprefix)/usr/local/share/fonts $(prefix)/release_neutrino/usr/local/share/
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/fonts
 	cp $(buildprefix)/root/usr/share/fonts/tuxtxt.ttf $(prefix)/release_neutrino/usr/local/share/fonts/
+	cp $(buildprefix)/root/usr/share/fonts/russian.ttf $(prefix)/release_neutrino/usr/local/share/fonts/
 
 #       Font libass
 	mkdir -p $(prefix)/release_neutrino/usr/share/fonts
