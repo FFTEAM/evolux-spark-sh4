@@ -3,6 +3,7 @@ installdir = $(DATADIR)/neutrino/locale
 install_DATA = \
 	deutsch.locale \
 	english.locale \
+	russkij.locale \
 	norsk.locale
 
 if MAINTAINER_MODE
