@@ -79,6 +79,7 @@ static bool          saved_orig_termio = false;
 CRCInput::CRCInput()
 {
 	timerid= 1;
+	repeatkeys = NULL;
 
 	// pipe for internal event-queue
 	// -----------------------------
@@ -491,6 +492,26 @@ void CRCInput::getMsg_ms(neutrino_msg_t * msg, neutrino_msg_data_t * data, int T
 }
 
 static bool firstKey = true;
+
+uint32_t *CRCInput::setAllowRepeat(uint32_t *rk) {
+	uint32_t *r = repeatkeys;
+	repeatkeys = rk;
+	return r;
+}
+
+bool CRCInput::mayRepeat(uint32_t key)
+{
+	if (repeatkeys) {
+		uint32_t *k = repeatkeys;
+		while (*k != RC_nokey) {
+			if (*k == key) {
+				return true;
+			}
+			k++;
+		}
+	}
+	return false;
+}
 
 #define ENABLE_REPEAT_CHECK
 void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, unsigned long long Timeout, bool bAllowRepeatLR)
@@ -1155,7 +1176,7 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 					if (ev.code == rc_last_key) {
 						/* only allow selected keys to be repeated */
 						/* (why?)                                  */
-						if((trkey == RC_up) || (trkey == RC_down   ) ||
+						if(mayRepeat(trkey) || (trkey == RC_up) || (trkey == RC_down   ) ||
 							(trkey == RC_plus   ) || (trkey == RC_minus  ) ||
 							(trkey == RC_page_down   ) || (trkey == RC_page_up  ) ||
 							//(trkey == RC_standby) ||
