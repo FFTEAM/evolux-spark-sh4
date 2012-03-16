@@ -192,8 +192,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 	(
 	/usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb
 	sleep 5
-	cd /media/hdd && mkdir movie music picture swap epg >/dev/null 2>&1
-	cd /media/hdd2 && mkdir movie music picture swap epg >/dev/null 2>&1
+	cd /media/hdd 2>/dev/null && mkdir movie music picture swap epg 2>/dev/null
+	cd /media/hdd2 2>/dev/null && mkdir movie music picture swap epg 2>/dev/null
 	) &
 
 	[ -e /etc/.dualTuner ] && [ -e /etc/.start_enigma2 ] && dualTuner &
@@ -219,6 +219,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	if [ "$NFS" -eq "1" ]; then
 	      echo "Booting from nfs, don't set network"
 	else
+		ifconfig eth0 down
 		/etc/init.d/networking restart
 	fi
 
