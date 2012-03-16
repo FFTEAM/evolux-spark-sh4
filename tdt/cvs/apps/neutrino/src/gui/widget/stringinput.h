@@ -84,6 +84,15 @@ class CStringInput : public CMenuTarget
 		virtual void keyPlusPressed();
 		virtual void keyMinusPressed();
 
+		virtual void valueDeletePrev();
+		virtual void valueDeleteSelected();
+		virtual void valueDeleteAll();
+		virtual void valueInsert();
+		virtual void valueSetStart();
+		virtual void valueSetEnd();
+		virtual void valuePrev();
+		virtual void valueNext();
+
 		virtual int handleOthers(const neutrino_msg_t msg, const neutrino_msg_data_t data);
 
 	public:
@@ -95,11 +104,11 @@ class CStringInput : public CMenuTarget
 
 		void hide();
 		int exec( CMenuTarget* parent, const std::string & actionKey );
-
 };
 
 class CStringInputSMS : public CStringInput
 {
+	protected:
 		bool	capsMode;
 		int 	arraySizes[10];
 		char	Chars[10][9];					// maximal 9 character in one CharList entry!
@@ -117,6 +126,16 @@ class CStringInputSMS : public CStringInput
 		virtual void keyDownPressed();
 		virtual void keyLeftPressed();
 		virtual void keyRightPressed();
+
+		virtual void valueToogleCase();
+		virtual void valueDeleteAll();
+		virtual void valueDeletePrev();
+		virtual void valueDeleteSelected();
+		virtual void valueInsert();
+		virtual void valueSetStart();
+		virtual void valueSetEnd();
+		virtual void valuePrev();
+		virtual void valueNext();
 
 		virtual void paint();
 		void initSMS(const char * const Valid_Chars);
