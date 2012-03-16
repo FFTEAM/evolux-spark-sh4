@@ -1935,8 +1935,9 @@ WLAN_Menu::WLAN_Menu() {
 }
 
 int WLAN_Menu::exec(CMenuTarget* parent, const std::string & actionKey) {
-/*orig code
+
 	if (actionKey == "reset") {
+		// discard changes and revert to the current settings
 		strncpy(tmp_essid, CNeutrinoApp::getInstance()->networkConfig.wlan_essid.c_str(), sizeof(tmp_essid));
 		strncpy(tmp_key, CNeutrinoApp::getInstance()->networkConfig.wlan_key.c_str(), sizeof(tmp_key));
 		wlan_mode = (CNeutrinoApp::getInstance()->networkConfig.wlan_mode == "WPA") ? 0 : 1;
@@ -1944,33 +1945,13 @@ int WLAN_Menu::exec(CMenuTarget* parent, const std::string & actionKey) {
 		return menu_return::RETURN_REPAINT;
 	}
 	if (actionKey == "apply") {
-		strncpy(tmp_essid, CNeutrinoApp::getInstance()->networkConfig.wlan_essid.c_str(), sizeof(tmp_essid));
-		strncpy(tmp_key, CNeutrinoApp::getInstance()->networkConfig.wlan_key.c_str(), sizeof(tmp_key));
-		wlan_mode = (CNeutrinoApp::getInstance()->networkConfig.wlan_mode == "WPA") ? 0 : 1;
+		CNeutrinoApp::getInstance()->networkConfig.wlan_essid = string(tmp_essid);
+		CNeutrinoApp::getInstance()->networkConfig.wlan_key = string(tmp_key);
+		CNeutrinoApp::getInstance()->networkConfig.wlan_mode = string(wlan_mode ? "WPA" : "WPA2");
 
 		return menu_return::RETURN_EXIT;
 	}
-*/
-// dirty hack till its full fixxed
-	if (actionKey == "reset") {
-                strncpy(tmp_essid, "yourESSID", sizeof(tmp_essid));
-                strncpy(tmp_key, "yourKEY", sizeof(tmp_key));
-                wlan_mode = 1;
 
-		return menu_return::RETURN_REPAINT;
-	}
-	if (actionKey == "apply") {
-                CNeutrinoApp::getInstance()->networkConfig.wlan_essid=tmp_essid;
-                CNeutrinoApp::getInstance()->networkConfig.wlan_key=tmp_key;
-                if(wlan_mode==0) 
-                        CNeutrinoApp::getInstance()->networkConfig.wlan_mode="WPA";
-                else
-                        CNeutrinoApp::getInstance()->networkConfig.wlan_mode="WPA2";
-
-                return menu_return::RETURN_EXIT;
-        }
-
-// dirty end
 	if (parent)
 		parent->hide();
 	WLAN_Settings();
