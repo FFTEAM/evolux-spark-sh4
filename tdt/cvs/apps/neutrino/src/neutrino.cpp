@@ -3737,8 +3737,10 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 		frameBuffer->paintBackground();
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/shutdown.jpg");
 #endif
+#if 0
 		networkConfig.automatic_start = (network_automatic_start == 1);
 		networkConfig.commitConfig();
+#endif
 		saveSetup(NEUTRINO_SETTINGS_FILE);
 
 		if(g_settings.epg_save /* && timeset && g_Sectionsd->getIsTimeSet ()*/) {
