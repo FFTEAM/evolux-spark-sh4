@@ -159,7 +159,7 @@ void CStringInput::NormalKeyPressed(const neutrino_msg_t key)
 			len++;
 		value[selected] = validchars[CRCInput::getNumericValue(key)];
 
-		if (selected + 1 < len)
+		if (value[selected] && (selected + 1 < size))
 		{
 			selected++;
 			paintChar(selected - 1);
