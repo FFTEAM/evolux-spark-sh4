@@ -693,7 +693,7 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		if (mode == 0)
 		{
 	 	  struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
-		  if(data->length <0)
+		  if(data->length <1)
 	            {
 	              res = -1;
 	              dprintk(2, "empty string\n");
