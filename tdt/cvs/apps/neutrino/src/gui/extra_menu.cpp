@@ -1391,10 +1391,10 @@ nGLCD::nGLCD() {
 
 	sem_init(&sem, 0, 1);
 
-        pthread_mutexattr_t attr;
-        pthread_mutexattr_init(&attr);
-        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
-        pthread_mutex_init(&mutex, &attr);
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
+	pthread_mutex_init(&mutex, &attr);
 
 	stagingChannel = "";
 	stagingEpg = "";
@@ -1609,11 +1609,15 @@ void* nGLCD::Run(void *)
 
 	do {
 		if (broken) {
-			fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
+			// fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
 			clock_gettime(CLOCK_REALTIME, &ts);
 			ts.tv_sec += 30;
 			sem_timedwait(&nglcd->sem, &ts);
 			broken = false;
+			if (nglcd->doExit)
+				break;
+			if (!settings.glcd_enable)
+				continue;
 		} else
 				while ((nglcd->doSuspend || nglcd->doStandby || !settings.glcd_enable) && !nglcd->doExit)
 					sem_wait(&nglcd->sem);
@@ -1624,22 +1628,24 @@ void* nGLCD::Run(void *)
 		int warmUp = 5;
 		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
 		if (!nglcd->lcd) {
-			fprintf(stderr, "CreateDriver failed.\n");
+			// fprintf(stderr, "CreateDriver failed.\n");
 			broken = true;
 			continue;
 		}
-		if (nglcd->lcd->Init() != 0) {
+		if (nglcd->lcd->Init()) {
 			delete nglcd->lcd;
 			nglcd->lcd = NULL;
-			fprintf(stderr, "LCD init failed.\n");
+			// fprintf(stderr, "LCD init failed.\n");
 			broken = true;
 			continue;
 		}
 
 		if (!nglcd->bitmap)
-				nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
+			nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
 
 		nglcd->Update();
+
+		nglcd->doMirrorOSD = false;
 
 		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
 			if (nglcd->doMirrorOSD) {
@@ -1718,6 +1724,7 @@ void* nGLCD::Run(void *)
 				for (int y = 0; y < lcd_height; y++) {
 					int ystride = y_min * fb_width;
 					for (int x = 0; x < lcd_width; x++) {
+						// FIXME: There might be some oscure bug somewhere that invalidate the address of bitmap->DrawPixel()
 						nglcd->bitmap->DrawPixel(x, y, *(fbp + ystride + (y * fb_h / lcd_height) * fb_width
 										 + x_min + (x * fb_w / lcd_width)));
 					}
