@@ -159,7 +159,7 @@ int CStreamInfo2::doSignalStrengthLoop ()
 			if (fesig[i].val[FESIG_VAL_CUR] > -1) {
 				if (fesig[i].val[FESIG_VAL_MAX] < fesig[i].val[FESIG_VAL_CUR])
 					fesig[i].val[FESIG_VAL_MAX] = fesig[i].val[FESIG_VAL_CUR];
-				if (fesig[i].val[FESIG_VAL_MIN] < fesig[i].val[FESIG_VAL_CUR])
+				if (fesig[i].val[FESIG_VAL_MIN] > fesig[i].val[FESIG_VAL_CUR] || fesig[i].val[FESIG_VAL_MIN] < 0 )
 					fesig[i].val[FESIG_VAL_MIN] = fesig[i].val[FESIG_VAL_CUR];
 			}
 
@@ -240,9 +240,12 @@ void CStreamInfo2::paint_signal_fe()
 
 	for (int i = 0; i < FESIG_MAX; i++)
 		if(fesig[i].val[FESIG_VAL_CUR] > -1) {
-			if (fesig[i].old != fesig[i].val[FESIG_VAL_CUR])
-				for (int j = 0; j <= FESIG_VAL_MIN; j++)
+			if (fesig[i].old != fesig[i].val[FESIG_VAL_CUR]) {
+				for (int j = 0; j < FESIG_VAL_MIN; j++)
 					SignalRenderStr(fesig[i].val[j], fesig[i].x, sig_text_y + (j + 1) * sheight);
+				if (fesig[i].val[FESIG_VAL_MIN] > -1)
+					SignalRenderStr(fesig[i].val[FESIG_VAL_MIN], fesig[i].x, sig_text_y + (FESIG_VAL_MIN + 1) * sheight);
+			}
 
 			int yd = y_signal_fe (fesig[i].val[FESIG_VAL_CUR], fesig[i].limit, sigBox_h);
 			if (sigBox_pos < 2)
@@ -311,7 +314,7 @@ void CStreamInfo2::paint (int mode)
 	for (int i = 0; i < FESIG_MAX; i++) {
 		fesig[i].old = -1;
 		fesig[i].val[FESIG_VAL_MAX] = 0;
-		fesig[i].val[FESIG_VAL_MIN] = 0;
+		fesig[i].val[FESIG_VAL_MIN] = -1;
 		fesig[i].yd_old = 0;
 		fesig[i].scale = NULL;
 		fesig[i].oldpercent = -1;
