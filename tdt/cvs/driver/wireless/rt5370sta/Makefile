@@ -9,8 +9,10 @@ CHIPSET                   = 5370
 OSABL                     = NO
 
 HAS_ATE                   = y
+HAS_WPA_SUPPLICANT        = y
 HAS_QA_SUPPORT            = y
 HAS_DOT11_N_SUPPORT       = y
+HAS_DOT11N_DRAFT3_SUPPORT = y
 HAS_LED_CONTROL_SUPPORT   = y
 
 EXTRA_CFLAGS += -I$(src)/include
@@ -409,8 +411,22 @@ rt$(CHIPSET)sta-objs += \
 endif
 endif
 
+ifeq ($(HAS_WPA_SUPPLICANT),y)
+WFLAGS += -DWPA_SUPPLICANT_SUPPORT
+ifeq ($(HAS_NATIVE_WPA_SUPPLICANT_SUPPORT),y)
+WFLAGS += -DNATIVE_WPA_SUPPLICANT_SUPPORT
+endif
+endif
+
 ifeq ($(HAS_ATE),y)
 rt$(CHIPSET)sta-objs += common/rt_ate.o
+endif
+
+ifeq ($(HAS_DOT11_N_SUPPORT),y)
+WFLAGS += -DDOT11_N_SUPPORT
+ifeq ($(HAS_DOT11N_DRAFT3_SUPPORT),y)
+WFLAGS += -DDOT11N_DRAFT3
+endif
 endif
 
 obj-m := $(MOD_NAME).o
