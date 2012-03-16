@@ -10,7 +10,6 @@ OSABL                     = NO
 
 HAS_ATE                   = y
 HAS_WPA_SUPPLICANT        = y
-HAS_NATIVE_WPA_SUPPLICANT_SUPPORT = y
 HAS_QA_SUPPORT            = y
 HAS_DOT11_N_SUPPORT       = y
 HAS_DOT11N_DRAFT3_SUPPORT = y
@@ -39,9 +38,6 @@ endif
 
 ifeq ($(HAS_DOT11_N_SUPPORT),y)
 WFLAGS += -DDOT11_N_SUPPORT
-ifeq ($(HAS_DOT11N_DRAFT3_SUPPORT),y)
-WFLAGS += -DDOT11N_DRAFT3
-endif
 endif
 
 ifeq ($(HAS_LED_CONTROL_SUPPORT),y)
@@ -412,13 +408,6 @@ rt$(CHIPSET)sta-objs += \
 		common/rtusb_dev_id.o\
 		os/linux/rt_usb_util.o\
 		os/linux/usb_main_dev.o
-endif
-endif
-
-ifeq ($(HAS_WPA_SUPPLICANT),y)
-WFLAGS += -DWPA_SUPPLICANT_SUPPORT
-ifeq ($(HAS_NATIVE_WPA_SUPPLICANT_SUPPORT),y)
-WFLAGS += -DNATIVE_WPA_SUPPLICANT_SUPPORT
 endif
 endif
 
