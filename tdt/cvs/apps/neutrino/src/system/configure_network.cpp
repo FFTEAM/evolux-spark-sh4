@@ -94,6 +94,25 @@ void CNetworkConfig::getInterfaceConfig(bool copy)
 		copy_to_orig();
 }
 
+void CNetworkConfig::getDHCPInterfaceConfig(void)
+{
+	if (!inet_static) {
+		char our_ip[16];
+		char our_mask[16];
+		char our_broadcast[16];
+		char our_gateway[16];
+		char our_nameserver[16];
+
+		netGetIP((char *) active_interface.c_str(), our_ip, our_mask, our_broadcast);
+		netGetDefaultRoute(our_gateway);
+		netGetNameserver(our_nameserver);
+		address = std::string(our_ip);
+		netmask = std::string(our_mask);
+		broadcast = std::string(our_broadcast);
+		gateway = std::string(our_gateway);
+	}
+}
+
 void CNetworkConfig::copy_to_orig(void)
 {
 	orig_automatic_start = automatic_start;

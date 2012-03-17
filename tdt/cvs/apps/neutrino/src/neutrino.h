@@ -182,6 +182,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
                 // USERMENU
                 CTimerList                      *Timerlist;
 		CAdZapMenu			*AdZapChanger;
+		CMenuWidget_Network		*networkSettings;
 
                 bool showUserMenu(int button);
                 bool getNVODMenu(CMenuWidget* menu);

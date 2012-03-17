@@ -2533,7 +2533,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	CMenuWidget    languageSettings    (LOCALE_LANGUAGESETUP_HEAD            , "language.raw"        );
 	CMenuWidget    audioSettings       (LOCALE_AUDIOMENU_HEAD                , "audio.raw"           );
 	CMenuWidget    parentallockSettings(LOCALE_PARENTALLOCK_PARENTALLOCK     , "lock.raw"            , 500);
-	CMenuWidget_Network networkSettings(LOCALE_NETWORKMENU_HEAD              , "network.raw"         );
+	networkSettings = new CMenuWidget_Network (LOCALE_NETWORKMENU_HEAD, "network.raw");
 	CMenuWidget    recordingSettings   (LOCALE_RECORDINGMENU_HEAD            , "recording.raw"       );
 	CMenuWidget    streamingSettings   (LOCALE_STREAMINGMENU_HEAD            , "streaming.raw"       );
 	//CMenuWidget    colorSettings       (LOCALE_COLORMENU_HEAD                , "colors.raw"          );
@@ -2550,7 +2550,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming.raw"       );
 	gmoviePlayer = &moviePlayer;
 
-	InitMainMenu(mainMenu, mainSettings, audioSettings, parentallockSettings, networkSettings, recordingSettings,
+	InitMainMenu(mainMenu, mainSettings, audioSettings, parentallockSettings, *networkSettings, recordingSettings,
 			colorSettings, lcdSettings, keySettings, languageSettings, miscSettings,
 			service, fontSettings, audioplPicSettings, streamingSettings, moviePlayer, ExtraMenu);
 
@@ -2629,7 +2629,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	g_Timerd->registerEvent(CTimerdClient::EVT_REMIND, 222, NEUTRINO_UDS_NAME);
 	g_Timerd->registerEvent(CTimerdClient::EVT_EXEC_PLUGIN, 222, NEUTRINO_UDS_NAME);
 
-	InitNetworkSettings(networkSettings);
+	InitNetworkSettings(*networkSettings);
 	InitKeySettings(keySettings);
 	InitFontSettings(fontSettings);
 	InitColorSettings(colorSettings, fontSettings);
@@ -2646,7 +2646,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 			if(tzSelect)
 				tzSelect->exec(NULL);
 		if(ret != menu_return::RETURN_EXIT_ALL)
-			networkSettings.exec(NULL, "");
+			networkSettings->exec(NULL, "");
 		if(ret != menu_return::RETURN_EXIT_ALL)
 			scanSettings.exec(NULL, "");
 
@@ -4343,6 +4343,8 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 		networkConfig.startNetwork();
 		hintBox->hide();
 		delete hintBox;
+		networkSettings->InitInterfaceList();
+		return menu_return::RETURN_REPAINT;
 	}
 	else if(actionKey=="networktest") {
 		dprintf(DEBUG_INFO, "doing network test...\n");

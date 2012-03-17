@@ -63,6 +63,7 @@ class CNetworkConfig
 	CNetworkConfig(void);
 
 	void getInterfaceConfig(bool = true);
+	void getDHCPInterfaceConfig(void);
 
 	void commitConfig(void);
 

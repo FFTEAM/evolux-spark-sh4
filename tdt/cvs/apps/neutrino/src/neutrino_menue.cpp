@@ -1915,6 +1915,9 @@ void CMenuWidget_Network::InitInterfaceList()
 		}
 		freeifaddrs(ifap);
 	}
+
+	if (CNeutrinoApp::getInstance()->networkConfig.interface == CNeutrinoApp::getInstance()->networkConfig.active_interface)
+		CNeutrinoApp::getInstance()->networkConfig.getDHCPInterfaceConfig();
 }
 
 int CMenuWidget_Network::exec(CMenuTarget* parent, const std::string & actionKey)

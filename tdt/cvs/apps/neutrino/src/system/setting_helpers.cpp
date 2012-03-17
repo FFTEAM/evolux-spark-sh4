@@ -573,12 +573,15 @@ bool CInterfaceChangeNotifier::changeNotify(const neutrino_locale_t, void * Data
 	if (toDisable)
 		toDisable->setActive(CNeutrinoApp::getInstance()->networkConfig.isWireless());
 	CNeutrinoApp::getInstance()->networkConfig.getInterfaceConfig();
+
+	if (CNeutrinoApp::getInstance()->networkConfig.interface ==
+	    CNeutrinoApp::getInstance()->networkConfig.active_interface)
+		CNeutrinoApp::getInstance()->networkConfig.getDHCPInterfaceConfig();
+
 	if (CNeutrinoApp::getInstance()->DHCPOptionChooser) {
-		CNeutrinoApp::getInstance()->DHCPOptionChooser->setOptionValue(
-			CNeutrinoApp::getInstance()->networkConfig.inet_static ? 0 : 1);
-		//CNeutrinoApp::getInstance()->DHCPOptionChooser->paint(true);
-		int o = CNeutrinoApp::getInstance()->networkConfig.inet_static ? 1 : 0;
-		CNeutrinoApp::getInstance()->changeNotify(NONEXISTANT_LOCALE, &o);
+		int o = CNeutrinoApp::getInstance()->networkConfig.inet_static ? 0 : 1;
+		CNeutrinoApp::getInstance()->DHCPOptionChooser->setOptionValue(o);
+		CNeutrinoApp::getInstance()->dhcpNotifier->changeNotify(NONEXISTANT_LOCALE, &o);
 	}
 
 	return true;
