@@ -65,7 +65,7 @@ audioplayer.playlist_name Имя для файла с плей-листом
 audioplayer.playlist_name_hint1 Введите имя для файла плей-листа
 audioplayer.playlist_name_hint2 Расширение .m3u добавится автоматически
 audioplayer.reading_files Чтение файлов
-audioplayer.receiving_list Получение списка, подождите
+audioplayer.receiving_list Получение списка, подождите ...
 audioplayer.repeat_on Разрешить повтор
 audioplayer.rewind Назад
 audioplayer.save_playlist Сохранить лист
@@ -759,7 +759,7 @@ moviebrowser.book_moviestart Начало фильма:
 moviebrowser.book_name Имя:
 moviebrowser.book_new Новая закладка
 moviebrowser.book_position Позиция:
-moviebrowser.book_type переход (<0 назад , >0 вперед):
+moviebrowser.book_type переход (<0 назад, >0 вперед):
 moviebrowser.book_type_backward Повторить
 moviebrowser.book_type_forward Перейти
 moviebrowser.browser_frame_high Browser hight [Pixel]
@@ -775,7 +775,7 @@ moviebrowser.edit_book_name_info2 имя info2
 moviebrowser.edit_book_pos_info1 Введите новую позицию (s)
 moviebrowser.edit_book_pos_info2 
 moviebrowser.edit_book_type_info1 Введите новую длину перехода (s)
-moviebrowser.edit_book_type_info2 <0 назад , >0 вперед, 0: ничего
+moviebrowser.edit_book_type_info2 <0 назад, >0 вперед, 0: ничего
 moviebrowser.edit_serie Введие имя серии
 moviebrowser.error_no_movies Фильмы не найдены
 moviebrowser.foot_filter Фильтр:
@@ -1158,14 +1158,14 @@ scrambled_channel Кодированный канал
 screensetup.lowerright Зелёная = Снизу/Справа
 screensetup.upperleft Красная = Сверху/Слева
 servicemenu.getplugins Перегрузить плагины
-servicemenu.getplugins_hint Перезагрузка плагинов,\nпотерпите.
+servicemenu.getplugins_hint Перезагрузка плагинов,\nподождите...
 servicemenu.head Сервисы
 servicemenu.imageinfo Информация о прошивке
 servicemenu.reload Перегрузить список
 servicemenu.reload_hint Перезагрузка списка каналов,\nвыполняется...
 servicemenu.restart Рестарт Neutrino
 servicemenu.restart_failed Рестарт неудачен!
-servicemenu.restart_hint Перезапуск, ждите
+servicemenu.restart_hint Перезапуск, ждите...
 servicemenu.restart_refused_recording Запись активна, перезапуск отменен
 servicemenu.scants Поиск каналов
 servicemenu.ucodecheck Проверка ucodes
@@ -1223,8 +1223,10 @@ streamingmenu.streaming_transcode_video_codec Видео-кодек MPEG
 streamingmenu.streaming_type Стрим-сервер
 streamingmenu.streaming_videorate Видео-поток (kbs)
 streamingserver.noconnect Нет соединения со стрим-сервером.\nПринятие данных остановлено.
+stringinput.insert Вставить
+stringinput.clear_all Удалить все
 stringinput.caps Большие / маленькие
-stringinput.clear Очистить все
+stringinput.clear Удалить
 subtitles.head Субтитры
 subtitles.stop Убрать субтитры
 timer.eventrecord.msg   ... Делать или не делать? ;-)
