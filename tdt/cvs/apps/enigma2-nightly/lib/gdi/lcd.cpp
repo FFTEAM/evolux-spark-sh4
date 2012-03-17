@@ -28,6 +28,7 @@ eDBoxLCD *eDBoxLCD::instance;
 
 eLCD::eLCD()
 {
+	_buffer = NULL;
 	lcdfd = -1;
 	locked=0;
 }
@@ -43,7 +44,8 @@ void eLCD::setSize(int xres, int yres, int bpp)
 
 eLCD::~eLCD()
 {
-	delete [] _buffer;
+	if (_buffer)
+		delete [] _buffer;
 }
 
 int eLCD::lock()
@@ -269,9 +271,13 @@ eDBoxLCD::eDBoxLCD()
 	}
 	if (lcd->Init() != 0)
 	{
+#if 0
+	// Returning an error here will break the code at various other places
 		eDebug("ERROR: Failed initializing display\n");
 		delete lcd;
+		lcd = NULL;
 		return;
+#endif
 	}
 	lcd->SetBrightness(GLCD::Config.driverConfigs[displayNumber].brightness);
 
