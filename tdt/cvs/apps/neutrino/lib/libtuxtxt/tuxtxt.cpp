@@ -1453,21 +1453,16 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	if (split3D)
 		SwitchScreenMode(SCREENMODE_FULL, 0); /* turn off divided screen */
 
-	static int firstRun = true;
-	if (firstRun) {
-		lfb = frameBuffer->getFrameBufferPointer();
-		x0 = frameBuffer->scaleX(frameBuffer->getScreenX());
-		y0 = frameBuffer->scaleY(frameBuffer->getScreenY());
-		dx = frameBuffer->scaleX(frameBuffer->getScreenWidth(true));
-		dy = frameBuffer->scaleY(frameBuffer->getScreenHeight(true));
-		ex = frameBuffer->scaleX(frameBuffer->getScreenWidth());
-		ey = frameBuffer->scaleY(frameBuffer->getScreenHeight());
+	lfb = frameBuffer->getFrameBufferPointer();
+	x0 = frameBuffer->scaleX(frameBuffer->getScreenX());
+	y0 = frameBuffer->scaleY(frameBuffer->getScreenY());
+	dx = frameBuffer->scaleX(frameBuffer->getScreenWidth(true));
+	dy = frameBuffer->scaleY(frameBuffer->getScreenHeight(true));
+	ex = frameBuffer->scaleX(frameBuffer->getScreenWidth());
+	ey = frameBuffer->scaleY(frameBuffer->getScreenHeight());
 
-		sx = x0;
-		sy = y0;
-	}
-
-	firstRun = false;
+	sx = x0;
+	sy = y0;
 
 	/* initialisations */
 	if (displayMode[MODE_PLAIN].transpmode == TRANSPMODE_TV)
