@@ -1894,8 +1894,8 @@ void CMenuWidget_Network::InitInterfaceList()
 		char const *interface = "eth0";
 		struct ifaddrs *it = ifap;
 		while (it) {
-			// Get name of first active interface
-			if ((it->ifa_addr->sa_family == AF_INET) && it->ifa_name && strcmp(it->ifa_name, "lo") && (it->ifa_flags & IFF_RUNNING)) {
+			// Get name of first active interface (but skip loopback)
+			if (it->ifa_name && strcmp(it->ifa_name, "lo") && (it->ifa_flags & IFF_RUNNING)) {
 				interface = it->ifa_name;
 				CNeutrinoApp::getInstance()->networkConfig.active_interface = std::string(interface);
 				break;
@@ -1947,7 +1947,7 @@ int WLAN_Menu::exec(CMenuTarget* parent, const std::string & actionKey) {
 	if (actionKey == "apply") {
 		CNeutrinoApp::getInstance()->networkConfig.wlan_essid = string(tmp_essid);
 		CNeutrinoApp::getInstance()->networkConfig.wlan_key = string(tmp_key);
-		CNeutrinoApp::getInstance()->networkConfig.wlan_mode = string(wlan_mode ? "WPA" : "WPA2");
+		CNeutrinoApp::getInstance()->networkConfig.wlan_mode = string(wlan_mode ? "WPA2" : "WPA");
 
 		return menu_return::RETURN_EXIT;
 	}

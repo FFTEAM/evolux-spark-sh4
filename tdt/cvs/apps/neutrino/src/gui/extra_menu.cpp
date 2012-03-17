@@ -1609,7 +1609,9 @@ void* nGLCD::Run(void *)
 
 	do {
 		if (broken) {
-			// fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
+#ifdef GLCD_DEBUG
+			fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
+#endif
 			clock_gettime(CLOCK_REALTIME, &ts);
 			ts.tv_sec += 30;
 			sem_timedwait(&nglcd->sem, &ts);
@@ -1628,17 +1630,27 @@ void* nGLCD::Run(void *)
 		int warmUp = 5;
 		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
 		if (!nglcd->lcd) {
-			// fprintf(stderr, "CreateDriver failed.\n");
+#ifdef GLCD_DEBUG
+			fprintf(stderr, "CreateDriver failed.\n");
+#endif
 			broken = true;
 			continue;
 		}
+#ifdef GLCD_DEBUG
+		fprintf(stderr, "CreateDriver succeeded.\n");
+#endif
 		if (nglcd->lcd->Init()) {
 			delete nglcd->lcd;
 			nglcd->lcd = NULL;
-			// fprintf(stderr, "LCD init failed.\n");
+#ifdef GLCD_DEBUG
+			fprintf(stderr, "LCD init failed.\n");
+#endif
 			broken = true;
 			continue;
 		}
+#ifdef GLCD_DEBUG
+		fprintf(stderr, "LCD init succeeded.\n");
+#endif
 
 		if (!nglcd->bitmap)
 			nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
@@ -2205,18 +2217,25 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 					if (f) {
 						chmod("/etc/modules.extra", 0644);
 						for (int i = 0; i < modules.size(); i++) {
-							if (modules[i].active)
-								fprintf(f, "%s\n", modules[i].name.c_str());
+							if (modules[i].active) {
+								for (int j = 0; j < modules[i].moduleList.size(); j++)
+									fprintf(f, "%s\n", modules[i].moduleList[j].c_str());
+							}
 						}
 					fclose(f);
 				}
 				for (int i = 0; i < modules.size(); i++) {
 					char buf[80];
 					if (modules[i].active)
-						snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko", modules[i].name.c_str());
+						for (int j = 0; j < modules[i].moduleList.size(); j++) {
+							snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko", modules[i].moduleList[j].c_str());
+							system(buf);
+						}
 					else
-						snprintf(buf, sizeof(buf), "rmmod %s", modules[i].name.c_str());
-					system(buf);
+						for (int j = 0; j < modules[i].moduleList.size(); j++) {
+							snprintf(buf, sizeof(buf), "rmmod %s", modules[i].moduleList[j].c_str());
+							system(buf);
+						}
 					modules[i].active_orig = modules[i].active;
 				}
 				break;
@@ -2233,7 +2252,7 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				char name[200];
 				if (1 == sscanf(buf, "%s", name))
 					for (int i = 0; i < modules.size(); i++) {
-						if (name == modules[i].name) {
+						if (name == modules[i].moduleList.back()) {
 							modules[i].installed = true;
 							break;
 						}
@@ -2244,7 +2263,7 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 		string text = "";
 		for (int i = 0; i < modules.size(); i++) {
-			text += modules[i].name;
+			text += modules[i].comment + " (" + modules[i].moduleList.back() + ") ";
 			// FIXME, localizations are missing (but rather not worth adding)
 			if (modules[i].active) {
 				if (modules[i].installed)
@@ -2289,18 +2308,27 @@ void KernelOptions_Menu::Settings()
 	FILE *f = fopen("/etc/modules.available", "r");
 	if (f) {
 		char buf[200];
-		module m;
-		m.active = m.active_orig = 0;
-		m.installed = false;
 		while (fgets(buf, sizeof(buf), f)) {
-			char *t = strchr(buf, '#');
-			if (t)
-				*t = 0;
-			char name[200];
-			if (1 == sscanf(buf, "%s", name)) {
-				m.name = string(name);
+			if (buf[0] == '#')
+				continue;
+			char *comment = strchr(buf, '#');
+			if (!comment)
+				continue;
+			*comment++ = 0;
+			while (*comment == ' ' || *comment == '\t')
+				comment++;
+			if (strlen(comment) < 1)
+				continue;
+			module m;
+			m.active = m.active_orig = 0;
+			m.installed = false;
+			m.comment = string(comment);
+			std::istringstream in(buf);
+			std::string s;
+			while (in >> s)
+				m.moduleList.push_back(s);
+			if (m.moduleList.size() > 0)
 				modules.push_back(m);
-			}
 		}
 		fclose(f);
 	}
@@ -2316,16 +2344,10 @@ void KernelOptions_Menu::Settings()
 			if (1 == sscanf(buf, "%s", name)) {
 				int i;
 				for (i = 0; i < modules.size(); i++)
-					if (modules[i].name == name) {
+					if (modules[i].moduleList.back() == name) {
 						modules[i].active = modules[i].active_orig = 1;
 						break;
 					}
-				if (i == modules.size()) {
-						module m;
-						m.active = m.active_orig = 1;
-						m.name = string(name);
-						modules.push_back(m);
-				}
 			}
 		}
 		fclose(f);
@@ -2334,7 +2356,7 @@ void KernelOptions_Menu::Settings()
 	int shortcut = 0;
 
 	for (int i = 0; i < modules.size(); i++) {
-		menu->addItem(new CMenuOptionChooser(modules[i].name.c_str(), &modules[i].active,
+		menu->addItem(new CMenuOptionChooser(modules[i].comment.c_str(), &modules[i].active,
 				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true));
 	}
 

@@ -140,10 +140,9 @@ bool CNetworkConfig::modified_from_orig(void)
 }
 
 int CNetworkConfig::setWLAN(){
-	std::string scriptName = "/etc/network/if-pre-up.d/wlan";
-	std::ofstream F(scriptName.c_str());
+	std::ofstream F("/etc/network/if-pre-up.d/wlan");
 	if(F.is_open()) {
-		chmod(scriptName.c_str(), 0755);
+		chmod("/etc/network/if-pre-up.d/wlan", 0755);
 		std::string authmode = "WPA2PSK"; // WPA2
 		std::string encryptype = "AES"; // WPA2
 		if (wlan_mode == "WPA") {
@@ -153,6 +152,7 @@ int CNetworkConfig::setWLAN(){
 		F << "#!/bin/sh\n"
                   << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
 		  << "grep $IFACE: /proc/net/wireless >/dev/null 2>&1 || exit 0\n"
+		  << "kill -9 $(pidof wpa_supplicant 2>/dev/null) 2>/dev/null\n"
 		  << "E=\"" << wlan_essid << "\"\n"
 		  << "A=\"" << authmode << "\"\n"
 		  << "C=\"" << encryptype << "\"\n"
@@ -163,8 +163,27 @@ int CNetworkConfig::setWLAN(){
 		  << "iwconfig $IFACE essid \"$E\"\n"
 		  << "iwpriv $IFACE set AuthMode=$A\n"
 		  << "iwpriv $IFACE set EncrypType=$C\n"
-		  << "iwpriv $IFACE set \"WPAPSK=$K\"\n";
+		  << "if ! iwpriv $IFACE set \"WPAPSK=$K\"\n"
+		  << "then\n"
+		  << "\t/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
+		  << "\tsleep 3\n"
+		  << "fi\n";
 		F.close();
+		
+		F.open("/etc/wpa_supplicant.conf");
+		if(F.is_open()) {
+			F << "ctrl_interface=/var/run/wpa_supplicant\n\n"
+			  << "network={\n"
+			  << "\tscan_ssid=1\n"
+			  << "\tssid=\"" << wlan_essid << "\"\n"
+			  << "\tkey_mgmt=WPA-PSK\n"
+			  << "\tproto=" << wlan_mode << "\n"
+			  << "\tpairwise=TKIP\n"
+			  << "\tgroup=TKIP\n"
+			  << "\tpsk=\"" << wlan_key << "\"\n"
+			  << "}\n";
+			F.close();
+		}
 		return 0;
 	}
 	return -1;

@@ -436,7 +436,8 @@ class KernelOptions_Menu : public CMenuTarget
 	int height;
 	int hheight,mheight; // head/menu font height
 	struct module {
-		string name;
+		string comment;
+		std::vector<string> moduleList;
 		int active_orig;
 		int active;
 		bool installed;

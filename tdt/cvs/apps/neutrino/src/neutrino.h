@@ -49,6 +49,7 @@
 #include <zapit/client/zapitclient.h>
 
 #include <string>
+#include <gui/widget/stringinput.h>
 
 #define widest_number "2"
 
