@@ -106,8 +106,8 @@
  }
  
  cParallelPort::cParallelPort()
---- graphlcd.conf	2011-12-11 17:28:26.778505886 +0100
-+++ graphlcd.conf.fix	2011-12-11 17:28:33.998507890 +0100
+--- graphlcd.conf.orig	2012-03-07 01:52:17.571231592 +0100
++++ graphlcd.conf	2012-03-07 01:54:58.223427153 +0100
 @@ -29,7 +29,7 @@
  #  Select the process priority that is used when sleeping.
  #  Possible values: -20 <= x <= 19
@@ -597,15 +597,14 @@
  #
  # UpsideDown
  #  Rotates the display output by 180 degrees. This might be useful, if
-
---- glcddrivers/ax206dpf.c	2012-03-16 11:00:16.511015067 +0100
-+++ glcddrivers/ax206dpf.fix	2012-03-16 11:43:25.794949505 +0100
+--- glcddrivers/ax206dpf.c	2012-01-08 11:51:56.907120065 +0100
++++ glcddrivers/ax206dpf.c.fix	2012-01-11 22:15:36.496080564 +0100
 @@ -212,7 +212,7 @@
      {
          dh[di]->dpfh = NULL;
          dh[di]->attached = false;
 -        return 0;
-+        return -1;
++        return error;
      }
      dh[di]->attached = true;
      struct usb_device *dev = usb_device(dh[di]->dpfh->dev.udev);
