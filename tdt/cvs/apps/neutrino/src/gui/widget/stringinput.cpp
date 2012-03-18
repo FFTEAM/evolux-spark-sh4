@@ -502,7 +502,7 @@ int CStringInput::handleOthers(const neutrino_msg_t msg, const neutrino_msg_data
 
 void CStringInput::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x, y, width, height);
+	frameBuffer->paintBackgroundBoxRel(x, y, width, height + 1);
 }
 
 const char * CStringInput::getHint1(void)
