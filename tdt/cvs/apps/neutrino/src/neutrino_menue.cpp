@@ -1165,7 +1165,7 @@ void CNeutrinoApp::InitScanSettings(CMenuWidget &settings)
 	sat_iterator_t sit;
 
 	if(g_info.delivery_system == DVB_S) {
-		satSelect = new CMenuOptionStringChooser(LOCALE_SATSETUP_SATELLITE, scanSettings.satNameNoDiseqc, true, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, true);
+		satSelect = new CMenuOptionStringChooser(LOCALE_SATSETUP_SATELLITE, scanSettings.satNameNoDiseqc, true, satNotify, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, true);
 		satOnOff = new CMenuWidget(LOCALE_SATSETUP_SATELLITE, NEUTRINO_ICON_SETTINGS);
 		satOnOff->addItem(GenericMenuSeparator);
 		satOnOff->addItem(GenericMenuBack);
@@ -1174,7 +1174,7 @@ void CNeutrinoApp::InitScanSettings(CMenuWidget &settings)
 		t_satellite_position currentSatellitePosition = frontend->getCurrentSatellitePosition();
 
 		for(sit = satellitePositions.begin(); sit != satellitePositions.end(); sit++) {
-			printf("Adding sat menu for %s position %d\n", sit->second.name.c_str(), sit->first);
+			fprintf(stderr, "Adding sat menu for %s position %d\n", sit->second.name.c_str(), sit->first);
 
 			satSelect->addOption(sit->second.name.c_str());
 			if(currentSatellitePosition == sit->first) {
@@ -1218,10 +1218,10 @@ void CNeutrinoApp::InitScanSettings(CMenuWidget &settings)
 			satSetup->addItem(new CMenuForwarderNonLocalized(sit->second.name.c_str(), true, NULL, tempsat));
 		}
 	} else if (g_info.delivery_system == DVB_C) {
-		satSelect = new CMenuOptionStringChooser(LOCALE_CABLESETUP_PROVIDER, (char*)scanSettings.satNameNoDiseqc, true);
+		satSelect = new CMenuOptionStringChooser(LOCALE_CABLESETUP_PROVIDER, scanSettings.satNameNoDiseqc, true, satNotify);
 		for(sit = satellitePositions.begin(); sit != satellitePositions.end(); sit++) {
 			satSelect->addOption(sit->second.name.c_str());
-printf("Adding cable menu for %s position %d\n", sit->second.name.c_str(), sit->first);
+			fprintf(stderr, "Adding cable menu for %s position %d\n", sit->second.name.c_str(), sit->first);
 			dprintf(DEBUG_DEBUG, "got scanprovider (cable): %s\n", sit->second.name.c_str());
 		}
 	}

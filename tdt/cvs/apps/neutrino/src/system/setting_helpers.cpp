@@ -77,8 +77,13 @@ CSatelliteSetupNotifier::CSatelliteSetupNotifier()
 }
 
 /* items1 enabled for advanced diseqc settings, items2 for diseqc != NO_DISEQC, items3 disabled for NO_DISEQC */
-bool CSatelliteSetupNotifier::changeNotify(const neutrino_locale_t, void * Data)
+bool CSatelliteSetupNotifier::changeNotify(const neutrino_locale_t loc, void * Data)
 {
+	if (loc == LOCALE_SATSETUP_SATELLITE || loc == LOCALE_CABLESETUP_PROVIDER) {
+		strncpy(CNeutrinoApp::getInstance()->getScanSettings().satNameNoDiseqc, (char *) Data, 50);
+		return true;
+	}
+
 	std::vector<CMenuItem*>::iterator it;
 	int type = *((int*) Data);
 
