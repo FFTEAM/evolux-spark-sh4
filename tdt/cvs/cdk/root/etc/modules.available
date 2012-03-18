@@ -2,7 +2,7 @@
 # the Ntrino Extra menu, via /etc/modules.extra
 #
 rt2870sta	# Ralink 2870 USB WLAN
-rt3070sta	# Ralink 3070 USB WLAN
+rt3070sta	# Ralink 2070/3070 USB WLAN
 rt5370sta	# Ralink 5370 USB WLAN
 zd1201		# ZYDAS  1201 USB WLAN
 usbserial pl2303	# Prolific PL-2303 USB-to-serial
