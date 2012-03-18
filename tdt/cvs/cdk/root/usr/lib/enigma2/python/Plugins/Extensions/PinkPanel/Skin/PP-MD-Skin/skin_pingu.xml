@@ -714,29 +714,32 @@ self.instance.move(ePoint((1024-wsizex)/2, (576-wsizey)/(count &gt; 7 and 2 or 3
 			<convert type="ClockToText">Format:%H:%M</convert>
 		</widget>
 	</screen> -->
-	<!-- LCD screen (main) -->
-	<screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
-		<widget source="session.CurrentService" render="Label" position="2,116" size="316,56" font="LCD;54" halign="center" valign="center" >
-			<convert type="ServiceName">Name</convert>
-		</widget>
-		<!-- Channellogo (Picon) -->
-		<!-- <widget source="session.CurrentService" render="Picon" backgroundColor="#00006c" position="220,10" zPosition="1" size="100,60" alphatest="on">
-			<convert type="ServiceName">Reference</convert>
-		</widget> -->
-		<widget source="session.Event_Now" render="Progress" position="2,200" size="316,20" borderWidth="3">
-			<convert type="EventTime">Progress</convert>
-		</widget>
-		<widget source="global.CurrentTime" render="Label" position="7,0" size="200,90" font="LCD;88" halign="right" valign="top">
-			<convert type="ClockToText">Format:%H:%M</convert>
-		</widget>
-		<widget source="global.CurrentTime" render="Label" position="239,9" zPosition="1" size="66,66" font="LCD;64" valign="top">
-			<convert type="ClockToText">Format:%S</convert>
-		</widget>
-		<widget source="session.RecordState" render="FixedLabel" text=" " position="2,2" zPosition="1" size="126,20">
-			<convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
-			<convert type="ConditionalShowHide">Blink</convert>
-		</widget>
-	</screen>
+<!-- LCD screen (main) -->
+  <screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
+    <widget source="session.CurrentService" render="Label" position="7,97" size="300,80" font="Regular;40" halign="center" valign="center" foregroundColor="red">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <!-- Channellogo (Picon) -->
+    <widget source="session.CurrentService" render="Picon" position="197,11" zPosition="1" size="125,75" alphatest="on">
+      <convert type="ServiceName">Reference</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" position="2,180" size="316,20" borderWidth="3">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="3,24" size="150,70" font="LCD;50" halign="center" valign="center" transparent="1" zPosition="0" foregroundColor="yellow">
+      <convert type="ClockToText">Format:%H:%M</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="138,7" zPosition="1" size="55,55" font="LCD;35" valign="center" foregroundColor="yellow">
+      <convert type="ClockToText">Format:%S</convert>
+    </widget>
+    <widget font="Regular;28" position="5,204" render="Label" size="300,32" source="session.Event_Now" transparent="1" zPosition="0" halign="center">
+      <convert type="EventName">Name</convert>
+    </widget>
+    <widget source="session.RecordState" render="FixedLabel" text=" " position="2,2" zPosition="1" size="126,20">
+      <convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+      <convert type="ConditionalShowHide">Blink</convert>
+    </widget>
+  </screen>  
 	<!-- Color OLED screen (main) -->
 	<screen name="InfoBarSummary" position="0,0" size="96,64" id="2">
 		<widget source="session.CurrentService" render="Label" position="0,0" size="96,28" font="Regular;16" halign="center" valign="center" >
