@@ -2356,6 +2356,11 @@ int YWPANEL_VFD_GetKeyValue(void)
 	}
 	switch(byte)
 	{
+		case 0x01:
+		{
+			key_val = EXIT_KEY;
+			break;
+		}
 		case 0x02:
 		{
 			key_val = LEFT_KEY;
