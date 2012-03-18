@@ -151,7 +151,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	#   if [ -z "$whichSTM" ]; then
 	#      insmod $MODDIR/stmdvb.ko TSsource0=0
 	#   else
-	insmod $MODDIR/stmdvb.ko reset_tsm=0
+	insmod $MODDIR/stmdvb.ko
 	#   fi
 	#   insmod $MODDIR/player2.ko
 	insmod $MODDIR/player2.ko discardlateframe=0
