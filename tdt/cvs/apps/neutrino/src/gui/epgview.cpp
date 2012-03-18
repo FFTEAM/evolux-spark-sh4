@@ -810,7 +810,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 				case CRCInput::RC_info:
 				case CRCInput::RC_help:
 					bigFonts = bigFonts ? false : true;
-					frameBuffer->paintBackgroundBox (sx, sy- toph, sx+ ox + 1, sy+ oy);
+					frameBuffer->paintBackgroundBox (sx, sy - toph, sx + ox + 1, sy + oy + 1);
 					showTimerEventBar (false);
 					start();
 //printf("bigFonts %d\n", bigFonts);
@@ -866,7 +866,7 @@ void CEpgData::hide()
 		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->setSize((int)(g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->getSize() / BIG_FONT_FAKTOR));
 	}
 
-	frameBuffer->paintBackgroundBox (sx, sy- toph, sx+ ox + 1, sy+ oy);
+	frameBuffer->paintBackgroundBox (sx, sy - toph, sx + ox + 1, sy + oy + 1);
         showTimerEventBar (false);
 }
 
