@@ -4,7 +4,7 @@ DIRECTORY="/media/hdd"
 BUDIR="/tmp/myBU"
 mycams='oscam CCcam Scam gbox camd3 incubusCamd mbox mgcamd'
 
-ISHDD=`mount | grep "autofs/sda"`
+ISHDD=`mount | grep "autofs/sda1"`
 if [ ! -z "$ISHDD" ]; then
 	case $1 in
 		backup)
