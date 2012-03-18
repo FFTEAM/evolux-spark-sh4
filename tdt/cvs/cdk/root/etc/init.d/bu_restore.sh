@@ -1,7 +1,7 @@
 #!bin/sh
 case $1 in
 	backup)
-	DESTINATION=`mount | grep autofs/sda1`
+	DESTINATION=`mount | grep "autofs/sda1"`
 	if [ ! -z "$DESTINATION" ]; then
 		MYBUPATH="/media/hdd"
 	else
