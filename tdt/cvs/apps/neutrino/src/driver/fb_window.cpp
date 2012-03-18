@@ -47,13 +47,13 @@ CFBWindow::CFBWindow(const int _x, const int _y, const int _dx, const int _dy)
 	private_data = (void *) new CPrivateData;
 	((CPrivateData *)private_data)->frameBuffer = CFrameBuffer::getInstance();
 #ifdef __sh__
-	((CPrivateData *)private_data)->Background = ((CPrivateData *)private_data)->frameBuffer->allocPixelBuffer(_dx, _dy);
+	((CPrivateData *)private_data)->Background = ((CPrivateData *)private_data)->frameBuffer->allocPixelBuffer(_dx + 1, _dy);
 #else
 	((CPrivateData *)private_data)->Background = new fb_pixel_t [_dx * _dy];
 #endif
 	if (((CPrivateData *)private_data)->Background != NULL)
 #ifdef __sh__
-		checkSize = ((CPrivateData *)private_data)->frameBuffer->SaveScreen(_x, _y, _dx, _dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background);
+		checkSize = ((CPrivateData *)private_data)->frameBuffer->SaveScreen(_x, _y, _dx + 1, _dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background);
 #else
 		((CPrivateData *)private_data)->frameBuffer->SaveScreen(_x, _y, _dx, _dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background);
 #endif
@@ -66,7 +66,7 @@ CFBWindow::~CFBWindow(void)
 	{
 		if (((CPrivateData *)private_data)->Background != NULL)
 #ifdef __sh__
-			((CPrivateData *)private_data)->frameBuffer->RestoreScreen(x, y, dx, dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background, checkSize);
+			((CPrivateData *)private_data)->frameBuffer->RestoreScreen(x, y, dx + 1, dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background, checkSize);
 #else
 			((CPrivateData *)private_data)->frameBuffer->RestoreScreen(x, y, dx, dy, (fb_pixel_t *)((CPrivateData *)private_data)->Background);
 #endif
