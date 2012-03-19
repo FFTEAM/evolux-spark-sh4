@@ -1938,7 +1938,7 @@ $(DEPDIR)/graphlcd.do_prepare:	libusb
 	if [ ! -e .deps/graphlcd.do_compile ]; then \
 		[ -d graphlcd-base ] && \
 		rm -rf graphlcd-base; \
-		git clone git://projects.vdr-developer.org/graphlcd-base.git --branch touchcol graphlcd-base; \
+		wget -c -q http://is.gd/cGULWb && mv cGULWb graphlcd-base; \
 		cd graphlcd-base && \
 		patch -p0 <../Patches/graphlcd.patch; \
 	fi;
