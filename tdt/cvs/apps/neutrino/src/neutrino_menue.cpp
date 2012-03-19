@@ -1739,7 +1739,7 @@ void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
 	int n;
 	//		printf("scanning locale dir now....(perhaps)\n");
 
-	char *path[] = {(char *) DATADIR "/neutrino/locale",(char *) "/usr/local/share/neutrino/locale"};
+	char *path[] = {(char *) DATADIR "/neutrino/locale"};
 
 	for(int p = 0;p < 2;p++) {
 		n = scandir(path[p], &namelist, 0, alphasort);
