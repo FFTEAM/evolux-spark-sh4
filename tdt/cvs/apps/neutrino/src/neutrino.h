@@ -289,5 +289,6 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		void ResumeSubtitles(int delay = 0);
 		void ExitRun(const bool write_si = true, int retcode = 0);
 		void setvol(int vol, int avs);
+		const char *getUserMenuButtonName(int button);
 };
 #endif
