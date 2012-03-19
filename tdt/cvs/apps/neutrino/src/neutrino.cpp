@@ -3856,7 +3856,8 @@ void CNeutrinoApp::setvol(int vol, int avs)
 	int v = vol * g_settings.volume_percent / 100;
 	if (v > 100)
 		v = 100;
-	audioDecoder->setVolume(v, v);
+	if (!current_muted)
+		audioDecoder->setVolume(v, v);
 }
 
 void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool nowait)
