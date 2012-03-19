@@ -85,9 +85,11 @@ class CInfoViewer
 
 	void show_Data( bool calledFromEvent = false );
 	void paintTime( bool show_dot, bool firstPaint );
+
+	std::string buttonName[4];
+	void showButtons(bool start = false);
 	
-	void showButtons();
-	
+	void showIcon_DD();
 	void showIcon_16_9();
 #ifndef SKIP_CA_STATUS
 	void showIcon_CA_Status(int);

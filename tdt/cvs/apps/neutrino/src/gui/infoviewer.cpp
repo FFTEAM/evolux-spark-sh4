@@ -417,9 +417,10 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 		frameBuffer->paintBox (ChanInfoX, BoxEndY-20, BoxEndX, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND, ROUND_RADIUS, 2); //round
 
 		showSNR();
-		showButtons ();
+		showButtons(true);
 		showIcon_CA_Status(0);
 		showIcon_16_9 ();
+		showIcon_DD();
 		showIcon_VTXT ();
 		showIcon_SubT();
 	}
@@ -799,16 +800,7 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
   } else if (msg == NeutrinoMessages::EVT_ZAP_GOTAPIDS) {
 	if ((*(t_channel_id *) data) == channel_id) {
 	  if (is_visible && showButtonBar) {
-  		const char *dd_icon;
-		if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < g_RemoteControl->current_PIDs.APIDs.size())
-		 && (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
-			dd_icon = "dd.raw";
-		else if (g_RemoteControl->has_ac3)
-			dd_icon = "dd_avail.raw";
-		else
-			dd_icon = "dd_gray.raw";
-
-		frameBuffer->paintIcon (dd_icon, BoxEndX - (ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 3*2), BoxEndY - ICON_Y_1);
+		showIcon_DD ();
 		showButtons ();
 	  }
 	}
@@ -1184,31 +1176,42 @@ void CInfoViewer::show_Data (bool calledFromEvent)
   }
 }
 
-void CInfoViewer::showButtons ()
+void CInfoViewer::showButtons (bool start)
 {
-	int x = ChanInfoX + 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x, BoxEndY - ICON_Y_1);
-	x += 2 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2;
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
-		CNeutrinoApp::getInstance()->getUserMenuButtonName(0), COL_INFOBAR_BUTTONS, 0, true);
+	const char *icon[4] = { NEUTRINO_ICON_BUTTON_RED, NEUTRINO_ICON_BUTTON_GREEN, NEUTRINO_ICON_BUTTON_YELLOW, NEUTRINO_ICON_BUTTON_BLUE };
+	int iconwidth[4] = { NEUTRINO_ICON_BUTTON_RED_WIDTH, NEUTRINO_ICON_BUTTON_GREEN_WIDTH, NEUTRINO_ICON_BUTTON_YELLOW_WIDTH, NEUTRINO_ICON_BUTTON_BLUE_WIDTH };
 
-	x += asize + 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_GREEN,x, BoxEndY - ICON_Y_1);
-	x += 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2;
-        g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
-		CNeutrinoApp::getInstance()->getUserMenuButtonName(1), COL_INFOBAR_BUTTONS, 0, true);
+	if (start)
+		for (int i = 0; i < 4; i++)
+			buttonName[i] = "";
 
-	x += asize + 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x, BoxEndY - ICON_Y_1);
-	x += 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 2;
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
-		CNeutrinoApp::getInstance()->getUserMenuButtonName(2), COL_INFOBAR_BUTTONS, 0, true);
-	
-	x += asize + 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_BLUE, x, BoxEndY - ICON_Y_1);
-	x += 2 + NEUTRINO_ICON_BUTTON_BLUE_WIDTH + 2;
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY + 2, asize,
-		CNeutrinoApp::getInstance()->getUserMenuButtonName(3), COL_INFOBAR_BUTTONS, 0, true);
+	int x = ChanInfoX - asize;
+
+	for (int i = 0; i < 4; i++) {
+		x += asize + 2;
+		if (start)
+			frameBuffer->paintIcon(icon[i], x, BoxEndY - ICON_Y_1);
+		const char *bn =  CNeutrinoApp::getInstance()->getUserMenuButtonName(i);
+		x += 2 + iconwidth[i] + 2;
+		if (strcmp(bn, buttonName[i].c_str())) {
+			frameBuffer->paintBox (x, BoxEndY - 20 , x + asize, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND);
+			buttonName[i] = std::string(bn);
+			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize, bn, COL_INFOBAR_BUTTONS, 0, true);
+		}
+	}
+}
+
+void CInfoViewer::showIcon_DD ()
+{
+	const char *dd_icon;
+	if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < g_RemoteControl->current_PIDs.APIDs.size())
+		&& (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
+		dd_icon = "dd.raw";
+	else if (g_RemoteControl->has_ac3)
+		dd_icon = "dd_avail.raw";
+	else
+		dd_icon = "dd_gray.raw";
+	frameBuffer->paintIcon (dd_icon, BoxEndX - (ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 3*2), BoxEndY - ICON_Y_1);
 }
 
 

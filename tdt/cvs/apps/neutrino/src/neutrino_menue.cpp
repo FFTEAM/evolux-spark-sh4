@@ -3397,7 +3397,7 @@ const char *CNeutrinoApp::getUserMenuButtonName(int button)
 
 	bool return_title = false;
 	neutrino_locale_t loc = NONEXISTANT_LOCALE;
-	char *text;
+	char *text = NULL;
 
 	#define locCheck(L) if(loc != NONEXISTANT_LOCALE) return_title = true; else loc=L;continue
 
