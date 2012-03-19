@@ -417,11 +417,7 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 		frameBuffer->paintBox (ChanInfoX, BoxEndY-20, BoxEndX, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND, ROUND_RADIUS, 2); //round
 
 		showSNR();
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_BLUE, ChanInfoX + 16*3 + asize * 3 + 2*7, BoxEndY - ICON_Y_1);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(ChanInfoX + 16*4 + asize * 3 + 2*8, BoxEndY+2, ButtonWidth - (2 + NEUTRINO_ICON_BUTTON_BLUE_WIDTH + 2 + 2), g_Locale->getText(LOCALE_INFOVIEWER_STREAMINFO), COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-
-		showButton_Audio ();
-		showButton_SubServices ();
+		showButtons ();
 		showIcon_CA_Status(0);
 		showIcon_16_9 ();
 		showIcon_VTXT ();
@@ -802,8 +798,19 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 	if(is_visible) showRecordIcon(true);
   } else if (msg == NeutrinoMessages::EVT_ZAP_GOTAPIDS) {
 	if ((*(t_channel_id *) data) == channel_id) {
-	  if (is_visible && showButtonBar)
-		showButton_Audio ();
+	  if (is_visible && showButtonBar) {
+  		const char *dd_icon;
+		if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < g_RemoteControl->current_PIDs.APIDs.size())
+		 && (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
+			dd_icon = "dd.raw";
+		else if (g_RemoteControl->has_ac3)
+			dd_icon = "dd_avail.raw";
+		else
+			dd_icon = "dd_gray.raw";
+
+		frameBuffer->paintIcon (dd_icon, BoxEndX - (ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 3*2), BoxEndY - ICON_Y_1);
+		showButtons ();
+	  }
 	}
 	return messages_return::handled;
   } else if (msg == NeutrinoMessages::EVT_ZAP_GOTPIDS) {
@@ -820,7 +827,7 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
   } else if (msg == NeutrinoMessages::EVT_ZAP_GOT_SUBSERVICES) {
 	if ((*(t_channel_id *) data) == channel_id) {
 	  if (is_visible && showButtonBar)
-		showButton_SubServices ();
+		showButtons ();
 	}
 	return messages_return::handled;
   } else if (msg == NeutrinoMessages::EVT_ZAP_SUB_COMPLETE) {
@@ -883,15 +890,6 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
   }
 
   return messages_return::unhandled;
-}
-
-void CInfoViewer::showButton_SubServices () {
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, BoxStartX + 15 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2 + asize + 2, BoxEndY- ICON_Y_1);
-	if (!(g_RemoteControl->subChannels.empty ())) {
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(BoxStartX + 18 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 2, BoxEndY+2, asize, g_Locale->getText((g_RemoteControl->are_subchannels) ? LOCALE_INFOVIEWER_SUBSERVICE : LOCALE_INFOVIEWER_SELECTTIME), COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-	} else {
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(BoxStartX + 18 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 2, BoxEndY+2, asize, g_Locale->getText(LOCALE_VIDEOMENU_HEAD), COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-	}
 }
 
 CSectionsdClient::CurrentNextInfo CInfoViewer::getEPG (const t_channel_id for_channel_id, CSectionsdClient::CurrentNextInfo &info)
@@ -1117,10 +1115,7 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 		oldrunningPercent = 255;
 		frameBuffer->paintBackgroundBoxRel (BoxEndX - 108, posy, 112, height2);
 	  }
-	  if (info_CurrentNext.flags & CSectionsdClient::epgflags::has_anything) {
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, ChanInfoX + 2, BoxEndY - ICON_Y_1);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(ChanInfoX + (2 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2), BoxEndY+2, asize, g_Locale->getText(LOCALE_INFOVIEWER_EVENTLIST), COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-	  }
+	  showButtons();
 	}
 
 	height = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->getHeight ();
@@ -1189,32 +1184,33 @@ void CInfoViewer::show_Data (bool calledFromEvent)
   }
 }
 
-void CInfoViewer::showButton_Audio ()
+void CInfoViewer::showButtons ()
 {
-  // green, in case of several APIDs
-  uint32_t count = g_RemoteControl->current_PIDs.APIDs.size ();
-  frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_GREEN, ChanInfoX + 2 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2 + asize + 2, BoxEndY- ICON_Y_1);
+	int x = ChanInfoX + 2;
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x, BoxEndY - ICON_Y_1);
+	x += 2 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2;
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
+		CNeutrinoApp::getInstance()->getUserMenuButtonName(0), COL_INFOBAR_BUTTONS, 0, true);
 
-  if (count > 0) {
-	int selected = g_RemoteControl->current_PIDs.PIDs.selected_apid;
+	x += asize + 2;
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_GREEN,x, BoxEndY - ICON_Y_1);
+	x += 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2;
+        g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
+		CNeutrinoApp::getInstance()->getUserMenuButtonName(1), COL_INFOBAR_BUTTONS, 0, true);
 
-	int sx = ChanInfoX + 2 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 2 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 2;
-
-	frameBuffer->paintBox (sx, BoxEndY-20, sx+asize, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND);
-
-        g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(sx, BoxEndY+2, asize,
-			g_RemoteControl->current_PIDs.APIDs[selected].desc, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-  }
-  const char *dd_icon;
-  if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < count) && (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
-	dd_icon = "dd.raw";
-  else if (g_RemoteControl->has_ac3)
-	dd_icon = "dd_avail.raw";
-  else
-	dd_icon = "dd_gray.raw";
-
-  frameBuffer->paintIcon (dd_icon, BoxEndX - (ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 3*2), BoxEndY - ICON_Y_1);
+	x += asize + 2;
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x, BoxEndY - ICON_Y_1);
+	x += 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 2;
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize,
+		CNeutrinoApp::getInstance()->getUserMenuButtonName(2), COL_INFOBAR_BUTTONS, 0, true);
+	
+	x += asize + 2;
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_BLUE, x, BoxEndY - ICON_Y_1);
+	x += 2 + NEUTRINO_ICON_BUTTON_BLUE_WIDTH + 2;
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY + 2, asize,
+		CNeutrinoApp::getInstance()->getUserMenuButtonName(3), COL_INFOBAR_BUTTONS, 0, true);
 }
+
 
 void CInfoViewer::killTitle ()
 {

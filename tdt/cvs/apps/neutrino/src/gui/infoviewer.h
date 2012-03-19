@@ -86,8 +86,7 @@ class CInfoViewer
 	void show_Data( bool calledFromEvent = false );
 	void paintTime( bool show_dot, bool firstPaint );
 	
-	void showButton_Audio();
-	void showButton_SubServices();
+	void showButtons();
 	
 	void showIcon_16_9();
 #ifndef SKIP_CA_STATUS
