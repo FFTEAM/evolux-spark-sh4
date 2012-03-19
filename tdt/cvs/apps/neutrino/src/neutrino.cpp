@@ -4383,6 +4383,9 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 	else if(actionKey=="savescansettings") {
 		SaveMotorPositions();
 	}
+	else if(actionKey=="savezapitsettings") {
+		setZapitConfig(&zapitCfg);
+	}
 	else if(actionKey=="savesettings") {
 		CHintBox * hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_MAINSETTINGS_SAVESETTINGSNOW_HINT)); // UTF-8
 		hintBox->paint();
