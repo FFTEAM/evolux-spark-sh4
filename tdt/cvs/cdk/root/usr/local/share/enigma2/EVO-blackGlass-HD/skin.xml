@@ -996,6 +996,39 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
  <convert type="ClockToText">Format:%H:%M</convert>
  </widget>
  </screen> -->
+<!-- LCD screen (main) -->
+  <screen name="InfoBarSummary" position="0,0" size="320,240" id="1">
+    <widget source="session.CurrentService" render="Label" position="7,97" size="300,80" font="Regular;40" halign="center" valign="center" foregroundColor="red">
+      <convert type="ServiceName">Name</convert>
+    </widget>
+    <!-- Channellogo (Picon) -->
+    <widget source="session.CurrentService" render="Picon" position="197,11" zPosition="1" size="125,75" alphatest="on">
+      <convert type="ServiceName">Reference</convert>
+    </widget>
+    <widget source="session.Event_Now" render="Progress" position="2,180" size="316,20" borderWidth="3">
+      <convert type="EventTime">Progress</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="3,24" size="150,70" font="LCD;50" halign="center" valign="center" transparent="1" zPosition="0" foregroundColor="yellow">
+      <convert type="ClockToText">Format:%H:%M</convert>
+    </widget>
+    <widget source="global.CurrentTime" render="Label" position="138,7" zPosition="1" size="55,55" font="LCD;35" valign="center" foregroundColor="yellow">
+      <convert type="ClockToText">Format:%S</convert>
+    </widget>
+    <widget font="Regular;28" position="5,204" render="Label" size="300,32" source="session.Event_Now" transparent="1" zPosition="0" halign="center">
+      <convert type="EventName">Name</convert>
+    </widget>
+    <widget source="session.RecordState" render="FixedLabel" text=" " position="2,2" zPosition="1" size="126,20">
+      <convert type="ConfigEntryTest">config.usage.blinking_display_clock_during_recording,True,CheckSourceBoolean</convert>
+      <convert type="ConditionalShowHide">Blink</convert>
+    </widget>
+  </screen>  
+	<!-- LCD screen (menus)  -->
+	<screen name="MenuSummary" position="0,0" size="320,240" id="1">
+		<widget source="parent.title" render="Label" position="6,10" size="308,35" font="LCD;30" halign="center" valign="center" foregroundColor="yellow"/>
+		<widget source="parent.menu" render="Label" position="6,45" size="308,190" font="LCD;40" halign="center" valign="center" foregroundColor="red">
+			<convert type="StringListSelection" />
+		</widget>
+	</screen>
  <screen name="InfoBarSummary" position="0,0" size="132,64">
  <widget font="Regular;16" halign="center" position="6,3" render="Label" size="120,34" source="session.CurrentService" valign="top">
  <convert type="ServiceName">Name</convert>
