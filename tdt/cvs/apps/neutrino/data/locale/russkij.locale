@@ -13,7 +13,7 @@ audiomenu.avsync_am Аудио мастер
 audiomenu.clockrec Время записи
 audiomenu.dolbydigital Dolby Digital
 audiomenu.hdmi_dd DD через HDMI
-audiomenu.head Настройки Аудио
+audiomenu.head Настройки звука
 audiomenu.lirc Управление пультом
 audiomenu.monoleft Левый
 audiomenu.monoright Правый
@@ -77,8 +77,8 @@ audioplayer.spectrum LCD-spectrum
 audioplayer.stop Остановить
 audioplayer.title_artist Альбом, Артист
 audioplayerpicsettings.general Аудиоплеер и Картинки
-AUDIOSelectMenue.head Выбор звука
-AUDIOSelectMenue.no_tracks Нет доступных треков
+AUDIOSelectMenue.head Выбор языка
+AUDIOSelectMenue.no_tracks Нет аудио
 bookmarkmanager.delete Удалить
 bookmarkmanager.name Закладки
 bookmarkmanager.rename Переименовать
@@ -455,7 +455,7 @@ fontsize.infobar_info Информация
 fontsize.infobar_number Номер
 fontsize.infobar_small Маленький
 fontsize.menu Текст меню
-fontsize.menu_info Информация Меню
+fontsize.menu_info Информация меню
 fontsize.menu_title Заголовок меню
 GENRE.ARTS.0 искусство / культура
 GENRE.ARTS.1 исполнительное искусство (танец, пьеса т.д.)
@@ -610,7 +610,7 @@ keybindingmenu.modechange Изменение режима
 keybindingmenu.pagedown Страница вниз
 keybindingmenu.pageup Страница вверх
 keybindingmenu.quickzap Quickzap
-keybindingmenu.RC ПДУ: повтор
+keybindingmenu.RC ПДУ
 keybindingmenu.repeatblock Задержка повтора
 keybindingmenu.repeatblockgeneric Общая задержка
 keybindingmenu.sort Порядок сортировки
@@ -620,7 +620,7 @@ keybindingmenu.tvradiomode ТВ/Радио-режим
 keybindingmenu.zaphistory Список переключений
 keychooser.head Настроить новые кнопки
 keychooser.text1 Нажмите новую кнопку
-keychooser.text2 Подождете несколько секунд для выхода
+keychooser.text2 Подождите несколько секунд
 keychoosermenu.currentkey Текущая кнопка
 keychoosermenu.setnew Настроить новые кнопки
 keychoosermenu.setnone нет кнопки
@@ -629,9 +629,9 @@ languagesetup.select Язык
 lcdcontroler.brightness В работе
 lcdcontroler.brightnessstandby В standby
 lcdcontroler.contrast Контрастность
-lcdmenu.autodimm Авто dimm
-lcdmenu.dim_brightness Яркость dimm
-lcdmenu.dim_time dimm тайм-аут
+lcdmenu.autodimm Автодиммер 
+lcdmenu.dim_brightness Яркость 
+lcdmenu.dim_time Тайм-аут диммера
 lcdmenu.head Настройки Дисплея (VFD)
 lcdmenu.inverse Инвертировать изображение
 lcdmenu.lcdcontroler Контрастность / Яркость
@@ -643,7 +643,7 @@ lcdmenu.statusline.volume Громкость
 mainmenu.audioplayer Аудиоплеер
 mainmenu.clearsectionsd Очистить кеш EPG
 mainmenu.games Игры
-mainmenu.head Меню управления
+mainmenu.head Главное меню
 mainmenu.movieplayer Видеоплеер
 mainmenu.pausesectionsd Чтение EPG
 mainmenu.pictureviewer Просмотр картинок
@@ -806,7 +806,7 @@ moviebrowser.info_parental_lockage_12year 12 лет
 moviebrowser.info_parental_lockage_16year 16 лет
 moviebrowser.info_parental_lockage_18year 18 лет
 moviebrowser.info_parental_lockage_6year 6 лет
-moviebrowser.info_parental_lockage_always Никогда 
+moviebrowser.info_parental_lockage_always Всегда 
 moviebrowser.info_path Путь
 moviebrowser.info_prevplaydate Последняя дата проигр.
 moviebrowser.info_prodcountry Страна
@@ -1319,7 +1319,7 @@ ucodes.failure ВНИМАНИЕ, , mCodes нет в наличии!\nПожал�
 upnpbrowser.head Браузер UPnP
 upnpbrowser.noservers Не найдено UPnP сервисов!
 upnpbrowser.rescan Отсканируйте снова
-upnpbrowser.scanning Сканирование UPnP сервисов.
+upnpbrowser.scanning Сканирование UPnP сервисов...
 usermenu.button_blue Синее меню
 usermenu.button_green Зеленое меню
 usermenu.button_red Красное меню
@@ -1428,7 +1428,7 @@ extramenu.swap.onoff SWAP
 extramenu.boot.head Boot-менеджер 
 extramenu.boot.select Выбор системы:
 extramenu.boot.unchanged без изменений
-extramenu.boot.bootargs.head Параметры загрузки тюнера
+extramenu.boot.bootargs.head Параметры загрузки STB
 extramenu.boot.bootargs.text Не выключайте ваш STB!
 extramenu.fsck Меню FSCK
 extramenu.fsck.select FSCK
@@ -1483,7 +1483,7 @@ dvb.subtitle.placement.top снизу
 onoff.on Вкл
 onoff.off Выкл
 videomenu.psi.contrast Контраст
-videomenu.psi.saturation Цветность
+videomenu.psi.saturation Насыщенность
 videomenu.psi.brightness Яркость
 videomenu.psi.tint Тон
 videomenu.psi Настройки цвета
