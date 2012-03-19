@@ -103,20 +103,20 @@ if [ ! -e /var/etc/.firstboot ]; then
 		if [ "$isactive1" = HDMI ]; then
 			MEMSIZE=12m
 			[ -e /etc/.15m ] && MEMSIZE=15m
-			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv;#HDMI
+			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 		else
 			MEMSIZE=4m
-	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs;#SCART
+	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		fi
 	else	
 		isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
 		if [ "$isactive1" = 2 ]; then
 			MEMSIZE=4m
 #		        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
-			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs;#SCART
+			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		else
 			MEMSIZE=8m
-			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv;#HDMI
+			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 		fi
 	fi
 	echo "LOADING MODULES"   
