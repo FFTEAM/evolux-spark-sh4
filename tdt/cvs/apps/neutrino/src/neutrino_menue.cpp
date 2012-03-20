@@ -1911,7 +1911,9 @@ void CMenuWidget_Network::InitInterfaceList()
 		if (!networkSettings_Interface) {
 			wlanMenuForw = new CMenuForwarder(LOCALE_NETWORKMENU_WLAN, true, NULL, new WLAN_Menu);
 			MyInterfaceChanger = new CInterfaceChangeNotifier(wlanMenuForw);
-			networkSettings_Interface = new CMenuOptionStringChooser(LOCALE_NETWORKMENU_INTERFACE, (char *) interface, true, MyInterfaceChanger, CRCInput::RC_nokey, "", true);
+			networkSettings_Interface = new CMenuOptionStringChooser(LOCALE_NETWORKMENU_INTERFACE,
+				(char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),
+				true, MyInterfaceChanger, CRCInput::RC_nokey, "", true);
 		}
 		it = ifap;
 		while (it) {

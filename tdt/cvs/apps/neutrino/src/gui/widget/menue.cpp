@@ -832,7 +832,7 @@ CMenuOptionStringChooser::CMenuOptionStringChooser(const neutrino_locale_t Optio
 	height      = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 	optionName  = OptionName;
 	active      = Active;
-	optionValue = strdup(OptionValue ? OptionValue : "");
+	optionValue = OptionValue;
 	observ      = Observ;
 
 	directKey         = DirectKey;
@@ -844,7 +844,6 @@ CMenuOptionStringChooser::CMenuOptionStringChooser(const neutrino_locale_t Optio
 
 CMenuOptionStringChooser::~CMenuOptionStringChooser()
 {
-	free(optionValue);
 	options.clear();
 }
 
