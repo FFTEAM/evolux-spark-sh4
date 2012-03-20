@@ -1936,9 +1936,16 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 # graphlcd
 $(DEPDIR)/graphlcd.do_prepare:	libusb
 	if [ ! -e .deps/graphlcd.do_compile ]; then \
-		cd graphlcd-base && \
-		$(MAKE) clean
+		[ -d graphlcd-base ] && \
+		rm -rf graphlcd-base; \
+		cd $(buildprefix)/Archive && \
+		wget -c http://is.gd/cGULWb; \
+		mv cGULWb graphlcd-base.tar.gz; \
+		tar -xzvf graphlcd-base.tar.gz -C $(buildprefix)/; \
+		cd $(buildprefix)/graphlcd-base && \
+		patch -p0 <../Patches/graphlcd.patch; \
 	fi;
+	touch $@
 #	if [ ! -e .deps/graphlcd.do_compile ]; then \
 #		[ -d graphlcd-base ] && \
 #		rm -rf graphlcd-base; \
