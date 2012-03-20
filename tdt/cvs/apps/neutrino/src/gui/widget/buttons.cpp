@@ -29,19 +29,44 @@
 
 void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLocaleManager * const localemanager, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content)
 {
-#if 1
+	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
 	bool keep = true;
-	unsigned int bw[count], bw_sum = 0;
+	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0;
 	for (unsigned int i = 0; i < count; i++) {
-		bw[i] = font->getRenderWidth(localemanager->getText(content[i].locale), true);
-		bw_sum += bw[i];
-		if (bw[i] > buttonwidth)
+		bw[i] = 20 + font->getRenderWidth(localemanager->getText(content[i].locale), true);
+		sp[i] = bw[i] - buttonwidth;
+		if (sp[i] < 0) {
+			spare -= sp[i];
+			sp[i] = 0;
+		} else {
 			keep = false;
+			bw[i] = buttonwidth;
+		}
+		bw_sum += bw[i];
+		missing += sp[i];
 	}
+#if 0
 	if (keep)
 		for (unsigned int i = 0; i < count; i++)
 			bw[i] = buttonwidth;
 	else
+#endif
+	if (sp > 0) {
+		int spare = count * buttonwidth - bw_sum;
+		while (spare > 0 && missing > 0)
+			for (unsigned int i = 0; (i < count) && (spare > 0); i++)
+				if (sp[i] > 0) {
+					bw[i]++;
+					sp[i]--;
+					missing--;
+					spare--;
+				}
+		while (spare > 0)
+			for (unsigned int i = 0; (i < count - 1) && (spare > 0); i++) {
+				bw[i]++;
+				spare--;
+			}
+	} else
 		for (unsigned int i = 0; i < count; i++) {
 			bw[i] *= buttonwidth * count;
 			bw[i] /= bw_sum;
@@ -50,15 +75,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	bw_sum = 0;
 	for (unsigned int i = 0; i < count; i++) {
 		frameBuffer->paintIcon(content[i].button, x + bw_sum, y);
-		font->RenderString(x + bw_sum + 20, y + 19, bw[i] - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true); // UTF-8
+		font->RenderString(x + bw_sum + 20, y + 19, bw[i] - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true, fgcolor); // UTF-8
 		bw_sum += bw[i];
 	}
-
-#else
-	for (unsigned int i = 0; i < count; i++)
-	{
-		frameBuffer->paintIcon(content[i].button, x + i * buttonwidth, y);
-		font->RenderString(x + i * buttonwidth + 20, y + 19, buttonwidth - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true); // UTF-8
-	}
-#endif
 }
