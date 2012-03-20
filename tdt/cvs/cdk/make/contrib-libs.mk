@@ -1939,9 +1939,9 @@ $(DEPDIR)/graphlcd.do_prepare:	libusb
 		[ -d graphlcd-base ] && \
 		rm -rf graphlcd-base; \
 		cd $(buildprefix)/Archive && \
-		[ -d $(buildprefix)/Archive/graphlcd-base-touchcol.tar.gz ] && \
-		rm $(buildprefix)/Archive/graphlcd-base-touchcol.tar.gz; \
-		wget -c http://projects.vdr-developer.org/git/graphlcd-base.git/snapshot/graphlcd-base-touchcol.tar.gz; \
+		if [ ! -e $(buildprefix)/Archive/graphlcd-base-touchcol.tar.gz ]; then \
+			wget -c http://projects.vdr-developer.org/git/graphlcd-base.git/snapshot/graphlcd-base-touchcol.tar.gz; \
+		fi; \
 		tar -xzvf graphlcd-base-touchcol.tar.gz -C $(buildprefix)/; \
 		mv  $(buildprefix)/graphlcd-base-touchcol $(buildprefix)/graphlcd-base; \
 		cd $(buildprefix)/graphlcd-base && \
