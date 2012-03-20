@@ -63,7 +63,7 @@ $(DEPDIR)/%release_evolux:
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
-	( cd $(prefix) && ../flash/spark/spark.sh ); \
+	( cd $(prefix)/flash/spark && ./spark.sh ); \
 	if [ -e $(buildprefix)/makeUpdatePack.sh ] ; then \
 		$(buildprefix)/makeUpdatePack.sh; \
 	fi;
