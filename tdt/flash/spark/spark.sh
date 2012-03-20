@@ -62,23 +62,23 @@ echo "-----------------------------------------------------------------------"
 
 echo "Checking targets..."
 echo "Found targets:"
-if [  -e $TUFSBOXDIR/release_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_with_dev ]; then
 	echo "   1) Prepare Enigma2  jffs2"
 fi
-if [  -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
 	echo "   2) Prepare Neutrino jffs2"
 fi
-if [  -e $TUFSBOXDIR/release_evolux_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   3) Prepare Evolux   jffs2"
 fi
 echo "----------------------------"
-if [  -e $TUFSBOXDIR/release_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_with_dev ]; then
 	echo "   4) Prepare Enigma2  yaffs2"
 fi
-if [  -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
 	echo "   5) Prepare Neutrino yaffs2"
 fi
-if [  -e $TUFSBOXDIR/release_evolux_with_dev ]; then
+if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   6) Prepare Evolux   yaffs2"
 fi
 read -p "Select target (1-6)? "
