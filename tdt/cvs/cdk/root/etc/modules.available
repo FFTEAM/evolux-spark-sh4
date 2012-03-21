@@ -4,6 +4,8 @@
 rt2870sta	# Ralink 2870 USB WLAN
 rt3070sta	# Ralink 2070/3070 USB WLAN
 rt5370sta	# Ralink 5370 USB WLAN
+rt8712u		# Ralink 8712 USB WLAN
+rt8192cu	# Ralink 8192 USB WLAN
 zd1201		# ZYDAS  1201 USB WLAN
 usbserial pl2303	# Prolific PL-2303 USB-to-serial
 
