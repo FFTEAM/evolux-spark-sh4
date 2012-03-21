@@ -21,7 +21,7 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(prefix)/release_with_dev/usr/share $(prefix)/release_evolux_with_dev/usr/
 	cp -RP $(prefix)/release_with_dev/usr/tuxtxt $(prefix)/release_evolux_with_dev/usr/
 	cp -RP $(prefix)/release_with_dev/usr/lib $(prefix)/release_evolux_with_dev/usr/
-	mv $(prefix)/release_evolux_with_dev/usr/local/share/fonts/neutrino.ttf $(prefix)/release_evolux_with_dev/usr/share/fonts
+	mv $(prefix)/release_evolux_with_dev/usr/local/share/fonts/*.ttf $(prefix)/release_evolux_with_dev/usr/share/fonts
 	rm -rf $(prefix)/release_evolux_with_dev/usr/local/share/fonts
 	cp -RP $(prefix)/release_with_dev/usr/local $(prefix)/release_evolux_with_dev/usr/
 	cp -RP $(prefix)/release_with_dev/etc/network/interfaces $(prefix)/release_evolux_with_dev/etc/network/
