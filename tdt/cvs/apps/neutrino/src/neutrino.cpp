@@ -4568,6 +4568,19 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 
 		return menu_return::RETURN_REPAINT;
 	}
+	else if(actionKey == "select_font") {
+		parent->hide();
+		CFileBrowser fileBrowser;
+		CFileFilter fileFilter;
+		fileFilter.addFilter("ttf");
+		fileBrowser.Filter = &fileFilter;
+		if (fileBrowser.exec(FONTDIR) == true) {
+			strcpy(g_settings.font_file, fileBrowser.getSelectedFile()->Name.c_str());
+			printf("[neutrino] new font file %s\n", fileBrowser.getSelectedFile()->Name.c_str());
+			SetupFonts();
+		}
+		return menu_return::RETURN_REPAINT;
+	}
 	else if(actionKey == "movieplugin") {
 		parent->hide();
 		CMenuWidget MoviePluginSelector(LOCALE_MOVIEPLAYER_DEFPLUGIN, "features.raw", 350);
