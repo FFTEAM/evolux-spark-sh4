@@ -9,6 +9,8 @@ TMPROOTDIR=$TMPDIR/ROOT
 TMPKERNELDIR=$TMPDIR/KERNEL
 OUTDIR=$CURDIR/out
 
+mkdir -p $OUTDIR >/dev/null 2>&1
+
 if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
