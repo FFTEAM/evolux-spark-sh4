@@ -23,7 +23,7 @@ PAD=$CURDIR/../common/pad
 OUTFILE=$OUTDIR/e2jffs2.img
 
 if [ ! -e $OUTDIR ]; then
-  mkdir $OUTDIR
+  mkdir -p $OUTDIR
 fi
 
 if [ -e $OUTFILE ]; then
