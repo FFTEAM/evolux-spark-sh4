@@ -228,7 +228,7 @@ _repeat:
 		}
 		if(abort_scan)
 			return 0;
-		if(0 /*scan_mode*/) {//FIXME
+		if(1 /*scan_mode*/) {//FIXME
 			TsidOnid = get_sdt_TsidOnid(satellitePosition, tI->second.feparams.frequency/1000);
 			DBG("[scan] actual tp-id %llx\n", TsidOnid);
 			if(!TsidOnid)
@@ -251,13 +251,15 @@ _repeat:
 		//INFO("parsing SDT (tsid:onid %04x:%04x)", tI->second.transport_stream_id, tI->second.original_network_id);
 		status = parse_sdt(&tI->second.transport_stream_id, &tI->second.original_network_id, satellitePosition, tI->second.feparams.frequency/1000);
 		if(status < 0) {
-			printf("[scan] SDT failed !\n");
-			continue;
+			fprintf(stderr, "[scan] SDT failed !\n");
+			// continue; //FIXME
 		}
 
+fprintf(stderr, "actual tp-id: %llx\n", TsidOnid);
 		TsidOnid = CREATE_TRANSPONDER_ID_FROM_SATELLITEPOSITION_ORIGINALNETWORK_TRANSPORTSTREAM_ID(
 				tI->second.feparams.frequency/1000, satellitePosition, tI->second.original_network_id, 
 				tI->second.transport_stream_id);
+fprintf(stderr, "fresh tp-id: %llx\n", TsidOnid);
 
 		//scanedtransponders.insert(std::pair <transponder_id_t,bool> (TsidOnid, true));
 
@@ -300,11 +302,13 @@ _repeat:
 			add_to_scan(tI->first, &tI->second.feparams, tI->second.polarization, false);
 		}
 		nittransponders.clear();
-		printf("\n\n[scan] found %d additional transponders from nit\n", scantransponders.size());
-		if(scantransponders.size()) {
-			eventServer->sendEvent ( CZapitClient::EVT_SCAN_NUM_TRANSPONDERS, CEventServer::INITID_ZAPIT,
-				&found_transponders, sizeof(found_transponders));
-			goto _repeat;
+		if (scan_sat_mode) {
+			fprintf(stderr, "\n\n[scan] found %d additional transponders from nit\n", scantransponders.size());
+			if(scantransponders.size()) {
+				eventServer->sendEvent ( CZapitClient::EVT_SCAN_NUM_TRANSPONDERS, CEventServer::INITID_ZAPIT,
+					&found_transponders, sizeof(found_transponders));
+				goto _repeat;
+			}
 		}
 	}
 	return 0;
