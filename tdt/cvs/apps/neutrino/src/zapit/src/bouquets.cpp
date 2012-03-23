@@ -442,6 +442,7 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 	ZapitChannelList unusedChannels;
 	set<t_channel_id> chans_processed;
 	bool tomake = config.getBool("makeRemainingChannelsBouquet", true);
+	bool tomake_new = config.getBool("makeNewChannelsBouquet", true);
 
 	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
 		it->second.number = 0;
@@ -459,28 +460,29 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 			if(!(*jt)->pname && !(*it)->bUser) (*jt)->pname = (char *) (*it)->Name.c_str();
 		}
 	}
+
+	if(tomake_new) {
+		if (newChannels)
+			deleteBouquet(newChannels);
+		newChannels = addBouquet("extra.zapit_bouquetname_newchannels", true); // UTF-8 encoded
+		for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
+			if (it->second.isNewChannel)
+				newChannels->addService(&it->second);
+
+		if ((newChannels->tvChannels.empty()) && (newChannels->radioChannels.empty())) {
+			deleteBouquet(newChannels);
+			newChannels = NULL;
+			return;
+		}
+	}
+
 	if(!tomake)
 		return;
 
-	// TODO: use locales
-	remainChannels = addBouquet((Bouquets.size() == 0) ? "All Channels" : "Other", false); // UTF-8 encoded
-
-	if (newChannels) {
-		deleteBouquet(newChannels);
-		newChannels = NULL;
-	}
-
-	// TODO: use locales
-	newChannels = addBouquet("New Channels", false); // UTF-8 encoded
-	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
-		if (it->second.isNewChannel)
-			newChannels->addService(&it->second);
-
-	if ((newChannels->tvChannels.empty()) && (newChannels->radioChannels.empty())) {
-		deleteBouquet(newChannels);
-		newChannels = NULL;
-		return;
-	}
+	if (Bouquets.size() == 0)
+		remainChannels = addBouquet("All Channels", false); // UTF-8 encoded
+	else
+		remainChannels = addBouquet("extra.zapit_bouquetname_others", true); // UTF-8 encoded
 
 	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
 		if (chans_processed.find(it->first) == chans_processed.end())

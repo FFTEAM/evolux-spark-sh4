@@ -329,7 +329,10 @@ extra.zapit_backup Backup channels to /tmp
 extra.zapit_fast_zap fast zap
 extra.zapit_fe_timeout Tune timeout
 extra.zapit_hvoltage High (13.5/18.5) voltage
-extra.zapit_make_bouquet Create bouquet "Others"
+extra.zapit_make_bouquet Create bouquet "Other Channels"
+extra.zapit_make_newbouquet Bouquet "New Channels" erstellen
+extra.zapit_bouquetname_others Other Channels
+extra.zapit_bouquetname_newchannels New Channels
 extra.zapit_menu Zapit options
 extra.zapit_motor_speed Motor moving speed (10 = 1deg/sec)
 extra.zapit_restore Restore channels from /tmp

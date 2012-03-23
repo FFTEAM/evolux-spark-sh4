@@ -152,6 +152,7 @@ typedef struct Zapit_config {
 	int motorRotationSpeed;
 	int writeChannelsNames;
 	int makeRemainingChannelsBouquet;
+	int makeNewChannelsBouquet;
 	int saveLastChannel;
 	int rezapTimeout;
 	int feTimeout;

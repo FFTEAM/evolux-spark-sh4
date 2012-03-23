@@ -330,6 +330,9 @@ extra.zapit_fast_zap zap fort
 extra.zapit_fe_timeout Tune timeout
 extra.zapit_hvoltage Høy (13.5/18.5) volt
 extra.zapit_make_bouquet Lag bouquet "Andre"
+extra.zapit_make_newbouquet Lag bouquet "Nye kanaler"
+extra.zapit_bouquetname_others Andre kanaler
+extra.zapit_bouquetname_newchannels Nye kanaler
 extra.zapit_menu Zapit valg
 extra.zapit_motor_speed Motor flytte fart (10 = 1deg/sek)
 extra.zapit_restore Gjenopprett kanaler fra /tmp

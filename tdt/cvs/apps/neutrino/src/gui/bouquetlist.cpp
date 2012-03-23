@@ -67,7 +67,6 @@ CBouquetList::CBouquetList(const char * const Name)
 		name = g_Locale->getText(LOCALE_BOUQUETLIST_HEAD);
 	else
 		name = Name;
-		
 }
 
 CBouquetList::~CBouquetList()
@@ -462,8 +461,13 @@ void CBouquetList::paintItem(int pos)
 	int npos = liststart + pos;
 	const char * name = NULL;
 
-	if(npos < (int) Bouquets.size())
+	if(npos < (int) Bouquets.size()) {
 		name = (Bouquets[npos]->zapitBouquet && Bouquets[npos]->zapitBouquet->bFav) ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : Bouquets[npos]->channelList->getName();
+		if(!strcmp(name, "extra.zapit_bouquetname_others"))
+			name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+		else if(!strcmp(name, "extra.zapit_bouquetname_newchannels"))
+			name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+	}
 
 	if (npos == (int) selected) {
 		color   = COL_MENUCONTENTSELECTED;

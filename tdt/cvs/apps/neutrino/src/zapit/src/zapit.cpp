@@ -2371,6 +2371,7 @@ void setZapitConfig(Zapit_config * Cfg)
 	config.setInt32("motorRotationSpeed", motorRotationSpeed);
 	config.setBool("writeChannelsNames", Cfg->writeChannelsNames);
 	config.setBool("makeRemainingChannelsBouquet", Cfg->makeRemainingChannelsBouquet);
+	config.setBool("makeNewChannelsBouquet", Cfg->makeNewChannelsBouquet);
 	config.setBool("saveLastChannel", Cfg->saveLastChannel);
 	fastZap = Cfg->fastZap;
 	sortNames = Cfg->sortNames;
@@ -2397,6 +2398,7 @@ void sendConfig(int connfd)
 	Cfg.motorRotationSpeed = motorRotationSpeed;
 	Cfg.writeChannelsNames = config.getBool("writeChannelsNames", true);
 	Cfg.makeRemainingChannelsBouquet = config.getBool("makeRemainingChannelsBouquet", true);
+	Cfg.makeNewChannelsBouquet = config.getBool("makeNewChannelsBouquet", true);
 	Cfg.saveLastChannel = config.getBool("saveLastChannel", true);
 	Cfg.fastZap = fastZap;
 	Cfg.sortNames = sortNames;
@@ -2420,6 +2422,7 @@ void getZapitConfig(Zapit_config *Cfg)
         Cfg->motorRotationSpeed = motorRotationSpeed;
         Cfg->writeChannelsNames = config.getBool("writeChannelsNames", true);
         Cfg->makeRemainingChannelsBouquet = config.getBool("makeRemainingChannelsBouquet", true);
+        Cfg->makeNewChannelsBouquet = config.getBool("makeNewChannelsBouquet", true);
         Cfg->saveLastChannel = config.getBool("saveLastChannel", true);
         Cfg->fastZap = fastZap;
         Cfg->sortNames = sortNames;

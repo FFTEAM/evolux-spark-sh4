@@ -1563,7 +1563,16 @@ void CChannelList::paintHead()
 {
 	// head
 	frameBuffer->paintBoxRel(x,y, width,theight+0, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 1);//round
-	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width- 65, name, COL_MENUHEAD, 0, true); // UTF-8
+
+	string _name;
+	if(name == "extra.zapit_bouquetname_others")
+		_name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+	else if(name == "extra.zapit_bouquetname_newchannels")
+		_name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+	else
+		_name = name;
+
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width- 65, _name, COL_MENUHEAD, 0, true); // UTF-8
 
 	int ButtonWidth = (width - 20) / 4;
 
