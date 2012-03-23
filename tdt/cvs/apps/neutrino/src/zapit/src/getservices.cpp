@@ -30,6 +30,8 @@
 #include <math.h>
 #include <sys/time.h>
 
+#include <set>
+
 extern xmlDocPtr scanInputParser;
 extern transponder_list_t transponders;
 extern tallchans allchans;
@@ -469,7 +471,7 @@ do_current:
 	return 0;
 }
 
-//#define SAVE_DEBUG
+#define SAVE_DEBUG
 void zapit_cp(char * from, char * to)
 {
         char cmd[256] = "cp -f ";
@@ -611,7 +613,7 @@ void SaveServices(bool tocopy)
 	int i = 0;
 	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
 		if (chans_processed.find(it->first) == chans_processed.end())
-			printf("unsed channel %d sat %d freq %d sid %04X: %s\n", ++i, it->second.getSatellitePosition(), it->second.getFreqId(), it->second.getServiceId(), it->second.getName().c_str());
+			fprintf(stderr, "unused channel %d sat %d freq %d sid %04X tpid:%llx: %s\n", ++i, it->second.getSatellitePosition(), it->second.getFreqId(), it->second.getServiceId(), it->second.getTransponderId(), it->second.getName().c_str());
 	chans_processed.clear();
 #endif
 	printf("processed channels: %d\n", processed);

@@ -85,7 +85,7 @@ stopping of Video in the player ;)
         }		
 #endif
         printf("ok\n");
-	return 0;
+	return true;
 }
 
 bool cDemux::Stop(void)

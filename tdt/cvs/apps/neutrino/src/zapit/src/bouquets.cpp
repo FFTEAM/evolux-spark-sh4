@@ -254,7 +254,7 @@ void CBouquetManager::saveBouquets(void)
 	bouq_fd = fopen(BOUQUETS_XML, "w");
 	fprintf(bouq_fd, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<zapit>\n");
 	for (unsigned int i = 0; i < Bouquets.size(); i++) {
-		if (Bouquets[i] != remainChannels) {
+		if (Bouquets[i] != remainChannels && Bouquets[i] != newChannels) {
 DBG("save Bouquets: name %s user: %d\n", Bouquets[i]->Name.c_str(), Bouquets[i]->bUser);
 			if(!Bouquets[i]->bUser) {
 				writeBouquetHeader(bouq_fd, i, convert_UTF8_To_UTF8_XML(Bouquets[i]->Name.c_str()).c_str());
@@ -276,7 +276,7 @@ void CBouquetManager::saveUBouquets(void)
 	ubouq_fd = fopen(UBOUQUETS_XML, "w");
 	fprintf(ubouq_fd, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<zapit>\n");
 	for (unsigned int i = 0; i < Bouquets.size(); i++) {
-		if (Bouquets[i] != remainChannels) {
+		if (Bouquets[i] != remainChannels && Bouquets[i] != newChannels) {
 			if(Bouquets[i]->bUser) {
 				writeBouquetHeader(ubouq_fd, i, convert_UTF8_To_UTF8_XML(Bouquets[i]->Name.c_str()).c_str());
 				writeBouquetChannels(ubouq_fd, i, true);
@@ -464,6 +464,23 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 
 	// TODO: use locales
 	remainChannels = addBouquet((Bouquets.size() == 0) ? "All Channels" : "Other", false); // UTF-8 encoded
+
+	if (newChannels) {
+		deleteBouquet(newChannels);
+		newChannels = NULL;
+	}
+
+	// TODO: use locales
+	newChannels = addBouquet("New Channels", false); // UTF-8 encoded
+	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
+		if (it->second.isNewChannel)
+			newChannels->addService(&it->second);
+
+	if ((newChannels->tvChannels.empty()) && (newChannels->radioChannels.empty())) {
+		deleteBouquet(newChannels);
+		newChannels = NULL;
+		return;
+	}
 
 	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
 		if (chans_processed.find(it->first) == chans_processed.end())

@@ -140,7 +140,7 @@ unsigned short parse_ES_info(const unsigned char * const buffer, CZapitChannel *
 					unsigned char teletext_type=buffer[pos + 5*fIdx + 5]>> 3;
 					unsigned char teletext_magazine_number = buffer[pos + 5*fIdx + 5] & 7;
 					unsigned char teletext_page_number=buffer[pos + 5*fIdx + 6];
-fprintf(stderr, "[pmt] teletext type %x mag %x page %x lang %s\n", teletext_type, teletext_magazine_number, teletext_page_number, tmp_Lang);
+//fprintf(stderr, "[pmt] teletext type %x mag %x page %x lang %s\n", teletext_type, teletext_magazine_number, teletext_page_number, tmp_Lang);
 					if (teletext_type==0x01)
 						channel->setTeletextLang(tmp_Lang);
 					if (teletext_type==0x02){ // subtitle

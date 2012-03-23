@@ -252,14 +252,12 @@ _repeat:
 		status = parse_sdt(&tI->second.transport_stream_id, &tI->second.original_network_id, satellitePosition, tI->second.feparams.frequency/1000);
 		if(status < 0) {
 			fprintf(stderr, "[scan] SDT failed !\n");
-			// continue; //FIXME
+			continue;
 		}
 
-fprintf(stderr, "actual tp-id: %llx\n", TsidOnid);
 		TsidOnid = CREATE_TRANSPONDER_ID_FROM_SATELLITEPOSITION_ORIGINALNETWORK_TRANSPORTSTREAM_ID(
 				tI->second.feparams.frequency/1000, satellitePosition, tI->second.original_network_id, 
 				tI->second.transport_stream_id);
-fprintf(stderr, "fresh tp-id: %llx\n", TsidOnid);
 
 		//scanedtransponders.insert(std::pair <transponder_id_t,bool> (TsidOnid, true));
 
@@ -474,6 +472,9 @@ void *start_scanthread(void *scanmode)
 
 	scan_mode = mode & 0xFF;// NIT (0) or fast (1)
 	scan_sat_mode = mode & 0xFF00; // single = 0, all = 1
+
+	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
+                it->second.isNewChannel = false;
 
 	printf("[zapit] scan mode %s, satellites %s\n", scan_mode ? "fast" : "NIT", scan_sat_mode ? "all" : "single");
 	CZapitClient myZapitClient;

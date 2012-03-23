@@ -146,6 +146,7 @@ class CZapitChannel
 
 	public:
 		bool bAlwaysLocked;
+		bool isNewChannel;
 
 		int             number;
 		CChannelEvent   currentEvent,nextEvent;

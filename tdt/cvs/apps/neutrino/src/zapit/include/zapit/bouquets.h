@@ -60,6 +60,7 @@ class CBouquetManager
 {
  private:
 	CZapitBouquet * remainChannels;
+	CZapitBouquet * newChannels;
 
 	void makeRemainingChannelsBouquet(void);
 	void parseBouquetsXml            (const xmlNodePtr root, bool ub = false);
@@ -68,7 +69,7 @@ class CBouquetManager
 	void writeBouquetChannels        (FILE * bouq_fd, uint32_t i, bool bUser = false);
 
  public:
-		CBouquetManager() { remainChannels = NULL; };
+		CBouquetManager() { remainChannels = NULL; newChannels = NULL; };
 		class ChannelIterator
 		{
 			private:

@@ -498,7 +498,7 @@ void service_descriptor(const unsigned char * const buffer, const t_service_id s
 	if(service_wr) {
 		pair<map<t_channel_id, CZapitChannel>::iterator,bool> ret;
 		DBG("New channel ===== %llx:::%llx %s\n", channel_id, tpid, serviceName.c_str());
-		if(freq == 11758 || freq == 11778) printf("New channel ===== %llx:::%llx %s\n", channel_id, tpid, serviceName.c_str()); //FIXME debug
+		//if(freq == 11758 || freq == 11778) printf("New channel ===== %llx:::%llx %s\n", channel_id, tpid, serviceName.c_str()); //FIXME debug
 		ret = allchans.insert (
 				std::pair <t_channel_id, CZapitChannel> (
 					channel_id,
@@ -514,6 +514,7 @@ void service_descriptor(const unsigned char * const buffer, const t_service_id s
 					)
 				);
 		ret.first->second.scrambled = free_ca;
+		ret.first->second.isNewChannel = true;
 		channel = &ret.first->second;
 	}
 
