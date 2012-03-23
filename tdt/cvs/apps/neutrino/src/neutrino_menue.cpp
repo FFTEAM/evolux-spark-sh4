@@ -1416,9 +1416,7 @@ void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget &scanSe
 	service.addItem(GenericMenuBack);
 	service.addItem(GenericMenuSeparatorLine);
  	service.addItem(new CMenuForwarder(LOCALE_SERVICEMENU_SCANTS    , true, NULL, &scanSettings, "savesettings", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED) );
-#if 0 // set to 1 to enable zapit menu
 	service.addItem(new CMenuForwarder(LOCALE_EXTRA_ZAPIT_MENU      , true, NULL, zapit_menu, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
-#endif
 	service.addItem(new CMenuForwarder(LOCALE_SERVICEMENU_RELOAD    , true, NULL, this, "reloadchannels", CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW));
 	service.addItem(new CMenuForwarder(LOCALE_BOUQUETEDITOR_NAME    , true, NULL, new CBEBouquetWidget(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE ));
 
