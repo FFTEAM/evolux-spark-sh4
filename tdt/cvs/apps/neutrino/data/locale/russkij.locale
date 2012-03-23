@@ -328,20 +328,23 @@ extra.use_log Лог в /tmp/log
 extra.west Запад
 extra.zap_cycle Цикл Zap
 extra.zapit_backup Копия каналов в /tmp
-extra.zapit_fast_zap Быстрый zap
+extra.zapit_fast_zap Быстрое переключение
 extra.zapit_fe_timeout Tune timeout
 extra.zapit_hvoltage Повышенное (13.5/18.5) напряжение
-extra.zapit_make_bouquet Хранить список Remaining каналов
+extra.zapit_make_bouquet Создать пакет "Прочее"
+extra.zapit_make_newbouquet Создать пакет "Новые"
+extra.zapit_bouquetname_others Прочее
+extra.zapit_bouquetname_newchannels Новые каналы
 extra.zapit_menu Параметры Zapit
 extra.zapit_motor_speed Скорость (10=1 гр/с)
 extra.zapit_restore Восстановить каналы из /tmp
 extra.zapit_rezap_time Re-Zap on emu switch time
-extra.zapit_save_last_chan Сохранить последний канал
+extra.zapit_save_last_chan Помнить последний
 extra.zapit_scan_sdt Обновить SDT
 extra.zapit_scanpids Сканировать пиды
-extra.zapit_sdt_changed Каналы изменились, перегрузка настроек.
-extra.zapit_sort_names Сортировать каналы по имени
-extra.zapit_write_names Имена каналов в bouquets.xml
+extra.zapit_sdt_changed Каналы изменились, перегрузка настроек...
+extra.zapit_sort_names Сортировать каналы 
+extra.zapit_write_names Имена в bouquets.xml
 fan_speed Скорость кулера CPU
 favorites.addchannel Этот канал будет добавлен \nв пакет каналов "Избранное". \n Это займет несколько секунд...
 favorites.bouquetname Избранное
@@ -979,7 +982,7 @@ options.fb Буфер кадров
 options.null null
 options.off Выкл
 options.on Вкл
-options.on.without_messages Без сообщения
+options.on.without_messages молча
 options.serial СОМ
 parentallock.changepin Изменить PIN-код
 parentallock.changepin_hint1 Введите новый PIN-код.
