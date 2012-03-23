@@ -12,6 +12,11 @@ class fbClass
 	int fd;
 	unsigned int xRes, yRes, stride, bpp;
 #if defined(__sh__) 
+	struct stmfbio_output_configuration outcfg;
+	struct stmfbio_outputinfo outinfo;
+	struct stmfbio_planeinfo planemode;
+	struct stmfbio_var_screeninfo_ex infoex;
+	
 	unsigned int xResFB, yResFB; 
 	int topDiff, leftDiff, rightDiff, bottomDiff; 
 	unsigned char *lfb_direct;

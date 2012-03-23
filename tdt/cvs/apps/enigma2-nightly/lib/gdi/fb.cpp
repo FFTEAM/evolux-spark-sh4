@@ -8,6 +8,9 @@
 #include <linux/kd.h>
 
 #include <lib/gdi/fb.h>
+#ifdef __sh__
+#include <linux/stmfb.h>
+#endif
 
 #ifndef FBIO_WAITFORVSYNC
 #define FBIO_WAITFORVSYNC _IOW('F', 0x20, __u32)
@@ -93,9 +96,11 @@ nolfb:
 int fbClass::showConsole(int state)
 {
 #if defined(__sh__) 
-	int fd=open("/dev/ttyAS1", O_RDWR); 
+//	int fd=open("/dev/ttyAS1", O_RDWR); 
+	int fd=open("/dev/null", O_RDWR); // [spider] changed it because conflict with hdbox frontpanel
 #else 
-	int fd=open("/dev/vc/0", O_RDWR);
+//	int fd=open("/dev/vc/0", O_RDWR);
+ 	int fd=open("/dev/tty0", O_RDWR);
 	if(fd>=0)
 	{
 		if(ioctl(fd, KDSETMODE, state?KD_TEXT:KD_GRAPHICS)<0)
@@ -187,8 +192,10 @@ int fbClass::SetMode(unsigned int nxRes, unsigned int nyRes, unsigned int nbpp)
 		printf("fb failed\n");
 	}
 	stride=fix.line_length;
-#if not defined(__sh__) 
-	memset(lfb, 0, stride*yRes);
+#if defined(__sh__) 
+	memset(lfb_direct, 0, stride*yRes);
+#else
+ 	memset(lfb, 0, stride*yRes);
 #endif
 	return 0;
 }
@@ -209,6 +216,14 @@ int fbClass::waitVSync()
 void fbClass::blit()
 {
 #if defined(__sh__) 
+	int modefd=open("/proc/stb/video/3d_mode", O_RDWR);
+	char buf[16] = "off";
+	if(modefd > 0){
+		read(modefd, buf, 15);
+		buf[15]='\0';
+		close(modefd);
+	}
+
 	STMFBIO_BLT_DATA  bltData; 
 	memset(&bltData, 0, sizeof(STMFBIO_BLT_DATA)); 
 	bltData.operation  = BLT_OP_COPY; 
@@ -216,18 +231,66 @@ void fbClass::blit()
 	bltData.srcPitch   = xResFB * 4; 
 	bltData.dstOffset  = 0; 
 	bltData.dstPitch   = xRes*4; 
-	bltData.src_top    = 0; bltData.src_left   = 0; 
-	bltData.src_right  = xResFB; bltData.src_bottom = yResFB; 
+	bltData.src_top    = 0; 
+	bltData.src_left   = 0; 
+	bltData.src_right  = xResFB; 
+	bltData.src_bottom = yResFB; 
 	bltData.srcFormat = SURF_BGRA8888; bltData.dstFormat = SURF_BGRA8888;
 	bltData.srcMemBase = STMFBGP_FRAMEBUFFER; bltData.dstMemBase = STMFBGP_FRAMEBUFFER; 
 	bltData.dst_top    = 0 + topDiff; 
 	bltData.dst_left   = 0 + leftDiff; 
 	bltData.dst_right  = xRes + rightDiff; 
 	bltData.dst_bottom = yRes + bottomDiff; 
-	if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+
+	if(strncmp(buf,"sbs",3)==0){
+		bltData.dst_top    = 0 + topDiff; 
+		bltData.dst_left   = 0 + leftDiff/2; 
+		bltData.dst_right  = xRes/2 + rightDiff/2; 
+		bltData.dst_bottom = yRes + bottomDiff; 
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+		{ 
+			perror("FBIO_BLIT"); 
+		}
+		bltData.dst_top    = 0 + topDiff; 
+		bltData.dst_left   = xRes/2 + leftDiff/2; 
+		bltData.dst_right  = xRes + rightDiff/2; 
+		bltData.dst_bottom = yRes + bottomDiff; 
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+		{ 
+			perror("FBIO_BLIT"); 
+		}
+	}else if(strncmp(buf,"tab",3)==0){
+		bltData.dst_top    = 0 + topDiff/2; 
+		bltData.dst_left   = 0 + leftDiff; 
+		bltData.dst_right  = xRes + rightDiff; 
+		bltData.dst_bottom = yRes/2 + bottomDiff/2; 
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+		{ 
+			perror("FBIO_BLIT"); 
+		}
+		bltData.dst_top    = yRes/2 + topDiff/2; 
+		bltData.dst_left   = 0 + leftDiff; 
+		bltData.dst_right  = xRes + rightDiff; 
+		bltData.dst_bottom = yRes + bottomDiff/2; 
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+		{ 
+			perror("FBIO_BLIT"); 
+		}
+	}else{
+		bltData.dst_top    = 0 + topDiff; 
+		bltData.dst_left   = 0 + leftDiff; 
+		bltData.dst_right  = xRes + rightDiff; 
+		bltData.dst_bottom = yRes + bottomDiff; 
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0) 
+		{ 
+			perror("FBIO_BLIT"); 
+		}
+	
+	}
+	if(ioctl(fd, STMFBIO_SYNC_BLITTER) < 0)
 	{ 
-		perror("FBIO_BLIT"); 
-	} 
+		perror("STMFBIO_SYNC_BLITTER"); 
+	}
 #else 
 	if (m_manual_blit == 1) {
 		if (ioctl(fd, FBIO_BLIT) < 0)
@@ -264,6 +327,26 @@ int fbClass::lock()
 	}
 	else
 		locked = 1;
+
+#if defined(__sh__) 
+	outcfg.outputid = STMFBIO_OUTPUTID_MAIN;
+	if (ioctl( fd, STMFBIO_GET_OUTPUT_CONFIG, &outcfg ) < 0)
+		perror("STMFBIO_GET_OUTPUT_CONFIG\n");
+
+	outinfo.outputid = STMFBIO_OUTPUTID_MAIN;
+	if (ioctl( fd, STMFBIO_GET_OUTPUTINFO, &outinfo ) < 0)
+	perror("STMFBIO_GET_OUTPUTINFO\n");
+
+	//if (ioctl( fd, STMFBIO_GET_VAR_SCREENINFO_EX, &infoex ) < 0)
+	//	printf("ERROR\n");
+
+	planemode.layerid = 0;
+	if (ioctl( fd, STMFBIO_GET_PLANEMODE, &planemode ) < 0)
+		perror("STMFBIO_GET_PLANEMODE\n");
+
+	if (ioctl( fd, STMFBIO_GET_VAR_SCREENINFO_EX, &infoex ) < 0)
+		perror("STMFBIO_GET_VAR_SCREENINFO_EX\n");
+#endif
 	return fd;
 }
 
@@ -274,6 +357,24 @@ void fbClass::unlock()
 	if (locked == 2)  // re-enable manualBlit
 		enableManualBlit();
 	locked=0;
+
+#if defined(__sh__) 
+	if (ioctl( fd, STMFBIO_SET_VAR_SCREENINFO_EX, &infoex ) < 0)
+		perror("STMFBIO_SET_VAR_SCREENINFO_EX\n");
+
+	if (ioctl( fd, STMFBIO_SET_PLANEMODE, &planemode ) < 0)
+		perror("STMFBIO_SET_PLANEMODE\n");
+
+	if (ioctl( fd, STMFBIO_SET_VAR_SCREENINFO_EX, &infoex ) < 0)
+		perror("STMFBIO_SET_VAR_SCREENINFO_EX\n");
+
+	if (ioctl( fd, STMFBIO_SET_OUTPUTINFO, &outinfo ) < 0)
+		perror("STMFBIO_SET_OUTPUTINFO\n");
+
+	if (ioctl( fd, STMFBIO_SET_OUTPUT_CONFIG, &outcfg ) < 0)
+		perror("STMFBIO_SET_OUTPUT_CONFIG\n");
+#endif
+
 	SetMode(xRes, yRes, bpp);
 	PutCMAP();
 }
