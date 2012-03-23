@@ -295,19 +295,20 @@ _repeat:
 	if(!scan_mode) {
 		printf("[scan] found %d transponders (%d failed) and %d channels\n", found_transponders, failed_transponders, found_channels);
 		scantransponders.clear();
-		for (tI = nittransponders.begin(); tI != nittransponders.end(); tI++) {
-//int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t polarity, bool fromnit = 0)
-			add_to_scan(tI->first, &tI->second.feparams, tI->second.polarization, false);
-		}
-		nittransponders.clear();
 		if (scan_sat_mode) {
+			for (tI = nittransponders.begin(); tI != nittransponders.end(); tI++) {
+//int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t polarity, bool fromnit = 0)
+				add_to_scan(tI->first, &tI->second.feparams, tI->second.polarization, false);
+			}
+			nittransponders.clear();
 			fprintf(stderr, "\n\n[scan] found %d additional transponders from nit\n", scantransponders.size());
 			if(scantransponders.size()) {
 				eventServer->sendEvent ( CZapitClient::EVT_SCAN_NUM_TRANSPONDERS, CEventServer::INITID_ZAPIT,
 					&found_transponders, sizeof(found_transponders));
 				goto _repeat;
 			}
-		}
+		} else
+			nittransponders.clear();
 	}
 	return 0;
 }
