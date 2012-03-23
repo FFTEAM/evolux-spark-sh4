@@ -100,7 +100,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	if [ -e /etc/.start_enigma2 ]; then
 		isactive1=`cat /etc/enigma2/settings | grep config.av.videoport= | cut -d = -f2`
-		if [ "$isactive1" = HDMI ]; then
+		if [ "$isactive1" = HDMI ] || [ -e /etc/.hdmi ]; then
 			MEMSIZE=12m
 			[ -e /etc/.15m ] && MEMSIZE=15m
 			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
@@ -254,12 +254,14 @@ if [ ! -e /var/etc/.firstboot ]; then
 			case $TASTE in
 				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
 					mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
+					rm -f /etc/.hdmi >/dev/null 2>&1
 					echo "SCART aktiv" > /dev/vfd;;
 				*) if [ -e /usr/local/share/config/neutrino.conf.hdmi ]; then
 					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.scart
 					mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
-				fi
-				echo "HDMI aktiv" > /dev/vfd;;
+				   fi
+					touch /etc/.hdmi
+				        echo "HDMI aktiv" > /dev/vfd;;
 			esac
 			sleep 3
 			rm /etc/.EVOfirstboot
