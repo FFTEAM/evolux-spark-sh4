@@ -468,21 +468,23 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 
 	CFrameBuffer::getInstance()->setSplit3D(false);
 	const char *chan = channel->getName().c_str();
-	FILE *F = fopen (CONFIGDIR "/3dchannels.list", "r");
-	if (F) {
-		char buf[80];
-		while (fgets(buf, sizeof(buf), F)) {
-			if (buf[0] == '#')
-				continue;
-			char *nl = strchr(buf, '\n');
-			if (nl)
-				*nl = 0;
-			if (strcmp(chan, buf))
-				continue;
-			CFrameBuffer::getInstance()->setSplit3D(true);
-			break;
+	if (strlen(chan)) {
+		FILE *F = fopen (CONFIGDIR "/3dchannels.list", "r");
+		if (F) {
+			char buf[80];
+			while (fgets(buf, sizeof(buf), F)) {
+				if (buf[0] == '#')
+					continue;
+				char *nl = strchr(buf, '\n');
+				if (nl)
+					*nl = 0;
+				if (strcmp(chan, buf))
+					continue;
+				CFrameBuffer::getInstance()->setSplit3D(true);
+				break;
+			}
+			fclose(F);
 		}
-		fclose(F);
 	}
 // FIXME -- end of 3D support hack
 }
