@@ -474,6 +474,10 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 			newChannels = NULL;
 			return;
 		}
+		for (vector<CZapitChannel*>::iterator jt = newChannels->tvChannels.begin(); jt != newChannels->tvChannels.end(); jt++)
+			if(!(*jt)->number) (*jt)->number = i++;
+		for (vector<CZapitChannel*>::iterator jt = newChannels->radioChannels.begin(); jt != newChannels->radioChannels.end(); jt++)
+			if(!(*jt)->number) (*jt)->number = j++;
 	}
 
 	if(!tomake)
