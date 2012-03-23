@@ -4,6 +4,10 @@ MODDIR=/lib/modules
 PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
 echo "init frontpanel"
 #insmod $MODDIR/vfd.ko
+mknod /dev/vfd c 147 1 2>/dev/null
+mknod /dev/rc c 147 1 2>/dev/null
+mknod /dev/hdmi_cec c 149 0 2>/dev/null
+mknod /dev/sci0 c 169 0 2>/dev/null
 insmod $MODDIR/aotom.ko
 insmod $MODDIR/simu_button.ko
 [ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
@@ -182,9 +186,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 		*) [ -e /bin/evremote2.amiko ] && rm /bin/evremote2 && mv /bin/evremote2.amiko /bin/evremote2
 		   [ -e /etc/lircd.conf.amiko ] && rm /etc/lircd.conf && mv /etc/lircd.conf.amiko /etc/lircd.conf;;
 	esac
-
-	mknod /dev/rc c 147 1 2>/dev/null
-	mknod /dev/sci0 c 169 0 2>/dev/null
 
 	major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
 	[ -n "$major" ] && {
