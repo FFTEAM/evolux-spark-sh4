@@ -43,12 +43,7 @@ echo "copy your orig Bootargs to /storage/c/enigma2/myBootargs.txt"
 #echo "change bootargs now..."
 oldEVOargs=`/storage/c/enigma2/bin/fw_printenv | grep yaffs2`
 EVObootset=`/storage/c/enigma2/bin/fw_printenv | grep boot_system=enigma2`
-if [ ! -z $oldEVOargs ]; then
-/storage/c/enigma2/bin/setmtdmode
-/storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_yaffs2
-/storage/c/enigma2/bin/setmtdmode -l
-fi
-if [ -z $EVObootset ]; then
+if [ ! -z $oldEVOargs ] || [ -z $EVObootset ]; then
 /storage/c/enigma2/bin/setmtdmode
 /storage/c/enigma2/bin/fw_setenv -s /storage/c/enigma2/etc/bootargs_evolux_yaffs2
 /storage/c/enigma2/bin/setmtdmode -l
