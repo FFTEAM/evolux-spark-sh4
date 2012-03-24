@@ -65,44 +65,36 @@ echo "-----------------------------------------------------------------------"
 echo "Checking targets..."
 echo "Found targets:"
 if [ -e $TUFSBOXDIR/release_with_dev ]; then
-	echo "   1) Prepare Enigma2  jffs2"
+	echo "   1) Prepare Enigma2  yaffs2"
 fi
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	echo "   2) Prepare Neutrino jffs2"
+	echo "   2) Prepare Neutrino yaffs2"
 fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
-	echo "   3) Prepare Evolux   jffs2"
+	echo "   3) Prepare Evolux   yaffs2"
 fi
-echo "----------------------------"
-
 read -p "Select target (1-3)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
-	1)  echo "Preparing Enigma2 jffs2..."
-		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_with_dev $TMPROOTDIR $TMPKERNELDIR
-		echo "-----------------------------------------------------------------------"
-		echo "Creating Enigma2 jffs2 and uImage..."
-		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+	1)  echo "Creating E2 yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
+		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	2)  echo "Preparing Neutrino jffs2..."
-		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_neutrino_with_dev $TMPROOTDIR $TMPKERNELDIR
-		echo "-----------------------------------------------------------------------"
-		echo "Creating Ntrino jffs2 and uImage..."
-		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+	2)  echo "Creating Ntrino  yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_neutrino_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf Ntrino-JFFS2.tar.gz e2jffs2.img uImage
+		cd $TUFSBOXDIR && tar -czvf Ntrino-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	3)  echo "Preparing Evolux jffs2..."
-		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_with_dev $TMPROOTDIR $TMPKERNELDIR
-		echo "-----------------------------------------------------------------------"
-		echo "Creating Evolux jffs2 and uImage..."
-		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+	3)  echo "Creating Evolux  yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_evolux_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	*)  "Invalid Input! Exiting..."

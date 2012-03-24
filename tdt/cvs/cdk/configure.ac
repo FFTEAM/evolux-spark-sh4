@@ -169,6 +169,11 @@ AC_ARG_ENABLE(enable_vdr1711,
 	,[enable_vdr1711=no])
 AM_CONDITIONAL(ENABLE_VDR1711,test "$enable_vdr1711" = "yes")
 
+AC_ARG_ENABLE(multi_yaffs2,
+	AS_HELP_STRING(--enable-multi-yaffs2,	set up the CDK to patch kernel ignoring rootfstype on bootargs),
+	,[enable_multi_yaffs2=no])
+AM_CONDITIONAL(ENABLE_MULTI_YAFFS2,test "$enable_multi_yaffs2" = "yes")
+
 AC_ARG_WITH(cpu,
 	[  --with-cpu=MODEL        cpu model [[sh4]]],
 	[CPU_MODEL="$withval"],[CPU_MODEL="sh4"])
@@ -1256,6 +1261,7 @@ MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
 EXTERNALLCD                 : $enable_externallcd
 EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
+MULTI YAFFS2		    : $enable_multi_yaffs2
 ])
 
 if test "$dircheck" = "fail"; then

@@ -174,6 +174,15 @@ MEDIAFW=""
 EXTERNAL_LCD="--enable-externallcd"
 
 ##############################################
+echo ""
+read -p "Activate multi-YAFFS2 (jffs2 not work if active!) (y/N)? "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
+	CONFIGPARAM="$CONFIGPARAM --enable-multi-yaffs2"
+else
+	CONFIGPARAM="$CONFIGPARAM"
+fi
+
+##############################################
 
 CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD"
 

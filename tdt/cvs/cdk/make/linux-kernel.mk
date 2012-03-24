@@ -462,6 +462,12 @@ endif
 
 STM24_DVB_PATCH = linux-sh4-linuxdvb_stm24$(PATCH_STR).patch
 
+if ENABLE_MULTI_YAFFS2
+FFS2_STR=_multi_yaffs2
+else !ENABLE_MULTI_YAFFS2
+FFS2_STR=_default
+endif
+
 COMMONPATCHES_24 = \
 		$(STM24_DVB_PATCH) \
 		linux-sh4-sound_stm24$(PATCH_STR).patch \
@@ -552,7 +558,7 @@ VIP2_PATCHES_24  = $(COMMONPATCHES_24) \
 SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
-		linux-sh4-spark_setup_stm24$(PATCH_STR).patch \
+		linux-sh4-spark_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
 		$(if $(P0207),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		linux-sh4-lirc_stm.patch
