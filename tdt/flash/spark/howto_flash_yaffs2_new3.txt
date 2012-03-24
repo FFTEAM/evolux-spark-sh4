@@ -25,6 +25,9 @@ FLASH EVOLUX:
 - copy "uImage" + "e2yaffs2.img + flash_E2_yaffs2.sh" into usb-stick-folder "enigma2"
 - connect usb-stick to box-usb-port
 - BOOT ORIG-SPARK
+
+if you have allready old EVOLUX-YAFFS2 in flash no worry...
+script will check args and reset them if needed back to JFFS2!
 ###############################################################
 telnet pingulux-ip
 user: root
@@ -90,6 +93,9 @@ FLASH EVOLUX:
 - "uImage" + "e2yaffs2.img + flash_E2_yaffs2.sh" auf Stick in Ordner "enigma2" kopieren
 - usb-stick an box stecken
 - ORIG-SPARK booten lassen
+
+habt ihr bereits ein "altes" EVOLUX-YAFFS2 img im flash so überprüft das script dies 
+und setzt ggfls die args wieder auf JFFS2!
 ###############################################################
 telnet pingulux-ip
 user: root
