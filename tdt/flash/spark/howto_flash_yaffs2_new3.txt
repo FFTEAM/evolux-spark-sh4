@@ -2,13 +2,8 @@
 ### HOWTO #####################################################
 ###############################################################
 
-TAKE CARE ON AMIKO YOU NEVER TRY FROM ORIG-SPARK-MANUFACTORSETTINGS-BOOTE2!
-THIS WILL DESTROY YOUR AMIKO!!!
-
 Content:
-A. : flash yaffs2-img
-
-B. : flash jffs2-img
+A. : flash Evolux-img
 
 -deutsche howto-übersetzung ab zeile 100-
 ###############################################################
@@ -21,9 +16,9 @@ READ CAREFULL!!!
 YOU MUST HAVE ORIG-SPARK VERSION >=1.2.09 IN BOX!!
 
 ###############################################################
-### FLASH YAFFS2 ##############################################
+### FLASH EVOLUX ##############################################
 ###############################################################
-A) FLASH EVOLUX-YAFFS2:
+FLASH EVOLUX:
 - format usb-stick with fat/fat32
 - copy from "BootargsPack":
        both folder "/bin + /etc" into usb-stick-folder "enigma2"
@@ -44,53 +39,21 @@ now we start flashing by:
 /storage/c/enigma2/flash_E2_yaffs2.sh
 
 
+are you sure? start flashing EVOLUX now (Y/n) ?
+
 select:
-	(1) FLASH YAFFS2
+	y
 
 ###############################################################
 that takes around 1-2 minutes
 till finished box reboot auto 
-     and Evolux-Neutrino-YAFFS2 should booting...
+     and Evolux-Neutrino should booting...
 
-on firstboot when asked 1 or exit (1=scart, exit=hdmi) make your choice
+on firstboot when asked 1 or exit (1=scart, any other button=hdmi) make your choice
 
-
-###############################################################
-### FLASH JFFS2 ##############################################
-###############################################################
-B) FLASH JFFS2:
-- format usb-stick with fat/fat32
-- copy from "BootargsPack" both folder "/bin + /etc" into usb-stick-folder "enigma2"
-- copy "uImage" + "e2jffs2.img" into usb-stick-folder "enigma2"
-- connect usb-stick to box-usb-port
-- BOOT ORIG-SPARK
-###############################################################
-telnet pingulux-ip
-user: root
-pw: root
-
-check if stick correct mounted:
-ls /storage/c/enigma2
-
-(if you see uImage, e2jffs2.img and "bin" + "etc" all fine)
-
-now we start flashing by:
-/storage/c/enigma2/flash_E2_yaffs2.sh
-
-
-select:
-	(2) FLASH JFFS2
 
 ##############################################################
-that takes around 1-2 minutes
-till finished box reboot auto and your-JFFS2-img should booting...
-
-if you revert to "(2) FLASH JFFS2" 
-   you can flash any kind off jffs2-images 
-   by "normal" standard way (ac off/on, ok, arrow-down-right)
-
-##############################################################
-YAFFS2-IMAGES CAN ONLY BE FLASHED BY:
+EVOLUX-IMAGES CAN ONLY BE FLASHED BY:
          BOOT ORIG-SPARK + flash_E2_yaffs2.sh!
 ##############################################################
 
@@ -106,9 +69,7 @@ SO YOU CAN IF SOMETHING WRONG USE COMCABLE TO FIX
 ### ANLEITUNG #################################################
 ###############################################################
 Inhalt:
-1. : flash yaffs2-img
-
-2. : flash jffs2-img
+1. : flash evolux-img
 
 ###############################################################
 ###############################################################
@@ -120,9 +81,9 @@ ALLES SEHR AUFMERKSAM LESEN!!!
 ORIG-SPARK VERSION >=1.2.09 MUSS SICH AUF EURER BOX BEFINDEN!!
 
 ###############################################################
-### FLASH YAFFS2 ##############################################
+### FLASH EVOLUX ##############################################
 ###############################################################
-A) FLASH EVOLUX-YAFFS2:
+FLASH EVOLUX:
 - usb-stick mit fat/fat32 formatieren
 - "BootargsPack"-Inhalt:
        beide Ordner "/bin + /etc" auf Stick in Ordner "enigma2" kopieren
@@ -142,57 +103,24 @@ ls /storage/c/enigma2
 flashvorgang starten mit:
 /storage/c/enigma2/flash_E2_yaffs2.sh
 
+are you sure? start flashing EVOLUX now (Y/n) ?
 
 Auswahl:
-	(1) FLASH YAFFS2
+	y
 
 ###############################################################
 dauert ca. 1-2 minuten
 wenn fertig bootet box automatisch neu
-     und Evolux-Neutrino-YAFFS2 sollte booten...
+     und Evolux-Neutrino sollte booten...
 
-bei firstboot wenn nach 1 / exit fragt (1=scart, exit=hdmi) trefft eure wahl!
-
-
-###############################################################
-### FLASH JFFS2 (zurücksetzen auf jedes herkömmliche image ####
-###############################################################
-B) FLASH JFFS2:
-- usb-stick mit fat/fat32 formatieren
-- "BootargsPack"-Inhalt:
-       beide Ordner "/bin + /etc" auf Stick in Ordner "enigma2" kopieren
-- "uImage" + "e2jffs2.img + flash_E2_yaffs2.sh" auf Stick in Ordner "enigma2" kopieren
-- usb-stick an box stecken
-- ORIG-SPARK booten lassen
-###############################################################
-telnet pingulux-ip
-user: root
-pw: root
-
-überprüfen ob stick korrekt gemounted wurde:
-ls /storage/c/enigma2
-
-(wenn ihr "uImage", "e2jffs2.img" und "bin" + "etc" seht is alles korrekt)
-
-flashvorgang starten mit:
-/storage/c/enigma2/flash_E2_yaffs2.sh
-
-
-Auswahl:
-	(2) FLASH JFFS2
+bei firstboot wenn nach 1 / exit fragt (1=scart, jede andere Taste=hdmi) trefft eure wahl!
 
 ##############################################################
-dauert ca. 1-2 minuten
-wenn fertig bootet box automatisch neu
-     und euer herkömmliches JFFS2 image(neuprolux+co) sollte booten...
-
-nachdem man einmalig "(2) FLASH JFFS2"  gemacht hat
-   kann man wieder auf die ganz normale standard-flashmethode gehen und jedes x-beliebige jffs2-image flashen
-   ("normal" standard-methode is ja (strom aus, an und "ok" gedrückt halten bis "force" im display erscheint, dann "pfeil unten", "pfeil rechts" und es flasht...)
-
-##############################################################
-YAFFS2-IMAGES LASSEN SICH AUSSCHLIESSLICH NUR FLASHEN VIA:
+EVOLUX-IMAGES LASSEN SICH AUSSCHLIESSLICH NUR FLASHEN VIA:
          ORIG-SPARK booten + flash_E2_yaffs2.sh!
+
+Alle anderen "gherkömmlichen images können wie gehabt via:
+usb+frontpanel-tasten gefahrlos geflasht werden!
 ##############################################################
 
 Eure ORIG BOOTARGS werden VOR änderung gesichert am stick als "myBootargs.txt"
