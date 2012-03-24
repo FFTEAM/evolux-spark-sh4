@@ -43,10 +43,6 @@ static char *hdmi0;
 module_param(hdmi0, charp, 0444);
 MODULE_PARM_DESC(hdmi0, "[enable|disable]");
 
-int STi7111Device_scart_output = 0;
-module_param(STi7111Device_scart_output, int, 0444);
-MODULE_PARM_DESC(STi7111Device_scart_output, "STi7111Device_scart_output");
-
 extern int stmhdmi_manager(void *data);
 
 #ifdef __TDT__
