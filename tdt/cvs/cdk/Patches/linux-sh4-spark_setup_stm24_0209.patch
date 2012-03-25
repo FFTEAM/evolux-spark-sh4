@@ -324,7 +324,7 @@
   				irq_str = "POLL";
 --- linux-sh4/arch/sh/kernel/setup.c	2012-03-24 19:04:15.446990932 +0100
 +++ linux-sh4/arch/sh/kernel/setup.c	2012-03-24 18:59:27.000000000 +0100
-@@ -388,6 +388,30 @@
+@@ -388,6 +388,48 @@
  #endif
  #endif
  
@@ -350,6 +350,24 @@
 +				break;
 +			}
 +		}
++
++		/* martii: for evolux, remove the "rootfstype=..." argument, too */
++		command_line_len = strlen(command_line);
++		for(i = 0; i < (command_line_len-11); i++)
++			if(!strncmp(command_line + i + 1, "rootfstype=", 11))
++			{
++				// search for next pos
++				int k;
++				int pos=command_line_len;
++				for(k=i+1; k<command_line_len; k++)
++					if(command_line[k]==' ') {
++						pos=k;
++						break;
++					}
++				memmove(command_line+i, command_line+pos, command_line_len-pos);
++				memset(&command_line[command_line_len-(pos-i)], '\0', pos-i);
++				break;
++			}
 +	}
 +
  	/* Save unparsed command line copy for /proc/cmdline */
@@ -378,3 +396,15 @@
  		stmmac_mmc_setup(priv);
  
  	/* Start the ball rolling... */
+
+--- linux-sh4/fs/jffs2/super.c	2012-03-25 15:38:25.420539349 +0200
++++ linux-sh4/fs/jffs2/super.c	2012-03-25 15:38:39.956611432 +0200
+@@ -236,6 +236,7 @@
+ 	.name =		"jffs2",
+ 	.get_sb =	jffs2_get_sb,
+ 	.kill_sb =	jffs2_kill_sb,
++        .fs_flags =        FS_REQUIRES_DEV,
+ };
+ 
+ static int __init init_jffs2_fs(void)
+

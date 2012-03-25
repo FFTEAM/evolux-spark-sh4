@@ -91,6 +91,12 @@ yaud-vdr: yaud-none stslave openssl openssl-dev \
 yaud-neutrino: yaud-none lirc stslave\
 		boot-elf remote firstboot neutrino neutrino-plugins release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
 
 yaud-neutrino-static: yaud-none lirc stslave\
 		boot-elf remote firstboot neutrino release_neutrino_static
@@ -111,12 +117,24 @@ evolux: yaud-neutrino \
 		yaud-enigma2-nightly \
 		release_evolux
 	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
 
 evolux-full: yaud-none host-python lirc stslave \
 		yaud-neutrino \
 		yaud-enigma2-nightly \
 		release_evolux
 	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
 
 if STM22
 yaud-enigma2: yaud-none host-python lirc stslave\
@@ -136,6 +154,12 @@ else
 yaud-enigma2-nightly: yaud-none host-python lirc stslave\
 		boot-elf remote firstboot enigma2-nightly enigma2-misc release
 	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
 endif
 
 if STM22

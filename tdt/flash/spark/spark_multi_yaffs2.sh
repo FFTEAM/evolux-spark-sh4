@@ -87,7 +87,7 @@ case "$REPLY" in
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_neutrino_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf Ntrino-YAFFS2.tar.gz e2yaffs2.img uImage
+		cd $TUFSBOXDIR && tar -czvf Neutrino-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Creating Evolux  yaffs2 and uImage..."

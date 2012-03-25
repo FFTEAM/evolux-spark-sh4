@@ -247,8 +247,8 @@ fi
 if [ -e $PATCHDIR/custom/myPatches_E2Nightly.diff ]; then
 	cd $CHANGEDIR/release_with_dev && patch -p1 < "../../custom/myPatches_E2Nightly.diff"
 fi
-	cp -RP $CHANGEDIR/release_with_dev/boot/uImage $CHANGEDIR/
-	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
-	( cd $CHANGEDIR && tar -czvf Enigma2_on_Pingulux.tar.gz e2jffs2.img uImage )
+#	cp -RP $CHANGEDIR/release_with_dev/boot/uImage $CHANGEDIR/
+#	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
+#	( cd $CHANGEDIR && tar -czvf Enigma2_on_Pingulux.tar.gz e2jffs2.img uImage )
 echo "--- Erledigt ---"
 exit
