@@ -64,6 +64,7 @@ echo "-----------------------------------------------------------------------"
 
 echo "Checking targets..."
 echo "Found targets:"
+echo "   0) Skipping..."
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
 	echo "   1) Prepare Neutrino yaffs2"
 fi

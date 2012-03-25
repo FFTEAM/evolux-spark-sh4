@@ -64,6 +64,7 @@ echo "-----------------------------------------------------------------------"
 
 echo "Checking targets..."
 echo "Found targets:"
+echo "   0) Skipping..."
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
 	echo "   1) Prepare Neutrino jffs2"
 fi
@@ -75,7 +76,7 @@ if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 fi
 echo "----------------------------"
 
-read -p "Select target (1-3)? "
+read -p "Select target (0-3)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Preparing Neutrino jffs2..."
