@@ -74,7 +74,7 @@ fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   3) Prepare Evolux   yaffs2"
 fi
-read -p "Select target (1-3)? "
+read -p "Select target (0-3)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Creating Ntrino  yaffs2 and uImage..."
