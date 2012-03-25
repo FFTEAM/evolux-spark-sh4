@@ -171,19 +171,19 @@ MEDIAFW=""
 EXTERNAL_LCD="--enable-externallcd"
 
 ##############################################
-#echo ""
-#echo -e "\nFilesystemtype:"
-#echo "   1) JFFS2 (standard)"
-#echo "   2) MULTI-YAFFS2 (not needed changing bootargs)"
-#read -p "Select Filesystem (1-2)? "
-#case "$REPLY" in
-#	1) echo -e "\nSelected Filesystem: $REPLY\n"
-#	   MULTIYAFFS2="";;
-#	2) echo -e "\nSelected Filesystem: $REPLY\n"
-	   MULTIYAFFS2="--enable-multi-yaffs2" #;;
-#	*) echo -e "\nSelected Filesystem: $REPLY\n"
-#	   MULTIYAFFS2="";;
-#esac
+echo ""
+echo -e "\nFilesystemtype:"
+echo "   1) JFFS2 (standard)"
+echo "   2) YAFFS2 (not needed changing bootargs)"
+read -p "Select Filesystem (1-2)? "
+case "$REPLY" in
+	1) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="";;
+	2) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="--enable-multi-yaffs2";;
+	*) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="";;
+esac
 
 ##############################################
 
