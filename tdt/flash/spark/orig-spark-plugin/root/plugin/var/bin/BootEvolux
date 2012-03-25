@@ -2,7 +2,7 @@
 ### boot evolux-yaffs2 from orig ####
 ln -sf /root/plugin/var/etc/fw_env.config /etc/fw_env.config
 /root/plugin/var/sbin/setmtdmode
-/root/plugin/var/sbin/fw_setenv -s /root/plugin/var/etc/bootargs_evolux_yaffs2
+/root/plugin/var/sbin/fw_setenv -s /root/plugin/var/etc/bootargs_evolux
 /root/plugin/var/sbin/setmtdmode -l
 echo "please restart box"
 exit
