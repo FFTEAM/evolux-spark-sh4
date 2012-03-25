@@ -1125,7 +1125,7 @@ void BOOT_Menu::BOOTSettings()
 		}
 		if (old_boot == BOOT_SPARK) {
 			unlink(DOTFILE_BOOTSPARK);
-			system("fw_setenv -s /etc/bootargs_evolux_yaffs2");
+			system("fw_setenv -s /etc/bootargs_evolux");
 		}
 		if(b) {
 			b->hide();
