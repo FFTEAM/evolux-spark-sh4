@@ -64,11 +64,11 @@ echo "-----------------------------------------------------------------------"
 
 echo "Checking targets..."
 echo "Found targets:"
-if [ -e $TUFSBOXDIR/release_with_dev ]; then
-	echo "   1) Prepare Enigma2  yaffs2"
-fi
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	echo "   2) Prepare Neutrino yaffs2"
+	echo "   1) Prepare Neutrino yaffs2"
+fi
+if [ -e $TUFSBOXDIR/release_with_dev ]; then
+	echo "   2) Prepare Enigma2  yaffs2"
 fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   3) Prepare Evolux   yaffs2"
@@ -76,18 +76,18 @@ fi
 read -p "Select target (1-3)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
-	1)  echo "Creating E2 yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_with_dev $CURDIR/out/e2yaffs2.img
-		cp $TUFSBOXDIR/release_with_dev/boot/uImage $CURDIR/out/uImage
-		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
-		cd $CURDIR
-		echo "-----------------------------------------------------------------------";;
-	2)  echo "Creating Ntrino  yaffs2 and uImage..."
+	1)  echo "Creating Ntrino  yaffs2 and uImage..."
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_neutrino_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf Neutrino-YAFFS2.tar.gz e2yaffs2.img uImage
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	2)  echo "Creating E2 yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_with_dev/boot/uImage $CURDIR/out/uImage
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Creating Evolux  yaffs2 and uImage..."

@@ -64,11 +64,11 @@ echo "-----------------------------------------------------------------------"
 
 echo "Checking targets..."
 echo "Found targets:"
-if [ -e $TUFSBOXDIR/release_with_dev ]; then
-	echo "   1) Prepare Enigma2  jffs2"
-fi
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	echo "   2) Prepare Neutrino jffs2"
+	echo "   1) Prepare Neutrino jffs2"
+fi
+if [ -e $TUFSBOXDIR/release_with_dev ]; then
+	echo "   2) Prepare Enigma2  jffs2"
 fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   3) Prepare Evolux   jffs2"
@@ -78,22 +78,22 @@ echo "----------------------------"
 read -p "Select target (1-3)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
-	1)  echo "Preparing Enigma2 jffs2..."
-		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_with_dev $TMPROOTDIR $TMPKERNELDIR
-		echo "-----------------------------------------------------------------------"
-		echo "Creating Enigma2 jffs2 and uImage..."
-		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
-		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
-		cd $CURDIR
-		echo "-----------------------------------------------------------------------";;
-	2)  echo "Preparing Neutrino jffs2..."
+	1)  echo "Preparing Neutrino jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_neutrino_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Ntrino jffs2 and uImage..."
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf Ntrino-JFFS2.tar.gz e2jffs2.img uImage
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	2)  echo "Preparing Enigma2 jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Enigma2 jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Preparing Evolux jffs2..."
