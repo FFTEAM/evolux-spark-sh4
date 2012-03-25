@@ -117,16 +117,11 @@ PLAYER="--enable-player191"
 echo -e "\nMulticom:"
 echo "   1) Multicom 3.2.4 rc3 (Recommended for Player191)"
 echo "   2) Multicom 3.2.4 (Experimental)"
-case $2 in
-        [1-2]) REPLY=$2
-        echo -e "\nSelected multicom: $REPLY\n"
-        ;;
-        *)
-        read -p "Select multicom (1-3)? ";;
-esac
+read -p "Select multicom (1-2)? "
 
 case "$REPLY" in
-	1) MULTICOM="--enable-multicom324"
+	1) echo -e "\nSelected multicom: $REPLY\n"
+	   MULTICOM="--enable-multicom324"
        cd ../driver/include/
        if [ -L multicom ]; then
           rm multicom
@@ -144,7 +139,8 @@ case "$REPLY" in
        echo "export CONFIG_MULTICOM324=y" >> .config
        cd - >/dev/null 2>&1
     ;;
-	2) MULTICOM="--enable-multicom324"
+	2) echo -e "\nSelected multicom: $REPLY\n"
+	   MULTICOM="--enable-multicom324"
        cd ../driver/include/
        if [ -L multicom ]; then
           rm multicom
@@ -162,7 +158,8 @@ case "$REPLY" in
        echo "export CONFIG_MULTICOM324=y" >> .config
        cd - >/dev/null 2>&1
     ;;
-	*) MULTICOM="--enable-multicom324";;
+	*) echo -e "\nSelected multicom: $REPLY\n"
+	   MULTICOM="--enable-multicom324";;
 esac
 
 ##############################################
@@ -175,16 +172,22 @@ EXTERNAL_LCD="--enable-externallcd"
 
 ##############################################
 echo ""
-read -p "Activate multi-YAFFS2 (jffs2 not work if active!) (y/N)? "
-if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-	CONFIGPARAM="$CONFIGPARAM --enable-multi-yaffs2"
-else
-	CONFIGPARAM="$CONFIGPARAM"
-fi
+echo -e "\nFilesystemtype:"
+echo "   1) JFFS2 (standard)"
+echo "   2) MULTI-YAFFS2 (not needed changing bootargs)"
+read -p "Select Filesystem (1-2)? "
+case "$REPLY" in
+	1) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="";;
+	2) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="--enable-multi-yaffs2";;
+	*) echo -e "\nSelected Filesystem: $REPLY\n"
+	   MULTIYAFFS2="";;
+esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD"
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $MULTIYAFFS2"
 
 ##############################################
 
