@@ -63,11 +63,11 @@ $(DEPDIR)/%release_evolux:
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
-if ENABLE_MULTI_YAFFS2
-	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
-else
-	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
-endif
+#if ENABLE_MULTI_YAFFS2
+#	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+#else
+#	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+#endif
 	if [ -e $(buildprefix)/makeUpdatePack.sh ] ; then \
 		$(buildprefix)/makeUpdatePack.sh; \
 	fi;
