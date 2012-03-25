@@ -48,14 +48,12 @@ $(DEPDIR)/%release_evolux:
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
-	cp -RP $(buildprefix)/root/etc/bootargs_* $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(buildprefix)/root/etc/fw_env.config $(prefix)/release_evolux_with_dev/etc/
+	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_with_dev/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/release_evolux_with_dev/bin/
 	mkdir -p $(prefix)/BootargsPack/bin
 	mkdir -p $(prefix)/BootargsPack/etc
-	cp -RP $(buildprefix)/root/etc/fw_env.config $(prefix)/BootargsPack/etc/
-	cp -RP $(buildprefix)/root/etc/bootargs_* $(prefix)/BootargsPack/etc/
+	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/BootargsPack/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/setmtdmode $(prefix)/BootargsPack/bin/

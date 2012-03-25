@@ -505,8 +505,7 @@ endif
 	find $(prefix)/release_neutrino/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino/etc/.fsck
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino/etc/init.d/
-	cp -f $(buildprefix)/root/etc/fw_env.config $(prefix)/release_neutrino/etc/
-	cp -f $(buildprefix)/root/etc/bootargs_* $(prefix)/release_neutrino/etc/
+	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_neutrino/etc/ )
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release_neutrino/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release_neutrino/bin/
 

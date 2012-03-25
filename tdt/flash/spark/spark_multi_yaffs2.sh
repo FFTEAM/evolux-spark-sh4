@@ -106,15 +106,4 @@ echo "-----------------------------------------------------------------------"
 echo "Flashimage created:"
 echo `ls $OUTDIR`
 
-echo "-----------------------------------------------------------------------"
-echo "To flash the created image rename the *.img file to e2jffs2.img and "
-echo "copy it and the uImage to the enigma2 folder (/enigma2) of your usb drive."
-echo "Before flashing make sure that enigma2 is the default system on your box."
-echo "To set enigma2 as your default system press OK for 5 sec on your box "
-echo "while the box is starting. As soon as \"FoYc\" is being displayed press"
-echo "DOWN (v) on your box to select \"ENIG\" and press OK to confirm"
-echo "To start the flashing process press OK for 5 sec on your box "
-echo "while the box is starting. As soon as \"Fact\" is being displayed press"
-echo "RIGHT (->) on your box to start the update"
-echo ""
 
