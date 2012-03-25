@@ -66,6 +66,8 @@ endif
 	-rm -rf $(prefix)/release*
 	-rm -rf $(prefix)/Neutrino*
 	-rm -rf $(prefix)/Enigma2*
+	-rm -rf $(prefix)/E2-*
+	-rm -rf $(prefix)/EvoLux*
 	-rm -rf $(prefix)/uImage*
 	-rm -rf $(prefix)/e2*.img
 	-rm -rf SOURCES SPECS BUILD && install -d SOURCES SPECS BUILD
