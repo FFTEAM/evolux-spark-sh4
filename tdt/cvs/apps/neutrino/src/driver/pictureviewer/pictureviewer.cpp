@@ -628,6 +628,8 @@ bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int w
 printf("logo file: %s\n", fname);
         if(access(fname, F_OK))
                 sprintf(fname, "%s/%llx.gif", LOGO_DIR2, channel_id & 0xFFFFFFFFFFFFULL);
+        if(access(fname, F_OK))
+                sprintf(fname, "%s/%llx.png", LOGO_DIR2, channel_id & 0xFFFFFFFFFFFFULL);
         if(!access(fname, F_OK)) {
                 ret = DisplayImage(fname, posx, posy, width, height);
         }
