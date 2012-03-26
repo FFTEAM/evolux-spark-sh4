@@ -156,8 +156,6 @@ include make/release.mk
 
 include make/release_neutrino.mk
 
-include make/release_neutrino_nightly.mk
-
 include make/release_evolux.mk
 
 #include make/release_vdr.mk
