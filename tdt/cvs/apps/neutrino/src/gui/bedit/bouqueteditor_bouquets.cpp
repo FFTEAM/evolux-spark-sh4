@@ -100,8 +100,14 @@ void CBEBouquetWidget::paintItem(int pos)
 		if ((*Bouquets)[current]->bHidden)
 			frameBuffer->paintIcon("hidden.raw", x + 37, ypos);
 
+		string name = (*Bouquets)[current]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[current]->Name;
+		if (name == "extra.zapit_bouquetname_others")
+			name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+		else if(name == "extra.zapit_bouquetname_newchannels")
+			name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+
 		//g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+68, ypos+ fheight, width-68, (*Bouquets)[current]->Name, color, 0, true);
-		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+68, ypos+ fheight, width-68, (*Bouquets)[current]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[current]->Name, color, 0, true);
+		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+68, ypos+ fheight, width-68, name.c_str(), color, 0, true);
 	}
 }
 
@@ -167,7 +173,7 @@ void CBEBouquetWidget::paintFoot()
 
 void CBEBouquetWidget::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height+ButtonHeight);
+	frameBuffer->paintBackgroundBoxRel(x,y, width + 1,height+ButtonHeight);
 }
 
 int CBEBouquetWidget::exec(CMenuTarget* parent, const std::string & actionKey)
