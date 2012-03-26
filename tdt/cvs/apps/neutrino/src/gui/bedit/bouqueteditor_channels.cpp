@@ -154,7 +154,7 @@ void CBEChannelWidget::paintFoot()
 
 void CBEChannelWidget::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height+ButtonHeight);
+	frameBuffer->paintBackgroundBoxRel(x,y, width + 1,height+ButtonHeight);
 }
 
 int CBEChannelWidget::exec(CMenuTarget* parent, const std::string & actionKey)
