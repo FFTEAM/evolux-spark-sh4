@@ -505,6 +505,12 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 			g_RemoteControl->current_PIDs.PIDs.vtxtpid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "VTXTpid", spaceoffset, buf);
 
+	//picon
+	ypos += iheight;
+	char logoname[255] ="";
+	sprintf(logoname, "%llx.jpg", channelList->getActiveChannel_ChannelID() & 0xFFFFFFFFFFFFULL);
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Logo:", spaceoffset, logoname);
+
 	yypos = ypos;
 }
 
