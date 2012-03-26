@@ -169,7 +169,7 @@ libusb-0.1.12.tar.gz;http://dfn.dl.sourceforge.net/project/libusb/libusb-0.1%20%
 #rtmpdump-2.3.tgz;http://rtmpdump.mplayerhq.hu/download/
 rtmpdump-2.4.tar.gz;http://dev.gentoo.org/~hwoarang/distfiles/
 Imaging-1.1.7.tar.gz;http://effbot.org/downloads
-libdvbsi++-0.3.6.tar.bz2;http://www.saftware.de/libdvbsi++
+libdvbsi++-0.3.6.tar.bz2;http://www.saftware.de/libdvbsi++/
 #
 # net apps
 #
