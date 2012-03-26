@@ -2155,28 +2155,6 @@ $(DEPDIR)/%rtmpdump: $(DEPDIR)/rtmpdump.do_compile
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 #
-# libdvbsi++
-#
-$(DEPDIR)/libdvbsipp.do_prepare:  @DEPENDS_libdvbsipp@
-	@PREPARE_libdvbsipp@
-	touch $@
-
-$(DEPDIR)/libdvbsipp.do_compile: $(DEPDIR)/libdvbsipp.do_prepare
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libdvbsipp@ && \
-	aclocal -I $(hostprefix)/share/aclocal -I m4 && \
-	autoheader && \
-	autoconf && \
-	automake --foreign && \
-	libtoolize --force && \
-	$(BUILDENV) \
-	./configure \
-		--host=$(target) \
-		--prefix=/usr && \
-	$(MAKE) all
-	touch $@
-
-#
 # tuxtxt32bpp
 #
 $(DEPDIR)/tuxtxt32bpp.do_prepare:  @DEPENDS_tuxtxt32bpp@
