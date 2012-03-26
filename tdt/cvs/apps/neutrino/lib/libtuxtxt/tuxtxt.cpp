@@ -1920,8 +1920,13 @@ int Init(int pid) {
 		page_atrb[i].doublew = 0;
 		page_atrb[i].IgnoreAtBlackBgSubst = 0;
 	}
+
+	displayMode[MODE_PLAIN].zoommode = ZOOMMODE_FULL;
+	displayMode[MODE_BOXED].zoommode = ZOOMMODE_FULL;
+	SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0);
+
 	/*  if no vtxtpid for current service, search PIDs */
-	if (tuxtxt_cache.vtxtpid == 0) {
+	if (!pid) {
 		/* get all vtxt-pids */
 		getpidsdone = -1;				/* don't kill thread */
 		if (GetTeletextPIDs() == 0) {
@@ -1932,9 +1937,9 @@ int Init(int pid) {
 		if (ttxcfg.auto_national)
 			ttxcfg.national_subset = pid_table[0].national_subset;
 		if ((pids_found) > 1 && use_gui)
-			ConfigMenu(1);
+			pid = ConfigMenu(1);
 		else {
-			tuxtxt_cache.vtxtpid = pid_table[0].vtxt_pid;
+			pid = pid_table[0].vtxt_pid;
 			current_service = 0;
 			RenderMessage(ShowServiceName);
 		}
@@ -1944,14 +1949,10 @@ int Init(int pid) {
 	}
 
 	tuxtxt_start(pid);
-	displayMode[MODE_PLAIN].zoommode = ZOOMMODE_FULL;
-	displayMode[MODE_BOXED].zoommode = ZOOMMODE_FULL;
 
 	if (rc > -1)
 		fcntl(rc, F_SETFL, O_NONBLOCK);
 	gethotlist();
-
-	SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0);
 
 	fprintf(stderr, "TuxTxt: init ok\n");
 
@@ -2472,7 +2473,7 @@ void Menu_Init(char *menu, int current_pid, int menuitem, int hotindex) {
 	Menu_UpdateHotlist(menu, hotindex, menuitem);
 }
 
-void ConfigMenu(int Init) {
+int ConfigMenu(int Init) {
 	// printf("[tuxtxt] Menu\n");
 	int val, menuitem = M_Start;
 	int current_pid = 0;
@@ -2501,8 +2502,6 @@ void ConfigMenu(int Init) {
 
 	Clear(use_gui ? black : transp);
 
-	SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0);
-
 	hotindex = getIndexOfPageInHotlist();
 
 	/* clear framebuffer */
@@ -2513,6 +2512,8 @@ void ConfigMenu(int Init) {
 	/* set blocking mode */
 	val = fcntl(rc, F_GETFL);
 	fcntl(rc, F_SETFL, val &~ O_NONBLOCK);
+
+	int pid = tuxtxt_cache.vtxtpid;
 
 	/* loop */
 	do {
@@ -2582,10 +2583,10 @@ void ConfigMenu(int Init) {
 						Clear(transp);
 
 						/* set current vtxt */
-						if (tuxtxt_cache.vtxtpid == 0)
-							tuxtxt_cache.vtxtpid = pid_table[0].vtxt_pid;
+						if (pid == 0)
+							pid = pid_table[0].vtxt_pid;
 						else
-							while(pid_table[current_pid].vtxt_pid != tuxtxt_cache.vtxtpid && current_pid < pids_found)
+							while(pid_table[current_pid].vtxt_pid != pid && current_pid < pids_found)
 								current_pid++;
 						Menu_Init(menu, current_pid, menuitem, hotindex);
 					}
@@ -2598,7 +2599,7 @@ void ConfigMenu(int Init) {
 							       &pid_table[current_pid].service_name,
 							       pid_table[current_pid].service_name_len);
 						} else
-							hex2str(&menu[MenuLine[M_PID]*Menu_Width + 13 + 3], tuxtxt_cache.vtxtpid);
+							hex2str(&menu[MenuLine[M_PID]*Menu_Width + 13 + 3], pid);
 
 						if (pids_found > 1) {
 							if (current_pid == 0) {
@@ -2685,10 +2686,10 @@ void ConfigMenu(int Init) {
 						Clear(transp);
 
 						/* set current vtxt */
-						if (tuxtxt_cache.vtxtpid == 0)
-							tuxtxt_cache.vtxtpid = pid_table[0].vtxt_pid;
+						if (pid == 0)
+							pid = pid_table[0].vtxt_pid;
 						else
-							while(pid_table[current_pid].vtxt_pid != tuxtxt_cache.vtxtpid && current_pid < pids_found)
+							while(pid_table[current_pid].vtxt_pid != pid && current_pid < pids_found)
 								current_pid++;
 						Menu_Init(menu, current_pid, menuitem, hotindex);
 					}
@@ -2858,21 +2859,22 @@ void ConfigMenu(int Init) {
 						GetTeletextPIDs();
 						Clear(transp);
 						/* set current vtxt */
-						if (tuxtxt_cache.vtxtpid == 0)
-							tuxtxt_cache.vtxtpid = pid_table[0].vtxt_pid;
-						else
-							while(pid_table[current_pid].vtxt_pid != tuxtxt_cache.vtxtpid && current_pid < pids_found)
+						if (pid == 0) {
+							pid = pid_table[0].vtxt_pid;
+							current_pid = 0;
+						} else {
+							while(pid_table[current_pid].vtxt_pid != pid && current_pid < pids_found)
 								current_pid++;
+						}
 						Menu_Init(menu, current_pid, menuitem, hotindex);
 					} else
 					if (pids_found > 1) {
 						if (hotlistchanged)
 							savehotlist();
 
-						if (Init || tuxtxt_cache.vtxtpid != pid_table[current_pid].vtxt_pid) {
+						if (Init || pid != pid_table[current_pid].vtxt_pid) {
 							tuxtxt_stop();
-							if (Init)
-								tuxtxt_cache.vtxtpid = 0; // force clear cache
+							tuxtxt_cache.vtxtpid = 0; // force clear cache
 							/* reset data */
 							inputcounter = 2;
 							tuxtxt_cache.page = 0x100;
@@ -2897,12 +2899,10 @@ void ConfigMenu(int Init) {
 							if (ttxcfg.auto_national)
 								ttxcfg.national_subset = pid_table[current_pid].national_subset;
 
-							tuxtxt_start(pid_table[current_pid].vtxt_pid);
-							displayMode[MODE_PLAIN].zoommode = ZOOMMODE_FULL;
-							displayMode[MODE_BOXED].zoommode = ZOOMMODE_FULL;
+							pid = pid_table[current_pid].vtxt_pid;
+							tuxtxt_start(pid);
 						}
 
-						Clear(use_gui ? black : transp);
 						gethotlist();
 
 						/* show new teletext */
@@ -2910,8 +2910,7 @@ void ConfigMenu(int Init) {
 
 						fcntl(rc, F_SETFL, O_NONBLOCK);
 						RCCode = -1;
-						SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0); /* restore divided screen */
-						return;
+						return pid;
 					}
 					break;
 #if 0
@@ -2968,8 +2967,8 @@ void ConfigMenu(int Init) {
 	fcntl(rc, F_SETFL, O_NONBLOCK);
 	tuxtxt_cache.pageupdate = 1;
 	RCCode = -1;
-	SwitchScreenMode(displayMode[displayModeIndex].screenmode, 0); /* restore divided screen */
-printf("[tuxtxt] Menu return\n");
+	// printf("[tuxtxt] Menu return\n");
+	return pid;
 }
 
 /******************************************************************************

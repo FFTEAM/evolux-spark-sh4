@@ -1062,7 +1062,7 @@ void *tuxtxt_CacheThread(void * /*arg*/)
 int tuxtxt_start_thread(int source = 0);
 int tuxtxt_start_thread(int source)
 {
-	if (tuxtxt_cache.vtxtpid == -1)
+	if (tuxtxt_cache.vtxtpid < 0)
 		return 0;
 
 	tuxtxt_cache.thread_starting = 1;

@@ -1424,7 +1424,7 @@ const char lcd_digits[] = {
 };
 
 /* functions */
-void ConfigMenu(int Init);
+int ConfigMenu(int Init);
 void CleanUp();
 void PageInput(int Number);
 void ColorKey(int);

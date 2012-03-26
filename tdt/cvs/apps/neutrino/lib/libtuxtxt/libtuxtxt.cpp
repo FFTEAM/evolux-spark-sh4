@@ -57,7 +57,7 @@ int tuxtxt_stop()
 
 void tuxtxt_start(int tpid, int source)
 {
-	if (tpid == -1)
+	if (tpid < 0)
 	{
 		printf("tuxtxt: invalid PID!\n");
 		return;
