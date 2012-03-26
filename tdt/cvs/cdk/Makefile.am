@@ -162,9 +162,6 @@ include make/release_evolux.mk
 
 #include make/release_enigma1_hd.mk
 
-# New static folder
-include make/release_neutrino_static.mk
-
 # Give the user rope to hang himself :-).  (Note: read from the
 # generated Makefile during make run, automake or configure does not
 # see it.)
