@@ -27,11 +27,11 @@
 /* Dagobert / Phantomias: sh4 cant access u16/u32 on unaligned address */ 
 #define r8(p)           (*(const __uint8_t * const)(p)) 
 
-#define r16(p)          (r8((const __uint8_t * const) p + 0) << 8 | \ 
+#define r16(p)          (r8((const __uint8_t * const) p + 0) << 8 | \
                         r8((const __uint8_t * const) p + 1)) 
  
-#define r32(p)          (r8((const __uint8_t * const) p + 0) << 24 | \ 
-                        r8((const __uint8_t * const) p + 1) << 16 | \ 
+#define r32(p)          (r8((const __uint8_t * const) p + 0) << 24 | \
+                        r8((const __uint8_t * const) p + 1) << 16 | \
                         r8((const __uint8_t * const) p + 2) << 8 | \ 
                         r8((const __uint8_t * const) p + 3)) 
  
