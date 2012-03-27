@@ -84,6 +84,8 @@ struct SNeutrinoSettings
 	int scale_display_type;
 	#endif
 	int play_button_action;
+	char picon_dir[100];
+	char picon_dir_e2[100];
 
 	//audio
 	int audio_AnalogMode;

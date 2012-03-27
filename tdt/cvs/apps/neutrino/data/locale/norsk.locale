@@ -575,6 +575,8 @@ infobar.picon Kanal logo
 infobar.picon_big stor
 infobar.picon_move stedet SIG/SNR
 infobar.picon_normal normal
+infobar.picon_dir Picon Directory
+infobar.picon_dir_e2 Picon Directory E2
 infoviewer.epgnotload EPG ikke lastet....
 infoviewer.epgwait venter på EPG...
 infoviewer.eventlist Hendelseliste

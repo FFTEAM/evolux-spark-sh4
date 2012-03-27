@@ -797,6 +797,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.fan_speed = configfile.getInt32( "fan_speed", 1);
 	if(g_settings.fan_speed < 1) g_settings.fan_speed = 1;//FIXME disable OFF
 
+	strncpy(g_settings.picon_dir, configfile.getString("picon_dir", "/usr/local/share/neutrino/icons/logo/").c_str(), sizeof(g_settings.picon_dir));
+	strncpy(g_settings.picon_dir_e2, configfile.getString("picon_dir_e2", "/usr/local/share/enigma2/picon/").c_str(), sizeof(g_settings.picon_dir_e2));
+
 	g_settings.srs_enable = configfile.getInt32( "srs_enable", 0);
 	g_settings.srs_algo = configfile.getInt32( "srs_algo", 1);
 	g_settings.srs_ref_volume = configfile.getInt32( "srs_ref_volume", 40);//FIXME
@@ -1349,12 +1352,15 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32( "video_Format", g_settings.video_Format );
 	configfile.setInt32( "video_43mode", g_settings.video_43mode );
 	configfile.setInt32( "current_volume", g_settings.current_volume );
-	configfile.setInt32("volume_slider_position", g_settings.volslider_pos);
+	configfile.setInt32( "volume_slider_position", g_settings.volslider_pos);
 	configfile.setInt32( "current_volume_step", g_settings.current_volume_step );
 	configfile.setInt32( "channel_mode", g_settings.channel_mode );
 	configfile.setInt32( "video_csync", g_settings.video_csync );
 
 	configfile.setInt32( "fan_speed", g_settings.fan_speed);
+
+	configfile.setString( "picon_dir", g_settings.picon_dir);
+	configfile.setString( "picon_dir_e2", g_settings.picon_dir_e2);
 
 	configfile.setInt32( "srs_enable", g_settings.srs_enable);
 	configfile.setInt32( "srs_algo", g_settings.srs_algo);
@@ -4566,6 +4572,22 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 			}
 		}
 
+		return menu_return::RETURN_REPAINT;
+	}
+	else if(actionKey == "picon_dir") {
+		parent->hide();
+		CFileBrowser b;
+		b.Dir_Mode=true;
+		if (b.exec(g_settings.picon_dir))
+			strncpy(g_settings.picon_dir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.picon_dir)-1);
+		return menu_return::RETURN_REPAINT;
+	}
+	else if(actionKey == "picon_dir_e2") {
+		parent->hide();
+		CFileBrowser b;
+		b.Dir_Mode=true;
+		if (b.exec(g_settings.picon_dir_e2))
+			strncpy(g_settings.picon_dir_e2, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.picon_dir_e2)-1);
 		return menu_return::RETURN_REPAINT;
 	}
 	else if(actionKey == "select_font") {

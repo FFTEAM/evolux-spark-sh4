@@ -616,24 +616,46 @@ void CPictureViewer::Cleanup ()
 	m_CurrentPic_Buffer = NULL;
   }
 }
-#define LOGO_DIR1 "/share/tuxbox/neutrino/icons/logo"
-#define LOGO_DIR2 "/var/share/icons/logo"
-#define LOGO_FMT ".jpg"
 
 bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int width, int height)
 {
-        char fname[255];
-	bool ret = false;
-        sprintf(fname, "%s/%llx.jpg", LOGO_DIR2, channel_id & 0xFFFFFFFFFFFFULL);
-printf("logo file: %s\n", fname);
-        if(access(fname, F_OK))
-                sprintf(fname, "%s/%llx.gif", LOGO_DIR2, channel_id & 0xFFFFFFFFFFFFULL);
-        if(access(fname, F_OK))
-                sprintf(fname, "%s/%llx.png", LOGO_DIR2, channel_id & 0xFFFFFFFFFFFFULL);
-        if(!access(fname, F_OK)) {
-                ret = DisplayImage(fname, posx, posy, width, height);
-        }
-	return ret;
+	int r = -1;
+
+	if (g_settings.infobar_picon) {
+		char fname[255];
+		int len = snprintf(fname, sizeof(fname), "%s/%llx.jpg", g_settings.picon_dir, channel_id & 0xFFFFFFFFFFFFULL);
+		if (len > sizeof(fname))
+			return false;
+		len -= 3;
+		r = access(fname, F_OK);
+		if (r) {
+			strcpy(fname + len, "gif");
+			r = access(fname, F_OK);
+		}
+		if (r) {
+			strcpy(fname + len, "png");
+			r = access(fname, F_OK);
+		}
+		if (r) {
+			// nothing found yet, try E2 ...
+			CZapitChannel * cc = CNeutrinoApp::getInstance()->channelList->getChannel(channel_id);
+			if (!cc)
+				return false;
+			len = snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+				g_settings.picon_dir_e2,
+				(u_int) (cc->getVideoPid() > 0) ? 1 : 2,
+				(u_int) channel_id & 0xFFFF,
+				(u_int) (channel_id >> 32) & 0xFFFF,
+				(u_int) (channel_id >> 16) & 0xFFFF,
+				(u_int) cc->getSatellitePosition());
+			if (len > sizeof(fname))
+				return false;
+			r = access(fname, F_OK);
+		}
+		if (!r)
+			return DisplayImage(fname, posx, posy, width, height);
+	}
+	return false;
 }
 
 bool CPictureViewer::DisplayImage (const std::string & name, int posx, int posy, int width, int height)

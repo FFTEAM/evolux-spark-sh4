@@ -424,6 +424,8 @@ const char *locale_real_names[] = {
 	"infobar.picon_big",
 	"infobar.picon_move",
 	"infobar.picon_normal",
+	"infobar.picon_dir",
+	"infobar.picon_dir_e2",
 	"infoviewer.epgnotload",
 	"infoviewer.epgwait",
 	"infoviewer.eventlist",

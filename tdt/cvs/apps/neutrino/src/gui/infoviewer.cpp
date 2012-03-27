@@ -332,11 +332,11 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 
 	int ChanNumWidth = 0;
 	logo_ok = false;
-	if(showButtonBar) {
+	if(showButtonBar && g_settings.infobar_picon > 1) {
 	    int P_W = 65;
 	    int P_H = 39;
 
-	    if (g_settings.infobar_picon) {
+	    if (g_settings.infobar_picon > 0) {
 		P_W = 100;
 		P_H = 60;
 	    }
@@ -345,26 +345,26 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 
 #define PIC_X (ChanNameX + 10)
 #define PIC_Y (ChanNameY + time_height - PIC_H)
-		if (g_settings.infobar_picon == 2) {
+		if (g_settings.infobar_picon == 3) {
 		    logo_ok = g_PicViewer->DisplayLogo(channel_id, PIC_X-127, PIC_Y-16, PIC_W, PIC_H);
 		} else {
 		    logo_ok = g_PicViewer->DisplayLogo(channel_id, PIC_X, PIC_Y, PIC_W, PIC_H);
 		}
 		ChanNumWidth = PIC_W + 10;
 	}
-	if (ChanNum && (!logo_ok || g_settings.infobar_picon == 2)) {
+	if (ChanNum && (!logo_ok || g_settings.infobar_picon == 3)) {
 		int ChanNumHeight = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_NUMBER]->getHeight() + 5;
 		ChanNumWidth = 5 + g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_NUMBER]->getRenderWidth (strChanNum);
 		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_NUMBER]->RenderString (ChanNameX + 5, ChanNameY + ChanNumHeight, ChanNumWidth, strChanNum, col_NumBoxText);
 	}
-	if (logo_ok && g_settings.infobar_picon < 2) {
+	if (logo_ok && g_settings.infobar_picon < 3) {
 		ChannelName = "  "+ChannelName;
 		ChannelName = strChanNum+ChannelName;
 	}
 	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (ChanNameX + 10 + ChanNumWidth, ChanNameY + time_height, BoxEndX - (ChanNameX + 20) - time_width - LEFT_OFFSET - 5 - ChanNumWidth, ChannelName, COL_INFOBAR, 0, true);	// UTF-8
 
 	int ChanNumYPos = BoxStartY + ChanHeight;
-	if ((g_settings.infobar_picon < 2 || !logo_ok) && g_settings.infobar_sat_display && satellitePosition != 0 && satellitePositions.size()) {
+	if ((g_settings.infobar_picon < 3 || !logo_ok) && g_settings.infobar_sat_display && satellitePosition != 0 && satellitePositions.size()) {
 		sat_iterator_t sit = satellitePositions.find(satellitePosition);
 
 		if(sit != satellitePositions.end()) {
@@ -916,7 +916,7 @@ CSectionsdClient::CurrentNextInfo CInfoViewer::getEPG (const t_channel_id for_ch
 #define get_set CNeutrinoApp::getInstance()->getScanSettings()
 
 void CInfoViewer::showSNR () {
-    if (g_settings.infobar_picon < 2 || (!logo_ok && g_settings.infobar_picon == 2)) {
+    if (g_settings.infobar_picon < 3 || (!logo_ok && g_settings.infobar_picon == 3)) {
 
   char percent[10];
   uint16_t ssig, ssnr;

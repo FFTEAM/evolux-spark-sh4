@@ -2503,11 +2503,12 @@ void CNeutrinoApp::InitFontSettings(CMenuWidget &fontSettings)
 	fontSettings.addItem(new CMenuForwarder(LOCALE_OPTIONS_DEFAULT, true, NULL, this, font_sizes_groups[5].actionkey));
 }
 
-#define OPTIONS_OFF0_ON1_ON2_OPTION_COUNT 3
+#define OPTIONS_OFF0_ON1_ON2_OPTION_COUNT 4
 const CMenuOptionChooser::keyval OPTIONS_OFF0_ON1_ON2_OPTIONS[OPTIONS_OFF0_ON1_ON2_OPTION_COUNT] = {
-	{ 0, LOCALE_INFOBAR_PICON_NORMAL },
-	{ 1, LOCALE_INFOBAR_PICON_BIG },
-	{ 2, LOCALE_INFOBAR_PICON_MOVE }
+	{ 0, LOCALE_OPTIONS_OFF },
+	{ 1, LOCALE_INFOBAR_PICON_NORMAL },
+	{ 2, LOCALE_INFOBAR_PICON_BIG },
+	{ 3, LOCALE_INFOBAR_PICON_MOVE }
 };
 
 void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings, CMenuWidget &fontSettings )
@@ -2540,6 +2541,10 @@ void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings, CMenuWidget &fo
 	colorSettings.addItem(new CMenuForwarder(LOCALE_TIMING_HEAD, true, NULL, colorSettings_timing));
 
 	colorSettings.addItem(new CMenuOptionChooser(LOCALE_INFOBAR_PICON, &g_settings.infobar_picon, OPTIONS_OFF0_ON1_ON2_OPTIONS, OPTIONS_OFF0_ON1_ON2_OPTION_COUNT, true));
+	CMenuForwarder* fRecDir = new CMenuForwarder(LOCALE_PICON_DIR, true, g_settings.picon_dir, this, "picon_dir");
+	CMenuForwarder* fTsDir = new CMenuForwarder(LOCALE_PICON_DIR_E2, true, g_settings.picon_dir_e2, this, "picon_dir_e2");
+	colorSettings.addItem(fRecDir);
+	colorSettings.addItem(fTsDir);
 
 	#ifdef DUCKBOX
 	colorSettings.addItem(new CMenuOptionChooser(LOCALE_SCALE_DISPLAY_TYPE, &g_settings.scale_display_type, MISCSETTINGS_SCALE_DISPLAY_TYPE_OPTIONS, MISCSETTINGS_SCALE_DISPLAY_TYPE_OPTION_COUNT, true ));

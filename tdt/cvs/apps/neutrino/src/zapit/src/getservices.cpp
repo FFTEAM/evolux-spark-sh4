@@ -353,7 +353,7 @@ void SaveMotorPositions()
 
 static void init_sat(t_satellite_position position)
 {
-	satellitePositions[position].position = 0;
+	satellitePositions[position].position = position;
 	satellitePositions[position].diseqc = -1;
 	satellitePositions[position].commited = -1;
 	satellitePositions[position].uncommited = -1;
