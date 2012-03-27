@@ -63,7 +63,7 @@ include make/misc_tools.mk
 include make/plugins.mk
 
 # Include stock gui targets
-include make/stock.mk
+#include make/stock.mk
 
 # Include enigma gui targets
 #include make/enigma.mk
@@ -103,7 +103,7 @@ include make/prog.mk
 #include make/flashybrid.mk
 
 # Include development targets
-include make/development.mk
+#include make/development.mk
 
 # Include stg-framebuffer targets (SPECS derived)
 # (stgfb X... freetype directfb)
@@ -152,7 +152,7 @@ include make/phony.mk
 include make/tags.mk
 
 # Target for building source distributions (hardly used these days of CVS :-)
-include make/disttargets.mk
+#include make/disttargets.mk
 
 #Trick
 include make/release.mk
