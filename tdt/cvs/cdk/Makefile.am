@@ -69,7 +69,7 @@ include make/stock.mk
 #include make/enigma.mk
 
 # Include enigma2 gui targets
-include make/enigma2.mk
+#include make/enigma2.mk
 
 # Include enigma2-nightly gui targets
 include make/enigma2-nightly.mk
