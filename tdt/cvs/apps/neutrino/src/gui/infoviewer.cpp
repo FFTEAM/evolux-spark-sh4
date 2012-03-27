@@ -332,11 +332,11 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 
 	int ChanNumWidth = 0;
 	logo_ok = false;
-	if(showButtonBar && g_settings.infobar_picon > 1) {
+	if(showButtonBar && g_settings.infobar_picon) {
 	    int P_W = 65;
 	    int P_H = 39;
 
-	    if (g_settings.infobar_picon > 0) {
+	    if (g_settings.infobar_picon > 1) {
 		P_W = 100;
 		P_H = 60;
 	    }
@@ -916,7 +916,7 @@ CSectionsdClient::CurrentNextInfo CInfoViewer::getEPG (const t_channel_id for_ch
 #define get_set CNeutrinoApp::getInstance()->getScanSettings()
 
 void CInfoViewer::showSNR () {
-    if (g_settings.infobar_picon < 3 || (!logo_ok && g_settings.infobar_picon == 3)) {
+    if ((g_settings.infobar_picon && g_settings.infobar_picon < 3) || (!logo_ok && g_settings.infobar_picon == 3)) {
 
   char percent[10];
   uint16_t ssig, ssnr;
