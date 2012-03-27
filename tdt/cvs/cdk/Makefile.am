@@ -58,6 +58,9 @@ include make/misc_tools.mk
 # Plugins
 include make/plugins.mk
 
+# Include enigma2 gui targets
+include make/enigma2.mk
+
 # Include enigma2-nightly gui targets
 include make/enigma2-nightly.mk
 
