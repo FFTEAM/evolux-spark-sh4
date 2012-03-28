@@ -31,7 +31,6 @@ $(DEPDIR)/%release_neutrino:
 	$(INSTALL_DIR) $(prefix)/release_neutrino/ram && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/etc && \
-	$(INSTALL_FILE) root/etc/tuxbox/timezone.xml $(targetprefix)/etc/ && \
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_neutrino/bin/ && \
@@ -63,6 +62,7 @@ $(DEPDIR)/%release_neutrino:
 	\
 	cp -a $(targetprefix)/dev/* $(prefix)/release_neutrino/dev/ && \
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release_neutrino/etc/fstab && \
+	cp -dp $(buildprefix)/root/etc/tuxbox/timezone.xml $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/group $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
