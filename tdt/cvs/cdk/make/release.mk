@@ -595,6 +595,7 @@ endif
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/CutListEditor
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/MediaScanner
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/TuxboxPlugins
+	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/SoftwareManager
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/CrashlogAutoSubmit
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/TempFanControl
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/DefaultServicesScanner
