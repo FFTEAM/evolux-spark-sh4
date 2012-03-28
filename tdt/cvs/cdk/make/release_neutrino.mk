@@ -400,6 +400,7 @@ endif
 	( cd $(prefix)/release_neutrino/usr/lib/tuxbox && ln -s /var/plugins )
 	rm -rf $(prefix)/release_neutrino/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino/usr/local/share/neutrino/icons/
+	rm $(prefix)/release_neutrino/usr/local/share/neutrino/icons/Makefile*
 
 #######################################################################################
 #######################################################################################
