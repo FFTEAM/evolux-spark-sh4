@@ -206,6 +206,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 	sleep 5
 	cd /media/hdd 2>/dev/null && mkdir movie music picture swap epg 2>/dev/null
 	cd /media/hdd2 2>/dev/null && mkdir movie music picture swap epg 2>/dev/null
+	[ -e /autofs/sda1/logo ] && mount -o bind /autofs/sda1/logo  /usr/local/share/neutrino/icons/logo &
+	[ -e /autofs/sda1/picon ] && mount -o bind /autofs/sda1/picon  /usr/local/share/enigma2/picon &
 	) &
 
 	[ -e /etc/.dualTuner ] && [ -e /etc/.start_enigma2 ] && dualTuner &

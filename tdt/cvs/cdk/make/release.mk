@@ -28,7 +28,7 @@ release_common_utils:
 	ln -s ../init.d/reboot $(prefix)/release/etc/rc.d/rc6.d/S90reboot
 
 release_spark:
-	echo "PinguLux" > $(prefix)/release/etc/hostname
+	echo "EvoLux" > $(prefix)/release/etc/hostname
 
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release/etc/init.d/
 	cp $(buildprefix)/root/release/rc $(prefix)/release/etc/init.d/
@@ -57,6 +57,7 @@ release_spark:
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release/etc/fstab
 	cp $(buildprefix)/root/boot/startup.mp4 $(prefix)/release/boot/startup.mp4
 
+	mkdir -p $(prefix)/release/usr/local/share/enigma2/picon
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release/usr/sbin/
@@ -71,13 +72,6 @@ release_spark:
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release/etc/init.d/
 
-if STM23
-	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release/lib/modules/rt2870sta.ko
-	cp -f $(buildprefix)/root/lib/modules/rt3070sta_stm23.ko $(prefix)/release/lib/modules/rt3070sta.ko
-	cp -f $(buildprefix)/root/lib/modules/smartcard_stm23.ko $(prefix)/release/lib/modules/smartcard.ko
-#	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/vfd.ko
-	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release/lib/modules/encrypt.ko
-endif
 if STM24
 if ENABLE_P0207
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
@@ -116,10 +110,9 @@ endif
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
-#	if STM23
+
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
-#	endif
-#	install autofs
+
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/
@@ -170,7 +163,7 @@ endif
 	ln -sf ../init.d/ntpupdate.sh $(prefix)/release/etc/rc.d/rc3.d/S52ntpupdate
 	cp -RP $(buildprefix)/root/etc/mumudvb $(prefix)/release/etc/
 	cp -RP $(buildprefix)/root/bin/mumudvb $(prefix)/release/bin/
-### del libcoolstream+libeplayer2 stuff as not needed for pingulux-E2 ###
+### del libcoolstream+libeplayer2 stuff as not needed for evolux-E2 ###
 	rm -f $(prefix)/release/lib/libcool*
 	rm -f $(prefix)/release/lib/libeplayer2*
 # copy evo mc files ####
