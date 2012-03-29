@@ -1,19 +1,19 @@
 installdir = $(DATADIR)/neutrino/icons
 
 install_DATA = \
-	16_9.raw 16_9_gray.raw audio.raw blau.raw border_lr.raw border_ul.raw \
-	colors.raw dbox.raw dd.raw dd_avail.raw dd_gray.raw error.raw features.raw \
-	file.raw folder.raw games.raw gelb.raw gruen.raw help.raw help_small.raw \
-	home.raw info.raw keybinding.raw language.raw lcd.raw lock.raw mainmenue.raw \
-	mounted.raw mp3.raw mute.raw network.raw not_mounted.raw numericpad.raw ok.raw power.raw radar.pal \
+	16_9.png 16_9_gray.png audio.raw blau.png border_lr.raw border_ul.raw \
+	colors.png dbox.raw dd.png dd_avail.png dd_gray.png error.png features.png \
+	file.png folder.png games.raw gelb.png gruen.png help.png help_small.png \
+	home.png info.raw keybinding.png language.raw lcd.png lock.raw mainmenue.png \
+	mounted.png mp3.png mute.png network.png not_mounted.png numericpad.png ok.png power.png radar.pal \
 	radar0.raw radar1.raw radar2.raw radar3.raw radar4.raw radar5.raw radar6.raw \
-	radar7.raw radar8.raw radar9.raw radiomode.pal radiomode.raw recording.raw \
-	rot.raw scan.pal scan.raw settings.raw shell.raw shutdown.pal shutdown.raw softupdate.raw \
-	streaming.raw timer.raw video.raw volume.raw volumebody.raw volumeslider2.raw \
-	volumeslider2alpha.raw volumeslider2blue.raw volumeslider2green.raw \
-	volumeslider2red.raw vtxt.raw vtxt_gray.raw movie.raw movieplayer.raw \
-	hidden.raw bookmarkmanager.raw mute_small.raw dbox_small.raw \
-	0.raw 1.raw 2.raw 3.raw 4.raw 5.raw 6.raw 7.raw 8.raw 9.raw \
-	up.raw right.raw down.raw left.raw fta.raw ca.raw subt.raw subt_gray.raw \
+	radar7.raw radar8.raw radar9.raw radiomode.pal radiomode.raw recording.png \
+	rot.png scan.pal scan.raw settings.png shell.png shutdown.pal shutdown.raw softupdate.png \
+	streaming.png timer.png video.png volume.png volumebody.png volumeslider2.png \
+	volumeslider2alpha.png volumeslider2blue.png volumeslider2green.png \
+	volumeslider2red.png vtxt.png vtxt_gray.png movie.png movieplayer.raw \
+	hidden.raw bookmarkmanager.png mute_small.png dbox_small.raw \
+	0.png 1.png 2.png 3.png 4.png 5.png 6.png 7.png 8.png 9.png \
+	up.png right.png down.png left.png fta.raw ca.png subt.png subt_gray.png \
 	fontsize.raw net_gray.raw net_green.raw pictureviewer.raw \
 	deutsch.raw english.raw polski.raw russkij.raw
