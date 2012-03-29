@@ -3287,13 +3287,11 @@ _repeat:
 		setVolume(msg, (mode != mode_scart));
 		return messages_return::handled;
 	}
-#if 0
 	else if ((msg == CRCInput::RC_left) || (msg == CRCInput::RC_right)) // FIXME temp, until new remote
 	{
 		setVolume(msg, (mode != mode_scart));
 		return messages_return::handled;
 	}
-#endif
 	else if( msg == CRCInput::RC_spkr ) {
 		if( mode == mode_standby ) {
 			//switch lcd off/on
