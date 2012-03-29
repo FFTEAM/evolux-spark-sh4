@@ -1118,10 +1118,15 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 #endif
 	if(ptr) {
 		*ptr = 0;
-		std::string newname = iconBasePath + filename.c_str() + ".gif";
+		std::string newname = iconBasePath + filename.c_str() + ".png";
 		*ptr = '.';
 		if(!access(newname.c_str(), F_OK))
-			return g_PicViewer->DisplayImage(newname, x, y, 0, 0);
+			return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
+		*ptr = 0;
+		newname = iconBasePath + filename.c_str() + ".gif";
+		*ptr = '.';
+		if(!access(newname.c_str(), F_OK))
+			return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
 	}
 	struct rawHeader header;
 	uint16_t         width, height;
