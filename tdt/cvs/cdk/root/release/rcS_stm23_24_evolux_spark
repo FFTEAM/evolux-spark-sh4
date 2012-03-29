@@ -256,8 +256,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 	if [ -n "$START_NEUTRINO" ]; then
 		if [ -e /etc/.EVOfirstboot ]; then
 			if [ `cat /sys/class/stmcoredisplay/display0/hdmi0.0/hotplug` == "y" ]; then
-				mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.scart
-				mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
+				if [ -e /usr/local/share/config/neutrino.conf.hdmi ]; then
+					rm /usr/local/share/config/neutrino.conf >/dev/null 2>&1
+					mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
+				fi
 				touch /etc/.hdmi
 			        echo "HDMI" > /dev/vfd
 			else
