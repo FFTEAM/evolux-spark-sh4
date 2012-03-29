@@ -255,21 +255,18 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	if [ -n "$START_NEUTRINO" ]; then
 		if [ -e /etc/.EVOfirstboot ]; then
-			echo "SCART 1 JA EXIT" > /dev/vfd
-			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
-			TASTE=`hexdump -n 12 /dev/input/event1 | awk '{print $7}'`
-			case $TASTE in
-				0002) mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
-					mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
-					rm -f /etc/.hdmi >/dev/null 2>&1
-					echo "SCART aktiv" > /dev/vfd;;
-				*) if [ -e /usr/local/share/config/neutrino.conf.hdmi ]; then
-					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.scart
-					mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
-				   fi
-					touch /etc/.hdmi
-				        echo "HDMI aktiv" > /dev/vfd;;
-			esac
+			if [ `cat /sys/class/stmcoredisplay/display0/hdmi0.0/hotplug` == "y" ]; then
+				mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.scart
+				mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
+				touch /etc/.hdmi
+			        echo "HDMI" > /dev/vfd;;
+
+			else
+				mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
+				mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
+				rm -f /etc/.hdmi >/dev/null 2>&1
+				echo "SCART" > /dev/vfd;;
+			fi
 			sleep 3
 			rm /etc/.EVOfirstboot
 		fi
