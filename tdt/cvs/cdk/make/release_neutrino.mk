@@ -196,7 +196,6 @@ if STM23
 	cp -f $(buildprefix)/root/lib/modules/rt2870sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt2870sta.ko
 	cp -f $(buildprefix)/root/lib/modules/rt3070sta_stm23.ko $(prefix)/release_neutrino/lib/modules/rt3070sta.ko
 	cp -f $(buildprefix)/root/lib/modules/smartcard_stm23.ko $(prefix)/release_neutrino/lib/modules/smartcard.ko
-#	cp -f $(buildprefix)/root/release/vfd_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/vfd.ko
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL)_noptk.ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 endif
 if STM24
@@ -204,20 +203,23 @@ if ENABLE_P0207
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino/lib/modules/
-#	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release_neutrino/lib/modules/
 	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
 endif
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino/lib/modules/rt8192cu.ko
-#	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release_neutrino/lib/modules/rt8712u.ko
 	cp -f $(buildprefix)/root/lib/modules/rt8712u_stm24-209.ko $(prefix)/release_neutrino/lib/modules/rt8712u.ko
-#	cp -f $(buildprefix)/root/lib/modules/stmcore-display-sti7111_stm24-209_scart.ko $(prefix)/release_neutrino/lib/modules/stmcore-display-sti7111_scart.ko
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release_neutrino/lib/modules/
-#	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd.fulan/vfd.ko $(prefix)/release_neutrino/lib/modules/
-#	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release_neutrino/lib/modules/encrypt.ko
+endif
+if ENABLE_P0210
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino/lib/modules/rt8192cu.ko
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release_neutrino/lib/modules/rt8712u.ko
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release_neutrino/lib/modules/
 endif
 endif
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino/sbin
