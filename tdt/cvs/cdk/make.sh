@@ -56,22 +56,35 @@ host_alias=`echo ${host_alias} | sed -e "s/suse/${VENDOR}/"`
 CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 
 ##############################################
-echo -e "Build SPARK STM24-209 Player191 now...\n"
+echo -e "Build SPARK STM24-209/210 Player191 now...\n"
 TARGET="--enable-spark"
 CONFIGPARAM="$CONFIGPARAM $TARGET"
 
 ##############################################
 
-KERNEL="--enable-stm24 --enable-p0209"
-CONFIGPARAM="$CONFIGPARAM $KERNEL"
-
-##############################################
 read -p "Activate debug (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	CONFIGPARAM="$CONFIGPARAM --enable-debug"
 else
 	CONFIGPARAM="$CONFIGPARAM"
 fi
+
+##############################################
+echo ""
+echo -e "\nSTB :"
+echo "   1) STM24-209 (standard)"
+echo "   2) STM24-210 (EXPERIMENTAL)"
+read -p "Select STB (1-2)? "
+case "$REPLY" in
+	1) echo -e "\nSelected STB: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0209";;
+	2) echo -e "\nSelected Filesystem: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0210";;
+	*) echo -e "\nSelected Filesystem: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0209";;
+esac
+#KERNEL="--enable-stm24 --enable-p0209"
+CONFIGPARAM="$CONFIGPARAM $KERNEL"
 
 ##############################################
 
