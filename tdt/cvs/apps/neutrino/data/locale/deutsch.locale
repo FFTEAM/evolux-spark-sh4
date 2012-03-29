@@ -1228,9 +1228,9 @@ streamingmenu.streaming_transcode_video_codec MPEG Video Codec
 streamingmenu.streaming_type Streamingserver
 streamingmenu.streaming_videorate Datenrate Video
 streamingserver.noconnect Keine Verbindung zum Streamingserver.\nAufnahme wird abgebrochen.
-stringinput.caps Groß-/Kleinbuchstaben
-stringinput.insert Zeichen einfügen
-stringinput.clear Zeichen löschen
+stringinput.caps Groß-/Klein
+stringinput.insert einfügen
+stringinput.clear löschen
 stringinput.clear_all Alles löschen
 subtitles.head Untertitel
 subtitles.stop Stop Untertitel
