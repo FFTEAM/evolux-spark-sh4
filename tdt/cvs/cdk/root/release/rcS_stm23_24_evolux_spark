@@ -263,8 +263,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 				touch /etc/.hdmi
 			        echo "HDMI" > /dev/vfd
 			else
-				mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
-				mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
+				if [ -e /usr/local/share/config/neutrino.conf.scart ]; then
+					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
+					mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
+				fi
 				rm -f /etc/.hdmi >/dev/null 2>&1
 				echo "SCART" > /dev/vfd
 			fi
