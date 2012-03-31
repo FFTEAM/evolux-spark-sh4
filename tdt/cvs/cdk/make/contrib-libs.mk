@@ -2224,14 +2224,9 @@ $(DEPDIR)/%libtuxtxt: $(DEPDIR)/libtuxtxt.do_compile
 #
 # tuxtxt32bpp
 #
-$(DEPDIR)/tuxtxt32bpp.do_prepare:  @DEPENDS_tuxtxt32bpp@
-	[ -d "tuxtxt" ] && \
-	cd tuxtxt && git pull; \
-	[ -d "tuxtxt" ] || \
-	git clone git://openpli.git.sourceforge.net/gitroot/openpli/tuxtxt;
-	touch py-compile
-	chmod 755 py-compile
-	cd @DIR_tuxtxt32bpp@ && patch -p1 < ../../Patches/tuxtxt32bpp-1.0-fix_dbox_headers.diff
+$(DEPDIR)/tuxtxt32bpp.do_prepare: libtuxtxt @DEPENDS_tuxtxt32bpp@
+	cd @DIR_tuxtxt32bpp@ && \
+		patch -p1 < $(buildprefix)/Patches/tuxtxt32bpp-1.0-fix_dbox_headers.diff;
 	touch $@
 
 $(DEPDIR)/tuxtxt32bpp.do_compile: $(DEPDIR)/tuxtxt32bpp.do_prepare
@@ -2247,17 +2242,19 @@ $(DEPDIR)/tuxtxt32bpp.do_compile: $(DEPDIR)/tuxtxt32bpp.do_prepare
 		--host=$(target) \
 		--prefix=/usr \
 		--with-boxtype=generic \
-		--with-configdir=/etc && \
+		--with-configdir=/usr \
+		--with-datadir=/usr/share/tuxtxt \
+		--with-fontdir=/usr/share/fonts && \
 	$(MAKE) all
 	touch $@
 
 $(DEPDIR)/min-tuxtxt32bpp $(DEPDIR)/std-tuxtxt32bpp $(DEPDIR)/max-tuxtxt32bpp \
 $(DEPDIR)/tuxtxt32bpp: \
 $(DEPDIR)/%tuxtxt32bpp: $(DEPDIR)/tuxtxt32bpp.do_compile
-	@[ "x$*" = "x" ] && touch $@ || true
 	cd @DIR_tuxtxt32bpp@ && \
 		@INSTALL_tuxtxt32bpp@
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_tuxtxt32bpp@
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # libdreamdvd

@@ -64,6 +64,9 @@ include make/plugins.mk
 # Include enigma2-nightly gui targets
 include make/enigma2-nightly.mk
 
+# Include enigma2-pli-nightly gui targets
+include make/enigma2-pli-nightly.mk
+
 # Include neutrino gui targets
 include make/neutrino.mk
 
@@ -104,6 +107,8 @@ include make/disttargets.mk
 
 #Trick
 include make/release.mk
+
+include make/release-enigma2-pli-nightly.mk
 
 include make/release_neutrino.mk
 
