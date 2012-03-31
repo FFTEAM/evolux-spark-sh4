@@ -1,8 +1,5 @@
-if STM22
-kernelpath="linux"
-else
 kernelpath="linux-sh4"
-endif
+
 # auxiliary targets for model-specific builds
 release_common_utils:
 #       remove the slink to busybox

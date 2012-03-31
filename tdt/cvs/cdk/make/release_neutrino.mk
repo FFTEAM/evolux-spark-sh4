@@ -1,8 +1,3 @@
-if STM22
-kernelpath="linux-sh4"
-else
-kernelpath="linux-sh4"
-endif
 #Trick ALPHA-Version ;)
 $(DEPDIR)/min-release_neutrino $(DEPDIR)/std-release_neutrino $(DEPDIR)/max-release_neutrino $(DEPDIR)/ipk-release_neutrino $(DEPDIR)/release_neutrino: \
 $(DEPDIR)/%release_neutrino:
