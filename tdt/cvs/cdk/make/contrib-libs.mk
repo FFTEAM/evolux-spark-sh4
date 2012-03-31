@@ -2185,6 +2185,43 @@ $(DEPDIR)/%libdvbsipp: $(DEPDIR)/libdvbsipp.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 #
+# libtuxtxt
+#
+$(DEPDIR)/libtuxtxt.do_prepare: @DEPENDS_libtuxtxt@
+	rm -rf $(buildprefix)/tuxtxt && \
+	git clone git://openpli.git.sourceforge.net/gitroot/openpli/tuxtxt;
+	cd @DIR_libtuxtxt@ && \
+	patch -p1 < $(buildprefix)/Patches/libtuxtxt-1.0-fix_dbox_headers.diff
+	touch $@
+
+$(DEPDIR)/libtuxtxt.do_compile: $(DEPDIR)/libtuxtxt.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libtuxtxt@ && \
+	aclocal -I $(hostprefix)/share/aclocal && \
+	autoheader && \
+	autoconf && \
+	automake --foreign && \
+	libtoolize --force && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr \
+		--with-boxtype=generic \
+		--with-configdir=/usr \
+		--with-datadir=/usr/share/tuxtxt \
+		--with-fontdir=/usr/share/fonts && \
+	$(MAKE) all
+	touch $@
+
+$(DEPDIR)/min-libtuxtxt $(DEPDIR)/std-libtuxtxt $(DEPDIR)/max-libtuxtxt \
+$(DEPDIR)/libtuxtxt: \
+$(DEPDIR)/%libtuxtxt: $(DEPDIR)/libtuxtxt.do_compile
+	cd @DIR_libtuxtxt@ && \
+		@INSTALL_libtuxtxt@
+#	@DISTCLEANUP_libtuxtxt@
+	@[ "x$*" = "x" ] && touch $@ || true
+
+#
 # tuxtxt32bpp
 #
 $(DEPDIR)/tuxtxt32bpp.do_prepare:  @DEPENDS_tuxtxt32bpp@
@@ -2253,7 +2290,7 @@ $(DEPDIR)/%libdreamdvd: $(DEPDIR)/libdreamdvd.do_compile
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 #
-# libdreamdvd
+# libdreamdvd2
 #
 $(DEPDIR)/libdreamdvd2.do_prepare:  @DEPENDS_libdreamdvd2@
 	[ -d "libdreamdvd" ] && \
@@ -2280,10 +2317,10 @@ $(DEPDIR)/libdreamdvd2.do_compile: $(DEPDIR)/libdreamdvd2.do_prepare
 $(DEPDIR)/min-libdreamdvd2 $(DEPDIR)/std-libdreamdvd2 $(DEPDIR)/max-libdreamdvd2 \
 $(DEPDIR)/libdreamdvd2: \
 $(DEPDIR)/%libdreamdvd2: $(DEPDIR)/libdreamdvd2.do_compile
-	@[ "x$*" = "x" ] && touch $@ || true
 	cd @DIR_libdreamdvd2@ && \
 		@INSTALL_libdreamdvd2@
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_libdreamdvd2@
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # PilImaging
