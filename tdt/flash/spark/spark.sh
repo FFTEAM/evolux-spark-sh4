@@ -66,17 +66,21 @@ echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
 if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	echo "   1) Prepare Neutrino jffs2"
+	echo "   1) Prepare Neutrino     jffs2"
 fi
 if [ -e $TUFSBOXDIR/release_with_dev ]; then
-	echo "   2) Prepare Enigma2  jffs2"
+	echo "   2) Prepare Enigma2      jffs2"
+fi
+if [ -e $TUFSBOXDIR/release-enigma2-pli_with_dev ]; then
+	echo "   3) Prepare Enigma2-PLI  jffs2"
 fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
-	echo "   3) Prepare Evolux   jffs2"
+	echo "   4) Prepare Evolux       jffs2"
 fi
+
 echo "----------------------------"
 
-read -p "Select target (0-3)? "
+read -p "Select target (0-4)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Preparing Neutrino jffs2..."
@@ -97,7 +101,16 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	3)  echo "Preparing Evolux jffs2..."
+	3)  echo "Preparing Enigma2-PLI jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release-enigma2-pli_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Enigma2 jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	4)  echo "Preparing Evolux jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Evolux jffs2 and uImage..."
