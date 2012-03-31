@@ -52,6 +52,8 @@
 #define DEFAULT_XRES 1280
 #define DEFAULT_YRES 720
 
+#include <png.h>
+
 #define ICON_TEMP_SIZE 256	// should be enough for small icons
 #endif
 
@@ -1110,7 +1112,6 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		y = _y;
 	}
 
-//printf("%s(file, %d, %d, %d)\n", __FUNCTION__, x, y, offset);
 #ifdef __sh__
 	char * ptr = (char *)rindex(filename.c_str(), '.');
 #else
@@ -1120,8 +1121,85 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		*ptr = 0;
 		std::string newname = iconBasePath + filename.c_str() + ".png";
 		*ptr = '.';
+#ifndef __sh__
 		if(!access(newname.c_str(), F_OK))
 			return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
+#else
+		u_char png_hdr[8];
+		FILE *F = fopen(newname.c_str(), "rb");
+		if (F) {
+			if (8 != fread(png_hdr, 1, 8, F)) {
+				fclose (F);
+				goto png_bye;
+			}
+			if (png_sig_cmp(png_hdr, 0, 8)) {
+				fclose (F);
+				goto png_bye;
+			}
+			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+			if (!png_ptr) {
+				fclose (F);
+				goto png_bye;
+			}
+			png_infop info_ptr = png_create_info_struct(png_ptr);
+			if (!info_ptr) {
+				png_destroy_read_struct(&png_ptr,  NULL, NULL);
+				fclose (F);
+				goto png_bye;
+			}
+			if (setjmp(png_jmpbuf(png_ptr))) {
+				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+				fclose (F);
+				goto png_bye;
+			}
+			png_init_io(png_ptr, F);
+			png_set_sig_bytes(png_ptr, 8);
+			png_read_info(png_ptr, info_ptr);
+			png_byte c = png_get_color_type(png_ptr, info_ptr);
+			png_byte d = png_get_bit_depth(png_ptr, info_ptr);
+			if (d == 16)
+				png_set_strip_16(png_ptr);
+			png_set_expand(png_ptr);
+			png_read_update_info(png_ptr, info_ptr);
+			int w = png_get_image_width(png_ptr, info_ptr);
+			int h = png_get_image_height(png_ptr, info_ptr);
+			if (w * h > ICON_TEMP_SIZE * ICON_TEMP_SIZE) {
+				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+				fclose (F);
+				goto png_bye;
+			}
+			if (setjmp(png_jmpbuf(png_ptr))) {
+				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+				fclose (F);
+				goto png_bye;
+			}
+			png_bytep *row_pointers = (png_bytep *) malloc(h * sizeof(png_bytep));
+			char *p = (char *) icon_space;
+			int wi = 4 * w;
+			for (int i = 0; i < h; i++) {
+				row_pointers[i] = (png_byte *) p;
+				p += wi;
+			}
+			png_read_image(png_ptr, row_pointers);
+			fclose (F);
+
+			uint32_t *bStart = (uint32_t *) icon_space;
+			uint32_t *bEnd = bStart + w * h;
+			while (bStart < bEnd) {
+				// 0xaabbggrr => 0xaarrggbb
+				uint32_t u = *bStart;
+				*bStart &= 0xFF00FF00;
+				*bStart |= 0x00FF0000 & (u << 16);
+				*bStart |= 0x000000FF & (u >> 16);
+				bStart++;
+			}
+			blitIcon(w, h, x, y, scaleX(w), scaleY(h));
+			free (row_pointers);
+			png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+			return  true;
+		}
+png_bye:
+#endif
 		*ptr = 0;
 		newname = iconBasePath + filename.c_str() + ".gif";
 		*ptr = '.';
