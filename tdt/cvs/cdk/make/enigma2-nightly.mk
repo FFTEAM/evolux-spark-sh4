@@ -45,18 +45,12 @@ $(DEPDIR)/enigma2-nightly: enigma2-nightly.do_prepare enigma2-nightly.do_compile
 	fi
 	touch $@
 
-enigma2-nightly-clean:
+enigma2-nightly-clean enigma2-nightly-distclean:
 	rm -f $(DEPDIR)/enigma2-nightly*
 	cd $(appsdir)/enigma2-nightly && \
 		$(MAKE) distclean && \
 		find $(appsdir)/enigma2-nightly -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/enigma2-nightly/autom4te.cache
-
-enigma2-nightly-distclean:
-	rm -f $(DEPDIR)/enigma2-nightly*
-	rm -rf $(appsdir)/enigma2-nightly.newest
-	rm -rf $(appsdir)/enigma2-nightly.org
-	rm -rf $(appsdir)/enigma2-nightly.patched
 
 $(DEPDIR)/enigma2-nightly-misc:
 #	workarounds to allow rebuild

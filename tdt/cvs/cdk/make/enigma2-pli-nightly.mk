@@ -42,9 +42,10 @@ $(DEPDIR)/enigma2-pli-nightly: enigma2-pli-nightly.do_prepare enigma2-pli-nightl
 
 enigma2-pli-nightly-clean enigma2-pli-nightly-distclean:
 	rm -f $(DEPDIR)/enigma2-pli-nightly*
-	rm -rf $(appsdir)/enigma2-pli-nightly.newest
-	rm -rf $(appsdir)/enigma2-pli-nightly.org
-	rm -rf $(appsdir)/enigma2-pli-nightly.patched
+	cd $(appsdir)/enigma2-pli-nightly && \
+		$(MAKE) distclean && \
+		find $(appsdir)/enigma2-pli-nightly -name "Makefile.in" -exec rm -rf {} \; && \
+		rm -rf $(appsdir)/enigma2-pli-nightly/autom4te.cache
 
 $(DEPDIR)/enigma2-pli-nightly-misc:
 #	workarounds to allow rebuild
