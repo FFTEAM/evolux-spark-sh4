@@ -99,6 +99,9 @@ include make/phony.mk
 # Create the TAGS file
 include make/tags.mk
 
+# Target for building source distributions (hardly used these days of CVS :-)
+include make/disttargets.mk
+
 #Trick
 include make/release.mk
 
