@@ -613,9 +613,29 @@ void Font::RenderString(int x, int y, const int width, const std::string & text,
 
 int Font::getRenderWidth(const char *text, const bool utf8_encoded)
 {
+#ifdef __sh__
+	FTC_ScalerRec  tempScaler;
+	FTC_ImageTypeRec tempFont;
+
+	tempScaler.face_id = scaler.face_id;
+	tempScaler.width   = frameBuffer->scaleX(scaler.width);
+	tempScaler.height  = frameBuffer->scaleY(scaler.height);
+	tempScaler.pixel   = scaler.pixel;
+	tempScaler.x_res   = frameBuffer->scaleX(scaler.x_res);
+	tempScaler.y_res   = frameBuffer->scaleY(scaler.y_res);
+	
+	memcpy(&tempFont, &font, sizeof(font));
+	tempFont.width = frameBuffer->scaleX(font.width);
+	tempFont.height = frameBuffer->scaleY(font.height);
+#endif
+
 	pthread_mutex_lock( &renderer->render_mutex );
 
+#ifdef __sh__
+	if (FTC_Manager_LookupSize(renderer->cacheManager, &tempScaler, &size)<0)
+#else
 	if (FTC_Manager_LookupSize(renderer->cacheManager, &scaler, &size)<0)
+#endif
 	{
 		dprintf(DEBUG_NORMAL, "FTC_Manager_Lookup_Size failed!\n");
 		return -1;
@@ -640,7 +660,11 @@ int Font::getRenderWidth(const char *text, const bool utf8_encoded)
 
 		if (!index)
 			continue;
+#ifdef __sh__
+		if (renderer->getGlyphBitmap(&tempFont, index, &glyph))
+#else
 		if (getGlyphBitmap(index, &glyph))
+#endif
 		{
 			dprintf(DEBUG_NORMAL, "failed to get glyph bitmap.\n");
 			continue;
@@ -670,7 +694,14 @@ int Font::getRenderWidth(const char *text, const bool utf8_encoded)
 
 	pthread_mutex_unlock( &renderer->render_mutex );
 
+#ifdef __sh__
+#  ifndef DEFAULT_XRES
+#    define DEFAULT_XRES 1280
+#  endif
+	return (x * DEFAULT_XRES) / frameBuffer->getScaledScreenWidth();
+#else
 	return x;
+#endif
 }
 
 int Font::getRenderWidth(const std::string & text, const bool utf8_encoded)
