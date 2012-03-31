@@ -2176,6 +2176,14 @@ $(DEPDIR)/libdvbsipp.do_compile: $(DEPDIR)/libdvbsipp.do_prepare
 	$(MAKE) all
 	touch $@
 
+$(DEPDIR)/min-libdvbsipp $(DEPDIR)/std-libdvbsipp $(DEPDIR)/max-libdvbsipp \
+$(DEPDIR)/libdvbsipp: \
+$(DEPDIR)/%libdvbsipp: $(DEPDIR)/libdvbsipp.do_compile
+	cd @DIR_libdvbsipp@ && \
+		@INSTALL_libdvbsipp@
+#	@DISTCLEANUP_libdvbsipp@
+	@[ "x$*" = "x" ] && touch $@ || true
+
 #
 # tuxtxt32bpp
 #
