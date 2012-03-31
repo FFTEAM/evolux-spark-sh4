@@ -78,7 +78,7 @@ $(DEPDIR)/enigma2-pli-nightly-misc:
 	$(INSTALL_DIR) $(targetprefix)/media/{hdd,dvd} && \
 	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
 	$(INSTALL_DIR) $(targetprefix)/usr/tuxtxt && \
-	chmod 755 $(targetprefix)/usr/bin/tuxtxt && \
+	chmod 755 $(targetprefix)/usr/tuxtxt && \
 	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/tuxtxt/
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
 	touch $@
@@ -94,8 +94,8 @@ $(DEPDIR)/libdvbsi++: $(appsdir)/dvb/libdvbsi++/config.status
 	touch $@
 
 #graphlcd Stuff
-	if [ -e $(prefix)/release/usr/lib/libglcddrivers.so ]; then \
-		( cd $(prefix)/release/usr/lib && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so.2 && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so.2 &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so.2 ); \
-		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release/etc/graphlcd.conf; \
+	if [ -e $(prefix)/release-enigma2-pli/usr/lib/libglcddrivers.so ]; then \
+		( cd $(prefix)/release-enigma2-pli/usr/lib && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so.2 && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so.2 &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so.2 ); \
+		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release-enigma2-pli/etc/graphlcd.conf; \
 	fi
 

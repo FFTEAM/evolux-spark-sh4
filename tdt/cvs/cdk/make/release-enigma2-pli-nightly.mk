@@ -1,5 +1,5 @@
 # auxiliary targets for model-specific builds
-release_common_utils:
+release_enigma2-pli_common_utils:
 #       remove the slink to busybox
 	rm -f $(prefix)/release-enigma2-pli/sbin/halt
 	cp -f $(targetprefix)/sbin/halt $(prefix)/release-enigma2-pli/sbin/
@@ -22,7 +22,7 @@ release_common_utils:
 	ln -s ../init.d/umountfs $(prefix)/release-enigma2-pli/etc/rc.d/rc6.d/S40umountfs
 	ln -s ../init.d/reboot $(prefix)/release-enigma2-pli/etc/rc.d/rc6.d/S90reboot
 
-release_spark:
+release_enigma2-pli_spark:
 	echo "spark" > $(prefix)/release-enigma2-pli/etc/hostname
 	rm -f $(prefix)/release-enigma2-pli/sbin/halt
 	cp $(buildprefix)/root/release-enigma2-pli/halt_spark $(prefix)/release-enigma2-pli/etc/init.d/halt
@@ -75,7 +75,7 @@ release_spark:
 	rm -f $(prefix)/release-enigma2-pli/bin/gotosleep
 	rm -f $(prefix)/release-enigma2-pli/bin/vdstandby
 
-release_spark7162:
+release_enigma2-pli_spark7162:
 	echo "spark7162" > $(prefix)/release-enigma2-pli/etc/hostname
 	rm -f $(prefix)/release-enigma2-pli/sbin/halt
 	cp $(buildprefix)/root/release-enigma2-pli/halt_spark $(prefix)/release-enigma2-pli/etc/init.d/halt
@@ -136,28 +136,13 @@ release_spark7162:
 # The main target depends on the model.
 # IMPORTANT: it is assumed that only one variable is set. Otherwise the target name won't be resolved.
 #
-$(DEPDIR)/min-release $(DEPDIR)/std-release $(DEPDIR)/max-release $(DEPDIR)/ipk-release $(DEPDIR)/release: \
-$(DEPDIR)/%release: release_base release_$(SPARK)$(SPARK7162)
+$(DEPDIR)/min-release_enigma2-pli $(DEPDIR)/std-release_enigma2-pli $(DEPDIR)/max-release_enigma2-pli $(DEPDIR)/ipk-release_enigma2-pli $(DEPDIR)/release_enigma2-pli: \
+$(DEPDIR)/%release_enigma2-pli: release_enigma2-pli_base release_enigma2-pli_$(SPARK)$(SPARK7162)
 	touch $@
 
 
-enigma2-pli-nightly-clean:
-	rm -f $(DEPDIR)/enigma2-pli-nightly*
-	cd $(appsdir)/enigma2-pli-nightly && \
-		$(MAKE) distclean && \
-		find $(appsdir)/enigma2-pli-nightly -name "Makefile.in" -exec rm -rf {} \; && \
-		rm -rf $(appsdir)/enigma2-pli-nightly/autom4te.cache
-
-enigma2-nightly-distclean:
-	rm -f $(DEPDIR)/enigma2-pli-nightly*
-	rm -rf $(appsdir)/enigma2-pli-nightly
-	rm -rf $(appsdir)/enigma2-pli-nightly.newest
-	rm -rf $(appsdir)/enigma2-pli-nightly.org
-	rm -rf $(appsdir)/enigma2-pli-nightly.patched
-
-
 # the following target creates the common file base
-release_base:
+release_enigma2-pli_base:
 	rm -rf $(prefix)/release || true
 	$(INSTALL_DIR) $(prefix)/release && \
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli/bin && \
