@@ -54,7 +54,6 @@ enigma2-nightly-clean:
 
 enigma2-nightly-distclean:
 	rm -f $(DEPDIR)/enigma2-nightly*
-	rm -rf $(appsdir)/enigma2-nightly
 	rm -rf $(appsdir)/enigma2-nightly.newest
 	rm -rf $(appsdir)/enigma2-nightly.org
 	rm -rf $(appsdir)/enigma2-nightly.patched
