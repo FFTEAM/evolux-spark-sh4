@@ -61,6 +61,7 @@ extern cVideo * videoDecoder;
 
 extern CPictureViewer * g_PicViewer;
 #define BACKGROUNDIMAGEWIDTH 720
+#define ICON_CACHE_SIZE 1024*1024*2 // 2mb
 
 //#undef USE_NEVIS_GXA //FIXME
 /*******************************************************************************/
@@ -299,6 +300,7 @@ void CFrameBuffer::init(const char * const fbDevice)
 	_write_gxa(gxa_base, GXA_BMP2_ADDR_REG, (unsigned int) fix.smem_start);
 	_write_gxa(gxa_base, GXA_CONTENT_ID_REG, 0);
 #endif
+	cache_size = 0;
 
 #if 0
 	if ((tty=open("/dev/vc/0", O_RDWR))<0) {
@@ -357,6 +359,11 @@ nolfb:
 
 CFrameBuffer::~CFrameBuffer()
 {
+	std::map<std::string, rawIcon>::iterator it;
+	for(it = icon_cache.begin(); it != icon_cache.end(); it++)
+		free(it->second.data);
+	icon_cache.clear();
+
 	if (background) {
 		delete[] background;
 	}
@@ -1008,6 +1015,8 @@ void CFrameBuffer::setIconBasePath(const std::string & iconPath)
 
 bool CFrameBuffer::paintIcon8(const std::string & filename, const int _x, const int _y, const unsigned char offset, bool applyScaling)
 {
+// currently exclusively uses by src/gui/scan.cpp
+
 	if (!getActive())
 		return false;
 
@@ -1101,6 +1110,9 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	if (!getActive())
 		return false;
 
+	std::string iconName = filename;
+	iconName.erase(iconName.find_last_of("."));
+
 	int x, y;
 	if (applyScaling) {
 #ifdef __sh__
@@ -1112,115 +1124,121 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		y = _y;
 	}
 
-#ifdef __sh__
-	char * ptr = (char *)rindex(filename.c_str(), '.');
-#else
-	char * ptr = rindex(filename.c_str(), '.');
-#endif
-	if(ptr) {
-		*ptr = 0;
-		std::string newname = iconBasePath + filename.c_str() + ".png";
-		*ptr = '.';
-#ifndef __sh__
-		if(!access(newname.c_str(), F_OK))
-			return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
-#else
-		u_char png_hdr[8];
-		FILE *F = fopen(newname.c_str(), "rb");
-		if (F) {
-			if (8 != fread(png_hdr, 1, 8, F)) {
-				fclose (F);
-				goto png_bye;
-			}
-			if (png_sig_cmp(png_hdr, 0, 8)) {
-				fclose (F);
-				goto png_bye;
-			}
-			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-			if (!png_ptr) {
-				fclose (F);
-				goto png_bye;
-			}
-			png_infop info_ptr = png_create_info_struct(png_ptr);
-			if (!info_ptr) {
-				png_destroy_read_struct(&png_ptr,  NULL, NULL);
-				fclose (F);
-				goto png_bye;
-			}
-			if (setjmp(png_jmpbuf(png_ptr))) {
-				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
-				fclose (F);
-				goto png_bye;
-			}
-			png_init_io(png_ptr, F);
-			png_set_sig_bytes(png_ptr, 8);
-			png_read_info(png_ptr, info_ptr);
-			png_byte c = png_get_color_type(png_ptr, info_ptr);
-			png_byte d = png_get_bit_depth(png_ptr, info_ptr);
-			if (d == 16)
-				png_set_strip_16(png_ptr);
-			png_set_expand(png_ptr);
-			png_read_update_info(png_ptr, info_ptr);
-			int w = png_get_image_width(png_ptr, info_ptr);
-			int h = png_get_image_height(png_ptr, info_ptr);
-			if (w * h > ICON_TEMP_SIZE * ICON_TEMP_SIZE) {
-				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
-				fclose (F);
-				goto png_bye;
-			}
-			if (setjmp(png_jmpbuf(png_ptr))) {
-				png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
-				fclose (F);
-				goto png_bye;
-			}
-			png_bytep *row_pointers = (png_bytep *) malloc(h * sizeof(png_bytep));
-			char *p = (char *) icon_space;
-			int wi = 4 * w;
-			for (int i = 0; i < h; i++) {
-				row_pointers[i] = (png_byte *) p;
-				p += wi;
-			}
-			png_read_image(png_ptr, row_pointers);
-			fclose (F);
+	std::map<std::string, rawIcon>::iterator it = icon_cache.find(iconName);
+	if(it != icon_cache.end()) {
+		int w = it->second.width;
+		int h = it->second.height;
+		memcpy(icon_space, it->second.data, w * h * sizeof(fb_pixel_t));
+		blitIcon(w, h, x, y, scaleX(w), scaleY(h));
+		return true;
+	}
 
-			uint32_t *bStart = (uint32_t *) icon_space;
-			uint32_t *bEnd = bStart + w * h;
-			while (bStart < bEnd) {
-				// 0xaabbggrr => 0xaarrggbb
-				uint32_t u = *bStart;
-				*bStart &= 0xFF00FF00;
-				*bStart |= 0x00FF0000 & (u << 16);
-				*bStart |= 0x000000FF & (u >> 16);
-				bStart++;
-			}
-			blitIcon(w, h, x, y, scaleX(w), scaleY(h));
-			free (row_pointers);
-			png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
-			return  true;
+	std::string newname = iconBasePath + iconName + ".png";
+#ifndef __sh__
+	if(!access(newname.c_str(), F_OK))
+		return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
+#else
+	FILE *F = fopen(newname.c_str(), "rb");
+	if (F) {
+		u_char png_hdr[8];
+		if (8 != fread(png_hdr, 1, 8, F)) {
+			fclose (F);
+			goto png_bye;
 		}
+		if (png_sig_cmp(png_hdr, 0, 8)) {
+			fclose (F);
+			goto png_bye;
+		}
+		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+		if (!png_ptr) {
+			fclose (F);
+			goto png_bye;
+		}
+		png_infop info_ptr = png_create_info_struct(png_ptr);
+		if (!info_ptr) {
+			png_destroy_read_struct(&png_ptr,  NULL, NULL);
+			fclose (F);
+			goto png_bye;
+		}
+		if (setjmp(png_jmpbuf(png_ptr))) {
+			png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+			fclose (F);
+			goto png_bye;
+		}
+		png_init_io(png_ptr, F);
+		png_set_sig_bytes(png_ptr, 8);
+		png_read_info(png_ptr, info_ptr);
+		png_byte c = png_get_color_type(png_ptr, info_ptr);
+		png_byte d = png_get_bit_depth(png_ptr, info_ptr);
+		if (d == 16)
+			png_set_strip_16(png_ptr);
+		png_set_expand(png_ptr);
+		png_read_update_info(png_ptr, info_ptr);
+		int w = png_get_image_width(png_ptr, info_ptr);
+		int h = png_get_image_height(png_ptr, info_ptr);
+		if (w * h > ICON_TEMP_SIZE * ICON_TEMP_SIZE) {
+			png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+			fclose (F);
+			goto png_bye;
+		}
+		if (setjmp(png_jmpbuf(png_ptr))) {
+			png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+			fclose (F);
+			goto png_bye;
+		}
+		png_bytep *row_pointers = (png_bytep *) malloc(h * sizeof(png_bytep));
+		size_t dsize = w * h * sizeof(fb_pixel_t);
+		fb_pixel_t *data = (fb_pixel_t *) malloc(dsize);
+
+		char *p = (char *) data;
+		int wi = 4 * w;
+		for (int i = 0; i < h; i++) {
+			row_pointers[i] = (png_byte *) p;
+			p += wi;
+		}
+		png_read_image(png_ptr, row_pointers);
+		fclose (F);
+
+		uint32_t *bStart = (uint32_t *) data;
+		uint32_t *bEnd = bStart + w * h;
+		while (bStart < bEnd) {
+			// 0xaabbggrr => 0xaarrggbb
+			uint32_t u = *bStart;
+			*bStart &= 0xFF00FF00;
+			*bStart |= 0x00FF0000 & (u << 16);
+			*bStart |= 0x000000FF & (u >> 16);
+			bStart++;
+		}
+		memcpy(icon_space, data, dsize);
+		blitIcon(w, h, x, y, scaleX(w), scaleY(h));
+		free (row_pointers);
+		png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
+		if(cache_size + dsize < ICON_CACHE_SIZE) {
+			struct rawIcon tmpIcon;
+			cache_size += dsize;
+			tmpIcon.width = w;
+			tmpIcon.height = h;
+			tmpIcon.data = data;
+			icon_cache.insert(std::pair <std::string, rawIcon> (iconName, tmpIcon));
+		}
+		return  true;
+	}
 png_bye:
 #endif
-		*ptr = 0;
-		newname = iconBasePath + filename.c_str() + ".gif";
-		*ptr = '.';
-		if(!access(newname.c_str(), F_OK))
-			return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
-	}
-	struct rawHeader header;
-	uint16_t         width, height;
-	int              fd;
-#if 0 // no need if we have whole / as r/w
-	std::string iconBasePath1 = "/var/share/icons/";
-	fd = open((iconBasePath1 + filename).c_str(), O_RDONLY);
-	if (fd == -1)
-		fd = open((iconBasePath + filename).c_str(), O_RDONLY);
-#endif
-	fd = open((iconBasePath + filename).c_str(), O_RDONLY);
+	newname = iconBasePath + iconName + ".gif";
+	if(!access(newname.c_str(), F_OK))
+		return g_PicViewer->DisplayImage(newname, _x, _y, 0, 0);
+
+	newname = iconBasePath + iconName + ".raw";
+	int fd = open(newname.c_str(), O_RDONLY);
 
 	if (fd == -1) {
-		fprintf(stderr, "paintIcon: error while loading icon: %s%s\n", iconBasePath.c_str(), filename.c_str());
+		fprintf(stderr, "paintIcon: error while loading icon: %s\n", newname.c_str());
 		return false;
 	}
+
+	struct rawHeader header;
+	uint16_t         width, height;
 
 	read(fd, &header, sizeof(struct rawHeader));
 
@@ -1228,13 +1246,14 @@ png_bye:
 	height = (header.height_hi << 8) | header.height_lo;
 
 #ifdef __sh__
-	if(width > ICON_TEMP_SIZE || height > ICON_TEMP_SIZE)
+	if(width * height > ICON_TEMP_SIZE * ICON_TEMP_SIZE)
 	{
 		close(fd);
 		return false;
 	}
 
 	unsigned char pixbuf[768];
+	size_t dsize = width * height * sizeof(fb_pixel_t);
 	uint8_t * d = (uint8_t *)icon_space;
 	fb_pixel_t * d2;
 	for (int count=0; count<height; count ++ ) {
@@ -1259,6 +1278,15 @@ png_bye:
 			pixpos++;
 		}
 		d += width * 4;
+	}
+	if(cache_size + dsize < ICON_CACHE_SIZE) {
+		struct rawIcon tmpIcon;
+		cache_size += dsize;
+		tmpIcon.width = width;
+		tmpIcon.height = height;
+		tmpIcon.data = (fb_pixel_t *) malloc(width * height * sizeof(fb_pixel_t));
+		memcpy(tmpIcon.data, icon_space, width * height * sizeof(fb_pixel_t));
+		icon_cache.insert(std::pair <std::string, rawIcon> (iconName, tmpIcon));
 	}
 	blitIcon(width, height, x, y, scaleX(width), scaleY(height));
 #else
