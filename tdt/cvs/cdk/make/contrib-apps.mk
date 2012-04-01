@@ -1010,7 +1010,6 @@ $(DEPDIR)/%jfsutils: $(DEPDIR)/jfsutils.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
 
-
 #
 # opkg
 #
@@ -1040,3 +1039,82 @@ $(DEPDIR)/%opkg: $(DEPDIR)/opkg.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+#
+# sysstat
+#
+$(DEPDIR)/sysstat: bootstrap @DEPENDS_sysstat@
+	@PREPARE_sysstat@
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_sysstat@ && \
+	$(BUILDENV) \
+	./configure \
+		--build=$(build) \
+		--host=$(target) \
+		--prefix=/usr \
+		--disable-documentation && \
+		$(MAKE) && \
+		@INSTALL_sysstat@
+	@DISTCLEANUP_sysstat@
+	@touch $@
+	@TUXBOX_YAUD_CUSTOMIZE@
+
+#
+# hotplug-e2
+#
+$(DEPDIR)/hotplug_e2.do_prepare: @DEPENDS_hotplug_e2@
+	[ -d @DIR_hotplug_e2@ ] && \
+	cd @DIR_hotplug_e2@ && git pull; \
+	[ -d @DIR_hotplug_e2@ ] || \
+	git clone git://openpli.git.sourceforge.net/gitroot/openpli/hotplug-e2-helper;
+	touch $@
+
+$(DEPDIR)/hotplug_e2.do_compile: bootstrap hotplug_e2.do_prepare 
+	cd @DIR_hotplug_e2@ && \
+		aclocal -I $(hostprefix)/share/aclocal && \
+		autoconf && \
+		automake --foreign && \
+		libtoolize --force && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all
+	touch $@
+
+$(DEPDIR)/min-hotplug_e2 $(DEPDIR)/std-hotplug_e2 $(DEPDIR)/max-hotplug_e2 \
+$(DEPDIR)/hotplug_e2: \
+$(DEPDIR)/%hotplug_e2: $(DEPDIR)/hotplug_e2.do_compile
+	cd @DIR_hotplug_e2@ && \
+		@INSTALL_hotplug_e2@
+#	@DISTCLEANUP_jfsutils@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
+
+#
+# autofs
+#
+$(DEPDIR)/autofs.do_prepare: @DEPENDS_autofs@
+	@PREPARE_autofs@
+	touch $@
+
+$(DEPDIR)/autofs.do_compile: bootstrap autofs.do_prepare 
+	cd @DIR_autofs@ && \
+		cp aclocal.m4 acinclude.m4 && \
+		autoconf && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all CC=$(target)-gcc STRIP=$(target)-strip
+	touch $@
+
+$(DEPDIR)/min-autofs $(DEPDIR)/std-autofs $(DEPDIR)/max-autofs \
+$(DEPDIR)/autofs: \
+$(DEPDIR)/%autofs: $(DEPDIR)/autofs.do_compile
+	cd @DIR_autofs@ && \
+		@INSTALL_autofs@
+#	@DISTCLEANUP_autofs@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
