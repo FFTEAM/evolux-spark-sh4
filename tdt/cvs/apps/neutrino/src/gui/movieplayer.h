@@ -43,9 +43,6 @@
 #include "gui/movieinfo.h"
 #include "gui/extra_menu.h"
 
-extern "C" {
-           	#include <driver/ringbuffer.h>
-}           	
 #include <stdio.h>
 
 #include <string>
