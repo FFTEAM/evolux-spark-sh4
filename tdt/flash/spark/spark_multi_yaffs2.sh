@@ -16,6 +16,11 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
+if [ -e [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt ]; then
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	cp -RP $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $TUFSBOXDIR/
+fi
+
 # originally created by schischu and konfetti
 # fedora parts prepared by lareq
 # fedora/suse/ubuntu scripts merged by kire pudsje (kpc)
@@ -96,7 +101,7 @@ case "$REPLY" in
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Creating E2-PLI yaffs2 and uImage..."
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev $CURDIR/out/e2yaffs2.img
-		cp $TUFSBOXDIR/release-enigma2-pli-nightly/boot/uImage $CURDIR/out/uImage
+		cp $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR

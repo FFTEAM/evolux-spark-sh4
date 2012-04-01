@@ -16,6 +16,11 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
+if [ -e [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt ]; then
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	cp -RP $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $TUFSBOXDIR/
+fi
+
 # originally created by schischu and konfetti
 # fedora parts prepared by lareq
 # fedora/suse/ubuntu scripts merged by kire pudsje (kpc)
