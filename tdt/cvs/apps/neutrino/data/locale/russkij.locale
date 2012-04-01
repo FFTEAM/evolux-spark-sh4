@@ -76,7 +76,7 @@ audioplayer.shuffle Смена порядка
 audioplayer.spectrum LCD-spectrum
 audioplayer.stop Остановить
 audioplayer.title_artist Альбом, Артист
-audioplayerpicsettings.general Аудиоплеер и Картинки
+audioplayerpicsettings.general Аудиоплеер и Фото
 AUDIOSelectMenue.head Выбор языка
 AUDIOSelectMenue.no_tracks Нет аудио
 bookmarkmanager.delete Удалить
@@ -651,7 +651,7 @@ mainmenu.games Игры
 mainmenu.head Главное меню
 mainmenu.movieplayer Видеоплеер
 mainmenu.pausesectionsd Чтение EPG
-mainmenu.pictureviewer Просмотр картинок
+mainmenu.pictureviewer Просмотр фотографий
 mainmenu.radiomode Радио-каналы
 mainmenu.reboot Перезагрузить STB
 mainmenu.recording Запись
@@ -950,7 +950,9 @@ networkmenu.wlan.essid Имя сети
 networkmenu.wlan.key Ключ
 networkmenu.wlan.mode Безопасность
 networkmenu.wlan.apply Применить
-networkmenu.wlan.reset Сброс
+networkmenu.wlan.reset Сбросить
+networkmenu.setup_title Настройка сети
+networkmenu.setup_hint Обновление настроек. Подождите, пожалуйста ...
 neutrino_starting Старт Neutrino...
 nfs.alreadymounted Уже подключен
 nfs.automount Подключать при включении
@@ -1003,7 +1005,7 @@ parentallock.prompt Зашита PIN-кодом
 pictureviewer.decode_server_ip Адрес декодирующего сервера
 pictureviewer.decode_server_port Порт декодирующего сервера
 pictureviewer.defdir Каталог по умолчанию
-pictureviewer.head Просмотр картинок
+pictureviewer.head Просмотр фотографий
 pictureviewer.help1 Режим меню
 pictureviewer.help10 режим просмотра
 pictureviewer.help11 Перегрузить картинку
