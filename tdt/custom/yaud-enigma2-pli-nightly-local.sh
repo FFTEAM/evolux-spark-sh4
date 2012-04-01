@@ -226,13 +226,13 @@ case $TARGET in
 #		make_devs
 	;;
 esac
-$USERS chmod 777 -R $CHANGEDIR/release-enigma2-pli/dev
-if [ -e $CHANGEDIR/release-enigma2-pli_with_dev ]; then
-	$USERS rm -rf $CHANGEDIR/release-enigma2-pli_with_dev
+$USERS chmod 777 -R $CHANGEDIR/release-enigma2-pli-nightly/dev
+if [ -e $CHANGEDIR/release-enigma2-pli-nightly_with_dev ]; then
+	$USERS rm -rf $CHANGEDIR/release-enigma2-pli-nightly_with_dev
 fi
-mv $CHANGEDIR/release-enigma2-pli $CHANGEDIR/release-enigma2-pli_with_dev
+mv $CHANGEDIR/release-enigma2-pli-nightly $CHANGEDIR/release-enigma2-pli-nightly_with_dev
 if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ]; then
-	cp -RP $BUILDDIR/own_build/enigma2/* $CHANGEDIR/release-enigma2-pli_with_dev/
+	cp -RP $BUILDDIR/own_build/enigma2/* $CHANGEDIR/release-enigma2-pli-nightly_with_dev/
 else
 	echo "#############################"
 	echo "#############################"
@@ -245,10 +245,10 @@ else
 	sleep 30
 fi
 if [ -e $PATCHDIR/custom/myPatches_E2Nightly.diff ]; then
-	cd $CHANGEDIR/release-enigma2-pli_with_dev && patch -p1 < "../../custom/myPatches_E2-PLINightly.diff"
+	cd $CHANGEDIR/release-enigma2-pli-nightly_with_dev && patch -p1 < "../../custom/myPatches_E2-PLINightly.diff"
 fi
-#	cp -RP $CHANGEDIR/release-enigma2-pli_with_dev/boot/uImage $CHANGEDIR/
-#	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release-enigma2-pli_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
+#	cp -RP $CHANGEDIR/release-enigma2-pli-nightly_with_dev/boot/uImage $CHANGEDIR/
+#	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release-enigma2-pli-nightly_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
 #	( cd $CHANGEDIR && tar -czvf Enigma2_on_Pingulux.tar.gz e2jffs2.img uImage )
 echo "--- Erledigt ---"
 exit
