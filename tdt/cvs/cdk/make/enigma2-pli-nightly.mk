@@ -83,16 +83,6 @@ $(DEPDIR)/enigma2-pli-nightly-misc:
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
 	touch $@
 
-#
-# dvb/libdvbsi++
-#
-$(appsdir)/dvb/libdvbsi++/config.status: bootstrap
-	cd $(appsdir)/dvb/libdvbsi++ && $(CONFIGURE) CPPFLAGS="$(CPPFLAGS) -I$(driverdir)/dvb/include"
-
-$(DEPDIR)/libdvbsi++: $(appsdir)/dvb/libdvbsi++/config.status
-	$(MAKE) -C $(appsdir)/dvb/libdvbsi++ all install
-	touch $@
-
 #graphlcd Stuff
 	if [ -e $(prefix)/release-enigma2-pli/usr/lib/libglcddrivers.so ]; then \
 		( cd $(prefix)/release-enigma2-pli/usr/lib && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so.2 && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so.2 &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so.2 ); \
