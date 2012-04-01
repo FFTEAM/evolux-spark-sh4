@@ -505,9 +505,9 @@ endif
 # AUTOFS
 #
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/; \
-	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release_neutrino/usr/lib/autofs/mount_ext3.so; \
+	ln -sf /usr/lib/autofs/mount_ext2.so $(prefix)/release_neutrino/usr/lib/autofs/mount_ext3.so; \
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
-	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/;
+	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/;
 
 #graphlcd Stuff
 	if [ -e $(prefix)/release_neutrino/usr/lib/libglcddrivers.so ]; then \
