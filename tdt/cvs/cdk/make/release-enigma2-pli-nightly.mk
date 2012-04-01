@@ -63,7 +63,6 @@ release-enigma2-pli-nightly_spark:
 
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ftdi.ko
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
-	cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
 
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-avl2108.fw
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-stv6306.fw
@@ -433,7 +432,6 @@ endif
 
 	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release-enigma2-pli-nightly/boot/
 
-	[ -e $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko ] && cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ftdi.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
@@ -450,13 +448,13 @@ endif
 #
 # AUTOFS
 #
-	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
-		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
-		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
+	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs ]; then \
+		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
 		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
-			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules; \
 		fi; \
-		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/; \
+		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/; \
 	fi
 
 #

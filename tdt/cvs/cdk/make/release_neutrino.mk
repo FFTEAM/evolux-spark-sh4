@@ -104,7 +104,6 @@ $(DEPDIR)/%release_neutrino:
 	rm -f $(prefix)/release_neutrino/lib/*.o && \
 	rm -f $(prefix)/release_neutrino/lib/*.la && \
 	find $(prefix)/release_neutrino/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
-	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release_neutrino/sbin/
 
@@ -462,7 +461,6 @@ endif
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release_neutrino/bin/
 
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/
 	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release_neutrino/etc/auto.usb
 	echo 'sda1   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release_neutrino/etc/auto.usb
@@ -505,6 +503,17 @@ endif
 #	[ -e $(kernelprefix)/$(kernelpath)/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/$(kernelpath)/fs/ntfs/ntfs.ko $(prefix)/release_neutrino/lib/modules || true
 #	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
 
+#
+# AUTOFS
+#
+	if [ -d $(prefix)/release_neutrino/usr/lib/autofs ]; then \
+		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release_neutrino/usr/lib/autofs/mount_ext3.so; \
+		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
+		fi; \
+		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/; \
+	fi
 
 #graphlcd Stuff
 	if [ -e $(prefix)/release_neutrino/usr/lib/libglcddrivers.so ]; then \
