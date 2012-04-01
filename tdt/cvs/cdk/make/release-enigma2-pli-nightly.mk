@@ -246,7 +246,7 @@ release-enigma2-pli-nightly_base:
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.a && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.o && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.la && \
-	$(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/lib && $(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/usr/lib
+	$(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/lib
 	find $(prefix)/release-enigma2-pli-nightly/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release-enigma2-pli-nightly/sbin/
@@ -338,7 +338,7 @@ endif
 	fi
 	
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/tuxtxt
-	cp -p $(targetprefix)/etc/tuxbox/tuxtxt2.conf $(prefix)/release-enigma2-pli-nightly/usr/tuxtxt/
+	cp -p $(targetprefix)/usr/tuxtxt/tuxtxt2.conf $(prefix)/release-enigma2-pli-nightly/usr/tuxtxt/
 	
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 
@@ -417,6 +417,7 @@ endif
 	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.a
 	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.o
 	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.la
+	$(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/usr/lib
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2
