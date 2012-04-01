@@ -197,7 +197,6 @@ release-enigma2-pli-nightly_base:
 	cp -dp $(targetprefix)/etc/init.d/portmap $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
 	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
 	cp -dp $(targetprefix)/sbin/MAKEDEV$(if $(SPARK),_no_CI) $(prefix)/release-enigma2-pli-nightly/sbin/MAKEDEV && \
-	cp $(targetprefix)/boot/audio.elf $(prefix)/release-enigma2-pli-nightly/boot/audio.elf && \
 	cp -a $(targetprefix)/dev/* $(prefix)/release-enigma2-pli-nightly/dev/ && \
 	cp -dp $(targetprefix)/etc/fstab $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/group $(prefix)/release-enigma2-pli-nightly/etc/ && \
