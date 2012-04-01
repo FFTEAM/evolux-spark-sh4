@@ -167,7 +167,7 @@ release-enigma2-pli-nightly_base:
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/var/etc && \
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/var/opkg && \
 	export CROSS_COMPILE=$(target)- && \
-		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release && \
+		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release-enigma2-pli-nightly && \
 	touch $(prefix)/release-enigma2-pli-nightly/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release-enigma2-pli-nightly/bin/ && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release-enigma2-pli-nightly/sbin/ && \
