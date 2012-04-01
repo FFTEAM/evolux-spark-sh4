@@ -73,61 +73,6 @@ release-enigma2-pli-nightly_spark:
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/gotosleep
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/vdstandby
 
-release-enigma2-pli-nightly_spark7162:
-	echo "spark7162" > $(prefix)/release-enigma2-pli-nightly/etc/hostname
-	rm -f $(prefix)/release-enigma2-pli-nightly/sbin/halt
-	cp $(buildprefix)/root/release/halt_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/halt
-	chmod 777 $(prefix)/release-enigma2-pli-nightly/etc/init.d/halt
-	cp -f $(targetprefix)/sbin/halt $(prefix)/release-enigma2-pli-nightly/sbin/
-	cp $(buildprefix)/root/release/umountfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	cp $(buildprefix)/root/release/rc $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	cp $(buildprefix)/root/release/sendsigs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/umountfs
-	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/rc
-	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/sendsigs
-	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/halt
-	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc0.d
-	ln -s ../init.d $(prefix)/release-enigma2-pli-nightly/etc/rc.d
-	ln -fs halt $(prefix)/release-enigma2-pli-nightly/sbin/reboot
-	ln -fs halt $(prefix)/release-enigma2-pli-nightly/sbin/poweroff
-	ln -s ../init.d/sendsigs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc0.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc0.d/S40umountfs
-	ln -s ../init.d/halt $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc0.d/S90halt
-	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d
-	ln -s ../init.d/sendsigs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S20sendsigs
-	ln -s ../init.d/umountfs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S40umountfs
-	ln -s ../init.d/reboot $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S90reboot
-
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml
-	cp -f $(buildprefix)/root/release/tuner.ko$(KERNELSTMLABEL)_spark7162 $(prefix)/release-enigma2-pli-nightly/lib/modules/spark7162.ko
-	cp -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp -f $(buildprefix)/root/sbin/flashcp $(prefix)/release-enigma2-pli-nightly/sbin
-	cp -f $(buildprefix)/root/sbin/flash_* $(prefix)/release-enigma2-pli-nightly/sbin
-	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release-enigma2-pli-nightly/sbin
-
-	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
-	cp -p $(targetprefix)/usr/bin/lircd $(prefix)/release-enigma2-pli-nightly/usr/bin/
-	mkdir -p $(prefix)/release-enigma2-pli-nightly/var/run/lirc
-
-	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/share/fonts
-	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release-enigma2-pli-nightly/usr/share/fonts/
-
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ftdi.ko
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
-	cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
-
-	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-avl2108.fw
-	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-stv6306.fw
-	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-cx24116.fw
-	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-cx21143.fw
-	rm -f $(prefix)/release-enigma2-pli-nightly/bin/evremote
-	rm -f $(prefix)/release-enigma2-pli-nightly/bin/gotosleep
-	rm -f $(prefix)/release-enigma2-pli-nightly/bin/vdstandby
-
 #
 # The main target depends on the model.
 # IMPORTANT: it is assumed that only one variable is set. Otherwise the target name won't be resolved.
@@ -505,108 +450,108 @@ endif
 #
 # AUTOFS
 #
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs ]; then \
-		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
-		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
+	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
+		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
 		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
-			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules; \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
 		fi; \
-		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/; \
+		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/; \
 	fi
 
 #
 # GSTREAMER
 #
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10 ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/libgstfft*; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/*; \
-		cp -a $(targetprefix)/usr/bin/gst-launch* $(prefix)/release-enigma2-pli-nightly/usr/bin/; \
-		sh4-linux-strip --strip-unneeded $(prefix)/release-enigma2-pli-nightly/usr/bin/gst-launch*; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstalsa.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstapp.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstasf.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstassrender.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioconvert.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioparsersbad.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioresample.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstautodetect.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstavi.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcdxaparse.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcoreelements.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcoreindexers.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdecodebin.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdecodebin2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvbaudiosink.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvbvideosink.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvdsub.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstflac.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstflv.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstfragmented.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgsticydemux.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstid3demux.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstisomp4.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmad.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmatroska.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegaudioparse.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegdemux.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegstream.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstogg.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstplaybin.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtmp.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtp.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtpmanager.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtsp.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstsouphttpsrc.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstsubparse.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgsttypefindfunctions.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstudp.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstvcdsrc.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstwavparse.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-		if [ -e $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/libgstffmpeg.so ]; then \
-			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstffmpeg.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstffmpegscale.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
-			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstpostproc.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
+	if [ -d $(prefix)/release/usr/lib/gstreamer-0.10 ]; then \
+		rm -rf $(prefix)/release/usr/lib/libgstfft*; \
+		rm -rf $(prefix)/release/usr/lib/gstreamer-0.10/*; \
+		cp -a $(targetprefix)/usr/bin/gst-launch* $(prefix)/release/usr/bin/; \
+		sh4-linux-strip --strip-unneeded $(prefix)/release/usr/bin/gst-launch*; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstalsa.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstapp.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstasf.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstassrender.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioconvert.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioparsersbad.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstaudioresample.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstautodetect.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstavi.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcdxaparse.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcoreelements.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstcoreindexers.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdecodebin.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdecodebin2.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvbaudiosink.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvbvideosink.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstdvdsub.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstflac.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstflv.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstfragmented.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgsticydemux.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstid3demux.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstisomp4.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmad.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmatroska.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegaudioparse.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegdemux.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstmpegstream.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstogg.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstplaybin.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtmp.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtp.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtpmanager.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstrtsp.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstsouphttpsrc.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstsubparse.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgsttypefindfunctions.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstudp.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstvcdsrc.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstwavparse.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+		if [ -e $(prefix)/release/usr/lib/gstreamer-0.10/libgstffmpeg.so ]; then \
+			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstffmpeg.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstffmpegscale.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
+			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstpostproc.so $(prefix)/release/usr/lib/gstreamer-0.10/; \
 		fi; \
-		sh4-linux-strip --strip-unneeded $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/*; \
+		sh4-linux-strip --strip-unneeded $(prefix)/release/usr/lib/gstreamer-0.10/*; \
 	fi
 
 #
 # DIRECTFB
 #
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5 ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/gfxdrivers/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/gfxdrivers/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/gfxdrivers/*.o; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/inputdrivers/*; \
-		cp -a $(targetprefix)/usr/lib/directfb-1.4-5/inputdrivers/libdirectfb_enigma2remote.so $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/inputdrivers/; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/systems/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/systems/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/systems/*.o; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/systems/libdirectfb_dummy.so; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/systems/libdirectfb_fbdev.so; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/wm/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/wm/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/wm/*.o; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.o; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.o; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.a; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.la; \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.o; \
+	if [ -d $(prefix)/release/usr/lib/directfb-1.4-5 ]; then \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/gfxdrivers/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/gfxdrivers/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/gfxdrivers/*.o; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/inputdrivers/*; \
+		cp -a $(targetprefix)/usr/lib/directfb-1.4-5/inputdrivers/libdirectfb_enigma2remote.so $(prefix)/release/usr/lib/directfb-1.4-5/inputdrivers/; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/systems/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/systems/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/systems/*.o; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/systems/libdirectfb_dummy.so; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/systems/libdirectfb_fbdev.so; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/wm/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/wm/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/wm/*.o; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBFont/*.o; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBImageProvider/*.o; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.a; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.la; \
+		rm -rf $(prefix)/release/usr/lib/directfb-1.4-5/interfaces/IDirectFBVideoProvider/*.o; \
 	fi
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/icu ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/icu; \
+	if [ -d $(prefix)/release/usr/lib/icu ]; then \
+		rm -rf $(prefix)/release/usr/lib/icu; \
 	fi
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/glib-2.0 ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/glib-2.0; \
+	if [ -d $(prefix)/release/usr/lib/glib-2.0 ]; then \
+		rm -rf $(prefix)/release/usr/lib/glib-2.0; \
 	fi
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/gio ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/gio; \
+	if [ -d $(prefix)/release/usr/lib/gio ]; then \
+		rm -rf $(prefix)/release/usr/lib/gio; \
 	fi
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/enchant ]; then \
-		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enchant; \
+	if [ -d $(prefix)/release/usr/lib/enchant ]; then \
+		rm -rf $(prefix)/release/usr/lib/enchant; \
 	fi
 
