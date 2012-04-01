@@ -72,7 +72,6 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/services $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/shells $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release_neutrino/etc/ && \
-	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release_neutrino/etc/ && \
 	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release_neutrino/etc/vsftpd.conf && \
 	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release_neutrino/etc/inetd.conf && \
