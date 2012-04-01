@@ -264,7 +264,7 @@ release_base:
 	cp -dp $(targetprefix)/etc/services $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/shells $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release/etc/ && \
-	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release/etc/ && \
+	cp -dp $(buildprefix)/root/etc/timezone.xml $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release/etc/ && \
 	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release/etc/vsftpd.conf && \
 	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release/etc/inetd.conf && \
@@ -281,6 +281,7 @@ release_base:
 	cp $(targetprefix)/etc/tuxbox/satellites.xml $(prefix)/release/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/cables.xml $(prefix)/release/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release/etc/tuxbox/ && \
+	ln -sf /etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/timezone.xml && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release/etc/init.d/rcS && \
