@@ -301,38 +301,8 @@ release_base:
 	rm -f $(prefix)/release/lib/*.la && \
 	find $(prefix)/release/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-if STM24
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
-endif
 
-if ENABLE_PLAYER131
-	cd $(targetprefix)/lib/modules/$(KERNELVERSION)/extra && \
-	for mod in \
-		sound/pseudocard/pseudocard.ko \
-		sound/silencegen/silencegen.ko \
-		stm/mmelog/mmelog.ko \
-		stm/monitor/stm_monitor.ko \
-		media/video/stm/stm_v4l2.ko \
-		media/dvb/stm/dvb/stmdvb.ko \
-		sound/ksound/ksound.ko \
-		media/dvb/stm/mpeg2_hard_host_transformer/mpeg2hw.ko \
-		media/dvb/stm/backend/player2.ko \
-		media/dvb/stm/h264_preprocessor/sth264pp.ko \
-		media/dvb/stm/allocator/stmalloc.ko \
-		stm/platform/platform.ko \
-		stm/platform/p2div64.ko \
-	;do \
-		echo `pwd` player2/linux/drivers/$$mod; \
-		if [ -e player2/linux/drivers/$$mod ]; then \
-			cp player2/linux/drivers/$$mod $(prefix)/release/lib/modules/; \
-			sh4-linux-strip --strip-unneeded $(prefix)/release/lib/modules/`basename $$mod`; \
-		else \
-			touch $(prefix)/release/lib/modules/`basename $$mod`; \
-		fi; \
-		echo "."; \
-	done
-	echo "touched";
-endif
 if ENABLE_PLAYER179
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stm_v4l2.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmvbi.ko $(prefix)/release/lib/modules/
@@ -397,9 +367,6 @@ if ENABLE_PLAYER191
 	echo "touched";
 endif
 
-if STM22
-	rm $(prefix)/release/lib/modules/p2div64.ko
-endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/avs/avs.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/boxtype/boxtype.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/simu_button/simu_button.ko $(prefix)/release/lib/modules/
@@ -410,46 +377,6 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxmailbox/embxmailbox.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshm/embxshm.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/mme/mme_host.ko $(prefix)/release/lib/modules/
-if ENABLE_CUBEREVO
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_MINI2
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_MINI
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_250HD
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_MINI_FTA
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_2000HD
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_CUBEREVO_9500HD
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
-else
-if ENABLE_ATEVIO7500
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
-else
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
 
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti/pti.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti/pti.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti_np/pti.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti_np/pti.ko $(prefix)/release/lib/modules || true
@@ -666,29 +593,7 @@ endif
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release/bin/
 
-if STM22
-	cp $(kernelprefix)/linux/arch/sh/boot/uImage $(prefix)/release/boot/
-	cp $(kernelprefix)/linux/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko
-	cp $(kernelprefix)/linux/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
-	cp $(kernelprefix)/linux/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
-	cp $(kernelprefix)/linux/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
-else
 	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release/boot/
-if ENABLE_UFS912
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
-else
-if ENABLE_HS7810A
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules
-	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
-endif
-if ENABLE_UFS922
-	cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules
-endif
-endif
-endif
 
 if STM24
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko $(prefix)/release/lib/modules/zd1201.ko || true
@@ -699,6 +604,18 @@ if STM24
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
 endif
+
+#
+# AUTOFS
+#
+	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
+		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
+		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
+		fi; \
+		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/; \
+	fi
 
 #GSTREAMER STUFF
 	if [ -d $(prefix)/release/usr/lib/gstreamer-0.10 ]; then \
