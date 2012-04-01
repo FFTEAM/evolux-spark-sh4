@@ -460,7 +460,6 @@ endif
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release_neutrino/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release_neutrino/bin/
 
-	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/
 	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release_neutrino/etc/auto.usb
 	echo 'sda1   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release_neutrino/etc/auto.usb
