@@ -231,7 +231,7 @@ release-enigma2-pli-nightly_base:
 	ln -sf /etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/timezone.xml && \
 	echo "576i50" > $(prefix)/release-enigma2-pli-nightly/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/ && \
-	cp $(buildprefix)/root/release/rcS$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS && \
+	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
 	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
@@ -246,13 +246,10 @@ release-enigma2-pli-nightly_base:
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.a && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.o && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.la && \
-	$USERS chmod 755 -R $(prefix)/release-enigma2-pli-nightly/lib
+	$(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/lib && $(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/usr/lib
 	find $(prefix)/release-enigma2-pli-nightly/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release-enigma2-pli-nightly/sbin/
-
-	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
-	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
 
 if ENABLE_PLAYER191
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stm_v4l2.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
