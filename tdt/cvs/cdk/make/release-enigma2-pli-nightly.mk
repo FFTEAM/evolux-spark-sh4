@@ -218,7 +218,7 @@ release-enigma2-pli-nightly_base:
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/image-version $(prefix)/release-enigma2-pli-nightly/etc/ && \
-	cp -dp $(targetprefix)/etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/ && \
+	cp $(buildprefix)/root/etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release-enigma2-pli-nightly/etc/network/ && \
 	cp -dp $(targetprefix)/etc/network/options $(prefix)/release-enigma2-pli-nightly/etc/network/ && \
@@ -247,6 +247,7 @@ release-enigma2-pli-nightly_base:
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.a && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.o && \
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/*.la && \
+	$USERS chmod 755 -R $(prefix)/release-enigma2-pli-nightly/lib
 	find $(prefix)/release-enigma2-pli-nightly/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release-enigma2-pli-nightly/sbin/
