@@ -71,7 +71,7 @@ fi
 if [ -e $TUFSBOXDIR/release_with_dev ]; then
 	echo "   2) Prepare Enigma2      jffs2"
 fi
-if [ -e $TUFSBOXDIR/release-enigma2-pli_with_dev ]; then
+if [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
 	echo "   3) Prepare Enigma2-PLI  jffs2"
 fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
@@ -102,7 +102,7 @@ case "$REPLY" in
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Preparing Enigma2-PLI jffs2..."
-		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release-enigma2-pli_with_dev $TMPROOTDIR $TMPKERNELDIR
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Enigma2 jffs2 and uImage..."
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
