@@ -448,14 +448,10 @@ endif
 #
 # AUTOFS
 #
-	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs ]; then \
-		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
-		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
-		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
-			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules; \
-		fi; \
-		cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/; \
-	fi
+	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
+	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules; \
+	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/; \
 
 #
 # GSTREAMER
