@@ -1,6 +1,6 @@
 #!/bin/sh
 CURDIR=`pwd`
-NRELDIR='../../tufsbox/release'
+NRELDIR='../../tufsbox/release-enigma2-pli-nightly'
 CHANGEDIR='../../tufsbox'
 TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
 BUILDDIR='../../cvs/cdk'
