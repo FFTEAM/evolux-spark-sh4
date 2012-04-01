@@ -33,8 +33,7 @@ libneutrino_driver_a_SOURCES = \
 	shutdown_count.cpp \
 	genpsi.c \
 	streamts.cpp \
-	rfmod.cpp \
-	ringbuffer.c
+	rfmod.cpp
 
 INCLUDES += \
 	-I$(top_srcdir)/../misc/tools/libeplayer3/include \

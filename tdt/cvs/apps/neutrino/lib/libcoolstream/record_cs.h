@@ -36,7 +36,7 @@
 #include <libgen.h>
 
 extern "C" {
-#include <driver/ringbuffer.h>
+#include "ringbuffer.h"
 #include <driver/genpsi.h>
 }           	
 
@@ -45,7 +45,8 @@ extern "C" {
 #define IN_SIZE		(TS_SIZE * 362)
 
 /* demux buffer size */
-#define DMX_BUFFER_SIZE (256 * 1024)
+//#define DMX_BUFFER_SIZE (256 * 1024)
+#define DMX_BUFFER_SIZE (1024 * 1024)
 
 /* maximum number of pes pids */
 #define MAXPIDS		64

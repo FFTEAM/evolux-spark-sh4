@@ -937,12 +937,10 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 
 
 	const char * l_optionName = g_Locale->getText(optionName);
-	int optionwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_optionName, true);
-	int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true);
-	int stringstartposName = x + offx + 10;
-	int stringstartposOption = x + offx + 10 + 10 + optionwidth;
-	if (stringstartposOption < x + dx - stringwidth - 10)
-		stringstartposOption = x + dx - stringwidth - 10;
+	int nameWidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_optionName, true);
+	int valueWidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true);
+	int nameStartX = x + offx + 10;
+	int valueStartX = std::max(nameStartX + nameWidth + 10, x + dx - valueWidth - 10);
 
 	if (!(iconName.empty()))
 	{
@@ -953,8 +951,8 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
         }
 
-	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposName,   y+height, dx- (stringstartposName - x),  l_optionName, color, 0, true); // UTF-8
-	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y+height, dx- (stringstartposOption - x), optionValue, color, 0, true);
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(nameStartX,  y+height, dx - (nameStartX  - x), l_optionName, color, 0, true); // UTF-8
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(valueStartX, y+height, dx - (valueStartX - x),  optionValue, color, 0, true);
 
 	if (selected)
 	{
