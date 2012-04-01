@@ -454,12 +454,25 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 			if(!(*jt)->number) (*jt)->number = i++;
 			if(!(*jt)->pname && !(*it)->bUser) (*jt)->pname = (char *) (*it)->Name.c_str();
 		}
-		for (vector<CZapitChannel*>::iterator jt = (*it) ->radioChannels.begin(); jt != (*it)->radioChannels.end(); jt++) {
+		for (vector<CZapitChannel*>::iterator jt = (*it)->radioChannels.begin(); jt != (*it)->radioChannels.end(); jt++) {
 			if(tomake) chans_processed.insert((*jt)->getChannelID());
 			if(!(*jt)->number) (*jt)->number = j++;
 			if(!(*jt)->pname && !(*it)->bUser) (*jt)->pname = (char *) (*it)->Name.c_str();
 		}
 	}
+
+
+	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
+		switch (it->second.getServiceType()) {
+			case ST_DIGITAL_TELEVISION_SERVICE:
+			case ST_NVOD_REFERENCE_SERVICE:
+			case ST_NVOD_TIME_SHIFTED_SERVICE:
+				if(!it->second.number) it->second.number = i++;
+				break;
+			case ST_DIGITAL_RADIO_SOUND_SERVICE:
+				if(!it->second.number) it->second.number = j++;
+				break;
+		}
 
 	if(tomake_new) {
 		if (newChannels)
