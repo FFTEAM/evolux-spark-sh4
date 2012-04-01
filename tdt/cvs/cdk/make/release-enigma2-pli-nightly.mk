@@ -172,7 +172,6 @@ release-enigma2-pli-nightly_base:
 	cp $(targetprefix)/etc/tuxbox/satellites.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/cables.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
-	ln -sf /etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/timezone.xml && \
 	echo "576i50" > $(prefix)/release-enigma2-pli-nightly/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/ && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
