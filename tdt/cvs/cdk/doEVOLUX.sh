@@ -39,7 +39,7 @@ if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
 	fi
 fi
 doOptimizeE2() {
-	SOURCE="$PINGUDIR/tufsbox/release_with_dev"
+	SOURCE="$E2DIR"
 	cd /usr/bin
 	$USERS ln -sf python2.6 python
 	cd $CURDIR
