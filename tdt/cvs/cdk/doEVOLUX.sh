@@ -1,9 +1,15 @@
 #!/bin/sh
 CURDIR=`pwd`
 PINGUDIR=${CURDIR%/cvs/cdk}
-E2DIR=$PINGUDIR/tufsbox/release_with_dev
+whichE2=`find $PINGUDIR/tufsbox -name release-enigma2-pli-nightly_with_dev` 
+if [ -z $whichE2 ]; then
+	E2DIR=$PINGUDIR/tufsbox/release_with_dev
+	EVOLUXDIR=$PINGUDIR/tufsbox/release_EVOLUX_with_dev
+else
+	E2DIR=$PINGUDIR/tufsbox/release-enigma2-pli-nightly_with_dev
+	EVOLUXDIR=$PINGUDIR/tufsbox/release_evolux_pli_with_dev
+fi
 NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino_with_dev
-EVOLUXDIR=$PINGUDIR/tufsbox/release_EVOLUX_with_dev
 DESTINATION="/devel/E2"
 DATE=`date +%Y%m%d`
 # originally created by schischu and konfetti
