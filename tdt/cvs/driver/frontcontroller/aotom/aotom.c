@@ -225,7 +225,7 @@ void draw_thread(void *arg)
   int pos = 0;
 
 //test
-  if (!arg) return;
+//  if (!arg) return;
 //end
   data = (struct vfd_ioctl_data *)arg;
 

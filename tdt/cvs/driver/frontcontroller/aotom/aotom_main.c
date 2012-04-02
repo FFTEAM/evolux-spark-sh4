@@ -80,6 +80,9 @@ typedef struct
 #define FRONTPANEL_MINOR_RC             1
 #define LASTMINOR                 	    2
 
+// test
+static struct vfd_ioctl_data int_data;
+// test end
 static tFrontPanelOpen FrontPanelOpen [LASTMINOR];
 
 #define BUFFERSIZE                256     //must be 2 ^ n
@@ -217,11 +220,16 @@ void draw_thread(void *arg)
   int count = 0;
   int pos = 0;
 
-
+// tmk2011
+  dprintk(2,"draw_thread length %d:\"%s\"\n",data->length,data->data);
+// tmk2011 end
   data = (struct vfd_ioctl_data *)arg;
 
   draw_data.length = data->length;
   memset(draw_data.data, 0, sizeof(draw_data.data));
+// tmk2011
+  dprintk(2,"draw_thread memcpy 0x%08x<-0x%08x\n",draw_data.data,data->data);
+// tmk2011 end
   memcpy(draw_data.data,data->data,data->length);
 
   thread_stop = 0;
@@ -275,11 +283,15 @@ int run_draw_thread(struct vfd_ioctl_data *draw_data)
     //wait thread stop
     while(!thread_stop)
     {msleep(1);}
-
-
+// tmk2011
+    dprintk(2, "run_draw_thread copy data 0x%08x<-0x%08x\n",&int_data,draw_data);
+    copy_from_user(&int_data,draw_data,sizeof(int_data));
+// tmk2011 end
     thread_stop = 2;
-    thread=kthread_run(draw_thread,draw_data,"draw thread",NULL,true);
-
+// tmk2011
+//    thread=kthread_run(draw_thread,draw_data,"draw thread",NULL,true);
+    thread=kthread_run(draw_thread,&int_data,"draw thread",NULL,true);
+// tmk2011 end
     //wait thread run
     while(thread_stop == 2)
     {msleep(1);}
