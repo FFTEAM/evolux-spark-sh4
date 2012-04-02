@@ -476,7 +476,8 @@ release-enigma2-pli-nightly_base:
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2
 	cp -a $(targetprefix)/usr/lib/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/
 	if test -d $(targetprefix)/usr/local/lib/enigma2; then \
-		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/; fi
+		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/; 
+	fi
 
 	cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/
 
