@@ -111,7 +111,7 @@ endif
 
 evolux-pli: yaud-neutrino \
 		yaud-enigma2-pli-nightly \
-		release_evolux
+		release_evolux_pli
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
@@ -123,7 +123,7 @@ endif
 evolux-pli-full: yaud-none host-python lirc stslave \
 		yaud-neutrino \
 		yaud-enigma2-pli-nightly \
-		release_evolux
+		release_evolux_pli
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
