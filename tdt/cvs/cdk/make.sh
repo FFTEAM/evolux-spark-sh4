@@ -232,6 +232,8 @@ echo "make yaud-neutrino"
 #echo "make yaud-vdr"
 #echo "make yaud-enigma1-hd"
 echo "make evolux"
+echo "make evolux-pli"
 echo "make evolux-full"
+echo "make evolux-pli-full"
 echo "-----------------------"
 
