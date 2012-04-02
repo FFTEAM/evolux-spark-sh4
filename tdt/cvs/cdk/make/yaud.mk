@@ -87,7 +87,7 @@ else
 endif
 
 evolux: yaud-neutrino \
-		yaud-enigma2-pli-nightly \
+		yaud-enigma2-nightly \
 		release_evolux
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
@@ -98,6 +98,29 @@ else
 endif
 
 evolux-full: yaud-none host-python lirc stslave \
+		yaud-neutrino \
+		yaud-enigma2-nightly \
+		release_evolux
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-pli: yaud-neutrino \
+		yaud-enigma2-pli-nightly \
+		release_evolux
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-pli-full: yaud-none host-python lirc stslave \
 		yaud-neutrino \
 		yaud-enigma2-pli-nightly \
 		release_evolux
