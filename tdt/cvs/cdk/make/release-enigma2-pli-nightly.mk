@@ -388,7 +388,7 @@ release-enigma2-pli-nightly_base:
 		cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/; \
 	fi
 	if [ -e $(buildprefix)/.deps/neutrino ]; then \
-		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release-enigma2-pli-nightly/usr/bin/;
+		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release-enigma2-pli-nightly/usr/bin/; \
 	fi
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 
