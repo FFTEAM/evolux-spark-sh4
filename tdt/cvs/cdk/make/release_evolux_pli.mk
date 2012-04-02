@@ -1,5 +1,4 @@
 #Trick ALPHA-Version ;)
-EVOLUXVERSION=$(shell cat $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2)
 $(DEPDIR)/release_evolux: \
 $(DEPDIR)/%release_evolux:
 	rm -rf $(prefix)/release_evolux_with_dev || true
