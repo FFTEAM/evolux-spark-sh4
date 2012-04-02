@@ -1,6 +1,6 @@
 #Trick ALPHA-Version ;)
-$(DEPDIR)/release_evolux: \
-$(DEPDIR)/%release_evolux:
+$(DEPDIR)/release_evolux_pli: \
+$(DEPDIR)/%release_evolux_pli:
 	rm -rf $(prefix)/release_evolux_pli_with_dev || true
 	rm -rf $(prefix)/uImage || true
 	rm -rf $(prefix)/e2jffs2.img || true
