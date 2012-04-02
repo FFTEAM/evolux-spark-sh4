@@ -384,7 +384,9 @@ release-enigma2-pli-nightly_base:
 	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release-enigma2-pli-nightly/usr/bin/opkg
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release-enigma2-pli-nightly/sbin/
-	cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/bin/
+	if [ -e $(targetprefix)/usr/bin/tuxtxt ]; then \
+		cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/; \
+	fi
 	if [ -e $(buildprefix)/.deps/neutrino ]; then \
 		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release-enigma2-pli-nightly/usr/bin/;fi
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release-enigma2-pli-nightly/usr/sbin/
