@@ -22,7 +22,7 @@ $(appsdir)/enigma2-pli-nightly/config.status: bootstrap freetype expat fontconfi
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			PY_PATH=$(targetprefix)/usr \
-			$(PLATFORM_CPPFLAGS)
+			CPPFLAGS="$(CPPFLAGS) -DPLATFORM_SPARK -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include"
 
 
 $(DEPDIR)/enigma2-pli-nightly.do_compile: $(appsdir)/enigma2-pli-nightly/config.status
@@ -82,10 +82,4 @@ $(DEPDIR)/enigma2-pli-nightly-misc:
 	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/tuxtxt/
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
 	touch $@
-
-#graphlcd Stuff
-	if [ -e $(prefix)/release-enigma2-pli/usr/lib/libglcddrivers.so ]; then \
-		( cd $(prefix)/release-enigma2-pli/usr/lib && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so.2 && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so.2 &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so.2 ); \
-		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release-enigma2-pli/etc/graphlcd.conf; \
-	fi
 

@@ -1,6 +1,6 @@
 #Trick ALPHA-Version ;)
 USERS=$(shell which sudo)
-EVOLUXVERSION=$(shell cat $(prefix)/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2)
+EVOLUXVERSION=$(shell cat $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2)
 $(DEPDIR)/release_evolux: \
 $(DEPDIR)/%release_evolux:
 	rm -rf $(prefix)/release_evolux_with_dev || true
@@ -12,41 +12,41 @@ $(DEPDIR)/%release_evolux:
 	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
 		$(buildprefix)/doEVOLUX.sh; \
 	fi;
-	cp -RP $(prefix)/release_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_with_dev/lib/firmware/
-	cp -RP $(prefix)/release_with_dev/var $(prefix)/release_evolux_with_dev/
-	cp -RP $(prefix)/release_with_dev/sbin $(prefix)/release_evolux_with_dev/
-	cp -RP $(prefix)/release_with_dev/usr/bin $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/usr/sbin $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/usr/script $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/usr/share $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/usr/tuxtxt $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/usr/lib $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_with_dev/lib/firmware/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/var $(prefix)/release_evolux_with_dev/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/sbin $(prefix)/release_evolux_with_dev/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/bin $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/sbin $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/script $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/share $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/tuxtxt $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/lib $(prefix)/release_evolux_with_dev/usr/
 	mv $(prefix)/release_evolux_with_dev/usr/local/share/fonts/*.ttf $(prefix)/release_evolux_with_dev/usr/share/fonts
 	rm -rf $(prefix)/release_evolux_with_dev/usr/local/share/fonts
-	cp -RP $(prefix)/release_with_dev/usr/local $(prefix)/release_evolux_with_dev/usr/
-	cp -RP $(prefix)/release_with_dev/etc/network/interfaces $(prefix)/release_evolux_with_dev/etc/network/
-	cp -RP $(prefix)/release_with_dev/etc/dropbear $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/enigma2 $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/fonts $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/tuxbox $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/Wireless $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/changelog.txt $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/local $(prefix)/release_evolux_with_dev/usr/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/network/interfaces $(prefix)/release_evolux_with_dev/etc/network/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/dropbear $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/enigma2 $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/fonts $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/tuxbox $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/Wireless $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $(prefix)/release_evolux_with_dev/etc/
 	echo "EvoLux" > $(prefix)/release_evolux_with_dev/etc/hostname
-	cp -RP $(prefix)/release_with_dev/etc/image-version $(prefix)/release_evolux_with_dev/etc/
-	if [ -e $(prefix)/release_with_dev/etc/graphlcd.conf ]; then \
-		cp -RP $(prefix)/release_with_dev/etc/graphlcd.conf $(prefix)/release_evolux_with_dev/etc/; \
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/image-version $(prefix)/release_evolux_with_dev/etc/
+	if [ -e $(prefix)/release-enigma2-pli-nightly_with_dev/etc/graphlcd.conf ]; then \
+		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/graphlcd.conf $(prefix)/release_evolux_with_dev/etc/; \
 	fi;
-	cp -RP $(prefix)/release_with_dev/bin/mumudvb $(prefix)/release_evolux_with_dev/bin/
-	cp -RP $(prefix)/release_with_dev/etc/mumudvb $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/inetd.conf $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/localtime $(prefix)/release_evolux_with_dev/etc/
-	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_with_dev/etc/rc.d/
-	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_with_dev/etc/rc.d/
-	cp -RP $(prefix)/release_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_with_dev/etc/rc.d/
-	cp -RP $(prefix)/release_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_with_dev/etc/init.d/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/bin/mumudvb $(prefix)/release_evolux_with_dev/bin/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/mumudvb $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/inetd.conf $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/localtime $(prefix)/release_evolux_with_dev/etc/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_with_dev/etc/rc.d/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_with_dev/etc/rc.d/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_with_dev/etc/rc.d/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_with_dev/etc/init.d/rcS
-	cp -RP $(prefix)/release_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
+	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_with_dev/lib/
 	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_with_dev/bin/
