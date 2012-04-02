@@ -176,36 +176,34 @@ void CInfoViewer::start ()
 
 void CInfoViewer::paintTime (bool show_dot, bool firstPaint)
 {
-  if (gotTime) {
+	if (!gotTime)
+		return;
+
 	int ChanNameY = BoxStartY + (ChanHeight >> 1) + 5;	//oberkante schatten?
 
 	char timestr[10];
 	struct timeb tm;
 
 	ftime (&tm);
-	strftime ((char *) &timestr, 20, "%H:%M", localtime (&tm.time));
+	strftime (timestr, sizeof(timestr), "%H:%M", localtime (&tm.time));
 
 	if ((!firstPaint) && (strcmp (timestr, old_timestr) == 0)) {
-	  if (show_dot)
-		frameBuffer->paintBoxRel (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY, time_dot_width, time_height / 2 + 2, COL_INFOBAR_PLUS_0);
-	  else
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_dot_width, ":", COL_INFOBAR);
-	  strcpy (old_timestr, timestr);
+		if (show_dot)
+			frameBuffer->paintBoxRel (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY, time_dot_width, time_height / 2 + 2, COL_INFOBAR_PLUS_0);
+		else
+			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_dot_width, ":", COL_INFOBAR);
 	} else {
-	  strcpy (old_timestr, timestr);
+		if (!firstPaint)
+			frameBuffer->paintBoxRel (BoxEndX - time_width - LEFT_OFFSET, ChanNameY, time_width + LEFT_OFFSET, time_height, COL_INFOBAR_PLUS_0, ROUND_RADIUS, 1);
 
-	  if (!firstPaint) {
-		frameBuffer->paintBoxRel (BoxEndX - time_width - LEFT_OFFSET, ChanNameY, time_width + LEFT_OFFSET, time_height, COL_INFOBAR_PLUS_0, ROUND_RADIUS, 1);
-	  }
-
-	  timestr[2] = 0;
-	  g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width - LEFT_OFFSET, ChanNameY + time_height, time_left_width, timestr, COL_INFOBAR);
-	  g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_left_width, &timestr[3], COL_INFOBAR);
-	  g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_dot_width, ":", COL_INFOBAR);
-	  if (show_dot)
-		frameBuffer->paintBoxRel (BoxEndX - time_left_width - time_dot_width - LEFT_OFFSET, ChanNameY, time_dot_width, time_height / 2 + 2, COL_INFOBAR_PLUS_0);
+		timestr[2] = 0;
+		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width - LEFT_OFFSET, ChanNameY + time_height, time_left_width, timestr, COL_INFOBAR);
+		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_left_width + 10, timestr + 3, COL_INFOBAR);
+		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->RenderString (BoxEndX - time_width + time_left_width - LEFT_OFFSET, ChanNameY + time_height, time_dot_width + 10, ":", COL_INFOBAR);
+		if (show_dot)
+			frameBuffer->paintBoxRel (BoxEndX - time_left_width - time_dot_width - LEFT_OFFSET, ChanNameY, time_dot_width, time_height / 2 + 2, COL_INFOBAR_PLUS_0);
 	}
-  }
+	strcpy (old_timestr, timestr);
 }
 
 void CInfoViewer::showRecordIcon (const bool show)
@@ -254,7 +252,18 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 	InfoHeightY_Info = 40;
 
 	time_height = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->getHeight () + 5;
-	time_left_width = 2 * g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->getRenderWidth (widest_number);
+
+	char t[2];
+	t[1] = 0;
+	time_left_width = 0;
+	for (int i = 0; i < 10; i++) {
+		*t = '0' + i;
+		int l = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->getRenderWidth(t);
+		if (l > time_left_width)
+			time_left_width = l;
+	}
+	time_left_width <<= 1;
+
 	time_dot_width = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_CHANNAME]->getRenderWidth (":");
 	time_width = time_left_width * 2 + time_dot_width;
 
