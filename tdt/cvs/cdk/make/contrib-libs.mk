@@ -550,7 +550,7 @@ $(DEPDIR)/libvorbisidec: $(DEPDIR)/libvorbisidec.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 #
-# GLIB2
+# libglib2
 # You need libglib2.0-dev on host system
 #
 $(DEPDIR)/glib2.do_prepare: @DEPENDS_glib2@
@@ -568,7 +568,6 @@ $(DEPDIR)/glib2.do_compile: bootstrap libz $(DEPDIR)/glib2.do_prepare
 	cd @DIR_glib2@ && \
 		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -Os" \
-		LDFLAGS="$(TARGET_LDFLAGS) -L\$(targetprefix)/usr/lib" \
 		./configure \
 			--cache-file=config.cache \
 			--disable-gtk-doc \
@@ -588,10 +587,6 @@ $(DEPDIR)/%glib2: $(DEPDIR)/glib2.do_compile
 		@INSTALL_glib2@
 #	@DISTCLEANUP_glib2@
 	@[ "x$*" = "x" ] && touch $@ || true
-
-# Evaluate package glib2
-# call MacroName,Source Package,Package
-$(eval $(call Package,glib2,libglib2))
 
 #
 # LIBICONV
