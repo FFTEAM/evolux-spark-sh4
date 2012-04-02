@@ -441,9 +441,11 @@ release-enigma2-pli-nightly_base:
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/bin
 	if [ -e $(targetprefix)/usr/bin/enigma2 ]; then \
-		cp -f $(targetprefix)/usr/bin/enigma2 $(prefix)/release-enigma2-pli-nightly/usr/local/bin/enigma2;fi
+		cp -f $(targetprefix)/usr/bin/enigma2 $(prefix)/release-enigma2-pli-nightly/usr/local/bin/enigma2;
+	fi
 	if [ -e $(targetprefix)/usr/local/bin/enigma2 ]; then \
-		cp -f $(targetprefix)/usr/local/bin/enigma2 $(prefix)/release-enigma2-pli-nightly/usr/local/bin/enigma2;fi
+		cp -f $(targetprefix)/usr/local/bin/enigma2 $(prefix)/release-enigma2-pli-nightly/usr/local/bin/enigma2;
+	fi
 	find $(prefix)/release-enigma2-pli-nightly/usr/local/bin/ -name  enigma2 -exec sh4-linux-strip --strip-unneeded {} \;
 
 
@@ -478,8 +480,9 @@ release-enigma2-pli-nightly_base:
 	if test -d $(targetprefix)/usr/local/lib/enigma2; then \
 		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/; 
 	fi
-
-	cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/
+	if [ -e $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt ]; then \
+		cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/;
+	fi
 
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
