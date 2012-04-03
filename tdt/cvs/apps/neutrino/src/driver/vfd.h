@@ -295,11 +295,6 @@ class CVFD
 		void ShowIcon(vfd_icon icon, bool show);
 		void ShowText(char * str);
 		
-#ifdef __sh__
-                void openDevice();
-		void closeDevice();
-#endif
-		
 #ifdef LCD_UPDATE
         private:
                 CFileList* m_fileList;

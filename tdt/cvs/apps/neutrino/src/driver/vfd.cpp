@@ -47,28 +47,6 @@ struct vfd_ioctl_data {
 	unsigned char data[64];
 	unsigned char length;
 };
-
-//konfetti: let us share the device with evremote and fp_control
-//it does currently not support more than one user (see e.g. micom)
-void CVFD::openDevice()
-{
-	fd = open("/dev/vfd", O_RDWR);
-	if(fd < 0)
-	{
-	    perror("opening vfd failed");
-	    fd = open("/dev/fplarge", O_RDWR);
-	    if (fd < 0)
-	      perror("opening fplarge failed");
-        }
-}
-
-void CVFD::closeDevice()
-{
-	if (fd)
-	   close(fd);
-	fd = -1;
-}
-
 #endif
 
 CVFD::CVFD()
@@ -88,24 +66,20 @@ CVFD::CVFD()
 
 	has_lcd = 1;
 
-#ifndef __sh__
-	fd = open("/dev/display", O_RDONLY);
+	fd = open("/dev/vfd", O_RDWR);
 
 	if(fd < 0) {
-		perror("/dev/display");
+		perror("/dev/vfd");
 		has_lcd = 0;
 	}
-#endif	
 	text[0] = 0;
 	clearClock = 0;
 }
 
 CVFD::~CVFD()
 {
-#ifndef __sh__
 	if(fd > 0)
 		close(fd);
-#endif
 }
 
 CVFD* CVFD::getInstance()
@@ -197,14 +171,10 @@ void CVFD::setlcdparameter(int dimm, const int power)
 
 printf("CVFD::setlcdparameter dimm %d power %d\n", dimm, power);
 #ifdef __sh__
-        openDevice();
-
         struct vfd_ioctl_data data;
 	data.start_address = dimm;
 	
 	int ret = ioctl(fd, VFDBRIGHTNESS, &data);
-
-        closeDevice();
 #else
 	int ret = ioctl(fd, IOC_VFD_SET_BRIGHT, dimm);
 	if(ret < 0)
@@ -600,11 +570,8 @@ void CVFD::Unlock()
 
 void CVFD::Clear()
 {
-printf("CVFD::Clear>\n");
 	if(!has_lcd) return;
 #ifdef __sh__
-        openDevice();
-
         struct vfd_ioctl_data data;
 	data.start_address = 0x01;
 	data.length = 0x0;
@@ -615,25 +582,17 @@ printf("CVFD::Clear>\n");
 #endif
 	if(ret < 0)
 		perror("IOC_VFD_CLEAR_ALL");
-#ifdef __sh__
-        closeDevice();
-#endif
-printf("CVFD::Clear<\n");
 }
 
 void CVFD::ShowIcon(vfd_icon icon, bool show)
 {
 //printf("CVFD::ShowIcon %s %x\n", show ? "show" : "hide", (int) icon);
 #ifdef __sh__
-        openDevice();
-
         struct vfd_ioctl_data data;
 
         data.data[0] = icon;
 	data.data[4] = show ? 1 : 0;
 	int ret = ioctl(fd, VFDICONDISPLAYONOFF, &data);
-
-        closeDevice();
 #else
 	int ret = ioctl(fd, show ? IOC_VFD_SET_ICON : IOC_VFD_CLEAR_ICON, icon);
 	if(ret < 0)
@@ -670,19 +629,9 @@ void CVFD::ShowText(char * str)
 //printf("****************************** CVFD::ShowText: %s\n", str);
 	//FIXME !! 
 #ifdef __sh__
-        openDevice();
-	
-	if (fd < 0)
-		perror("opening vfd failed");
-	else {
-		ret = write(fd , str, len>16?16:len);
-
-		if(ret < 0)
-			perror("write to vfd failed");
-
-		closeDevice();
-	}
-
+	ret = write(fd , str, len>16?16:len);
+	if(ret < 0)
+		perror("write to vfd failed");
 #else
 	ret = ioctl(fd, IOC_VFD_SET_TEXT, len ? str : NULL);
 
