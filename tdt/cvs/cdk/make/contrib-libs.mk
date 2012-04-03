@@ -589,7 +589,7 @@ $(DEPDIR)/%glib2: $(DEPDIR)/glib2.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 #
-# LIBICONV
+# libiconv
 #
 $(DEPDIR)/libiconv.do_prepare: bootstrap @DEPENDS_libiconv@
 	@PREPARE_libiconv@
@@ -605,12 +605,12 @@ $(DEPDIR)/libiconv.do_compile: $(DEPDIR)/libiconv.do_prepare
 		$(MAKE)
 	touch $@
 
-$(DEPDIR)/min-libiconv $(DEPDIR)/std-libiconv $(DEPDIR)/max-libiconv $(DEPDIR)/ipk-libiconv \
+$(DEPDIR)/min-libiconv $(DEPDIR)/std-libiconv $(DEPDIR)/max-libiconv \
 $(DEPDIR)/libiconv: \
 $(DEPDIR)/%libiconv: $(DEPDIR)/libiconv.do_compile
 	cd @DIR_libiconv@ && \
+		cp ./srcm4/* $(hostprefix)/share/aclocal/ && \
 		@INSTALL_libiconv@
-#	sed "s@libdir='/usr/lib'@libdir='\$(targetprefix)/usr/lib'@g" -i $(targetprefix)/usr/lib/libiconv.la
 #	@DISTCLEANUP_libiconv@
 	@[ "x$*" = "x" ] && touch $@ || true
 
