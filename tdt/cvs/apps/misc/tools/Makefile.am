@@ -4,7 +4,6 @@ SUBDIRS = \
 	devinit \
 	evremote2 \
 	libdreamdvd \
-	libeplayer2 \
 	libeplayer3 \
 	fp_control \
 	showiframe \
