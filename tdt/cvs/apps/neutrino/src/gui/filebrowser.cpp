@@ -407,9 +407,13 @@ CFileBrowser::~CFileBrowser()
 
 CFile *CFileBrowser::getSelectedFile()
 {
-	if ((!(filelist.empty())) && (!(filelist[selected].Name.empty())))
+	if ((!(filelist.empty())) && (!(filelist[selected].Name.empty()))) {
+#ifndef HIDE_FILES_IN_DIRMODE
+		if(Dir_Mode && (filelist[selected].getType() != CFile::FILE_DIR))
+			filelist[selected].Name.erase(filelist[selected].Name.find_last_of("/"));
+#endif
 		return &filelist[selected];
-	else
+	} else
 		return NULL;
 }
 
@@ -479,10 +483,10 @@ void CFileBrowser::ChangeDir(const std::string & filename, int selection)
 				}
 			}
 		}
+#ifdef HIDE_FILES_IN_DIRMODE
 		if(Dir_Mode && (!S_ISDIR(file->Mode)))
-		{
 			continue;
-		}
+#endif
 		filelist.push_back(*file);
 	}
 	// sort result
@@ -1205,7 +1209,7 @@ void CFileBrowser::addRecursiveDir(CFileList * re_filelist, std::string rpath, b
 
 void CFileBrowser::hide()
 {
-	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+	frameBuffer->paintBackgroundBoxRel(x,y, width + 1,height);
 }
 
 //------------------------------------------------------------------------
