@@ -67,6 +67,7 @@ libfribidi;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgcon
 libsigc;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/sigc++-1.2.pc;rewrite-libtool:TARGETS/usr/lib/libsigc-1.2.la;rewrite-dependency:TARGETS/usr/lib/libsigc-1.2.la
 libmad;make:install:DESTDIR=TARGETS;install:-m644:mad.pc:TARGETS/usr/lib/pkgconfig;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/mad.pc;rewrite-libtool:TARGETS/usr/lib/libmad.la
 libid3tag;make:install:DESTDIR=TARGETS;install:-m644:id3tag.pc:TARGETS/usr/lib/pkgconfig;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/id3tag.pc;rewrite-libtool:TARGETS/usr/lib/libid3tag.la
+hotplug_e2;make:install:prefix=/usr:DESTDIR=TARGETS
 libxml2;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libxml-2.0.pc:TARGETS/usr/lib/pkgconfig/libxslt.pc;rewrite-libtool:TARGETS/usr/lib/libxml2.la;rewrite-dependency:TARGETS/usr/lib/;rewrite-libtool:TARGETS/usr/lib/python2.6/site-packages/libxml2mod.la
 libxslt;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libxslt.pc:TARGETS/usr/lib/pkgconfig/libexslt.pc;rewrite-libtool:TARGETS/usr/lib/libxslt.la:TARGETS/usr/lib/libexslt.la:TARGETS/usr/lib/python2.6/site-packages/libxsltmod.la
 libvorbisidec;make:install:DESTDIR=TARGETS;install:-m644:vorbisidec.pc:TARGETS/usr/lib/pkgconfig;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/vorbisidec.pc;rewrite-libtool:TARGETS/usr/lib/libvorbisidec.la

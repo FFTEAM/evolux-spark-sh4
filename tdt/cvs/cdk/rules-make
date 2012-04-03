@@ -123,6 +123,8 @@ cairo;1.8.10;cairo-1.8.10;cairo-1.8.10.tar.gz;extract:cairo-1.8.10.tar.gz;patch:
 expat;2.0.1;expat-2.0.1;expat-2.0.1.tar.gz;extract:expat-2.0.1.tar.gz
 fontconfig;2.8.0;fontconfig-2.8.0;fontconfig-2.8.0.tar.gz;extract:fontconfig-2.8.0.tar.gz
 python;2.6;python-2.6;Python-2.6.tar.bz2:python_2.6.diff:python-2.6-force_largefile_support.diff;extract:Python-2.6.tar.bz2;move:Python-2.6:python-2.6;patch:python_2.6.diff;patch:python-2.6-force_largefile_support.diff
+pythonwifi;0.5.0;python-wifi-0.5.0;python-wifi-0.5.0.tar.bz2;extract:python-wifi-0.5.0.tar.bz2
+pythoncheetah;2.4.4;Cheetah-2.4.4;Cheetah-2.4.4.tar.gz;extract:Cheetah-2.4.4.tar.gz
 elementtree;1.2.6-20050316;elementtree-1.2.6-20050316;elementtree-1.2.6-20050316.tar.gz;extract:elementtree-1.2.6-20050316.tar.gz
 lxml;2.0.5;lxml-2.0.5;lxml-2.0.5.tgz;extract:lxml-2.0.5.tgz
 libxmlccwrap;0.0.12;libxmlccwrap-0.0.12;libxmlccwrap-0.0.12.tar.gz;extract:libxmlccwrap-0.0.12.tar.gz
@@ -179,8 +181,11 @@ libdreamdvd2;1.0;libdreamdvd;;patch:libdreamdvd-1.0-support_sh4.patch
 #
 portmap;6.0;portmap_6.0;portmap-6.0.tgz:portmap_6.0.diff:portmap_6.0-9.diff.gz;extract:portmap-6.0.tgz;patch:portmap_6.0.diff
 nfs_utils;1.1.1;nfs-utils-1.1.1;nfs-utils-1.1.1.tar.bz2:nfs-utils_1.1.1-12.diff.gz;extract:nfs-utils-1.1.1.tar.bz2
+sysstat;10.0.4;sysstat-10.0.4;sysstat-10.0.4.tar.gz;extract:sysstat-10.0.4.tar.gz
+hotplug_e2;1.0;hotplug-e2-helper;;
 autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.gz;extract:autofs-4.1.4.tar.gz;patch:autofs-4.1.4-misc-fixes.patch;patch:autofs-4.1.4-multi-parse-fix.patch;patch:autofs-4.1.4-non-replicated-ping.patch;patch:autofs-4.1.4-locking-fix-1.patch;patch:autofs-4.1.4-cross.patch;patch:autofs-4.1.4-Makefile.rules-cross.patch;patch:autofs-4.1.4-install.patch;patch:autofs-4.1.4-auto.net-sort-option-fix.patch;patch:autofs-4.1.4-autofs-additional-distros.patch;patch:autofs-4.1.4-no-bash.patch;patch:autofs-4.1.4-autofs-add-hotplug.patch;patch:autofs-4.1.4-no_man.patch
 #autofs;3.1.7;autofs-3.1.7;autofs-3.1.7.tar.bz2;extract:autofs-3.1.7.tar.bz2;patch:autofs-3.1.7-16.diff
+open_max.patch;patch:autofs-3.1.7-labelfix.patch;patch:autofs-3.1.7-timeout.patch;patch:autofs-3.1.7-no_man.patch
 #vsftpd;2.0.7;vsftpd-2.0.7;vsftpd-2.0.7.tar.gz:vsftpd.diff;extract:vsftpd-2.0.7.tar.gz;patch:vsftpd.diff
 vsftpd;2.3.4;vsftpd-2.3.4;vsftpd-2.3.4.tar.gz:vsftpd.diff;extract:vsftpd-2.3.4.tar.gz;patch:vsftpd.diff
 netkit_ftp;0.17;netkit-ftp-0.17;netkit-ftp-0.17.tar.gz:netkit-ftp.diff;extract:netkit-ftp-0.17.tar.gz;patch:netkit-ftp.diff
