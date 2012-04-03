@@ -1,11 +1,11 @@
 #
 # MODULE-INIT-TOOLS
 #
-$(DEPDIR)/module-init-tools.do_prepare: @DEPENDS_module_init_tools@
+$(DEPDIR)/module_init_tools.do_prepare: @DEPENDS_module_init_tools@
 	@PREPARE_module_init_tools@
 	touch $@
 
-$(DEPDIR)/module-init-tools.do_compile: bootstrap $(DEPDIR)/module-init-tools.do_prepare
+$(DEPDIR)/module_init_tools.do_compile: bootstrap $(DEPDIR)/module_init_tools.do_prepare
 	cd @DIR_module_init_tools@  && \
 		$(BUILDENV) \
 		./configure \
@@ -17,9 +17,9 @@ $(DEPDIR)/module-init-tools.do_compile: bootstrap $(DEPDIR)/module-init-tools.do
 #			--enable-zlib \
 #
 
-$(DEPDIR)/min-module-init-tools $(DEPDIR)/std-module-init-tools $(DEPDIR)/max-module-init-tools \
-$(DEPDIR)/module-init-tools: \
-$(DEPDIR)/%module-init-tools: $(DEPDIR)/%lsb $(MODULE_INIT_TOOLS:%=root/etc/%) $(DEPDIR)/module-init-tools.do_compile
+$(DEPDIR)/min-module_init_tools $(DEPDIR)/std-module_init_tools $(DEPDIR)/max-module_init_tools \
+$(DEPDIR)/module_init_tools: \
+$(DEPDIR)/%module_init_tools: $(DEPDIR)/%lsb $(MODULE_INIT_TOOLS:%=root/etc/%) $(DEPDIR)/module_init_tools.do_compile
 	cd @DIR_module_init_tools@  && \
 		@INSTALL_module_init_tools@
 	$(call adapted-etc-files,$(MODULE_INIT_TOOLS_ADAPTED_ETC_FILES))
@@ -30,9 +30,9 @@ $(DEPDIR)/%module-init-tools: $(DEPDIR)/%lsb $(MODULE_INIT_TOOLS:%=root/etc/%) $
 
 if TARGETRULESET_FLASH
 
-flash-module-init-tools: $(flashprefix)/root/sbin/depmod
+flash-module_init_tools: $(flashprefix)/root/sbin/depmod
 
-$(flashprefix)/root/sbin/depmod: flash-lsb $(MODULE_INIT_TOOLS:%=root/etc/%) $(DEPDIR)/module-init-tools.do_compile | $(flashprefix)/root
+$(flashprefix)/root/sbin/depmod: flash-lsb $(MODULE_INIT_TOOLS:%=root/etc/%) $(DEPDIR)/module_init_tools.do_compile | $(flashprefix)/root
 	cd @DIR_module_init_tools@  && \
 		for i in depmod modinfo ; do \
 			$(INSTALL) -m 755 $$i $(@D) ; done
