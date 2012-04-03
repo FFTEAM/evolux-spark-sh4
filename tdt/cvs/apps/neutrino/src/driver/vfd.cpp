@@ -607,10 +607,10 @@ void CVFD::ShowIcon(vfd_icon icon, bool show)
 	int which;
 	switch (icon) {
 		case VFD_ICON_TIMESHIFT:
-			which = 1;
+			which = 0;
 			break;
 		case VFD_ICON_RECORD:
-			which = 1;
+			which = 0;
 			break;
 		default:
 			return;
