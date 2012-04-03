@@ -1,45 +1,45 @@
 
 # Plugins
-$(DEPDIR)/enigma2-plugins: enigma2-openwebif enigma2-networkbrowser
+$(DEPDIR)/enigma2-pli-plugins: enigma2-pli-openwebif enigma2-pli-networkbrowser
 
 #
-# enigma2-openwebif
+# enigma2-pli-openwebif
 #
-$(DEPDIR)/enigma2-openwebif.do_prepare: bootstrap python pythoncheetah
+$(DEPDIR)/enigma2-pli-openwebif.do_prepare: bootstrap python pythoncheetah
 	rm -rf e2openplugin-OpenWebif
 	git clone git://github.com/E2OpenPlugins/e2openplugin-OpenWebif.git
 	touch $@
 
-$(DEPDIR)/enigma2-openwebif.do_compile: $(DEPDIR)/enigma2-openwebif.do_prepare
+$(DEPDIR)/enigma2-pli-openwebif.do_compile: $(DEPDIR)/enigma2-pli-openwebif.do_prepare
 	cd e2openplugin-OpenWebif && \
 		$(BUILDENV) \
 		cp -a plugin $(targetprefix)/usr/lib/enigma2/python/Plugins/Extensions/OpenWebif
 	touch $@
 
-$(DEPDIR)/min-enigma2-openwebif $(DEPDIR)/std-enigma2-openwebif $(DEPDIR)/max-enigma2-openwebif \
-$(DEPDIR)/enigma2-openwebif: \
-$(DEPDIR)/%enigma2-openwebif: $(DEPDIR)/enigma2-openwebif.do_compile
-#	@DISTCLEANUP_enigma2-openwebif@
+$(DEPDIR)/min-enigma2-pli-openwebif $(DEPDIR)/std-enigma2-pli-openwebif $(DEPDIR)/max-enigma2-pli-openwebif \
+$(DEPDIR)/enigma2-pli-openwebif: \
+$(DEPDIR)/%enigma2-pli-openwebif: $(DEPDIR)/enigma2-pli-openwebif.do_compile
+#	@DISTCLEANUP_enigma2-pli-openwebif@
 	@[ "x$*" = "x" ] && touch $@ || true
 
 #
-# enigma2-openpli-plugins-enigma2
+# enigma2-pli-openpli-plugins-enigma2
 #
-$(DEPDIR)/enigma2-openpli-plugins-enigma2.do_prepare: 
+$(DEPDIR)/enigma2-pli-openpli-plugins-enigma2.do_prepare: 
 	rm -rf openpli-plugins-enigma2
 	git clone git://openpli.git.sourceforge.net/gitroot/openpli/plugins-enigma2 openpli-plugins-enigma2
 	touch $@
 
 #
-# enigma2-networkbrowser
+# enigma2-pli-networkbrowser
 #
 
-$(DEPDIR)/enigma2-networkbrowser.do_prepare: $(DEPDIR)/enigma2-openpli-plugins-enigma2.do_prepare 
+$(DEPDIR)/enigma2-pli-networkbrowser.do_prepare: $(DEPDIR)/enigma2-pli-openpli-plugins-enigma2.do_prepare 
 	cd openpli-plugins-enigma2 && \
-	patch -p1 < $(buildprefix)/Patches/enigma2-networkbrowser-support_autofs.patch
+	patch -p1 < $(buildprefix)/Patches/enigma2-pli-networkbrowser-support_autofs.patch
 	touch $@
 
-$(DEPDIR)/enigma2-networkbrowser.do_compile: $(DEPDIR)/enigma2-networkbrowser.do_prepare 
+$(DEPDIR)/enigma2-pli-networkbrowser.do_compile: $(DEPDIR)/enigma2-pli-networkbrowser.do_prepare 
 	cd openpli-plugins-enigma2/networkbrowser/src/lib && \
 		$(BUILDENV) \
 		sh4-linux-gcc -shared -o netscan.so \
@@ -70,10 +70,10 @@ $(DEPDIR)/enigma2-networkbrowser.do_compile: $(DEPDIR)/enigma2-networkbrowser.do
 		rm -rf $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/NetworkBrowser/lib
 	touch $@
 
-$(DEPDIR)/min-enigma2-networkbrowser $(DEPDIR)/std-enigma2-networkbrowser $(DEPDIR)/max-enigma2-networkbrowser \
-$(DEPDIR)/enigma2-networkbrowser: \
-$(DEPDIR)/%enigma2-networkbrowser: $(DEPDIR)/enigma2-networkbrowser.do_compile
-#	@DISTCLEANUP_enigma2-networkbrowser@
+$(DEPDIR)/min-enigma2-pli-networkbrowser $(DEPDIR)/std-enigma2-pli-networkbrowser $(DEPDIR)/max-enigma2-pli-networkbrowser \
+$(DEPDIR)/enigma2-pli-networkbrowser: \
+$(DEPDIR)/%enigma2-pli-networkbrowser: $(DEPDIR)/enigma2-pli-networkbrowser.do_compile
+#	@DISTCLEANUP_enigma2-pli-networkbrowser@
 	@[ "x$*" = "x" ] && touch $@ || true
 
 
