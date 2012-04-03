@@ -42,6 +42,23 @@
 extern CRemoteControl * g_RemoteControl; /* neutrino.cpp */
 
 #ifdef __sh__
+struct set_led_s {
+        int led_nr;
+        int on;
+};
+
+struct aotom_ioctl_data {
+	union {
+//		struct set_icon_s icon;
+		struct set_led_s led;
+//		struct set_brightness_s brightness;
+//		struct set_mode_s mode;
+//		struct set_standby_s standby;
+//		struct set_time_s time;
+	} u;
+};
+
+
 struct vfd_ioctl_data {
 	unsigned char start_address;
 	unsigned char data[64];
@@ -586,6 +603,23 @@ void CVFD::Clear()
 
 void CVFD::ShowIcon(vfd_icon icon, bool show)
 {
+#if 1
+	int which;
+	switch (icon) {
+		case VFD_ICON_TIMESHIFT:
+			which = 0;
+			break;
+		case VFD_ICON_RECORD:
+			which = 0;
+			break;
+		default:
+			return;
+	}
+	struct aotom_ioctl_data vData;
+	vData.u.led.led_nr = which;
+	vData.u.led.on = show ? 1 : 0;
+	ioctl(fd, VFDSETLED, &vData);
+#else
 //printf("CVFD::ShowIcon %s %x\n", show ? "show" : "hide", (int) icon);
 #ifdef __sh__
         struct vfd_ioctl_data data;
@@ -597,6 +631,7 @@ void CVFD::ShowIcon(vfd_icon icon, bool show)
 	int ret = ioctl(fd, show ? IOC_VFD_SET_ICON : IOC_VFD_CLEAR_ICON, icon);
 	if(ret < 0)
 		perror(show ? "IOC_VFD_SET_ICON" : "IOC_VFD_CLEAR_ICON");
+#endif
 #endif
 }
 

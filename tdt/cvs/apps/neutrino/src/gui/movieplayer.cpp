@@ -374,8 +374,7 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 	else if (actionKey == "timeshift") {
 		timeshift = 1;
 		cutNeutrino();
-		system("/bin/fp_control -l 0 1 >/dev/null 2>&1 &");
-		system("/bin/fp_control -l 1 1 >/dev/null 2>&1 &");
+		CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
 		PlayFile();
 	} 
 	else if (actionKey == "ptimeshift") {
@@ -422,8 +421,7 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		delete bookmarkmanager;
 	if (timeshift) {
 		timeshift = 0;
-		system("/bin/fp_control -l 0 0 >/dev/null 2>&1 &");
-		system("/bin/fp_control -l 1 0 >/dev/null 2>&1 &");
+		CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, false);
 		return menu_return::RETURN_EXIT_ALL;
 	}
 	return menu_return::RETURN_REPAINT;
