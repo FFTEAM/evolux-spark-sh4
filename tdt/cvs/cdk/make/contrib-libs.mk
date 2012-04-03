@@ -781,7 +781,7 @@ $(DEPDIR)/fontconfig: fontconfig.do_compile
 	touch $@
 
 #
-# Python
+# python
 #
 $(DEPDIR)/python.do_prepare: host-python @DEPENDS_python@
 	@PREPARE_python@ && \
@@ -826,25 +826,55 @@ $(DEPDIR)/%python: python.do_compile
 			HOSTPYTHON=$(crossprefix)/bin/python \
 			HOSTPGEN=$(crossprefix)/bin/pgen \
 			install DESTDIR=$(prefix)/$*cdkroot ) && \
-	$(LN_SF) ../../libpython2.6.so.1.0 $(prefix)/$*cdkroot/usr/lib/python2.6/config/libpython2.6.so && \
+	$(LN_SF) ../../libpython2.6.so.1.0 $(prefix)/$*cdkroot/usr/lib/python2.6/config/libpython2.6.so
+#	@DISTCLEANUP_python@
 	[ "x$*" = "x" ] && touch $@ || true
 
-flash-python-enigma2: $(flashprefix)/root-enigma2/usr/bin/python
+#
+# pythonwifi
+#
+$(DEPDIR)/pythonwifi.do_prepare: @DEPENDS_pythonwifi@
+	@PREPARE_pythonwifi@
+	touch $@
 
-$(flashprefix)/root-enigma2/usr/bin/python: \
-%/usr/bin/python: python.do_compile
-	( cd @DIR_python@ && \
-		$(MAKE) $(MAKE_ARGS) \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-			HOSTPGEN=$(crossprefix)/bin/pgen \
-			install DESTDIR=$* ) && \
-	rm $*/usr/bin/{python,idle,pydoc,python2.6-config,python-config,smtpd.py} && \
-	$(LN_SF) python2.6 $@ && \
-	chmod 755 $*/usr/lib/libpython2.6.so.1.0 && \
-	rm -rf $*/usr/lib/python2.6/config/ && \
-	touch $@ && \
-	@TUXBOX_CUSTOMIZE@
+$(DEPDIR)/pythonwifi.do_compile: bootstrap setuptools pythonwifi.do_prepare
+	cd @DIR_pythonwifi@ && \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+		$(crossprefix)/bin/python ./setup.py build
+	touch $@
 
+$(DEPDIR)/min-pythonwifi $(DEPDIR)/std-pythonwifi $(DEPDIR)/max-pythonwifi \
+$(DEPDIR)/pythonwifi: \
+$(DEPDIR)/%pythonwifi: pythonwifi.do_compile
+	cd @DIR_pythonwifi@ && \
+		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+#	@DISTCLEANUP_pythonwifi@
+	[ "x$*" = "x" ] && touch $@ || true
+
+#
+# pythoncheetah
+#
+$(DEPDIR)/pythoncheetah.do_prepare: @DEPENDS_pythoncheetah@
+	@PREPARE_pythoncheetah@
+	touch $@
+
+$(DEPDIR)/pythoncheetah.do_compile: bootstrap setuptools pythoncheetah.do_prepare
+	cd @DIR_pythoncheetah@ && \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+		$(crossprefix)/bin/python ./setup.py build
+	touch $@
+
+$(DEPDIR)/min-pythoncheetah $(DEPDIR)/std-pythoncheetah $(DEPDIR)/max-pythoncheetah \
+$(DEPDIR)/pythoncheetah: \
+$(DEPDIR)/%pythoncheetah: pythoncheetah.do_compile
+	cd @DIR_pythoncheetah@ && \
+		PYTHONPATH=$(targetprefix)/usr/lib/python2.6/site-packages \
+		$(crossprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+#	@DISTCLEANUP_pythonwifi@
+	[ "x$*" = "x" ] && touch $@ || true
 #
 # ELEMENTTREE
 #
