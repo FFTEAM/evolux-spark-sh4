@@ -21,8 +21,8 @@ unload()
 start()
 {
   echo "Starting autofs"
-  /usr/sbin/automount --timeout=5 /autofs file /etc/auto.hotplug
-  /usr/sbin/automount --ghost --timeout=5 /media/net file /etc/auto.network
+  /usr/sbin/automount --timeout=30 /autofs file /etc/auto.hotplug
+  /usr/sbin/automount --ghost --timeout=30 /media/net file /etc/auto.network
 }
 
 stop()
