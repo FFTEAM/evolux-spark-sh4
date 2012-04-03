@@ -2026,6 +2026,86 @@ $(DEPDIR)/%graphlcd: $(DEPDIR)/graphlcd.do_compile
 #$(DEPDIR)/graphlcd: graphlcd.do_compile
 #	touch $@
 
+##############################   LCD4LINUX   ###################################
+
+#
+#
+# libgd2
+#
+$(DEPDIR)/libgd2.do_prepare: bootstrap libz libpng jpeg libiconv freetype fontconfig @DEPENDS_libgd2@
+	@PREPARE_libgd2@
+	touch $@
+
+$(DEPDIR)/libgd2.do_compile: $(DEPDIR)/libgd2.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libgd2@ && \
+	chmod +w configure && \
+	libtoolize -f -c && \
+	autoreconf --force --install -I$(hostprefix)/share/aclocal && \
+	$(BUILDENV) \
+	./configure \
+		--build=$(build) \
+		--host=$(target) \
+		--prefix=/usr && \
+		$(MAKE)
+
+$(DEPDIR)/min-libgd2 $(DEPDIR)/std-libgd2 $(DEPDIR)/max-libgd2 \
+$(DEPDIR)/libgd2: \
+$(DEPDIR)/%libgd2: $(DEPDIR)/libgd2.do_compile
+	cd @DIR_libgd2@ && \
+		@INSTALL_libgd2@
+#	@DISTCLEANUP_libgd2@
+	@[ "x$*" = "x" ] && touch $@ || true
+
+#
+# libusb2
+#
+$(DEPDIR)/libusb2.do_prepare: bootstrap @DEPENDS_libusb2@
+	@PREPARE_libusb2@
+	touch $@
+
+$(DEPDIR)/libusb2.do_compile: $(DEPDIR)/libusb2.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libusb2@ && \
+	$(BUILDENV) \
+	./configure \
+		--build=$(build) \
+		--host=$(target) \
+		--prefix=/usr && \
+		$(MAKE) all
+
+$(DEPDIR)/min-libusb2 $(DEPDIR)/std-libusb2 $(DEPDIR)/max-libusb2 \
+$(DEPDIR)/libusb2: \
+$(DEPDIR)/%libusb2: $(DEPDIR)/libusb2.do_compile
+	cd @DIR_libusb2@ && \
+		@INSTALL_libusb2@
+#	@DISTCLEANUP_libusb2@
+	@[ "x$*" = "x" ] && touch $@ || true
+
+#
+# libusbcompat
+#
+$(DEPDIR)/libusbcompat.do_prepare: bootstrap libusb2 @DEPENDS_libusbcompat@
+	@PREPARE_libusbcompat@
+	touch $@
+
+$(DEPDIR)/libusbcompat.do_compile: $(DEPDIR)/libusbcompat.do_prepare
+	cd @DIR_libusbcompat@ && \
+	$(BUILDENV) \
+	./configure \
+		--build=$(build) \
+		--host=$(target) \
+		--prefix=/usr && \
+		$(MAKE)
+
+$(DEPDIR)/min-libusbcompat $(DEPDIR)/std-libusbcompat $(DEPDIR)/max-libusbcompat \
+$(DEPDIR)/libusbcompat: \
+$(DEPDIR)/%libusbcompat: $(DEPDIR)/libusbcompat.do_compile
+	cd @DIR_libusbcompat@ && \
+		@INSTALL_libusbcompat@
+#	@DISTCLEANUP_libusbcompat@
+	@[ "x$*" = "x" ] && touch $@ || true
+
 ################ END EXTERNAL_CLD #############################
 
 #
