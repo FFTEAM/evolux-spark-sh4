@@ -2,7 +2,6 @@ AC_DEFUN([TUXBOX_RULES_MAKE],[
 AC_MSG_CHECKING([$1 rules])
 eval `${srcdir}/rules.pl make ${srcdir}/rules-make${BLEEDING_EDGE_FALSE:+.latest} $1 cdkoutput`
 INSTALL_$1=`${srcdir}/rules.pl install ${srcdir}/rules-install${INSTALLRULESETFILE} $1`
-UNINSTALL_$1=`${srcdir}/rules.pl uninstall ${srcdir}/rules-uninstall $1`
 DEPSCLEANUP_$1="rm .deps/$1"
 DEPSCLEANUP="$DEPSCLEANUP .deps/$1"
 LIST_CLEAN="$LIST_CLEAN $1-clean"
@@ -18,7 +17,6 @@ AC_SUBST(DIR_$1)dnl
 AC_SUBST(PREPARE_$1)dnl
 AC_SUBST(VERSION_$1)dnl
 AC_SUBST(INSTALL_$1)dnl
-AC_SUBST(UNINSTALL_$1)dnl
 AC_SUBST(DEPSCLEANUP_$1)dnl
 AC_SUBST(DEPSCLEANUP)dnl
 AC_SUBST(LIST_CLEAN)dnl

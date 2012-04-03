@@ -329,63 +329,6 @@ sub process_install_rule ($)
   return $output;
 }
 
-sub process_uninstall_rule ($)
-{
-  my $rule = shift;
-  @_ = split ( /:/, $rule );
-  $_ = shift @_;
-
-  my $output = "";
-
-  if ( $_ eq "make" )
-  {
-    $output .= "\$\(MAKE\) " . join " ", @_;
-  }
-  elsif ( $_ eq "install" )
-  {
-    $output .= "\$\(INSTALL\) " . join " ", @_;
-  }
-  elsif ( $_ eq "rpminstall" )
-  {
-    $output .= "rpm \${DRPM} --ignorearch -Uhv RPMS/sh4/" . join " ", @_;
-  }
-  elsif ( $_ eq "shellconfigdel" )
-  {
-    $output .= "export HCTDUNINST \&\& HOST/bin/target-shellconfig --del " . join " ", @_;
-  }
-  elsif ( $_ eq "initdconfigdel" )
-  {
-    $output .= "export HCTDUNINST \&\& HOST/bin/target-initdconfig --del " . join " ", @_;
-  }
-  elsif ( $_ eq "move" )
-  {
-    $output .= "mv " . join " ", @_;
-  }
-  elsif ( $_ eq "remove" )
-  {
-    $output .= "rm -rf " . join " ", @_;
-  }
-  elsif ( $_ eq "link" )
-  {
-    $output .= "ln -sf " . join " ", @_;
-  }
-  elsif ( $_ eq "archive" )
-  {
-    $output .= "TARGETNAME-ar cru " . join " ", @_;
-  }
-  elsif ( $_ =~ m/^rewrite-(libtool|pkgconfig)/ )
-  {
-    $output .= "perl -pi -e \"s,^libdir=.*\$\$,libdir='TARGET/lib',\"  ". join " ", @_ if $1 eq "libtool";
-    $output .= "perl -pi -e \"s,^prefix=.*\$\$,prefix=TARGET,\" " . join " ", @_ if $1 eq "pkgconfig";
-  }
-  else
-  {
-    die "can't recognize rule \"$rule\"";
-  }
-
-  return $output;
-}
-
 sub process_install ($$$)
 {
   my @rules = @{$_[1]};
@@ -395,20 +338,6 @@ sub process_install ($$$)
   {
     $output .= " && " if $output;
     $output .= process_install_rule ($_);
-  }
-
-  return $output;
-}
-
-sub process_uninstall ($$$)
-{
-  my @rules = @{$_[1]};
-  my $output = "";
-
-  foreach ( @rules )
-  {
-    $output .= " && " if $output;
-    $output .= process_uninstall_rule ($_);
   }
 
   return $output;
