@@ -112,7 +112,8 @@ void * start_loop (void *arg)
 	//ioctl(fpc, FRONTPANELSCROLLMODE, &scrollMode);
 	
 	// display string
-	char str[] = "        TEAM DUCKTALES ENIGMA2";
+//	char str[] = "        TEAM DUCKTALES ENIGMA2";
+	char str[] = "        EVOLUX E2 ON SPARK";
 	int length = strlen(str);
 	char dispData[MAX_CHARS + 1];
 	int offset = 0;

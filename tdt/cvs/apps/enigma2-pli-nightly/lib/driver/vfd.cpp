@@ -124,7 +124,8 @@ void * start_loop (void *arg)
 	//ioctl(fpc, FRONTPANELSCROLLMODE, &scrollMode);
 	
 	// display string
-	char str[] = "        SH4 Git ENIGMA2";
+//	char str[] = "        SH4 Git ENIGMA2";
+	char str[] = "        EVOLUX E2-PLI ON SPARK";
 	int length = strlen(str);
 	char dispData[MAX_CHARS + 1];
 	int offset = 0;
