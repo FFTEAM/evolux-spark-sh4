@@ -2192,6 +2192,7 @@ bool CNeutrinoApp::doGuiRecord(char * preselectedDir, bool addTimer)
 			stopAutoRecord();
 		}
 		if(recordingstatus == 1) {
+			CVFD::getInstance()->ShowIcon(VFD_ICON_RECORD, true);
 			puts("[neutrino.cpp] executing " NEUTRINO_RECORDING_START_SCRIPT ".");
 			if (system(NEUTRINO_RECORDING_START_SCRIPT) != 0)
 				perror(NEUTRINO_RECORDING_START_SCRIPT " failed");
@@ -3381,6 +3382,7 @@ _repeat:
 			nGLCD::Update();
 #endif
 		}
+		CVFD::getInstance()->ShowIcon(VFD_ICON_RECORD, true);
 		puts("[neutrino.cpp] executing " NEUTRINO_RECORDING_START_SCRIPT ".");
 		if (system(NEUTRINO_RECORDING_START_SCRIPT) != 0)
 			perror(NEUTRINO_RECORDING_START_SCRIPT " failed");
@@ -3423,6 +3425,7 @@ _repeat:
 				puts("[neutrino.cpp] executing " NEUTRINO_RECORDING_ENDED_SCRIPT ".");
 				if (system(NEUTRINO_RECORDING_ENDED_SCRIPT) != 0)
 					perror(NEUTRINO_RECORDING_ENDED_SCRIPT " failed");
+				CVFD::getInstance()->ShowIcon(VFD_ICON_RECORD, false);
 				if( mode == mode_standby )
 					cpuFreq->SetCpuFreq(g_settings.standby_cpufreq * 1000 * 1000);
 			}
