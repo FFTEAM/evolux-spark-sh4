@@ -168,6 +168,8 @@ gst-fluendo-mpegdemux-0.10.69.tar.gz;http://core.fluendo.com/gstreamer/src/gst-f
 BroFS1.2.tgz;http://www.avalpa.com/assets/freesoft/other/
 
 alsa-lib-1.0.21a.tar.bz2;ftp://ftp.alsa-project.org/pub/lib/
+libusb-compat-0.1.3.tar.bz2;http://downloads.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-0.1.3
+gd-2.0.35.tar.gz;http://www.chipsnbytes.net/downloads
 libusb-0.1.12.tar.gz;http://dfn.dl.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/
 #libusb-1.0.8.tar.bz2;http://heanet.dl.sourceforge.net/project/libusb/libusb-1.0/libusb-1.0.8/
 #rtmpdump-2.3.tgz;http://rtmpdump.mplayerhq.hu/download/
