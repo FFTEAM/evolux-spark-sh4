@@ -45,7 +45,7 @@ class VideoHardware:
 
 	modes["Scart"] = ["PAL"]
 	modes["Component"] = ["576i", "576p", "720p", "1080i", "1080p"]
-	modes["HDMI"]  = ["576i", "576p", "720p", "1080i", "1080p"]
+	modes["HDMI"]  = ["720p", "1080i", "1080p", "576i", "576p"]
 	modes["HDMI-PC"] = ["PC"]
 
 	widescreen_modes = set(["576i", "576p", "720p", "1080i", "1080p"])
