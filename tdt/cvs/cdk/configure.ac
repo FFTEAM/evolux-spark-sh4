@@ -567,10 +567,6 @@ AC_ARG_WITH(serversupport,
 	[  --with-serversupport=DIR  prefix for server file templates [[PREFIX/serversupport]]],
 	[serversupport="$with_serversupport"],[serversupport="${prefix}/serversupport"])
 
-AC_ARG_WITH(ucodesdir,
-	[  --with-ucodesdir=DIR  optional directory containing ucodes [[NONE]]],
-	[ucodesdir="$with_ucodesdir"],[ucodesdir="NONE"])
-
 AC_ARG_WITH(customizationsdir,
 	[  --with-customizationsdir=DIR  optional directory containing customization scripts [[[CVS]]]],
 	[customizationsdir="$with_customizationsdir"],[customizationsdir="`pwd`"])
@@ -595,7 +591,6 @@ AC_SUBST(bootprefix)
 AC_SUBST(flashprefix)
 AC_SUBST(ipkprefix)
 AC_SUBST(serversupport)
-AC_SUBST(ucodesdir)
 AC_SUBST(customizationsdir)
 AC_SUBST(updatehttpprefix)
 AC_SUBST(stockdir)
@@ -795,8 +790,6 @@ fi
 
 FONTDIR="/share/fonts"
 AC_SUBST(FONTDIR)
-UCODEDIR="/var/tufsbox/ucodes"
-AC_SUBST(UCODEDIR)
 
 CLEANUP="rm -rf"
 AC_SUBST(CLEANUP)
@@ -1228,46 +1221,19 @@ boot directory              : $bootdir
 driver directory            : $driverdir
 host apps directory         : $hostappsdir
 customization directory     : $customizationsdir
-ucode directory             : $ucodesdir
 GNU server                  : $gnuserver
 default server              : $defaultserver
 update http prefix          : $updatehttpprefix
 stock directory             : $stockdir
 ipkg build directory        : $ipkgbuilddir
-Fortis/hdbox stuff          : $enable_fortis_hdbox
-Fortis hs7810a stuff        : $enable_hs7810a
-Fortis hs7110 stuff         : $enable_hs7110
-Atevio 7500 stuff           : $enable_atevio7500
-octagon1008 stuff           : $enable_octagon1008
-topfield stuff              : $enable_tf7700
-spider-box hl101 stuff      : $enable_hl101
-edision argus vip1 v2 stuff : $enable_vip1_v2
-edision argus vip2 v1 stuff : $enable_vip2_v1
 spark box stuff             : $enable_spark
 spark7162 box stuff         : $enable_spark7162
-adb_box stuff               : $enable_adb_box
-ufs910 stuff                : $enable_ufs910
-ufs910 flash                : $enable_flash_ufs910
-ufs912 stuff                : $enable_ufs912
-ufs922 stuff                : $enable_ufs922
-cuberevo stuff              : $enable_cuberevo
-cuberevo mini stuff         : $enable_cuberevo_mini
-cuberevo mini 2 stuff       : $enable_cuberevo_mini2
-cuberevo mini fta stuff     : $enable_cuberevo_mini_fta
-cuberevo 250hd stuff        : $enable_cuberevo_250hd
-cuberevo 2000hd stuff       : $enable_cuberevo_2000hd
-cuberevo 9500hd stuff       : $enable_cuberevo_9500hd
-homecast 5101 stuff         : $enable_homecast5101
-ipbox 9900 stuff            : $enable_ipbox9900
-ipbox 99 stuff              : $enable_ipbox99
-ipbox 55 stuff              : $enable_ipbox55
 XFS support for IDE         : $enable_xfs
 NFS server                  : $enable_nfsserver
 Samba Clients               : $enable_cifs
 NTFS support for IDE        : $enable_ntfs
 sg3 utils                   : $enable_sg3
 DEBUG                       : $enable_debug
-Player131                   : $enable_player131
 Player179                   : $enable_player179
 Player191                   : $enable_player191
 Multicom322                 : $enable_multicom322
