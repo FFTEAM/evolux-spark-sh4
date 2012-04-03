@@ -82,7 +82,10 @@ fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   4) Prepare Evolux       yaffs2"
 fi
-read -p "Select target (0-4)? "
+if [ -e $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+	echo "   5) Prepare Evolux-PLI   yaffs2"
+fi
+read -p "Select target (0-5)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Creating Ntrino  yaffs2 and uImage..."
@@ -109,6 +112,13 @@ case "$REPLY" in
 	4)  echo "Creating Evolux  yaffs2 and uImage..."
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_evolux_with_dev/boot/uImage $CURDIR/out/uImage
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	5)  echo "Creating Evolux-PLI  yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_pli_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_evolux_pli_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR

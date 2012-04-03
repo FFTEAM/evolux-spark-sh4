@@ -82,6 +82,9 @@ fi
 if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   4) Prepare Evolux       jffs2"
 fi
+if [ -e $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+	echo "   5) Prepare Evolux-PLI   jffs2"
+fi
 
 echo "----------------------------"
 
@@ -117,6 +120,15 @@ case "$REPLY" in
 		echo "-----------------------------------------------------------------------";;
 	4)  echo "Preparing Evolux jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Evolux jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	5)  echo "Preparing Evolux-PLI jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_pli_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Evolux jffs2 and uImage..."
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
