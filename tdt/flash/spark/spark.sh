@@ -88,7 +88,7 @@ fi
 
 echo "----------------------------"
 
-read -p "Select target (0-4)? "
+read -p "Select target (0-5)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Preparing Neutrino jffs2..."
