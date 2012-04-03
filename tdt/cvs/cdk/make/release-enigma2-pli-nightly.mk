@@ -111,11 +111,11 @@ endif
 
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 
-	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/
-	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
-	echo 'sda1   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
-	echo 'sda2   -fstype=auto,noatime,nodiratime          :/dev/sda2' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
-	echo 'sda3   -fstype=auto,noatime,nodiratime          :/dev/sda3' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
+#	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/
+#	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
+#	echo 'sda1   -fstype=auto,noatime,nodiratime          :/dev/sda1' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
+#	echo 'sda2   -fstype=auto,noatime,nodiratime          :/dev/sda2' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
+#	echo 'sda3   -fstype=auto,noatime,nodiratime          :/dev/sda3' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
 
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-avl2108.fw
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/firmware/dvb-fe-stv6306.fw
@@ -586,10 +586,20 @@ release-enigma2-pli-nightly_base:
 #
 # AUTOFS
 #
-	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
-	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
-	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
-	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
+#	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
+#	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
+#	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
+#	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
+	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
+		cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
+		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
+		fi; \
+		cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/; \
+		cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/; \
+		cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/; \
+	fi
 
 #
 # GSTREAMER
