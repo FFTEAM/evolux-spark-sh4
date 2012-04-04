@@ -33,8 +33,6 @@
 #include <sys/un.h>
 #include <signal.h>
 #include <time.h>
-#include <poll.h>
-#include <linux/input.h>
 
 #include "global.h"
 #include "map.h"
@@ -47,7 +45,7 @@
 #define	SPARK_RC09_PREDATA		"9966"
 #define	SPARK_RC12_PREDATA		"08F7"
 #define	SPARK_RC13_PREDATA		"AA55"
-#define	SPARK_DEFAULT_PREDATA	"A25D"
+#define	SPARK_DEFAUYLT_PREDATA	"A25D"
 
 static tLongKeyPressSupport cLongKeyPressSupport = {
   10, 120,
@@ -175,7 +173,7 @@ static tButton cButtonsEdisionSparkPlus[] = {
 };
 
 /* spark RC8 */
-static tButton cButtonsSparkRc08[] = {
+static tButton cButtonsSparRc08[] = {
     {"POWER"          , "4D", KEY_POWER},
     {"MUTE"           , "DD", KEY_MUTE},
     {"TIME"           , "ED", KEY_TIME},
@@ -370,7 +368,7 @@ static tButton cButtonsSparkRc12[] = {
 };
 
 /* spark Default */
-static tButton cButtonsSparkDefault[] = {
+static tButton cButtonsSparDefault[] = {
     {"POWER"          , "87", KEY_POWER},
     {"V.FORMAT"       , "0F", KEY_V},
     {"TV/SAT"         , "2F", KEY_AUX},
@@ -447,16 +445,16 @@ static tButton *pSparkGetButton(char *pData)
 	}
 	else if (!strncasecmp(pData, SPARK_RC08_PREDATA, sizeof(SPARK_RC08_PREDATA)))
 	{
-		pButtons = cButtonsSparkRc08;
+		pButtons = cButtonsSparRc08;
 	}
 	else if (!strncasecmp(pData, SPARK_RC09_PREDATA, sizeof(SPARK_RC09_PREDATA)))
 	{
 //		pButtons = cButtonsSparkRc09;
 		pButtons = cButtonsEdisionSpark;
 	}
-	else if (!strncasecmp(pData, SPARK_DEFAULT_PREDATA, sizeof(SPARK_DEFAULT_PREDATA)))
+	else if (!strncasecmp(pData, SPARK_DEFAUYLT_PREDATA, sizeof(SPARK_DEFAUYLT_PREDATA)))
 	{
-		pButtons = cButtonsSparkDefault;
+		pButtons = cButtonsSparDefault;
 	}
 	else if (!strncasecmp(pData, SPARK_RC12_PREDATA, sizeof(SPARK_RC12_PREDATA)))
 	{
@@ -512,52 +510,23 @@ static int pShutdown(Context_t* context ) {
 }
 
 static int pRead(Context_t* context ) {
-    char                vBuffer[sizeof(struct input_event)];
+    char                vBuffer[128];
     char                vData[10];
-    const int           cSize         = sizeof(vBuffer);
+    const int           cSize         = 128;
     int                 vCurrentCode  = -1;
 	int					rc;
 	tButton 			*cButtons = cButtonsEdisionSpark;
-	struct input_event	*ev = ((struct input_event *)vBuffer);
 
-	static int vfd_fd = -1;
-
-	memset(vBuffer, 0, sizeof(vBuffer));
+	memset(vBuffer, 0, 128);
     //wait for new command
-
-	if (vfd_fd < 0)
-		vfd_fd = open("/dev/input/event0", O_RDONLY);
-
-	if (vfd_fd > -1) {
-		struct pollfd fds[2];
-		memset(&fds, 0, sizeof(fds));
-		fds[0].fd = context->fd;
-		fds[1].fd = vfd_fd;
-		fds[0].events = fds[1].events = POLLIN;
-		if (poll(fds, 2, -1) <= 0)
-			return -1;
-		if (fds[1].revents & POLLIN) {
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // Key down
-				goto bye;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-				goto bye;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // key up
-				goto bye;
-			rc = ev->code;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-				goto bye;
-			return rc;
-	bye:
-			close(vfd_fd);
-			vfd_fd = -1;
-			return -1;
-		}
-	}
-			//printf("[RCU] Frontpanel key code: 0x%x\n", ev->code);
-			//printf("[RCU] Frontpanel type    : 0x%x\n", ev->type);
-			//printf("[RCU] Frontpanel value   : 0x%x\n", ev->value);
-	rc = read (context->fd, vBuffer, cSize);
+    rc = read (context->fd, vBuffer, cSize);
 	if(rc <= 0)return -1;
+
+    //parse and send key event
+    vData[0] = vBuffer[17];
+    vData[1] = vBuffer[18];
+    vData[2] = '\0';
+
 
     vData[0] = vBuffer[8];
     vData[1] = vBuffer[9];
@@ -570,10 +539,17 @@ static int pRead(Context_t* context ) {
     vData[1] = vBuffer[15];
     vData[2] = '\0';
 
-    printf("[RCU] key: %s -> %d\n", vData, &vBuffer[0]);
+    printf("[RCU] key: %s -> %s\n", vData, &vBuffer[0]);
+    vCurrentCode = getInternalCode(cButtons, vData);
 
-	vCurrentCode = getInternalCode(cButtons, vData);
-
+	if(vCurrentCode != 0) {
+		static int nextflag = 0;
+		if (('0' == vBuffer[17]) && ('0' == vBuffer[18]))
+		{
+		    nextflag++;
+		}
+		vCurrentCode += (nextflag << 16);
+	}
     return vCurrentCode;
 }
 
@@ -617,4 +593,3 @@ RemoteControl_t Spark_RC = {
   	&cLongKeyPressSupport,
 };
 
-// vim:ts=4
