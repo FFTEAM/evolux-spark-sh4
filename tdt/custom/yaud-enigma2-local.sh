@@ -2,7 +2,7 @@
 CURDIR=`pwd`
 NRELDIR='../../tufsbox/release'
 CHANGEDIR='../../tufsbox'
-TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
+TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $4}' | cut -d ' ' -f 1`
 BUILDDIR='../../cvs/cdk'
 
 # originally created by schischu and konfetti
@@ -69,114 +69,6 @@ function make_devs() {
 [ -e $NRELDIR/dev/ ] && [ -e $NRELDIR/dev/vfd ] && exit;
 
 case $TARGET in
-	ufs910)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		make_devs
-	;;
-	flash_ufs910)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_flash"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		echo "ln -sf /dev/mtdblock2 root" >> $CURDIR/.fakeroot
-		make_devs
-	;;
-	ufs912)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		make_devs
-	;;
-	ufs922)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	tf7700)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	fortis_hdbox)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		echo "mknod -m 666 rc c 147 1" >> $CURDIR/.fakeroot
-		echo "mknod -m 666 sci0 c 253 0" >> $CURDIR/.fakeroot
-		echo "mknod -m 666 sci1 c 253 1" >> $CURDIR/.fakeroot
-		make_devs
-	;;
-	hl101)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	vip)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_mini)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_mini2)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_250hd)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_no_CI"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_9500hd)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_2000hd)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_no_CI"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	cuberevo_mini_fta)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_no_CI"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	homecast5101)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	octagon1008)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		echo "mknod -m 666 rc c 147 1" >> $CURDIR/.fakeroot
-		echo "mknod -m 666 sci0 c 169 0" >> $CURDIR/.fakeroot
-		make_devs
-	;;
 	spark)
 		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
 		make_default
@@ -185,40 +77,7 @@ case $TARGET in
 		echo "mknod -m 666 sci0 c 169 0" >> $CURDIR/.fakeroot
 		make_devs
 	;;
-	atevio7500)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
-		echo "mknod -m 666 rc c 147 1" >> $CURDIR/.fakeroot
-		echo "mknod -m 666 sci0 c 169 0" >> $CURDIR/.fakeroot
-		echo "mknod -m 666 sci1 c 169 1" >> $CURDIR/.fakeroot
-		make_devs
-	;;
 	spark7162)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	ipbox9900)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_dual_tuner"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	ipbox99)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_no_CI"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	ipbox55)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV_no_CI"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-	hs7810a)
 		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
 #		make_default
 		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
