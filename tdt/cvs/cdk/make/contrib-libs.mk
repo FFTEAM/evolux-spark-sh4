@@ -1959,7 +1959,7 @@ $(DEPDIR)/%gst_plugins_dvbmediasink: $(DEPDIR)/gst_plugins_dvbmediasink.do_compi
 
 # libusb 
 # 
-$(DEPDIR)/libusb.do_prepare:  @DEPENDS_libusb@ 
+$(DEPDIR)/libusb.do_prepare: @DEPENDS_libusb@ 
 	@PREPARE_libusb@ 
 	touch $@ 
  
@@ -1982,7 +1982,7 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 # graphlcd
-$(DEPDIR)/graphlcd.do_prepare:	libusb
+$(DEPDIR)/graphlcd.do_prepare: libusb
 	if [ ! -e .deps/graphlcd.do_compile ]; then \
 		[ -d graphlcd-base ] && \
 		rm -rf graphlcd-base; \
