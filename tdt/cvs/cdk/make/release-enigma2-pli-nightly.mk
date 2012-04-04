@@ -251,7 +251,6 @@ release-enigma2-pli-nightly_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release-enigma2-pli-nightly/etc/ && \
-	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release-enigma2-pli-nightly/etc/ && \
@@ -268,7 +267,6 @@ release-enigma2-pli-nightly_base:
 	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release-enigma2-pli-nightly/etc/inetd.conf && \
 	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release-enigma2-pli-nightly/etc/inetd.conf && \
 	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release-enigma2-pli-nightly/etc/inetd.conf && \
-	cp -dp $(targetprefix)/etc/inetd.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/image-version $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp $(buildprefix)/root/etc/timezone.xml $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release-enigma2-pli-nightly/etc/ && \
