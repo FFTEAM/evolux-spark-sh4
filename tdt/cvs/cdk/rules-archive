@@ -38,9 +38,10 @@ libtool-2.2.6a.tar.gz;http://ftp.gnu.org/gnu/libtool/
 #
 #busybox-1.19.3.tar.bz2;http://www.busybox.net/downloads
 busybox-1.19.4.tar.bz2;http://www.busybox.net/downloads
-lsb_3.2-20.tar.gz;http://ftp.uni-erlangen.de/pub/debian/pool/main/l/lsb
+lsb_3.2-20.tar.gz;http://ftp.uni-erlangen.de/pub/debian/pool/main/l/lsb;http://debian.sdinet.de/etch/sdinet/lsb;ftp://debian.sil.at/grml/src/grml64-small_2008.11/lsb
 #lsb_3.2-20.tar.gz;http://190.9.128.108/repositorios/universo/pool/main/l/lsb
 # lsb_3.2-12.tar.gz;http://ftp.de.debian.org/debian/pool/main/l/lsb
+lsb_3.2-28.1.tar.gz;http://ftp.de.debian.org/debian/pool/main/l/lsb;http://ftp.uni-erlangen.de/pub/debian/pool/main/l/lsb
 ipkg-0.99.163.tar.gz;http://www.handhelds.org/download/packages/ipkg
 module-init-tools-3.3-pre1.tar.bz2;http://ftp.tlk-l.net/pub/mirrors/kernel.org/linux/utils/kernel/module-init-tools/
 module-init-tools-3.12-pre2.tar.bz2;http://ftp.tlk-l.net/pub/mirrors/kernel.org/linux/utils/kernel/module-init-tools/
@@ -180,7 +181,7 @@ libdvbsi++-0.3.6.tar.bz2;http://www.saftware.de/libdvbsi++
 # net apps
 #
 portmap-6.0.tgz;http://fossies.org/unix/misc
-portmap_6.0-9.diff.gz;http://debian.osuosl.org/debian/pool/main/p/portmap/
+portmap_6.0-9.diff.gz;http://debian.osuosl.org/debian/pool/main/p/portmap;http://www.kanotix.com/files/fix/portmap/portmap;ftp://15.192.45.22/ftp1/pub/tcdebian/pool/t5745/source
 nfs-utils-1.1.1.tar.bz2;http://pkgs.fedoraproject.org/repo/pkgs/nfs-utils/nfs-utils-1.1.1.tar.bz2/d2a7815329405172b29f051fcffe3c94/
 nfs-utils_1.1.1-12.diff.gz;https://launchpadlibrarian.net/11192890/
 #autofs-4.1.4.tar.bz2;http://pkgs.fedoraproject.org/repo/pkgs/autofs/autofs-4.1.4.tar.bz2/7e3949114c00665b4636f0c318179657
