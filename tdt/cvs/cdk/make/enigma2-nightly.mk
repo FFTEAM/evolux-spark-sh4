@@ -10,7 +10,7 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	touch $@
 
 $(appsdir)/enigma2-nightly/config.status: bootstrap freetype expat fontconfig libpng jpeg libgif libfribidi libid3tag libmad libsigc libreadline \
-		libdvbsi++ python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev $(EXTERNALLCD_DEP)
+		libdvbsi++ python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev graphlcd
 	cd $(appsdir)/enigma2-nightly && \
 		./autogen.sh && \
 		sed -e 's|#!/usr/bin/python|#!$(crossprefix)/bin/python|' -i po/xml2po.py && \
@@ -84,7 +84,7 @@ $(DEPDIR)/enigma2-nightly-misc:
 	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
 	$(INSTALL_DIR) $(targetprefix)/usr/bin/tuxtxt && \
 	chmod 755 $(targetprefix)/usr/bin/tuxtxt && \
-	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/tuxtxt/
+	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/bin/tuxtxt/
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
 	touch $@
 
