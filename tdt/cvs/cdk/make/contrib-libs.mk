@@ -2005,8 +2005,8 @@ $(DEPDIR)/%graphlcd: $(DEPDIR)/graphlcd.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 graphlcd-base-touchcol.tar.bz2:
-	if [ -d $(archivedir)/graphlcd-base-touchcol.tar.bz2 ]; then \
-		rm $(archivedir)/graphlcd-base-touchcol.tar.bz2; \
+	if [ -d Archive/graphlcd-base-touchcol.tar.bz2 ]; then \
+		rm Archive/graphlcd-base-touchcol.tar.bz2; \
 	fi
 
 ##############################   LCD4LINUX   ###################################
