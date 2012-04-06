@@ -1957,13 +1957,14 @@ $(DEPDIR)/%gst_plugins_dvbmediasink: $(DEPDIR)/gst_plugins_dvbmediasink.do_compi
 
 ################ EXTERNAL_CLD #############################
 
-# libusb 
-# 
-$(DEPDIR)/libusb.do_prepare: @DEPENDS_libusb@ 
-	@PREPARE_libusb@ 
-	touch $@ 
- 
-$(DEPDIR)/libusb.do_compile: $(DEPDIR)/libusb.do_prepare 
+#
+# libusb
+#
+$(DEPDIR)/libusb.do_prepare: @DEPENDS_libusb@
+	@PREPARE_libusb@
+	touch $@
+
+$(DEPDIR)/libusb.do_compile: $(DEPDIR)/libusb.do_prepare
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_libusb@ && \
 	$(BUILDENV) \
@@ -1972,14 +1973,14 @@ $(DEPDIR)/libusb.do_compile: $(DEPDIR)/libusb.do_prepare
 		--prefix=/usr && \
 		$(MAKE) all
 	touch $@
- 
+
 $(DEPDIR)/min-libusb $(DEPDIR)/std-libusb $(DEPDIR)/max-libusb \
 $(DEPDIR)/libusb: \
 $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
-	@[ "x$*" = "x" ] && touch $@ || true
 	cd @DIR_libusb@ && \
 		@INSTALL_libusb@
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_libusb@
+	@[ "x$*" = "x" ] && touch $@ || true
 
 # graphlcd
 $(DEPDIR)/graphlcd.do_prepare: libusb
