@@ -17,7 +17,6 @@ $(DEPDIR)/%release_evolux_pli:
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/sbin $(prefix)/release_evolux_pli_with_dev/usr/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/script $(prefix)/release_evolux_pli_with_dev/usr/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/share $(prefix)/release_evolux_pli_with_dev/usr/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/tuxtxt $(prefix)/release_evolux_pli_with_dev/usr/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/lib $(prefix)/release_evolux_pli_with_dev/usr/
 	mv $(prefix)/release_evolux_pli_with_dev/usr/local/share/fonts/*.ttf $(prefix)/release_evolux_pli_with_dev/usr/share/fonts
 	rm -rf $(prefix)/release_evolux_pli_with_dev/usr/local/share/fonts
