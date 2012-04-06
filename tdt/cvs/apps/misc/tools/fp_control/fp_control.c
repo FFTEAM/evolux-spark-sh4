@@ -318,7 +318,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-t") == 0) || (strcmp(argv[i], "--settext") == 0))
 			{
-		        if (i + 1 <= argc)
+		        if (i + 1 < argc)
 					/* set display text */
 					if (((Model_t*)context->m)->SetText)
 						((Model_t*)context->m)->SetText(context, argv[i+1]);
@@ -327,7 +327,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-l") == 0) || (strcmp(argv[i], "--setLed") == 0))
 		   	{
-		        if (i + 2 <= argc)
+		        if (i + 2 < argc)
 				{
 					int which, on;
 
@@ -343,7 +343,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-i") == 0) || (strcmp(argv[i], "--setIcon") == 0))
 	        {
-	        	if (i + 2 <= argc)
+	        	if (i + 2 < argc)
 				{
 					int which, on;
 
@@ -358,7 +358,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-b") == 0) || (strcmp(argv[i], "--setBrightness") == 0))
 	        {
-	        	if (i + 1 <= argc)
+	        	if (i + 1 < argc)
 				{
 					int brightness;
 
@@ -428,7 +428,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-led") == 0) || (strcmp(argv[i], "--setLedBrightness") == 0))
 	        {
-		        if (i + 1 <= argc)
+		        if (i + 1 < argc)
 				{
 					int brightness;
 
@@ -465,7 +465,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-sr") == 0) || (strcmp(argv[i], "--setRF") == 0))
 	        {
-	        	if (i + 1 <= argc)
+	        	if (i + 1 < argc)
 				{
 					int on;
 
@@ -493,7 +493,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 		    }
 			else if ((strcmp(argv[i], "-tm") == 0) || (strcmp(argv[i], "--time_mode") == 0))
 	        {
-	        	if (i + 1 <= argc)
+	        	if (i + 1 < argc)
 				{
 					int twentyFour;
 
