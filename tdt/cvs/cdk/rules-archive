@@ -174,7 +174,7 @@ gd-2.0.35.tar.gz;http://www.chipsnbytes.net/downloads
 libusb-0.1.12.tar.gz;http://dfn.dl.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/
 #libusb-1.0.8.tar.bz2;http://heanet.dl.sourceforge.net/project/libusb/libusb-1.0/libusb-1.0.8/
 #rtmpdump-2.3.tgz;http://rtmpdump.mplayerhq.hu/download/
-rtmpdump-2.4.tar.gz;http://dev.gentoo.org/~hwoarang/distfiles/
+rtmpdump-2.4.tar.gz;http://dev.gentoo.org/~hwoarang/distfiles;http://mirror.informatik.uni-mannheim.de/pub/mirrors/xbmc/build-deps/darwin-libs
 Imaging-1.1.7.tar.gz;http://effbot.org/downloads
 libdvbsi++-0.3.6.tar.bz2;http://www.saftware.de/libdvbsi++
 #
