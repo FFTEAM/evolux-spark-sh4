@@ -82,7 +82,7 @@ $(DEPDIR)/enigma2-nightly-misc:
 	$(INSTALL_DIR) $(targetprefix)/boot && \
 	$(INSTALL_DIR) $(targetprefix)/media/{hdd,dvd} && \
 	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
-	$(INSTALL_DIR) $(targetprefix)/usr/tuxtxt && \
+	$(INSTALL_DIR) $(targetprefix)/usr/bin/tuxtxt && \
 	chmod 755 $(targetprefix)/usr/bin/tuxtxt && \
 	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/tuxtxt/
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
