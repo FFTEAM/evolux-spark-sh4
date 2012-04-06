@@ -23,7 +23,7 @@ release-enigma2-pli-nightly_common_utils:
 	ln -s ../init.d/reboot $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S90reboot
 
 release-enigma2-pli-nightly_spark:
-	echo "EvoLux" > $(prefix)/release-enigma2-pli-nightly/etc/hostname
+	echo "EvoPLI" > $(prefix)/release-enigma2-pli-nightly/etc/hostname
 
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp $(buildprefix)/root/release/rc $(prefix)/release-enigma2-pli-nightly/etc/init.d/
@@ -554,7 +554,7 @@ release-enigma2-pli-nightly_base:
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/
 	touch $(prefix)/release-enigma2-pli-nightly/etc/.start_enigma2
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Components/
-#	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
+	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
 	touch $(prefix)/release-enigma2-pli-nightly/etc/changelog.txt
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
@@ -583,7 +583,7 @@ release-enigma2-pli-nightly_base:
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
 	cp -f $(buildprefix)/root/release/autofs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp -f $(buildprefix)/root/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so
+	[ ! -e $(prefix)/release/usr/lib/autofs/mount_ext3.so ] && ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release-enigma2-pli-nightly/etc/

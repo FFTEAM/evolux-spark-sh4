@@ -569,7 +569,7 @@ release_base:
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/;
 	cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/
 	cp -f $(buildprefix)/root/usr/sbin/automount $(prefix)/release/usr/sbin/
-	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
+	[ ! -e $(prefix)/release/usr/lib/autofs/mount_ext3.so ] && ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/
