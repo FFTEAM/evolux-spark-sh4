@@ -143,7 +143,7 @@ else
 endif
 
 yaud-enigma2-pli-nightly: yaud-none host-python lirc \
-		boot-elf remote firstboot enigma2-pli-nightly release-enigma2-pli-nightly
+		boot-elf remote firstboot enigma2-pli-nightly enigma2-pli-nightly-misc release-enigma2-pli-nightly
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2

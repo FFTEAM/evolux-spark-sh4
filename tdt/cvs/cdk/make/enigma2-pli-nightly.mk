@@ -47,3 +47,38 @@ enigma2-pli-nightly-clean enigma2-pli-nightly-distclean:
 		find $(appsdir)/enigma2-pli-nightly -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/enigma2-pli-nightly/autom4te.cache
 
+$(DEPDIR)/enigma2-pli-nightly-misc:
+#	workarounds to allow rebuild
+	find $(targetprefix)/usr/local/share/enigma2/ -name .svn |xargs rm -fr
+	rm -f $(targetprefix)/usr/local/etc
+
+	$(INSTALL_DIR) $(targetprefix)/usr/bin && \
+	$(INSTALL_DIR) $(targetprefix)/usr/share && \
+	$(LN_SF) /usr/local/share/enigma2 $(targetprefix)/usr/share/enigma2 && \
+	$(INSTALL_DIR) $(targetprefix)/usr/share/etc && \
+	$(LN_SF) /usr/local/share/enigma2 $(targetprefix)/usr/share/etc/enigma2 && \
+	cp -rd root/usr/local/share/enigma2/* $(targetprefix)/usr/local/share/enigma2/ && \
+	$(INSTALL_DIR) $(targetprefix)/usr/share/fonts && \
+	cp -rd root/usr/share/fonts/* $(targetprefix)/usr/share/fonts/ && \
+	$(INSTALL_DIR) $(targetprefix)/etc && \
+	$(INSTALL_DIR) $(targetprefix)/etc/enigma2 && \
+	$(LN_SF) /etc $(targetprefix)/usr/local/etc && \
+	cp -rd root/etc/enigma2/* $(targetprefix)/etc/enigma2/ && \
+	$(INSTALL_FILE) root/etc/videomode $(targetprefix)/etc/ && \
+	$(INSTALL_FILE) root/etc/lircd.conf $(targetprefix)/etc/ && \
+	$(INSTALL_FILE) root/etc/inetd.conf $(targetprefix)/etc/ && \
+	$(INSTALL_FILE) root/etc/image-version $(targetprefix)/etc/ && \
+	$(INSTALL_DIR) $(targetprefix)/etc/tuxbox && \
+	$(INSTALL_FILE) root/etc/tuxbox/satellites.xml $(targetprefix)/etc/tuxbox/ && \
+	$(INSTALL_FILE) root/etc/tuxbox/tuxtxt2.conf $(targetprefix)/etc/tuxbox/ && \
+	$(INSTALL_FILE) root/etc/tuxbox/cables.xml $(targetprefix)/etc/tuxbox/ && \
+	$(INSTALL_FILE) root/etc/tuxbox/terrestrial.xml $(targetprefix)/etc/tuxbox/ && \
+	$(INSTALL_FILE) root/etc/tuxbox/timezone.xml $(targetprefix)/etc/tuxbox/ && \
+	$(INSTALL_DIR) $(targetprefix)/boot && \
+	$(INSTALL_DIR) $(targetprefix)/media/{hdd,dvd} && \
+	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
+	$(INSTALL_DIR) $(targetprefix)/usr/tuxtxt && \
+	chmod 755 $(targetprefix)/usr/bin/tuxtxt && \
+	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/tuxtxt/
+	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
+	touch $@
