@@ -567,16 +567,12 @@ release_base:
 #	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
 #	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/;
-	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
-		cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
-		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
-		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
-			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
-		fi; \
-		cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/; \
-		cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/; \
-		cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/; \
-	fi
+	cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/
+	cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/
+	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/
+	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/
+	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/
 
 #
 # GSTREAMER
