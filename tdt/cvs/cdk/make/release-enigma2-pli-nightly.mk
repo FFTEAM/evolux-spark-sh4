@@ -573,6 +573,7 @@ release-enigma2-pli-nightly_base:
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
+	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ || true
 
 #
 # AUTOFS
@@ -583,7 +584,6 @@ release-enigma2-pli-nightly_base:
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
 	cp -f $(buildprefix)/root/release/autofs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp -f $(buildprefix)/root/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release-enigma2-pli-nightly/etc/
 

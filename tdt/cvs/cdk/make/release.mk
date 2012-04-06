@@ -559,7 +559,7 @@ release_base:
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
-
+	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/ || true
 #
 # AUTOFS
 #
@@ -569,7 +569,6 @@ release_base:
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/;
 	cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/
 	cp -f $(buildprefix)/root/usr/sbin/automount $(prefix)/release/usr/sbin/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/
 
