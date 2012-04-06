@@ -1983,7 +1983,7 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 # graphlcd
-$(DEPDIR)/graphlcd.do_prepare: libusb
+$(DEPDIR)/graphlcd.do_prepare: bootstrap libusb @DEPENDS_graphlcd@
 	if [ ! -e .deps/graphlcd.do_compile ]; then \
 		[ -d graphlcd-base ] && \
 		rm -rf graphlcd-base; \
