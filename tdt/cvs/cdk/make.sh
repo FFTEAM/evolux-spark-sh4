@@ -124,53 +124,20 @@ PLAYER="--enable-player191"
 
 ##############################################
 
-echo -e "\nMulticom:"
-echo "   1) Multicom 3.2.4 rc3 (Recommended for Player191)"
-echo "   2) Multicom 3.2.4 (Experimental)"
-read -p "Select multicom (1-2)? "
-
-case "$REPLY" in
-	1) echo -e "\nSelected multicom: $REPLY\n"
-	   MULTICOM="--enable-multicom324"
-       cd ../driver/include/
-       if [ -L multicom ]; then
-          rm multicom
-       fi
-
-       ln -s ../multicom-3.2.4_rc3/include multicom
-       cd - >/dev/null 2>&1
-
-       cd ../driver/
-       if [ -L multicom ]; then
-          rm multicom
-       fi
-
-       ln -s multicom-3.2.4_rc3 multicom
-       echo "export CONFIG_MULTICOM324=y" >> .config
-       cd - >/dev/null 2>&1
-    ;;
-	2) echo -e "\nSelected multicom: $REPLY\n"
-	   MULTICOM="--enable-multicom324"
-       cd ../driver/include/
-       if [ -L multicom ]; then
-          rm multicom
-       fi
-
-       ln -s ../multicom-3.2.4/include multicom
-       cd - >/dev/null 2>&1
-
-       cd ../driver/
-       if [ -L multicom ]; then
-          rm multicom
-       fi
-
-       ln -s multicom-3.2.4 multicom
-       echo "export CONFIG_MULTICOM324=y" >> .config
-       cd - >/dev/null 2>&1
-    ;;
-	*) echo -e "\nSelected multicom: $REPLY\n"
-	   MULTICOM="--enable-multicom324";;
-esac
+MULTICOM="--enable-multicom324"
+cd ../driver/include/
+if [ -L multicom ]; then
+	rm multicom
+fi
+ln -s ../multicom-3.2.4/include multicom
+cd - >/dev/null 2>&1
+cd ../driver/
+if [ -L multicom ]; then
+	rm multicom
+fi
+ln -s multicom-3.2.4 multicom
+echo "export CONFIG_MULTICOM324=y" >> .config
+cd - >/dev/null 2>&1
 
 ##############################################
 
