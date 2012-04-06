@@ -96,12 +96,12 @@ struct receive_s {
 #define cMaxReceiveQueue	100
 static wait_queue_head_t   wq;
 
-struct receive_s receive[cMaxReceiveQueue];
+static struct receive_s receive[cMaxReceiveQueue];
 static int receiveCount = 0;
 
-struct semaphore 	   write_sem;
-struct semaphore 	   receive_sem;
-struct semaphore 	   thread_sem;
+static struct semaphore 	   write_sem;
+static struct semaphore 	   receive_sem;
+static struct semaphore 	   draw_thread_sem;
 
 unsigned char ASCII[48][2] =
 {
@@ -175,8 +175,8 @@ static int VFD_Show_Ico(LogNum_T log_num, int log_stat)
 	return YWPANEL_VFD_ShowIco(log_num, log_stat);
 }
 
-static struct task_struct *thread;
-static int thread_stop  = 1;
+static struct task_struct *draw_task = 0;
+static int draw_thread_stop  = 1;
 int aotomSetIcon(int which, int on);
 
 void clear_display(void)
@@ -209,7 +209,7 @@ int draw_thread(void *arg)
   memcpy(buf + off, data->data, len);
   len += off;
 
-  thread_stop = 0;
+  draw_thread_stop = 0;
 
   count = len;
   if(len > DISPLAYWIDTH)
@@ -219,7 +219,7 @@ int draw_thread(void *arg)
     {
        int i;
        if(kthread_should_stop()) {
-    	   thread_stop = 1;
+    	   draw_thread_stop = 1;
     	   return 0;
        }
 
@@ -228,7 +228,7 @@ int draw_thread(void *arg)
 	// sleep 200 ms
 	for (i = 0; i < 5; i++) {
 		if(kthread_should_stop()) {
-			thread_stop = 1;
+			draw_thread_stop = 1;
 			return 0;
 		}
 		msleep(40);
@@ -241,30 +241,39 @@ int draw_thread(void *arg)
       YWPANEL_VFD_ShowString(buf + off);
   }
 
-  thread_stop = 1;
+  draw_thread_stop = 1;
   return 0;
 }
 
 int run_draw_thread(struct vfd_ioctl_data *draw_data)
 {
-    if(down_interruptible (&thread_sem))
+    if(down_interruptible (&draw_thread_sem))
 	return -ERESTARTSYS;
 
     // stop existing thread, if any
-    if(!thread_stop) {
-	kthread_stop(thread);
-	while(!thread_stop)
+    if(!draw_thread_stop && draw_task) {
+	kthread_stop(draw_task);
+	while(!draw_thread_stop)
+		msleep(1);
+	draw_task = 0;
+    }
+
+    if (draw_data->length < DISPLAYWIDTH) {
+	char buf[DISPLAYWIDTH];
+	memset(buf, ' ', sizeof(buf));
+	if (draw_data->length)
+		memcpy(buf, draw_data->data, draw_data->length);
+	YWPANEL_VFD_ShowString(buf);
+    } else {
+	draw_thread_stop = 2;
+	draw_task = kthread_run(draw_thread,draw_data,"draw thread");
+
+	//wait until thread has copied the argument
+	while(draw_thread_stop == 2)
 		msleep(1);
     }
 
-    thread_stop = 2;
-    thread = kthread_run(draw_thread,draw_data,"draw thread");
-
-    //wait until thread has copied the argument
-    while(thread_stop == 2)
-    	msleep(1);
-
-    up(&thread_sem);
+    up(&draw_thread_sem);
 
     return 0;
 }
@@ -471,7 +480,7 @@ static struct vfd_ioctl_data vfd_data;
 static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int cmd, unsigned long arg)
 {
    static int mode = 0;
-   int res = 0;
+   int res = -EINVAL;
    dprintk(5, "%s > 0x%.8x\n", __func__, cmd);
 
    if(down_interruptible (&write_sem))
@@ -482,6 +491,7 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 	case VFDSETLED:
 	case VFDICONDISPLAYONOFF:
 	case VFDSETTIME:
+	case VFDBRIGHTNESS:
 		if (copy_from_user(&aotom_data, (void *) arg, sizeof(aotom_data)))
 			return -EFAULT;
 	}
@@ -496,6 +506,11 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 #endif
 		break;
 	case VFDBRIGHTNESS:
+		if (aotom_data.u.brightness.level < 0)
+			aotom_data.u.brightness.level = 0;
+		else if (aotom_data.u.brightness.level > 7)
+			aotom_data.u.brightness.level = 7;
+		res = YWPANEL_VFD_SetBrightness(aotom_data.u.brightness.level);
 		break;
 	case VFDICONDISPLAYONOFF:
 	{
@@ -557,7 +572,7 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		u32 uTime = 0;
 		uTime = YWPANEL_FP_GetTime();
 		//printk("uTime = %d\n", uTime);
-		put_user(uTime, (int *) arg);
+		res = put_user(uTime, (int *) arg);
 #endif
 		break;
 	}
@@ -577,26 +592,22 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 	case VFDDISPLAYWRITEONOFF:
 		break;
 	case VFDDISPLAYCLR:
-		if(!thread_stop) {
-			kthread_stop(thread);
-			while(!thread_stop)
-			msleep(1);
-		}
-		VFD_clr();
+		vfd_data.length = 0;
+	   	res = run_draw_thread(&vfd_data);
 		break;
 #if defined(SPARK)
 	case 0x5305:
+		res = 0;
 		break;
 #endif
 	case 0x5401:
+		res = 0;
 		break;
 	case VFDGETSTARTUPSTATE: // --martii, 20120301
 	{
 		YWPANEL_STARTUPSTATE_t State;
 		if (YWPANEL_FP_GetStartUpState(&State))
-			put_user(State, (int *) arg);
-		else
-			res = -1;
+			res = put_user(State, (int *) arg);
 		break;
 	}
 
@@ -794,7 +805,7 @@ static int __init aotom_init_module(void)
 		printk("unable to get major %d for VFD\n",VFD_MAJOR);
 
 	sema_init(&write_sem, 1);
-	sema_init(&thread_sem, 1);
+	sema_init(&draw_thread_sem, 1);
 	sema_init(&receive_sem, 1);
 
 	for (i = 0; i < LASTMINOR; i++) {
@@ -809,6 +820,12 @@ static int __init aotom_init_module(void)
 
 static void __exit aotom_cleanup_module(void)
 {
+	if(!draw_thread_stop && draw_task) {
+		kthread_stop(draw_task);
+		while(!draw_thread_stop)
+			msleep(1);
+	}
+
 	dprintk(5, "[BTN] unloading ...\n");
 	button_dev_exit();
 
