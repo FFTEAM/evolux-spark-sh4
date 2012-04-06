@@ -460,6 +460,7 @@ release_base:
 		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release/usr/lib/enigma2/; fi
 
 	cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release/usr/lib/enigma2/python/Plugins/SystemPlugins/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
 
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
@@ -531,7 +532,6 @@ release_base:
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release/usr/lib/enigma2/
 	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/FlashBackup
 #### displaytime plugin not longer needed so we remove it #####
