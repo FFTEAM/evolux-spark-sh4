@@ -76,9 +76,11 @@ $(DEPDIR)/enigma2-pli-nightly-misc:
 	$(INSTALL_FILE) root/etc/tuxbox/timezone.xml $(targetprefix)/etc/tuxbox/ && \
 	$(INSTALL_DIR) $(targetprefix)/boot && \
 	$(INSTALL_DIR) $(targetprefix)/media/{hdd,dvd} && \
-	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie} && \
-	$(INSTALL_DIR) $(targetprefix)/usr/bin/tuxtxt && \
-	chmod 755 $(targetprefix)/usr/bin/tuxtxt && \
-	$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/bin/tuxtxt/
+	$(INSTALL_DIR) $(targetprefix)/hdd/{music,picture,movie}
+	if [ ! -e $(targetprefix)/usr/bin/tuxtxt ]; then \
+		$(INSTALL_DIR) $(targetprefix)/usr/bin/tuxtxt; \
+		chmod 755 $(targetprefix)/usr/bin/tuxtxt; \
+		$(INSTALL_FILE) root/usr/tuxtxt/tuxtxt2.conf $(targetprefix)/usr/bin/tuxtxt/; \
+	fi
 	rm -f $(targetprefix)/usr/local/share/enigma2/keymap_tf7700.xml
 	touch $@
