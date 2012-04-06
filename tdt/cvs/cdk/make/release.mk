@@ -377,7 +377,7 @@ release_base:
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/
 	$(INSTALL_DIR) $(prefix)/release/usr/tuxtxt
 	cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/
-	cp -p $(targetprefix)/usr/bin/tuxtxt/tuxtxt2.conf $(prefix)/release/usr/tuxtxt/
+	cp $(buildprefix)/root/usr/tuxtxt/tuxtxt2.conf $(prefix)/release/usr/tuxtxt/
 	if [ -e $(buildprefix)/.deps/neutrino ]; then \
 		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release/usr/bin/;fi
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/
