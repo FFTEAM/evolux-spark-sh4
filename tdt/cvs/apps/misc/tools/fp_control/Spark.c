@@ -102,8 +102,6 @@ static int Spark_init(Context_t* context)
     tSparkPrivate* private = malloc(sizeof(tSparkPrivate));
     int vFd;
 
-    printf("%s\n", __func__);
-
     vFd = open(cVFD_DEVICE, O_RDWR);
 
     if (vFd < 0)
@@ -412,7 +410,6 @@ static int Spark_setBrightness(Context_t* context, int brightness)
 
    vData.u.brightness.level = brightness;
 
-   printf("%d\n", context->fd);
    if (ioctl(context->fd, VFDBRIGHTNESS, &vData) < 0)
    {
       perror("setbrightness");
