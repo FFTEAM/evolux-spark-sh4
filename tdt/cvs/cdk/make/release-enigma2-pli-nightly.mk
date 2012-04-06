@@ -67,13 +67,6 @@ release-enigma2-pli-nightly_spark:
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 
-if STM24
-if ENABLE_P0207
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp -f $(buildprefix)/root/release/encrypt_spark$(KERNELSTMLABEL).ko $(prefix)/release-enigma2-pli-nightly/lib/modules/encrypt.ko
-endif
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
@@ -90,7 +83,7 @@ if ENABLE_P0210
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 endif
-endif
+
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release-enigma2-pli-nightly/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release-enigma2-pli-nightly/sbin
 
