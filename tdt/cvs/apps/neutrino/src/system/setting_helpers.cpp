@@ -361,10 +361,17 @@ bool CMiscNotifier::changeNotify(const neutrino_locale_t, void *)
    return true;
 }
 
-bool CLcdNotifier::changeNotify(const neutrino_locale_t, void *)
+bool CLcdNotifier::changeNotify(const neutrino_locale_t OptionName, void *arg)
 {
-	CVFD::getInstance()->setlcdparameter();
-	//CLCD::getInstance()->setAutoDimm(g_settings.lcd_setting[SNeutrinoSettings::LCD_AUTODIMM]);
+	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_DISPLAYMODE)) {
+		CVFD::getInstance()->ShowText(NULL);
+		CVFD::getInstance()->setlcdparameter();
+	}
+#if 0
+	else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_BRIGHTNESS)) {
+		CVFD::getInstance()->setlcdparameter();
+	}
+#endif
 	return true;
 }
 

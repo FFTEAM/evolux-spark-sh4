@@ -725,7 +725,11 @@ const lcd_setting_struct_t lcd_setting[LCD_SETTING_COUNT] =
 	{"lcd_power"            , DEFAULT_LCD_POWER            },
 	{"lcd_inverse"          , DEFAULT_LCD_INVERSE          },
 	{"lcd_show_volume"      , DEFAULT_LCD_SHOW_VOLUME      },
-	{"lcd_autodimm"         , DEFAULT_LCD_AUTODIMM         }
+	{"lcd_autodimm"         , DEFAULT_LCD_AUTODIMM         },
+	{"lcd_displaymode"      , DEFAULT_LCD_DISPLAYMODE      },
+	{"lcd_standbydisplaymode", DEFAULT_LCD_DISPLAYMODE    },
+	{"lcd_dim_time",	0    },
+	{"lcd_dim_brightness",	DEFAULT_VFD_BRIGHTNESS    }
 };
 
 /**************************************************************************************
@@ -1114,8 +1118,6 @@ int CNeutrinoApp::loadSetup(const char * fname)
 
 	for (int i = 0; i < LCD_SETTING_COUNT; i++)
 		g_settings.lcd_setting[i] = configfile.getInt32(lcd_setting[i].name, lcd_setting[i].default_value);
-	strcpy(g_settings.lcd_setting_dim_time, configfile.getString("lcd_dim_time","0").c_str());
-	strcpy(g_settings.lcd_setting_dim_brightness, configfile.getString("lcd_dim_brightness","0").c_str());
 
 	//Picture-Viewer
 	strcpy( g_settings.picviewer_slide_time, configfile.getString( "picviewer_slide_time", "10" ).c_str() );
@@ -1657,8 +1659,6 @@ void CNeutrinoApp::saveSetup(const char * fname)
 
 	for (int i = 0; i < LCD_SETTING_COUNT; i++)
 		configfile.setInt32(lcd_setting[i].name, g_settings.lcd_setting[i]);
-	configfile.setString("lcd_dim_time", g_settings.lcd_setting_dim_time);
-	configfile.setString("lcd_dim_brightness", g_settings.lcd_setting_dim_brightness);
 
 	//Picture-Viewer
 	configfile.setString( "picviewer_slide_time", g_settings.picviewer_slide_time );
@@ -2426,11 +2426,9 @@ int CNeutrinoApp::run(int argc, char **argv)
 	colorSetupNotifier->changeNotify(NONEXISTANT_LOCALE, NULL);
 	hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_NEUTRINO_STARTING));
 	hintBox->paint();
-	CVFD::getInstance()->init(font.filename, font.name);
 
-	CVFD::getInstance()->Clear();
-	// disable Neutrino start message we can use a bootvideo...
-	// CVFD::getInstance()->ShowText((char *) g_Locale->getText(LOCALE_NEUTRINO_STARTING));
+	//CVFD::getInstance()->Clear();
+	//CVFD::getInstance()->ShowText((char *) g_Locale->getText(LOCALE_NEUTRINO_STARTING));
 
 	pthread_create (&zapit_thread, NULL, zapit_main_thread, (void *) g_settings.video_Mode);
 	audioSetupNotifier        = new CAudioSetupNotifier;
@@ -2484,7 +2482,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	}
 
 
-	CVFD::getInstance()->showVolume(g_settings.current_volume);
+//	CVFD::getInstance()->showVolume(g_settings.current_volume);
 	CVFD::getInstance()->setMuted(current_muted);
 
 	InfoClock = new CInfoClock();
@@ -4936,8 +4934,6 @@ void CNeutrinoApp::loadColors(const char * fname)
 
 	for (int i = 0; i < LCD_SETTING_COUNT; i++)
 		g_settings.lcd_setting[i] = tconfig.getInt32(lcd_setting[i].name, lcd_setting[i].default_value);
-	strcpy(g_settings.lcd_setting_dim_time, tconfig.getString("lcd_dim_time","0").c_str());
-	strcpy(g_settings.lcd_setting_dim_brightness, tconfig.getString("lcd_dim_brightness","0").c_str());
 
 	strcpy( g_settings.font_file, configfile.getString( "font_file", "/share/fonts/neutrino.ttf" ).c_str() );
 	colorSetupNotifier->changeNotify(NONEXISTANT_LOCALE, NULL);
@@ -5009,8 +5005,6 @@ void CNeutrinoApp::saveColors(const char * fname)
 
 	for (int i = 0; i < LCD_SETTING_COUNT; i++)
 		tconfig.setInt32(lcd_setting[i].name, g_settings.lcd_setting[i]);
-	tconfig.setString("lcd_dim_time", g_settings.lcd_setting_dim_time);
-	tconfig.setString("lcd_dim_brightness", g_settings.lcd_setting_dim_brightness);
 
 	tconfig.setString("font_file", g_settings.font_file);
 	tconfig.saveConfig(fname);

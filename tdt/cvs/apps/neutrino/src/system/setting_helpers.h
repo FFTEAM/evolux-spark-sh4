@@ -142,6 +142,7 @@ class CLcdNotifier : public CChangeObserver
 	public:
 		bool changeNotify(const neutrino_locale_t, void *);
 };
+
 class CRfNotifier : public CChangeObserver
 {
 	public:

@@ -162,7 +162,7 @@ CFrameBuffer::CFrameBuffer()
 	background = NULL;
 	backupBackground = NULL;
 	backgroundFilename = "";
-	fd  = 0;
+	fd  = -1;
 	tty = 0;
 	split3D = false;
 	memset(red, 0, 256*sizeof(__u16));
@@ -187,7 +187,6 @@ CFrameBuffer* CFrameBuffer::getInstance()
 void CFrameBuffer::init(const char * const fbDevice)
 {
 	fd = open(fbDevice, O_RDWR);
-	if(!fd) fd = open(fbDevice, O_RDWR);
 
 	if (fd<0) {
 		perror(fbDevice);

@@ -810,7 +810,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // SWAP Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 	int extrashortcut = 1;
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
 #ifdef WITH_GRAPHLCD
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 #endif
@@ -2644,12 +2644,13 @@ void CNeutrinoApp::InitColorSettingsTiming(CMenuWidget &colorSettings_timing)
 	colorSettings_timing.addItem(new CMenuForwarder(LOCALE_OPTIONS_DEFAULT, true, NULL, this, "osd.def"));
 }
 
-#define LCDMENU_STATUSLINE_OPTION_COUNT 2
-const CMenuOptionChooser::keyval LCDMENU_STATUSLINE_OPTIONS[LCDMENU_STATUSLINE_OPTION_COUNT] =
+#define OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT 4
+const CMenuOptionChooser::keyval OPTIONS_LCD_DISPLAYMODE_OPTIONS[OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT] =
 {
-	{ 0, LOCALE_LCDMENU_STATUSLINE_PLAYTIME },
-	{ 1, LOCALE_LCDMENU_STATUSLINE_VOLUME   }
-	//,{ 2, LOCALE_LCDMENU_STATUSLINE_BOTH     }
+        { LCD_DISPLAYMODE_OFF, LOCALE_OPTIONS_OFF },
+        { LCD_DISPLAYMODE_ON, LOCALE_OPTIONS_ON },
+	{ LCD_DISPLAYMODE_TIMEONLY, LOCALE_LCDMENU_DISPLAYMODE_TIMEONLY },
+	{ LCD_DISPLAYMODE_TIMEOFF, LOCALE_LCDMENU_DISPLAYMODE_TIMEOFF }
 };
 
 void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
@@ -2659,31 +2660,27 @@ void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
 	lcdSettings.addItem(GenericMenuBack);
 	lcdSettings.addItem(GenericMenuSeparatorLine);
 
-	CVfdControler* lcdsliders = new CVfdControler(LOCALE_LCDMENU_HEAD, NULL);
-
-#if 0
 	CLcdNotifier* lcdnotifier = new CLcdNotifier();
 
-	CMenuOptionChooser* oj = new CMenuOptionChooser(LOCALE_LCDMENU_INVERSE, &g_settings.lcd_setting[SNeutrinoSettings::LCD_INVERSE], OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, lcdnotifier);
-	lcdSettings.addItem(oj);
-
-	oj = new CMenuOptionChooser(LOCALE_LCDMENU_POWER, &g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER], OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, lcdnotifier);
-	lcdSettings.addItem(oj);
+	lcdSettings.addItem(new CMenuOptionChooser(LOCALE_LCDMENU_DISPLAYMODE,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_DISPLAYMODE],
+		OPTIONS_LCD_DISPLAYMODE_OPTIONS, OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT, true, lcdnotifier));
+#if 0 // disabled until aotom supports changing VFD brightness
+	lcdSettings.addItem(new CMenuOptionNumberChooser(LOCALE_LCDMENU_BRIGHTNESS,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS], true, 0, 7, lcdnotifier));
+	lcdSettings.addItem(new CMenuOptionNumberChooser(LOCALE_LCDMENU_DIM_BRIGHTNESS,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_DIM_BRIGHTNESS], true, 0, 7));
+	lcdSettings.addItem(new CMenuOptionNumberChooser(LOCALE_LCDMENU_DIM_TIME,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_DIM_TIME], true, 0, 99));
 #endif
-	CStringInput * dim_time = new CStringInput(LOCALE_LCDMENU_DIM_TIME, g_settings.lcd_setting_dim_time, 3,
-						    NONEXISTANT_LOCALE, NONEXISTANT_LOCALE,"0123456789 ");
-	lcdSettings.addItem(new CMenuForwarder(LOCALE_LCDMENU_DIM_TIME,true, g_settings.lcd_setting_dim_time,dim_time));
 
-	CStringInput * dim_brightness = new CStringInput(LOCALE_LCDMENU_DIM_BRIGHTNESS, g_settings.lcd_setting_dim_brightness, 3,
-							  NONEXISTANT_LOCALE, NONEXISTANT_LOCALE,"0123456789 ");
-	lcdSettings.addItem(new CMenuForwarder(LOCALE_LCDMENU_DIM_BRIGHTNESS,true, g_settings.lcd_setting_dim_brightness,dim_brightness));
-
-	lcdSettings.addItem(GenericMenuSeparatorLine);
-	lcdSettings.addItem(new CMenuForwarder(LOCALE_LCDMENU_LCDCONTROLER, true, NULL, lcdsliders));
-#if 0
-	lcdSettings.addItem(GenericMenuSeparatorLine);
-	CMenuOptionChooser* oj = new CMenuOptionChooser(LOCALE_LCDMENU_STATUSLINE, &g_settings.lcd_setting[SNeutrinoSettings::LCD_SHOW_VOLUME], LCDMENU_STATUSLINE_OPTIONS, LCDMENU_STATUSLINE_OPTION_COUNT, true);
-	lcdSettings.addItem(oj);
+	lcdSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_LCDMENU_STANDBY));
+	lcdSettings.addItem(new CMenuOptionChooser(LOCALE_LCDMENU_DISPLAYMODE,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_DISPLAYMODE],
+		OPTIONS_LCD_DISPLAYMODE_OPTIONS, 2, true));
+#if 0 // disabled until aotom supports changing VFD brightness
+	lcdSettings.addItem(new CMenuOptionNumberChooser(LOCALE_LCDMENU_BRIGHTNESS,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS], true, 0, 7));
 #endif
 }
 

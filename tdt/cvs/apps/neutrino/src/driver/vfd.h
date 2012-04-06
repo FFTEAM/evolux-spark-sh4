@@ -157,6 +157,7 @@ typedef enum {
 	VFD_FLAG_SCROLL_SIO	= 0x04		/* start/stop scrolling with empty screen (scroll in/out) */
 } vfd_flag;
 
+#if 0
 #ifdef __sh__
 #define VFDDISPLAYCHARS		0xc0425a00
 #define VFDWRITECGRAM		0x40425a01
@@ -196,6 +197,7 @@ typedef enum {
 #define IOC_VFD_SET_OUTPUT	_IOW(0xDE,  6, unsigned char)	/* switch the given output on (supported by the controller, but not used in the hardware) */
 #define IOC_VFD_CLEAR_OUTPUT	_IOW(0xDE,  7, unsigned char)	/* switch the given output off (supported by the controller, but not used in the hardware) */
 
+#endif
 #endif
 
 class CVFD
@@ -239,10 +241,12 @@ class CVFD
 		pthread_t			thrTime;
 		int                             last_toggle_state_power;
 		bool				clearClock;
+		bool				timeThreadRunning;
 		unsigned int                    timeout_cnt;
 		int fd;
-		int brightness;
-		char text[256];
+		int time_notify_reader;
+		int time_notify_writer;
+		int waitSec;
 
 		void wake_up();
 		void count_down();
@@ -251,6 +255,8 @@ class CVFD
 
 		static void* TimeThread(void*);
 		void setlcdparameter(int dimm, int power);
+
+
 	public:
 
 		~CVFD();
@@ -258,8 +264,6 @@ class CVFD
 		void setlcdparameter(void);
 
 		static CVFD* getInstance();
-		void init(const char * fontfile, const char * fontname);
-
 		void setMode(const MODES m, const char * const title = "");
 
 		void showServicename(const std::string & name); // UTF-8
@@ -274,7 +278,6 @@ class CVFD
 		void showAudioProgress(const char perc, bool isMuted);
 		void setBrightness(int);
 		int getBrightness();
-
 		void setBrightnessStandby(int);
 		int getBrightnessStandby();
 
@@ -288,14 +291,13 @@ class CVFD
 
 		void setMuted(bool);
 
-		void resume();
+		void resume(bool showLastServiceName = false);
 		void pause();
 		void Lock();
 		void Unlock();
 		void Clear();
 		void ShowIcon(vfd_icon icon, bool show);
-		void ShowText(char * str);
-		
+		void ShowText(char * str, bool rescheduleTime = true);
 #ifdef LCD_UPDATE
         private:
                 CFileList* m_fileList;

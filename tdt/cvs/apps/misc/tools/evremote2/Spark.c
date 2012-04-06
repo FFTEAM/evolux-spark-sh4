@@ -580,24 +580,24 @@ static int pRead(Context_t* context ) {
 static int pNotification(Context_t* context, const int cOn) {
 
     struct aotom_ioctl_data vfd_data;
-    int ioctl_fd = -1;
+    static int ioctl_fd = -1;
+    if (ioctl_fd < 0)
+		ioctl_fd = open("/dev/vfd", O_RDONLY);
+    if (ioctl_fd < 0)
+		return -1;
 
     if(cOn)
     {
-       ioctl_fd = open("/dev/vfd", O_RDONLY);
        vfd_data.u.icon.icon_nr = 35;
        vfd_data.u.icon.on = 1;
        ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
-       close(ioctl_fd);
     }
     else
     {
        usleep(100000);
-       ioctl_fd = open("/dev/vfd", O_RDONLY);
        vfd_data.u.icon.icon_nr = 35;
        vfd_data.u.icon.on = 0;
        ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
-       close(ioctl_fd);
     }
 
     return 0;

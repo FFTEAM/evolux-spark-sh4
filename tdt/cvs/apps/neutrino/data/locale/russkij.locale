@@ -1506,3 +1506,7 @@ adzap.minute минуты
 adzap.minutes минут
 adzap.switchback Переключить назад после
 adzap.commit Выбор режима:
+lcdmenu.displaymode.timeonly время
+lcdmenu.displaymode.timeoff без времени
+lcdmenu.displaymode отображать
+lcdmenu.standby Standby

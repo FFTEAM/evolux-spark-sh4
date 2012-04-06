@@ -1500,3 +1500,7 @@ adzap.minute minute
 adzap.minutes minutes
 adzap.switchback Switch back after
 adzap.commit (Press (OK) after changing time)
+lcdmenu.displaymode.timeonly Time only
+lcdmenu.displaymode.timeoff Without time
+lcdmenu.displaymode Display
+lcdmenu.standby Standby

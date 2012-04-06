@@ -278,8 +278,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 		fi
 	fi
 
-	[ -n "$START_NEUTRINO" ] && [ -e /etc/.time ] && (sleep 20; /etc/init.d/DisplayTime.sh) &
-
 	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &
 
 	[ -n "$START_E2" ] && (sleep 15;startVideoTuneEnhanced) &

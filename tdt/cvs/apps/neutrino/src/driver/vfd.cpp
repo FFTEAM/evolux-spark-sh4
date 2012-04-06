@@ -22,6 +22,8 @@
 	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+// FIXME -- there is too much unused code left, but we may need it in the future ...
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -35,36 +37,14 @@
 #include <sys/timeb.h>
 #include <time.h>
 #include <unistd.h>
+#include <poll.h>
 #include <math.h>
 
 #include <daemonc/remotecontrol.h>
 
+#include <aotom_main.h>
+
 extern CRemoteControl * g_RemoteControl; /* neutrino.cpp */
-
-#ifdef __sh__
-struct set_led_s {
-        int led_nr;
-        int on;
-};
-
-struct aotom_ioctl_data {
-	union {
-//		struct set_icon_s icon;
-		struct set_led_s led;
-//		struct set_brightness_s brightness;
-//		struct set_mode_s mode;
-//		struct set_standby_s standby;
-//		struct set_time_s time;
-	} u;
-};
-
-
-struct vfd_ioctl_data {
-	unsigned char start_address;
-	unsigned char data[64];
-	unsigned char length;
-};
-#endif
 
 CVFD::CVFD()
 {
@@ -81,20 +61,40 @@ CVFD::CVFD()
         m_progressLocal = 0;
 #endif // VFD_UPDATE
 
+	thrTime = 0;
+
 	has_lcd = 1;
 
-	fd = open("/dev/vfd", O_RDWR);
+	fd = open("/dev/vfd", O_RDWR | O_CLOEXEC);
 
 	if(fd < 0) {
 		perror("/dev/vfd");
 		has_lcd = 0;
 	}
-	text[0] = 0;
 	clearClock = 0;
+
+	mode = MODE_MENU_UTF8;
+	servicename = "";
+
+	int fds[2];
+	if (pipe2(fds, O_CLOEXEC | O_NONBLOCK))
+		return;
+
+	time_notify_reader = fds[0];
+	time_notify_writer = fds[1];
+
+	if (pthread_create (&thrTime, NULL, TimeThread, NULL))
+		perror("[lcdd]: pthread_create(TimeThread)");
+
+	setlcdparameter(getBrightness(), 1);
 }
 
 CVFD::~CVFD()
 {
+	timeThreadRunning = false;
+	if (thrTime)
+		pthread_join(thrTime, NULL);
+	
 	if(fd > 0)
 		close(fd);
 }
@@ -112,61 +112,72 @@ void CVFD::count_down() {
 	if (timeout_cnt > 0) {
 		timeout_cnt--;
 		if (timeout_cnt == 0) {
-			if (atoi(g_settings.lcd_setting_dim_brightness) > 0) {
+			if (g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] > 0) {
 				// save lcd brightness, setBrightness() changes global setting
-				int b = g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS];
-				setBrightness(atoi(g_settings.lcd_setting_dim_brightness));
-				g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = b;
+//				int b = g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS];
+//				setBrightness(g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS]);
+//				g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = b;
 			} else {
-				setPower(0);
+				setBrightness(g_settings.lcd_setting[SNeutrinoSettings::LCD_DIM_BRIGHTNESS]);
 			}
 		}
 	} 
 }
 
 void CVFD::wake_up() {
-printf("CVFD::wake_up>\n");
+#ifndef __sh__
 	if (atoi(g_settings.lcd_setting_dim_time) > 0) {
-printf("1\n");
 		timeout_cnt = atoi(g_settings.lcd_setting_dim_time);
-		atoi(g_settings.lcd_setting_dim_brightness) > 0 ?
+		atoi(g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS]) > 0 ?
 			setBrightness(g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS]) : setPower(1);
 	}
 	else
         {
-printf("2\n");
 		setPower(1);
         }
-printf("CVFD::wake_up<\n");
+#endif
 }
 
-void* CVFD::TimeThread(void *)
+void* CVFD::TimeThread(void *arg)
 {
-	while(1) {
-		sleep(1);
-		struct stat buf;
-                if (stat("/tmp/vfd.locked", &buf) == -1) {
-                        CVFD::getInstance()->showTime();
-                        CVFD::getInstance()->count_down();
-                } else
-                        CVFD::getInstance()->wake_up();
+	CVFD *cvfd = CVFD::getInstance();
+	cvfd->timeThreadRunning = true;
+	time_t now;
+	struct tm tm;
+	char buf[10];
+	cvfd->waitSec = 0;
+	struct pollfd fds;
+	memset(&fds, 0, sizeof(fds));
+	fds.fd = cvfd->time_notify_reader;
+	fds.events = POLLIN;
+	while (cvfd->timeThreadRunning) {
+		int res = poll(&fds, 1, cvfd->waitSec * 1000);
+		if (!cvfd->showclock) {
+			cvfd->waitSec = -1; // forever
+			continue;
+		}
+		switch (res) {
+		case 0: // timeout, update displayed time
+			now = time(NULL);
+			localtime_r(&now, &tm);
+			strftime(buf, sizeof(buf), "%H%M", &tm);
+			cvfd->ShowText(buf, false);
+			cvfd->waitSec = 60 - tm.tm_sec;
+			if (cvfd->waitSec == 0)
+				cvfd->waitSec = 60;
+			continue;
+		case 1: // re-schedule time display
+			while (0 < read(fds.fd, buf, sizeof(buf)));
+			continue;
+		default:
+			cvfd->timeThreadRunning = false;
+		}
 	}
+	close (cvfd->time_notify_reader);
+	cvfd->time_notify_reader = -1;
+	close (cvfd->time_notify_writer);
+	cvfd->time_notify_writer = -1;
 	return NULL;
-}
-
-void CVFD::init(const char * fontfile, const char * fontname)
-{
-	//InitNewClock(); /FIXME
-
-printf("CVFD::init>\n");
-	brightness = -1;
-	setMode(MODE_TVRADIO);
-
-	if (pthread_create (&thrTime, NULL, TimeThread, NULL) != 0 ) {
-		perror("[lcdd]: pthread_create(TimeThread)");
-		return ;
-	}
-printf("CVFD::init<\n");
 }
 
 void CVFD::setlcdparameter(int dimm, const int power)
@@ -181,17 +192,12 @@ void CVFD::setlcdparameter(int dimm, const int power)
 	if(!power)
 		dimm = 0;
 
-	if(brightness == dimm)
-		return;
-
-	brightness = dimm;
-
-printf("CVFD::setlcdparameter dimm %d power %d\n", dimm, power);
 #ifdef __sh__
-        struct vfd_ioctl_data data;
-	data.start_address = dimm;
-	
-	int ret = ioctl(fd, VFDBRIGHTNESS, &data);
+	struct aotom_ioctl_data vData;
+	vData.u.brightness.level = dimm;
+	int ret = ioctl(fd, VFDBRIGHTNESS, &vData);
+	if(ret < 0)
+		perror("VFDBRIGHTNESS");
 #else
 	int ret = ioctl(fd, IOC_VFD_SET_BRIGHT, dimm);
 	if(ret < 0)
@@ -203,8 +209,9 @@ void CVFD::setlcdparameter(void)
 {
 	if(!has_lcd) return;
 	last_toggle_state_power = g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER];
-	setlcdparameter((mode == MODE_STANDBY) ? g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] : g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS],
-			last_toggle_state_power);
+	setlcdparameter((mode == MODE_STANDBY)
+		? g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS]
+		: g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS], last_toggle_state_power);
 }
 
 /* show only displaytime
@@ -221,7 +228,6 @@ void CVFD::showServicename(const std::string & name) // UTF-8
 {
 	if(!has_lcd) return;
 
-printf("CVFD::showServicename: %s\n", name.c_str());
 	servicename = name;
 	if (mode != MODE_TVRADIO)
 		return;
@@ -232,6 +238,9 @@ printf("CVFD::showServicename: %s\n", name.c_str());
 
 void CVFD::showTime(bool force)
 {
+#ifdef __sh__
+	return;
+#else
 	if(!has_lcd)
 		return;
 
@@ -265,6 +274,7 @@ void CVFD::showTime(bool force)
 		clearClock = 0;
 		ShowIcon(VFD_ICON_CAM1, false);
 	}
+#endif
 }
 
 void CVFD::showRCLock(int duration)
@@ -273,6 +283,11 @@ void CVFD::showRCLock(int duration)
 
 void CVFD::showVolume(const char vol, const bool perform_update)
 {
+#ifdef __sh__
+	char buf[10];
+	snprintf(buf, sizeof(buf), "%4d", vol);
+	ShowText(buf);
+#else
 	static int oldpp = 0;
 	if(!has_lcd) return;
 
@@ -303,10 +318,14 @@ printf("CVFD::showVolume: %d, bar %d\n", (int) vol, pp);
 			oldpp = pp;
 		}
 	}
+#endif
 }
 
 void CVFD::showPercentOver(const unsigned char perc, const bool perform_update)
 {
+#ifdef ___sh__
+	return;
+#else
 	if(!has_lcd) return;
 
 	if ((mode == MODE_TVRADIO) && !(g_settings.lcd_setting[SNeutrinoSettings::LCD_SHOW_VOLUME])) {
@@ -335,15 +354,16 @@ printf("CVFD::showPercentOver: %d, bar %d\n", (int) perc, pp);
 			}
 		}
 	}
+#endif
 }
 
-void CVFD::showMenuText(const int position, const char * text, const int highlight, const bool utf_encoded)
+void CVFD::showMenuText(const int position, const char * txt, const int highlight, const bool utf_encoded)
 {
 	if(!has_lcd) return;
 	if (mode != MODE_MENU_UTF8)
 		return;
 
-	ShowText((char *) text);
+	ShowText((char *) txt);
 	wake_up();
 }
 
@@ -365,6 +385,9 @@ printf("CVFD::showAudioTrack: %s\n", title.c_str());
 
 void CVFD::showAudioPlayMode(AUDIOMODES m)
 {
+#ifdef __sh__
+	return;
+#else
 	if(!has_lcd) return;
 	switch(m) {
 		case AUDIO_MODE_PLAY:
@@ -385,6 +408,7 @@ void CVFD::showAudioPlayMode(AUDIOMODES m)
 			break;
 	}
 	wake_up();
+#endif
 }
 
 void CVFD::showAudioProgress(const char perc, bool isMuted)
@@ -409,6 +433,8 @@ void CVFD::setMode(const MODES m, const char * const title)
 {
 	if(!has_lcd) return;
 
+	MODES lastmode = mode;
+
 	if(mode == MODE_AUDIO)
 		ShowIcon(VFD_ICON_MP3, false);
 #if 0
@@ -425,6 +451,7 @@ void CVFD::setMode(const MODES m, const char * const title)
 
 	switch (m) {
 	case MODE_TVRADIO:
+#if 0
 		switch (g_settings.lcd_setting[SNeutrinoSettings::LCD_SHOW_VOLUME])
 		{
 		case 0:
@@ -433,65 +460,64 @@ void CVFD::setMode(const MODES m, const char * const title)
 		case 1:
 			showVolume(volume, false);
 			break;
-#if 0
 		case 2:
 			showVolume(volume, false);
 			showPercentOver(percentOver, false);
 			break;
-#endif
 		}
-		showServicename(servicename);
-		showclock = true;
+		// showServicename(servicename);
+#endif
+		resume(m != lastmode);
 		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
 	case MODE_AUDIO:
 	{
-		ShowIcon(VFD_ICON_MP3, true);
-		showAudioPlayMode(AUDIO_MODE_STOP);
-		showVolume(volume, false);
-		showclock = true;
+		//ShowIcon(VFD_ICON_MP3, true);
+		//showAudioPlayMode(AUDIO_MODE_STOP);
+	//	showVolume(volume, false);
+		resume();
 		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
 	}
 	case MODE_SCART:
-		showVolume(volume, false);
-		showclock = true;
+	//	showVolume(volume, false);
+		resume();
 		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
 	case MODE_MENU_UTF8:
-		showclock = false;
+		pause();
 		//fonts.menutitle->RenderString(0,28, 140, title, CLCDDisplay::PIXEL_ON, 0, true); // UTF-8
 		break;
 	case MODE_SHUTDOWN:
-		showclock = false;
+		pause();
 		break;
 	case MODE_STANDBY:
 #if 0
 		ShowIcon(VFD_ICON_COL1, true);
 		ShowIcon(VFD_ICON_COL2, true);
 #endif
-		showclock = true;
-		showTime(true);      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
+		resume();
+		// showTime(true);      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		                 /* "showTime()" clears the whole lcd in MODE_STANDBY                         */
 		break;
 #ifdef VFD_UPDATE
         case MODE_FILEBROWSER:
-                showclock = true;
+		resume();
                 display.draw_fill_rect(-1, -1, 120, 64, CLCDDisplay::PIXEL_OFF); // clear lcd
                 showFilelist();
                 break;
         case MODE_PROGRESSBAR:
-                showclock = false;
+                suspend();
                 display.load_screen(&(background[BACKGROUND_SETUP]));
                 showProgressBar();
                 break;
         case MODE_PROGRESSBAR2:
-                showclock = false;
+                suspend();
                 display.load_screen(&(background[BACKGROUND_SETUP]));
                 showProgressBar2();
                 break;
         case MODE_INFOBOX:
-                showclock = false;
+                suspend();
                 showInfoBox();
                 break;
 #endif // VFD_UPDATE
@@ -499,19 +525,20 @@ void CVFD::setMode(const MODES m, const char * const title)
 	wake_up();
 }
 
+
 void CVFD::setBrightness(int bright)
 {
 	if(!has_lcd) return;
 
-	g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = bright;
+	//g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = bright;
 	setlcdparameter();
 }
 
 int CVFD::getBrightness()
 {
 	//FIXME for old neutrino.conf
-	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] > 15)
-		g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = 15;
+	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] > 7)
+		g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS] = 7;
 
 	return g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS];
 }
@@ -520,26 +547,28 @@ void CVFD::setBrightnessStandby(int bright)
 {
 	if(!has_lcd) return;
 
-	g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] = bright;
+//	g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] = bright;
 	setlcdparameter();
 }
 
 int CVFD::getBrightnessStandby()
 {
 	//FIXME for old neutrino.conf
-	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] > 15)
-		g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] = 15;
+	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] > 7)
+		g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] = 7;
 	return g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS];
 }
 
 void CVFD::setPower(int power)
 {
+#ifndef __sh__
 printf("CVFD::setPower>\n");
 	if(!has_lcd) return;
 // old
 	//g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] = power;
 	//setlcdparameter();
 printf("CVFD::setPower<\n");
+#endif
 }
 
 int CVFD::getPower()
@@ -549,40 +578,57 @@ int CVFD::getPower()
 
 void CVFD::togglePower(void)
 {
+#ifndef __sh__
 	if(!has_lcd) return;
 
-	last_toggle_state_power = 1 - last_toggle_state_power;
-	setlcdparameter((mode == MODE_STANDBY) ? g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS] : g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS],
-			last_toggle_state_power);
+	last_toggle_state_power = 1 & (!last_toggle_state_power);
+	setlcdparameter((mode == MODE_STANDBY)
+		? g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_BRIGHTNESS]
+		: g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS], last_toggle_state_power);
+#endif
 }
 
 void CVFD::setMuted(bool mu)
 {
+#ifdef __sh__
+	return;
+#else
 	if(!has_lcd) return;
 	muted = mu;
 	showVolume(volume);
+#endif
 }
 
-void CVFD::resume()
+void CVFD::resume(bool showServiceName)
 {
 	if(!has_lcd) return;
+	showclock = true;
+	waitSec = 0;
+	if (showServiceName)
+		ShowText(NULL);
+	write(time_notify_writer, "", 1);
 }
 
 void CVFD::pause()
 {
 	if(!has_lcd) return;
+	showclock = false;
 }
 
 void CVFD::Lock()
 {
+#ifndef __sh__
 	if(!has_lcd) return;
 	creat("/tmp/vfd.locked", 0);
+#endif
 }
 
 void CVFD::Unlock()
 {
+#ifndef __sh__
 	if(!has_lcd) return;
 	unlink("/tmp/vfd.locked");
+#endif
 }
 
 void CVFD::Clear()
@@ -635,45 +681,53 @@ void CVFD::ShowIcon(vfd_icon icon, bool show)
 #endif
 }
 
-void CVFD::ShowText(char * str)
+void CVFD::ShowText(char * str, bool rescheduleTime)
 {
-	if (!str)
-		return;
-	int len = strlen(str);
-	if (len < 1)
-		return;
-	int i, ret;
+	if (!str && servicename.length() > 0)
+		str = (char *) servicename.c_str();
 
-        printf("CVFD::ShowText: [%s]\n", str);
-	
-	for(i = len-1; i > 0; i--) {
-		if(str[i] == ' ')
-			str[i] = 0;
-		else
+	int m = g_settings.lcd_setting[ (mode == MODE_STANDBY)
+			? SNeutrinoSettings::LCD_STANDBY_DISPLAYMODE
+			: SNeutrinoSettings::LCD_DISPLAYMODE];
+	switch (m) {
+		case LCD_DISPLAYMODE_TIMEONLY:
+			if (!rescheduleTime)
+				break;
+			return;
+		case LCD_DISPLAYMODE_TIMEOFF:
+			if (rescheduleTime)
+				break;
+			return;
+		case LCD_DISPLAYMODE_OFF:
+			Clear();
+			return;
+		default:
 			break;
 	}
 
-	if(!strcmp(str, text) || len > 255)
-	{
-	        printf("CVFD::ShowText < %s - %s\n", str, text);
-		return;
-        }
-	
-	strcpy(text, str);
-	
-//printf("****************************** CVFD::ShowText: %s\n", str);
-	//FIXME !! 
-#ifdef __sh__
-	ret = write(fd , str, len>16?16:len);
-	if(ret < 0)
-		perror("write to vfd failed");
-#else
-	ret = ioctl(fd, IOC_VFD_SET_TEXT, len ? str : NULL);
+        printf("CVFD::ShowText: [%s]\n", str);
 
-	if(ret < 0)
-		perror("IOC_VFD_SET_TEXT");
-#endif
-printf("CVFD::ShowText<\n");
+	if (str) {
+		std::string s = std::string(str);
+
+		size_t start = s.find_first_not_of (" \t\n");
+		if (start != std::string::npos) {
+			size_t end = s.find_last_not_of (" \t\n");
+			s = s.substr(start, end - start + 1);
+		}
+		if (s.length() < 1)
+			waitSec = 0;
+		else if (write(fd , s.c_str(), s.length()) < 0)
+			perror("write to vfd failed");
+		waitSec = 8;
+	} else
+		waitSec = 0;
+
+	if (rescheduleTime && (time_notify_writer > -1)) {
+		write(time_notify_writer, "", 1);
+	}
+
+	printf("CVFD::ShowText<\n");
 }
 
 #ifdef VFD_UPDATE
