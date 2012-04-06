@@ -552,16 +552,16 @@ release-enigma2-pli-nightly_base:
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/
 	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release-enigma2-pli-nightly/etc/
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/FlashBackup
 #### displaytime plugin not longer needed so we remove it #####
 #	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
-	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release-enigma2-pli-nightly/etc/enigma2/
+#	cp -RP $(buildprefix)/root/etc/enigma2/* $(prefix)/release-enigma2-pli-nightly/etc/enigma2/
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/
 	touch $(prefix)/release-enigma2-pli-nightly/etc/.start_enigma2
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Components/
-	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
+#	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
 	touch $(prefix)/release-enigma2-pli-nightly/etc/changelog.txt
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
