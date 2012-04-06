@@ -475,6 +475,14 @@ release-enigma2-pli-nightly_base:
 #		cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/; \
 #	fi
 
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Screens $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/AutomaticVolumeAdjustment $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/EVOMediaCenter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinguExplorer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/SystemPlugins $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/
+
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
@@ -545,7 +553,6 @@ release-enigma2-pli-nightly_base:
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/
 	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release-enigma2-pli-nightly/etc/
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/FlashBackup
 #### displaytime plugin not longer needed so we remove it #####
