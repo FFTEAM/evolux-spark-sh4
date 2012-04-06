@@ -491,7 +491,7 @@ release-enigma2-pli-nightly_base:
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
-#	Delete unnecessary plugins
+#	Delete unnecessary plugins #
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/DemoPlugins
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/FrontprocessorUpgrade
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/NFIFlash
