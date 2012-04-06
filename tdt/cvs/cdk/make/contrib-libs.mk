@@ -1982,50 +1982,27 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 #	@DISTCLEANUP_libusb@
 	@[ "x$*" = "x" ] && touch $@ || true
 
+#
 # graphlcd
+#
 $(DEPDIR)/graphlcd.do_prepare: bootstrap libusb @DEPENDS_graphlcd@
-	if [ ! -e .deps/graphlcd.do_compile ]; then \
-		[ -d graphlcd-base ] && \
-		rm -rf graphlcd-base; \
-		cd $(buildprefix)/Archive && \
-		if [ ! -e $(buildprefix)/Archive/graphlcd-base-touchcol.tar.gz ]; then \
-			wget -c http://projects.vdr-developer.org/git/graphlcd-base.git/snapshot/graphlcd-base-touchcol.tar.gz; \
-		fi; \
-		tar -xzvf graphlcd-base-touchcol.tar.gz -C $(buildprefix)/; \
-		mv  $(buildprefix)/graphlcd-base-touchcol $(buildprefix)/graphlcd-base; \
-		cd $(buildprefix)/graphlcd-base && \
-		patch -p0 <../Patches/graphlcd.patch; \
-	fi;
+	@PREPARE_graphlcd@
 	touch $@
-#	if [ ! -e .deps/graphlcd.do_compile ]; then \
-#		[ -d graphlcd-base ] && \
-#		rm -rf graphlcd-base; \
-#		git clone git://projects.vdr-developer.org/graphlcd-base.git --branch touchcol graphlcd-base; \
-#		cd graphlcd-base && \
-#		patch -p0 <../Patches/graphlcd.patch; \
-#	fi;
 
 $(DEPDIR)/graphlcd.do_compile: $(DEPDIR)/graphlcd.do_prepare
-	cd graphlcd-base && \
-	$(BUILDENV) && \
-	$(MAKE) all
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_graphlcd@ && \
+	$(BUILDENV) \
+		$(MAKE) all
 	touch $@
 
 $(DEPDIR)/min-graphlcd $(DEPDIR)/std-graphlcd $(DEPDIR)/max-graphlcd \
 $(DEPDIR)/graphlcd: \
 $(DEPDIR)/%graphlcd: $(DEPDIR)/graphlcd.do_compile
+	cd @DIR_graphlcd@ && \
+		@INSTALL_graphlcd@
+#	@DISTCLEANUP_graphlcd@
 	@[ "x$*" = "x" ] && touch $@ || true
-	cd graphlcd-base && \
-		cp glcddrivers/*.so* $(targetprefix)/usr/lib/ && \
-		cp glcdgraphics/*.so* $(targetprefix)/usr/lib/ && \
-		cp glcdskin/*.so* $(targetprefix)/usr/lib/ && \
-		cp tools/showpic/showpic $(targetprefix)/usr/bin/ && \
-		cp tools/showtext/showtext $(targetprefix)/usr/bin/ && \
-		cp graphlcd.conf $(targetprefix)/etc/
-	@TUXBOX_YAUD_CUSTOMIZE@
-
-#$(DEPDIR)/graphlcd: graphlcd.do_compile
-#	touch $@
 
 ##############################   LCD4LINUX   ###################################
 

@@ -110,6 +110,7 @@ libtuxtxt;rewrite-pkgconfig:tuxbox-tuxtxt.pc;make:install:prefix=/usr:DESTDIR=TA
 tuxtxt32bpp;make:install:prefix=/usr:DESTDIR=TARGETS
 libdreamdvd;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libdreamdvd.pc
 libdreamdvd2;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libdreamdvd.pc
+graphlcd;make:install:DESTDIR=TARGETS
 
 #
 # GSTREAMER
