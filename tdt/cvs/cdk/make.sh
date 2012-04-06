@@ -175,8 +175,8 @@ esac
 ##############################################
 
 echo -e "\nMedia Framework:"
-echo "   1) eplayer3  (Recommended)"
-echo "   2) gstreamer (needed for PLI)"
+echo "   1) eplayer3  (for old-E2)"
+echo "   2) gstreamer (for E2-PLI ONLY!)"
 read -p "Select media framwork (1-2)? "
 
 case "$REPLY" in
