@@ -583,7 +583,6 @@ release-enigma2-pli-nightly_base:
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
 	cp -f $(buildprefix)/root/release/autofs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp -f $(buildprefix)/root/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	[ ! -e $(prefix)/release/usr/lib/autofs/mount_ext3.so ] && ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release-enigma2-pli-nightly/etc/
