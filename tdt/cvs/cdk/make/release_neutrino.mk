@@ -466,12 +466,12 @@ endif
 #	ln -sf /usr/lib/autofs/mount_ext2.so $(prefix)/release_neutrino/usr/lib/autofs/mount_ext3.so; \
 #	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_neutrino/etc/;
-	cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/
-	cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/
-	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/
-	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/
-	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/
+	cp -f $(buildprefix)/root/release/autofs $(prefix)/release_neutrino/etc/init.d/
+	cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release_neutrino/usr/sbin/
+	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release_neutrino/usr/lib/autofs/mount_ext3.so
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules/
+	cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release_neutrino/etc/
+	cp -f $(buildprefix)/root/release/auto.network $(prefix)/release_neutrino/etc/
 
 #graphlcd Stuff
 	if [ -e $(prefix)/release_neutrino/usr/lib/libglcddrivers.so ]; then \
