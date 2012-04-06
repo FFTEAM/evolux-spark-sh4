@@ -100,9 +100,9 @@ libflac;make:install:DESTDIR=TARGETS
 evebrowser;make:install:DESTDIR=TARGETS
 brofs;make:install:DESTDIR=TARGETS/usr/bin
 libalsa;rewrite-pkgconfig:utils/alsa.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libasound.la
-libusb;make:install:DESTDIR=TARGETS
-libusb2;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libusb-1.0.pc;rewrite-libtool:TARGETS/usr/lib/libusb-1.0.la
-libusbcompat;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libusb.pc;rewrite-libtool:TARGETS/usr/lib/libusb.la
+libusb;rewrite-pkgconfig:libusb.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libusb.la;rewrite-libtool:TARGETS/usr/lib/libusbpp.la
+libusb2;rewrite-pkgconfig:libusb-1.0.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libusb-1.0.la
+libusbcompat;rewrite-pkgconfig:libusb.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libusb.la
 libgd2;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libgd.la
 rtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/librtmp.pc
 libdvbsipp;make:install:prefix=/usr:DESTDIR=TARGETS
