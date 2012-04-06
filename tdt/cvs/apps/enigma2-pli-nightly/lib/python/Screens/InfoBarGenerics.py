@@ -431,6 +431,8 @@ class InfoBarChannelSelection:
 				"zapDown": (self.zapDown, _("next channel")),
 				"historyBack": (self.historyBack, _("previous channel in history")),
 				"historyNext": (self.historyNext, _("next channel in history")),
+				"prevBouquet": (self.prevBouquet, _("previous bouquet")),
+				"nextBouquet": (self.nextBouquet, _("next bouquet")),
 				"openServiceList": (self.openServiceList, _("open servicelist")),
 			})
 
@@ -466,6 +468,16 @@ class InfoBarChannelSelection:
 
 	def openServiceList(self):
 		self.session.execDialog(self.servicelist)
+
+	def prevBouquet(self):
+		if self.servicelist.inBouquet():
+			self.servicelist.prevBouquet()
+			self.servicelist.zap()
+
+	def nextBouquet(self):
+		if self.servicelist.inBouquet():
+			self.servicelist.nextBouquet()
+			self.servicelist.zap()
 
 	def zapUp(self):
 		if self.servicelist.inBouquet():
