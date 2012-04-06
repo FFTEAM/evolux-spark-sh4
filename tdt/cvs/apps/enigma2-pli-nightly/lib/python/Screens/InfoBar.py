@@ -55,6 +55,9 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 				"toogleTvRadio": (self.toogleTvRadio, _("toggels betwenn tv and radio...")), 
 				"volumeUp": (self._volUp, _("...")), 
 				"volumeDown": (self._volDown, _("...")), 
+# ------------------ Extra-Menu Patch Blue----------------
+				"pinkpanel": (self.callPinkPanelBlue, _("view PinkPanel...")),
+# ------------------ Extra-Menu Patch Blue----------------
 #+++<
 			}, prio=2)
 		
@@ -83,6 +86,13 @@ class InfoBar(InfoBarBase, InfoBarShowHide,
 		InfoBar.instance = self
 
 #+++>
+# ------------------ Extra-Menu Patch Blue-----------------
+	def callPinkPanelBlue(self):
+                from Plugins.Extensions.PinkPanel.plugin import PinkPanelMenu, PinkPanelButton
+	        PinkPanelButton(self,"blue")
+		self.session.open(PinkPanelMenu)
+                PinkPanelButton(self,"")
+# ------------------ Extra-Menu Patch Blue----------------
 	def _volUp(self):
 		print "_volUp"
 		from Components.VolumeControl import VolumeControl
