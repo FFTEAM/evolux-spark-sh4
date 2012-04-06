@@ -156,12 +156,12 @@ endif
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/libcool*
 	rm -f $(prefix)/release-enigma2-pli-nightly/lib/libeplayer2*
 # copy evo mc files ####
-	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/skin_default
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/prev.png $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/EVO-blackGlass-HD $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/skin_default
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin_default.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/prev.png $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/EVO-blackGlass-HD $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Vali.HD.nano $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
 
 
