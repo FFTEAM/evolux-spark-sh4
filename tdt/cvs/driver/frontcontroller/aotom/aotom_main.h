@@ -1,6 +1,20 @@
 #ifndef __AOTOM_MAIN_H__
 #define __AOTOM_MAIN_H__
 
+#ifndef __KERNEL__
+typedef signed char s8;
+typedef unsigned char u8;
+
+typedef signed short s16;
+typedef unsigned short u16;
+
+typedef signed int s32;
+typedef unsigned int u32;
+
+typedef signed long s64;
+typedef unsigned long u64;
+#endif
+
 #define VFD_MAJOR				147
 
 #define VFDBRIGHTNESS         0xc0425a03
@@ -673,3 +687,5 @@ int YWPANEL_VFD_GetKeyValue(void);
 int YWPANEL_VFD_SetLed(int which, int on);
 
 #endif /* __AOTOM_MAIN_H__ */
+
+// vim:ts=4

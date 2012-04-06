@@ -2210,13 +2210,13 @@ int YWPANEL_VFD_SetBrightness_StandBy(int level)
 	   ST_ErrCode =-EBUSY;
 	   return ST_ErrCode;
 	}
-	if(level <=0)
+	if(level < 0)
 		level = 0;
-	else if(level >= 7)
+	else if(level > 7)
 		level = 7;
 	data.dataType = YWPANEL_DATATYPE_VFD;
 	data.data.vfdData.type = YWPANEL_VFD_SETTING;
-	data.data.vfdData.setValue = level+0x88;
+	data.data.vfdData.setValue = level | 0x88;
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
 		ywtrace_print(TRACE_ERROR,"SetBrightness wrong!!\n");
@@ -2229,19 +2229,22 @@ int YWPANEL_VFD_SetBrightness_StandBy(int level)
 int YWPANEL_VFD_SetBrightness_Common(int level)
 {
 	int 		ST_ErrCode = 0;
-	if(level <=0)
+	if(level < 0)
 		level = 0;
-	else if(level >= 7)
+	else if(level > 7)
 		level = 7;
 
 	VFD_CS_CLR();
-	YWPANEL_VFD_WR(0x88+level);
+	YWPANEL_VFD_WR(0x88 | level);
 	VFD_CS_SET();
 	return ST_ErrCode ;
 }
 
 int YWPANEL_VFD_SetBrightness(int level)
 {
+#if 1 // Doesn't work currently. Disabled to avoid side effects. --martii
+	return 0;
+#else
 	int ErrorCode = 0 ;
 	switch (YWVFD_INFO.vfd_type)
 	{
@@ -2257,6 +2260,7 @@ int YWPANEL_VFD_SetBrightness(int level)
 			break;
 	}
 	return ErrorCode;
+#endif
 }
 
 u8 YWPANEL_VFD_ScanKeyboard_StandBy(void)
