@@ -561,7 +561,6 @@ release-enigma2-pli-nightly_base:
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 	rm $(prefix)/release-enigma2-pli-nightly/bin/showiframe
 	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi
-	rm $(prefix)/release-enigma2-pli-nightly/bin/stslave
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release-enigma2-pli-nightly/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release-enigma2-pli-nightly/bin/
