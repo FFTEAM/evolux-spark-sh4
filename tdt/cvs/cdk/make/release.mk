@@ -375,11 +375,6 @@ release_base:
 	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release/usr/bin/
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/
-	if [ -e $(targetprefix)/usr/bin/tuxtxt ]; then \
-		$(INSTALL_DIR) $(prefix)/release/usr/bin/tuxtxt; \
-		cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/; \
-		cp -p $(targetprefix)/usr/bin/tuxtxt/tuxtxt2.conf $(prefix)/release/usr/bin/tuxtxt/; \
-	fi
 	if [ -e $(buildprefix)/.deps/neutrino ]; then \
 		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release/usr/bin/;fi
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/
