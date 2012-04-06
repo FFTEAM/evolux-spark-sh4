@@ -1,5 +1,5 @@
---- Make.config	2011-12-06 23:03:38.986910111 +0100
-+++ Make.config.fix	2011-12-06 23:03:18.216901196 +0100
+--- graphlcd-base/Make.config	2011-12-06 23:03:38.986910111 +0100
++++ graphlcd-base/Make.config.fix	2011-12-06 23:03:18.216901196 +0100
 @@ -3,10 +3,10 @@
  
  ### The C compiler and options:
@@ -46,8 +46,8 @@
  # Read DRIVER.ax206dpf before use!
 -#HAVE_AX206DPF_EXPERIMENTAL=1
 +HAVE_AX206DPF_EXPERIMENTAL=1
---- glcddrivers/port.c	2011-12-07 22:31:41.607561726 +0100
-+++ glcddrivers/port.fix	2011-12-07 22:31:47.877565426 +0100
+--- graphlcd-base/glcddrivers/port.c	2011-12-07 22:31:41.607561726 +0100
++++ graphlcd-base/glcddrivers/port.fix	2011-12-07 22:31:47.877565426 +0100
 @@ -16,12 +16,35 @@
  #include <syslog.h>
  #include <unistd.h>
@@ -106,8 +106,8 @@
  }
  
  cParallelPort::cParallelPort()
---- graphlcd.conf.orig	2012-03-07 01:52:17.571231592 +0100
-+++ graphlcd.conf	2012-03-07 01:54:58.223427153 +0100
+--- graphlcd-base/graphlcd.conf.orig	2012-03-07 01:52:17.571231592 +0100
++++ graphlcd-base/graphlcd.conf	2012-03-07 01:54:58.223427153 +0100
 @@ -29,7 +29,7 @@
  #  Select the process priority that is used when sleeping.
  #  Possible values: -20 <= x <= 19
@@ -597,8 +597,8 @@
  #
  # UpsideDown
  #  Rotates the display output by 180 degrees. This might be useful, if
---- glcddrivers/ax206dpf.c	2012-01-08 11:51:56.907120065 +0100
-+++ glcddrivers/ax206dpf.c.fix	2012-01-11 22:15:36.496080564 +0100
+--- graphlcd-base/glcddrivers/ax206dpf.c	2012-01-08 11:51:56.907120065 +0100
++++ graphlcd-base/glcddrivers/ax206dpf.c.fix	2012-01-11 22:15:36.496080564 +0100
 @@ -212,7 +212,7 @@
      {
          dh[di]->dpfh = NULL;
@@ -608,3 +608,69 @@
      }
      dh[di]->attached = true;
      struct usb_device *dev = usb_device(dh[di]->dpfh->dev.udev);
+--- graphlcd-base/tools/convpic/Makefile.org	2012-01-21 23:04:06.899524642 +0100
++++ graphlcd-base/tools/convpic/Makefile	2012-01-21 23:04:06.847524649 +0100
+@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
+--- graphlcd-base/tools/crtfont/Makefile.org	2012-01-21 23:10:38.711524640 +0100
++++ graphlcd-base/tools/crtfont/Makefile	2012-01-21 23:10:38.663524640 +0100
+@@ -35,7 +35,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
+--- graphlcd-base/tools/genfont/Makefile.org	2012-01-21 23:13:28.307524643 +0100
++++ graphlcd-base/tools/genfont/Makefile	2012-01-21 23:13:28.255524646 +0100
+@@ -38,7 +38,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 	
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
+--- graphlcd-base/tools/showpic/Makefile.org	2012-01-21 23:15:43.891524641 +0100
++++ graphlcd-base/tools/showpic/Makefile	2012-01-21 23:15:43.843524640 +0100
+@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
+--- graphlcd-base/tools/showtext/Makefile.org	2012-01-21 23:18:13.715524639 +0100
++++ graphlcd-base/tools/showtext/Makefile	2012-01-21 23:18:13.667524641 +0100
+@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
+--- graphlcd-base/tools/lcdtestpattern/Makefile.org	2012-01-21 23:19:57.715524641 +0100
++++ graphlcd-base/tools/lcdtestpattern/Makefile	2012-01-21 23:19:56.899524641 +0100
+@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+ 
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
