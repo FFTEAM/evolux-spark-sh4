@@ -11,10 +11,7 @@ insmod $MODDIR/aotom.ko
 insmod $MODDIR/simu_button.ko
 [ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
 
-if [ -e /var/etc/.firstboot ]; then
-	echo "WAIT 1 min" >/dev/vfd
-	echo "WAIT 1 min"
-	rm /var/etc/.firstboot
+if [ ! -e /dev/.devfsd ]; then
 	touch /dev/.devfsd
 fi
 

@@ -174,12 +174,28 @@ esac
 
 ##############################################
 
-MEDIAFW=""
+echo -e "\nMedia Framework:"
+echo "   1) eplayer3  (Recommended)"
+echo "   2) gstreamer (needed for PLI)"
+read -p "Select media framwork (1-2)? "
+
+case "$REPLY" in
+	1) MEDIAFW=""
+	;;
+	2) MEDIAFW="--enable-mediafwgstreamer"
+	;;
+	*) MEDIAFW=""
+	;;
+esac
+
+CONFIGPARAM="$CONFIGPARAM $MEDIAFW"
 
 ##############################################
-
-EXTERNAL_LCD="--enable-externallcd"
-
+if [ -z "$MEDIAFW" ]; then
+	EXTERNAL_LCD="--enable-externallcd"
+else
+	EXTERNAL_LCD=""
+fi
 ##############################################
 echo ""
 echo -e "\nFilesystemtype:"
@@ -197,7 +213,7 @@ esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $MULTIYAFFS2"
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $EXTERNAL_LCD $MULTIYAFFS2"
 
 ##############################################
 

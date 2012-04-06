@@ -383,7 +383,7 @@ release-enigma2-pli-nightly_base:
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release-enigma2-pli-nightly/usr/bin/opkg
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release-enigma2-pli-nightly/sbin/
 	if [ -e $(targetprefix)/usr/bin/tuxtxt ]; then \
-		cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release/usr/bin/; \
+		cp -p $(targetprefix)/usr/bin/tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/bin/; \
 	fi
 	if [ -e $(buildprefix)/.deps/neutrino ]; then \
 		cp -p $(targetprefix)/usr/bin/grab $(prefix)/release-enigma2-pli-nightly/usr/bin/; \
@@ -478,9 +478,9 @@ release-enigma2-pli-nightly_base:
 	if test -d $(targetprefix)/usr/local/lib/enigma2; then \
 		cp -a $(targetprefix)/usr/local/lib/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/; \
 	fi
-	if [ -e $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt ]; then \
-		cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/; \
-	fi
+#	if [ -e $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt ]; then \
+#		cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/; \
+#	fi
 
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
@@ -588,15 +588,15 @@ release-enigma2-pli-nightly_base:
 #	ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
 #	cp $(kernelprefix)/$(kernelpath)/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules; \
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/;
-	if [ -d $(prefix)/release/usr/lib/autofs ]; then \
-		cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release/usr/sbin/; \
-		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release/usr/lib/autofs/mount_ext3.so; \
+	if [ -d $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs ]; then \
+		cp -f $(buildprefix)/usr/sbin/automount $(prefix)/release-enigma2-pli-nightly/usr/sbin/; \
+		ln -s /usr/lib/autofs/mount_ext2.so $(prefix)/release-enigma2-pli-nightly/usr/lib/autofs/mount_ext3.so; \
 		if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ]; then \
-			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules; \
+			cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules; \
 		fi; \
-		cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release/etc/; \
-		cp -f $(buildprefix)/root/release/auto.network $(prefix)/release/etc/; \
-		cp -f $(buildprefix)/root/release/autofs $(prefix)/release/etc/init.d/; \
+		cp -f $(buildprefix)/root/release/auto.hotplug $(prefix)/release-enigma2-pli-nightly/etc/; \
+		cp -f $(buildprefix)/root/release/auto.network $(prefix)/release-enigma2-pli-nightly/etc/; \
+		cp -f $(buildprefix)/root/release/autofs $(prefix)/release-enigma2-pli-nightly/etc/init.d/; \
 	fi
 
 #
