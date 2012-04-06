@@ -1,4 +1,5 @@
 # tuxbox/neutrino
+EXTERNALLCD_DEP="graphlcd"
 
 $(targetprefix)/var/etc/.version:
 	echo "imagename=Neutrino-HD" > $@
