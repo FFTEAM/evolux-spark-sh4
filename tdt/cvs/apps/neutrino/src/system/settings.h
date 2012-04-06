@@ -387,7 +387,7 @@ struct SNeutrinoSettings
 	};
 
 	// lcdd
-#define LCD_SETTING_COUNT 7
+#define LCD_SETTING_COUNT 11
 	enum LCD_SETTINGS {
 		LCD_BRIGHTNESS         = 0,
 		LCD_STANDBY_BRIGHTNESS = 1,
@@ -396,11 +396,12 @@ struct SNeutrinoSettings
 		LCD_INVERSE            = 4,
 		LCD_SHOW_VOLUME        = 5,
 		LCD_AUTODIMM           = 6,
+		LCD_DISPLAYMODE        = 7,
+		LCD_STANDBY_DISPLAYMODE  = 8,
+		LCD_DIM_TIME       	 = 9,
+		LCD_DIM_BRIGHTNESS       = 10
 	};
 	int lcd_setting[LCD_SETTING_COUNT];
-
-	char lcd_setting_dim_time[4];          
-	char lcd_setting_dim_brightness[4];
 
 #define FILESYSTEM_ENCODING_TO_UTF8(a) (g_settings.filesystem_is_utf8 ? (a) : ZapitTools::Latin1_to_UTF8(a).c_str())
 #define UTF8_TO_FILESYSTEM_ENCODING(a) (g_settings.filesystem_is_utf8 ? (a) : ZapitTools::UTF8_to_Latin1(a).c_str())
@@ -506,7 +507,7 @@ extern const int               default_timing     [TIMING_SETTING_COUNT];
 extern const neutrino_locale_t timing_setting_name[TIMING_SETTING_COUNT];
 
 // lcdd
-#define DEFAULT_VFD_BRIGHTNESS			15
+#define DEFAULT_VFD_BRIGHTNESS			7
 #define DEFAULT_VFD_STANDBYBRIGHTNESS		5
 
 #define DEFAULT_LCD_BRIGHTNESS			0xff
@@ -516,6 +517,11 @@ extern const neutrino_locale_t timing_setting_name[TIMING_SETTING_COUNT];
 #define DEFAULT_LCD_INVERSE			0x00
 #define DEFAULT_LCD_AUTODIMM			0x00
 #define DEFAULT_LCD_SHOW_VOLUME			0x01
+#define LCD_DISPLAYMODE_OFF			0
+#define LCD_DISPLAYMODE_ON			1
+#define LCD_DISPLAYMODE_TIMEONLY		2
+#define LCD_DISPLAYMODE_TIMEOFF			3
+#define DEFAULT_LCD_DISPLAYMODE			LCD_DISPLAYMODE_ON
 
 #define CORNER_RADIUS_LARGE             12
 #define CORNER_RADIUS_MID               9
