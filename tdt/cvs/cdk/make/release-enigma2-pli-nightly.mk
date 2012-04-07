@@ -162,7 +162,7 @@ endif
 #	cp -RP $(buildprefix)/root/usr/local/share/enigma2/skin.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
 #	cp -RP $(buildprefix)/root/usr/local/share/enigma2/prev.png $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
 #	cp -RP $(buildprefix)/root/usr/local/share/enigma2/EVO-blackGlass-HD $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
-	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Vali.HD.nano $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
+#	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Vali.HD.nano $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/
 
 
 #
@@ -208,6 +208,7 @@ release-enigma2-pli-nightly_base:
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/ram && \
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/var && \
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/var/opkg && \
+	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/de/LC_MESSAGES && \
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release-enigma2-pli-nightly && \
 	ln -s  ../etc $(prefix)/release-enigma2-pli-nightly/var/etc && \
@@ -272,6 +273,21 @@ release-enigma2-pli-nightly_base:
 	cp $(targetprefix)/etc/tuxbox/satellites.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/cables.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Vali.HD.nano $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/skin_default $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/*.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/free* $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/*.png $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/*.mvi $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/*.conf $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/countries $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(targetprefix)/usr/local/share/enigma2/po/en $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/ && \
+	cp -RP $(targetprefix)/usr/local/share/enigma2/po/ru $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/ && \
+	cp -RP $(targetprefix)/usr/local/share/enigma2/po/no $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/ && \
+	cp -RP $(targetprefix)/usr/local/share/enigma2/po/pl $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/ && \
+	cp -RP $(targetprefix)/usr/local/share/enigma2/po/de $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/ && \
+	cp -RP $(appsdir)/enigma2-pli-nightly/data/extensions $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml && \
 	echo "576i50" > $(prefix)/release-enigma2-pli-nightly/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/ && \
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
@@ -443,7 +459,7 @@ release-enigma2-pli-nightly_base:
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/share
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/share/keymaps
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2
-	cp -a $(targetprefix)/usr/local/share/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2
+#	cp -a $(targetprefix)/usr/local/share/enigma2/* $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2
 	cp -a $(targetprefix)/etc/enigma2/* $(prefix)/release-enigma2-pli-nightly/etc/enigma2
 
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml
@@ -565,12 +581,12 @@ release-enigma2-pli-nightly_base:
 	cp -RP $(buildprefix)/root/etc/tuxbox/satellites.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/
 	touch $(prefix)/release-enigma2-pli-nightly/etc/.start_enigma2
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Components/
-	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
+#	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
 	touch $(prefix)/release-enigma2-pli-nightly/etc/changelog.txt
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
-	rm $(prefix)/release-enigma2-pli-nightly/bin/showiframe
-	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi
+#	rm $(prefix)/release-enigma2-pli-nightly/bin/showiframe
+#	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release-enigma2-pli-nightly/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release-enigma2-pli-nightly/bin/
@@ -698,3 +714,6 @@ release-enigma2-pli-nightly_base:
 		( cd $(prefix)/release-enigma2-pli/usr/lib && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so && ln -sf libglcddrivers.so.2.1.0 libglcddrivers.so.2 && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so && ln -sf libglcdgraphics.so.2.1.0 libglcdgraphics.so.2 &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so &&  ln -sf libglcdskin.so.2.1.0 libglcdskin.so.2 ); \
 		cp -f $(targetprefix)/etc/graphlcd.conf $(prefix)/release-enigma2-pli/etc/graphlcd.conf; \
 	fi
+
+	find $(prefix)/release-enigma2-pli-nightly/ -name 'Makefile*' -exec rm {} \;
+

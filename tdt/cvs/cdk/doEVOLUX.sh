@@ -77,8 +77,13 @@ doOptimizeE2() {
 	rm $SOURCE/etc/tuxbox/terrestrial.xml
 	mkdir -p $SOURCE/usr/keys
 
-	echo "config.plugins.PinkPanel.usePPSkin=true" >> $SOURCE/etc/enigma2/settings
-	echo "config.skin.primary_skin=PP-MD-Skin/skin.xml" >> $SOURCE/etc/enigma2/settings
+	isOLDE2=`cat $CURDIR/lastChoice | grep mediafwgstreamer`
+	if [ -z $isOLDE2 ]; then
+		echo "config.plugins.PinkPanel.usePPSkin=true" >> $SOURCE/etc/enigma2/settings
+		echo "config.skin.primary_skin=PP-MD-Skin/skin.xml" >> $SOURCE/etc/enigma2/settings
+	else
+		echo "config.skin.primary_skin=Vali.HD.nano/skin.xml" >> $SOURCE/etc/enigma2/settings
+	fi
 	#echo "config.skin.primary_skin=EVO-blackGlass-HD/skin.xml" >> $SOURCE/etc/enigma2/settings
 	echo "config.usage.on_long_powerpress=shutdown" >> $SOURCE/etc/enigma2/settings
 	echo "config.psi.saturation=135" >> $SOURCE/etc/enigma2/settings
@@ -103,7 +108,7 @@ doOptimizeE2() {
 	rm $SOURCE/usr/lib/enigma2/python/Components/Renderer/chNumber.py
 
 
-	for i in cs ar et fr hr is lt nl sl sv uk ca da el es fi fy hu it lv pt sk sr tr
+	for i in cs ar et fr hr is lt nl sl sv uk ca da el es fi fy hu it lv pt sk sr tr il bg ir th
 	do
 	   rm -rf $SOURCE/usr/local/share/enigma2/po/$i
 	done
