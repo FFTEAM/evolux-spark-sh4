@@ -9,7 +9,7 @@ install_DATA = \
 	radar0.raw radar1.raw radar2.raw radar3.raw radar4.raw radar5.raw radar6.raw \
 	radar7.raw radar8.raw radar9.raw radiomode.pal radiomode.raw recording.png \
 	rot.png scan.pal scan.raw settings.png shell.png shutdown.pal shutdown.raw softupdate.png \
-	streaming.png timer.png video.png volume.png volumebody.png volumeslider2.png \
+	streaming.png timer.png video.png volume.raw volumebody.png volumeslider2.png \
 	volumeslider2alpha.png volumeslider2blue.png volumeslider2green.png \
 	volumeslider2red.png vtxt.png vtxt_gray.png movie.png movieplayer.raw \
 	hidden.raw bookmarkmanager.png mute_small.png dbox_small.raw \
