@@ -570,7 +570,7 @@ static int pRead(Context_t* context ) {
     vData[1] = vBuffer[15];
     vData[2] = '\0';
 
-    printf("[RCU] key: %s -> %d\n", vData, vBuffer[0]);
+    printf("[RCU] key: %s -> %d\n", vData, &vBuffer[0]);
 
 	vCurrentCode = getInternalCode(cButtons, vData);
 
@@ -588,9 +588,16 @@ static int pNotification(Context_t* context, const int cOn) {
 
     if(cOn)
     {
-       vfd_data.u.led.led_nr = 1;
-       vfd_data.u.led.on = 10;
-       ioctl(ioctl_fd, VFDSETLED, &vfd_data);
+       vfd_data.u.icon.icon_nr = 35;
+       vfd_data.u.icon.on = 1;
+       ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
+    }
+    else
+    {
+       usleep(100000);
+       vfd_data.u.icon.icon_nr = 35;
+       vfd_data.u.icon.on = 0;
+       ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
     }
 
     return 0;
