@@ -653,17 +653,17 @@ void CVFD::ShowIcon(vfd_icon icon, bool show)
 	int which;
 	switch (icon) {
 		case VFD_ICON_TIMESHIFT:
-			which = 0;
+			which = LED_GREEN;
 			break;
 		case VFD_ICON_RECORD:
-			which = 0;
+			which = LED_RED;
 			break;
 		default:
 			return;
 	}
 	struct aotom_ioctl_data vData;
 	vData.u.led.led_nr = which;
-	vData.u.led.on = show ? 1 : 0;
+	vData.u.led.on = show ? LOG_ON : LOG_OFF;
 	ioctl(fd, VFDSETLED, &vData);
 #else
 //printf("CVFD::ShowIcon %s %x\n", show ? "show" : "hide", (int) icon);

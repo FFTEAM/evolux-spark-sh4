@@ -17,6 +17,12 @@ typedef unsigned long u64;
 
 #define VFD_MAJOR				147
 
+#define LOG_OFF     	0
+#define LOG_ON      	1
+#define LED_RED		0
+#define LED_GREEN	1
+#define LASTLED		2
+
 #define VFDBRIGHTNESS         0xc0425a03
 #define VFDDRIVERINIT         0xc0425a08
 #define VFDICONDISPLAYONOFF   0xc0425a0a
