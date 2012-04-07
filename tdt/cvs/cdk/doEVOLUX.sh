@@ -82,7 +82,7 @@ doOptimizeE2() {
 		echo "config.plugins.PinkPanel.usePPSkin=true" >> $SOURCE/etc/enigma2/settings
 		echo "config.skin.primary_skin=PP-MD-Skin/skin.xml" >> $SOURCE/etc/enigma2/settings
 	else
-		echo "config.skin.primary_skin=Vali.HD.nano/skin.xml" >> $SOURCE/etc/enigma2/settings
+		echo "config.skin.primary_skin=skin.xml" >> $SOURCE/etc/enigma2/settings
 	fi
 	#echo "config.skin.primary_skin=EVO-blackGlass-HD/skin.xml" >> $SOURCE/etc/enigma2/settings
 	echo "config.usage.on_long_powerpress=shutdown" >> $SOURCE/etc/enigma2/settings
