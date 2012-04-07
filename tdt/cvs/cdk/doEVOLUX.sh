@@ -108,12 +108,12 @@ doOptimizeE2() {
 	rm $SOURCE/usr/lib/enigma2/python/Components/Renderer/chNumber.py
 
 
-	for i in cs ar et fr hr is lt nl sl sv uk ca da el es fi fy hu it lv pt sk sr tr il bg ir th
+	for i in cs ar et fr hr is lt nl sl sv uk ca da el es fi fy hu it lv pt sk sr tr
 	do
 	   rm -rf $SOURCE/usr/local/share/enigma2/po/$i
 	done
 
-	for i in ad.png dk.png fi.png hu.png lv.png se.png ua.png ae.png ee.png fr.png is.png missing.png pt.png si.png x-fy.png cz.png gr.png it.png nl.png ro.png sk.png yu.png es.png hr.png lt.png tr.png
+	for i in ad.png dk.png fi.png hu.png lv.png se.png ua.png ae.png ee.png fr.png is.png missing.png pt.png si.png x-fy.png cz.png gr.png it.png nl.png ro.png sk.png yu.png es.png hr.png lt.png tr.png il.png bg.png ir.png th.png
 	do
 	   rm -rf $SOURCE/usr/local/share/enigma2/countries/$i
 	done
