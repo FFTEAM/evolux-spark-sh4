@@ -18,7 +18,7 @@ class SkinSelector(Screen):
 	# for i18n:
 	# _("Choose your Skin")
 	skinlist = []
-	root = eEnv.resolve("${datadir}/enigma2/")
+	root = eEnv.resolve("/usr/local/share/enigma2/")
 
 	def __init__(self, session, args = None):
 
