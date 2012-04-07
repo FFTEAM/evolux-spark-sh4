@@ -495,7 +495,7 @@ void CMenuWidget::paint()
 	frameBuffer->paintBoxRel(x, y, width+sb_width, hheight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 1); //FIXME rounded
 
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+38,y+hheight+1, width-40, l_name, COL_MENUHEAD, 0, true); // UTF-8
-	frameBuffer->paintIcon(iconfile, x + 8, y + 5);
+	frameBuffer->paintIcon(iconfile, x + 8, y + hheight/8, 24, (6 * hheight)/8);
 
 	item_start_y = y+hheight;
 	paintItems();
@@ -791,15 +791,13 @@ int CMenuOptionChooser::paint( bool selected , bool last)
 
 	if (!(iconName.empty()))
 	{
-		frameBuffer->paintIcon(iconName, x + 10, y + ((height - 20) >> 1));
+		frameBuffer->paintIcon(iconName, x + 10, y + height/8, 24, (6 * height)/8);
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-#if 0
 		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
 		//printf("MENU: newicon %s\n", newicon);
-		if(!frameBuffer->paintIcon(newicon, x + 10, y + ((height - 20) >> 1)))
-#endif
+		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
 	}
 
@@ -944,11 +942,13 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 
 	if (!(iconName.empty()))
 	{
-		CFrameBuffer::getInstance()->paintIcon(iconName, x + 10, y + ((height - 20) >> 1));
+		CFrameBuffer::getInstance()->paintIcon(iconName, x + 10, y + height/8, 24, (6 * height)/8);
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
+		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
+		if(!CFrameBuffer::getInstance()->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
+			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
         }
 
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(nameStartX,  y+height, dx - (nameStartX  - x), l_optionName, color, 0, true); // UTF-8
@@ -1034,7 +1034,7 @@ int CMenuOptionLanguageChooser::paint( bool selected, bool last )
 
 	if (!(iconName.empty()))
 	{
-		CFrameBuffer::getInstance()->paintIcon(iconName, x + 10, y + ((height - 11) >> 1));
+		CFrameBuffer::getInstance()->paintIcon(iconName, x + 10, y + height/8, 24, (6 * height)/8);
 	}
 
 	//int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue);
@@ -1169,17 +1169,13 @@ int CMenuForwarder::paint(bool selected, bool last)
 
 	if (!iconName.empty())
 	{
-		frameBuffer->paintIcon(iconName, x + 10, y+ ((height- 20)>>1) );
+		frameBuffer->paintIcon(iconName, x + 10, y + height/8, 24, (6 * height)/8);
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-#if 0
-printf("MENU: key %s\n", CRCInput::getKeyName(directKey).c_str()); fflush(stdout);
 		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
-printf("MENU: newicon %s\n", newicon.c_str()); fflush(stdout);
-		if(!frameBuffer->paintIcon(newicon, x + 10, y + ((height - 20) >> 1)))
-#endif
-		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
+		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
+			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
 	}
 
 	if (option_text != NULL)

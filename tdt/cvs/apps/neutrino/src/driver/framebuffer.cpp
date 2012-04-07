@@ -1104,7 +1104,11 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int _x, const 
 	return true;
 }
 
-bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const int _y, const unsigned char offset, bool applyScaling)
+bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const int _y, const unsigned char offset, bool applyScaling) {
+	return paintIcon(filename, _x, _y, 0, 0, offset, applyScaling);
+}
+
+bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const int _y, int width, int height, const unsigned char offset, bool applyScaling)
 {
 	if (!getActive())
 		return false;
@@ -1113,12 +1117,13 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 	iconName.erase(iconName.find_last_of("."));
 
 	int x, y;
-	if (applyScaling) {
 #ifdef __sh__
+	if (applyScaling) {
 		x = scaleX(_x);
 		y = scaleY(_y);
+	} else
 #endif
-	} else {
+	{
 		x = _x;
 		y = _y;
 	}
@@ -1128,7 +1133,37 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		int w = it->second.width;
 		int h = it->second.height;
 		memcpy(icon_space, it->second.data, w * h * sizeof(fb_pixel_t));
-		blitIcon(w, h, x, y, scaleX(w), scaleY(h));
+		if (width && height) {
+			if (width * h < height * w) {
+				int oldheight = height;
+				height = (width * h) / w;
+#ifdef __sh__
+				if (applyScaling)
+					y = scaleY(_y + (oldheight - height)/2);
+				else
+#endif
+					y = _y + (oldheight - height)/2;
+			} else {
+				width = (height * w) / h;
+			}
+		}
+
+		if (!width && height)
+			width = (w * height) / h;
+		if (width && !height)
+			height = (h * width) / w;
+
+		if (!width)
+			width = w;
+		if (!height)
+			height = h;
+#ifdef __sh__
+		if (applyScaling) {
+			width = scaleX(width);
+			height = scaleY(height);
+		}
+#endif
+		blitIcon(w, h, x, y, width, height);
 		return true;
 	}
 
@@ -1209,7 +1244,35 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 			bStart++;
 		}
 		memcpy(icon_space, data, dsize);
-		blitIcon(w, h, x, y, scaleX(w), scaleY(h));
+		if (width && height) {
+			if (width * h < height * w) {
+				int oldheight = height;
+				height = (width * h) / w;
+#ifdef __sh__
+				if (applyScaling)
+					y = scaleY(_y + (oldheight - height)/2);
+				else
+#endif
+					y = _y + (oldheight - height)/2;
+			} else {
+				width = (height * w) / h;
+			}
+		}
+
+		if (!width && height)
+			width = (w * height) / h;
+		if (width && !height)
+			height = (h * width) / w;
+
+		if (!width)
+			width = w;
+		if (!height)
+			height = h;
+#ifdef __sh__
+		width = scaleX(width);
+		height = scaleY(height);
+#endif
+		blitIcon(w, h, x, y, width, height);
 		free (row_pointers);
 		png_destroy_read_struct(&png_ptr,  &info_ptr, NULL);
 		if(cache_size + dsize < ICON_CACHE_SIZE) {
@@ -1237,29 +1300,29 @@ png_bye:
 	}
 
 	struct rawHeader header;
-	uint16_t         width, height;
+	uint16_t         w, h;
 
 	read(fd, &header, sizeof(struct rawHeader));
 
-	width  = (header.width_hi  << 8) | header.width_lo;
-	height = (header.height_hi << 8) | header.height_lo;
+	w = (header.width_hi  << 8) | header.width_lo;
+	h = (header.height_hi << 8) | header.height_lo;
 
 #ifdef __sh__
-	if(width * height > ICON_TEMP_SIZE * ICON_TEMP_SIZE)
+	if(w * h > ICON_TEMP_SIZE * ICON_TEMP_SIZE)
 	{
 		close(fd);
 		return false;
 	}
 
 	unsigned char pixbuf[768];
-	size_t dsize = width * height * sizeof(fb_pixel_t);
+	size_t dsize = w * h * sizeof(fb_pixel_t);
 	uint8_t * d = (uint8_t *)icon_space;
 	fb_pixel_t * d2;
-	for (int count=0; count<height; count ++ ) {
-		read(fd, &pixbuf[0], width >> 1 );
+	for (int count=0; count<h; count ++ ) {
+		read(fd, &pixbuf[0], w >> 1 );
 		unsigned char *pixpos = &pixbuf[0];
 		d2 = (fb_pixel_t *) d;
-		for (int count2=0; count2<width >> 1; count2 ++ ) {
+		for (int count2=0; count2<(w >> 1); count2 ++ ) {
 			unsigned char compressed = *pixpos;
 			unsigned char pix1 = (compressed & 0xf0) >> 4;
 			unsigned char pix2 = (compressed & 0x0f);
@@ -1276,27 +1339,57 @@ png_bye:
 			d2++;
 			pixpos++;
 		}
-		d += width * 4;
+		d += w * 4;
 	}
 	if(cache_size + dsize < ICON_CACHE_SIZE) {
 		struct rawIcon tmpIcon;
 		cache_size += dsize;
-		tmpIcon.width = width;
-		tmpIcon.height = height;
-		tmpIcon.data = (fb_pixel_t *) malloc(width * height * sizeof(fb_pixel_t));
-		memcpy(tmpIcon.data, icon_space, width * height * sizeof(fb_pixel_t));
+		tmpIcon.width = w;
+		tmpIcon.height = h;
+		tmpIcon.data = (fb_pixel_t *) malloc(w * h * sizeof(fb_pixel_t));
+		memcpy(tmpIcon.data, icon_space, w * h * sizeof(fb_pixel_t));
 		icon_cache.insert(std::pair <std::string, rawIcon> (iconName, tmpIcon));
 	}
-	blitIcon(width, height, x, y, scaleX(width), scaleY(height));
+
+	if (width && height) {
+		if (width * h < height * w) {
+			int oldheight = height;
+			height = (width * h) / w;
+#ifdef __sh__
+			if (applyScaling)
+				y = scaleY(_y + (oldheight - height)/2);
+			else
+#endif
+				y = _y + (oldheight - height)/2;
+		} else {
+			width = (height * w) / h;
+		}
+	}
+
+	if (!width && height)
+		width = (w * height) / h;
+	if (width && !height)
+		height = (h * width) / w;
+
+	if (!width)
+		width = w;
+	if (!height)
+		height = h;
+#ifdef __sh__
+	width = scaleX(width);
+	height = scaleY(height);
+#endif
+
+	blitIcon(w, h, x, y, width, height);
 #else
 	unsigned char pixbuf[768];
 	uint8_t * d = ((uint8_t *)getFrameBufferPointer()) + x * sizeof(fb_pixel_t) + stride * y;
 	fb_pixel_t * d2;
-	for (int count=0; count<height; count ++ ) {
-		read(fd, &pixbuf[0], width >> 1 );
+	for (int count=0; count<h; count ++ ) {
+		read(fd, &pixbuf[0], w >> 1 );
 		unsigned char *pixpos = &pixbuf[0];
 		d2 = (fb_pixel_t *) d;
-		for (int count2=0; count2<width >> 1; count2 ++ ) {
+		for (int count2=0; count2<w >> 1; count2 ++ ) {
 			unsigned char compressed = *pixpos;
 			unsigned char pix1 = (compressed & 0xf0) >> 4;
 			unsigned char pix2 = (compressed & 0x0f);
@@ -1323,8 +1416,14 @@ png_bye:
 
 bool CFrameBuffer::paintIcon(const char * const filename, const int x, const int y, const unsigned char offset, bool applyScaling)
 {
+	//printf("%s(%s, %d, %d, %d)\n", __FUNCTION__, filename, x, y, offset);
+	return paintIcon(std::string(filename), x, y, 0, 0, offset);
+}
+
+bool CFrameBuffer::paintIcon(const char * const filename, const int x, const int y, int width, int height, const unsigned char offset, bool applyScaling)
+{
 //printf("%s(%s, %d, %d, %d)\n", __FUNCTION__, filename, x, y, offset);
-	return paintIcon(std::string(filename), x, y, offset);
+	return paintIcon(std::string(filename), x, y, width, height, offset);
 }
 
 void CFrameBuffer::loadPal(const std::string & filename, const unsigned char offset, const unsigned char endidx)
