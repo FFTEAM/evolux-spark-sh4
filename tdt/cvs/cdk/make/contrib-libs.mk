@@ -1985,7 +1985,7 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 #
 # graphlcd
 #
-$(DEPDIR)/graphlcd.do_prepare: graphlcd-base-touchcol.tar.bz2 bootstrap libusb @DEPENDS_graphlcd@
+$(DEPDIR)/graphlcd.do_prepare: bootstrap libusb @DEPENDS_graphlcd@
 	@PREPARE_graphlcd@
 	touch $@
 
@@ -2005,7 +2005,7 @@ $(DEPDIR)/%graphlcd: $(DEPDIR)/graphlcd.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 graphlcd-base-touchcol.tar.bz2:
-	if [ -d Archive/graphlcd-base-touchcol.tar.bz2 ]; then \
+	if [ -e Archive/graphlcd-base-touchcol.tar.bz2 ]; then \
 		rm Archive/graphlcd-base-touchcol.tar.bz2; \
 	fi
 
