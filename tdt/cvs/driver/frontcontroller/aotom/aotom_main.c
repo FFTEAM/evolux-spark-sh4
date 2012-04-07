@@ -1,7 +1,6 @@
 /*
  * aotom_main.c
  *
-*
  * (c) 2010 Spider-Team
  * (c) 2011 oSaoYa
  *
