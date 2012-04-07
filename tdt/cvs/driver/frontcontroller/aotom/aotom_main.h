@@ -33,7 +33,7 @@ typedef unsigned long u64;
 #define VFDSETMODE            0xc0425aff
 #define VFDDISPLAYCLR		  0xc0425b00
 
-#define	REMOTE_SLAVE_ADDRESS			0x40bd0000	/* slave address is 5 */
+#define	REMOTE_SLAVE_ADDRESS			0x40bd0000	/* slave address is 5 **/
 #define	REMOTE_SLAVE_ADDRESS_NEW		0xc03f0000	/* sz 2008-06-26 add new remote*/
 #define	REMOTE_SLAVE_ADDRESS_EDISION1	0x22dd0000
 #define	REMOTE_SLAVE_ADDRESS_EDISION2	0XCC330000
