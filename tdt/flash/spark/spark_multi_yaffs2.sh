@@ -17,7 +17,7 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 fi
 
 if [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt ]; then
-	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 	cp -RP $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
