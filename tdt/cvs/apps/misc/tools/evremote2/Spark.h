@@ -4,7 +4,7 @@
 #define VFDICONDISPLAYONOFF		0xc0425a0a
 
 /* this setups the mode temporarily (for one ioctl)
- * to the desired mode. currently the "normal" modes
+ * to the desired mode. currently the "normal" mode
  * is the compatible vfd mode
  */
 struct set_mode_s {
