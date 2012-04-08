@@ -1043,7 +1043,8 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 		frameBuffer->paintBoxRel (b112+4, posy + 2, 98, 14, COL_INFOBAR_PLUS_0);
 		oldrunningPercent = file_prozent;
 	}
-	timescale->paint(b112+4, posy + 2, runningPercent);
+	if (runningPercent > -1)
+		timescale->paint(b112+4, posy + 2, runningPercent);
 
 	int xStart = BoxStartX + ChanWidth;
 	int ChanInfoY = BoxStartY + ChanHeight + 15;	//+10
@@ -1112,7 +1113,8 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 			frameBuffer->paintBoxRel (BoxEndX - 108, posy + 2, 108, 14, COL_INFOBAR_PLUS_0, 1, 3);
 			oldrunningPercent = runningPercent;
 		}
-		timescale->paint(BoxEndX - 102, posy + 2, runningPercent);
+		if (runningPercent > -1)
+			timescale->paint(BoxEndX - 102, posy + 2, runningPercent);
 	  } else {
 		oldrunningPercent = 255;
 		frameBuffer->paintBackgroundBoxRel (BoxEndX - 108, posy, 112, height2);
