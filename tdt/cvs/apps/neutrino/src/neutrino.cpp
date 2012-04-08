@@ -2387,7 +2387,7 @@ void CNeutrinoApp::setupRecordingDevice(void)
 	}
 }
 
-//CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming.raw"       );
+//CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming"       );
 CMenuWidget * gmoviePlayer;
 #if 0
 CPipSetup * g_Pip0;
@@ -2533,26 +2533,26 @@ int CNeutrinoApp::run(int argc, char **argv)
 
 	c_SMSKeyInput = new SMSKeyInput();
 	//Main settings
-	CMenuWidget    mainMenu            (LOCALE_MAINMENU_HEAD                 , "mainmenue.raw"       );
+	CMenuWidget    mainMenu            (LOCALE_MAINMENU_HEAD                 , "mainmenue"       );
 	CMenuWidget    mainSettings        (LOCALE_MAINSETTINGS_HEAD             , NEUTRINO_ICON_SETTINGS);
-	CMenuWidget    languageSettings    (LOCALE_LANGUAGESETUP_HEAD            , "language.raw"        );
-	CMenuWidget    audioSettings       (LOCALE_AUDIOMENU_HEAD                , "audio.raw"           );
-	CMenuWidget    parentallockSettings(LOCALE_PARENTALLOCK_PARENTALLOCK     , "lock.raw"            , 500);
-	networkSettings = new CMenuWidget_Network (LOCALE_NETWORKMENU_HEAD, "network.raw");
-	CMenuWidget    recordingSettings   (LOCALE_RECORDINGMENU_HEAD            , "recording.raw"       );
-	CMenuWidget    streamingSettings   (LOCALE_STREAMINGMENU_HEAD            , "streaming.raw"       );
-	//CMenuWidget    colorSettings       (LOCALE_COLORMENU_HEAD                , "colors.raw"          );
-	CMenuWidget    colorSettings       (LOCALE_MAINSETTINGS_OSD                , "colors.raw"          );
-	CMenuWidget    fontSettings        (LOCALE_FONTMENU_HEAD                 , "colors.raw"          );
-	CMenuWidget    lcdSettings         (LOCALE_LCDMENU_HEAD                  , "lcd.raw"             );
-	//CMenuWidget    keySettings         (LOCALE_KEYBINDINGMENU_HEAD           , "keybinding.raw"      , 400);
-	CMenuWidget    keySettings         (LOCALE_MAINSETTINGS_KEYBINDING           , "keybinding.raw"      , 400);
+	CMenuWidget    languageSettings    (LOCALE_LANGUAGESETUP_HEAD            , "language"        );
+	CMenuWidget    audioSettings       (LOCALE_AUDIOMENU_HEAD                , "audio"           );
+	CMenuWidget    parentallockSettings(LOCALE_PARENTALLOCK_PARENTALLOCK     , "lock"            , 500);
+	networkSettings = new CMenuWidget_Network (LOCALE_NETWORKMENU_HEAD	 ,"network");
+	CMenuWidget    recordingSettings   (LOCALE_RECORDINGMENU_HEAD            , "recording"       );
+	CMenuWidget    streamingSettings   (LOCALE_STREAMINGMENU_HEAD            , "streaming"       );
+	//CMenuWidget    colorSettings       (LOCALE_COLORMENU_HEAD                , "colors"          );
+	CMenuWidget    colorSettings       (LOCALE_MAINSETTINGS_OSD                , "colors"          );
+	CMenuWidget    fontSettings        (LOCALE_FONTMENU_HEAD                 , "colors"          );
+	CMenuWidget    lcdSettings         (LOCALE_LCDMENU_HEAD                  , "lcd"             );
+	//CMenuWidget    keySettings         (LOCALE_KEYBINDINGMENU_HEAD           , "keybinding"      , 400);
+	CMenuWidget    keySettings         (LOCALE_MAINSETTINGS_KEYBINDING           , "keybinding"      , 400);
 	CMenuWidget    miscSettings        (LOCALE_MISCSETTINGS_HEAD             , NEUTRINO_ICON_SETTINGS);
 	CMenuWidget    audioplPicSettings  (LOCALE_AUDIOPLAYERPICSETTINGS_GENERAL, NEUTRINO_ICON_SETTINGS);
-	CMenuWidget ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings.raw" );
+	CMenuWidget ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings" );
 	CMenuWidget    scanSettings        (LOCALE_SERVICEMENU_SCANTS            , NEUTRINO_ICON_SETTINGS);
 	CMenuWidget    service             (LOCALE_SERVICEMENU_HEAD              , NEUTRINO_ICON_SETTINGS);
-	CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming.raw"       );
+	CMenuWidget    moviePlayer         (LOCALE_MOVIEPLAYER_HEAD              , "streaming"       );
 	gmoviePlayer = &moviePlayer;
 
 	InitMainMenu(mainMenu, mainSettings, audioSettings, parentallockSettings, *networkSettings, recordingSettings,
@@ -3909,7 +3909,7 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 			frameBuffer->SaveScreen(x, y, dx, dy, pixbuf);
 #endif
 
-		frameBuffer->paintIcon("volume.raw",x,y, COL_INFOBAR);
+		frameBuffer->paintIcon("volume",x,y, COL_INFOBAR);
 		frameBuffer->paintBoxRel (x + 40, y+12, 200, 15, COL_INFOBAR_PLUS_0);
 		g_volscale->reset();
 		g_volscale->paint(x + 41, y + 12, g_settings.current_volume);
@@ -4604,7 +4604,7 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 	}
 	else if(actionKey == "movieplugin") {
 		parent->hide();
-		CMenuWidget MoviePluginSelector(LOCALE_MOVIEPLAYER_DEFPLUGIN, "features.raw", 350);
+		CMenuWidget MoviePluginSelector(LOCALE_MOVIEPLAYER_DEFPLUGIN, "features", 350);
 		MoviePluginSelector.addItem(GenericMenuSeparator);
 
 		char id[5];
@@ -4625,7 +4625,7 @@ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
 	}
 	else if(actionKey == "onekeyplugin") {
 		parent->hide();
-		CMenuWidget MoviePluginSelector(LOCALE_EXTRA_KEY_PLUGIN, "features.raw", 350);
+		CMenuWidget MoviePluginSelector(LOCALE_EXTRA_KEY_PLUGIN, "features", 350);
 		MoviePluginSelector.addItem(GenericMenuSeparator);
 
 		char id[5];

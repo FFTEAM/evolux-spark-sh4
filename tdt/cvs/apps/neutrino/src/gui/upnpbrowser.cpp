@@ -425,7 +425,7 @@ void CUpnpBrowserGui::selectDevice()
 	catch (std::runtime_error error)
 	{
 		delete scanBox;
-		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 		return;
 	}
 #endif
@@ -434,7 +434,7 @@ void CUpnpBrowserGui::selectDevice()
 
 	if (!m_devices.size())
 	{
-		ShowLocalizedMessage(LOCALE_MESSAGEBOX_INFO, LOCALE_UPNPBROWSER_NOSERVERS, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+		ShowLocalizedMessage(LOCALE_MESSAGEBOX_INFO, LOCALE_UPNPBROWSER_NOSERVERS, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 		delete scanBox;
 		return;
 	}
@@ -493,7 +493,7 @@ void CUpnpBrowserGui::selectDevice()
 			catch (std::runtime_error error)
 			{
 				delete scanBox;
-				ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+				ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 				return;
 			}
 #endif
@@ -501,7 +501,7 @@ void CUpnpBrowserGui::selectDevice()
 			scanBox->hide();
 			if (!m_devices.size())
 			{
-				ShowLocalizedMessage(LOCALE_MESSAGEBOX_INFO, LOCALE_UPNPBROWSER_NOSERVERS, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+				ShowLocalizedMessage(LOCALE_MESSAGEBOX_INFO, LOCALE_UPNPBROWSER_NOSERVERS, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 				delete scanBox;
 				return;
 			}
@@ -563,7 +563,7 @@ void CUpnpBrowserGui::playnext(void)
 		}
 		catch (std::runtime_error error)
 		{
-			ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+			ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 			m_folderplay = false;
 			return;
 		}
@@ -726,7 +726,7 @@ bool CUpnpBrowserGui::selectItem(std::string id)
 			}
 			catch (std::runtime_error error)
 			{
-				ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+				ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, error.what(), CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 				if (entries)
 					delete entries;
 				return endall;
@@ -826,7 +826,7 @@ bool CUpnpBrowserGui::selectItem(std::string id)
 		    if (isPlaybackRunning)
 		    {
 printf("upnp audio\n");
-			CMenuWidget APIDSelector(LOCALE_APIDSELECTOR_HEAD, "audio.raw", 300);
+			CMenuWidget APIDSelector(LOCALE_APIDSELECTOR_HEAD, "audio", 300);
 			
 			playback->FindAllPids(g_apids, g_ac3flags, &g_numpida, g_language);
 			
@@ -1413,19 +1413,19 @@ void CUpnpBrowserGui::paintItemPos(std::vector<UPnPEntry> *entry, unsigned int p
 	if ((*entry)[pos].isdir)
 	{
 		info = "<DIR>";
-		fileicon = "folder.raw";
+		fileicon = "folder";
 	}
 	else
 	{
 		if (preferred != -1)
 		{
 			info = (*entry)[pos].resources[preferred].duration;
-			fileicon = "mp3.raw";
+			fileicon = "mp3";
 		}
 		else
 		{
 			info = "(none)";
-			fileicon = "file.raw";
+			fileicon = "file";
 		}
 	}
 
@@ -1433,7 +1433,7 @@ void CUpnpBrowserGui::paintItemPos(std::vector<UPnPEntry> *entry, unsigned int p
 	char tmp_time[] = "00:00:00.0";
 	int w = g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->getRenderWidth(tmp_time);
 
-	m_frameBuffer->paintIcon(fileicon, m_x + 5 , ypos + (m_fheight - 16) / 2);
+	m_frameBuffer->paintIcon(fileicon, m_x + 5 , ypos + m_fheight/8, 0, (6 * m_fheight)/8);
 	g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->RenderString(m_x + m_width - 15 - w, ypos + m_fheight,
 		w, info, color, m_fheight);
 	g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->RenderString(m_x + 30, ypos + m_fheight, m_width - 50 - w,
@@ -1495,7 +1495,7 @@ void CUpnpBrowserGui::paintDevice()
 	ypos = m_y + m_title_height;
 	if(m_theight > 26)
 		ypos = (m_theight - 26) / 2 + m_y + m_title_height;
-	m_frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, m_x + m_width - 30, ypos);
+	m_frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, m_x + m_width - 30, ypos);
 #if 0
 	if( CNeutrinoApp::getInstance()->isMuted() )
 	{
@@ -1618,7 +1618,7 @@ void CUpnpBrowserGui::paintItem(std::vector<UPnPEntry> *entry, unsigned int sele
 	ypos = m_y + m_title_height;
 	if(m_theight > 26)
 		ypos = (m_theight - 26) / 2 + m_y + m_title_height;
-	m_frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, m_x + m_width - 30, ypos);
+	m_frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, m_x + m_width - 30, ypos);
 #if 0
 	if( CNeutrinoApp::getInstance()->isMuted() )
 	{

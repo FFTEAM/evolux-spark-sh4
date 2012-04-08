@@ -208,18 +208,18 @@ void CScreenSetup::paintBorder( int selected )
 
 void CScreenSetup::paintIcons()
 {
-        frameBuffer->paintIcon("rot.raw", x+6, y+8);
-        frameBuffer->paintIcon("gruen.raw", x+6, y+36 );
+        frameBuffer->paintIcon("rot", x+6, y+8);
+        frameBuffer->paintIcon("gruen", x+6, y+36 );
 }
 
 void CScreenSetup::paintBorderUL()
 {
-	frameBuffer->paintIcon( "border_ul.raw", x_coord[0], y_coord[0] );
+	frameBuffer->paintIcon( "border_ul", x_coord[0], y_coord[0] );
 }
 
 void CScreenSetup::paintBorderLR()
 {
-	frameBuffer->paintIcon("border_lr.raw", x_coord[1]- 96, y_coord[1]- 96 );
+	frameBuffer->paintIcon("border_lr", x_coord[1]- 96, y_coord[1]- 96 );
 }
 
 void CScreenSetup::paintCoords()

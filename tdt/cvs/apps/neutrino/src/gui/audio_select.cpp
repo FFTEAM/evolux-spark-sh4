@@ -78,7 +78,7 @@ int CAudioSelectMenuHandler::exec(CMenuTarget* parent, const std::string &action
 
 int CAudioSelectMenuHandler::doMenu ()
 {
-	CMenuWidget AudioSelector(LOCALE_APIDSELECTOR_HEAD, "audio.raw", 360);
+	CMenuWidget AudioSelector(LOCALE_APIDSELECTOR_HEAD, "audio", 360);
 	unsigned int count;
 	CSubtitleChangeExec SubtitleChanger;
 

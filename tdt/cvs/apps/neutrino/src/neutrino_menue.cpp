@@ -296,7 +296,7 @@ const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_AUTO_OPTIONS[VIDEOMENU_VIDE
 #include "videosettings.h"
 CVideoSettings * videoSettings;
 
-CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video.raw", 500), RGBCSyncControler(LOCALE_VIDEOMENU_RGB_CENTERING, &g_settings.video_csync)
+CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video", 500), RGBCSyncControler(LOCALE_VIDEOMENU_RGB_CENTERING, &g_settings.video_csync)
 {
 	addItem(GenericMenuSeparator);
 	addItem(GenericMenuBack);
@@ -478,7 +478,7 @@ bool CVideoSettings::changeNotify(const neutrino_locale_t OptionName, void *)
 		//videoDecoder->SetVideoMode((analog_mode_t) g_settings.analog_mode);//FIXME
 		if(prev_video_mode != g_settings.video_Mode) {
 			frameBuffer->paintBackground();
-			if(ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_VIDEOMODE_OK), CMessageBox::mbrNo, CMessageBox::mbYes | CMessageBox::mbNo, "info.raw") != CMessageBox::mbrYes) {
+			if(ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_VIDEOMODE_OK), CMessageBox::mbrNo, CMessageBox::mbYes | CMessageBox::mbNo, "info") != CMessageBox::mbrYes) {
 				g_settings.video_Mode = prev_video_mode;
 				videoDecoder->SetVideoSystem(g_settings.video_Mode);
 #ifdef __sh__
@@ -561,7 +561,7 @@ int CTestMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 		text[12*len] = 0;
 
 		CVFD::getInstance()->ShowText(text);
-		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, "VFD test, Press OK to return", CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, "VFD test, Press OK to return", CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 		CVFD::getInstance()->Clear();
 	}
 	else if(actionKey == "network") {
@@ -596,7 +596,7 @@ int CTestMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 				(unsigned char)ifr.ifr_hwaddr.sa_data[5], ip == NULL ? "Unknown" : ip);
 
 		close(fd);
-		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, str, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, str, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 	}
 	else if(actionKey == "card") {
 	}
@@ -615,7 +615,7 @@ int CTestMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 		}
 		sprintf(buffer, "HDD: /dev/sda1 is %s", mounted ? "mounted" : "NOT mounted");
 		printf("%s\n", buffer);
-		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, buffer, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+		ShowMsgUTF(LOCALE_MESSAGEBOX_INFO, buffer, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 	}
 	else if(actionKey == "buttons") {
 		neutrino_msg_t      msg;
@@ -771,7 +771,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	moviePlayer.addItem(new CMenuForwarder(LOCALE_MOVIEPLAYER_VCDPLAYBACK, true, NULL, moviePlayerGui, "vcdplayback", CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE));
 	moviePlayer.addItem(GenericMenuSeparatorLine);
 	moviePlayer.addItem(new CMenuForwarder(LOCALE_MAINMENU_SETTINGS, true, NULL, &streamingSettings, NULL, CRCInput::RC_help, NEUTRINO_ICON_BUTTON_HELP_SMALL));
-	moviePlayer.addItem(new CMenuForwarder(LOCALE_NFSMENU_HEAD, true, NULL, new CNFSSmallMenu(), NULL, CRCInput::RC_setup, NEUTRINO_ICON_BUTTON_DBOX_SMALL));
+	moviePlayer.addItem(new CMenuForwarder(LOCALE_NFSMENU_HEAD, true, NULL, new CNFSSmallMenu(), NULL, CRCInput::RC_setup, NEUTRINO_ICON_BUTTON_MENU_SMALL));
 #endif
 
 	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_PICTUREVIEWER, true, NULL, new CPictureViewerGui(), NULL, CRCInput::convertDigitToKey(shortcut++)));
@@ -835,10 +835,10 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 					CRCInput::convertDigitToKey(shortcut++)));
 	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_SLEEPTIMER, true, NULL, new CSleepTimerWidget, NULL,
 					CRCInput::convertDigitToKey(shortcut++)));
-	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_SHUTDOWN, true, NULL, this, "shutdown", CRCInput::RC_standby, "power.raw"));//FIXME
+	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_SHUTDOWN, true, NULL, this, "shutdown", CRCInput::RC_standby, "power"));//FIXME
 
 	mainMenu.addItem( new CMenuSeparator(CMenuSeparator::LINE) );
-	mainMenu.addItem( new CMenuForwarder(LOCALE_DBOXINFO, true, NULL, new CDBoxInfoWidget, NULL, CRCInput::RC_help, "help.raw"));
+	mainMenu.addItem( new CMenuForwarder(LOCALE_DBOXINFO, true, NULL, new CDBoxInfoWidget, NULL, CRCInput::RC_help, "help"));
 
 	mainSettings.addItem(GenericMenuSeparator);
 	mainSettings.addItem(GenericMenuBack);
@@ -908,7 +908,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	g_RFmod = new RFmod();
 	if(g_RFmod->rfmodfd >=0) {
 		g_RFmod->init();
-		CMenuWidget * rfmenu  = new CMenuWidget(LOCALE_RFMOD, "settings.raw");
+		CMenuWidget * rfmenu  = new CMenuWidget(LOCALE_RFMOD, "settings");
 		CRfNotifier * rfnot = new CRfNotifier();
 		CRfExec * rfexec = new CRfExec();
 
@@ -1382,7 +1382,7 @@ void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget &scanSe
 	CZapitDestExec * zexec = new CZapitDestExec();
 #endif
 
-	CMenuWidget* zapit_menu = new CMenuWidget(LOCALE_EXTRA_ZAPIT_MENU, "settings.raw");
+	CMenuWidget* zapit_menu = new CMenuWidget(LOCALE_EXTRA_ZAPIT_MENU, "settings");
 	zapit_menu->addItem( GenericMenuBack );
 	//zapit_menu->addItem(new CMenuForwarder(LOCALE_EXTRA_SAVESETTINGS, true, "", new CZapitDestExec, "savesettings", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	zapit_menu->addItem(new CMenuForwarder(LOCALE_MAINSETTINGS_SAVESETTINGSNOW, true, "", this, "savezapitsettings", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
@@ -1427,18 +1427,18 @@ void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget &scanSe
 
 	service.addItem(GenericMenuSeparatorLine);
 	service.addItem(new CMenuForwarder(LOCALE_SERVICEMENU_IMAGEINFO,  true, NULL, new CImageInfo(), NULL, CRCInput::RC_help, NEUTRINO_ICON_BUTTON_HELP_SMALL ), false);
-	service.addItem(new CMenuForwarder(LOCALE_SERVICEMENU_RESTART   , true, NULL, this, "restart", CRCInput::RC_standby, "power.raw"));
+	service.addItem(new CMenuForwarder(LOCALE_SERVICEMENU_RESTART   , true, NULL, this, "restart", CRCInput::RC_standby, "power"));
 
 	if(0 /*softupdate*/)
 	{
 		dprintf(DEBUG_DEBUG, "init soft-update-stuff\n");
-		CMenuWidget* updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, "softupdate.raw", 550);
+		CMenuWidget* updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, "softupdate", 550);
 		updateSettings->addItem(GenericMenuSeparator);
 		updateSettings->addItem(GenericMenuBack);
 		updateSettings->addItem(GenericMenuSeparatorLine);
 
 		//expert-function for mtd read/write
-		CMenuWidget* mtdexpert = new CMenuWidget(LOCALE_FLASHUPDATE_EXPERTFUNCTIONS, "softupdate.raw");
+		CMenuWidget* mtdexpert = new CMenuWidget(LOCALE_FLASHUPDATE_EXPERTFUNCTIONS, "softupdate");
 		mtdexpert->addItem(GenericMenuSeparator);
 		mtdexpert->addItem(GenericMenuBack);
 		mtdexpert->addItem(GenericMenuSeparatorLine);
@@ -1757,7 +1757,7 @@ void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
 				if(pos != NULL) {
 					char iname[50];
 					*pos = '\0';
-					sprintf(iname, "%s.raw", locale); 
+					sprintf(iname, "%s", locale); 
 					CMenuOptionLanguageChooser* oj = new CMenuOptionLanguageChooser((char*)locale, this, iname);
 					oj->addOption(locale);
 					languageSettings.addItem( oj );
@@ -1976,7 +1976,7 @@ const CMenuOptionChooser::keyval OPTIONS_WLAN_SECURITY_OPTIONS[OPTIONS_WLAN_SECU
 };
 
 void WLAN_Menu::WLAN_Settings() {
-	CMenuWidget* menu = new CMenuWidget(LOCALE_NETWORKMENU_WLAN, "network.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_NETWORKMENU_WLAN, "network");
 
 	tmp_essid[41];
 	tmp_key[41];
@@ -2142,7 +2142,7 @@ void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
 	CMenuForwarder *fTimerAfter = new CMenuForwarder(LOCALE_TIMERSETTINGS_RECORD_SAFETY_TIME_AFTER, true, g_settings.record_safety_time_after, timerAfter);
 
 	// default recording audio pids
-	//CMenuWidget * apidMenu = new CMenuWidget(LOCALE_RECORDINGMENU_APIDS, "audio.raw");
+	//CMenuWidget * apidMenu = new CMenuWidget(LOCALE_RECORDINGMENU_APIDS, "audio");
 	//CMenuForwarder* fApidMenu = new CMenuForwarder(LOCALE_RECORDINGMENU_APIDS ,true, NULL, apidMenu);
 	g_settings.recording_audio_pids_std = ( g_settings.recording_audio_pids_default & TIMERD_APIDS_STD ) ? 1 : 0 ;
 	g_settings.recording_audio_pids_alt = ( g_settings.recording_audio_pids_default & TIMERD_APIDS_ALT ) ? 1 : 0 ;
@@ -2484,7 +2484,7 @@ void CNeutrinoApp::InitFontSettings(CMenuWidget &fontSettings)
 
 	for (int i = 0; i < 5; i++)
 	{
-		CMenuWidget * fontSettingsSubMenu = new CMenuWidget(font_sizes_groups[i].groupname, "colors.raw");
+		CMenuWidget * fontSettingsSubMenu = new CMenuWidget(font_sizes_groups[i].groupname, "colors");
 		fontSettingsSubMenu->addItem(GenericMenuSeparator);
 		fontSettingsSubMenu->addItem(GenericMenuBack);
 		fontSettingsSubMenu->addItem(GenericMenuSeparatorLine);
@@ -2793,7 +2793,7 @@ const neutrino_locale_t keydescription[KEYBINDS_COUNT] =
 
 void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings)
 {
-	CMenuWidget* bindSettings = new CMenuWidget(LOCALE_KEYBINDINGMENU_HEAD, "keybinding.raw", 400);
+	CMenuWidget* bindSettings = new CMenuWidget(LOCALE_KEYBINDINGMENU_HEAD, "keybinding", 400);
 
 	keySettings.addItem(GenericMenuSeparator);
 	keySettings.addItem(GenericMenuBack);
@@ -2916,7 +2916,7 @@ void CNeutrinoApp::SelectNVOD()
         if (!(g_RemoteControl->subChannels.empty()))
         {
                 // NVOD/SubService- Kanal!
-                CMenuWidget NVODSelector(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD, "video.raw", 350);
+                CMenuWidget NVODSelector(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD, "video", 350);
                 if(getNVODMenu(&NVODSelector))
                         NVODSelector.exec(NULL, "");
         }
@@ -2986,7 +2986,7 @@ void CNeutrinoApp::SelectAPID()
 	{
 		// we have APIDs for this channel!
 
-		CMenuWidget APIDSelector(LOCALE_APIDSELECTOR_HEAD, "audio.raw", 300);
+		CMenuWidget APIDSelector(LOCALE_APIDSELECTOR_HEAD, "audio", 300);
 		APIDSelector.addItem(GenericMenuSeparator);
 
 		for( unsigned int count=0; count<g_RemoteControl->current_PIDs.APIDs.size(); count++ )
@@ -3123,7 +3123,7 @@ bool CNeutrinoApp::showUserMenu(int button)
                 if( txt.empty() )
                         txt = g_Locale->getText(LOCALE_INFOVIEWER_STREAMINFO);
         }
-        CMenuWidget *menu = new CMenuWidget(txt.c_str() , "features.raw", 350);
+        CMenuWidget *menu = new CMenuWidget(txt.c_str() , "features", 350);
         if (menu == NULL)
                 return 0;
         menu->addItem(GenericMenuSeparator);
@@ -3247,7 +3247,7 @@ bool CNeutrinoApp::showUserMenu(int button)
 			case SNeutrinoSettings::ITEM_SUBCHANNEL:
 				if (!(g_RemoteControl->subChannels.empty())) {
 					// NVOD/SubService- Kanal!
-					tmpNVODSelector = new CMenuWidget(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD, "video.raw", 350);
+					tmpNVODSelector = new CMenuWidget(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD, "video", 350);
 					if(getNVODMenu(tmpNVODSelector)) {
 						menu_items++;
 						menu_prev = SNeutrinoSettings::ITEM_SUBCHANNEL;

@@ -438,10 +438,10 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 									evtlist[selected].eventID, evtlist[selected].startTime,
 									evtlist[selected].startTime - (ANNOUNCETIME + 120),
 									TIMERD_APIDS_CONF, true, recDir,true);
-							ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+							ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 						}
 					} else {
-						ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+						ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 					}
 				}
 				timerlist.clear();
@@ -465,7 +465,7 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 					evtlist[selected].startTime,
 					evtlist[selected].startTime - ANNOUNCETIME, 0,
 					evtlist[selected].eventID, evtlist[selected].startTime, 0);
-			ShowLocalizedMessage(LOCALE_TIMER_EVENTTIMED_TITLE, LOCALE_TIMER_EVENTTIMED_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+			ShowLocalizedMessage(LOCALE_TIMER_EVENTTIMED_TITLE, LOCALE_TIMER_EVENTTIMED_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 			timerlist.clear();
 			g_Timerd->getTimerList (timerlist);
 			paint(channel_id);
@@ -1072,7 +1072,7 @@ int CEventFinderMenu::showMenu(void)
 	CMenuOptionChooser* mo1 	= new CMenuOptionChooser(LOCALE_EVENTFINDER_SEARCH_WITHIN_EPG, m_search_epg_item, SEARCH_EPG_OPTIONS, SEARCH_EPG_OPTION_COUNT, true, NULL, CRCInput::RC_4);
 	CMenuForwarder* mf0 		= new CMenuForwarder(LOCALE_EVENTFINDER_START_SEARCH, true, NULL, this, "1", CRCInput::RC_5 );
 	
-	CMenuWidget searchMenu(LOCALE_EVENTFINDER_HEAD, "features.raw", 450);
+	CMenuWidget searchMenu(LOCALE_EVENTFINDER_HEAD, "features", 450);
 
         searchMenu.addItem(GenericMenuSeparator);
         searchMenu.addItem(mf2, false);

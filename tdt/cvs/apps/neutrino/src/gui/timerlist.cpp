@@ -743,19 +743,20 @@ void CTimerList::paintItem(int pos)
 void CTimerList::paintHead()
 {
 	frameBuffer->paintBoxRel(x,y, width,theight+0, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 1);
-	frameBuffer->paintIcon("timer.raw",x+5,y+4);
+	frameBuffer->paintIcon("timer",x+5,y+4);
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+35,y+theight+0, width- 45, g_Locale->getText(LOCALE_TIMERLIST_NAME), COL_MENUHEAD, 0, true); // UTF-8
 
 	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x+ width- 30, y+ 5 );
 /*	if (bouquetList!=NULL)
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, x+ width- 60, y+ 5 );*/
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, x+ width- 60, y+ 5 );*/
 }
 
-const struct button_label TimerListButtons[3] =
+const struct button_label TimerListButtons[4] =
 {
 	{ NEUTRINO_ICON_BUTTON_RED   , LOCALE_TIMERLIST_DELETE },
 	{ NEUTRINO_ICON_BUTTON_GREEN , LOCALE_TIMERLIST_NEW    },
-	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_TIMERLIST_RELOAD }
+	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_TIMERLIST_RELOAD },
+	{ NEUTRINO_ICON_BUTTON_OKAY, LOCALE_TIMERLIST_MODIFY }
 };
 
 void CTimerList::paintFoot()
@@ -764,15 +765,11 @@ void CTimerList::paintFoot()
 	frameBuffer->paintBoxRel(x,y+height, width,buttonHeight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 	//frameBuffer->paintHLine(x, x+width,  y, COL_INFOBAR_SHADOW_PLUS_0);
 
+	int h = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 	if (timerlist.empty())
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10, y + height + 4, ButtonWidth, 2, &(TimerListButtons[1]));
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10, y + height, ButtonWidth, 2, &(TimerListButtons[1]));
 	else
-	{
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height + 4, ButtonWidth, 3, TimerListButtons);
-
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x+width- 1* ButtonWidth + 10, y+height);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width-1 * ButtonWidth + 38, y+height+24 - 2, ButtonWidth- 28, g_Locale->getText(LOCALE_TIMERLIST_MODIFY), COL_INFOBAR, 0, true); // UTF-8
-	}
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height, ButtonWidth, 4, TimerListButtons);
 }
 
 void CTimerList::paint()

@@ -795,7 +795,7 @@ int CMenuOptionChooser::paint( bool selected , bool last)
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
+		std::string newicon = CRCInput::getKeyName(directKey);
 		//printf("MENU: newicon %s\n", newicon);
 		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
@@ -946,7 +946,7 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
+		std::string newicon = CRCInput::getKeyName(directKey);
 		if(!CFrameBuffer::getInstance()->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
         }
@@ -1173,7 +1173,7 @@ int CMenuForwarder::paint(bool selected, bool last)
 	}
 	else if (CRCInput::isNumeric(directKey))
 	{
-		std::string newicon = CRCInput::getKeyName(directKey) + ".raw";
+		std::string newicon = CRCInput::getKeyName(directKey);
 		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
 	}

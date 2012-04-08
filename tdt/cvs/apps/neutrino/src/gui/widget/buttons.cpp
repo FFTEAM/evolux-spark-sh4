@@ -33,7 +33,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	bool keep = true;
 	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0;
 	for (int i = 0; i < count; i++) {
-		bw[i] = 20 + font->getRenderWidth(localemanager->getText(content[i].locale), true);
+		bw[i] = 20 + (content[i].locale == NONEXISTANT_LOCALE) ? 0 : font->getRenderWidth(localemanager->getText(content[i].locale), true);
 		sp[i] = bw[i] - buttonwidth;
 		if (sp[i] < 0) {
 			spare -= sp[i];
@@ -76,8 +76,9 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	int height = font->getHeight();
 	bw_sum = 0;
 	for (int i = 0; i < count; i++) {
-		frameBuffer->paintIcon(content[i].button, x + bw_sum, y + height/8, 0, (6 * height)/8, true);
-		font->RenderString(x + bw_sum + 20, y + height, bw[i] - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true, fgcolor); // UTF-8
+		frameBuffer->paintIcon(content[i].button, x + bw_sum, y + height/8, 20, (6 * height)/8, true);
+		if (content[i].locale != NONEXISTANT_LOCALE)
+			font->RenderString(x + bw_sum + 20, y + height, bw[i] - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true, fgcolor); // UTF-8
 		bw_sum += bw[i];
 	}
 }

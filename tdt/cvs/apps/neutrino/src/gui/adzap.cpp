@@ -233,7 +233,7 @@ void CAdZapMenu::Settings()
     channelName = channelList->getActiveChannelName();
 
     CMenuWidget *menu =
-	new CMenuWidget(LOCALE_ADZAP, "settings.raw", width);
+	new CMenuWidget(LOCALE_ADZAP, "settings", width);
     menu->addItem(new
 		  CMenuSeparator(CMenuSeparator::LINE |
 				 CMenuSeparator::STRING,

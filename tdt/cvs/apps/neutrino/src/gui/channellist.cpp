@@ -1452,7 +1452,7 @@ void CChannelList::paintItem(int pos)
 		}
 
 		if(chan->scrambled) 
-			frameBuffer->paintIcon("ca.raw", x+width- 15 - 28, ypos + (fheight - 16)/2);
+			frameBuffer->paintIcon("ca", x+width- 15 - 28, ypos + fheight/8, 0, (6 * fheight)/8);
 
 		int numpos = x+5+numwidth- g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->getRenderWidth(tmp);
 		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(numpos,ypos+fheight, numwidth+5, tmp, color, fheight);
@@ -1537,12 +1537,13 @@ void CChannelList::paintItem(int pos)
 #endif
 }
 
-#define NUM_LIST_BUTTONS 3
+#define NUM_LIST_BUTTONS 4
 struct button_label CChannelListButtons[NUM_LIST_BUTTONS] =
 {
 	{ NEUTRINO_ICON_BUTTON_RED, LOCALE_INFOVIEWER_EVENTLIST},
 	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_INFOVIEWER_NEXT},
-	{ NEUTRINO_ICON_BUTTON_BLUE, LOCALE_BOUQUETLIST_HEAD}
+	{ NEUTRINO_ICON_BUTTON_BLUE, LOCALE_BOUQUETLIST_HEAD},
+	{ NEUTRINO_ICON_BUTTON_MENU, NONEXISTANT_LOCALE }
 #if 0
 	{ NEUTRINO_ICON_BUTTON_GREEN, LOCALE_BOUQUETEDITOR_DELETE},
 	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_BOUQUETEDITOR_MOVE},
@@ -1550,12 +1551,13 @@ struct button_label CChannelListButtons[NUM_LIST_BUTTONS] =
 #endif
 };
 
-#define NUM_VLIST_BUTTONS 3
+#define NUM_VLIST_BUTTONS 4
 const struct button_label CChannelVListButtons[NUM_VLIST_BUTTONS] =
 {
 	{ NEUTRINO_ICON_BUTTON_RED, LOCALE_INFOVIEWER_EVENTLIST},
 	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_INFOVIEWER_NEXT},
-	{ NEUTRINO_ICON_BUTTON_BLUE, LOCALE_BOUQUETLIST_HEAD}
+	{ NEUTRINO_ICON_BUTTON_BLUE, LOCALE_BOUQUETLIST_HEAD},
+	{ NEUTRINO_ICON_BUTTON_MENU, NONEXISTANT_LOCALE }
 	//{ NEUTRINO_ICON_BUTTON_BLUE, LOCALE_EXTRA_ADD_TO_BOUQUET}
 };
 
@@ -1574,7 +1576,7 @@ void CChannelList::paintHead()
 
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width- 65, _name, COL_MENUHEAD, 0, true); // UTF-8
 
-	int ButtonWidth = (width - 20) / 4;
+	int ButtonWidth = (width - 40) / (bouquetList ? 4 : 3);
 
 	// foot
 	if (displayNext) {
@@ -1585,11 +1587,11 @@ void CChannelList::paintHead()
 
 	frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2); //round
 	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - buttonHeight) + 3, ButtonWidth, 
-		vlist ? NUM_VLIST_BUTTONS : NUM_LIST_BUTTONS, vlist ? CChannelVListButtons : CChannelListButtons);
+		bouquetList ? 4 : 3, vlist ? CChannelVListButtons : CChannelListButtons);
 
 	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x+ width- 30, y+ 5 );
-	if (bouquetList != NULL)
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, x + width - 60, y + 5); // icon for bouquet list button
+//	if (bouquetList != NULL)
+//		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, x + width - 60, y + 5); // icon for bouquet list button
 	frameBuffer->paintIcon(new_mode_active ? NEUTRINO_ICON_BUTTON_MUTE_ZAP_ACTIVE : NEUTRINO_ICON_BUTTON_MUTE_ZAP_INACTIVE, x + width - 90, y + 5);
 }
 

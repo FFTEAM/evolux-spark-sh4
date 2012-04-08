@@ -337,9 +337,10 @@ CPSISetup::paintSlider (int i)	// UTF-8
     }
   else
     {
+      int fh = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
       frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, dx, locHeight, col_bg, ROUND_RADIUS, 3);
       g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc,psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
-      frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_RED, psi_list[i].x + 2, psi_list[i].y + (locHeight >> 1) - 7);
+      frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_RED, psi_list[i].x + 2, psi_list[i].yLoc - fh + fh/8, 0, (6 * fh)/8);
     }
 }
 

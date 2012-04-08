@@ -615,11 +615,11 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
                 {
                         if( tags[i].streamContent == 1 && (tags[i].componentType == 2 || tags[i].componentType == 3) )
                         {
-                                frameBuffer->paintIcon("16_9.raw" ,ox+sx-(ICON_LARGE_WIDTH+2)-(ICON_LARGE_WIDTH+2),sy + oy+5 );
+                                frameBuffer->paintIcon("16_9" ,ox+sx-(ICON_LARGE_WIDTH+2)-(ICON_LARGE_WIDTH+2),sy + oy+5 );
                         }
                         else if( tags[i].streamContent == 2 && tags[i].componentType == 5 )
                         {
-                                frameBuffer->paintIcon("dd.raw", ox+sx-(ICON_LARGE_WIDTH+2), sy + oy+5);
+                                frameBuffer->paintIcon("dd", ox+sx-(ICON_LARGE_WIDTH+2), sy + oy+5);
                         }
                 }
         }
@@ -778,10 +778,10 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 														 epgData.eventID, epgData.epg_times.startzeit,
 														 epgData.epg_times.startzeit - (ANNOUNCETIME + 120 ),
 														 TIMERD_APIDS_CONF, true, recDir,true);
-										ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+										ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 									}
 								} else {
-									ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+									ShowLocalizedMessage(LOCALE_TIMER_EVENTRECORD_TITLE, LOCALE_TIMER_EVENTRECORD_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 								}
 							}
 						}
@@ -800,7 +800,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 																  epgData.epg_times.startzeit,
 																  epgData.epg_times.startzeit - ANNOUNCETIME, 0,
 																  epgData.eventID, epgData.epg_times.startzeit, 0);
-						ShowLocalizedMessage(LOCALE_TIMER_EVENTTIMED_TITLE, LOCALE_TIMER_EVENTTIMED_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info.raw");
+						ShowLocalizedMessage(LOCALE_TIMER_EVENTTIMED_TITLE, LOCALE_TIMER_EVENTTIMED_MSG, CMessageBox::mbrBack, CMessageBox::mbBack, "info");
 					}
 					else
 						printf("timerd not available\n");
@@ -1042,17 +1042,19 @@ void CEpgData::showTimerEventBar (bool show)
 
 	frameBuffer->paintBoxRel(x,y,w,h, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);//round
 
+	int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
+	int fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)];
 	// Button: Timer Record & Channelswitch
 	if (g_settings.recording_type != CNeutrinoApp::RECORDING_OFF)
 	{
 		pos = 0;
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x+8+cellwidth*pos, y+h_offset );
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_RECORDEVENT), COL_INFOBAR, 0, true); // UTF-8
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x+8+cellwidth*pos, y+h-h_offset-fh+fh/8,0,(6*fh)/8);
+		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_RECORDEVENT), COL_INFOBAR, 0, true, fgcolor); // UTF-8
 	}
 	// Button: Timer Channelswitch
 	pos = 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x+8+cellwidth*pos, y+h_offset );
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_CHANNELSWITCH), COL_INFOBAR, 0, true); // UTF-8
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x+8+cellwidth*pos, y+h-h_offset-fh+fh/8,0,(6*fh)/8);
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_CHANNELSWITCH), COL_INFOBAR, 0, true, fgcolor); // UTF-8
 }
 
 //  -- EPG Data Viewer Menu Handler Class

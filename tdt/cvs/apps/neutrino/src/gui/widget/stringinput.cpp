@@ -776,7 +776,7 @@ void CStringInputSMS::paint()
 {
 	CStringInput::paint();
 
-	frameBuffer->paintIcon("numericpad.raw", x+20+140, y+ hheight+ mheight+ iheight* 3+ 30, COL_MENUCONTENT);
+	frameBuffer->paintIcon("numericpad", x+20+140, y+ hheight+ mheight+ iheight* 3+ 30, COL_MENUCONTENT);
 
 	frameBuffer->paintBoxRel(x,y+height-25, width,25, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 	frameBuffer->paintHLine(x, x+width,  y+height-25, COL_INFOBAR_SHADOW_PLUS_0);

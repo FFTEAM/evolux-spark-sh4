@@ -90,7 +90,7 @@ void CBEChannelWidget::paintItem(int pos)
 
 	if ((current == selected) && (state == beMoving))
 	{
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x + 8, ypos+4);
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x + 8, ypos + fheight/8, 0, (6*fheight)/8);
 	}
 	if(current < Channels->size())
 	{

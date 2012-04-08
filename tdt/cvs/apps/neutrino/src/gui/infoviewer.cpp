@@ -212,7 +212,7 @@ void CInfoViewer::showRecordIcon (const bool show)
   if (recordModeActive) {
 	int ChanNameX = BoxStartX + ChanWidth + 20;
 	if (show) {
-	  frameBuffer->paintIcon (autoshift ? "ats.raw" : NEUTRINO_ICON_BUTTON_RED, ChanNameX, BoxStartY + 12);
+	  frameBuffer->paintIcon (autoshift ? "ats" : NEUTRINO_ICON_BUTTON_RED, ChanNameX, BoxStartY + 12);
 	  if(!autoshift && !shift_timer) {
 	  	int chanH = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight ();
 	  	frameBuffer->paintBoxRel (ChanNameX + 28 + SHADOW_OFFSET, BoxStartY + 12 + SHADOW_OFFSET, 300, 20, COL_INFOBAR_SHADOW_PLUS_0);
@@ -696,7 +696,8 @@ void CInfoViewer::showSubchan ()
 	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->RenderString (x + 10, y + 30, dx - 20, text, COL_MENUCONTENT);
 
 	if (g_RemoteControl->director_mode) {
-	  frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_YELLOW, x + 8, y + dy - 20);
+	  int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->getHeight ();
+	  frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_YELLOW, x + 8, y + dy - 2 - fh + fh/8, 0, (6*fh)/8);
 	  g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString (x + 30, y + dy - 2, dx - 40, g_Locale->getText (LOCALE_NVODSELECTOR_DIRECTORMODE), COL_MENUCONTENT, 0, true);	// UTF-8
 	}
 
@@ -734,7 +735,7 @@ void CInfoViewer::showSubchan ()
 
 void CInfoViewer::showIcon_16_9 () {
 	aspectRatio = videoDecoder->getAspectRatio();
-	frameBuffer->paintIcon ((aspectRatio) ? "16_9.raw" : "16_9_gray.raw", BoxEndX - (2*ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 4*2), BoxEndY - ICON_Y_1);
+	frameBuffer->paintIcon ((aspectRatio) ? "16_9" : "16_9_gray", BoxEndX - (2*ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 4*2), BoxEndY - ICON_Y_1);
 }
 
 extern "C" void tuxtxt_start(int tpid);
@@ -742,7 +743,7 @@ extern "C" int  tuxtxt_stop();
 
 void CInfoViewer::showIcon_VTXT () const
 {
-  frameBuffer->paintIcon ((g_RemoteControl->current_PIDs.PIDs.vtxtpid != 0) ? "vtxt.raw" : "vtxt_gray.raw", BoxEndX - (2*ICON_SMALL_WIDTH + 2*2), BoxEndY - ICON_Y_1);
+  frameBuffer->paintIcon ((g_RemoteControl->current_PIDs.PIDs.vtxtpid != 0) ? "vtxt" : "vtxt_gray", BoxEndX - (2*ICON_SMALL_WIDTH + 2*2), BoxEndY - ICON_Y_1);
 }
 
 void CInfoViewer::showIcon_SubT() const
@@ -752,7 +753,7 @@ void CInfoViewer::showIcon_SubT() const
 	if(cc && cc->getSubtitleCount())
 		have_sub = true;
 
-        frameBuffer->paintIcon(have_sub ? "subt.raw" : "subt_gray.raw", BoxEndX - (ICON_SMALL_WIDTH + 2), BoxEndY - ICON_Y_1);
+        frameBuffer->paintIcon(have_sub ? "subt" : "subt_gray", BoxEndX - (ICON_SMALL_WIDTH + 2), BoxEndY - ICON_Y_1);
 }
 
 void CInfoViewer::showFailure ()
@@ -1196,16 +1197,17 @@ void CInfoViewer::showButtons (bool start)
 
 	int x = ChanInfoX - asize;
 
+	int fontheight = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 	for (int i = 0; i < 4; i++) {
 		x += asize + 2;
 		if (start)
-			frameBuffer->paintIcon(icon[i], x, BoxEndY - ICON_Y_1);
+			frameBuffer->paintIcon(icon[i], x, BoxEndY - fontheight + fontheight/8, 0, (6 * fontheight)/8);
 		const char *bn =  CNeutrinoApp::getInstance()->getUserMenuButtonName(i);
 		x += 2 + iconwidth[i] + 2;
 		if (strcmp(bn, buttonName[i].c_str())) {
-			frameBuffer->paintBox (x, BoxEndY - 20 , x + asize, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND);
+			frameBuffer->paintBox (x, BoxEndY - fontheight , x + asize, BoxEndY, COL_INFOBAR_BUTTONS_BACKGROUND);
 			buttonName[i] = std::string(bn);
-			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY+2, asize, bn, COL_INFOBAR_BUTTONS, 0, true);
+			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x, BoxEndY, asize, bn, COL_INFOBAR_BUTTONS, 0, true);
 		}
 	}
 }
@@ -1215,11 +1217,11 @@ void CInfoViewer::showIcon_DD ()
 	const char *dd_icon;
 	if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < g_RemoteControl->current_PIDs.APIDs.size())
 		&& (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
-		dd_icon = "dd.raw";
+		dd_icon = "dd";
 	else if (g_RemoteControl->has_ac3)
-		dd_icon = "dd_avail.raw";
+		dd_icon = "dd_avail";
 	else
-		dd_icon = "dd_gray.raw";
+		dd_icon = "dd_gray";
 	frameBuffer->paintIcon (dd_icon, BoxEndX - (ICON_LARGE_WIDTH + 2*ICON_SMALL_WIDTH + 3*2), BoxEndY - ICON_Y_1);
 }
 

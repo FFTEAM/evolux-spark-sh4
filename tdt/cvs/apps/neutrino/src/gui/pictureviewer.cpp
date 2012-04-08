@@ -582,13 +582,13 @@ void CPictureViewerGui::paintHead()
 //	printf("paintHead{\n");
 	std::string strCaption = g_Locale->getText(LOCALE_PICTUREVIEWER_HEAD);
 	frameBuffer->paintBoxRel(x,y, width,theight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 1);
-	frameBuffer->paintIcon("mp3.raw",x+7,y+10);
+	frameBuffer->paintIcon("mp3",x+7,y+10);
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+35,y+theight+0, width- 45, strCaption, COL_MENUHEAD, 0, true); // UTF-8
 	int ypos=y+0;
 	if(theight > 26)
 		ypos = (theight-26) / 2 + y ;
 	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x+ width- 60, ypos );
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, x+ width- 30, ypos );
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, x+ width- 30, ypos );
 //	printf("paintHead}\n");
 }
 
@@ -609,12 +609,14 @@ void CPictureViewerGui::paintFoot()
 	frameBuffer->paintBoxRel(x,y+(height-2*buttonHeight), width,2*buttonHeight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 	frameBuffer->paintHLine(x, x+width,  y+(height-2*buttonHeight), COL_INFOBAR_SHADOW_PLUS_0);
 
+	int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
+
 	if (!playlist.empty())
 	{
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x + 1* ButtonWidth2 + 25, y+(height-buttonHeight)-3);
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x + 1* ButtonWidth2 + 25, y+(height-buttonHeight) + 24 - fh - fh/8 - 4);
 		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + 1 * ButtonWidth2 + 53 , y+(height-buttonHeight)+24 - 4, ButtonWidth2- 28, g_Locale->getText(LOCALE_PICTUREVIEWER_SHOW), COL_INFOBAR, 0, true); // UTF-8
 
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_5, x+ 0* ButtonWidth2 + 25, y+(height-buttonHeight)-3);
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_5, x+ 0* ButtonWidth2 + 25, y+(height-buttonHeight) + 24 - fh -fh/8 - 4);
 		std::string tmp = g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER);
 		tmp += ' ';
 		if(m_sort==FILENAME)

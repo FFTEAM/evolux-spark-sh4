@@ -92,13 +92,13 @@ void CBEBouquetWidget::paintItem(int pos)
 
 	if(current < Bouquets->size()) {
 		if ((current == selected) && (state == beMoving))
-			frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x + 8, ypos+4);
+			frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x + 8, ypos + fheight/8, 0, (6 * fheight)/8);
 
 		if ((*Bouquets)[current]->bLocked)
-			frameBuffer->paintIcon("lock.raw", x + 7, ypos);
+			frameBuffer->paintIcon("lock", x + 7, ypos + fheight/8, 0, (6 * fheight)/8);
 
 		if ((*Bouquets)[current]->bHidden)
-			frameBuffer->paintIcon("hidden.raw", x + 37, ypos);
+			frameBuffer->paintIcon("hidden", x + 37, ypos + fheight/8, 0, (6 * fheight)/8);
 
 		string name = (*Bouquets)[current]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[current]->Name;
 		if (name == "extra.zapit_bouquetname_others")
@@ -168,7 +168,7 @@ void CBEBouquetWidget::paintFoot()
 		break;
 	}
 	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 5, y + height + 4, (width - 28 - 10) / 4, 4, Button);
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_DBOX, x+width - 28, y+height);
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, x+width - 28, y+height);
 }
 
 void CBEBouquetWidget::hide()

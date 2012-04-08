@@ -231,7 +231,7 @@ void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
 	}
 	int old_corrVol=corrVol;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CORRECTVOLUME, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CORRECTVOLUME, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -315,7 +315,7 @@ void TUNERRESET_Menu::hide()
 void TUNERRESET_Menu::TUNERRESETSettings()
 {
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -396,7 +396,7 @@ void AMOUNT_Menu::AMOUNTSettings()
 	}
 	int old_amount=amount;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_AMOUNT, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_AMOUNT, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -480,7 +480,7 @@ void CHECKFS_Menu::CHECKFSSettings()
 	int checkfs = access(DOTFILE_CHECKFS, F_OK) ? 0 : 1;
 	int old_checkfs=checkfs;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -659,7 +659,7 @@ void EMU_Menu::EMU_Menu_Settings()
 
 	update_installed();
 
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -748,7 +748,7 @@ void DISPLAYTIME_Menu::DISPLAYTIMESettings()
 	int displaytime = access(DOTFILE_DISPLAYTIME, F_OK) ? 0 : 1;
 	int old_displaytime=displaytime;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -827,7 +827,7 @@ void WWWDATE_Menu::WWWDATESettings()
 	}
 	int old_wwwdate=wwwdate;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WWWDATE, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WWWDATE, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -989,7 +989,7 @@ void SWAP_Menu::SWAP_Menu_Settings()
 	int old_swap_onoff=swap_onoff;
 
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_SWAP, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_SWAP, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -1098,7 +1098,7 @@ void BOOT_Menu::BOOTSettings()
 		boot = BOOT_E2;
 	int old_boot = boot;
 
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings.raw", width);
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings", width);
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -1187,7 +1187,7 @@ void FSCK_Menu::FSCKSettings()
 	int fsck = access(DOTFILE_FSCK, F_OK) ? 0 : 1;
 	int old_fsck=fsck;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -1252,7 +1252,7 @@ void STMFB_Menu::STMFBSettings()
 	int stmfb = access(DOTFILE_STMFB, F_OK) ? 0 : 1;
 	int old_stmfb=stmfb;
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -1322,7 +1322,7 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 	int old_fritzcall=fritzcall;
 
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -2146,7 +2146,7 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	int color_fg = color2index(settings.glcd_color_fg);
 	int color_bar = color2index(settings.glcd_color_bar);
 
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
@@ -2300,7 +2300,7 @@ void KernelOptions_Menu::hide()
 
 void KernelOptions_Menu::Settings()
 {
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES));
@@ -2420,7 +2420,7 @@ void EVOLUXUPDATE_Menu::hide()
 void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 {
 	//MENU AUFBAUEN
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EVOLUXUPDATE, "settings.raw");
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EVOLUXUPDATE, "settings");
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);

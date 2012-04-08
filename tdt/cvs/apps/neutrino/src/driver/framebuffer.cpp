@@ -1114,7 +1114,9 @@ bool CFrameBuffer::paintIcon(const std::string & filename, const int _x, const i
 		return false;
 
 	std::string iconName = filename;
-	iconName.erase(iconName.find_last_of("."));
+	int dot = iconName.find_last_of(".");
+	if (dot != std::string::npos)
+		iconName.erase(dot);
 
 	int x, y;
 #ifdef __sh__

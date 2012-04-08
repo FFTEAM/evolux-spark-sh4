@@ -1278,20 +1278,20 @@ void CFileBrowser::paintItem(unsigned int pos)
 #ifdef ENABLE_FLAC
 			case CFile::FILE_FLAC:
 #endif
-				fileicon = "mp3.raw";
+				fileicon = "mp3";
 //				color = COL_MENUCONTENT;
 				break;
 
 			case CFile::FILE_DIR:
-				fileicon = "folder.raw";
+				fileicon = "folder";
 				break;
 
 			case CFile::FILE_PICTURE:
 			case CFile::FILE_TEXT:
 			default:
-				fileicon = "file.raw";
+				fileicon = "file";
 			}
-			frameBuffer->paintIcon(fileicon, x+5 , ypos + (fheight-16) / 2 );
+			frameBuffer->paintIcon(fileicon, x+5 , ypos + fheight/8, 0, (fheight * 6)/8);
 
 			g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->RenderString(x + 35, ypos + fheight, colwidth1 - 10 , FILESYSTEM_ENCODING_TO_UTF8_STRING(actual_file->getFileName()), color, 0, true); // UTF-8
 
