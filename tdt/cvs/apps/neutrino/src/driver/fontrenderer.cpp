@@ -281,7 +281,8 @@ return 0;
 	ascender=tM;
 	descender=tg-hg; //this is a negative value!
 	int halflinegap= -(descender>>1); // |descender/2| - we use descender as linegap, half at top, half at bottom
-	upper = halflinegap+ascender+3;   // we add 3 at top
+	//upper = halflinegap+ascender+3;   // we add 3 at top
+	upper = halflinegap+ascender+1;   // we add 1 at top
 	lower = -descender+halflinegap+1; // we add 1 at bottom
 	height=upper+lower;               // this is total height == distance of lines
 	// hack end
