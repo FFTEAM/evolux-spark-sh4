@@ -511,6 +511,8 @@ static int pShutdown(Context_t* context ) {
     return 0;
 }
 
+static int pNotification(Context_t* context, const int cOn);
+
 static int pRead(Context_t* context ) {
     char                vBuffer[sizeof(struct input_event)];
     char                vData[10];
@@ -528,15 +530,18 @@ static int pRead(Context_t* context ) {
 	if (vfd_fd < 0)
 		vfd_fd = open("/dev/input/event0", O_RDONLY);
 
+	struct pollfd fds[2];
+	memset(&fds, 0, sizeof(fds));
+	fds[0].fd = context->fd;
+	fds[0].events = POLLIN;
+
 	if (vfd_fd > -1) {
-		struct pollfd fds[2];
-		memset(&fds, 0, sizeof(fds));
-		fds[0].fd = context->fd;
 		fds[1].fd = vfd_fd;
-		fds[0].events = fds[1].events = POLLIN;
+		fds[1].events = POLLIN;
 		if (poll(fds, 2, -1) <= 0)
 			return -1;
 		if (fds[1].revents & POLLIN) {
+			pNotification(context, 1);
 			if (read (fds[1].fd, vBuffer, cSize) != cSize) // Key down
 				goto bye;
 			if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
@@ -558,6 +563,7 @@ static int pRead(Context_t* context ) {
 			//printf("[RCU] Frontpanel value   : 0x%x\n", ev->value);
 	rc = read (context->fd, vBuffer, cSize);
 	if(rc <= 0)return -1;
+	pNotification(context, 1);
 
     vData[0] = vBuffer[8];
     vData[1] = vBuffer[9];
@@ -570,9 +576,12 @@ static int pRead(Context_t* context ) {
     vData[1] = vBuffer[15];
     vData[2] = '\0';
 
-    printf("[RCU] key: %s -> %d\n", vData, &vBuffer[0]);
+    printf("[RCU] key: %s -> %d\n", vData, vBuffer[0]);
 
 	vCurrentCode = getInternalCode(cButtons, vData);
+
+	if(vCurrentCode != 0 && poll(fds, 1, 0) == 1)
+		vCurrentCode |= (1 << 16);
 
     return vCurrentCode;
 }
@@ -588,16 +597,9 @@ static int pNotification(Context_t* context, const int cOn) {
 
     if(cOn)
     {
-       vfd_data.u.icon.icon_nr = 35;
-       vfd_data.u.icon.on = 1;
-       ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
-    }
-    else
-    {
-       usleep(100000);
-       vfd_data.u.icon.icon_nr = 35;
-       vfd_data.u.icon.on = 0;
-       ioctl(ioctl_fd, VFDICONDISPLAYONOFF, &vfd_data);
+       vfd_data.u.led.led_nr = 1;
+       vfd_data.u.led.on = 10;
+       ioctl(ioctl_fd, VFDSETLED, &vfd_data);
     }
 
     return 0;
@@ -609,7 +611,7 @@ RemoteControl_t Spark_RC = {
 	&pInit,
 	&pShutdown,
 	&pRead,
-	&pNotification,
+	NULL, //&pNotification,
 	cButtonsEdisionSpark,
 	NULL,
 	NULL,
