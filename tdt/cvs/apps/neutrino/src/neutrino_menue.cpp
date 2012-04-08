@@ -302,14 +302,14 @@ CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video", 5
 	addItem(GenericMenuBack);
 
 	addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_VIDEOMENU_TV_SCART));
-
+#if 0
 	if (system_rev == 0x06) {
 		addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_ANALOG_MODE, &g_settings.analog_mode1, VIDEOMENU_VIDEOSIGNAL_HD1_OPTIONS, VIDEOMENU_VIDEOSIGNAL_HD1_OPTION_COUNT, true, this));
 	} else if (system_rev > 0x06) {
 		addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_SCART, &g_settings.analog_mode1, VIDEOMENU_VIDEOSIGNAL_HD1PLUS_SCART_OPTIONS, VIDEOMENU_VIDEOSIGNAL_HD1PLUS_SCART_OPTION_COUNT, true, this));
 		addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_CINCH, &g_settings.analog_mode2, VIDEOMENU_VIDEOSIGNAL_HD1PLUS_CINCH_OPTIONS, VIDEOMENU_VIDEOSIGNAL_HD1PLUS_CINCH_OPTION_COUNT, true, this));
 	}
-	
+#endif	
 	#ifdef DUCKBOX
 	addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_COLOR_SPACE, &g_settings.hdmi_color_space, VIDEOMENU_HDMI_COLOR_SPACE_OPTIONS, VIDEOMENU_HDMI_COLOR_SPACE_OPTION_COUNT, true, this));
 	#endif
@@ -329,7 +329,7 @@ CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video", 5
 	auto_switch_menu->addItem(new CMenuOptionChooser("1080i 50Hz", &g_settings.video_Mode_Auto_1080i50, VIDEOMENU_VIDEOMODE_AUTO_OPTIONS, VIDEOMENU_VIDEOMODE_AUTO_OPTION_COUNT, true, NULL));
 	auto_switch_menu->addItem(new CMenuOptionChooser("1080p 25Hz", &g_settings.video_Mode_Auto_1080p25, VIDEOMENU_VIDEOMODE_AUTO_OPTIONS, VIDEOMENU_VIDEOMODE_AUTO_OPTION_COUNT, true, NULL));
 
-	addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_DBDR, &g_settings.video_dbdr, VIDEOMENU_DBDR_OPTIONS, VIDEOMENU_DBDR_OPTION_COUNT, true, this));
+	// addItem(new CMenuOptionChooser(LOCALE_VIDEOMENU_DBDR, &g_settings.video_dbdr, VIDEOMENU_DBDR_OPTIONS, VIDEOMENU_DBDR_OPTION_COUNT, true, this));
 
         CMenuWidget* menu = new CMenuWidget(LOCALE_VIDEOMENU_ENABLED_MODES, NEUTRINO_ICON_SETTINGS);
 	for(int i = 0; i < VIDEOMENU_VIDEOMODE_OPTION_COUNT; i++)
@@ -442,6 +442,7 @@ void CVideoSettings::SwitchFormat(void)
 
 bool CVideoSettings::changeNotify(const neutrino_locale_t OptionName, void *)
 {
+#if 0
 	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_VIDEOMENU_ANALOG_MODE))
 	{
 		videoDecoder->SetVideoMode((analog_mode_t) g_settings.analog_mode1);
@@ -454,7 +455,9 @@ bool CVideoSettings::changeNotify(const neutrino_locale_t OptionName, void *)
 	{
 		videoDecoder->SetVideoMode((analog_mode_t) g_settings.analog_mode2);
 	}
-	else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_VIDEOMENU_DBDR))
+	else
+#endif
+	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_VIDEOMENU_DBDR))
 	{
 		videoDecoder->SetDBDR(g_settings.video_dbdr);
 	}

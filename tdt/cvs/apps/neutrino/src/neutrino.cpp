@@ -2441,7 +2441,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	audioDecoder->setVolume(g_settings.current_volume, g_settings.current_volume);
 	audioDecoder->SetHdmiDD(g_settings.hdmi_dd ? true : false);
 	audioDecoder->SetSpdifDD(g_settings.spdif_dd ? true : false);
-	videoDecoder->SetDBDR(g_settings.video_dbdr);
+	// videoDecoder->SetDBDR(g_settings.video_dbdr);
 	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AVSYNC, NULL);
 	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AC3DOWNMIX, NULL);
 
