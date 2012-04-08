@@ -62,16 +62,10 @@ if ((paramDebug) && (paramDebug > level)) printk(TAGDEBUG x); \
 #endif
 
 #define INVALID_KEY    	-1
-#define LOG_OFF     	0
-#define LOG_ON      	1
 
 #define NO_KEY_PRESS    -1
 #define KEY_PRESS_DOWN 	1
 #define KEY_PRESS_UP   	0
-
-#define REC_NEW_KEY 	34
-#define REC_NO_KEY  	0
-#define REC_REPEAT_KEY  2
 
 static char *gmt = "+0000";
 
@@ -85,6 +79,16 @@ typedef struct {
 #define LASTMINOR 		2
 
 static tFrontPanelOpen FrontPanelOpen [LASTMINOR];
+
+typedef struct {
+	int	state;
+	int	period;
+	int	stop;
+	struct task_struct *led_task;
+	struct semaphore led_sem;
+} tLedState;
+
+static tLedState led_state[LASTLED];
 
 #define BUFFERSIZE                256     //must be 2 ^ n
 
@@ -177,6 +181,7 @@ static int VFD_Show_Ico(LogNum_T log_num, int log_stat)
 
 static struct task_struct *draw_task = 0;
 static int draw_thread_stop  = 1;
+
 int aotomSetIcon(int which, int on);
 
 void clear_display(void)
@@ -194,7 +199,7 @@ static void VFD_clr(void)
 		aotomSetIcon(i, 0);
 }
 
-int draw_thread(void *arg)
+static int draw_thread(void *arg)
 {
   struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
   int count = 0;
@@ -243,6 +248,32 @@ int draw_thread(void *arg)
 
   draw_thread_stop = 1;
   return 0;
+}
+
+static int led_thread(void *arg)
+{
+	int led = (int) arg;
+	// toggle green LED status for a given time period
+
+	led_state[led].stop = 0;
+
+	while(!kthread_should_stop()) {
+		if (!down_interruptible(&led_state[led].led_sem)) {
+			if (kthread_should_stop())
+				break;
+			while (down_trylock(&led_state[led].led_sem)); // make sure semaphore is at 0
+			YWPANEL_VFD_SetLed(led, led_state[led].state ? LOG_OFF : LOG_ON);
+			while ((led_state[led].period > 0) && !kthread_should_stop()) {
+				msleep(10);
+				led_state[led].period -= 10;
+			}
+			// switch LED back to manually set state
+			YWPANEL_VFD_SetLed(led, led_state[led].state);
+		}
+	}
+	led_state[led].stop = 1;
+    	led_state[led].led_task = 0;
+	return 0;
 }
 
 int run_draw_thread(struct vfd_ioctl_data *draw_data)
@@ -391,6 +422,9 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
 	while ((data.length > 0) && (kernel_buf[data.length - 1 ] == '\n'))
 	  data.length--;
 
+	if (data.length > sizeof(data.data))
+		len = data.length = sizeof(data.data);
+
 	memcpy(data.data, kernel_buf, data.length);
 	res = run_draw_thread(&data);
 
@@ -401,6 +435,13 @@ static ssize_t AOTOMdev_write(struct file *filp, const char *buff, size_t len, l
 	if (res < 0)
 	   return res;
 	return len;
+}
+
+static void flashLED(int led, int ms) {
+	if (!led_state[led].led_task || ms < 1)
+		return;
+	led_state[led].period = ms;
+	up(&led_state[led].led_sem);
 }
 
 static ssize_t AOTOMdev_read(struct file *filp, char __user *buff, size_t len, loff_t *off)
@@ -415,6 +456,8 @@ static ssize_t AOTOMdev_read(struct file *filp, char __user *buff, size_t len, l
 				return -ERESTARTSYS;
 		}
 
+		flashLED(LED_GREEN, 100);
+
 		/* 0. claim semaphore */
 		if (down_interruptible(&receive_sem))
 			return -ERESTARTSYS;
@@ -422,9 +465,9 @@ static ssize_t AOTOMdev_read(struct file *filp, char __user *buff, size_t len, l
 		/* 1. copy data to user */
 		copy_to_user(buff, receive[0].buffer, receive[0].len);
 
-		/* 2. copy all entries to start and decreas receiveCount */
+		/* 2. copy all entries to start and decrease receiveCount */
 		receiveCount--;
-		memmove(&receive[0], &receive[1], 99 * sizeof(struct receive_s));
+		memmove(&receive[0], &receive[1], (cMaxReceiveQueue - 1) * sizeof(struct receive_s));
 
 		/* 3. free semaphore */
 		up(&receive_sem);
@@ -434,7 +477,7 @@ static ssize_t AOTOMdev_read(struct file *filp, char __user *buff, size_t len, l
 	return -EOPNOTSUPP;
 }
 
-int AOTOMdev_open(struct inode *inode, struct file *filp)
+static int AOTOMdev_open(struct inode *inode, struct file *filp)
 {
 	int minor;
 
@@ -457,7 +500,7 @@ int AOTOMdev_open(struct inode *inode, struct file *filp)
 	return 0;
 }
 
-int AOTOMdev_close(struct inode *inode, struct file *filp)
+static int AOTOMdev_close(struct inode *inode, struct file *filp)
 {
 	int minor;
 
@@ -502,7 +545,17 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		break;
 	case VFDSETLED:
 #if defined(SPARK) || defined(SPARK7162)
-		res = YWPANEL_VFD_SetLed(aotom_data.u.led.led_nr, aotom_data.u.led.on);
+		if (aotom_data.u.led.led_nr > -1 && aotom_data.u.led.led_nr < LED_MAX) {
+			switch (aotom_data.u.led.on) {
+			case LOG_OFF:
+			case LOG_ON:
+				res = YWPANEL_VFD_SetLed(aotom_data.u.led.led_nr, aotom_data.u.led.on);
+				led_state[aotom_data.u.led.led_nr].state = aotom_data.u.led.on;
+				break;
+			default: // toggle (for aotom_data.u.led.on * 10) ms
+				flashLED(aotom_data.u.led.led_nr, aotom_data.u.led.on * 10);
+			}
+		}
 #endif
 		break;
 	case VFDBRIGHTNESS:
@@ -517,10 +570,12 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 #if defined(SPARK) || defined(SPARK7162)
 		switch (aotom_data.u.icon.icon_nr) {
 		case 0:
-			res = YWPANEL_VFD_SetLed(0, aotom_data.u.icon.on);
+			res = YWPANEL_VFD_SetLed(LED_RED, aotom_data.u.icon.on);
+			led_state[LED_RED].state = aotom_data.u.icon.on;
 			break;
 		case 35:
-			res = YWPANEL_VFD_SetLed(1, aotom_data.u.icon.on);
+			res = YWPANEL_VFD_SetLed(LED_GREEN, aotom_data.u.icon.on);
+			led_state[LED_GREEN].state = aotom_data.u.icon.on;
 			break;
 		default:
 			break;
@@ -579,15 +634,15 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 	case VFDGETWAKEUPMODE:
 		break;
 	case VFDDISPLAYCHARS:
-		if (mode == 0) // ???
+		if (mode == 0)
 		{
 		   if (copy_from_user(&vfd_data, (void *) arg, sizeof(vfd_data)))
 			return -EFAULT;
 		   while ((vfd_data.length > 0) && (vfd_data.data[vfd_data.length - 1 ] == '\n'))
 			  vfd_data.length--;
 	     	   res = run_draw_thread(&vfd_data);
-		}
-		mode = 0;
+		} else
+			mode = 0;
 		break;
 	case VFDDISPLAYWRITEONOFF:
 		break;
@@ -641,7 +696,7 @@ static struct file_operations vfd_fops =
 	.ioctl = AOTOMdev_ioctl,
 	.write = AOTOMdev_write,
 	.read  = AOTOMdev_read,
-  	.poll  = (void*) AOTOMdev_poll,
+  	.poll  = AOTOMdev_poll,
 	.open  = AOTOMdev_open,
 	.release  = AOTOMdev_close
 };
@@ -650,7 +705,6 @@ static struct file_operations vfd_fops =
 
 static char *button_driver_name = "fulan front panel buttons";
 static struct input_dev *button_dev;
-static int button_value = -1;
 static int bad_polling = 1;
 static struct workqueue_struct *fpwq;
 
@@ -662,26 +716,22 @@ static void button_bad_polling(struct work_struct *work)
 
 	while(bad_polling == 1)
 	{
+		int button_value;
 		msleep(50);
 		button_value = AOTOMfp_Get_Key_Value();
 		if (button_value != INVALID_KEY) {
 			dprintk(5, "got button: %X\n", button_value);
-	        VFD_Show_Ico(DOT2,LOG_ON);
-			YWPANEL_VFD_SetLed(1, LOG_ON);
-			if (1 == btn_pressed)
-			{
-				if (report_key != button_value)
-				{
-					input_report_key(button_dev, report_key, 0);
-					input_sync(button_dev);
-				}
-				else
-				{
-				    continue;
-				}
+			flashLED(LED_GREEN, 100);
+			//VFD_Show_Ico(DOT2,LOG_ON);
+			//YWPANEL_VFD_SetLed(1, LOG_ON);
+			if (1 == btn_pressed) {
+				if (report_key == button_value)
+					continue;
+				input_report_key(button_dev, report_key, 0);
+				input_sync(button_dev);
 			}
 			report_key = button_value;
-	        btn_pressed = 1;
+			btn_pressed = 1;
 			switch(button_value) {
 				case KEY_LEFT:
 				case KEY_RIGHT:
@@ -695,21 +745,23 @@ static void button_bad_polling(struct work_struct *work)
 					input_sync(button_dev);
 					break;
 				default:
-					dprintk(5, "[BTN] unknown button_value?\n");
+					dprintk(5, "[BTN] unknown button_value %d\n", button_value);
 			}
 		}
 		else {
 			if(btn_pressed) {
 				btn_pressed = 0;
-				msleep(80);
-				VFD_Show_Ico(DOT2,LOG_OFF);
-				YWPANEL_VFD_SetLed(1, LOG_OFF);
+				//msleep(80);
+				//VFD_Show_Ico(DOT2,LOG_OFF);
+				//YWPANEL_VFD_SetLed(1, LOG_OFF);
 				input_report_key(button_dev, report_key, 0);
 				input_sync(button_dev);
 			}
 		}
 	}
+	bad_polling = 2;
 }
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17)
 static DECLARE_WORK(button_obj, button_bad_polling);
 #else
@@ -718,27 +770,22 @@ static DECLARE_WORK(button_obj, button_bad_polling, NULL);
 static int button_input_open(struct input_dev *dev)
 {
 	fpwq = create_workqueue("button");
-	if(queue_work(fpwq, &button_obj))
-	{
+	if(queue_work(fpwq, &button_obj)) {
 		dprintk(5, "[BTN] queue_work successful ...\n");
+		return 0;
 	}
-	else
-	{
-		dprintk(5, "[BTN] queue_work not successful, exiting ...\n");
-		return 1;
-	}
-
-	return 0;
+	dprintk(5, "[BTN] queue_work not successful, exiting ...\n");
+	return 1;
 }
 
 static void button_input_close(struct input_dev *dev)
 {
 	bad_polling = 0;
-	msleep(55);
+	while (bad_polling != 2)
+		msleep(1);
 	bad_polling = 1;
 
-	if (fpwq)
-	{
+	if (fpwq) {
 		destroy_workqueue(fpwq);
 		dprintk(5, "[BTN] workqueue destroyed\n");
 	}
@@ -758,7 +805,6 @@ int button_dev_init(void)
 	button_dev->open = button_input_open;
 	button_dev->close= button_input_close;
 
-
 	set_bit(EV_KEY		, button_dev->evbit );
 	set_bit(KEY_UP		, button_dev->keybit);
 	set_bit(KEY_DOWN	, button_dev->keybit);
@@ -770,12 +816,10 @@ int button_dev_init(void)
 	set_bit(KEY_EXIT	, button_dev->keybit);
 
 	error = input_register_device(button_dev);
-	if (error) {
+	if (error)
 		input_free_device(button_dev);
-		return error;
-	}
 
-	return 0;
+	return error;
 }
 
 void button_dev_exit(void)
@@ -805,26 +849,52 @@ static int __init aotom_init_module(void)
 		printk("unable to get major %d for VFD\n",VFD_MAJOR);
 
 	sema_init(&write_sem, 1);
-	sema_init(&draw_thread_sem, 1);
 	sema_init(&receive_sem, 1);
+	sema_init(&draw_thread_sem, 1);
 
 	for (i = 0; i < LASTMINOR; i++) {
 	    FrontPanelOpen[i].open_count = 0;
 	    FrontPanelOpen[i].minor = i;
 	}
 
+	for (i = 0; i < LASTLED; i++) {
+		led_state[i].state = LOG_OFF;
+		led_state[i].period = 0;
+		led_state[i].stop = 1;
+		sema_init(&led_state[i].led_sem, 0);
+		led_state[i].led_task = kthread_run(led_thread, (void *) i, "led thread");
+	}
+
+
 	dprintk(5, "%s <\n", __func__);
 
 	return 0;
 }
 
+static int led_thread_active(void) {
+	int i;
+
+	for (i = 0; i < LASTLED; i++)
+		if(!led_state[i].stop && led_state[i].led_task)
+			return -1;
+	return 0;
+}
+
 static void __exit aotom_cleanup_module(void)
 {
-	if(!draw_thread_stop && draw_task) {
+	int i;
+
+	if(!draw_thread_stop && draw_task)
 		kthread_stop(draw_task);
-		while(!draw_thread_stop)
-			msleep(1);
-	}
+
+	for (i = 0; i < LASTLED; i++)
+		if(!led_state[i].stop && led_state[i].led_task) {
+			up(&led_state[i].led_sem);
+			kthread_stop(led_state[i].led_task);
+		}
+
+	while(!draw_thread_stop && !led_thread_active())
+		msleep(1);
 
 	dprintk(5, "[BTN] unloading ...\n");
 	button_dev_exit();
