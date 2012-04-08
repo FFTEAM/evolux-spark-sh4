@@ -42,9 +42,9 @@
 #include "Spark.h"
 
 
-#define	SPARK_RC05_PREDATA		"11EE"
+#define	SPARK_RC05_PREDATA		"11EE" // Pingulux (green, RC2)
 #define	SPARK_RC08_PREDATA		"44BB"
-#define	SPARK_RC09_PREDATA		"9966"
+#define	SPARK_RC09_PREDATA		"9966" // Pingulux (red, RC1) and Amiko
 #define	SPARK_RC12_PREDATA		"08F7"
 #define	SPARK_RC13_PREDATA		"AA55"
 #define	SPARK_DEFAULT_PREDATA	"A25D"
@@ -430,45 +430,50 @@ static tButton cButtonsSparkDefault[] = {
     {""               , ""  , KEY_NULL},
 };
 
+#define STB_ID_GOLDENMEDIA_GM990		"09:00:07"
+#define STB_ID_EDISION_PINGULUX			"09:00:08"
+#define STB_ID_AMIKO_ALIEN_SDH8900		"09:00:0A"
+#define STB_ID_GALAXYINNOVATIONS_S8120	"09:00:0B"
+
+static tButton *pSparkGetButton(char *pData)
+{
+	if (!strncasecmp(pData, SPARK_RC05_PREDATA, sizeof(SPARK_RC05_PREDATA)))
+		return cButtonsEdisionSpark;
+	if (!strncasecmp(pData, SPARK_RC08_PREDATA, sizeof(SPARK_RC08_PREDATA)))
+		return cButtonsSparkRc08;
+	if (!strncasecmp(pData, SPARK_RC09_PREDATA, sizeof(SPARK_RC09_PREDATA))) {
+		static tButton *cButtons = NULL;
+		if (!cButtons) {
+			int fn = open("/proc/cmdline", O_RDONLY);
+			if (fn > -1) {
+				char procCmdLine[1024];
+				int len = read(fn, procCmdLine, sizeof(procCmdLine) - 1);
+				if (len > 0) {
+					procCmdLine[len] = 0;
+					if (strstr(procCmdLine, "STB_ID=" STB_ID_EDISION_PINGULUX))
+						cButtons = cButtonsEdisionSpark;
+				}
+				close(fn);
+			}
+			if (!cButtons)
+				cButtons = cButtonsSparkRc09; /* Amiko Alien 8900 */
+		}
+		return cButtons;
+	}
+	if (!strncasecmp(pData, SPARK_DEFAULT_PREDATA, sizeof(SPARK_DEFAULT_PREDATA)))
+		return cButtonsSparkDefault;
+	if (!strncasecmp(pData, SPARK_RC12_PREDATA, sizeof(SPARK_RC12_PREDATA)))
+		return cButtonsSparkRc12;
+	if (!strncasecmp(pData, SPARK_RC13_PREDATA, sizeof(SPARK_RC13_PREDATA)))
+		return cButtonsEdisionSparkPlus;
+	return NULL;
+}
+
+
 /* fixme: move this to a structure and
  * use the private structure of RemoteControl_t
  */
 static struct sockaddr_un  vAddr;
-
-
-
-static tButton *pSparkGetButton(char *pData)
-
-{
-	tButton	*pButtons = cButtonsEdisionSpark;
-	if (!strncasecmp(pData, SPARK_RC05_PREDATA, sizeof(SPARK_RC05_PREDATA)))
-	{
-		pButtons = cButtonsEdisionSpark;
-	}
-	else if (!strncasecmp(pData, SPARK_RC08_PREDATA, sizeof(SPARK_RC08_PREDATA)))
-	{
-		pButtons = cButtonsSparkRc08;
-	}
-	else if (!strncasecmp(pData, SPARK_RC09_PREDATA, sizeof(SPARK_RC09_PREDATA)))
-	{
-//		pButtons = cButtonsSparkRc09;
-		pButtons = cButtonsEdisionSpark;
-	}
-	else if (!strncasecmp(pData, SPARK_DEFAULT_PREDATA, sizeof(SPARK_DEFAULT_PREDATA)))
-	{
-		pButtons = cButtonsSparkDefault;
-	}
-	else if (!strncasecmp(pData, SPARK_RC12_PREDATA, sizeof(SPARK_RC12_PREDATA)))
-	{
-		pButtons = cButtonsSparkRc12;
-	}
-	else if (!strncasecmp(pData, SPARK_RC13_PREDATA, sizeof(SPARK_RC13_PREDATA)))
-	{
-		pButtons = cButtonsEdisionSparkPlus;
-	}
-	return pButtons;
-}
-
 
 static int pInit(Context_t* context, int argc, char* argv[]) {
 
@@ -535,42 +540,44 @@ static int pRead(Context_t* context ) {
 	fds[0].fd = context->fd;
 	fds[0].events = POLLIN;
 
-	if (vfd_fd > -1) {
-		fds[1].fd = vfd_fd;
-		fds[1].events = POLLIN;
-		if (poll(fds, 2, -1) <= 0)
-			return -1;
-		if (fds[1].revents & POLLIN) {
-			pNotification(context, 1);
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // Key down
-				goto bye;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-				goto bye;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // key up
-				goto bye;
-			rc = ev->code;
-			if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-				goto bye;
-			return rc;
-	bye:
-			close(vfd_fd);
-			vfd_fd = -1;
-			return -1;
+	do {
+		if (vfd_fd > -1) {
+			fds[1].fd = vfd_fd;
+			fds[1].events = POLLIN;
+			if (poll(fds, 2, -1) <= 0)
+				return -1;
+			if (fds[1].revents & POLLIN) {
+				pNotification(context, 1);
+				if (read (fds[1].fd, vBuffer, cSize) != cSize) // Key down
+					goto bye;
+				if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
+					goto bye;
+				if (read (fds[1].fd, vBuffer, cSize) != cSize) // key up
+					goto bye;
+				rc = ev->code;
+				if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
+					goto bye;
+				return rc;
+			bye:
+				close(vfd_fd);
+				vfd_fd = -1;
+				return -1;
+			}
 		}
-	}
-			//printf("[RCU] Frontpanel key code: 0x%x\n", ev->code);
-			//printf("[RCU] Frontpanel type    : 0x%x\n", ev->type);
-			//printf("[RCU] Frontpanel value   : 0x%x\n", ev->value);
-	rc = read (context->fd, vBuffer, cSize);
-	if(rc <= 0)return -1;
-	pNotification(context, 1);
 
-    vData[0] = vBuffer[8];
-    vData[1] = vBuffer[9];
-    vData[2] = vBuffer[10];
-    vData[3] = vBuffer[11];
-    vData[4] = '\0';
-	cButtons = pSparkGetButton(vData);
+		rc = read (context->fd, vBuffer, cSize);
+		if(rc <= 0)return -1;
+	
+		vData[0] = vBuffer[8];
+		vData[1] = vBuffer[9];
+		vData[2] = vBuffer[10];
+		vData[3] = vBuffer[11];
+		vData[4] = '\0';
+
+		cButtons = pSparkGetButton(vData);
+		if (cButtons)
+			pNotification(context, 1);
+	} while (!cButtons);
 
     vData[0] = vBuffer[14];
     vData[1] = vBuffer[15];
