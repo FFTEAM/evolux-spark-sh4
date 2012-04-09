@@ -2509,7 +2509,6 @@ class InfoBarServiceErrorPopupSupport:
 				eDVBServicePMTHandler.eventNoResources: _("No free tuner!"),
 				eDVBServicePMTHandler.eventTuneFailed: _("Tune failed!"),
 				eDVBServicePMTHandler.eventNoPAT: _("No data on transponder!\n(Timeout reading PAT)"),
-				eDVBServicePMTHandler.eventNoPATEntry: _("Service not found!\n(SID not found in PAT)"),
 				eDVBServicePMTHandler.eventNoPMT: _("Service invalid!\n(Timeout reading PMT)"),
 				eDVBServicePMTHandler.eventNewProgramInfo: None,
 				eDVBServicePMTHandler.eventTuned: None,
