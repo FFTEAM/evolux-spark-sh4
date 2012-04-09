@@ -530,41 +530,13 @@ static int pRead(Context_t* context ) {
 	static int vfd_fd = -1;
 
 	memset(vBuffer, 0, sizeof(vBuffer));
-    //wait for new command
 
-	if (vfd_fd < 0)
-		vfd_fd = open("/dev/input/event0", O_RDONLY);
-
-	struct pollfd fds[2];
+	struct pollfd fds[1];
 	memset(&fds, 0, sizeof(fds));
 	fds[0].fd = context->fd;
 	fds[0].events = POLLIN;
 
 	do {
-		if (vfd_fd > -1) {
-			fds[1].fd = vfd_fd;
-			fds[1].events = POLLIN;
-			if (poll(fds, 2, -1) <= 0)
-				return -1;
-			if (fds[1].revents & POLLIN) {
-				pNotification(context, 1);
-				if (read (fds[1].fd, vBuffer, cSize) != cSize) // Key down
-					goto bye;
-				if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-					goto bye;
-				if (read (fds[1].fd, vBuffer, cSize) != cSize) // key up
-					goto bye;
-				rc = ev->code;
-				if (read (fds[1].fd, vBuffer, cSize) != cSize) // sync
-					goto bye;
-				return rc;
-			bye:
-				close(vfd_fd);
-				vfd_fd = -1;
-				return -1;
-			}
-		}
-
 		rc = read (context->fd, vBuffer, cSize);
 		if(rc <= 0)return -1;
 	
