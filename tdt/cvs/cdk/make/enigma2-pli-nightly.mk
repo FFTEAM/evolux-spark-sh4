@@ -4,7 +4,7 @@ $(DEPDIR)/enigma2-pli-nightly.do_prepare:
 	touch $@
 
 $(appsdir)/enigma2-pli-nightly/config.status: bootstrap freetype expat fontconfig libpng jpeg libgif libfribidi libid3tag libmad libsigc libreadline \
-		libdvbsipp python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev libdreamdvd2 tuxtxt32bpp sdparm  hotplug_e2 $(MEDIAFW_DEP) $(EXTERNALLCD_DEP)
+		libdvbsipp python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev libdreamdvd2 tuxtxt32bpp sdparm  hotplug_e2 $(MEDIAFW_DEP) graphlcd
 	cd $(appsdir)/enigma2-pli-nightly && \
 		./autogen.sh && \
 		sed -e 's|#!/usr/bin/python|#!$(crossprefix)/bin/python|' -i po/xml2po.py && \
