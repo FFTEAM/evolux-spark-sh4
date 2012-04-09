@@ -50,6 +50,9 @@ case $1 in
 1)
 	isCam=`pidof $myCam`;for i in $isCam; do kill $i;done;sleep 5;/usr/bin/${myCam} ${myOptions} &
 ;;
+2)
+	reboot -f
+;;
 *)
 	exit
 ;;

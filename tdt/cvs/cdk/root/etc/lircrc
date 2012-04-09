@@ -17,3 +17,17 @@ begin
      flags  = mode 
 end
 
+begin
+     button = OK
+     button = POWER
+     button = POWER
+     button = POWER
+     button = POWER
+     prog   = irexec
+     config = /usr/bin/functions.sh 2
+     mode   = mode_POWER              
+     repeat = 0    
+     delay  = 0   
+     flags  = mode
+end
+

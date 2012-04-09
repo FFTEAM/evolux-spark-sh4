@@ -81,7 +81,7 @@ if [ ! -e /etc/.dualTuner ] && [ -e /dev/dvb/adapter1 ]; then
 fi
 (cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
 (if [ -e /media/net ]; then rm -rf /media/net;fi;ln -sf /mnt/nfs /media/net) &
-awk -f /etc/init.d/getfb.awk /dev/input/event1 &
+#awk -f /etc/init.d/getfb.awk /dev/input/event1 &
 
 insmod $MODDIR/e2_proc.ko
 #insmod $MODDIR/autofs4.ko
