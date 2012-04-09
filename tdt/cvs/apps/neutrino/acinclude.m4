@@ -236,7 +236,7 @@ AC_SUBST($1_LIBS)
 ])
 
 AC_DEFUN([GRAPHLCD_CONFIG],[
-GLCDBASE=`cd ../../cdk/graphlcd-base 2>/dev/null && pwd`
+GLCDBASE=`cd ../../cdk/graphlcd-base-touchcol 2>/dev/null && pwd`
 if test -f $GLCDBASE/glcdgraphics/glcd.h ; then
 	GRAPHLCD_CFLAGS="-DWITH_GRAPHLCD -I$GLCDBASE"
 	GRAPHLCD_LIBS="-L$GLCDBASE/glcdgraphics -L$GLCDBASE/glcddrivers -lglcddrivers -lglcdgraphics"
