@@ -100,8 +100,8 @@ class SkinSelector(Screen):
 		print "Skinselector: Selected Skin: "+self.root+skinfile
 		config.skin.primary_skin.value = skinfile
 		config.skin.primary_skin.save()
-		restartbox = self.session.openWithCallback(self.restartGUI,MessageBox,_("GUI needs a restart to apply a new skin\nDo you want to Restart the GUI now?"), MessageBox.TYPE_YESNO)
-		restartbox.setTitle(_("Restart GUI now?"))
+		restartbox = self.session.openWithCallback(self.restartGUI,MessageBox,_("BOX needs a restart to apply a new skin\nDo you want to Restart the BOX now?"), MessageBox.TYPE_YESNO)
+		restartbox.setTitle(_("Restart BOX now?"))
 
 	def loadPreview(self):
 		if self["SkinList"].getCurrent() == "Default Skin":
@@ -120,7 +120,7 @@ class SkinSelector(Screen):
 	def restartGUI(self, answer):
 		if answer is True:
 			configfile.save()
-			system("killall enigma2")
+			system("init 6")
 			#self.session.open(TryQuitMainloop, 3)
 
 def SkinSelMain(session, **kwargs):
