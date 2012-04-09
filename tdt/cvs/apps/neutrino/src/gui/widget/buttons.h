@@ -25,6 +25,7 @@
 #include <driver/fontrenderer.h>
 #include <driver/framebuffer.h>
 #include <system/localize.h>
+#include <string>
 
 typedef struct button_label
 {
@@ -33,5 +34,10 @@ typedef struct button_label
 } button_label_struct;
 
 void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLocaleManager * const localemanager, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content);
+
+void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, std::string const &text, const int x, const int y, const unsigned int buttonwidth);
+void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, char *text, const int x, const int y, const unsigned int buttonwidth);
+void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, std::string const &text, const int x, const int y, const unsigned int buttonwidth);
+void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, char *text, const int x, const int y, const unsigned int buttonwidth);
 
 #endif /* __gui_widget_buttons_h__ */

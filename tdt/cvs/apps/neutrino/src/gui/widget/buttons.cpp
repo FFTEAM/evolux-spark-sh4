@@ -27,6 +27,27 @@
 
 #include <gui/color.h>
 
+void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, std::string const &text, const int x, const int y, const unsigned int buttonwidth) {
+	paintButton(frameBuffer, button, font, text.c_str(), x, y, buttonwidth);
+}
+
+void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, char *text, const int x, const int y, const unsigned int buttonwidth)
+{
+	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
+	int height = font->getHeight();
+	frameBuffer->paintIcon(button, x, y + height/8, 20, (6 * height)/8, true);
+	font->RenderString(x + 20, y + height, buttonwidth - 20, text, COL_INFOBAR, 0, true, fgcolor); // UTF-8
+}
+
+void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, std::string const &text, const int x, const int y, const unsigned int buttonwidth) {
+	paintButton_Footer(frameBuffer, button, font, text.c_str(), x, y, buttonwidth);
+}
+
+void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, char *text, const int x, const int y, const unsigned int buttonwidth)
+{
+	paintButton(frameBuffer, button, font, text, x, y - font->getHeight(), buttonwidth);
+}
+
 void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLocaleManager * const localemanager, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content)
 {
 	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;

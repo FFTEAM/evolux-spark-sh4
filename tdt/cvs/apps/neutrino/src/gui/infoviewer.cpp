@@ -47,6 +47,7 @@
 
 #include <gui/widget/icons.h>
 #include <gui/widget/hintbox.h>
+#include <gui/widget/buttons.h>
 
 #include <daemonc/remotecontrol.h>
 
@@ -695,11 +696,9 @@ void CInfoViewer::showSubchan ()
 	frameBuffer->paintBoxRel (x, y, dx, dy, COL_MENUCONTENT_PLUS_0);
 	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->RenderString (x + 10, y + 30, dx - 20, text, COL_MENUCONTENT);
 
-	if (g_RemoteControl->director_mode) {
-	  int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_INFO]->getHeight ();
-	  frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_YELLOW, x + 8, y + dy - 2 - fh + fh/8, 0, (6*fh)/8);
-	  g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString (x + 30, y + dy - 2, dx - 40, g_Locale->getText (LOCALE_NVODSELECTOR_DIRECTORMODE), COL_MENUCONTENT, 0, true);	// UTF-8
-	}
+	if (g_RemoteControl->director_mode)
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_YELLOW, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+			g_Locale->getText (LOCALE_NVODSELECTOR_DIRECTORMODE), x + 8, y + dy - 2, dx - 10);
 
 	unsigned long long timeoutEnd = CRCInput::calcTimeoutEnd (2);
 	int res = messages_return::none;

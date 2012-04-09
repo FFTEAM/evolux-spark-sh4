@@ -51,6 +51,7 @@
 #include <gui/customcolor.h>
 #include <gui/scale.h>
 #include <gui/pictureviewer.h>
+#include <gui/widget/buttons.h>
 
 extern CPictureViewer * g_PicViewer;
 #define PIC_W 65
@@ -1026,7 +1027,7 @@ void CEpgData::showTimerEventBar (bool show)
 {
 	int  x,y,w,h;
 	int  cellwidth;		// 4 cells
-	int  h_offset, pos;
+	int  h_offset;
 
 	w = ox;
 	h = 30;
@@ -1034,7 +1035,6 @@ void CEpgData::showTimerEventBar (bool show)
 	y = sy + oy;
 	h_offset = 5;
 	cellwidth = w / 4;
-
 
 	frameBuffer->paintBackgroundBoxRel(x,y,w,h);
 	// hide only?
@@ -1046,15 +1046,11 @@ void CEpgData::showTimerEventBar (bool show)
 	int fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)];
 	// Button: Timer Record & Channelswitch
 	if (g_settings.recording_type != CNeutrinoApp::RECORDING_OFF)
-	{
-		pos = 0;
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x+8+cellwidth*pos, y+h-h_offset-fh+fh/8,0,(6*fh)/8);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_RECORDEVENT), COL_INFOBAR, 0, true, fgcolor); // UTF-8
-	}
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+			g_Locale->getText(LOCALE_TIMERBAR_RECORDEVENT), x + cellwidth * 0, y+h-h_offset, cellwidth);
 	// Button: Timer Channelswitch
-	pos = 2;
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW, x+8+cellwidth*pos, y+h-h_offset-fh+fh/8,0,(6*fh)/8);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+29+cellwidth*pos, y+h-h_offset, w-30, g_Locale->getText(LOCALE_TIMERBAR_CHANNELSWITCH), COL_INFOBAR, 0, true, fgcolor); // UTF-8
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_YELLOW, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		g_Locale->getText(LOCALE_TIMERBAR_CHANNELSWITCH), x + cellwidth * 2, y+h-h_offset, cellwidth);
 }
 
 //  -- EPG Data Viewer Menu Handler Class

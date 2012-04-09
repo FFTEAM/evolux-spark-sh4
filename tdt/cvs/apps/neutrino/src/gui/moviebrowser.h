@@ -226,8 +226,8 @@ class CMovieBrowser : public CMenuTarget
 		int Dirs_Selectable; // for FileBrowser compatibility, not used in MovieBrowser
 		
 	private: // Variables
-		//CFBWindow* m_pcWindow;
-		CFrameBuffer * m_pcWindow;
+		//CFBWindow* frameBuffer;
+		CFrameBuffer * frameBuffer;
 
 		CListFrame* m_pcBrowser;
 		CListFrame* m_pcLastPlay;

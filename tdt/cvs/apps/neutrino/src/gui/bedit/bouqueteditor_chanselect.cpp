@@ -41,6 +41,7 @@
 #include <driver/fontrenderer.h>
 #include <driver/screen_max.h>
 #include <gui/widget/icons.h>
+#include <gui/widget/buttons.h>
 
 #include <zapit/client/zapitclient.h>
 #include <zapit/channel.h>
@@ -167,11 +168,9 @@ void CBEChannelSelectWidget::paintFoot()
 	int ButtonWidth = width / 3;
 	frameBuffer->paintBoxRel(x,y+height, width,ButtonHeight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 	//frameBuffer->paintHLine(x, x+width,  y, COL_INFOBAR_SHADOW_PLUS_0);
-	int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x+width- 3* ButtonWidth+ 8, y+height+24 - 2 - fh + fh/8, 0, (6 * fh)/8);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width- 3* ButtonWidth+ 38, y+height+24 - 2, width, g_Locale->getText(LOCALE_BOUQUETEDITOR_SWITCH), COL_INFOBAR, 0, true); // UTF-8
-
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HOME, x+width - ButtonWidth+ 8, y+height+24 - 2 - fh + fh/8, 0, (6 * fh)/8);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width - ButtonWidth+ 38, y+height+24 - 2, width, g_Locale->getText(LOCALE_BOUQUETEDITOR_RETURN), COL_INFOBAR, 0, true); // UTF-8
+	::paintButton(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		g_Locale->getText(LOCALE_BOUQUETEDITOR_SWITCH), x+width- 3* ButtonWidth, y+height+24 - 2, width);
+	::paintButton(frameBuffer, NEUTRINO_ICON_BUTTON_HOME, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		g_Locale->getText(LOCALE_BOUQUETEDITOR_RETURN), x+width- 1* ButtonWidth, y+height+24 - 2, width);
 }

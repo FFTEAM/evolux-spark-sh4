@@ -55,6 +55,7 @@
 #include "widget/helpbox.h"
 #include "widget/messagebox.h"
 #include "widget/stringinput_ext.h"
+#include "widget/buttons.h"
 #include <dirent.h>
 #include <sys/stat.h>
 #include <gui/nfs.h>
@@ -427,7 +428,7 @@ void CMovieBrowser::init(void)
 	m_file_info_stale = true;
 	m_seriename_stale = true;
 
-	m_pcWindow = CFrameBuffer::getInstance();
+	frameBuffer = CFrameBuffer::getInstance();
 	m_pcBrowser = NULL;
 	m_pcLastPlay = NULL;
 	m_pcLastRecord = NULL;
@@ -1043,7 +1044,7 @@ int CMovieBrowser::exec(const char* path)
 void CMovieBrowser::hide(void)
 {
 	//TRACE("[mb]->Hide\r\n");
-	m_pcWindow->paintBackground();
+	frameBuffer->paintBackground();
 	if (m_pcFilter != NULL)
 	{
 		m_currentFilterSelection  = m_pcFilter->getSelectedLine();
@@ -1069,9 +1070,9 @@ void CMovieBrowser::hide(void)
 		m_pcLastRecord = NULL;
 	}
 	if (m_pcInfo != NULL) delete m_pcInfo;
-	//if (m_pcWindow != NULL) delete m_pcWindow;
+	//if (frameBuffer != NULL) delete frameBuffer;
 
-	//m_pcWindow = NULL;
+	//frameBuffer = NULL;
 	m_pcInfo = NULL;
 	
 }
@@ -1193,7 +1194,7 @@ void CMovieBrowser::refreshMovieInfo(void)
 //printf("refreshMovieInfo: EpgId %llx id %llx y %d\n", m_movieSelectionHandler->epgEpgId, m_movieSelectionHandler->epgId, m_cBoxFrameTitleRel.iY);
 		int lx = m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX+m_cBoxFrameTitleRel.iWidth-PIC_W-10;
 		int ly = m_cBoxFrameTitleRel.iY+m_cBoxFrame.iY+ (m_cBoxFrameTitleRel.iHeight-PIC_H)/2;
-		m_pcWindow->paintBoxRel(lx, ly, PIC_W, PIC_H, TITLE_BACKGROUND_COLOR);
+		frameBuffer->paintBoxRel(lx, ly, PIC_W, PIC_H, TITLE_BACKGROUND_COLOR);
         	g_PicViewer->DisplayLogo(m_movieSelectionHandler->epgEpgId >>16, lx, ly, PIC_W, PIC_H);
 		if(logo_ok) {
 #if 0
@@ -1203,10 +1204,10 @@ void CMovieBrowser::refreshMovieInfo(void)
 #endif
 			lx = m_cBoxFrameInfo.iX+m_cBoxFrameInfo.iWidth - picw -10;
 			ly = m_cBoxFrameInfo.iY + (m_cBoxFrameInfo.iHeight-pich)/2;
-			m_pcWindow->paintVLineRel(lx, ly, pich, COL_WHITE);
-			m_pcWindow->paintVLineRel(lx+picw, ly, pich, COL_WHITE);
-			m_pcWindow->paintHLineRel(lx, picw, ly, COL_WHITE);
-			m_pcWindow->paintHLineRel(lx, picw, ly+pich, COL_WHITE);
+			frameBuffer->paintVLineRel(lx, ly, pich, COL_WHITE);
+			frameBuffer->paintVLineRel(lx+picw, ly, pich, COL_WHITE);
+			frameBuffer->paintHLineRel(lx, picw, ly, COL_WHITE);
+			frameBuffer->paintHLineRel(lx, picw, ly+pich, COL_WHITE);
 			g_PicViewer->DisplayImage(fname, lx+3, ly+3, picw-3, pich-3);
 		}
 #endif
@@ -1491,7 +1492,7 @@ void CMovieBrowser::refreshTitle(void)
 {
 	//Paint Text Background
 	//TRACE("[mb]->refreshTitle : %s\r\n",m_textTitle.c_str());
-	m_pcWindow->paintBoxRel(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX, m_cBoxFrame.iY+	m_cBoxFrameTitleRel.iY, 
+	frameBuffer->paintBoxRel(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX, m_cBoxFrame.iY+	m_cBoxFrameTitleRel.iY, 
 				m_cBoxFrameTitleRel.iWidth, m_cBoxFrameTitleRel.iHeight, TITLE_BACKGROUND_COLOR, ROUND_RADIUS, 1);
 
 	//m_pcFontTitle->RenderString(m_cBoxFrame.iX+m_cBoxFrameTitleRel.iX + TEXT_BORDER_WIDTH, m_cBoxFrame.iY+m_cBoxFrameTitleRel.iY + m_cBoxFrameTitleRel.iHeight, m_cBoxFrameTitleRel.iWidth - (TEXT_BORDER_WIDTH << 1), m_textTitle.c_str(), TITLE_FONT_COLOR, 0, true); // UTF-8
@@ -1510,7 +1511,7 @@ void CMovieBrowser::refreshFoot(void)
 	std::string ok_text = g_Locale->getText(LOCALE_MOVIEBROWSER_FOOT_PLAY);
 	
 	// draw the background first
-	m_pcWindow->paintBoxRel(m_cBoxFrame.iX+m_cBoxFrameFootRel.iX, m_cBoxFrame.iY+	m_cBoxFrameFootRel.iY, 
+	frameBuffer->paintBoxRel(m_cBoxFrame.iX+m_cBoxFrameFootRel.iX, m_cBoxFrame.iY+	m_cBoxFrameFootRel.iY, 
 				m_cBoxFrameFootRel.iWidth, m_cBoxFrameFootRel.iHeight+ 6,  
 				(CFBWindow::color_t)COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 
@@ -1529,27 +1530,20 @@ void CMovieBrowser::refreshFoot(void)
 	//xpos += ButtonWidth + ButtonSpacing;
 	// draw yellow (sort)
 	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD)
-	{
-		m_pcWindow->paintIcon(NEUTRINO_ICON_BUTTON_RED, m_cBoxFrame.iX+xpos1, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + (ADD_FOOT_HEIGHT>>1));
-		m_pcFontFoot->RenderString(m_cBoxFrame.iX+xpos1 + 20, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4 , width1-30, sort_text.c_str(), (CFBWindow::color_t)color, 0, true); // UTF-8
-	}
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, m_pcFontFoot, sort_text.c_str(),
+			m_cBoxFrame.iX+xpos1, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width1);
 
 	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD)
-	{
-		m_pcWindow->paintIcon(NEUTRINO_ICON_BUTTON_GREEN, m_cBoxFrame.iX+xpos2, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + (ADD_FOOT_HEIGHT>>1));
-		m_pcFontFoot->RenderString(m_cBoxFrame.iX+ xpos2 + 20, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4 , width2 -30, filter_text.c_str(), (CFBWindow::color_t)color, 0, true); // UTF-8
-	}
-	//std::string ok_text;
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_GREEN, m_pcFontFoot, filter_text.c_str(),
+			m_cBoxFrame.iX+xpos2, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width2);
+
 	if(m_settings.gui == MB_GUI_FILTER && m_windowFocus == MB_FOCUS_FILTER)
-	{
 		ok_text = "select";
-	}
 	else
-	{
 		ok_text = g_Locale->getText(LOCALE_MOVIEBROWSER_FOOT_PLAY);
-	}
-	m_pcWindow->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, m_cBoxFrame.iX+xpos4, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + (ADD_FOOT_HEIGHT>>1));
-	m_pcFontFoot->RenderString(m_cBoxFrame.iX+xpos4 + 30, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4 , width4-30, ok_text.c_str(), (CFBWindow::color_t)color, 0, true); // UTF-8
+
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, m_pcFontFoot, ok_text.c_str(),
+		m_cBoxFrame.iX+xpos4, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width4);
 }
 
 bool CMovieBrowser::onButtonPress(neutrino_msg_t msg)
@@ -1673,7 +1667,7 @@ bool CMovieBrowser::onButtonPressMainFrame(neutrino_msg_t msg)
 			sleep(1);
 			hintBox->hide();
 			delete hintBox;
-			m_pcWindow->paintBackground(); // clear screen
+			frameBuffer->paintBackground(); // clear screen
 			off64_t res = copy_movie(m_movieSelectionHandler, &m_movieInfo, msg == CRCInput::RC_radio);
 			//g_RCInput->clearRCMsg();
 			if(res == 0)
@@ -1695,7 +1689,7 @@ bool CMovieBrowser::onButtonPressMainFrame(neutrino_msg_t msg)
 			sleep(1);
 			hintBox->hide();
 			delete hintBox;
-			m_pcWindow->paintBackground(); // clear screen
+			frameBuffer->paintBackground(); // clear screen
 			off64_t res = cut_movie(m_movieSelectionHandler, &m_movieInfo);
 			//g_RCInput->clearRCMsg();
 			if(res == 0)
@@ -2852,7 +2846,7 @@ extern "C" int pinghost( const char *hostname );
 bool CMovieBrowser::showMenu(MI_MOVIE_INFO* movie_info)
 {
     /* first clear screen */
-    m_pcWindow->paintBackground();
+    frameBuffer->paintBackground();
   int i;
 /********************************************************************/
 /**  directory menu ******************************************************/

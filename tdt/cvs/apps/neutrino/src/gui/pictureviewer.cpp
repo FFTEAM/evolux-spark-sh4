@@ -613,23 +613,25 @@ void CPictureViewerGui::paintFoot()
 
 	if (!playlist.empty())
 	{
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x + 1* ButtonWidth2 + 25, y+(height-buttonHeight) + 24 - fh - fh/8 - 4);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + 1 * ButtonWidth2 + 53 , y+(height-buttonHeight)+24 - 4, ButtonWidth2- 28, g_Locale->getText(LOCALE_PICTUREVIEWER_SHOW), COL_INFOBAR, 0, true); // UTF-8
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_PICTUREVIEWER_SHOW),
+			x + ButtonWidth2, y +(height-buttonHeight)+24 - 4, ButtonWidth2);
 
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_5, x+ 0* ButtonWidth2 + 25, y+(height-buttonHeight) + 24 - fh -fh/8 - 4);
-		std::string tmp = g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER);
-		tmp += ' ';
+		std::string tmp = g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER) + ' ';
 		if(m_sort==FILENAME)
 			tmp += g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER_DATE);
 		else if(m_sort==DATE)
 			tmp += g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER_FILENAME);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+ 0* ButtonWidth2 +53 , y+(height-buttonHeight)+24 - 4, ButtonWidth2- 28, tmp, COL_INFOBAR, 0, true); // UTF-8
+
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_5, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], tmp,
+			x + 0 * ButtonWidth2, y+(height-buttonHeight)+24 - 4, ButtonWidth2- 28);
 
 
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - 2 * buttonHeight) + 4, ButtonWidth, 4, PictureViewerButtons);
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10,
+			y + (height - 2 * buttonHeight) + 4, ButtonWidth, 4, PictureViewerButtons);
 	}
 	else
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10, y + (height - 2 * buttonHeight) + 4, ButtonWidth, 1, &(PictureViewerButtons[1]));
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10,
+			y + (height - 2 * buttonHeight) + 4, ButtonWidth, 1, &(PictureViewerButtons[1]));
 //	printf("paintFoot}\n");
 }
 //------------------------------------------------------------------------

@@ -1409,22 +1409,15 @@ void CFileBrowser::paintFoot()
 			::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10 + (3 * dx), by, dx, 1, &(FileBrowserFilterButton[use_filter?0:1]));
 
 		//OK-Button
-		if( (filelist[selected].getType() != CFile::FILE_UNKNOWN) || (S_ISDIR(filelist[selected].Mode)) )
-		{
-			frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x +3 , by2 - 3);
-			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + 35, ty2, dx - 35, g_Locale->getText(LOCALE_FILEBROWSER_SELECT), COL_INFOBAR /*_SHADOW_PLUS_1*/, 0, true); // UTF-8
-
-		}
+		if((filelist[selected].getType() != CFile::FILE_UNKNOWN) || (S_ISDIR(filelist[selected].Mode)))
+			::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_FILEBROWSER_SELECT), x, ty2, dx);
 
 		//?-Button
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x + (1 * dx), by2 - 3);
-		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + 35 + (1 * dx), ty2, dx - 35, g_Locale->getText(sortByNames[g_settings.filebrowser_sortmethod]), COL_INFOBAR /*_SHADOW_PLUS_1*/, 0, true); // UTF-8
+		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_HELP, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(sortByNames[g_settings.filebrowser_sortmethod]), x + dx, ty2, dx);
 
 		//Mute-Button
-		if (strncmp(Path.c_str(), VLC_URI, strlen(VLC_URI)) != 0) { //Not in vlc mode
-		    frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MUTE_SMALL, x + (2 * dx), by2 - 3);
-			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + 35 + (2 * dx), ty2, dx - 35, g_Locale->getText(LOCALE_FILEBROWSER_DELETE), COL_INFOBAR /*_SHADOW_PLUS_1*/, 0, true); // UTF-8
-		}
+		if (strncmp(Path.c_str(), VLC_URI, strlen(VLC_URI)) != 0) //Not in vlc mode
+			::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_MUTE_SMALL, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_FILEBROWSER_DELETE), x + 2 * dx, ty2, dx);
 
 		if(m_SMSKeyInput.getOldKey()!=0)
 		{
