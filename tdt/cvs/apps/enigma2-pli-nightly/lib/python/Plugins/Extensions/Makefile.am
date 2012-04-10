@@ -1,6 +1,6 @@
 installdir = $(pkglibdir)/python/Plugins/Extensions
 
-SUBDIRS = CutListEditor PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI DVDBurn
+SUBDIRS = PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI AutomaticVolumeAdjustment
  
 if ENABLE_TF7700
 SUBDIRS += TopfieldVFD
