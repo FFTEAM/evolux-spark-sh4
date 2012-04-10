@@ -3,6 +3,11 @@ from Tools.Profile import profile
 from Screen import Screen
 from Components.Button import Button
 from Components.ServiceList import ServiceList
+# --- patch 1 ---
+from Components.Sources.StaticText import StaticText
+from Components.Label import Label
+from os import path as os_path, system, unlink
+# --- ende patch 1 --
 from Components.ActionMap import NumberActionMap, ActionMap, HelpableActionMap
 from Components.MenuList import MenuList
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
@@ -433,7 +438,10 @@ class ChannelSelectionEdit:
 		self.__marked = [ ]
 		self.saved_title = None
 		self.saved_root = None
-
+# --- patch 2 ----
+		self["title"] = StaticText()
+# ------------------ AAF Channelselection.py Patch2 ---- end -----------
+		
 		class ChannelSelectionEditActionMap(ActionMap):
 			def __init__(self, csel, contexts = [ ], actions = { }, prio=0):
 				ActionMap.__init__(self, contexts, actions, prio)
@@ -627,6 +635,9 @@ class ChannelSelectionEdit:
 			else:
 				new_title += ' ' + _("[favourite edit]")
 		self.setTitle(new_title)
+# ------------------ AAF Channelselection.py Patch3 ---- begin ------------
+		self["title"].setText(new_title)
+# ------------------ AAF Channelselection.py Patch3 ---- end -----------
 		self.__marked = self.servicelist.getRootServices()
 		for x in self.__marked:
 			self.servicelist.addMarked(eServiceReference(x))
@@ -653,6 +664,9 @@ class ChannelSelectionEdit:
 		self.bouquet_mark_edit = OFF
 		self.mutableList = None
 		self.setTitle(self.saved_title)
+# ------------------ AAF Channelselection.py Patch4 ---- begin ------------
+		self["title"].setText(self.saved_title)
+# ------------------ AAF Channelselection.py Patch4 ---- end -----------
 		self.saved_title = None
 		# self.servicePath is just a reference to servicePathTv or Radio...
 		# so we never ever do use the asignment operator in self.servicePath
@@ -706,6 +720,9 @@ class ChannelSelectionEdit:
 			self.mutableList.flushChanges() # FIXME add check if changes was made
 			self.mutableList = None
 			self.setTitle(self.saved_title)
+# ------------------ AAF Channelselection.py Patch5 ---- begin ------------
+			self["title"].setText(self.saved_title)
+# ------------------ AAF Channelselection.py Patch5 ---- end -----------
 			self.saved_title = None
 			cur_root = self.getRoot()
 			if cur_root and cur_root == self.bouquet_root:
@@ -719,6 +736,9 @@ class ChannelSelectionEdit:
 			pos = self.saved_title.find(')')
 			new_title = self.saved_title[:pos+1] + ' ' + _("[move mode]") + self.saved_title[pos+1:]
 			self.setTitle(new_title);
+# ------------------ AAF Channelselection.py Patch6 ---- begin ------------
+			self["title"].setText(new_title)
+# ------------------ AAF Channelselection.py Patch6 ---- end -----------
 
 	def handleEditCancel(self):
 		if self.movemode: #movemode active?
@@ -770,6 +790,11 @@ class ChannelSelectionBase(Screen):
 		self["list"] = ServiceList()
 		self.servicelist = self["list"]
 
+# ------------------ AAF Channelselection.py Patch7 ---- begin ------------
+		self["boquet"] = Label(_("Channel Selection"))
+		self["title"] = StaticText()
+# ------------------ AAF Channelselection.py Patch7 ---- end -----------
+				
 		self.numericalTextInput = NumericalTextInput()
 		self.numericalTextInput.setUseableChars(u'1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
@@ -862,7 +887,10 @@ class ChannelSelectionBase(Screen):
 			title = title[:pos]
 		title += _(" (TV)")
 		self.setTitle(title)
-
+# ------------------ AAF Channelselection.py Patch8 ---- begin ------------
+		self["title"].setText(title)
+# ------------------ AAF Channelselection.py Patch8 ---- end -----------
+		
 	def setRadioMode(self):
 		self.mode = MODE_RADIO
 		self.servicePath = self.servicePathRadio
@@ -873,7 +901,10 @@ class ChannelSelectionBase(Screen):
 			title = title[:pos]
 		title += _(" (Radio)")
 		self.setTitle(title)
-
+# ------------------ AAF Channelselection.py Patch9 ---- begin ------------
+		self["title"].setText(title)
+# ------------------ AAF Channelselection.py Patch9 ---- end -----------
+		
 	def setRoot(self, root, justSet=False):
 		path = root.getPath()
 		inBouquetRootList = path.find('FROM BOUQUET "bouquets.') != -1 #FIXME HACK
@@ -927,6 +958,9 @@ class ChannelSelectionBase(Screen):
 					end_ref = None
 				nameStr = self.getServiceName(base_ref)
 				titleStr += ' - ' + nameStr
+# ------------------ AAF Channelselection.py Patch10 ---- begin ------------
+				self["boquet"].setText("Channel Selection")
+# ------------------ AAF Channelselection.py Patch10 ---- end -----------
 				if end_ref is not None:
 					if Len > 2:
 						titleStr += '/../'
@@ -934,8 +968,14 @@ class ChannelSelectionBase(Screen):
 						titleStr += '/'
 					nameStr = self.getServiceName(end_ref)
 					titleStr += nameStr
+# ------------------ AAF Channelselection.py Patch11 ---- begin ------------
+					self["boquet"].setText(nameStr)
+# ------------------ AAF Channelselection.py Patch11 ---- end -----------
 				self.setTitle(titleStr)
-
+# ------------------ AAF Channelselection.py Patch12 ---- begin ------------
+				self["title"].setText(titleStr)
+# ------------------ AAF Channelselection.py Patch12 ---- end -----------
+				
 	def moveUp(self):
 		self.servicelist.moveUp()
 
@@ -1706,7 +1746,10 @@ class SimpleChannelSelection(ChannelSelectionBase):
 
 	def layoutFinished(self):
 		self.setModeTv()
-
+# ------------------ AAF Channelselection.py Patch13 ---- begin ------------
+		self["title"].setText(self.title)
+# ------------------ AAF Channelselection.py Patch13 ---- end -----------
+		
 	def channelSelected(self): # just return selected service
 		ref = self.getCurrentSelection()
 		if (ref.flags & eServiceReference.flagDirectory) == eServiceReference.flagDirectory:
