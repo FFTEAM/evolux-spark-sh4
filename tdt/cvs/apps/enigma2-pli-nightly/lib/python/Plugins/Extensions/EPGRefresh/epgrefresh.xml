@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<epgrefresh>
+
+ <!--Das Erste-->
+ <service>1:0:1:6DCA:44D:1:C00000:0:0:0:</service>
+ <!--ZDF-->
+ <service>1:0:1:6D66:437:1:C00000:0:0:0:</service>
+ <!--ProSieben-->
+ <service>1:0:1:445D:453:1:C00000:0:0:0:</service>
+ <!--RTL Television-->
+ <service>1:0:1:2EE3:441:1:C00000:0:0:0:</service>
+ <!--SAT.1-->
+ <service>1:0:1:445C:453:1:C00000:0:0:0:</service>
+
+</epgrefresh>
