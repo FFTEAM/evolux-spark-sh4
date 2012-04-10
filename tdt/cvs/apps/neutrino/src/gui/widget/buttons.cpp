@@ -99,8 +99,10 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 
 	int height = font->getHeight();
 	bw_sum = 0;
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < count; i++) {
 		paintButton(frameBuffer, content[i].button, font, (content[i].locale == NONEXISTANT_LOCALE)
 			? NULL : localemanager->getText(content[i].locale),
 			x + bw_sum, y, bw[i]);
+		bw_sum += bw[i];
+	}
 }
