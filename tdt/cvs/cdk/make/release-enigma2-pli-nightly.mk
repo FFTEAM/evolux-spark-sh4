@@ -528,6 +528,7 @@ release-enigma2-pli-nightly_base:
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/CableScan
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/OSD*
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/WebInterface
+	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/WirelessLan
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/VideoClippingSetup
 
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6
