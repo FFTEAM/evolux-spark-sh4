@@ -6,8 +6,8 @@ $(DEPDIR)/enigma2-pli-plugins: enigma2-pli-openwebif enigma2-pli-networkbrowser
 # enigma2-pli-openwebif
 #
 $(DEPDIR)/enigma2-pli-openwebif.do_prepare: bootstrap python pythoncheetah
-	rm -rf e2openplugin-OpenWebif
-	git clone git://github.com/E2OpenPlugins/e2openplugin-OpenWebif.git
+	[ -d "e2openplugin-OpenWebif" ] || \
+	git clone git://github.com/E2OpenPlugins/e2openplugin-OpenWebif.git;
 	touch $@
 
 $(DEPDIR)/enigma2-pli-openwebif.do_compile: $(DEPDIR)/enigma2-pli-openwebif.do_prepare
@@ -26,8 +26,8 @@ $(DEPDIR)/%enigma2-pli-openwebif: $(DEPDIR)/enigma2-pli-openwebif.do_compile
 # enigma2-pli-openpli-plugins-enigma2
 #
 $(DEPDIR)/enigma2-pli-openpli-plugins-enigma2.do_prepare: 
-	rm -rf openpli-plugins-enigma2
-	git clone git://openpli.git.sourceforge.net/gitroot/openpli/plugins-enigma2 openpli-plugins-enigma2
+	[ -d "openpli-plugins-enigma2" ] || \
+	git clone git://openpli.git.sourceforge.net/gitroot/openpli/plugins-enigma2 openpli-plugins-enigma2;
 	touch $@
 
 #
@@ -35,8 +35,8 @@ $(DEPDIR)/enigma2-pli-openpli-plugins-enigma2.do_prepare:
 #
 
 $(DEPDIR)/enigma2-pli-networkbrowser.do_prepare: $(DEPDIR)/enigma2-pli-openpli-plugins-enigma2.do_prepare 
-	cd openpli-plugins-enigma2 && \
-	patch -p1 < $(buildprefix)/Patches/enigma2-pli-networkbrowser-support_autofs.patch
+	[ -d "openpli-plugins-enigma2" ] || \
+	( cd openpli-plugins-enigma2 && patch -p1 < $(buildprefix)/Patches/enigma2-pli-networkbrowser-support_autofs.patch );
 	touch $@
 
 $(DEPDIR)/enigma2-pli-networkbrowser.do_compile: $(DEPDIR)/enigma2-pli-networkbrowser.do_prepare 
