@@ -491,13 +491,13 @@ release-enigma2-pli-nightly_base:
 #		cp -RP $(targetprefix)/usr/lib/enigma2/python/Plugins/SystemPlugins/Tuxtxt $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/; \
 #	fi
 
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Screens $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/AutomaticVolumeAdjustment $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Screens $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/AutomaticVolumeAdjustment $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/EVOMediaCenter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinguExplorer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinguExplorer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+#	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/SystemPlugins $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/
 
 #	Dont remove pyo files, remove pyc instead
