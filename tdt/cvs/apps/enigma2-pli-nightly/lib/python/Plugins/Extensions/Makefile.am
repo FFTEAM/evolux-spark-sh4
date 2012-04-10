@@ -1,6 +1,6 @@
 installdir = $(pkglibdir)/python/Plugins/Extensions
 
-SUBDIRS = PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI AutomaticVolumeAdjustment EPGRefresh PinguExplorer
+SUBDIRS = PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI AutomaticVolumeAdjustment EPGRefresh PinguExplorer PPDisplayTime
 
 if ENABLE_TF7700
 SUBDIRS += TopfieldVFD
