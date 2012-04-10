@@ -1,4 +1,4 @@
-SUBDIRS = menu icons buttons spinner
+SUBDIRS = menu icons buttons spinner window
 
 installdir = $(pkgdatadir)/skin_default
 
@@ -37,12 +37,18 @@ dist_install_DATA = \
 	mute.png \
 	nim_active.png \
 	no_coverArt.png \
+	now_arrow.png \
+	now_progress.png \
+	now_progress_border.png \
+	pal.png \
 	picon_default.png \
 	position_arrow.png \
 	position_pointer.png \
+	progress_bar.png \
 	progress_bg.png \
 	progress_big.png \
 	progress_medium.png \
+	progress_snr_small.png \
 	progress_small.png \
 	rcold.png \
 	rc.png \
@@ -67,4 +73,6 @@ dist_install_DATA = \
 	vkey_space.png \
 	vkey_text.png \
 	volume.png \
+	volumeslider.png \
+	volumeslider_bar.png \
 	wizard.png

@@ -17,13 +17,28 @@ dist_install_DATA = \
 	ico_mp_rewind.png \
 	ico_mp_stop.png \
 	icon_crypt.png \
+	ico_crypt_off.png \
+	ico_crypt_on.png \
 	icon_dolby.png \
+	ico_dolby_off.png \
+	ico_dolby_on.png \
 	icon_event.png \
 	icon_format.png \
+	ico_format_off.png \
+	ico_format_on.png \
+	ico_hd_on.png \
+	icon_hdtv.png \
+	icon_nim_a.png \
+	icon_nim_b.png \
 	icon_rec_off.png \
 	icon_rec.png \
+	icon_subchannels.png \
+	ico_subservices.png \
 	icons_off.png \
 	icon_txt.png \
+	icon_txt_alt.png \
+	ico_txt_off.png \
+	ico_txt_on.png \
 	icon_view.png \
 	input_error.png \
 	input_info.png \
@@ -58,6 +73,7 @@ dist_install_DATA = \
 	network_wireless-active.png \
 	network_wireless-inactive.png \
 	plugin.png \
+	rass.png \
 	rass_logo.png \
 	rass_page1.png \
 	rass_page2.png \

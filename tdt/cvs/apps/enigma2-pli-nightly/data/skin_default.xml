@@ -33,6 +33,7 @@
 		<font filename="nmsbd.ttf" name="Regular" scale="90" />
 		<font filename="andale.ttf" name="Fixed" scale="100" />
 		<font filename="tuxtxt.ttf" name="Console" scale="100" />
+		<font filename="lcd.ttf" name="LCD" scale="100" />
 		<!-- Arabic and Thai char set replacement -->
 		<font filename="ae_AlMateen.ttf" name="Replacement" scale="100" replacement="1" />
 		<!-- Aliases that should be present -->
@@ -41,20 +42,61 @@
 		<alias name="TextNormal" font="Regular" size="20" height="24" />
 	</fonts>
 	<colors>
-		<color name="white" value="#ffffff" />
-		<color name="black" value="#000000" />
-		<color name="dark" value="#25062748" />
-		<color name="menu" value="#25062748" />
-		<color name="red" value="#f23d21" />
-		<color name="green" value="#389416" />
-		<color name="blue" value="#0064c7" />
-		<color name="yellow" value="#bab329" />
-		<color name="transparent" value="#ffffffff" />
-		<color name="transpBlack" value="#80000000" />
-		<color name="transpWhite" value="#80ffffff" />
-		<color name="background" value="#25062748" />
-		<color name="foreground" value="#ffffff" />
+		<color name="white" value="#f0f0f0"/>
+		<color name="black" value="#080808"/>
+		<color name="dark" value="#25062748"/>
+		<color name="menu" value="#25062748"/>
+		<color name="red" value="#f23d21"/>
+		<color name="green" value="#389416"/>
+		<color name="grey" value="#666666"/>
+		<color name="lightgrey" value="#d0d0d0"/>
+		<color name="orange" value="#ffa323"/>
+		<color name="darkgrey" value="#999999"/>
+		<color name="lightgreen" value="#51e51e"/> 
+		<color name="lightblue" value="#1885f4"/> 
+		<color name="blue" value="#0064c7"/>
+		<color name="yellow" value="#bab329"/>		
+		<color name="transparent" value="#ff000000"/>
+		<color name="transpBlack" value="#ff000000"/>
+		<color name="transpWhite" value="#ff000000"/>
+		<color name="background" value="#251f1f1f"/>
+		<color name="foreground" value="#f0f0f0"/>
+		<color name="clBack" value="#331f1f1f"/>
+		<color name="clBack2" value="#771f1f1f"/>
+		<color name="clText" value="#f0f0f0"/>
+		<color name="clBackSel" value="#20d2d2d2"/>
+		<color name="clTextSel" value="#040404"/>
+		<color name="clGrau" value="#153f3f3f"/>
+		<color name="clGelb" value="#fdc000"/>
+		<color name="clBorder" value="#777777"/>
 	</colors>
+	<!-- Main screen colors (id=0 Framebuffer) -->
+	<windowstyle type="skinned" id="0">
+		<title offset="15,3" font="Regular;18" color="black"/>
+		<color name="Background" color="clBack"/>
+		<color name="LabelForeground" color="white"/>
+		<color name="ListboxBackground" color="clBack"/>
+		<color name="ListboxForeground" color="clText"/>
+		<color name="ListboxSelectedBackground" color="clBackSel"/>
+		<color name="ListboxSelectedForeground" color="clTextSel"/>
+		<color name="ListboxMarkedBackground" color="#25fc0000"/>
+		<color name="ListboxMarkedForeground" color="#f0f0f0"/>
+		<color name="ListboxMarkedAndSelectedBackground" color="#25800000"/>
+		<color name="ListboxMarkedAndSelectedForeground" color="#f0f0f0"/>
+		<color name="WindowTitleForeground" color="grey"/>
+		<color name="WindowTitleBackground" color="white"/>
+		<!-- Main screen border png's -->
+		<borderset name="bsWindow">
+			<pixmap filename="skin_default/window/oben_links.png" pos="bpTopLeft"/>
+			<pixmap filename="skin_default/window/oben.png" pos="bpTop"/>
+			<pixmap filename="skin_default/window/oben_rechts.png" pos="bpTopRight"/>
+			<pixmap filename="skin_default/window/links.png" pos="bpLeft"/>
+			<pixmap filename="skin_default/window/rechts.png" pos="bpRight"/>
+			<pixmap filename="skin_default/window/unten_links.png" pos="bpBottomLeft"/>
+			<pixmap filename="skin_default/window/unten.png" pos="bpBottom"/>
+			<pixmap filename="skin_default/window/unten_rechts.png" pos="bpBottomRight"/>
+		</borderset>
+	</windowstyle>
 	<!-- Screwed Stone II skin (skin_default.xml) /Nemesis -->
 	<!-- About screen -->
 	<screen name="About" position="center,center" size="420,350" title="About">
@@ -265,7 +307,7 @@ self.autoResize()
 	<!-- Default wizard -->
 	<screen name="DefaultWizard" position="0,0" size="720,576" title="Welcome..." flags="wfNoBorder" >
 			<widget name="text" position="153,50" size="340,270" font="Regular;23" />
-			<widget source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
+			<widget enableWrapAround="1" source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
 				<convert type="StringList" />
 			</widget>
 			<ePixmap pixmap="skin_default/buttons/button_red.png" position="40,225" size="15,16" alphatest="on" />
@@ -280,7 +322,7 @@ self.autoResize()
 	</screen>
 	<screen name="DefaultSatLists" position="0,0" size="720,576" title="Welcome..." flags="wfNoBorder" >
 			<widget name="text" position="153,50" size="340,270" font="Regular;23" />
-			<widget source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
+			<widget enableWrapAround="1" source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
 				<convert type="StringList" />
 			</widget>
 			<ePixmap pixmap="skin_default/buttons/button_red.png" position="40,225" size="15,16" alphatest="on" />
@@ -295,7 +337,7 @@ self.autoResize()
 	</screen>
 	<screen name="DreamPackageWizard" position="0,0" size="720,576" title="Welcome..." flags="wfNoBorder" >
 			<widget name="text" position="153,50" size="340,270" font="Regular;23" />
-			<widget source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
+			<widget enableWrapAround="1" source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
 				<convert type="StringList" />
 			</widget>
 			<ePixmap pixmap="skin_default/buttons/button_red.png" position="40,225" size="15,16" alphatest="on" />
@@ -716,7 +758,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 	</screen>
 	<!-- Nim selection -->
 	<screen name="NimSelection" position="center,center" size="490,330" title="Choose Tuner">
-		<widget source="nimlist" render="Listbox" position="0,0" size="460,360" scrollbarMode="showOnDemand">
+		<widget source="nimlist" render="Listbox" position="15,0" size="460,360" scrollbarMode="showOnDemand">
 			<convert type="TemplatedMultiContent">
 				{"template": [
 						MultiContentEntryText(pos = (10, 5), size = (440, 30), flags = RT_HALIGN_LEFT, text = 1), # index 1 is the nim name,
@@ -1006,7 +1048,7 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 	<!-- Start Wizard -->
 	<screen name="StartWizard" position="0,0" size="720,576" title="Welcome..." flags="wfNoBorder">
 		<widget name="text" position="153,50" size="340,270" font="Regular;23" />
-		<widget source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
+		<widget enableWrapAround="1" source="list" render="Listbox" position="50,300" size="440,200" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
 		<widget name="config" position="50,300" size="440,200" scrollbarMode="showOnDemand" zPosition="1" transparent="1" />
@@ -1134,9 +1176,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 		<widget name="arrowup2" pixmap="skin_default/arrowup.png" position="-100,-100" zPosition="11" size="37,70" alphatest="on"/>
 	</screen>
 	<!-- Volumebar -->
-	<screen name="Volume" position="253,60" zPosition="1" size="214,21" title="Volume" flags="wfNoBorder">
-		<ePixmap pixmap="skin_default/volume.png" position="0,0" size="214,21" />
-		<widget name="Volume" pixmap="skin_default/progress_small.png" position="31,7" zPosition="1" size="168,7" transparent="1" />
+	<screen backgroundColor="#FF000000" flags="wfNoBorder" name="Volume" position="center,20" size="220,35" title="Volume" zPosition="1">
+		<ePixmap alphatest="on" pixmap="skin_default/volumeslider.png" position="0,0" size="220,35" transparent="1" zPosition="2"/>
+		<widget name="Volume" pixmap="skin_default/volumeslider_bar.png" position="38,0" size="135,35" transparent="1" zPosition="3"/>
+		<widget backgroundColor="background" font="Regular;17" foregroundColor="#bbbbbb" name="VolumeText" position="180,7" size="30,19" transparent="1" zPosition="3"/>
 	</screen>
 	<!-- JobView -->
 	<screen name="JobView" position="center,center" size="520,350" title="Job View">
@@ -1169,13 +1212,10 @@ self.instance.move(ePoint(orgpos.x() + (orgwidth - newwidth)/2, orgpos.y()))
 	</screen>
 	<!-- VirtualKeyBoard -->
 	<screen name="VirtualKeyBoard" position="center,center" size="560,350" zPosition="99" title="Virtual KeyBoard">
-		<ePixmap pixmap="skin_default/vkey_text.png" position="9,45" zPosition="-4" size="542,52" alphatest="on" />
-		<widget source="country" render="Pixmap" position="490,0" size="60,40" alphatest="on" borderWidth="2" borderColor="yellow" >
-			<convert type="ValueToPixmap">LanguageCode</convert>
-		</widget>
-		<widget name="header" position="10,20" size="500,20" font="Regular;20" transparent="1" noWrap="1" />
-		<widget name="text" position="12,45" size="536,46" font="Regular;46" transparent="1" noWrap="1" halign="right" />
-		<widget name="list" position="10,110" size="540,225" selectionDisabled="1" transparent="1" />
+		<ePixmap pixmap="skin_default/vkey_text.png" position="9,35" zPosition="-4" size="542,52" alphatest="on" />
+		<widget name="header" position="10,10" size="500,20" font="Regular;20" transparent="1" noWrap="1" />
+		<widget name="text" position="12,35" size="536,46" font="Regular;46" transparent="1" noWrap="1" halign="right" />
+		<widget name="list" position="10,100" size="540,225" selectionDisabled="1" transparent="1" />
 	</screen>
 	<!-- FileBrowser -->
 	<screen name="FileBrowser" position="center,center" size="520,430" title="DVD File Browser" >
