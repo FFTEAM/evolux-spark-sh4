@@ -4,6 +4,6 @@ install_PYTHON =	\
 	__init__.py \
 	plugin.py \
 	setup.py \
-	config
 
- 
+dist_install_DATA = \
+	config
