@@ -31,12 +31,15 @@ void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * co
 	paintButton(frameBuffer, button, font, text.c_str(), x, y, buttonwidth);
 }
 
-void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, const char *text, const int x, const int y, const unsigned int buttonwidth)
+void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, const char *text, const int _x, const int y, const unsigned int _buttonwidth)
 {
+	int x = _x + 5;
+	int buttonwidth = _buttonwidth - 5;
 	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
 	int height = font->getHeight();
 	frameBuffer->paintIcon(button, x, y + height/8, 20, (6 * height)/8, true);
-	font->RenderString(x + 20, y + height, buttonwidth - 20, text, COL_INFOBAR, 0, true, fgcolor); // UTF-8
+	if (text && strlen(text))
+		font->RenderString(x + 20, y + height, buttonwidth - 20, text, COL_INFOBAR, 0, true, fgcolor); // UTF-8
 }
 
 void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, const std::string &text, const int x, const int y, const unsigned int buttonwidth) {
@@ -96,10 +99,8 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 
 	int height = font->getHeight();
 	bw_sum = 0;
-	for (int i = 0; i < count; i++) {
-		frameBuffer->paintIcon(content[i].button, x + bw_sum, y + height/8, 20, (6 * height)/8, true);
-		if (content[i].locale != NONEXISTANT_LOCALE)
-			font->RenderString(x + bw_sum + 20, y + height, bw[i] - 20, localemanager->getText(content[i].locale), COL_INFOBAR, 0, true, fgcolor); // UTF-8
-		bw_sum += bw[i];
-	}
+	for (int i = 0; i < count; i++)
+		paintButton(frameBuffer, content[i].button, font, (content[i].locale == NONEXISTANT_LOCALE)
+			? NULL : localemanager->getText(content[i].locale),
+			x + bw_sum, y, bw[i]);
 }

@@ -26,6 +26,7 @@
 #endif
 
 #include <gui/widget/listbox.h>
+#include <gui/widget/buttons.h>
 
 #include <global.h>
 #include <neutrino.h>
@@ -91,17 +92,14 @@ void CListBox::paintFoot()
 	frameBuffer->paintBoxRel(x,y+height, width,ButtonHeight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);//round
 	frameBuffer->paintHLine(x, x+width,  y, COL_INFOBAR_SHADOW_PLUS_0);
 
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, x+width- 4* ButtonWidth+ 8, y+height+1);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width- 4* ButtonWidth+ 38, y+height+24 - 2, width, "edit", COL_INFOBAR);
-
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_GREEN, x+width- 3* ButtonWidth+ 8, y+height+4);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width- 3* ButtonWidth+ 29, y+height+24 - 2, width- 26, "add", COL_INFOBAR);
-
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, x+width- 2* ButtonWidth+ 8, y+height+4);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width- 2* ButtonWidth+ 29, y+height+24 - 2, width- 26, "remove", COL_INFOBAR);
-
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HOME, x+width - ButtonWidth+ 8, y+height+1);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x+width - ButtonWidth+ 38, y+height+24 - 2, width, "ready", COL_INFOBAR);
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		"edit", x+width- 4* ButtonWidth, y+height+24 - 2, width);
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_GREEN, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		"add", x+width- 3* ButtonWidth, y+height+24 - 2, width);
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		"remove", x+width- 2* ButtonWidth, y+height+24 - 2, width);
+	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_HOME, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		"ready", x+width- 1* ButtonWidth, y+height+24 - 2, width);
 }
 
 void CListBox::paintItem(int pos)
