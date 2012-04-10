@@ -1,7 +1,7 @@
 installdir = $(pkglibdir)/python/Plugins/Extensions
 
-SUBDIRS = PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI AutomaticVolumeAdjustment
- 
+SUBDIRS = PicturePlayer MediaScanner MediaPlayer GraphMultiEPG SocketMMI AutomaticVolumeAdjustment EPGRefresh
+
 if ENABLE_TF7700
 SUBDIRS += TopfieldVFD
 endif
