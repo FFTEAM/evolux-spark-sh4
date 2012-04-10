@@ -265,6 +265,14 @@ lib/python/Plugins/Extensions/CuberevoVFD/Makefile
 lib/python/Plugins/SystemPlugins/VFD-Icons/Makefile 
 lib/python/Plugins/SystemPlugins/VFD-Icons/meta/Makefile
 lib/python/Tools/Makefile
+lib/python/Plugins/Extensions/AutomaticVolumeAdjustment/Makefile
+lib/python/Plugins/Extensions/EPGRefresh/Makefile
+lib/python/Plugins/Extensions/EPGRefresh/locale/Makefile
+lib/python/Plugins/Extensions/EPGRefresh/locale/de/Makefile
+lib/python/Plugins/Extensions/EPGRefresh/locale/de/LC_MESSAGES/Makefile
+lib/python/Plugins/Extensions/PPDisplayTime/Makefile
+lib/python/Plugins/Extensions/PinguExplorer/Makefile
+lib/python/Plugins/Extensions/PinguExplorer/res/Makefile
 po/Makefile
 main/Makefile
 tools/Makefile
