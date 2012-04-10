@@ -530,6 +530,7 @@ release-enigma2-pli-nightly_base:
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/WebInterface
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/WirelessLan
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/SystemPlugins/VideoClippingSetup
+	( cd $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2 && ln -sf radio-hd.mvi radio.mvi )
 
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6
 	cp -a $(targetprefix)/usr/lib/python2.6/* $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/
