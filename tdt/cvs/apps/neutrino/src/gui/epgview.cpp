@@ -709,7 +709,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 					if(showPos+scrollCount<textCount)
 					{
 						showPos += scrollCount;
-						showText(showPos,textypos);
+						showText(showPos,sy);
 					}
 					break;
 
@@ -718,7 +718,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 					if(showPos<0)
 						showPos = 0;
 					else
-						showText(showPos,textypos);
+						showText(showPos,sy);
 					break;
 
 				// 31.05.2002 dirch		record timer
@@ -813,7 +813,6 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 					bigFonts = bigFonts ? false : true;
 					frameBuffer->paintBackgroundBox (sx, sy - toph, sx + ox + 1, sy + oy + 1);
 					showTimerEventBar (false);
-					start();
 //printf("bigFonts %d\n", bigFonts);
 					if(bigFonts)
 					{
@@ -825,6 +824,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 						g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->setSize((int)(g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO2]->getSize() / BIG_FONT_FAKTOR));
 					}
 					g_settings.bigFonts = bigFonts;
+					start();
 					show(channel_id, id, &startzeit, false);
 					showPos=0;
 					break;
