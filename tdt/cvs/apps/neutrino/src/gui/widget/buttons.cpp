@@ -57,7 +57,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	bool keep = true;
 	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0;
 	for (int i = 0; i < count; i++) {
-		bw[i] = 20 + (content[i].locale == NONEXISTANT_LOCALE) ? 0 : font->getRenderWidth(localemanager->getText(content[i].locale), true);
+		bw[i] = 25 + ((content[i].locale == NONEXISTANT_LOCALE) ? 0 : font->getRenderWidth(localemanager->getText(content[i].locale), true));
 		sp[i] = bw[i] - buttonwidth;
 		if (sp[i] < 0) {
 			spare -= sp[i];
@@ -69,12 +69,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 		bw_sum += bw[i];
 		missing += sp[i];
 	}
-#if 0
-	if (keep)
-		for (unsigned int i = 0; i < count; i++)
-			bw[i] = buttonwidth;
-	else
-#endif
+
 	if (sp > 0) {
 		int spare = count * buttonwidth - bw_sum;
 		while (spare > 0 && missing > 0)
