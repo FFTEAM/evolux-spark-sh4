@@ -14,6 +14,9 @@ insmod $MODDIR/simu_button.ko
 if [ ! -e /dev/.devfsd ]; then
 	touch /dev/.devfsd
 fi
+if [ ! -e /dev/.udev ]; then
+	touch /dev/.udev
+fi
 
 rm -f /etc/.start_spark >/dev/null 2>&1
 
