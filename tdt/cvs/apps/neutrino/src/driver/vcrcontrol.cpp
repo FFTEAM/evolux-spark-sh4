@@ -659,6 +659,7 @@ printf("Record channel_id: " PRINTF_CHANNEL_ID_TYPE_NO_LEADING_ZEROS " epg: %llx
 	else {
 		RestoreNeutrino();
 		CVFD::getInstance()->ShowIcon(VFD_ICON_RECORD, false);
+		CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, false);
 
 		printf("[vcrcontrol] stream2file error code: %d\n", error_msg);
 #warning FIXME: Use better error message
