@@ -293,7 +293,12 @@ TUNERRESET_Menu::TUNERRESET_Menu()
 int TUNERRESET_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
-	if(actionKey == "tunerreset") 
+	if(actionKey == "reset-usermenu") 
+	{
+		this->TunerReset();
+		return menu_return::RETURN_EXIT_ALL;
+	}
+	if(actionKey == "reset") 
 	{
 		this->TunerReset();
 		return res;
@@ -319,7 +324,7 @@ void TUNERRESET_Menu::TUNERRESETSettings()
 	menu->addItem(GenericMenuSeparator);
 	menu->addItem(GenericMenuBack);
 	menu->addItem(GenericMenuSeparatorLine);
-	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, "", this, "tunerreset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, "", this, "reset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 	menu->exec (NULL, "");
 	menu->hide ();
 	delete menu;
@@ -595,6 +600,8 @@ EMU_Menu::EMU_Menu()
 			+ " >/dev/null 2>&1) &";
 		safe_system(cmd.c_str());
 	}
+	for (int i = 1; i < EMU_OPTION_COUNT; i++)
+		EMU_list[i].cmf = NULL;
 }
 
 int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
@@ -609,6 +616,10 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	else if (actionKey == "reset") {
 		doReset = true;
 		emu = selected;
+	} else if (actionKey == "reset-usermenu") {
+		doReset = true;
+		emu = selected;
+		res = menu_return::RETURN_EXIT_ALL;
 	} else
 		for (emu = 1; emu < EMU_OPTION_COUNT; emu++)
 			if (!strcmp(EMU_list[emu].procname, actionKey.c_str()))
@@ -621,6 +632,8 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				safe_system(EMU_list[emu_old].stop_command);
 				string m = " " + string(EMU_list[emu_old].procname) + " is now inactive ";
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+				if (EMU_list[emu_old].cmf)
+					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_OFF));
 			}
 			if (emu) {
 				safe_system(EMU_list[emu].start_command);
@@ -630,13 +643,14 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 					safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
 				string m = " " + string(EMU_list[emu].procname) + " is now active ";
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+				if (EMU_list[emu].cmf)
+					EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_ON));
 			}
 			settings.cam_selected = string(EMU_list[emu].procname);
 			selected = emu;
 		}
 
-		g_RCInput->postMsg(CRCInput::RC_red, 0); // reenter menu // FIXME?
-		return menu_return::RETURN_EXIT_ALL;
+		return res;
 	}
 
 	if (parent)
@@ -666,12 +680,13 @@ void EMU_Menu::EMU_Menu_Settings()
 
 	int shortcut = 1;
 	for (int i = 1; i < EMU_OPTION_COUNT; i++)
-		if (EMU_list[i].installed)
-			menu->addItem(new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
+		if (EMU_list[i].installed) {
+			EMU_list[i].cmf = new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
 				(i == selected) ? g_Locale->getText(LOCALE_ONOFF_ON)
 						: g_Locale->getText(LOCALE_ONOFF_OFF),
-				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++)),
-				(i == selected));
+				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++));
+			menu->addItem(EMU_list[i].cmf, (i == selected));
+		}
 
 	menu->addItem(GenericMenuSeparatorLine);
 	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "reset",

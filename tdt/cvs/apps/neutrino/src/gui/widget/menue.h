@@ -166,6 +166,9 @@ class CMenuForwarder : public CMenuItem
 		{
 			return active;
 		}
+	void setOptionValue(const char * const Option);
+	void setOptionValue(const std::string &Option);
+
 };
 
 class CMenuForwarderNonLocalized : public CMenuForwarder

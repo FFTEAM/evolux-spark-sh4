@@ -794,18 +794,12 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 	ExtraMenu.addItem(GenericMenuBack);
 	ExtraMenu.addItem(GenericMenuSeparatorLine);
 
-	EMU_Menu *Em = new EMU_Menu();
-#if 0
-	if (Em->get_installed_count() > 0) {
-#endif
-		ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, Em, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
-		moviePlayerGui->setEmuMenu(Em);
-#if 0
-	} else
-		delete Em;
-#endif
+	ExtraMenu_CamReset = new EMU_Menu();
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, ExtraMenu_CamReset, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
+	moviePlayerGui->setEmuMenu(ExtraMenu_CamReset);
 
-	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, new TUNERRESET_Menu(), NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
+	ExtraMenu_TunerReset = new TUNERRESET_Menu();
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, ExtraMenu_TunerReset, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
@@ -3320,6 +3314,22 @@ bool CNeutrinoApp::showUserMenu(int button)
                                 keyhelper.get(&key,&icon,CRCInput::RC_blue);
 				//keyhelper.get(&key,&icon);
 				menu_item = new CMenuForwarder(LOCALE_USERMENU_ITEM_ADZAP, true, NULL, AdZapChanger, "adzap", key, icon);
+				menu->addItem(menu_item, 0);
+
+                                break;
+			case SNeutrinoSettings::ITEM_EMU_RESTART:
+				menu_items++;
+				menu_prev = SNeutrinoSettings::ITEM_EMU_RESTART;
+                                keyhelper.get(&key,&icon);
+				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, NULL, ExtraMenu_CamReset, "reset-usermenu", key, icon);
+				menu->addItem(menu_item, 0);
+
+                                break;
+			case SNeutrinoSettings::ITEM_TUNER_RESTART:
+				menu_items++;
+				menu_prev = SNeutrinoSettings::ITEM_TUNER_RESTART;
+                                keyhelper.get(&key,&icon);
+				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, NULL, ExtraMenu_TunerReset, "reset-usermenu", key, icon);
 				menu->addItem(menu_item, 0);
 
                                 break;

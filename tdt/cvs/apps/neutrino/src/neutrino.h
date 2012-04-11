@@ -44,6 +44,7 @@
 #include <timerdclient/timerdtypes.h>
 #include <gui/channellist.h>          /* CChannelList */
 #include <gui/rc_lock.h>
+#include <gui/extra_menu.h>
 #include <daemonc/remotecontrol.h>    /* st_rmsg      */
 
 #include <zapit/client/zapitclient.h>
@@ -183,6 +184,9 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
                 CTimerList                      *Timerlist;
 		CAdZapMenu			*AdZapChanger;
 		CMenuWidget_Network		*networkSettings;
+
+		EMU_Menu *ExtraMenu_CamReset;
+		TUNERRESET_Menu *ExtraMenu_TunerReset;
 
                 bool showUserMenu(int button);
                 bool getNVODMenu(CMenuWidget* menu);

@@ -490,6 +490,8 @@ struct SNeutrinoSettings
                 ITEM_PLUGIN = 14,
                 ITEM_VTXT = 15,
                 ITEM_ADZAP = 16,
+                ITEM_EMU_RESTART = 17,
+                ITEM_TUNER_RESTART = 18,
 #if 0
                 ITEM_MOVIEPLAYER_TS = 17,
 		ITEM_RESTART_CAMD = 18,

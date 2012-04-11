@@ -1076,6 +1076,18 @@ CMenuForwarder::CMenuForwarder(const neutrino_locale_t Text, const bool Active, 
 	iconName = IconName ? IconName : "";
 }
 
+void CMenuForwarder::setOptionValue(const char * const Option)
+{
+	option = Option;
+	option_string = NULL;
+}
+
+void CMenuForwarder::setOptionValue(const std::string &Option)
+{
+	option = NULL;
+	option_string = &Option;
+}
+
 int CMenuForwarder::getHeight(void) const
 {
 	return g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();

@@ -111,6 +111,7 @@ class EMU_Menu : public CMenuTarget
 		const char *start_command;
 		const char *stop_command;
 		bool installed;
+		CMenuForwarderNonLocalized *cmf;
 	};
 
 	int get_installed_count();
