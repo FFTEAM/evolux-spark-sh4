@@ -54,7 +54,7 @@
 			<convert type="EventTime">StartTime</convert>
 			<convert type="ClockToText">Default</convert>
 		</widget>
-		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,435" render="Label" size="371,26" source="session.Event_Now" transparent="1" zPosition="3">
+		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,435" render="Label" size="371,22" source="session.Event_Now" transparent="1" zPosition="3">
 			<convert type="EventName">Name</convert>
 		</widget>
 		<widget backgroundColor="clBack" font="Regular;17" foregroundColor="clText" halign="right" position="590,437" render="Label" size="76,22" source="session.Event_Now" transparent="1" zPosition="3">
@@ -65,7 +65,7 @@
 			<convert type="EventTime">StartTime</convert>
 			<convert type="ClockToText">Default</convert>
 		</widget>
-		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,462" render="Label" size="372,26" source="session.Event_Next" transparent="1" zPosition="3">
+		<widget backgroundColor="clBack" font="Regular;21" foregroundColor="clText" position="240,462" render="Label" size="372,22" source="session.Event_Next" transparent="1" zPosition="3">
 			<convert type="EventName">Name</convert>
 		</widget>
 		<widget backgroundColor="clBack" font="Regular;17" foregroundColor="clText" halign="right" position="606,462" render="Label" size="59,26" source="session.Event_Next" transparent="1" zPosition="3">
