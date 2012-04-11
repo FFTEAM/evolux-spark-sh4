@@ -164,7 +164,9 @@ int CNetworkConfig::setWLAN(){
 		chmod("/etc/network/if-pre-up.d/wlan", 0755);
 		std::string authmode = "WPA2PSK"; // WPA2
 		std::string encryptype = "AES"; // WPA2
+		std::string proto = "RSN";
 		if (wlan_mode == "WPA") {
+			proto = "WPA";
 			authmode = "WPAPSK";
 			encryptype = "TKIP";
 		}
@@ -196,9 +198,9 @@ int CNetworkConfig::setWLAN(){
 			  << "\tscan_ssid=1\n"
 			  << "\tssid=\"" << wlan_essid << "\"\n"
 			  << "\tkey_mgmt=WPA-PSK\n"
-			  << "\tproto=" << wlan_mode << "\n"
-			  << "\tpairwise=TKIP\n"
-			  << "\tgroup=TKIP\n"
+			  << "\tproto=" << proto << "\n"
+			  << "\tpairwise=CCMP TKIP\n"
+			  << "\tgroup=CCMP TKIP\n"
 			  << "\tpsk=\"" << wlan_key << "\"\n"
 			  << "}\n";
 			F.close();
