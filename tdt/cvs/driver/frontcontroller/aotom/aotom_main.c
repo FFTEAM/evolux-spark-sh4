@@ -253,7 +253,7 @@ static int draw_thread(void *arg)
 static int led_thread(void *arg)
 {
 	int led = (int) arg;
-	// toggle green LED status for a given time period
+	// toggle LED status for a given time period
 
 	led_state[led].stop = 0;
 
@@ -261,7 +261,7 @@ static int led_thread(void *arg)
 		if (!down_interruptible(&led_state[led].led_sem)) {
 			if (kthread_should_stop())
 				break;
-			while (down_trylock(&led_state[led].led_sem)); // make sure semaphore is at 0
+			while (!down_trylock(&led_state[led].led_sem)); // make sure semaphore is at 0
 			YWPANEL_VFD_SetLed(led, led_state[led].state ? LOG_OFF : LOG_ON);
 			while ((led_state[led].period > 0) && !kthread_should_stop()) {
 				msleep(10);
