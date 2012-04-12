@@ -199,7 +199,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 	echo 2 > /proc/cpu/alignment
 
 
-	(
 #	/usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb
 	/etc/init.d/autofs start
 	(sleep 10
