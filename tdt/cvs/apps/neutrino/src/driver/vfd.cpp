@@ -152,6 +152,8 @@ void* CVFD::TimeThread(void *arg)
 	fds.events = POLLIN;
 	while (cvfd->timeThreadRunning) {
 		int res = poll(&fds, 1, cvfd->waitSec * 1000);
+		if (res == 1)
+			while (0 < read(fds.fd, buf, sizeof(buf)));
 		if (!cvfd->showclock) {
 			cvfd->waitSec = -1; // forever
 			continue;
@@ -167,7 +169,6 @@ void* CVFD::TimeThread(void *arg)
 				cvfd->waitSec = 60;
 			continue;
 		case 1: // re-schedule time display
-			while (0 < read(fds.fd, buf, sizeof(buf)));
 			continue;
 		default:
 			cvfd->timeThreadRunning = false;
