@@ -4,7 +4,7 @@ install_DATA = \
 	16_9.png 16_9_gray.png audio.raw blau.png border_lr.raw border_ul.raw \
 	colors.png dbox.raw dd.png dd_avail.png dd_gray.png error.png features.png \
 	file.png folder.png games.raw gelb.png gruen.png help.png help_small.png \
-	home.png info.raw keybinding.png language.raw lcd.png lock.raw mainmenue.png \
+	home.png info.raw keybinding.png language.raw lcd.png lock.raw mainmenue.png menu.png menu_small.png \
 	mounted.png mp3.png mute.png network.png not_mounted.png numericpad.raw ok.png power.png radar.pal \
 	radar0.raw radar1.raw radar2.raw radar3.raw radar4.raw radar5.raw radar6.raw \
 	radar7.raw radar8.raw radar9.raw radiomode.pal radiomode.raw recording.png \
