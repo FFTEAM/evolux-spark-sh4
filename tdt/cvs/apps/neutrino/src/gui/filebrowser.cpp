@@ -866,6 +866,9 @@ bool CFileBrowser::exec(const char * const dirname)
 		if(!CRCInput::isNumeric(msg))
 		{
 			m_SMSKeyInput.resetOldKey();
+			int fgcolor = frameBuffer->realcolor[(((((int)COL_MENUHEAD) + 2) | 7) - 2)];
+			int by = y + height - foheight;
+			frameBuffer->paintBoxRel(x + width - 30, by - foheight, 16, foheight, COL_INFOBAR_SHADOW_PLUS_1, RADIUS_MID, CORNER_BOTTOM);
 		}
 
 		if (msg == CRCInput::RC_yellow)
@@ -1082,7 +1085,7 @@ bool CFileBrowser::exec(const char * const dirname)
 				}
 			}
 		}
-		else if (msg==CRCInput::RC_help)
+		else if (msg==CRCInput::RC_help || msg==CRCInput::RC_info)
 		{
 			if (++g_settings.filebrowser_sortmethod >= FILEBROWSER_NUMBER_OF_SORT_VARIANTS)
 				g_settings.filebrowser_sortmethod = 0;
@@ -1377,53 +1380,47 @@ void CFileBrowser::paintHead()
 
 //------------------------------------------------------------------------
 
-const struct button_label FileBrowserButtons[3] =
-{
-	{ NEUTRINO_ICON_BUTTON_RED   , LOCALE_FILEBROWSER_NEXTPAGE        },
-	{ NEUTRINO_ICON_BUTTON_GREEN , LOCALE_FILEBROWSER_PREVPAGE        },
-	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_FILEBROWSER_MARK            },
-};
-const struct button_label FileBrowserFilterButton[2] =
-{
-	{ NEUTRINO_ICON_BUTTON_BLUE  , LOCALE_FILEBROWSER_FILTER_INACTIVE },
-	{ NEUTRINO_ICON_BUTTON_BLUE  , LOCALE_FILEBROWSER_FILTER_ACTIVE   },
-};
-
 void CFileBrowser::paintFoot()
 {
-	int dx = (width-20) / 4;
-	//Second Line (bottom, top)
-	int by2 = y + height - (foheight - 4);
-	int ty2 = by2 + g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
-
-	//Background
 	frameBuffer->paintBoxRel(x, y + height - (2 * foheight ), width, (2 * foheight ), COL_INFOBAR_SHADOW_PLUS_1, RADIUS_MID, CORNER_BOTTOM);
 
 	if (!(filelist.empty()))
 	{
-		int by = y + height - 2 * (foheight - 4);
+		struct button_label bl[10];
+		int i = 0;
+		int by = y + height - 1 * (foheight - 4);
 
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, by, dx, Multi_Select ? 3 : 2, FileBrowserButtons);
-
-		if(Filter != NULL)
-			::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10 + (3 * dx), by, dx, 1, &(FileBrowserFilterButton[use_filter?0:1]));
-
-		//OK-Button
-		if((filelist[selected].getType() != CFile::FILE_UNKNOWN) || (S_ISDIR(filelist[selected].Mode)))
-			::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_FILEBROWSER_SELECT), x, ty2, dx);
-
-		//?-Button
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_HELP, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(sortByNames[g_settings.filebrowser_sortmethod]), x + dx, ty2, dx);
-
-		//Mute-Button
-		if (strncmp(Path.c_str(), VLC_URI, strlen(VLC_URI)) != 0) //Not in vlc mode
-			::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_MUTE_SMALL, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_FILEBROWSER_DELETE), x + 2 * dx, ty2, dx);
-
-		if(m_SMSKeyInput.getOldKey()!=0)
-		{
-			char cKey[2]={m_SMSKeyInput.getOldKey(),0};
-			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + width - 16, by2 , 16, cKey, COL_MENUHEAD, 0, true); // UTF-8
+		bl[i].button = NEUTRINO_ICON_BUTTON_RED;
+		bl[i].locale = LOCALE_FILEBROWSER_NEXTPAGE;
+		i++;
+		bl[i].button = NEUTRINO_ICON_BUTTON_GREEN;
+		bl[i].locale = LOCALE_FILEBROWSER_PREVPAGE;
+		i++;
+		if (Multi_Select) {
+			bl[i].button = NEUTRINO_ICON_BUTTON_YELLOW;
+			bl[i].locale = LOCALE_FILEBROWSER_MARK;
+			i++;
 		}
+		if(Filter) {
+			bl[i].button = NEUTRINO_ICON_BUTTON_BLUE;
+			bl[i].locale = use_filter ? LOCALE_FILEBROWSER_FILTER_INACTIVE : LOCALE_FILEBROWSER_FILTER_ACTIVE;
+			i++;
+		}
+		if((filelist[selected].getType() != CFile::FILE_UNKNOWN) || (S_ISDIR(filelist[selected].Mode))) {
+			bl[i].button = NEUTRINO_ICON_BUTTON_OKAY;
+			bl[i].locale = LOCALE_FILEBROWSER_SELECT;
+			i++;
+		}
+		bl[i].button = NEUTRINO_ICON_BUTTON_HELP_SMALL;
+		bl[i].locale = sortByNames[g_settings.filebrowser_sortmethod];
+		i++;
+		if (strncmp(Path.c_str(), VLC_URI, strlen(VLC_URI)) != 0) { //Not in vlc mode
+			bl[i].button = NEUTRINO_ICON_BUTTON_MUTE_SMALL;
+			bl[i].locale = LOCALE_FILEBROWSER_DELETE;
+			i++;
+		}
+
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, by, (width - 20)/i, i, bl);
 	}
 }
 
@@ -1455,6 +1452,15 @@ void CFileBrowser::paint()
 void CFileBrowser::SMSInput(const neutrino_msg_t msg)
 {
 	unsigned char key = m_SMSKeyInput.handleMsg(msg);
+
+	if(key)
+	{
+		int fgcolor = frameBuffer->realcolor[(((((int)COL_MENUHEAD) + 2) | 7) - 2)];
+		int by = y + height - foheight;
+		frameBuffer->paintBoxRel(x + width - 30, by - foheight, 16, foheight, COL_INFOBAR_SHADOW_PLUS_1, RADIUS_MID, CORNER_BOTTOM);
+		char cKey[2] = { key, 0 };
+		g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(x + width - 30, by, 16, cKey, COL_MENUHEAD, 0, true, fgcolor); // UTF-8
+	}
 
 	unsigned int i;
 	for(i=(selected+1) % filelist.size(); i != selected ; i= (i+1) % filelist.size())

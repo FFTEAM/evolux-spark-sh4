@@ -57,7 +57,10 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0, loc_count = 0;
 	for (int i = 0; i < count; i++) {
 		if ((content[i].locale == NONEXISTANT_LOCALE)) {
-			bw[i] = 25;
+			if (content[i].text)
+				bw[i] = 25 + font->getRenderWidth(content[i].text);
+			else
+				bw[i] = 25;
 		} else {
 			bw[i] = 25 + font->getRenderWidth(localemanager->getText(content[i].locale), true);
 			loc_count++;
@@ -86,7 +89,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 		if (loc_count && count > 1)
 			while (spare > 0)
 				for (int i = 0; (i < count - 1) && (spare > 0); i++)
-					if ((content[i].locale != NONEXISTANT_LOCALE)){
+					if ((content[i].locale != NONEXISTANT_LOCALE) || content[i].text){
 						bw[i]++;
 						spare--;
 					}
@@ -100,7 +103,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	bw_sum = 0;
 	for (int i = 0; i < count; i++) {
 		paintButton(frameBuffer, content[i].button, font, (content[i].locale == NONEXISTANT_LOCALE)
-			? NULL : localemanager->getText(content[i].locale),
+			? content[i].text : localemanager->getText(content[i].locale),
 			x + bw_sum, y, bw[i]);
 		bw_sum += bw[i];
 	}

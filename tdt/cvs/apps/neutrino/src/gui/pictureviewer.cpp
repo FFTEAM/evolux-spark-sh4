@@ -593,13 +593,6 @@ void CPictureViewerGui::paintHead()
 }
 
 //------------------------------------------------------------------------
-const struct button_label PictureViewerButtons[4] =
-{
-	{ NEUTRINO_ICON_BUTTON_RED   , LOCALE_AUDIOPLAYER_DELETE        },
-	{ NEUTRINO_ICON_BUTTON_GREEN , LOCALE_AUDIOPLAYER_ADD           },
-	{ NEUTRINO_ICON_BUTTON_YELLOW, LOCALE_AUDIOPLAYER_DELETEALL     },
-	{ NEUTRINO_ICON_BUTTON_BLUE  , LOCALE_PICTUREVIEWER_SLIDESHOW }
-};
 
 void CPictureViewerGui::paintFoot()
 {
@@ -611,10 +604,27 @@ void CPictureViewerGui::paintFoot()
 
 	int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 
+	struct button_label bl[10];
+	int i = 0;
+
 	if (!playlist.empty())
 	{
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale->getText(LOCALE_PICTUREVIEWER_SHOW),
-			x + ButtonWidth2, y +(height-buttonHeight)+24 - 4, ButtonWidth2);
+
+		bl[i].button = NEUTRINO_ICON_BUTTON_RED;
+		bl[i].locale = LOCALE_AUDIOPLAYER_DELETE;
+		i++;
+		bl[i].button = NEUTRINO_ICON_BUTTON_GREEN;
+		bl[i].locale = LOCALE_AUDIOPLAYER_ADD;
+		i++;
+		bl[i].button = NEUTRINO_ICON_BUTTON_YELLOW;
+		bl[i].locale = LOCALE_AUDIOPLAYER_DELETEALL;
+		i++;
+		bl[i].button = NEUTRINO_ICON_BUTTON_BLUE;
+		bl[i].locale = LOCALE_PICTUREVIEWER_SLIDESHOW;
+		i++;
+		bl[i].button = NEUTRINO_ICON_BUTTON_OKAY;
+		bl[i].locale = LOCALE_PICTUREVIEWER_SHOW;
+		i++;
 
 		std::string tmp = g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER) + ' ';
 		if(m_sort==FILENAME)
@@ -622,16 +632,20 @@ void CPictureViewerGui::paintFoot()
 		else if(m_sort==DATE)
 			tmp += g_Locale->getText(LOCALE_PICTUREVIEWER_SORTORDER_FILENAME);
 
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_5, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], tmp,
-			x + 0 * ButtonWidth2, y+(height-buttonHeight)+24 - 4, ButtonWidth2- 28);
+		bl[i].button = NEUTRINO_ICON_BUTTON_5;
+		bl[i].locale = NONEXISTANT_LOCALE;
+		bl[i].text = tmp.c_str();
+		i++;
 
-
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10,
-			y + (height - 2 * buttonHeight) + 4, ButtonWidth, 4, PictureViewerButtons);
 	}
-	else
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10,
-			y + (height - 2 * buttonHeight) + 4, ButtonWidth, 1, &(PictureViewerButtons[1]));
+	else {
+		bl[i].button = NEUTRINO_ICON_BUTTON_GREEN;
+		bl[i].locale = LOCALE_AUDIOPLAYER_ADD;
+		i++;
+	}
+	int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->getHeight();
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10,
+		y + height - fheight - 4, (width - 20)/i, i, bl);
 //	printf("paintFoot}\n");
 }
 //------------------------------------------------------------------------
