@@ -515,7 +515,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	ypos += iheight;
 	t_channel_id channel_id = channelList->getActiveChannel_ChannelID();
 	char logoname[255] ="";
-	snprintf(logoname, sizeof(logoname), "%s/%llx.jpg", g_settings.picon_dir, channel_id & 0xFFFFFFFFFFFFULL);
+	snprintf(logoname, sizeof(logoname), "%llx.jpg", channel_id & 0xFFFFFFFFFFFFULL);
 	int fgcolor_found = fgcolor_head;
 	int logo_found = !access(logoname, R_OK);
 	if (logo_found) {
@@ -531,8 +531,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	CZapitChannel * cc = CNeutrinoApp::getInstance()->channelList->getChannel(channel_id);
 	if (cc) {
 		ypos += iheight;
-		snprintf(logoname, sizeof(logoname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
-			g_settings.picon_dir_e2,
+		snprintf(logoname, sizeof(logoname), "1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
 			(u_int) (cc->getVideoPid() > 0) ? 1 : 2,
 			(u_int) channel_id & 0xFFFF,
 			(u_int) (channel_id >> 32) & 0xFFFF,
