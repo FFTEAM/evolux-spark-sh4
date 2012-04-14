@@ -39,6 +39,7 @@
 #include <gui/color.h>
 #include <gui/widget/icons.h>
 #include <gui/customcolor.h>
+#include <gui/pictureviewer.h>
 #include <daemonc/remotecontrol.h>
 #include <zapit/frontend_c.h>
 #include <video_cs.h>
@@ -53,6 +54,7 @@
 extern CFrontend * frontend;
 extern cVideo * videoDecoder;
 extern cAudio * audioDecoder;
+extern CPictureViewer * g_PicViewer;
 
 extern CRemoteControl *g_RemoteControl;	/* neutrino.cpp */
 extern CZapitClient::SatelliteList satList;
@@ -71,6 +73,7 @@ CStreamInfo2::CStreamInfo2 ()
 	font_small = SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL;
 
 	fgcolor = frameBuffer->realcolor[(((((int)COL_MENUCONTENTDARK) + 2) | 7) - 2)];
+	fgcolor_arg = fgcolor;
 	fgcolor_head = frameBuffer->realcolor[(((((int)COL_MENUHEAD) + 2) | 7) - 2)];
 	fgcolor |= 0xFF000000;
 	fgcolor_head |= 0xFF000000;
@@ -153,7 +156,7 @@ int CStreamInfo2::doSignalStrengthLoop ()
 		fesig[FESIG_BER].val[FESIG_VAL_CUR] = frontend->getBitErrorRate();
 		fesig[FESIG_RATE].val[FESIG_VAL_CUR] = rate;
 
-		showScale();
+		// showScale();
 
 		for (int i = 0; i < FESIG_MAX; i++)
 			if (fesig[i].val[FESIG_VAL_CUR] > -1) {
@@ -255,6 +258,9 @@ void CStreamInfo2::paint_signal_fe()
 						       sigBox_x + x_now, sigBox_y + sigBox_h - yd, fesig[i].color);
 			fesig[i].yd_old = yd;
 		}
+
+	showScale (FESIG_SIG, sig_text_y + (FESIG_MAX + 1) * sheight);
+	showScale (FESIG_SNR, sig_text_y + (FESIG_MAX + 1) * sheight + iheight + 4);
 }
 
 // -- calc y from max_range and max_y
@@ -335,7 +341,7 @@ void CStreamInfo2::paint_techinfo_line(int xpos, int ypos, const neutrino_locale
 	char buf[100];
 	snprintf(buf, sizeof(buf), "%s: ", txt);
 	g_Font[font_info]->RenderString (xpos, ypos, width - xpos, txt, 0, 0, true, fgcolor);
-	g_Font[font_info]->RenderString (xpos + xpos2, ypos, width - xpos - xpos2, txt2, 0, 0, true, fgcolor);
+	g_Font[font_info]->RenderString (xpos + xpos2, ypos, width - xpos - xpos2, txt2, 0, 0, true, fgcolor_arg);
 }
 
 void CStreamInfo2::paint_techinfo(int xpos, int ypos)
@@ -363,7 +369,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 
 	{
 		char const *s_arr[] = {
-			"Tp. Freq.", "ONid", "Sid", "TSid", "PMTpid", "Vpid", "Apid(s)", "VTXTpid", NULL
+			"Tp. Freq.", "ONid", "Sid", "TSid", "PMTpid", "Vpid", "Apid(s)", "VTXTpid", "Backup Logo", NULL
 		};
 
 		const char **i = s_arr;
@@ -477,7 +483,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 
 	//apid
 	ypos+= iheight;
-	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Apid(s):" , COL_MENUCONTENTDARK, 0, true, fgcolor);
+	g_Font[font_info]->RenderString(xpos, ypos, width*2/3-10, "Apid(s)" , COL_MENUCONTENTDARK, 0, true, fgcolor);
 	if (g_RemoteControl->current_PIDs.APIDs.empty()){
 		snprintf(buf, sizeof(buf), "%s", g_Locale->getText(LOCALE_STREAMINFO_NOT_AVAILABLE));
 	} else {
@@ -505,11 +511,41 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 			g_RemoteControl->current_PIDs.PIDs.vtxtpid);
 	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "VTXTpid", spaceoffset, buf);
 
-	//picon
+	//picons
 	ypos += iheight;
+	t_channel_id channel_id = channelList->getActiveChannel_ChannelID();
 	char logoname[255] ="";
-	sprintf(logoname, "%llx.jpg", channelList->getActiveChannel_ChannelID() & 0xFFFFFFFFFFFFULL);
-	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Logo:", spaceoffset, logoname);
+	snprintf(logoname, sizeof(logoname), "%s/%llx.jpg", g_settings.picon_dir, channel_id & 0xFFFFFFFFFFFFULL);
+	int fgcolor_found = fgcolor_head;
+	int logo_found = !access(logoname, R_OK);
+	if (logo_found) {
+		fgcolor_arg = fgcolor_found;
+		fgcolor_found = fgcolor;
+	}
+	paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Logo", spaceoffset, logoname);
+#define P_W 100
+#define P_H 60
+	if (logo_found && g_PicViewer->DisplayImage(logoname, xpos + spaceoffset, ypos + 10, P_W, P_H))
+		ypos += P_H + 20;
+	fgcolor_arg = fgcolor;
+	CZapitChannel * cc = CNeutrinoApp::getInstance()->channelList->getChannel(channel_id);
+	if (cc) {
+		ypos += iheight;
+		snprintf(logoname, sizeof(logoname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+			g_settings.picon_dir_e2,
+			(u_int) (cc->getVideoPid() > 0) ? 1 : 2,
+			(u_int) channel_id & 0xFFFF,
+			(u_int) (channel_id >> 32) & 0xFFFF,
+			(u_int) (channel_id >> 16) & 0xFFFF,
+			(u_int) cc->getSatellitePosition());
+		int logo_found = !access(logoname, R_OK);
+		if (logo_found)
+			fgcolor_arg = fgcolor_found;
+		paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Backup Logo", spaceoffset, logoname);
+		fgcolor_arg = fgcolor;
+		if (logo_found && g_PicViewer->DisplayImage(logoname, xpos + spaceoffset, ypos + 10, P_W, P_H))
+			ypos += P_H + 20;
+	}
 
 	yypos = ypos;
 }
@@ -542,7 +578,8 @@ void CStreamInfo2::showScale (int i, int posy)
 	int perc = ((fesig[i].val[i] & 0xFFFF) * 100) >> 16;
 	if(perc != fesig[i].oldpercent) {
 		char percent[40];
-		int posx = x + 10;
+		// int posx = x + 10;
+		int posx = width - 2 * width/5 - 10;
 		snprintf(percent, sizeof(percent), "%d%% %s", perc, fesig[i].title);
 		int sw = g_Font[font_info]->getRenderWidth (percent);
 		fesig[i].scale->paint(posx - 1, posy, perc);
