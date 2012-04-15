@@ -398,7 +398,7 @@ int CPictureViewerGui::show()
 					m_state = SLIDESHOW;
 			}
 		}
-		else if(msg==CRCInput::RC_help)
+		else if(msg==CRCInput::RC_help || msg==CRCInput::RC_info)
 		{
 			if (m_state == MENU)
 			{
