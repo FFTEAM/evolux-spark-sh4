@@ -113,6 +113,13 @@ CPSISetup::readProcPSI (int i)
 #endif
 
 void
+CPSISetup::writeProcPSI ()
+{
+  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+    writeProcPSI (i);
+}
+
+void
 CPSISetup::writeProcPSI (int i)
 {
   int fn;

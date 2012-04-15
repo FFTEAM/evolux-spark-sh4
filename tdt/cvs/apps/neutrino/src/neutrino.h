@@ -45,6 +45,7 @@
 #include <gui/channellist.h>          /* CChannelList */
 #include <gui/rc_lock.h>
 #include <gui/extra_menu.h>
+#include <gui/psisetup.h>
 #include <daemonc/remotecontrol.h>    /* st_rmsg      */
 
 #include <zapit/client/zapitclient.h>
@@ -267,6 +268,8 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CNetworkConfig                  networkConfig;
 		CMenuOptionChooser		*DHCPOptionChooser;
 		CDHCPNotifier			*dhcpNotifier;
+
+		CPSISetup			*chPSISetup;
 
 		static CNeutrinoApp* getInstance();
 

@@ -2687,6 +2687,8 @@ int CNeutrinoApp::run(int argc, char **argv)
 	hintBox->hide();
 	delete hintBox;
 
+	chPSISetup->writeProcPSI();
+
 	cDvbCi::getInstance()->SetHook(CISendMessage);
 	RealRun(mainMenu);
 

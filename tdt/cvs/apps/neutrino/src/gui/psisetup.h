@@ -74,6 +74,7 @@ public:
 
   int exec (CMenuTarget * parent, const std::string & actionKey);
   void hide ();
+  void writeProcPSI ();
   void writeProcPSI (int);
 };
 

@@ -343,7 +343,8 @@ CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video", 5
 	addItem(new CMenuForwarder(LOCALE_VIDEOMENU_SCREENSETUP, true, NULL, &ScreenSetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
 #endif
 	addItem(GenericMenuSeparatorLine);
-	CPSISetup* chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
+	CPSISetup *chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
+	CNeutrinoApp::getInstance()->chPSISetup = chPSISetup;
 	addItem(new CMenuForwarder(LOCALE_VIDEOMENU_PSI, true, NULL, chPSISetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));;
 	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_STEP, (int *)&g_settings.psi_step, true, 1, 100, NULL));
 	CPSISetupNotifier *psiNotifier = new CPSISetupNotifier(chPSISetup);
