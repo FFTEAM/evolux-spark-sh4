@@ -1052,7 +1052,7 @@ void CEpgData::showTimerEventBar (bool show)
 	i++;
 
 	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-		x + 10, y + h - h_offset - fh , (w - 20)/i, i, bl);
+		x + 10, y + h - h_offset - fh , (w - 20 - 2 * (ICON_LARGE_WIDTH+2))/i, i, bl);
 }
 
 //  -- EPG Data Viewer Menu Handler Class
