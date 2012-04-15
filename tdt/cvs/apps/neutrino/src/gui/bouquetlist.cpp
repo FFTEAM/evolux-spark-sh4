@@ -532,7 +532,7 @@ void CBouquetList::paint()
 	int ButtonWidth = (width - 20) / 4;
 
 	frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
-	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - buttonHeight) + 3, ButtonWidth, 4, CBouquetListButtons);
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + (height - buttonHeight) + 3, ButtonWidth, 4, CBouquetListButtons);
 
 	if(Bouquets.size()) 
 	{

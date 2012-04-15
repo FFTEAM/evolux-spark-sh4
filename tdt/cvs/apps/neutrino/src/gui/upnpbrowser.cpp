@@ -1526,7 +1526,7 @@ void CUpnpBrowserGui::paintDevice()
 	int ButtonWidth = (m_width - 20) / 4;
 	m_frameBuffer->paintBoxRel(m_x, top, m_width, 1 * m_buttonHeight, COL_MENUHEAD_PLUS_0, c_rad_mid, CORNER_BOTTOM);
 	m_frameBuffer->paintHLine(m_x, m_x + m_width, top, COL_INFOBAR_SHADOW_PLUS_0);
-	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale,
+	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
 		m_x + 10, top + 4, ButtonWidth, 1, &RescanButton);
 
 	clearItem2DetailsLine(); // clear it
@@ -1651,11 +1651,11 @@ void CUpnpBrowserGui::paintItem(std::vector<UPnPEntry> *entry, unsigned int sele
 	int ButtonWidth = (m_width - 20) / 4;
 	m_frameBuffer->paintBoxRel(m_x, top, m_width, 1 * m_buttonHeight+2, COL_MENUHEAD_PLUS_0);
 	m_frameBuffer->paintHLine(m_x, m_x + m_width, top, COL_INFOBAR_SHADOW_PLUS_0);
-	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale,
+	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
 		m_x + 10, top + 4, ButtonWidth, 1, &StopButton);
-	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale,
+	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
 		m_x + ButtonWidth + 10, top + 4, ButtonWidth, 1, &PUpButton);
-	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale,
+	::paintButtons(m_frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
 		m_x + 2 * ButtonWidth + 10, top + 4, ButtonWidth, 1, &PDownButton);
 
 	m_frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_OKAY, m_x + 3 * ButtonWidth + 10, top + 1);

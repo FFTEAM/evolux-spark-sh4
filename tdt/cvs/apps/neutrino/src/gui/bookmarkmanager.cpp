@@ -445,9 +445,9 @@ void CBookmarkManager::paintFoot()
 	frameBuffer->paintHLine(x, x+width,  y, COL_INFOBAR_SHADOW_PLUS_0);
 
 	if (bookmarks.empty())
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height + 4, width - 20, 2, &BookmarkmanagerButtons[2]);
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + height + 4, width - 20, 2, &BookmarkmanagerButtons[2]);
 	else
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height + 4, (width - 20)/3, 3, BookmarkmanagerButtons);
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + height + 4, (width - 20)/3, 3, BookmarkmanagerButtons);
 }
 
 //------------------------------------------------------------------------

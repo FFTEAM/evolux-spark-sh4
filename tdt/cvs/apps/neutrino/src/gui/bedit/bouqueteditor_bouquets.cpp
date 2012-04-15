@@ -167,7 +167,7 @@ void CBEBouquetWidget::paintFoot()
 			Button[3].locale = LOCALE_BOUQUETEDITOR_LOCK;
 		break;
 	}
-	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 5, y + height + 4, (width - 28 - 10) / 4, 4, Button);
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 5, y + height + 4, (width - 28 - 10) / 4, 4, Button);
 	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_MENU, x+width - 28, y+height);
 }
 

@@ -1515,35 +1515,35 @@ void CMovieBrowser::refreshFoot(void)
 				m_cBoxFrameFootRel.iWidth, m_cBoxFrameFootRel.iHeight+ 6,  
 				(CFBWindow::color_t)COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 
-	int width = m_cBoxFrameFootRel.iWidth>>2;
-	
-	int xpos1 = m_cBoxFrameFootRel.iX+10;
-	int width1 = width;
-	int xpos2 = xpos1 + width1;
-	int width2 = width + width;
-	int xpos4 = xpos2 + width2;
-	int width4 = width;
-	//int xpos4 = xpos3 + width3;
-	//int width4 = width;
+	struct button_label bl[10];
+	int i = 0;
 
-	// draw Button blue (filter)
-	//xpos += ButtonWidth + ButtonSpacing;
-	// draw yellow (sort)
-	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD)
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, m_pcFontFoot, sort_text.c_str(),
-			m_cBoxFrame.iX+xpos1, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width1);
+	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD) {
+		bl[i].button = NEUTRINO_ICON_BUTTON_RED;
+		bl[i].locale = NONEXISTANT_LOCALE;
+		bl[i].text = sort_text.c_str();
+		i++;
+	}
 
-	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD)
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_GREEN, m_pcFontFoot, filter_text.c_str(),
-			m_cBoxFrame.iX+xpos2, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width2);
+	if (m_settings.gui != MB_GUI_LAST_PLAY && m_settings.gui != MB_GUI_LAST_RECORD) {
+		bl[i].button = NEUTRINO_ICON_BUTTON_GREEN;
+		bl[i].locale = NONEXISTANT_LOCALE;
+		bl[i].text = filter_text.c_str();
+		i++;
+	}
 
-	if(m_settings.gui == MB_GUI_FILTER && m_windowFocus == MB_FOCUS_FILTER)
-		ok_text = "select";
-	else
-		ok_text = g_Locale->getText(LOCALE_MOVIEBROWSER_FOOT_PLAY);
+	bl[i].button = NEUTRINO_ICON_BUTTON_OKAY;
+	if(m_settings.gui == MB_GUI_FILTER && m_windowFocus == MB_FOCUS_FILTER) {
+		bl[i].locale = NONEXISTANT_LOCALE;
+		bl[i].text = "select"; //FIXME
+	} else
+		bl[i].locale = LOCALE_MOVIEBROWSER_FOOT_PLAY;
 
-	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_OKAY, m_pcFontFoot, ok_text.c_str(),
-		m_cBoxFrame.iX+xpos4, m_cBoxFrame.iY+m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight + 4, width4);
+	i++;
+
+	::paintButtons(frameBuffer, m_pcFontFoot, m_cBoxFrame.iX + 10,
+		m_cBoxFrame.iY + m_cBoxFrameFootRel.iY + m_cBoxFrameFootRel.iHeight+ 6 - m_pcFontFoot->getHeight(),
+		(m_cBoxFrameFootRel.iWidth - 20)/i, i, bl);
 }
 
 bool CMovieBrowser::onButtonPress(neutrino_msg_t msg)
@@ -3105,7 +3105,6 @@ bool CMovieBrowser::isFiltered(MI_MOVIE_INFO& movie_info)
 		case MB_INFO_SERIE:
 			if(strcmp(m_settings.filter.optionString.c_str(),movie_info.serieName.c_str()) == 0) 
 				result = false;
-			break;
 			break;
 		default:
 				result = false;

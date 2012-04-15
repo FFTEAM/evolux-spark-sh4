@@ -1588,7 +1588,7 @@ void CChannelList::paintHead()
 	}
 
 	frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2); //round
-	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - buttonHeight) + 3, ButtonWidth, 
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + (height - buttonHeight) + 3, ButtonWidth, 
 		bouquetList ? 5 : 4, vlist ? CChannelVListButtons : CChannelListButtons);
 
 //	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x+ width- 30, y+ 5 );

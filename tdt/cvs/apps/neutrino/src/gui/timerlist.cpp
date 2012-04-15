@@ -767,9 +767,9 @@ void CTimerList::paintFoot()
 
 	int h = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 	if (timerlist.empty())
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + ButtonWidth + 10, y + height, ButtonWidth, 2, &(TimerListButtons[1]));
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + ButtonWidth + 10, y + height, ButtonWidth, 2, &(TimerListButtons[1]));
 	else
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height, ButtonWidth, 4, TimerListButtons);
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + height, ButtonWidth, 4, TimerListButtons);
 }
 
 void CTimerList::paint()

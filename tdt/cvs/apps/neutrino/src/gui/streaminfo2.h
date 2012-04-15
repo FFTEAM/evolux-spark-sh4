@@ -54,6 +54,7 @@ class CStreamInfo2 : public CMenuTarget
 
 		int  fgcolor;
 		int  fgcolor_head;
+		int  fgcolor_arg;
 		int  bgcolor;
 
 		int   sigBox_x;

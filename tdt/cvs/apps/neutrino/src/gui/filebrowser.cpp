@@ -1420,7 +1420,7 @@ void CFileBrowser::paintFoot()
 			i++;
 		}
 
-		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, by, (width - 20)/i, i, bl);
+		::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, by, (width - 20)/i, i, bl);
 	}
 }
 

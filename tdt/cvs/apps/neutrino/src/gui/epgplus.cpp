@@ -491,7 +491,7 @@ void EpgPlus::Footer::paintButtons (button_label * buttonLabels, int numberOfBut
 
   this->frameBuffer->paintBoxRel (this->x, yPos, this->width, this->fontButtons->getHeight (), COL_MENUHEAD_PLUS_0);
 
-  ::paintButtons (this->frameBuffer, this->fontButtons, g_Locale, this->x + 10, yPos + this->fontButtons->getHeight () - buttonHeight + 3, buttonWidth, numberOfButtons, buttonLabels);
+  ::paintButtons (this->frameBuffer, this->fontButtons, this->x + 10, yPos + this->fontButtons->getHeight () - buttonHeight + 3, buttonWidth, numberOfButtons, buttonLabels);
 
   this->frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_HELP, this->x + this->width - 30, yPos - this->fontButtons->getHeight ());
 }

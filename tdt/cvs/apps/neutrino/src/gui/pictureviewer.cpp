@@ -644,7 +644,7 @@ void CPictureViewerGui::paintFoot()
 		i++;
 	}
 	int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_FILEBROWSER_ITEM]->getHeight();
-	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10,
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10,
 		y + height - fheight - 4, (width - 20)/i, i, bl);
 //	printf("paintFoot}\n");
 }

@@ -24,8 +24,8 @@
 #endif
 
 #include <gui/widget/buttons.h>
-
 #include <gui/color.h>
+#include <global.h>
 
 void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * const font, const std::string &text, const int x, const int y, const unsigned int buttonwidth) {
 	paintButton(frameBuffer, button, font, text.c_str(), x, y, buttonwidth);
@@ -51,18 +51,19 @@ void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Fo
 	paintButton(frameBuffer, button, font, text, x, y - font->getHeight(), buttonwidth);
 }
 
-void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLocaleManager * const localemanager, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content)
+void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content)
 {
 	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
 	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0, loc_count = 0;
 	for (int i = 0; i < count; i++) {
 		if ((content[i].locale == NONEXISTANT_LOCALE)) {
-			if (content[i].text)
+			if (content[i].text) {
 				bw[i] = 25 + font->getRenderWidth(content[i].text);
-			else
+				loc_count++;
+			} else
 				bw[i] = 25;
 		} else {
-			bw[i] = 25 + font->getRenderWidth(localemanager->getText(content[i].locale), true);
+			bw[i] = 25 + font->getRenderWidth(g_Locale->getText(content[i].locale), true);
 			loc_count++;
 		}
 		sp[i] = bw[i] - buttonwidth;
@@ -103,7 +104,7 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const CLo
 	bw_sum = 0;
 	for (int i = 0; i < count; i++) {
 		paintButton(frameBuffer, content[i].button, font, (content[i].locale == NONEXISTANT_LOCALE)
-			? content[i].text : localemanager->getText(content[i].locale),
+			? content[i].text : g_Locale->getText(content[i].locale),
 			x + bw_sum, y, bw[i]);
 		bw_sum += bw[i];
 	}

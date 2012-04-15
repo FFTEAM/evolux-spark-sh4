@@ -149,7 +149,7 @@ void CBEChannelWidget::paintFoot()
 	frameBuffer->paintBoxRel(x,y+height, width,ButtonHeight, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 	//frameBuffer->paintHLine(x, x+width,  y, COL_INFOBAR_SHADOW_PLUS_0);
 
-	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + height + 4, (width - 20) / 4, 4, CBEChannelWidgetButtons);
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, y + height + 4, (width - 20) / 4, 4, CBEChannelWidgetButtons);
 }
 
 void CBEChannelWidget::hide()
