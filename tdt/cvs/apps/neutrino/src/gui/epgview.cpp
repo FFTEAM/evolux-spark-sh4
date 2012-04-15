@@ -635,16 +635,9 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 
 	GetPrevNextEPGData( epgData.eventID, &epgData.epg_times.startzeit );
 	if (prev_id != 0)
-	{
-		frameBuffer->paintBoxRel(sx+ 5, sy+ oy- botboxheight+ 4, botboxheight- 8, botboxheight- 8,  COL_MENUCONTENT_PLUS_3);
-		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_DATE]->RenderString(sx+ 10, sy+ oy- 3, widthr, "<", COL_MENUCONTENT + 3);
-	}
-
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_LEFT, sx+ 5, sy+ oy- botboxheight+ 4, botboxheight- 8, botboxheight- 8);
 	if (next_id != 0)
-	{
-		frameBuffer->paintBoxRel(sx+ ox- botboxheight+ 8- 5, sy+ oy- botboxheight+ 4, botboxheight- 8, botboxheight- 8,  COL_MENUCONTENT_PLUS_3);
-		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_DATE]->RenderString(sx+ ox- botboxheight+ 8, sy+ oy- 3, widthr, ">", COL_MENUCONTENT + 3);
-	}
+		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RIGHT, sx+ ox- botboxheight+ 8- 5, sy+ oy- botboxheight+ 4, botboxheight- 8, botboxheight- 8);
 
 	if ( doLoop )
 	{
