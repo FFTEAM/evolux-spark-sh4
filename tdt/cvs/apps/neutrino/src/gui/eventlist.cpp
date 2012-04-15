@@ -692,9 +692,6 @@ void EventList::paint(t_channel_id channel_id)
 {
 	liststart = (selected/listmaxshow)*listmaxshow;
 
-	if (evtlist[0].eventID != 0)
-		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_HELP, x+ width- 30, y+ 5 );
-
 	frameBuffer->paintBoxRel(x, y+theight, width, height-theight-iheight, COL_MENUCONTENT_PLUS_0, 0, 1);
 	for(unsigned int count=0;count<listmaxshow;count++)
 	{
@@ -716,17 +713,11 @@ void EventList::paint(t_channel_id channel_id)
 void  EventList::showFunctionBar (bool show)
 {
   int  bx,by,bw,bh;
-  int  cellwidth;		// 4 cells
-  int  h_offset, pos;
-  int  bdx;
 
   bw = width;
   bh = iheight;
   bx = x;
   by = y + height-iheight;
-  h_offset = 5;
-  cellwidth = bw / 4;
-  bdx = iheight-1;
 
   int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
 
@@ -734,46 +725,53 @@ void  EventList::showFunctionBar (bool show)
     // -- hide only?
     if (! show) return;
 
-    // -- frameBuffer->paintBoxRel(x,y,w,h, COL_INFOBAR_SHADOW_PLUS_1);
-    //frameBuffer->paintBoxRel(bx,by,bw,bh, COL_MENUHEAD_PLUS_0);
     frameBuffer->paintBoxRel(bx,by,bw,bh, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);
 
+    struct button_label bl[10];
+    int i = 0;
 
     // -- Button: Timer Record & Channelswitch
     if ((g_settings.recording_type != CNeutrinoApp::RECORDING_OFF) &&
-	((unsigned int) g_settings.key_channelList_addrecord != CRCInput::RC_nokey))
-    {
-	    pos = 0;
+	((unsigned int) g_settings.key_channelList_addrecord != CRCInput::RC_nokey)) {
 #warning FIXME: display other icons depending on g_settings.key_channelList_addrecord
-	    if ((g_settings.key_channelList_addrecord == CRCInput::RC_red) && !g_settings.minimode)
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-			g_Locale->getText(LOCALE_EVENTLISTBAR_RECORDEVENT), bx+8+cellwidth*pos, by+bh-h_offset, bw);
+	    if ((g_settings.key_channelList_addrecord == CRCInput::RC_red) && !g_settings.minimode) {
+		bl[i].button = NEUTRINO_ICON_BUTTON_RED;
+		bl[i].locale = LOCALE_EVENTLISTBAR_RECORDEVENT;
+		i++;
+	}
     }
-    if (1)
-    {
-                pos = 1;
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_GREEN, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-			g_Locale->getText(LOCALE_EVENTFINDER_SEARCH), bx+8+cellwidth*pos, by+bh-h_offset, bw);
-    }
+
+    bl[i].button = NEUTRINO_ICON_BUTTON_GREEN;
+    bl[i].locale = LOCALE_EVENTFINDER_SEARCH;
+    i++;
 
     // Button: Timer Channelswitch
     if ((unsigned int) g_settings.key_channelList_addremind != CRCInput::RC_nokey)
     {
-	    pos = 2;
 #warning FIXME: display other icons depending on g_settings.key_channelList_addremind
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_YELLOW, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-			g_Locale->getText(LOCALE_EVENTLISTBAR_CHANNELSWITCH), bx+8+cellwidth*pos, by+bh-h_offset, bw);
+	bl[i].button = NEUTRINO_ICON_BUTTON_YELLOW;
+	bl[i].locale = LOCALE_EVENTLISTBAR_CHANNELSWITCH;
+		i++;
     }
 
     // Button: Event Re-Sort
-    if ((unsigned int) g_settings.key_channelList_sort != CRCInput::RC_nokey)
-    {
-	    pos = 3;
+    if ((unsigned int) g_settings.key_channelList_sort != CRCInput::RC_nokey) {
 #warning FIXME: display other icons depending on g_settings.key_channelList_sort value
-	    if (g_settings.key_channelList_sort == CRCInput::RC_blue)
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_BLUE, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-			g_Locale->getText(LOCALE_EVENTLISTBAR_EVENTSORT), bx+8+cellwidth*pos, by+bh-h_offset, bw);
+	    if (g_settings.key_channelList_sort == CRCInput::RC_blue) {
+		bl[i].button = NEUTRINO_ICON_BUTTON_BLUE;
+		bl[i].locale = LOCALE_EVENTLISTBAR_EVENTSORT;
+		i++;
+	    }
     }
+
+    if (evtlist[0].eventID != 0) {
+	bl[i].button = NEUTRINO_ICON_BUTTON_HELP;
+	bl[i].locale = NONEXISTANT_LOCALE;
+	bl[i].text = NULL;
+	i++;
+    }
+
+    ::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], x + 10, by + iheight - fh - 5, (width - 20)/i, i, bl);
 }
 
 int CEventListHandler::exec(CMenuTarget* parent, const std::string &actionkey)

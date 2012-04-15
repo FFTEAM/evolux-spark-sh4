@@ -1036,14 +1036,23 @@ void CEpgData::showTimerEventBar (bool show)
 	frameBuffer->paintBoxRel(x,y,w,h, COL_MENUHEAD_PLUS_0, ROUND_RADIUS, 2);//round
 
 	int fh = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
-	int fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)];
+
+	struct button_label bl[10];
+	int i = 0;
+
 	// Button: Timer Record & Channelswitch
-	if (g_settings.recording_type != CNeutrinoApp::RECORDING_OFF)
-		::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_RED, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-			g_Locale->getText(LOCALE_TIMERBAR_RECORDEVENT), x + cellwidth * 0, y+h-h_offset, cellwidth);
-	// Button: Timer Channelswitch
-	::paintButton_Footer(frameBuffer, NEUTRINO_ICON_BUTTON_YELLOW, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
-		g_Locale->getText(LOCALE_TIMERBAR_CHANNELSWITCH), x + cellwidth * 2, y+h-h_offset, cellwidth);
+	if (g_settings.recording_type != CNeutrinoApp::RECORDING_OFF) {
+		bl[i].button = NEUTRINO_ICON_BUTTON_RED;
+		bl[i].locale = LOCALE_TIMERBAR_RECORDEVENT;
+		i++;
+	}
+
+	bl[i].button = NEUTRINO_ICON_BUTTON_YELLOW;
+	bl[i].locale = LOCALE_TIMERBAR_CHANNELSWITCH;
+	i++;
+
+	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL],
+		x + 10, y + h - h_offset - fh , (w - 20)/i, i, bl);
 }
 
 //  -- EPG Data Viewer Menu Handler Class
