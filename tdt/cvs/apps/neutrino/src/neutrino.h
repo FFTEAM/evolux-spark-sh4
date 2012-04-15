@@ -93,7 +93,7 @@ class CMenuWidget_Network : public CMenuWidget
     public: 
 	CMenuOptionStringChooser *networkSettings_Interface;
 	CMenuForwarder *wlanMenuForw;
-	CMenuWidget_Network(const neutrino_locale_t Name, const std::string & Icon = "", const int mwidth = 400, const int mheight = 576);
+	CMenuWidget_Network(const neutrino_locale_t Name, const std::string & Icon = "", const int mwidth = 500, const int mheight = 576);
 	void InitInterfaceList();
 	int exec(CMenuTarget* parent, const std::string & actionKey);
 };
