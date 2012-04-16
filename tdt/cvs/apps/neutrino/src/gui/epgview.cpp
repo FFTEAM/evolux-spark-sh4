@@ -652,7 +652,7 @@ int CEpgData::show(const t_channel_id channel_id, unsigned long long a_id, time_
 
 		while(loop)
 		{
-			g_RCInput->getMsgAbsoluteTimeout( &msg, &data, &timeoutEnd );
+			g_RCInput->getMsgAbsoluteTimeout( &msg, &data, &timeoutEnd, true);
 
 			scrollCount = medlinecount;
 
