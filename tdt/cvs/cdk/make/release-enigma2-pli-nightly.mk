@@ -274,6 +274,7 @@ release-enigma2-pli-nightly_base:
 	cp $(targetprefix)/etc/tuxbox/cables.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release-enigma2-pli-nightly/etc/tuxbox/ && \
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Vali.HD.nano $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
+	cp -RP $(buildprefix)/root/usr/local/share/enigma2/Nobile $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
 	cp -RP $(appsdir)/enigma2-pli-nightly/data/skin_default $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
 	cp -RP $(appsdir)/enigma2-pli-nightly/data/*.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
 	cp -RP $(appsdir)/enigma2-pli-nightly/data/free* $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
