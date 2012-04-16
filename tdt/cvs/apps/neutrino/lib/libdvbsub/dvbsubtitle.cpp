@@ -750,8 +750,9 @@ void cDvbSubtitleBitmaps::Draw()
 	fb_pixel_t *b = fb->icon_space;
 	for (int j = 0; j < bs; j++)
 	    b[j] = save_colors[bitmaps[i]->bitmap[j]];
-#endif
+#else
 	int y = (bitmaps[i]->Y0()) * stride + bitmaps[i]->X0();
+#endif
 
 	int bih = bitmaps[i]->Height();
 	int biw = bitmaps[i]->Width();
@@ -759,24 +760,22 @@ void cDvbSubtitleBitmaps::Draw()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), biw, bih, NumColors);
 
-	if (y > bih) {
 #ifdef PLATFORM_SPARK
-		int width_new = (biw * max_x) / picture_xres;
-		int height_new = (bih * max_y) / picture_yres;
+	int width_new = (biw * max_x) / picture_xres;
+	int height_new = (bih * max_y) / picture_yres;
 
-		fb->blitIcon(biw, bih, 0, fb->scaleY(bitmaps[i]->Y0()), width_new, height_new);
+	fb->blitIcon(biw, bih, 0, fb->scaleY(bitmaps[i]->Y0()), width_new, height_new);
 #else
-		if (split3D) {
-		    for (int y2 = 0; y2 < bih; y2++, y += stride)
-			for (int x2 = 0; x2 < biw; x2++)
-			    fb->paintPixel(x2, y, save_colors[*(bitmaps[i]->Data(x2, y2))], false);
-		} else {
-		    for (int y2 = 0; y2 < bih; y2++, y += stride)
-			for (int x2 = 0; x2 < biw; x2++)
-			    *(sublfb + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
-		}
-#endif
+	if (split3D) {
+	    for (int y2 = 0; y2 < bih; y2++, y += stride)
+		for (int x2 = 0; x2 < biw; x2++)
+		    fb->paintPixel(x2, y, save_colors[*(bitmaps[i]->Data(x2, y2))], false);
+	} else {
+	    for (int y2 = 0; y2 < bih; y2++, y += stride)
+		for (int x2 = 0; x2 < biw; x2++)
+		    *(sublfb + x2 + y) = save_colors[*(bitmaps[i]->Data(x2, y2))];
 	}
+#endif
     }
 
     needs_clear = true;
