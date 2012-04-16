@@ -89,7 +89,6 @@ class CFrameBuffer
 		fb_pixel_t *    lfb;
 #ifdef __sh__
 		int				fd_bpa;
-		fb_pixel_t *    icon_space;
 #endif
 		int		available;
 		fb_pixel_t *    background;
@@ -122,6 +121,9 @@ class CFrameBuffer
 	public:
 #ifndef FB_USE_PALETTE
 		fb_pixel_t realcolor[256];
+#endif
+#ifdef __sh__
+		fb_pixel_t *    icon_space;
 #endif
 
 		~CFrameBuffer();

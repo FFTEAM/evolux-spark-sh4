@@ -91,11 +91,11 @@ public:
 
 class cBitmap : public cPalette {
 private:
-  tIndex *bitmap;
   int x0, y0;
   int width, height;
   int dirtyX1, dirtyY1, dirtyX2, dirtyY2;
 public:
+  tIndex *bitmap;
   cBitmap(int Width, int Height, int Bpp, int X0 = 0, int Y0 = 0);
        ///< Creates a bitmap with the given Width, Height and color depth (Bpp).
        ///< X0 and Y0 define the offset at which this bitmap will be located on the OSD.
