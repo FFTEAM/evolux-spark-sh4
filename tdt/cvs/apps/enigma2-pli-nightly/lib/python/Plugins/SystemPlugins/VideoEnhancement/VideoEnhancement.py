@@ -12,7 +12,7 @@ class VideoEnhancement:
 
 	def createConfig(self, *args):
 		config.psi = ConfigSubsection()
-		config.psi.configsteps = NoSave(ConfigSelection(choices=[1, 5, 10, 25], default = 1))
+		config.psi.configsteps = NoSave(ConfigSelection(choices=[1, 5, 10, 25], default = 5))
 
 		if os_path.exists("/proc/stb/video/plane/psi_contrast"):
 			def setContrast(config):
