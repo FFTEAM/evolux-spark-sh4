@@ -92,8 +92,10 @@ CVFD::CVFD()
 CVFD::~CVFD()
 {
 	timeThreadRunning = false;
-	if (thrTime)
+	if (thrTime) {
+		write(time_notify_writer, "", 1);
 		pthread_join(thrTime, NULL);
+	}
 	
 	if(fd > 0)
 		close(fd);
