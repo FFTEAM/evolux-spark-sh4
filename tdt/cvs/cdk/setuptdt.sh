@@ -109,15 +109,29 @@ if [ ! "$?" -eq "0" ]; then
 fi
 
 #Is this also necessary for other dists?
-	DEBIAN_VERSION=`cat /etc/debian_version`
-	if [ $DEBIAN_VERSION == "wheezy/sid" ]; then
-	# Do we need to take care of 32bit and 64bit?
-	echo "Downgrading to gcc-4.5"
-	apt-get install gcc-4.5
-	apt-get install g++-4.5
-	update-alternatives --remove-all gcc
-	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.5 45 --slave /usr/bin/g++ g++ /usr/bin/g++-4.5 --slave /usr/bin/gcov gcov /usr/bin/gcov-4.5
-	
-	ln -s /usr/include/i386-linux-gnu/bits /usr/include/bits
-	ln -s /usr/include/i386-linux-gnu/gnu /usr/include/gnu
-	ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
+DEBIAN_VERSION=`cat /etc/debian_version`
+if [ $DEBIAN_VERSION == "wheezy/sid" ]; then
+	read -p "Downgrade gcc to 4.5? (y/N) "
+	if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
+		# Do we need to take care of 32bit and 64bit?
+		echo "Downgrading to gcc-4.5"
+		apt-get install gcc-4.5
+		apt-get install g++-4.5
+		update-alternatives --remove-all gcc
+		update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.5 45 --slave /usr/bin/g++ g++ /usr/bin/g++-4.5 --slave /usr/bin/gcov gcov /usr/bin/gcov-4.5
+
+		ln -s /usr/include/i386-linux-gnu/bits /usr/include/bits
+		ln -s /usr/include/i386-linux-gnu/gnu /usr/include/gnu
+		ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
+	else
+		if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
+			ln -s /usr/include/x86_64-linux-gnu/bits /usr/include/bits
+			ln -s /usr/include/x86_64-linux-gnu/gnu /usr/include/gnu
+			ln -s /usr/include/x86_64-linux-gnu/sys /usr/include/sys
+		else
+			ln -s /usr/include/i386-linux-gnu/bits /usr/include/bits
+			ln -s /usr/include/i386-linux-gnu/gnu /usr/include/gnu
+			ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
+		fi
+	fi
+fi
