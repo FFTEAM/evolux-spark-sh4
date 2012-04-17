@@ -300,7 +300,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &
 
-	[ -n "$START_E2" ] && (sleep 15;startVideoTuneEnhanced) &
+	[ -n "$START_E2" ] && (sleep 29;startVideoTuneEnhanced) &
 	
 	#neutrinoTuxtxt=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
 	#if [ $neutrinoTuxtxt == "7" ]; then
