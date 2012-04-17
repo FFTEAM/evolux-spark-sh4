@@ -212,12 +212,15 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
   for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
     psi_list[i].value_old = psi_list[i].value;
 
-  paint ();
+  paint();
 
+  unsigned long long timeoutEnd = CRCInput::calcTimeoutEnd(g_settings.timing[SNeutrinoSettings::TIMING_MENU] ? g_settings.timing[SNeutrinoSettings::TIMING_MENU] : 0xffff);
   bool loop = true;
   while (loop)
     {
-      g_RCInput->getMsg (&msg, &data, 100);
+      g_RCInput->getMsgAbsoluteTimeout(&msg, &data, &timeoutEnd, true);
+      if ( msg <= CRCInput::RC_MaxRC )
+	timeoutEnd = CRCInput::calcTimeoutEnd(g_settings.timing[SNeutrinoSettings::TIMING_MENU] ? g_settings.timing[SNeutrinoSettings::TIMING_MENU] : 0xffff);
       switch (msg)
 	{
 	case CRCInput::RC_down:
@@ -330,23 +333,17 @@ CPSISetup::paint ()
 void
 CPSISetup::paintSlider (int i)	// UTF-8
 {
-  int col_bg =
-    psi_list[i].selected ? COL_MENUCONTENTSELECTED_PLUS_0 :
-    COL_MENUCONTENT_PLUS_0;
-  int col_fg =
-    psi_list[i].selected ? COL_MENUCONTENTSELECTED : COL_MENUCONTENT;
+  int fg_col = frameBuffer->realcolor[(((((int)psi_list[i].selected ? COL_MENUHEAD : COL_MENUCONTENT) + 2) | 7) - 2)];
 
   if (i < PSI_RESET)
     {
       psi_list[i].scale->paint (psi_list[i].x, psi_list[i].y + sliderOffset, (psi_list[i].value * 100)/255);
-      frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, locWidth, locHeight, col_bg, ROUND_RADIUS, 3);
-      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc, psi_list[i].yLoc, locWidth, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
+      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc, psi_list[i].yLoc, locWidth, g_Locale->getText(psi_list[i].loc), 0, 0, true, fg_col);
     }
   else
     {
       int fh = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-      frameBuffer->paintBoxRel (psi_list[i].xBox, psi_list[i].yBox, dx, locHeight, col_bg, ROUND_RADIUS, 3);
-      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc,psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), col_fg, 0, true);
+      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc,psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), 0, 0, true, fg_col);
       frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_RED, psi_list[i].x + 2, psi_list[i].yLoc - fh + fh/8, 0, (6 * fh)/8);
     }
 }
