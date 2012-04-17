@@ -718,22 +718,9 @@ void cDvbSubtitleBitmaps::Draw()
 	picture_yres = 576;
     }
 
-#ifndef PLATFORM_SPARK
-    for (int i = 0; i < bitmaps.Size(); i++) {
-#if 0
-	dbgconverter("cDvbSubtitleBitmaps::Draw: pre bitmap=%d x=%d y=%d, w=%d, h=%d\n",
-		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), bitmaps[i]->Width(), bitmaps[i]->Height());
-	dbgconverter("cDvbSubtitleBitmaps::Draw: Resize %d %d => %d %d\n",
-		picture_xres, picture_yres, max_x, max_y);
-#endif
-
+#ifndef __sh__
+    for (int i = 0; i < bitmaps.Size(); i++)
 	bitmaps[i]->Resize(picture_xres, picture_yres, max_x, max_y);
-#if 0
-	dbgconverter("cDvbSubtitleBitmaps::Draw: post bitmap=%d x=%d y=%d, w=%d, h=%d\n",
-		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), bitmaps[i]->Width(), bitmaps[i]->Height());
-#endif
-
-    }
 #endif
 
     dbgconverter("cDvbSubtitleBitmaps::Draw: min_y=%d max_y=%d y_start=%d y_end=%d\n", min_y, max_y, y_start, y_end);
@@ -745,7 +732,7 @@ void cDvbSubtitleBitmaps::Draw()
 	const tColor *Colors = bitmaps[i]->Colors(NumColors);
 	if (Colors)
 	    memcpy(save_colors, Colors, sizeof(tColor)*NumColors);
-#ifdef PLATFORM_SPARK
+#ifdef __sh__
 	size_t bs = bitmaps[i]->Height() * bitmaps[i]->Width();
 	fb_pixel_t *b = fb->icon_space;
 	for (int j = 0; j < bs; j++)
@@ -760,7 +747,7 @@ void cDvbSubtitleBitmaps::Draw()
 	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 		i, bitmaps[i]->X0(), bitmaps[i]->Y0(), biw, bih, NumColors);
 
-#ifdef PLATFORM_SPARK
+#ifdef __sh__
 	int width_new = (biw * max_x) / picture_xres;
 	int height_new = (bih * max_y) / picture_yres;
 
