@@ -125,13 +125,13 @@ if [ $DEBIAN_VERSION == "wheezy/sid" ]; then
 		ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
 	else
 		if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
-			ln -s /usr/include/x86_64-linux-gnu/bits /usr/include/bits
-			ln -s /usr/include/x86_64-linux-gnu/gnu /usr/include/gnu
-			ln -s /usr/include/x86_64-linux-gnu/sys /usr/include/sys
+			ln -sf /usr/include/x86_64-linux-gnu/bits /usr/include/bits
+			ln -sf /usr/include/x86_64-linux-gnu/gnu /usr/include/gnu
+			ln -sf /usr/include/x86_64-linux-gnu/sys /usr/include/sys
 		else
-			ln -s /usr/include/i386-linux-gnu/bits /usr/include/bits
-			ln -s /usr/include/i386-linux-gnu/gnu /usr/include/gnu
-			ln -s /usr/include/i386-linux-gnu/sys /usr/include/sys
+			ln -sf /usr/include/i386-linux-gnu/bits /usr/include/bits
+			ln -sf /usr/include/i386-linux-gnu/gnu /usr/include/gnu
+			ln -sf /usr/include/i386-linux-gnu/sys /usr/include/sys
 		fi
 	fi
 fi
