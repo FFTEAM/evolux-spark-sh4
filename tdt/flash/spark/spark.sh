@@ -94,7 +94,7 @@ fi
 
 echo "----------------------------"
 
-read -t 5 -p "Select target (autoskip in 5s)? "
+read -t 10 -p "Select target (autoskip in 10s)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Preparing Neutrino jffs2..."

@@ -91,7 +91,7 @@ fi
 if [ -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
 	echo "   5) Prepare Evolux-PLI   yaffs2"
 fi
-read -t 5 -p "Select target (autoskip in 5s)? "
+read -t 10 -p "Select target (autoskip in 10s)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Creating Ntrino  yaffs2 and uImage..."
