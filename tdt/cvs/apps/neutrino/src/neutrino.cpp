@@ -3970,7 +3970,14 @@ void CNeutrinoApp::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool
 
 		CVFD::getInstance()->showVolume(g_settings.current_volume);
 		if (msg != CRCInput::RC_timeout) {
-			g_RCInput->getMsgAbsoluteTimeout(&msg, &data, &timeoutEnd );
+			uint32_t repeatkeys[] = {
+				CRCInput::RC_plus, CRCInput::RC_minus, CRCInput::RC_left, CRCInput::RC_right,
+				CRCInput::RC_nokey
+			};
+			uint32_t *old_repeatkeys = g_RCInput->setAllowRepeat(repeatkeys);
+			g_RCInput->getMsgAbsoluteTimeout(&msg, &data, &timeoutEnd);
+			g_RCInput->setAllowRepeat(old_repeatkeys);
+			
 		}
 	} while (msg != CRCInput::RC_timeout);
 
