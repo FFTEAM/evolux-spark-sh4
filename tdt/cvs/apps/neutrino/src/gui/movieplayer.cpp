@@ -186,7 +186,6 @@ CMoviePlayerGui::CMoviePlayerGui()
 void CMoviePlayerGui::Init(void)
 {
 	stopped = false;
-	cam_stopped = false;
 	hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_MOVIEPLAYER_PLEASEWAIT));	// UTF-8
 
 	frameBuffer = CFrameBuffer::getInstance();
@@ -263,10 +262,8 @@ void CMoviePlayerGui::cutNeutrino()
 		return;
 
 	if (!timeshift) {
-		// if (emu_menu) emu_menu->suspend();
 		if (!access(MOVIEPLAYER_START_SCRIPT, X_OK))
 			system(MOVIEPLAYER_START_SCRIPT);
-		cam_stopped = true;
 	}
 
 	g_Zapit->stopPlayBack();
@@ -298,11 +295,9 @@ void CMoviePlayerGui::restoreNeutrino()
 
 	stopped = false;
 
-	if (cam_stopped) {
-		// if (emu_menu) emu_menu->resume();
+	if (!timeshift) {
 		if (!access(MOVIEPLAYER_END_SCRIPT, X_OK))
 			system(MOVIEPLAYER_END_SCRIPT);
-		cam_stopped = false;
 	}
 }
 
@@ -1427,9 +1422,4 @@ void CMoviePlayerGui::showHelpVLC()
 	helpbox.addLine("Movieplayer (c) 2003, 2004 by gagga");
 	hide();
 	helpbox.show(LOCALE_MESSAGEBOX_INFO);
-}
-
-void CMoviePlayerGui::setEmuMenu(EMU_Menu *e)
-{
-	emu_menu = e;
 }

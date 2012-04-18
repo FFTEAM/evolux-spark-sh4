@@ -186,8 +186,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CAdZapMenu			*AdZapChanger;
 		CMenuWidget_Network		*networkSettings;
 
-		EMU_Menu *ExtraMenu_CamReset;
-		TUNERRESET_Menu *ExtraMenu_TunerReset;
+		TUNERRESET_Menu *TunerMenu;
 
                 bool showUserMenu(int button);
                 bool getNVODMenu(CMenuWidget* menu);
@@ -270,6 +269,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
 		CDHCPNotifier			*dhcpNotifier;
 
 		CPSISetup			*chPSISetup;
+		EMU_Menu *EmuMenu;
 
 		static CNeutrinoApp* getInstance();
 

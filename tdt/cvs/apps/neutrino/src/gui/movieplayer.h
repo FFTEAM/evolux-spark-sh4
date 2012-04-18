@@ -97,13 +97,11 @@ class CMoviePlayerGui : public CMenuTarget
 	CFileFilter vlcfilefilter;
 	void showHelpTS(void);
 	void showHelpVLC(void);
-	EMU_Menu *emu_menu;
 
  public:
 	CMoviePlayerGui();
 	~CMoviePlayerGui();
 	int exec(CMenuTarget* parent, const std::string & actionKey);
-	void setEmuMenu(EMU_Menu *);
 };
 
 

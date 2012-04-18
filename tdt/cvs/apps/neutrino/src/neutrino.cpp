@@ -4784,6 +4784,9 @@ void stop_daemons(bool stopall)
 	tuxtxt_stop();
 	tuxtxt_close();
 
+	if (CNeutrinoApp::getInstance()->EmuMenu)
+		CNeutrinoApp::getInstance()->EmuMenu->suspend();
+
 	printf("httpd shutdown\n");
 	pthread_cancel(nhttpd_thread);
 	pthread_join(nhttpd_thread, NULL);
