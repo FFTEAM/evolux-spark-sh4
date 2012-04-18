@@ -70,19 +70,25 @@ echo "-----------------------------------------------------------------------"
 echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
-if [ -e $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	echo "   1) Prepare Neutrino     yaffs2"
+if [ -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+		echo "   1) Prepare Neutrino     yaffs2"
+	fi
 fi
-if [ -e $TUFSBOXDIR/release_with_dev ]; then
-	echo "   2) Prepare Enigma2      yaffs2"
+if [ -d $TUFSBOXDIR/release_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+		echo "   2) Prepare Enigma2      yaffs2"
+	fi
 fi
-if [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-	echo "   3) Prepare Enigma2-PLI  yaffs2"
+if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+		echo "   3) Prepare Enigma2-PLI  yaffs2"
+	fi
 fi
-if [ -e $TUFSBOXDIR/release_evolux_with_dev ]; then
+if [ -d $TUFSBOXDIR/release_evolux_with_dev ]; then
 	echo "   4) Prepare Evolux       yaffs2"
 fi
-if [ -e $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+if [ -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
 	echo "   5) Prepare Evolux-PLI   yaffs2"
 fi
 read -p "Select target (0-5)? "
