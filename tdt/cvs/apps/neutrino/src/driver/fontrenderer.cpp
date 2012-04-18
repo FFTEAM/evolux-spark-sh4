@@ -440,8 +440,11 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 
 
 	if (_fgcol) {
+		int yoff = y - tempFont.height/2;
+		if (yoff < 0)
+			yoff  = 0;
 		uint32_t *lfb = frameBuffer->getFrameBufferPointer();
-		bgcolor = *(lfb + y * frameBuffer->getStride()/sizeof(fb_pixel_t) + x / (frameBuffer->getSplit3D() ? 2 : 1));
+		bgcolor = *(lfb + yoff * frameBuffer->getStride()/sizeof(fb_pixel_t) + x / (frameBuffer->getSplit3D() ? 2 : 1));
 		fgcolor = _fgcol;
 	} else {
 		bgcolor = frameBuffer->realcolor[color];
