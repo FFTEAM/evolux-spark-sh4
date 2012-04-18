@@ -91,7 +91,7 @@ fi
 if [ -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
 	echo "   5) Prepare Evolux-PLI   yaffs2"
 fi
-read -p "Select target (0-5)? "
+read -t 5 -p "Select target (autoskip in 5s)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Creating Ntrino  yaffs2 and uImage..."
@@ -129,8 +129,7 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	*)  "Invalid Input! Exiting..."
-		exit 2;;
+	*)  echo "Skipping...";;
 esac
 
 echo "-----------------------------------------------------------------------"
