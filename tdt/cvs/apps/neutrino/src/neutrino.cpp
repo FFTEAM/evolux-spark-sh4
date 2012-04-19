@@ -2686,8 +2686,11 @@ int CNeutrinoApp::run(int argc, char **argv)
 
 	hintBox->hide();
 	delete hintBox;
-
-	chPSISetup->writeProcPSI();
+	system("contrast=`cat /usr/local/share/config/neutrino.conf | grep video_psi_contrast | cut -d = -f2`;if [ ! -z $contrast ]; then echo $contrast > /proc/stb/video/plane/psi_contrast & fi");
+	system("saturation=`cat /usr/local/share/config/neutrino.conf | grep video_psi_saturation | cut -d = -f2`;if [ ! -z $saturation ]; then echo $saturation > /proc/stb/video/plane/psi_saturation & fi");
+	system("brightness=`cat /usr/local/share/config/neutrino.conf | grep video_psi_brightness | cut -d = -f2`;if [ ! -z $brightness ]; then echo $brightness > /proc/stb/video/plane/psi_brightness & fi");
+	system("tint=`cat /usr/local/share/config/neutrino.conf | grep video_psi_tint | cut -d = -f2`;if [ ! -z $tint ]; then echo $tint > /proc/stb/video/plane/psi_tint & fi");
+//	chPSISetup->writeProcPSI();
 
 	cDvbCi::getInstance()->SetHook(CISendMessage);
 	RealRun(mainMenu);
