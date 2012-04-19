@@ -71,7 +71,7 @@ echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
 if [ -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
 		echo "   1) Prepare Neutrino     yaffs2"
 	fi
 fi
