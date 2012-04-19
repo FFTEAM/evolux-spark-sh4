@@ -309,6 +309,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
 	#fi
 	/etc/init.d/Swap.sh &
+	[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common start;/etc/init.d/nfs-kernel-server start) &
 
 	echo "run" > /dev/vfd
 	if [ -n "$START_E2" ]; then
