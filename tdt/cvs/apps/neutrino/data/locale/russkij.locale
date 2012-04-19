@@ -1441,6 +1441,10 @@ extramenu.fsck Меню FSCK
 extramenu.fsck.select FSCK
 extramenu.fsck.on Вкл
 extramenu.fsck.off Выкл
+extramenu.nfsserver Меню NFSSERVER
+extramenu.nfsserver.select NFSSERVER
+extramenu.nfsserver.on Вкл
+extramenu.nfsserver.off Выкл
 extramenu.stmfb Меню STMFB
 extramenu.stmfb.select STMFB 15m
 extramenu.stmfb.on Вкл
