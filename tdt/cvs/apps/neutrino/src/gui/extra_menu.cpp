@@ -2476,5 +2476,71 @@ bool EVOLUXUPDATE_Menu::CheckUpdate()
 }
 //ENDE EVOLUXUPDATE
 
+////////////////////////////// NFSSERVER Menu ANFANG ////////////////////////////////////
+#define NFSSERVER_OPTION_COUNT 2
+const CMenuOptionChooser::keyval NFSSERVER_OPTIONS[NFSSERVER_OPTION_COUNT] =
+{
+	{ 0, LOCALE_EXTRAMENU_NFSSERVER_OFF },
+	{ 1, LOCALE_EXTRAMENU_NFSSERVER_ON }
+};
+
+NFSSERVER_Menu::NFSSERVER_Menu()
+{
+	frameBuffer = CFrameBuffer::getInstance();
+	width = 600;
+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+	height = hheight+13*mheight+ 10;
+
+	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
+	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
+}
+
+int NFSSERVER_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+{
+	int res = menu_return::RETURN_REPAINT;
+
+	if (parent)
+		parent->hide();
+
+	NFSSERVERSettings();
+
+	return res;
+}
+
+void NFSSERVER_Menu::hide()
+{
+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
+}
+
+void NFSSERVER_Menu::NFSSERVERSettings()
+{
+#define DOTFILE_NFSSERVER "/etc/.nfsserver"
+	int nfsserver = access(DOTFILE_NFSSERVER, F_OK) ? 0 : 1;
+	int old_nfsserver=nfsserver;
+	//MENU AUFBAUEN
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_NFSSERVER, "settings");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(GenericMenuSeparatorLine);
+	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_NFSSERVER_SELECT, &nfsserver, NFSSERVER_OPTIONS, NFSSERVER_OPTION_COUNT,true);
+	menu->addItem( oj1 );
+	menu->exec (NULL, "");
+	menu->hide ();
+	delete menu;
+	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
+	if (old_nfsserver!=nfsserver)
+	{
+		if (nfsserver == 1) {
+			touch(DOTFILE_NFSSERVER);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Activated, please reboot!", 450, 2); // UTF-8("")
+		} else {
+			unlink(DOTFILE_NFSSERVER);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Deactivated!", 450, 2); // UTF-8("")
+		}
+	}
+}
+////////////////////////////// NFSSERVER Menu ENDE //////////////////////////////////////
+
 ////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
 // vim:ts=4

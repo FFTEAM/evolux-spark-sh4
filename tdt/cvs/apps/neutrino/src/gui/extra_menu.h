@@ -275,6 +275,27 @@ class FSCK_Menu : public CMenuTarget
 
 };
 
+class NFSSERVER_Menu : public CMenuTarget
+{
+	private:
+
+	CFrameBuffer *frameBuffer;
+	int x;
+	int y;
+	int width;
+	int height;
+	int hheight,mheight; // head/menu font height
+
+	public:
+
+	NFSSERVER_Menu();
+
+	void hide();
+	int exec(CMenuTarget* parent, const std::string & actionKey);
+	void NFSSERVERSettings();
+
+};
+
 class STMFB_Menu : public CMenuTarget
 {
 	private:
