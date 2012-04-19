@@ -128,7 +128,7 @@ CPSISetup::writeProcPSI (int i)
     {
       char buf[10];
       ssize_t len = snprintf (buf, sizeof (buf), "%d", psi_list[i].value);
-      if (len > 0)
+      if (len < sizeof(buf))
 	write (fn, buf, len);
       close (fn);
     }
