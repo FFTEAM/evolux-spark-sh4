@@ -171,7 +171,7 @@ $(DEPDIR)/%release_neutrino:
 	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release_neutrino/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release_neutrino/usr/sbin/
 	mkdir -p $(prefix)/release_neutrino/var
-	cp -f $(buildprefix)/root/var/lib $(prefix)/release_neutrino/var/
+	cp -RP $(buildprefix)/root/var/lib $(prefix)/release_neutrino/var/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release_neutrino/etc/
 	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release_neutrino/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release_neutrino/usr/lib/

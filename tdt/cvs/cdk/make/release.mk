@@ -62,7 +62,7 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release/usr/sbin/
 	mkdir -p $(prefix)/release/var
-	cp -f $(buildprefix)/root/var/lib $(prefix)/release/var/
+	cp -RP $(buildprefix)/root/var/lib $(prefix)/release/var/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release/etc/
 	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release/usr/lib/
