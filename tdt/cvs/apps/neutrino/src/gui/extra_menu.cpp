@@ -2533,6 +2533,7 @@ void NFSSERVER_Menu::NFSSERVERSettings()
 	{
 		if (nfsserver == 1) {
 			touch(DOTFILE_NFSSERVER);
+			system("myRange=`ifconfig | grep -m1 'Bcast' | cut -d : -f3 | cut -d ' ' -f1 | cut -b1-11`;sed 's@/media/hdd.*@/media/hdd '$myRange'.0/255.255.255.0(rw,async,no_root_squash)@g' -i /etc/exports");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Activated, please reboot!", 450, 2); // UTF-8("")
 		} else {
 			unlink(DOTFILE_NFSSERVER);
