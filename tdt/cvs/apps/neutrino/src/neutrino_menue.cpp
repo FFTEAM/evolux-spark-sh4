@@ -813,6 +813,7 @@ void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings
 #endif
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
 	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, NULL, new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, NULL, new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
 	if (!access("/etc/enigma2/settings", R_OK))
 		ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL, new EVOLUXUPDATE_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Evolux Oupdate Menu
 	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
