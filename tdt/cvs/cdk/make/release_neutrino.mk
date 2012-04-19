@@ -152,6 +152,7 @@ $(DEPDIR)/%release_neutrino:
 	mkdir -p $(prefix)/release_neutrino/usr/lib
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release_neutrino/lib/
+	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release_neutrino/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_neutrino/sbin/
 	rm $(prefix)/release_neutrino/bin/ps
 	mkdir -p $(prefix)/release_neutrino/usr/lib/opkg/info
@@ -166,7 +167,11 @@ $(DEPDIR)/%release_neutrino:
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release_neutrino/usr/bin/
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release_neutrino/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release_neutrino/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/exportfs $(prefix)/release_neutrino/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release_neutrino/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release_neutrino/usr/sbin/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release_neutrino/etc/
+	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release_neutrino/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release_neutrino/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release_neutrino/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release_neutrino/usr/lib/
@@ -179,7 +184,7 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release_neutrino/usr/bin/
 #	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino/etc/init.d/
-	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release_neutrino/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release_neutrino/etc/init.d/
 
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino/lib/modules/

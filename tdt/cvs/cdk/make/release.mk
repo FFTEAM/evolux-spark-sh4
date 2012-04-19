@@ -58,7 +58,11 @@ release_spark:
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/exportfs $(prefix)/release/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release/usr/sbin/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release/etc/
+	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release/usr/lib/
@@ -67,7 +71,7 @@ release_spark:
 	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libpng* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
-	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release/etc/init.d/
 
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
@@ -130,6 +134,7 @@ endif
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release/sbin/ )
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
+	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
 	mkdir -p $(prefix)/release/usr/lib/opkg/info

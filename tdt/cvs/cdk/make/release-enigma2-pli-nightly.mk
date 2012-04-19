@@ -56,7 +56,11 @@ release-enigma2-pli-nightly_spark:
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/exportfs $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release-enigma2-pli-nightly/etc/
+	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release-enigma2-pli-nightly/usr/lib/
@@ -65,7 +69,7 @@ release-enigma2-pli-nightly_spark:
 	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/usr/lib/libpng* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	cp -RP $(buildprefix)/root/etc/init.d/nfs_speedtest.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
+	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
@@ -128,6 +132,7 @@ endif
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release-enigma2-pli-nightly/lib/
+	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release-enigma2-pli-nightly/sbin/
 	rm $(prefix)/release-enigma2-pli-nightly/bin/ps
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/opkg/info
