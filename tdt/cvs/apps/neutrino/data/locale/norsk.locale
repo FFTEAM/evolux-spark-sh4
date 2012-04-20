@@ -1507,3 +1507,4 @@ lcdmenu.displaymode.timeonly bare tid
 lcdmenu.displaymode.timeoff uten en tid med
 lcdmenu.displaymode Display
 lcdmenu.standby Standby
+menu.numbers_as_icons Tall som menyikoner

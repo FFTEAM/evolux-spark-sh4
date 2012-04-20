@@ -418,6 +418,7 @@ struct SNeutrinoSettings
 
 	int misc_option[MISC_SETTING_FILES_COUNT];
 
+	int menu_numbers_as_icons;
 
 	// pictureviewer
 	char   picviewer_slide_time[3];

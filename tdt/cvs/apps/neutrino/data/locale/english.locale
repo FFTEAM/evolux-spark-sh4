@@ -1508,3 +1508,4 @@ lcdmenu.displaymode.timeonly Time only
 lcdmenu.displaymode.timeoff Without time
 lcdmenu.displaymode Display
 lcdmenu.standby Standby
+menu.numbers_as_icons Menue numbers as icons

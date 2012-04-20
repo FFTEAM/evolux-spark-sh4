@@ -1508,3 +1508,4 @@ lcdmenu.displaymode.timeonly Nur Uhrzeit
 lcdmenu.displaymode.timeoff Ohne Uhrzeit
 lcdmenu.displaymode Anzeige
 lcdmenu.standby Standby
+menu.numbers_as_icons Menü-Zahlen als Icons

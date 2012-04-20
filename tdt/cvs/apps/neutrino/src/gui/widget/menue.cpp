@@ -176,6 +176,9 @@ int CMenuWidget::exec(CMenuTarget* parent, const std::string &)
 
 	if ( fadeIn )
 		fadeTimer = g_RCInput->addTimer( FADE_TIME, false );
+
+	uint32_t repeatkeys[] = { CRCInput::RC_left, CRCInput::RC_right, CRCInput::RC_nokey };
+	uint32_t *old_repeatkeys = g_RCInput->setAllowRepeat(repeatkeys);
 	do {
 		g_RCInput->getMsgAbsoluteTimeout(&msg, &data, &timeoutEnd);
 
@@ -404,6 +407,7 @@ int CMenuWidget::exec(CMenuTarget* parent, const std::string &)
 		}
 	}
 	while ( msg!=CRCInput::RC_timeout );
+	g_RCInput->setAllowRepeat(old_repeatkeys);
 	hide();
 
 	if ( fadeIn || fadeOut ) {       
@@ -797,7 +801,7 @@ int CMenuOptionChooser::paint( bool selected , bool last)
 	{
 		std::string newicon = CRCInput::getKeyName(directKey);
 		//printf("MENU: newicon %s\n", newicon);
-		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
+		if(!g_settings.menu_numbers_as_icons || !frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
 	}
 
@@ -947,7 +951,7 @@ int CMenuOptionStringChooser::paint( bool selected, bool last )
 	else if (CRCInput::isNumeric(directKey))
 	{
 		std::string newicon = CRCInput::getKeyName(directKey);
-		if(!CFrameBuffer::getInstance()->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
+		if(!g_settings.menu_numbers_as_icons || !CFrameBuffer::getInstance()->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
         }
 
@@ -1038,7 +1042,7 @@ int CMenuOptionLanguageChooser::paint( bool selected, bool last )
 	}
 
 	//int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue);
-	int stringstartposOption = x + offx + 10;
+	int stringstartposOption = x + offx + 14;
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y+height,dx- (stringstartposOption - x), optionValue, color);
 
 	if (selected)
@@ -1186,7 +1190,7 @@ int CMenuForwarder::paint(bool selected, bool last)
 	else if (CRCInput::isNumeric(directKey))
 	{
 		std::string newicon = CRCInput::getKeyName(directKey);
-		if(!frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
+		if(!g_settings.menu_numbers_as_icons || !frameBuffer->paintIcon(newicon, x + 10, y + height/8, 24, (6 * height)/8))
 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + 15, y+ height, height, CRCInput::getKeyName(directKey), color, height);
 	}
 

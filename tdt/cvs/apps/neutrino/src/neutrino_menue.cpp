@@ -345,8 +345,8 @@ CVideoSettings::CVideoSettings() : CMenuWidget(LOCALE_VIDEOMENU_HEAD, "video", 5
 	addItem(GenericMenuSeparatorLine);
 	CPSISetup *chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
 	CNeutrinoApp::getInstance()->chPSISetup = chPSISetup;
-//	addItem(new CMenuForwarder(LOCALE_VIDEOMENU_PSI, true, NULL, chPSISetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));;
-//	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_STEP, (int *)&g_settings.psi_step, true, 1, 100, NULL));
+	addItem(new CMenuForwarder(LOCALE_VIDEOMENU_PSI, true, NULL, chPSISetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));;
+	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_STEP, (int *)&g_settings.psi_step, true, 1, 100, NULL));
 	CPSISetupNotifier *psiNotifier = new CPSISetupNotifier(chPSISetup);
 	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_CONTRAST, (int *)&g_settings.psi_contrast, true, 0, 255, psiNotifier));
 	addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_SATURATION, (int *)&g_settings.psi_saturation, true, 0, 255, psiNotifier));
@@ -2537,6 +2537,7 @@ void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings, CMenuWidget &fo
 
 	colorSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_VIDEOMENU_OSD));
 	colorSettings.addItem(new CMenuForwarder(LOCALE_TIMING_HEAD, true, NULL, colorSettings_timing));
+	colorSettings.addItem(new CMenuOptionChooser(LOCALE_MENU_NUMBERS_AS_ICONS, &g_settings.menu_numbers_as_icons, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 
 	colorSettings.addItem(new CMenuOptionChooser(LOCALE_INFOBAR_PICON, &g_settings.infobar_picon, OPTIONS_OFF0_ON1_ON2_OPTIONS, OPTIONS_OFF0_ON1_ON2_OPTION_COUNT, true));
 	CMenuForwarder* fRecDir = new CMenuForwarder(LOCALE_PICON_DIR, true, g_settings.picon_dir, this, "picon_dir");

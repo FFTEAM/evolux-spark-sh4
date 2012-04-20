@@ -841,6 +841,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         strcpy(g_settings.shutdown_count, configfile.getString("shutdown_count","0").c_str());
 	g_settings.infobar_sat_display   = configfile.getBool("infobar_sat_display"  , true );
 	g_settings.infobar_subchan_disp_pos = configfile.getInt32("infobar_subchan_disp_pos"  , 0 );
+	g_settings.menu_numbers_as_icons = configfile.getBool("menu_numbers_as_icons", true);
 
 	//audio
 	g_settings.audio_AnalogMode = configfile.getInt32( "audio_AnalogMode", 0 );
@@ -1399,6 +1400,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString("shutdown_count"           , g_settings.shutdown_count);
 	configfile.setBool("infobar_sat_display"  , g_settings.infobar_sat_display  );
 	configfile.setInt32("infobar_subchan_disp_pos"  , g_settings.infobar_subchan_disp_pos  );
+	configfile.setBool("menu_numbers_as_icons", g_settings.menu_numbers_as_icons);
 
 	//audio
 	configfile.setInt32( "audio_AnalogMode", g_settings.audio_AnalogMode );
@@ -2686,11 +2688,8 @@ int CNeutrinoApp::run(int argc, char **argv)
 
 	hintBox->hide();
 	delete hintBox;
-	system("contrast=`cat /usr/local/share/config/neutrino.conf | grep video_psi_contrast | cut -d = -f2`;if [ ! -z $contrast ]; then echo $contrast > /proc/stb/video/plane/psi_contrast & fi");
-	system("saturation=`cat /usr/local/share/config/neutrino.conf | grep video_psi_saturation | cut -d = -f2`;if [ ! -z $saturation ]; then echo $saturation > /proc/stb/video/plane/psi_saturation & fi");
-	system("brightness=`cat /usr/local/share/config/neutrino.conf | grep video_psi_brightness | cut -d = -f2`;if [ ! -z $brightness ]; then echo $brightness > /proc/stb/video/plane/psi_brightness & fi");
-	system("tint=`cat /usr/local/share/config/neutrino.conf | grep video_psi_tint | cut -d = -f2`;if [ ! -z $tint ]; then echo $tint > /proc/stb/video/plane/psi_tint & fi");
-//	chPSISetup->writeProcPSI();
+
+	chPSISetup->writeProcPSI();
 
 	cDvbCi::getInstance()->SetHook(CISendMessage);
 	RealRun(mainMenu);

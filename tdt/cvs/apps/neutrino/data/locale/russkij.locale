@@ -1514,3 +1514,4 @@ lcdmenu.displaymode.timeonly время
 lcdmenu.displaymode.timeoff без времени
 lcdmenu.displaymode отображать
 lcdmenu.standby Standby
+menu.numbers_as_icons Меню номера в виде значков

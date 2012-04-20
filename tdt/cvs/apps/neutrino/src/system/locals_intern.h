@@ -1508,6 +1508,7 @@ const char *locale_real_names[] = {
 	"adzap.minute",
 	"adzap.minutes",
 	"adzap.switchback",
-	"adzap.commit"
+	"adzap.commit",
+	"menu.numbers_as_icons"
 };
 #endif

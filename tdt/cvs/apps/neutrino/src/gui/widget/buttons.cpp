@@ -37,9 +37,10 @@ void paintButton(CFrameBuffer * const frameBuffer, const char *button, Font * co
 	int buttonwidth = _buttonwidth - 5;
 	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
 	int height = font->getHeight();
-	frameBuffer->paintIcon(button, x, y + height/8, 20, (6 * height)/8, true);
+	int iconWidth = height;
+	frameBuffer->paintIcon(button, x, y + height/8, iconWidth, (6 * height)/8, true);
 	if (text && strlen(text))
-		font->RenderString(x + 20, y + height, buttonwidth - 20, text, COL_INFOBAR, 0, true, fgcolor); // UTF-8
+		font->RenderString(x + iconWidth + iconWidth/8, y + height, buttonwidth - iconWidth - iconWidth/8, text, COL_INFOBAR, 0, true, fgcolor); // UTF-8
 }
 
 void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Font * const font, const std::string &text, const int x, const int y, const unsigned int buttonwidth) {
@@ -54,16 +55,17 @@ void paintButton_Footer(CFrameBuffer * const frameBuffer, const char *button, Fo
 void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const int x, const int y, const unsigned int buttonwidth, const unsigned int count, const struct button_label * const content)
 {
 	uint32_t fgcolor = frameBuffer->realcolor[(((((int)COL_INFOBAR) + 2) | 7) - 2)] | 0xFF000000;
+	int height = font->getHeight();
 	int bw[count], sp[count], bw_sum = 0, missing = 0, spare = 0, loc_count = 0;
 	for (int i = 0; i < count; i++) {
 		if ((content[i].locale == NONEXISTANT_LOCALE)) {
 			if (content[i].text) {
-				bw[i] = 25 + font->getRenderWidth(content[i].text);
+				bw[i] = height + height/8 + 5 + font->getRenderWidth(content[i].text);
 				loc_count++;
 			} else
-				bw[i] = 25;
+				bw[i] = height + height/8 + 5;
 		} else {
-			bw[i] = 25 + font->getRenderWidth(g_Locale->getText(content[i].locale), true);
+			bw[i] = height + height/8 + 5 + font->getRenderWidth(g_Locale->getText(content[i].locale), true);
 			loc_count++;
 		}
 		sp[i] = bw[i] - buttonwidth;
@@ -100,7 +102,6 @@ void paintButtons(CFrameBuffer * const frameBuffer, Font * const font, const int
 			bw[i] /= bw_sum;
 		}
 
-	int height = font->getHeight();
 	bw_sum = 0;
 	for (int i = 0; i < count; i++) {
 		paintButton(frameBuffer, content[i].button, font, (content[i].locale == NONEXISTANT_LOCALE)

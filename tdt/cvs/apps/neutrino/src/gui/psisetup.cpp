@@ -43,9 +43,12 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include <global.h>
 #include <neutrino.h>
+
+#include <linux/stmfb.h>
 
 #define PSI_SCALE_COUNT 5
 static
@@ -75,7 +78,7 @@ CPSISetup::CPSISetup (const neutrino_locale_t Name)
   name = Name;
   selected = 0;
 
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     psi_list[i].scale =
       new CScale (SLIDERWIDTH, SLIDERHEIGHT, 50, 100, 80, true);
 
@@ -84,7 +87,7 @@ CPSISetup::CPSISetup (const neutrino_locale_t Name)
   psi_list[PSI_BRIGHTNESS].value = g_settings.psi_brightness;
   psi_list[PSI_TINT].value = g_settings.psi_tint;
 
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     writeProcPSI (i);
 }
 
@@ -94,7 +97,7 @@ CPSISetup::readProcPSI (int i)
 {
 // Broken, don't try this, read(2) will block.
   int fn, v = 128;
-  if ((i > -1) && (i < PSI_SCALE_COUNT - 1)
+  if ((i > -1) && (i < PSI_RESET)
       && ((fn = open (psi_list[i].procfilename, O_RDONLY) > -1)))
     {
       char buf[10];
@@ -115,7 +118,7 @@ CPSISetup::readProcPSI (int i)
 void
 CPSISetup::writeProcPSI ()
 {
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     writeProcPSI (i);
 }
 
@@ -123,15 +126,22 @@ void
 CPSISetup::writeProcPSI (int i)
 {
   int fn;
-  if ((i > -1) && (i < PSI_SCALE_COUNT - 1)
-      && ((fn = open (psi_list[i].procfilename, O_WRONLY) > -1)))
+  if (i < 0 || i > PSI_SCALE_COUNT - 2)
+	return;
+
+  fn = open (psi_list[i].procfilename, O_WRONLY);
+  if (fn > -1)
     {
       char buf[10];
       ssize_t len = snprintf (buf, sizeof (buf), "%d", psi_list[i].value);
       if (len < sizeof(buf))
-	write (fn, buf, len);
+	if (0 > write (fn, buf, len))
+    	  fprintf(stderr, "%s: write(%s): %s\n", __func__, psi_list[i].procfilename, strerror[errno]);
+		
       close (fn);
     }
+  else
+    fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror[errno]);
 }
 
 int
@@ -142,7 +152,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 
   fb_pixel_t *pixbuf = NULL;
   locWidth = 0;
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     {
       int w = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth (g_Locale->getText (psi_list[i].loc), true) + 3;	// UTF-8
       if (w > locWidth)
@@ -155,7 +165,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 
   sliderOffset = (locHeight - SLIDERHEIGHT) >> 1;
 
-  //            [ SLIDERWIDTH ][5][lowidth     ]
+  //            [ SLIDERWIDTH ][5][locwidth    ]
   // [locHeight][XXXXXXXXXXXXX]   [XXXXXXXXXXXX]
   // [locHeight][XXXXXXXXXXXXX]   [XXXXXXXXXXXX]
   // [locHeight][XXXXXXXXXXXXX]   [XXXXXXXXXXXX]
@@ -201,7 +211,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
   psi_list[PSI_RESET].xLoc = x + 20;
   psi_list[PSI_RESET].xBox = x;
 
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     psi_list[i].scale->reset ();
 
   psi_list[PSI_CONTRAST].value = g_settings.psi_contrast;
@@ -209,7 +219,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
   psi_list[PSI_BRIGHTNESS].value = g_settings.psi_brightness;
   psi_list[PSI_TINT].value = g_settings.psi_tint;
 
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     psi_list[i].value_old = psi_list[i].value;
 
   paint();
@@ -224,7 +234,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
       switch (msg)
 	{
 	case CRCInput::RC_down:
-	  if (selected < PSI_SCALE_COUNT - 1)
+	  if (selected < PSI_RESET)
 	    {
 	      psi_list[selected].selected = false;
 	      paintSlider (selected);
@@ -264,37 +274,36 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 	case CRCInput::RC_home:	// exit -> revert changes
 	  int i;
 	  for (i = 0;
-	       (i < PSI_SCALE_COUNT - 1)
+	       (i < PSI_RESET)
 	       && (psi_list[i].value == psi_list[i].value_old); i++);
 
-	  if (i < PSI_SCALE_COUNT - 1)
+	  if (i < PSI_RESET)
 	    if (ShowLocalizedMessage
 		(name, LOCALE_MESSAGEBOX_ACCEPT, CMessageBox::mbrYes,
 		 CMessageBox::mbYes | CMessageBox::mbCancel) ==
 		CMessageBox::mbrCancel)
-	      for (i = 0; i < PSI_SCALE_COUNT - 1; i++)
+	      for (i = 0; i < PSI_RESET; i++)
 		{
 		  psi_list[i].value = psi_list[i].value_old;
 		  writeProcPSI (i);
-
 		}
 	case CRCInput::RC_ok:
+          loop = false;
 	  if (selected != PSI_RESET)
 	    {
 	      g_settings.psi_contrast = psi_list[PSI_CONTRAST].value;
 	      g_settings.psi_saturation = psi_list[PSI_SATURATION].value;
 	      g_settings.psi_brightness = psi_list[PSI_BRIGHTNESS].value;
 	      g_settings.psi_tint = psi_list[PSI_TINT].value;
-	      loop = false;
 	      break;
 	    }
 	case CRCInput::RC_red:
-	  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+	  for (int i = 0; i < PSI_RESET; i++)
 	    {
 	      psi_list[i].value = 128;
 	      writeProcPSI (i);
 	    }
-	  for (i = 0; i < PSI_SCALE_COUNT - 1; i++)
+	  for (i = 0; i < PSI_RESET; i++)
 	    paintSlider (i);
 	  break;
 	default:
@@ -343,7 +352,7 @@ CPSISetup::paintSlider (int i)	// UTF-8
   else
     {
       int fh = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].xLoc,psi_list[i].yLoc, dx - 6, g_Locale->getText(psi_list[i].loc), 0, 0, true, fg_col);
+      g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString (psi_list[i].x + 2 + fh + fh/8, psi_list[i].yLoc, dx - 2 - fh, g_Locale->getText(psi_list[i].loc), 0, 0, true, fg_col);
       frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_RED, psi_list[i].x + 2, psi_list[i].yLoc - fh + fh/8, 0, (6 * fh)/8);
     }
 }
@@ -355,7 +364,7 @@ CPSISetupNotifier::CPSISetupNotifier (class CPSISetup *p) {
 bool
 CPSISetupNotifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
 {
-  for (int i = 0; i < PSI_SCALE_COUNT - 1; i++)
+  for (int i = 0; i < PSI_RESET; i++)
     if (OptionName == psi_list[i].loc)
       {
 	psi_list[i].value = *((int *) Data);
