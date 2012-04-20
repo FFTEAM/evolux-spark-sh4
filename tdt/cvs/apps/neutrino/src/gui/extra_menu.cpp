@@ -2533,10 +2533,11 @@ void NFSSERVER_Menu::NFSSERVERSettings()
 	{
 		if (nfsserver == 1) {
 			touch(DOTFILE_NFSSERVER);
-			system("myRange=`ifconfig | grep -m1 'Bcast' | cut -d : -f3 | cut -d ' ' -f1 | cut -b1-11`;sed 's@/media/hdd.*@/media/hdd '$myRange'.0/255.255.255.0(rw,async,no_root_squash)@g' -i /etc/exports");
-			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Activated, please reboot!", 450, 2); // UTF-8("")
+			system("myRange=`ifconfig | grep -m1 'Bcast' | cut -d : -f3 | cut -d ' ' -f1 | cut -b1-11`;sed 's@/media/hdd.*@/media/hdd '$myRange'.0/255.255.255.0(rw,async,no_root_squash)@g' -i /etc/exports;/etc/init.d/nfs-common start;/etc/init.d/nfs-kernel-server start");
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Activated!", 450, 2); // UTF-8("")
 		} else {
 			unlink(DOTFILE_NFSSERVER);
+			system("/etc/init.d/nfs-kernel-server stop;/etc/init.d/nfs-common stop");
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Deactivated!", 450, 2); // UTF-8("")
 		}
 	}
