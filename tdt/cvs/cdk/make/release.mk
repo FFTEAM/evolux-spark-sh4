@@ -138,7 +138,6 @@ endif
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release/usr/lib/
-	rm -rf $(prefix)/release/usr/lib/libnfsidmap
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
@@ -449,6 +448,7 @@ release_base:
 
 	$(INSTALL_DIR) $(prefix)/release/usr/lib
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release/usr/lib/
+	rm -rf $(prefix)/release/usr/lib/libnfsidmap
 	rm -rf $(prefix)/release/usr/lib/engines
 #	[ -e $(prefix)/release/usr/lib/tuxbox ] && rm -rf $(prefix)/release/usr/lib/tuxbox
 	rm -rf $(prefix)/release/usr/lib/enigma2

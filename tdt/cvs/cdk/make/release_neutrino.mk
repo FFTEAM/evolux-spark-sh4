@@ -154,7 +154,6 @@ $(DEPDIR)/%release_neutrino:
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release_neutrino/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release_neutrino/usr/lib/
-	rm -rf $(prefix)/release_neutrino/usr/lib/libnfsidmap
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release_neutrino/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_neutrino/sbin/
 	rm $(prefix)/release_neutrino/bin/ps
@@ -402,6 +401,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/lib
 	rm -rf $(prefix)/release_neutrino/usr/lib/tuxbox
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino/usr/lib/
+	rm -rf $(prefix)/release_neutrino/usr/lib/libnfsidmap
 	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino/usr/lib/
 	rm -rf $(prefix)/release_neutrino/usr/lib/alsa-lib
 	rm -rf $(prefix)/release_neutrino/usr/lib/alsaplayer
