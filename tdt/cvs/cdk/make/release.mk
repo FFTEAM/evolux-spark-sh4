@@ -136,8 +136,8 @@ endif
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release/sbin/ )
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
-	cp -RP $(targetprefix)/usr/lib/libevent* $(prefix)/release/usr/lib/
-	cp -RP $(targetprefix)/usr/lib/libnfsi* $(prefix)/release/usr/lib/
+	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release/usr/lib/
+	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release/usr/lib/
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
