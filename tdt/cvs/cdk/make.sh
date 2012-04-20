@@ -19,6 +19,7 @@ CONFIGPARAM=" \
  --prefix=$KATIDIR/tufsbox \
  --with-cvsdir=$KATIDIR/cvs \
  --with-customizationsdir=$KATIDIR/custom \
+ --enable-nfsserver \
  --enable-ccache"
 
 ##############################################
