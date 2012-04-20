@@ -136,6 +136,7 @@ endif
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
+	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/libnfsidmap
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release-enigma2-pli-nightly/sbin/
 	rm $(prefix)/release-enigma2-pli-nightly/bin/ps

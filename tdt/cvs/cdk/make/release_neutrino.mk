@@ -154,6 +154,7 @@ $(DEPDIR)/%release_neutrino:
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release_neutrino/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release_neutrino/usr/lib/
+	rm -rf $(prefix)/release_neutrino/usr/lib/libnfsidmap
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release_neutrino/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_neutrino/sbin/
 	rm $(prefix)/release_neutrino/bin/ps

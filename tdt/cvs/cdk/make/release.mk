@@ -138,6 +138,7 @@ endif
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release/usr/lib/
+	rm -rf $(prefix)/release/usr/lib/libnfsidmap
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
