@@ -5,35 +5,52 @@ $(DEPDIR)/libevent.do_prepare: @DEPENDS_libevent@
 	@PREPARE_libevent@
 	touch $@
 
-$(DEPDIR)/libevent.do_compile: $(DEPDIR)/libevent.do_prepare
+$(DEPDIR)/libevent.do_compile: bootstrap $(DEPDIR)/libevent.do_prepare
 	cd @DIR_libevent@ && \
 		$(BUILDENV) \
 		./configure --prefix=$(prefix)/$*cdkroot/usr/ --host=$(target) && \
-		$(MAKE) install
+		$(MAKE)
 	touch $@
+
+$(DEPDIR)/min-libevent $(DEPDIR)/std-libevent $(DEPDIR)/max-libevent \
+$(DEPDIR)/libevent: \
+$(DEPDIR)/%libevent: $(DEPDIR)/libevent.do_compile
+	cd @DIR_libevent@  && \
+		@INSTALL_libevent@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
 
 $(DEPDIR)/libnfsidmap.do_prepare: @DEPENDS_libnfsidmap@
 	@PREPARE_libnfsidmap@
 	touch $@
 
-$(DEPDIR)/libnfsidmap.do_compile: $(DEPDIR)/libnfsidmap.do_prepare
+$(DEPDIR)/libnfsidmap.do_compile: bootstrap $(DEPDIR)/libnfsidmap.do_prepare
 	cd @DIR_libnfsidmap@ && \
 		$(BUILDENV) \
 		ac_cv_func_malloc_0_nonnull=yes ./configure --prefix=$(prefix)/$*cdkroot/usr/ --host=$(target) && \
-		$(MAKE) install
+		$(MAKE)
 	touch $@
+
+$(DEPDIR)/min-libnfsidmap $(DEPDIR)/std-libnfsidmap $(DEPDIR)/max-libnfsidmap \
+$(DEPDIR)/libnfsidmap: \
+$(DEPDIR)/%libnfsidmap: $(DEPDIR)/libnfsidmap.do_compile
+	cd @DIR_libnfsidmap@  && \
+		@INSTALL_libnfsidmap@
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
 
 $(DEPDIR)/nfs-utils.do_prepare: @DEPENDS_nfs_utils@
 	@PREPARE_nfs_utils@
 	touch $@
 
-$(DEPDIR)/nfs-utils.do_compile: bootstrap e2fsprogs $(DEPDIR)/nfs-utils.do_prepare $(DEPDIR)/libevent.do_compile $(DEPDIR)/libnfsidmap.do_compile
+$(DEPDIR)/nfs-utils.do_compile: bootstrap e2fsprogs libevent libnfsidmap $(DEPDIR)/nfs-utils.do_prepare
 	cd @DIR_nfs_utils@  && \
 		$(BUILDENV) \
 		./configure \
-			--prefix=$(prefix)/$*cdkroot/usr/ \
 			--build=$(build) \
 			--host=$(target) \
+			--prefix= \
+			--exec-prefix=/usr \
 			--target=$(target) \
 			CC_FOR_BUILD=$(target)-gcc \
 			--disable-gss \
@@ -45,22 +62,15 @@ $(DEPDIR)/nfs-utils.do_compile: bootstrap e2fsprogs $(DEPDIR)/nfs-utils.do_prepa
 $(DEPDIR)/min-nfs-utils $(DEPDIR)/std-nfs-utils $(DEPDIR)/max-nfs-utils $(DEPDIR)/ipk-nfs-utils \
 $(DEPDIR)/nfs-utils: \
 $(DEPDIR)/%nfs-utils: $(NFS_UTILS_ADAPTED_ETC_FILES:%=root/etc/%) \
-		$(DEPDIR)/nfs-utils.do_compile
+	$(DEPDIR)/nfs-utils.do_compile
 	@[ "x$*" = "xipk-" ] && rm -rf  $(prefix)/$*cdkroot || true
 	$(INSTALL) -d $(prefix)/$*cdkroot/etc/{default,init.d} && \
 	cd @DIR_nfs_utils@  && \
 		@INSTALL_nfs_utils@
-	( cd root/etc && for i in $(NFS_UTILS_ADAPTED_ETC_FILES); do \
-		[ -f $$i ] && $(INSTALL) -m644 $$i $(prefix)/$*cdkroot/etc/$$i || true; \
-		[ "$${i%%/*}" = "init.d" ] && chmod 755 $(prefix)/$*cdkroot/etc/$$i || true; done ) && \
-	[ "x$*" != "xipk-" ] && { \
-		export HHL_CROSS_TARGET_DIR=$(prefix)/$*cdkroot && cd $(prefix)/$*cdkroot/etc/init.d && \
-			for s in nfs-common nfs-kernel-server ; do \
-				$(hostprefix)/bin/target-initdconfig --add $$s || \
-				echo "Unable to enable initd service: $$s" ; done && rm *rpmsave 2>/dev/null || true ; } || true
+	( cd root/etc && cp -rp exports $(prefix)/$*cdkroot/etc/) && \
+	( cd root/etc/init.d/ && cp -rp nfs* $(prefix)/$*cdkroot/etc/init.d/)
 #	@DISTCLEANUP_nfs_utils@
 	@[ "x$*" = "x" ] && touch $@ || true
-	@[ "x$*" = "xipk-" ] && make $(prefix)/$*cdkroot/strippy || true
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 #
