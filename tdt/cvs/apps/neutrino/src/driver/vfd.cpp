@@ -729,8 +729,6 @@ void CVFD::ShowText(char * str, bool rescheduleTime)
 	if (rescheduleTime && (time_notify_writer > -1)) {
 		write(time_notify_writer, "", 1);
 	}
-
-	printf("CVFD::ShowText<\n");
 }
 
 #ifdef VFD_UPDATE
