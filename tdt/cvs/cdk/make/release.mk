@@ -296,9 +296,6 @@ release_base:
 	cp $(buildprefix)/root/release/networking $(prefix)/release/etc/init.d/ && \
 	mkdir -p $(prefix)/release/var/run/lirc && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release/lib/ && \
-	rm -f $(prefix)/release/lib/*.a && \
-	rm -f $(prefix)/release/lib/*.o && \
-	rm -f $(prefix)/release/lib/*.la && \
 	$(USERS) chmod 755 -R $(prefix)/release/lib
 	find $(prefix)/release/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -458,9 +455,6 @@ release_base:
 	rm -rf $(prefix)/release/usr/lib/python2.6
 	rm -rf $(prefix)/release/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release/usr/lib/X11
-	rm -f $(prefix)/release/usr/lib/*.a
-	rm -f $(prefix)/release/usr/lib/*.o
-	rm -f $(prefix)/release/usr/lib/*.la
 	chmod 755 -R $(prefix)/release/usr/lib/
 	find $(prefix)/release/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -475,9 +469,6 @@ release_base:
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
-	find $(prefix)/release/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #	Delete unnecessary plugins
@@ -537,9 +528,6 @@ release_base:
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyo' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/
@@ -569,6 +557,11 @@ release_base:
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
 	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules/ || true
+
+	find $(prefix)/release/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release/ -name '*.la' -exec rm -f {} \;
+
 #
 # AUTOFS
 #

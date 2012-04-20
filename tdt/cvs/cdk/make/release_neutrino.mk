@@ -99,9 +99,6 @@ $(DEPDIR)/%release_neutrino:
 	cp $(buildprefix)/root/release/networking $(prefix)/release_neutrino/etc/init.d/ && \
 	cp $(buildprefix)/root/release/getfb.awk $(prefix)/release_neutrino/etc/init.d/ && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release_neutrino/lib/ && \
-	rm -f $(prefix)/release_neutrino/lib/*.a && \
-	rm -f $(prefix)/release_neutrino/lib/*.o && \
-	rm -f $(prefix)/release_neutrino/lib/*.la && \
 	find $(prefix)/release_neutrino/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release_neutrino/sbin/
@@ -412,9 +409,6 @@ endif
 	rm -rf $(prefix)/release_neutrino/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_neutrino/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release_neutrino/usr/lib/X11
-	find $(prefix)/release_neutrino/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release_neutrino/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release_neutrino/ -name '*.la' -exec rm -f {} \;
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons/logo
 	( cd $(prefix)/release_neutrino/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo )
 	( cd $(prefix)/release_neutrino/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo logos )
@@ -470,6 +464,9 @@ endif
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release_neutrino/lib/modules || true
 	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino/lib/modules/ || true
 
+	find $(prefix)/release_neutrino/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release_neutrino/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release_neutrino/ -name '*.la' -exec rm -f {} \;
 #
 # AUTOFS
 #

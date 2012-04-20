@@ -487,9 +487,6 @@ release-enigma2-pli-nightly_base:
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/X11
-	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.a
-	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.o
-	rm -f $(prefix)/release-enigma2-pli-nightly/usr/lib/*.la
 	$(USERS) chmod 755 -R $(prefix)/release-enigma2-pli-nightly/usr/lib
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -514,9 +511,6 @@ release-enigma2-pli-nightly_base:
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #	Delete unnecessary plugins #
@@ -616,6 +610,9 @@ release-enigma2-pli-nightly_base:
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ || true
 
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.la' -exec rm -f {} \;
 #
 # AUTOFS
 #
