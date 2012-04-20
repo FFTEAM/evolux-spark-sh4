@@ -335,7 +335,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 					echo "FSCK" > /dev/vfd
 					umount /media/hdd
 					umount /dev/sda1
-					fsck.$HDDON -y /dev/sda1
+					fsck.$HDDON -p /dev/sda1
 				fi
 				init 0;;
 			2)	echo "$rtv"
@@ -372,7 +372,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 					echo "FSCK" > /dev/vfd
 					umount /media/hdd
 					umount /dev/sda1
-					fsck.$HDDON -y /dev/sda1
+					fsck.$HDDON -p /dev/sda1
 				fi
 				init 0;;
 			2)	echo "$rtv"
