@@ -56,11 +56,11 @@ release-enigma2-pli-nightly_spark:
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml
 	cp -f $(buildprefix)/root/usr/sbin/iw* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	cp -f $(buildprefix)/root/usr/sbin/wpa* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	cp -f $(buildprefix)/root/usr/sbin/exportfs $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	cp -f $(buildprefix)/root/usr/sbin/showmount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
-	cp -f $(buildprefix)/root/usr/sbin/rpc* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(targetprefix)/usr/sbin/exportfs $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(targetprefix)/usr/sbin/showmount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	cp -f $(targetprefix)/usr/sbin/rpc* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/var
-	cp -RP $(buildprefix)/root/var/lib $(prefix)/release-enigma2-pli-nightly/var/
+	cp -RP $(targetprefix)/var/lib $(prefix)/release-enigma2-pli-nightly/var/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release-enigma2-pli-nightly/usr/lib/
@@ -134,7 +134,9 @@ endif
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release-enigma2-pli-nightly/lib/
-	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release-enigma2-pli-nightly/lib/
+	cp -RP $(targetprefix)/usr/lib/libevent* $(prefix)/release-enigma2-pli-nightly/usr/lib/
+	cp -RP $(targetprefix)/usr/lib/libnfsi* $(prefix)/release-enigma2-pli-nightly/usr/lib/
+#	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release-enigma2-pli-nightly/sbin/
 	rm $(prefix)/release-enigma2-pli-nightly/bin/ps
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/opkg/info
