@@ -184,7 +184,10 @@ libdreamdvd2;1.0;libdreamdvd;;patch:libdreamdvd-1.0-support_sh4.patch
 # net apps
 #
 portmap;6.0;portmap_6.0;portmap-6.0.tgz:portmap_6.0.diff:portmap_6.0-9.diff.gz;extract:portmap-6.0.tgz;patch:portmap_6.0.diff
-nfs_utils;1.1.1;nfs-utils-1.1.1;nfs-utils-1.1.1.tar.bz2:nfs-utils_1.1.1-12.diff.gz;extract:nfs-utils-1.1.1.tar.bz2
+nfs_utils;1.2.5;nfs-utils-1.2.5;nfs-utils-1.2.5.tar.bz2;extract:nfs-utils-1.2.5.tar.bz2
+libnfsidmap;0.25;libnfsidmap-0.25;libnfsidmap-0.25.tar.gz;extract:libnfsidmap-0.25.tar.gz
+libevent;2.0.18-stable;libevent-2.0.18-stable;libevent-2.0.18-stable.tar.gz;extract:libevent-2.0.18-stable.tar.gz
+
 sysstat;10.0.4;sysstat-10.0.4;sysstat-10.0.4.tar.gz;extract:sysstat-10.0.4.tar.gz
 hotplug_e2;1.0;hotplug-e2-helper;;
 autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.gz;extract:autofs-4.1.4.tar.gz;patch:autofs-4.1.4-misc-fixes.patch;patch:autofs-4.1.4-multi-parse-fix.patch;patch:autofs-4.1.4-non-replicated-ping.patch;patch:autofs-4.1.4-locking-fix-1.patch;patch:autofs-4.1.4-cross.patch;patch:autofs-4.1.4-Makefile.rules-cross.patch;patch:autofs-4.1.4-install.patch;patch:autofs-4.1.4-auto.net-sort-option-fix.patch;patch:autofs-4.1.4-autofs-additional-distros.patch;patch:autofs-4.1.4-no-bash.patch;patch:autofs-4.1.4-autofs-add-hotplug.patch;patch:autofs-4.1.4-no_man.patch

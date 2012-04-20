@@ -1,28 +1,43 @@
 #
 # NFS-UTILS
 #
-$(DEPDIR)/nfs-utils.do_prepare: @DEPENDS_nfs_utils@
-	@PREPARE_nfs_utils@
-	chmod +x @DIR_nfs_utils@/autogen.sh
-	cd @DIR_nfs_utils@ && \
-		gunzip -cd ../$(lastword $^) | cat > debian.patch && \
-		patch -p1 <debian.patch && \
-		sed -e 's/### BEGIN INIT INFO/# chkconfig: 2345 19 81\n### BEGIN INIT INFO/g' -i debian/nfs-common.init && \
-		sed -e 's/### BEGIN INIT INFO/# chkconfig: 2345 20 80\n### BEGIN INIT INFO/g' -i debian/nfs-kernel-server.init && \
-		sed -e 's/do_modprobe nfsd/# do_modprobe nfsd/g' -i debian/nfs-kernel-server.init && \
-		sed -e 's/RPCNFSDCOUNT=8/RPCNFSDCOUNT=3/g' -i debian/nfs-kernel-server.default
+$(DEPDIR)/libevent.do_prepare: @DEPENDS_libevent@
+	@PREPARE_libevent@
 	touch $@
 
-$(DEPDIR)/nfs-utils.do_compile: bootstrap e2fsprogs $(DEPDIR)/nfs-utils.do_prepare
+$(DEPDIR)/libevent.do_compile: $(DEPDIR)/libevent.do_prepare
+	cd @DIR_libevent@ && \
+		$(BUILDENV) \
+		./configure --prefix=$(prefix)/$*cdkroot/usr/ --host=$(target) && \
+		$(MAKE) install
+	touch $@
+
+$(DEPDIR)/libnfsidmap.do_prepare: @DEPENDS_libnfsidmap@
+	@PREPARE_libnfsidmap@
+	touch $@
+
+$(DEPDIR)/libnfsidmap.do_compile: $(DEPDIR)/libnfsidmap.do_prepare
+	cd @DIR_libnfsidmap@ && \
+		$(BUILDENV) \
+		ac_cv_func_malloc_0_nonnull=yes ./configure --prefix=$(prefix)/$*cdkroot/usr/ --host=$(target) && \
+		$(MAKE) install
+	touch $@
+
+$(DEPDIR)/nfs-utils.do_prepare: @DEPENDS_nfs_utils@
+	@PREPARE_nfs_utils@
+	touch $@
+
+$(DEPDIR)/nfs-utils.do_compile: bootstrap e2fsprogs $(DEPDIR)/nfs-utils.do_prepare $(DEPDIR)/libevent.do_compile $(DEPDIR)/libnfsidmap.do_compile
 	cd @DIR_nfs_utils@  && \
 		$(BUILDENV) \
 		./configure \
+			--prefix=$(prefix)/$*cdkroot/usr/ \
 			--build=$(build) \
 			--host=$(target) \
 			--target=$(target) \
 			CC_FOR_BUILD=$(target)-gcc \
 			--disable-gss \
-			--disable-nfsv4 \
+			--disable-nfsv41 \
 			--without-tcp-wrappers && \
 		$(MAKE)
 	touch $@
