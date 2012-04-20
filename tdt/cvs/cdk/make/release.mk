@@ -475,9 +475,9 @@ release_base:
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/enigma2/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/enigma2/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/enigma2/ -name '*.la' -exec rm -f {} \;
+	find $(prefix)/release/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #	Delete unnecessary plugins

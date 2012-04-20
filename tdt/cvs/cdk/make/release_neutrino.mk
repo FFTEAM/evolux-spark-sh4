@@ -412,9 +412,9 @@ endif
 	rm -rf $(prefix)/release_neutrino/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_neutrino/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release_neutrino/usr/lib/X11
-	rm -f $(prefix)/release_neutrino/usr/lib/*.a
-	rm -f $(prefix)/release_neutrino/usr/lib/*.o
-	rm -f $(prefix)/release_neutrino/usr/lib/*.la
+	find $(prefix)/release_neutrino/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release_neutrino/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release_neutrino/ -name '*.la' -exec rm -f {} \;
 	mkdir -p $(prefix)/release_neutrino/usr/local/share/neutrino/icons/logo
 	( cd $(prefix)/release_neutrino/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo )
 	( cd $(prefix)/release_neutrino/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo logos )

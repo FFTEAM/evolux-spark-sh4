@@ -514,9 +514,9 @@ release-enigma2-pli-nightly_base:
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.la' -exec rm -f {} \;
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release-enigma2-pli-nightly/ -name '*.la' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #	Delete unnecessary plugins #
