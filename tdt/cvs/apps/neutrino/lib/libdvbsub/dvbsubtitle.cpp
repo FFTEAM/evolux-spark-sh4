@@ -751,7 +751,7 @@ void cDvbSubtitleBitmaps::Draw()
 	int width_new = (biw * max_x) / picture_xres;
 	int height_new = (bih * max_y) / picture_yres;
 
-	fb->blitIcon(biw, bih, 0, fb->scaleY(bitmaps[i]->Y0()), width_new, height_new);
+	fb->blitIcon(biw, bih, 0, (bitmaps[i]->Y0() * max_y)/picture_yres, width_new, height_new);
 #else
 	if (split3D) {
 	    for (int y2 = 0; y2 < bih; y2++, y += stride)
