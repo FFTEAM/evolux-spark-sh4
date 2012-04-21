@@ -2,7 +2,7 @@
 CURDIR=`pwd`
 NRELDIR='../../tufsbox/release_neutrino'
 CHANGEDIR='../../tufsbox'
-TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $4}' | cut -d ' ' -f 1`
+TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
 BUILDDIR='../../cvs/cdk'
 # originally created by schischu and konfetti
 # fedora parts prepared by lareq

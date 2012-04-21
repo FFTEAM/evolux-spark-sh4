@@ -2,7 +2,7 @@
 CURDIR=`pwd`
 NRELDIR='../../tufsbox/release'
 CHANGEDIR='../../tufsbox'
-TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $4}' | cut -d ' ' -f 1`
+TARGET=`cat $CURDIR/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
 BUILDDIR='../../cvs/cdk'
 PATCHDIR=${CHANGEDIR%/tufsbox}
 
