@@ -256,8 +256,8 @@ release-enigma2-pli-nightly_base:
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release-enigma2-pli-nightly/etc/hosts && \
-	touch $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf/&& \
-	echo "hosts: files dns" > $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf/&& \
+	touch $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf && \
+	echo "hosts: files dns" > $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release-enigma2-pli-nightly/etc/ && \

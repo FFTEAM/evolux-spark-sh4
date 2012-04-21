@@ -63,8 +63,8 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release_neutrino/etc/ && \
 	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release_neutrino/etc/hosts && \
-	touch $(prefix)/release_neutrino/etc/nsswitch.conf/&& \
-	echo "hosts: files dns" > $(prefix)/release_neutrino/etc/nsswitch.conf/&& \
+	touch $(prefix)/release_neutrino/etc/nsswitch.conf && \
+	echo "hosts: files dns" > $(prefix)/release_neutrino/etc/nsswitch.conf && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release_neutrino/etc/ && \

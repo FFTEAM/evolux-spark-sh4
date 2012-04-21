@@ -258,8 +258,8 @@ release_base:
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
 	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release/etc/hosts && \
-	touch $(prefix)/release/etc/nsswitch.conf/&& \
-	echo "hosts: files dns" > $(prefix)/release/etc/nsswitch.conf/&& \
+	touch $(prefix)/release/etc/nsswitch.conf && \
+	echo "hosts: files dns" > $(prefix)/release/etc/nsswitch.conf && \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release/etc/ && \
