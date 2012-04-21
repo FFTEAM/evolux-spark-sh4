@@ -586,8 +586,8 @@ bool CInterfaceChangeNotifier::changeNotify(const neutrino_locale_t, void * Data
 		toDisable->setActive(CNeutrinoApp::getInstance()->networkConfig.isWireless());
 	CNeutrinoApp::getInstance()->networkConfig.getInterfaceConfig();
 
-	if (CNeutrinoApp::getInstance()->networkConfig.interface ==
-	    CNeutrinoApp::getInstance()->networkConfig.active_interface)
+	if (!strcmp(CNeutrinoApp::getInstance()->networkConfig.interface.c_str(),
+	    CNeutrinoApp::getInstance()->networkConfig.active_interface))
 		CNeutrinoApp::getInstance()->networkConfig.getDHCPInterfaceConfig();
 
 	if (CNeutrinoApp::getInstance()->DHCPOptionChooser) {
@@ -826,7 +826,7 @@ void testNetworkSettings(const char* ip, const char* netmask, const char* broadc
 		strcpy(our_nameserver,nameserver);
 	}
 	else {
-		netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),our_ip,our_mask,our_broadcast);
+		netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface,our_ip,our_mask,our_broadcast);
 		netGetDefaultRoute(our_gateway);
 		netGetNameserver(our_nameserver);
 	}
@@ -867,7 +867,7 @@ void showCurrentNetworkSettings()
 	char nameserver[16];
 	std::string text;
 
-	netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),ip,mask,broadcast);
+	netGetIP((char *) CNeutrinoApp::getInstance()->networkConfig.active_interface,ip,mask,broadcast);
 	if (ip[0] == 0) {
 		text = "Network inactive\n";
 	}
@@ -876,7 +876,7 @@ void showCurrentNetworkSettings()
 		netGetDefaultRoute(router);
 		text  = g_Locale->getText(LOCALE_NETWORKMENU_INTERFACE );
 		text += ": ";
-		text += CNeutrinoApp::getInstance()->networkConfig.active_interface;
+		text += string(CNeutrinoApp::getInstance()->networkConfig.active_interface);
 		text += '\n';
 		text += g_Locale->getText(LOCALE_NETWORKMENU_IPADDRESS );
 		text += ": ";
