@@ -103,7 +103,7 @@ void CNetworkConfig::getDHCPInterfaceConfig(void)
 		char our_gateway[16];
 		char our_nameserver[16];
 
-		netGetIP((char *) active_interface.c_str(), our_ip, our_mask, our_broadcast);
+		netGetIP(active_interface, our_ip, our_mask, our_broadcast);
 		netGetDefaultRoute(our_gateway);
 		netGetNameserver(our_nameserver);
 		address = std::string(our_ip);
@@ -144,7 +144,7 @@ void CNetworkConfig::copy_from_orig(void)
 bool CNetworkConfig::modified_from_orig(void)
 {
 	return (
-		(orig_interface       != active_interface) ||
+		strcmp(orig_interface.c_str(), active_interface) ||
 		(orig_automatic_start != automatic_start)  ||
 		(orig_address         != address        )  ||
 		(orig_netmask         != netmask        )  ||
@@ -242,7 +242,7 @@ void CNetworkConfig::commitConfig(void)
 		else
 			setDhcpAttributes(interface, true);
 
-		active_interface = interface;
+		strncpy(active_interface, interface.c_str(), sizeof(active_interface));
 
 		if (isWireless())
 			setWLAN();

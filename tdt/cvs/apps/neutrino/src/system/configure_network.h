@@ -58,7 +58,7 @@ class CNetworkConfig
 	std::string wlan_key;
 	std::string wlan_mode;
 
-	std::string active_interface;
+	char active_interface[40];
 
 	CNetworkConfig(void);
 

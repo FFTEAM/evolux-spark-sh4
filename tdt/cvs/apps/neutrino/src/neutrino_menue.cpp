@@ -1900,7 +1900,7 @@ void CMenuWidget_Network::InitInterfaceList()
 			// Get name of first active interface (but skip loopback)
 			if (it->ifa_name && strcmp(it->ifa_name, "lo") && (it->ifa_flags & IFF_RUNNING)) {
 				interface = it->ifa_name;
-				CNeutrinoApp::getInstance()->networkConfig.active_interface = std::string(interface);
+				strncpy(CNeutrinoApp::getInstance()->networkConfig.active_interface, interface, sizeof(CNeutrinoApp::getInstance()->networkConfig.active_interface));
 				break;
 			}
 			it = it->ifa_next;
@@ -1909,7 +1909,7 @@ void CMenuWidget_Network::InitInterfaceList()
 			wlanMenuForw = new CMenuForwarder(LOCALE_NETWORKMENU_WLAN, true, NULL, new WLAN_Menu);
 			MyInterfaceChanger = new CInterfaceChangeNotifier(wlanMenuForw);
 			networkSettings_Interface = new CMenuOptionStringChooser(LOCALE_NETWORKMENU_INTERFACE,
-				(char *) CNeutrinoApp::getInstance()->networkConfig.active_interface.c_str(),
+				(char *) CNeutrinoApp::getInstance()->networkConfig.active_interface,
 				true, MyInterfaceChanger, CRCInput::RC_nokey, "", true);
 		}
 		it = ifap;
@@ -1921,7 +1921,7 @@ void CMenuWidget_Network::InitInterfaceList()
 		freeifaddrs(ifap);
 	}
 
-	if (CNeutrinoApp::getInstance()->networkConfig.interface == CNeutrinoApp::getInstance()->networkConfig.active_interface)
+	if (!strcmp(CNeutrinoApp::getInstance()->networkConfig.interface.c_str(), CNeutrinoApp::getInstance()->networkConfig.active_interface))
 		CNeutrinoApp::getInstance()->networkConfig.getDHCPInterfaceConfig();
 }
 
