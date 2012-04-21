@@ -137,6 +137,7 @@ endif
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release-enigma2-pli-nightly/lib/
+	cp -RP $(buildprefix)/root/usr/bin/rpcinfo $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release-enigma2-pli-nightly/sbin/
 	rm $(prefix)/release-enigma2-pli-nightly/bin/ps
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/opkg/info
@@ -254,6 +255,9 @@ release-enigma2-pli-nightly_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release-enigma2-pli-nightly/etc/ && \
+	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release-enigma2-pli-nightly/etc/hosts && \
+	touch $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf/&& \
+	echo "hosts: files dns" > $(prefix)/release-enigma2-pli-nightly/etc/nsswitch.conf/&& \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release-enigma2-pli-nightly/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release-enigma2-pli-nightly/etc/ && \

@@ -139,6 +139,7 @@ endif
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release/usr/lib/
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release/lib/
+	cp -RP $(buildprefix)/root/usr/bin/rpcinfo $(prefix)/release/usr/bin/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release/sbin/
 	rm $(prefix)/release/bin/ps
 	mkdir -p $(prefix)/release/usr/lib/opkg/info
@@ -256,6 +257,9 @@ release_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
+	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release/etc/hosts && \
+	touch $(prefix)/release/etc/nsswitch.conf/&& \
+	echo "hosts: files dns" > $(prefix)/release/etc/nsswitch.conf/&& \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release/etc/ && \

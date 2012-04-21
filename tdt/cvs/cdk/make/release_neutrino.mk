@@ -62,6 +62,9 @@ $(DEPDIR)/%release_neutrino:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release_neutrino/etc/ && \
+	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release_neutrino/etc/hosts && \
+	touch $(prefix)/release_neutrino/etc/nsswitch.conf/&& \
+	echo "hosts: files dns" > $(prefix)/release_neutrino/etc/nsswitch.conf/&& \
 	cp -dp $(targetprefix)/etc/inittab $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release_neutrino/etc/ && \
 	cp -dp $(targetprefix)/etc/mtab $(prefix)/release_neutrino/etc/ && \
@@ -152,6 +155,7 @@ $(DEPDIR)/%release_neutrino:
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release_neutrino/usr/lib/
 	cp -RP $(targetprefix)/usr/lib/libnfsi*.so* $(prefix)/release_neutrino/usr/lib/
 #	cp -RP $(buildprefix)/root/lib/libwrap* $(prefix)/release_neutrino/lib/
+	cp -RP $(buildprefix)/root/usr/bin/rpcinfo $(prefix)/release_neutrino/usr/bin/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_neutrino/sbin/
 	rm $(prefix)/release_neutrino/bin/ps
 	mkdir -p $(prefix)/release_neutrino/usr/lib/opkg/info
