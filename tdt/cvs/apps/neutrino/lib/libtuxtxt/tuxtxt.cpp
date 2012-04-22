@@ -5484,7 +5484,7 @@ void tuxtx_pause_subtitle(bool pause, int delay)
 			ttx_sleep = delay * 1000 * 1000;
 		}
 		else {
-			displayModeIndex = MODE_PLAIN;
+			// displayModeIndex = MODE_PLAIN;
 			ttx_req_pause = 1;
 			while(reader_running && !ttx_paused)
 				usleep(10);
