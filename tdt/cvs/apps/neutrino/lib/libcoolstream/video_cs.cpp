@@ -504,22 +504,11 @@ void cVideo::Pig(int x, int y, int w, int h, int osd_w, int osd_h)
 		x, y, w, h, osd_w, osd_h);
 
 	// set video size auto not working @obi
-	FILE* fd;
-	fd = fopen("/proc/stb/vmpeg/0/dst_left", "w");
-	fprintf(fd, "%x", x);
-	fclose(fd);
-
-	fd = fopen("/proc/stb/vmpeg/0/dst_top", "w");
-	fprintf(fd, "%x", y);
-	fclose(fd);
-
-	fd = fopen("/proc/stb/vmpeg/0/dst_width", "w");
-	fprintf(fd, "%x", w);
-	fclose(fd);
-
-	fd = fopen("/proc/stb/vmpeg/0/dst_height", "w");
-	fprintf(fd, "%x", h);
-	fclose(fd);
+	FILE* fd = fopen("/proc/stb/vmpeg/0/dst_all", "w");
+	if (fd) {
+		fprintf(fd, "%x %x %x %x", x ,y, w, h);
+		fclose(fd);
+	}
 }
 
 void cVideo::setContrast(int val)
