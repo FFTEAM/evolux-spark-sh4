@@ -379,7 +379,7 @@ class VideoPlayerSettings(Screen, ConfigListScreen):
 		}, -1)
 		self.list = []
 #		self.list.append(getConfigListEntry(_("Autoplay Enable"), config.plugins.EVOMC_vp.showPreview))
-		self.list.append(getConfigListEntry(_("Autoplay Delay"), config.plugins.EVOMC_vp.preview_delay))
+#		self.list.append(getConfigListEntry(_("Autoplay Delay"), config.plugins.EVOMC_vp.preview_delay))
 		self.list.append(getConfigListEntry(_("Dimmer Enable"), config.plugins.EVOMC_all.showDimmer))
 		self.list.append(getConfigListEntry(_("Dimmer Delay"), config.plugins.EVOMC_all.dimmer_delay))
 		ConfigListScreen.__init__(self, self.list, session)
