@@ -9,6 +9,7 @@
 
 #include "dmx_cs.h"
 #include <linux/dvb/dmx.h>
+#include <errno.h>
 
 static const char * FILENAME = "dmx_cs.cpp";
 
@@ -364,13 +365,14 @@ void cDemux::addPid(unsigned short Pid)
 
 void cDemux::getSTC(int64_t * STC)
 {
-	printf("%s:%s (type=%s) STC=\n", FILENAME, __FUNCTION__, aDMXCHANNELTYPE[type]);
+	fprintf(stderr, "%s:%s (type=%s) STC=\n", FILENAME, __FUNCTION__, aDMXCHANNELTYPE[type]);
 	
 	struct dmx_stc stc;
 	memset(&stc, 0, sizeof(dmx_stc));
 	stc.num = 0/*num*/;
 	stc.base = 1;
-	ioctl(privateData->m_fd_demux, DMX_GET_STC, &stc);
+	if (0 > ioctl(privateData->m_fd_demux, DMX_GET_STC, &stc))
+		fprintf(stderr, "%s %d: ioctl(DMX_GET_STC): %s\n", __func__, __LINE__, strerror(errno));
 	*STC = (int64_t)stc.stc;
 }
 
