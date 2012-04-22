@@ -67,7 +67,8 @@ void tuxtxt_start(int tpid, int source)
 	{
 		tuxtxt_stop();
 		tuxtxt_clear_cache();
-		tuxtxt_cache.page = 0x100;
+		//tuxtxt_cache.page = 0x100;
+		tuxtxt_cache.page = 0; // avoid pre-loading 0x100 (conflicts with subtitles)
 		tuxtxt_cache.vtxtpid = tpid;
 		tuxtxt_start_thread(source);
 	}

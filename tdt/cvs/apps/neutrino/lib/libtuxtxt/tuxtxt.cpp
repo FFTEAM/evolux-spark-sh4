@@ -1429,13 +1429,13 @@ int tuxtx_main(int _rc, int pid, int page, int source) {
 	else
 		initialized = tuxtxt_init();
 
-	tuxtxt_cache.page = 0x100;
-
 	if(_rc < 0) {
 		sub_page = tuxtxt_cache.page = page;
 		sub_pid = pid;
 		boxed = 1;
-	}
+	} else
+		tuxtxt_cache.page = 0x100;
+
 
 	rc = _rc;
 
