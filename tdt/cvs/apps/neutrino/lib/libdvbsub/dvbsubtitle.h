@@ -11,34 +11,33 @@
 
 #ifndef __DVBSUBTITLE_H
 #define __DVBSUBTITLE_H
+
+// Workaround for C++
+#define __STDC_CONSTANT_MACROS
+
 extern "C" {
 #include <unistd.h>
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+#include <libavutil/avutil.h>
 }
-#include "osd.h"
+
 #include "tools.h"
 
-class cDvbSubtitlePage;
-class cDvbSubtitleAssembler; // for legacy PES recordings
 class cDvbSubtitleBitmaps;
 
 class cDvbSubtitleConverter  /*: public cThread */{
 private:
-  static int setupLevel;
-  cDvbSubtitleAssembler *dvbSubtitleAssembler;
-//  cOsd *osd;
-  cList<cDvbSubtitlePage> *pages;
-  cList<cDvbSubtitleBitmaps> *bitmaps;
-  tColor yuv2rgb(int Y, int Cb, int Cr);
-  bool AssertOsd(void);
-  int ExtractSegment(const uchar *Data, int Length, int64_t Pts);
-  void FinishPage(cDvbSubtitlePage *Page);
   bool running;
-//  int min_x, min_y, max_x, max_y;
-  cTimeMs Timeout;
   pthread_mutex_t mutex;
+  cList<cDvbSubtitleBitmaps> *bitmaps;
+  AVCodecContext * avctx;
+  AVCodec * avcodec;
+  int min_x, min_y, max_x, max_y;
+  cTimeMs Timeout;
 public:
   cDvbSubtitleConverter(void);
   virtual ~cDvbSubtitleConverter();
@@ -48,9 +47,7 @@ public:
   void Pause(bool pause);
   void Lock();
   void Unlock();
-  int ConvertFragments(const uchar *Data, int Length, int64_t pts); // for legacy PES recordings
   int Convert(const uchar *Data, int Length, int64_t pts);
-  static void SetupChanged(void);
   bool Running() { return running; };
 };
 

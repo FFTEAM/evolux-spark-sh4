@@ -384,7 +384,6 @@ extern int dvbsub_pause();
 extern int dvbsub_stop();
 extern int dvbsub_getpid();
 extern int dvbsub_start(int pid);
-extern void dvbsub_setup_changed(void);
 
 extern void setvolume(int volume_percent);
 #define VOLUME_DEFAULT_PCM 75
@@ -703,8 +702,6 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 #endif
 		}
 	}
-
-	dvbsub_setup_changed();
 
 	return 0;
 }
