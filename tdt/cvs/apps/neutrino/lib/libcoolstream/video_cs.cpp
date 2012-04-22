@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <sys/select.h>
+#include <errno.h>
 
 #include "video_cs.h"
 #include <linux/version.h>
@@ -320,7 +321,15 @@ bool cVideo::Resume(void)
 
 int cVideo::LipsyncAdjust() { printf("%s:%s\n", FILENAME, __FUNCTION__); return 0; }
 
-int64_t cVideo::GetPTS(void) { printf("%s:%s\n", FILENAME, __FUNCTION__); return 0; }
+int64_t cVideo::GetPTS(void)
+{
+	int64_t i;
+	if (ioctl(privateData->m_fd, VIDEO_GET_PTS, &i) < 0) {
+		fprintf(stderr, "%s %d: VIDEO_GET_PTS: %s\n", __FILE__, __LINE__, strerror(errno));
+		return 0;
+	}
+	return i;
+}
 
 int cVideo::Flush(void)
 {
