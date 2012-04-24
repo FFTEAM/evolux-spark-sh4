@@ -160,6 +160,9 @@ $(DEPDIR)/%release_neutrino:
 	rm $(prefix)/release_neutrino/bin/ps
 	mkdir -p $(prefix)/release_neutrino/usr/lib/opkg/info
 	touch $(prefix)/release_neutrino/usr/lib/opkg/info/opkg.list
+	mkdir -p $(prefix)/release_neutrino/etc/opkg
+	touch $(prefix)/release_neutrino/etc/opkg/opkg.conf
+	echo "src/gz graugans http://packages.evolux.yourweb.de" > $(prefix)/release_neutrino/etc/opkg/opkg.conf
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release_neutrino/bin/
 	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release_neutrino/bin/

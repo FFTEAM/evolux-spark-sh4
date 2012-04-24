@@ -147,6 +147,9 @@ endif
 	rm $(prefix)/release-enigma2-pli-nightly/bin/ps
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/opkg/info
 	touch $(prefix)/release-enigma2-pli-nightly/usr/lib/opkg/info/opkg.list
+	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/opkg
+	touch $(prefix)/release-enigma2-pli-nightly/etc/opkg/opkg.conf
+	echo "src/gz graugans http://packages.evolux.yourweb.de" > $(prefix)/release-enigma2-pli-nightly/etc/opkg/opkg.conf
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release-enigma2-pli-nightly/bin/
 	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release-enigma2-pli-nightly/bin/
 	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release-enigma2-pli-nightly/bin/
