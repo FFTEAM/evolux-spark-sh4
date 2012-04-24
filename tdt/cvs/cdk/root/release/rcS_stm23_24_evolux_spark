@@ -176,6 +176,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/bpamem.ko
 	mknod /dev/bpamem c 153 0 
 	insmod $MODDIR/smartcard.ko
+	insmod $MODDIR/tun.ko
 
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
