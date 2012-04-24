@@ -69,22 +69,22 @@ function make_devs() {
 
 [ -e $NRELDIR/dev/ ] && [ -e $NRELDIR/dev/vfd ] && exit;
 
-case $TARGET in
-	spark)
+#case $TARGET in
+#	spark)
 		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
 		make_default
-		echo "Erstelle weitere /dev für $TARGET..."
+		echo "Erstelle weitere /dev für SPARK" #$TARGET..."
 		echo "mknod -m 666 rc c 147 1" >> $CURDIR/.fakeroot
 		echo "mknod -m 666 sci0 c 169 0" >> $CURDIR/.fakeroot
 		make_devs
-	;;
-	spark7162)
-		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
-#		make_default
-		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
-#		make_devs
-	;;
-esac
+#	;;
+#	spark7162)
+#		MAKEDEV="$CURDIR/root/sbin/MAKEDEV"
+##		make_default
+#		echo -e "Erstelle weitere /dev für $TARGET...\nSorry, $TARGET wird derzeit nicht unterstützt."
+##		make_devs
+#	;;
+#esac
 $USERS chmod 777 -R $CHANGEDIR/release/dev
 if [ -e $CHANGEDIR/release_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release_with_dev
