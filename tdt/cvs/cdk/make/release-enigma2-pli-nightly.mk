@@ -90,6 +90,11 @@ if ENABLE_P0210
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 endif
 
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release-enigma2-pli-nightly/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release-enigma2-pli-nightly/sbin
 
