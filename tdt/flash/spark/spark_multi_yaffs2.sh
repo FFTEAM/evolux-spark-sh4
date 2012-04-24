@@ -32,7 +32,7 @@ SUSE=
 # Try to detect the distribution
 if `which lsb_release > /dev/null 2>&1`; then 
 	case `lsb_release -s -i` in
-		Debian*) UBUNTU=1; USERS="su -c";;
+		Debian*) UBUNTU=1; USERS="sudo";;
 		Fedora*) FEDORA=1; USERS="sudo";;
 		SUSE*)   SUSE=1;   USERS="su";;
 		Ubuntu*) UBUNTU=1; USERS="sudo";;
@@ -43,7 +43,7 @@ if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
 	if   [ -f /etc/redhat-release ]; then FEDORA=1; USERS="sudo"; 
 	elif [ -f /etc/fedora-release ]; then FEDORA=1; USERS="sudo"; 
 	elif [ -f /etc/SuSE-release ];   then SUSE=1; USERS="su";
-	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="su -c";
+	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="sudo";
 	fi
 fi
 
