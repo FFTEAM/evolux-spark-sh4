@@ -344,7 +344,7 @@ int UTF8ToUnicode(const char * &text, const bool utf8_encoded) // returns -1 on 
 }
 
 #ifdef __sh__
-void Font::RenderString(int x, int y, const int _width, const char *text, const unsigned char color, const int _boxheight, const bool utf8_encoded, uint32_t _fgcol)
+void Font::RenderString(int x, int y, const int _width, const char *text, const unsigned char color, const int _boxheight, const bool utf8_encoded, uint32_t _fgcol, uint32_t _bgcol)
 {
 	FTC_ScalerRec  tempScaler;
 	FTC_ImageTypeRec tempFont;
@@ -366,7 +366,7 @@ void Font::RenderString(int x, int y, const int _width, const char *text, const 
 	tempFont.width = frameBuffer->scaleX(font.width);
 	tempFont.height = frameBuffer->scaleY(font.height);
 #else
-void Font::RenderString(int x, int y, const int width, const char *text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol)
+void Font::RenderString(int x, int y, const int width, const char *text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol, uint32_t _bgcol)
 {
 #endif
 	if (!frameBuffer->getActive())
@@ -440,11 +440,15 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 
 
 	if (_fgcol) {
-		int yoff = y - tempFont.height/2;
-		if (yoff < 0)
-			yoff  = 0;
-		uint32_t *lfb = frameBuffer->getFrameBufferPointer();
-		bgcolor = *(lfb + yoff * frameBuffer->getStride()/sizeof(fb_pixel_t) + x / (frameBuffer->getSplit3D() ? 2 : 1));
+		if (_bgcol)
+			bgcolor = _bgcol;
+		else {
+			int yoff = y - tempFont.height/2;
+			if (yoff < 0)
+				yoff  = 0;
+			uint32_t *lfb = frameBuffer->getFrameBufferPointer();
+			bgcolor = *(lfb + yoff * frameBuffer->getStride()/sizeof(fb_pixel_t) + x / (frameBuffer->getSplit3D() ? 2 : 1));
+		}
 		fgcolor = _fgcol;
 	} else {
 		bgcolor = frameBuffer->realcolor[color];
@@ -610,9 +614,9 @@ void Font::RenderString(int x, int y, const int width, const char *text, const u
 	pthread_mutex_unlock( &renderer->render_mutex );
 }
 
-void Font::RenderString(int x, int y, const int width, const std::string & text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol)
+void Font::RenderString(int x, int y, const int width, const std::string & text, const unsigned char color, const int boxheight, const bool utf8_encoded, uint32_t _fgcol, uint32_t _bgcol)
 {
-	RenderString(x, y, width, text.c_str(), color, boxheight, utf8_encoded, _fgcol);
+	RenderString(x, y, width, text.c_str(), color, boxheight, utf8_encoded, _fgcol, _bgcol);
 }
 
 int Font::getRenderWidth(const char *text, const bool utf8_encoded)

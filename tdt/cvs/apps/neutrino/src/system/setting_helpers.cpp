@@ -633,12 +633,12 @@ bool CTimingSettingsNotifier::changeNotify(const neutrino_locale_t OptionName, v
 
 bool CFontSizeNotifier::changeNotify(const neutrino_locale_t, void *)
 {
-	CHintBox hintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_FONTSIZE_HINT)); // UTF-8
-	hintBox.paint();
+	//CHintBox hintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_FONTSIZE_HINT)); // UTF-8
+	//hintBox.paint();
 
 	CNeutrinoApp::getInstance()->SetupFonts();
 
-	hintBox.hide();
+	//hintBox.hide();
 
 	return true;
 }

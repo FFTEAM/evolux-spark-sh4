@@ -617,7 +617,7 @@ void CPictureViewer::Cleanup ()
   }
 }
 
-bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int width, int height)
+bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int width, int height, bool check_only)
 {
 	int r = -1;
 
@@ -652,8 +652,11 @@ bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int w
 				return false;
 			r = access(fname, F_OK);
 		}
-		if (!r)
+		if (!r) {
+			if (check_only)
+				return true;
 			return DisplayImage(fname, posx, posy, width, height);
+		}
 	}
 	return false;
 }

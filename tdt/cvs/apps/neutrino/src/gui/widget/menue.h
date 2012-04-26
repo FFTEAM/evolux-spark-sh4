@@ -190,11 +190,8 @@ class CAbstractMenuOptionChooser : public CMenuItem
 	int               height;
 	int *             optionValue;
 
-	int getHeight(void) const
-		{
-			return height;
-		}
-	
+	int getHeight(void) const;
+
 	bool isSelectable(void) const
 		{
 			return active;
@@ -268,10 +265,7 @@ class CMenuOptionStringChooser : public CMenuItem
 		void addOption(const char * value);
 		void clearOptions(void);
 		int paint(bool selected, bool last = 0);
-		int getHeight(void) const
-		{
-			return height;
-		}
+		int getHeight(void) const;
 		bool isSelectable(void) const
 		{
 			return active;
@@ -293,10 +287,7 @@ class CMenuOptionLanguageChooser : public CMenuItem
 
 		void addOption(const char * value);
 		int paint(bool selected, bool last = 0);
-		int getHeight(void) const
-		{
-			return height;
-		}
+		int getHeight(void) const;
 		bool isSelectable(void) const
 		{
 			return true;
@@ -316,6 +307,7 @@ class CMenuWidget : public CMenuTarget
 		std::string			iconfile;
 
 		int			width;
+		int			width_save;
 		int			height;
 		int         wanted_height;
 		int			x;

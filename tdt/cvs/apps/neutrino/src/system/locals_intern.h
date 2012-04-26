@@ -417,6 +417,7 @@ const char *locale_real_names[] = {
 	"fontsize.menu",
 	"fontsize.menu_info",
 	"fontsize.menu_title",
+	"fontsize.percent",
 	"gtxalpha.alpha1",
 	"gtxalpha.alpha2",
 	"infobar.bar_color",

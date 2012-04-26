@@ -2474,6 +2474,8 @@ void CNeutrinoApp::InitFontSettings(CMenuWidget &fontSettings)
 	fontSettings.addItem(GenericMenuSeparator);
 	fontSettings.addItem(GenericMenuBack);
 	fontSettings.addItem(GenericMenuSeparatorLine);
+	fontSettings.addItem(new CMenuOptionNumberChooser(LOCALE_FONTSIZE_PERCENT, &g_settings.font_percent, true, 40, 999, &fontsizenotifier));
+	fontSettings.addItem(GenericMenuSeparatorLine);
 	//fontSettings.addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font"));
 	AddFontSettingItem(fontSettings, SNeutrinoSettings::FONT_TYPE_MENU);
 	AddFontSettingItem(fontSettings, SNeutrinoSettings::FONT_TYPE_MENU_TITLE);

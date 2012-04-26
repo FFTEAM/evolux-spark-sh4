@@ -202,6 +202,10 @@ struct SNeutrinoSettings
 	unsigned char infobar_Text_blue;
 
 	//infobar extended
+#define INFOBAR_PICON_OFF 0
+#define INFOBAR_PICON_NORMAL 1
+#define INFOBAR_PICON_BIG 2
+#define INFOBAR_PICON_MOVE 3
 	int infobar_picon;
 	int infobar_barcolor;
 	unsigned char infobar_barcolor_red;
@@ -458,6 +462,7 @@ struct SNeutrinoSettings
 	int	zap_cycle;
 	int	sms_channel;
 	char	font_file[100];
+	int	font_percent;
 	char	update_dir[100];
 
 	// adzap

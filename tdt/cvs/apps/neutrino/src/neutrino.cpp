@@ -1100,6 +1100,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	strcpy(g_settings.softupdate_proxypassword, configfile.getString("softupdate_proxypassword", "" ).c_str());
 //
 	strcpy( g_settings.font_file, configfile.getString( "font_file", FONTDIR"/neutrino.ttf" ).c_str() );
+	g_settings.font_percent = configfile.getInt32( "font_percent",  100);
 	strcpy( g_settings.update_dir, configfile.getString( "update_dir", "/tmp" ).c_str() );
 	//BouquetHandling
 	g_settings.bouquetlist_mode = configfile.getInt32( "bouquetlist_mode", 0 );
@@ -1647,6 +1648,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 #endif
 	configfile.setString("update_dir", g_settings.update_dir);
 	configfile.setString("font_file", g_settings.font_file);
+	configfile.setInt32( "font_percent", g_settings.font_percent );
 	//BouquetHandling
 	configfile.setInt32( "bouquetlist_mode", g_settings.bouquetlist_mode );
 
@@ -2105,12 +2107,15 @@ void CNeutrinoApp::SetupFonts()
 	g_fontRenderer->AddFont(font.filename, true);  // make italics
 	style[2] = "Italic";
 
+	g_SignalFont = g_fontRenderer->getFont(font.name, style[signal_font.style], signal_font.defaultsize + signal_font.size_offset * font.size_offset);
+
 	for (int i = 0; i < FONT_TYPE_COUNT; i++)
 	{
 		if(g_Font[i]) delete g_Font[i];
-		g_Font[i] = g_fontRenderer->getFont(font.name, style[neutrino_font[i].style], configfile.getInt32(locale_real_names[neutrino_font[i].name], neutrino_font[i].defaultsize) + neutrino_font[i].size_offset * font.size_offset);
+		g_Font[i] = g_fontRenderer->getFont(font.name, style[neutrino_font[i].style],
+			((configfile.getInt32(locale_real_names[neutrino_font[i].name], neutrino_font[i].defaultsize) + neutrino_font[i].size_offset * font.size_offset)
+			* g_settings.font_percent) / 100);
 	}
-	g_SignalFont = g_fontRenderer->getFont(font.name, style[signal_font.style], signal_font.defaultsize + signal_font.size_offset * font.size_offset);
 }
 
 /**************************************************************************************

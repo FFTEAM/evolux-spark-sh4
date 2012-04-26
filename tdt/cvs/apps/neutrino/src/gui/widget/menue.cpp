@@ -106,7 +106,8 @@ void CMenuWidget::Init(const std::string & Icon, const int mwidth, const int mhe
         frameBuffer = CFrameBuffer::getInstance();
         iconfile = Icon;
         selected = -1;
-        width = mwidth;
+	width_save = mwidth;
+        width = width_save * g_settings.font_percent / 100;
         if(width > (int) frameBuffer->getScreenWidth())
                 width = frameBuffer->getScreenWidth();
         height = mheight;
@@ -444,6 +445,10 @@ void CMenuWidget::paint()
 
 	CVFD::getInstance()->setMode(CVFD::MODE_MENU_UTF8 /*, l_name*/); //FIXME menu name
 
+        width = width_save * g_settings.font_percent / 100;
+        if(width > (int) frameBuffer->getScreenWidth())
+                width = frameBuffer->getScreenWidth();
+
 	height=wanted_height;
 
 	if(height > ((int)frameBuffer->getScreenHeight() - 10))
@@ -595,6 +600,7 @@ int CMenuOptionNumberChooser::exec(CMenuTarget*)
 
 int CMenuOptionNumberChooser::paint(bool selected, bool last)
 {
+	int height = getHeight();
 	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
 
 	unsigned char color   = COL_MENUCONTENT;
@@ -749,6 +755,7 @@ int CMenuOptionChooser::exec(CMenuTarget*)
 
 int CMenuOptionChooser::paint( bool selected , bool last)
 {
+	int height = getHeight();
 	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
 
 	unsigned char color   = COL_MENUCONTENT;
@@ -919,6 +926,7 @@ int CMenuOptionStringChooser::exec(CMenuTarget* parent)
 
 int CMenuOptionStringChooser::paint( bool selected, bool last )
 {
+	int height = getHeight();
 	unsigned char color   = COL_MENUCONTENT;
 	fb_pixel_t    bgcolor = COL_MENUCONTENT_PLUS_0;
 	if (selected) {
@@ -1021,6 +1029,7 @@ int CMenuOptionLanguageChooser::exec(CMenuTarget*)
 
 int CMenuOptionLanguageChooser::paint( bool selected, bool last )
 {
+	int height = getHeight();
 	unsigned char color   = COL_MENUCONTENT;
 	fb_pixel_t    bgcolor = COL_MENUCONTENT_PLUS_0;
 	if (selected)
@@ -1352,5 +1361,21 @@ int CMenuSelectorTarget::exec(CMenuTarget* parent, const std::string & actionKey
         else
                 *m_select = -1;
         return menu_return::RETURN_EXIT;
+}
+
+
+int CAbstractMenuOptionChooser::getHeight() const
+{
+	return g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+}
+
+int CMenuOptionLanguageChooser::getHeight() const
+{
+	return g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
+}
+
+int CMenuOptionStringChooser::getHeight() const
+{
+	return g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 }
 
