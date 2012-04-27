@@ -14,16 +14,16 @@
 		<S i="2f08" n="SUPER RTL" t="0441" on="0001" s="192" frq="12187" />
 		<S i="0384" n="SPORT1" t="0021" on="0085" s="192" frq="12480" />
 		<S i="79e0" n="Eurosport Deutschland" t="0443" on="0001" s="192" frq="12226" />
-		<S i="2775" n="DMAX alt" t="0444" on="0001" s="192" frq="12246" />
+		<S i="003f" n="DMAX neu" t="0021" on="0085" s="192" frq="12480" />
+		<S i="1523" n="Dr.DishTV-Welt der Technik" t="0455" on="0001" s="192" frq="12574" />
 		<S i="02fc" n="ANIXE SD" t="0005" on="0085" s="192" frq="12460" />
 		<S i="0701" n="DAS VIERTE" t="0005" on="0085" s="192" frq="12460" />
 		<S i="0033" n="TELE 5" t="0021" on="0085" s="192" frq="12480" />
 		<S i="0308" n="SIXX" t="0005" on="0085" s="192" frq="12460" />
-		<S i="0049" n="Dr.Dish TV" t="0005" on="0085" s="192" frq="12460" />
 		<S i="445f" n="N24" t="0453" on="0001" s="192" frq="12544" />
 		<S i="2f3a" n="n-tv" t="0441" on="0001" s="192" frq="12187" />
 		<S i="79f4" n="EuroNews" t="0443" on="0001" s="192" frq="12226" />
-		<S i="7035" n="Phoenix" t="041b" on="0001" s="192" frq="10743" />
+		<S i="7035" n="PHOENIX" t="041b" on="0001" s="192" frq="10743" />
 		<S i="6e43" n="NDR FS SH" t="0431" on="0001" s="192" frq="12109" />
 		<S i="6e2e" n="rbb Berlin" t="0431" on="0001" s="192" frq="12109" />
 		<S i="6dd1" n="SWR Fernsehen BW" t="044d" on="0001" s="192" frq="11836" />
@@ -37,7 +37,6 @@
 		<S i="6d6b" n="ZDFinfo" t="0437" on="0001" s="192" frq="11953" />
 		<S i="6d70" n="zdf.kultur" t="0437" on="0001" s="192" frq="11953" />
 		<S i="7034" n="arte" t="041b" on="0001" s="192" frq="10743" />
-		<S i="4460" n="SIXX" t="0453" on="0001" s="192" frq="12544" />
 	</Bouquet>
 	<Bouquet name="SKY/Premiere" hidden="0" locked="0">
 		<S i="0081" n="Sky Sport HD 1" t="0006" on="0085" s="192" frq="11914" />
@@ -48,12 +47,13 @@
 		<S i="00dd" n="Sky Sport 1" t="0004" on="0085" s="192" frq="12031" />
 		<S i="00de" n="Sky Sport 2" t="0004" on="0085" s="192" frq="12031" />
 		<S i="006a" n="Sky Action HD" t="000c" on="0085" s="192" frq="12304" />
-		<S i="006b" n="Sky Christmas HD" t="000c" on="0085" s="192" frq="12304" />
+		<S i="006b" n="Sky Hits HD" t="000c" on="0085" s="192" frq="12304" />
+		<S i="007c" n="Fox HD" t="000e" on="0085" s="192" frq="11875" />
 		<S i="000a" n="Sky Cinema" t="0002" on="0085" s="192" frq="11797" />
 		<S i="000b" n="Sky Cinema +1" t="0002" on="0085" s="192" frq="11797" />
 		<S i="002b" n="Sky Cinema +24" t="0002" on="0085" s="192" frq="11797" />
 		<S i="0009" n="Sky Action" t="0002" on="0085" s="192" frq="11797" />
-		<S i="0029" n="Sky Christmas" t="0003" on="0085" s="192" frq="11719" />
+		<S i="0029" n="Sky Hits" t="0003" on="0085" s="192" frq="11719" />
 		<S i="0017" n="Sky Krimi" t="0001" on="0085" s="192" frq="12070" />
 		<S i="0204" n="Sky Nostalgie" t="0003" on="0085" s="192" frq="11719" />
 		<S i="0008" n="Sky Comedy" t="0002" on="0085" s="192" frq="11797" />
@@ -87,15 +87,10 @@
 		<S i="006f" n="Disney Cinemagic HD" t="000d" on="0085" s="192" frq="11992" />
 	</Bouquet>
 	<Bouquet name="Erotik" hidden="0" locked="0">
-		<S i="1272" n="Dolly Buster Media" t="3458" on="013e" s="130" frq="11200" />
-		<S i="1273" n="Dolly Buster Secret" t="3458" on="013e" s="130" frq="11200" />
-		<S i="1274" n="Dolly Buster Classic" t="3458" on="013e" s="130" frq="11200" />
-		<S i="1275" n="Dolly Buster Five Star" t="3458" on="013e" s="130" frq="11200" />
 		<S i="0013" n="XDREAM-FRENCHLOVER TV" t="0578" on="013e" s="130" frq="11470" />
 		<S i="43b3" n="Daring!TV" t="2cec" on="013e" s="130" frq="10815" />
 		<S i="128f" n="XTSY" t="3458" on="013e" s="130" frq="11200" />
 		<S i="07fa" n="Hustler TV" t="0449" on="0035" s="192" frq="12343" />
-		<S i="227b" n="Dorcel TV" t="238c" on="013e" s="130" frq="12539" />
 		<S i="35c0" n="Redlight" t="1388" on="013e" s="130" frq="11727" />
 		<S i="35c1" n="D-XTV2" t="1388" on="013e" s="130" frq="11727" />
 		<S i="35c6" n="SCT 6" t="1388" on="013e" s="130" frq="11727" />
@@ -105,11 +100,9 @@
 		<S i="35c2" n="SCT 3" t="1388" on="013e" s="130" frq="11727" />
 		<S i="35c4" n="SCT 4" t="1388" on="013e" s="130" frq="11727" />
 		<S i="4224" n="Redlight 3D-HD" t="3db8" on="013e" s="130" frq="11662" />
-		<S i="4223" n="REDLIGHT PREMIUM" t="3db8" on="013e" s="130" frq="11662" />
 		<S i="4225" n="HUSTLER HD-3D" t="3db8" on="013e" s="130" frq="11662" />
 		<S i="1251" n="Private Spice" t="2b5c" on="013e" s="130" frq="10723" />
-		<S i="26b1" n="PENTHOUSE HD" t="045c" on="0001" s="192" frq="12669" />
-		<S i="0046" n="Alpenglþhen TVX" t="0007" on="0085" s="192" frq="12148" />
+		<S i="227b" n="Dorcel TV" t="238c" on="013e" s="130" frq="12539" />
 	</Bouquet>
 	<Bouquet name="HDTV" hidden="0" locked="0">
 		<S i="2b5c" n="Das Erste HD" t="03f3" on="0001" s="192" frq="11361" />
@@ -119,7 +112,7 @@
 		<S i="0069" n="Sky Sport HD Extra" t="000c" on="0085" s="192" frq="12304" />
 		<S i="006c" n="Sky Sport News HD" t="000c" on="0085" s="192" frq="12304" />
 		<S i="0083" n="Sky Cinema HD" t="0006" on="0085" s="192" frq="11914" />
-		<S i="006b" n="Sky Christmas HD" t="000c" on="0085" s="192" frq="12304" />
+		<S i="006b" n="Sky Hits HD" t="000c" on="0085" s="192" frq="12304" />
 		<S i="006a" n="Sky Action HD" t="000c" on="0085" s="192" frq="12304" />
 		<S i="0077" n="ESPN America HD" t="000b" on="0085" s="192" frq="12382" />
 		<S i="ef10" n="RTL HD" t="0421" on="0001" s="192" frq="10832" />
@@ -135,7 +128,7 @@
 		<S i="0084" n="Eurosport HD" t="0006" on="0085" s="192" frq="11914" />
 		<S i="132f" n="ORF1 HD" t="03ef" on="0001" s="192" frq="11302" />
 		<S i="1330" n="ORF2 HD" t="03ef" on="0001" s="192" frq="11302" />
-		<S i="03de" n="HD suisse" t="2134" on="013e" s="130" frq="12399" />
+		<S i="007c" n="Fox HD" t="000e" on="0085" s="192" frq="11875" />
 		<S i="330b" n="ESP HD German" t="0190" on="013e" s="130" frq="11278" />
 		<S i="331a" n="EUROSPORT HD " t="0190" on="013e" s="130" frq="11278" />
 		<S i="2b70" n="arte HD" t="03f3" on="0001" s="192" frq="11361" />
@@ -147,7 +140,6 @@
 		<S i="006f" n="Disney Cinemagic HD" t="000d" on="0085" s="192" frq="11992" />
 	</Bouquet>
 	<Bouquet name="ORF+SF" hidden="0" locked="0">
-		<S i="03de" n="HD suisse" t="2134" on="013e" s="130" frq="12399" />
 		<S i="132f" n="ORF1 HD" t="03ef" on="0001" s="192" frq="11302" />
 		<S i="1330" n="ORF2 HD" t="03ef" on="0001" s="192" frq="11302" />
 		<S i="32c9" n="ORF1" t="045d" on="0001" s="192" frq="12692" />
@@ -199,7 +191,7 @@
 		<S i="7001" n="MTV Germany" t="0436" on="0001" s="192" frq="11973" />
 		<S i="6fee" n="MTV Hits" t="042a" on="0001" s="192" frq="11739" />
 		<S i="6fef" n="MTV Dance" t="042a" on="0001" s="192" frq="11739" />
-		<S i="6fff" n="MTV Music" t="0436" on="0001" s="192" frq="11973" />
+		<S i="6fff" n="MTV Music 24" t="0436" on="0001" s="192" frq="11973" />
 		<S i="7009" n="28681" t="0436" on="0001" s="192" frq="11973" />
 		<S i="7004" n="VIVA Germany" t="0436" on="0001" s="192" frq="11973" />
 		<S i="6ffb" n="VH1 Classic." t="042a" on="0001" s="192" frq="11739" />
@@ -216,17 +208,6 @@
 		<S i="7007" n="MTV NL" t="0436" on="0001" s="192" frq="11973" />
 		<S i="2584" n="M6 MUSIC BLACK" t="0458" on="0001" s="192" frq="12610" />
 		<S i="2585" n="M6 MUSIC CLUB" t="0458" on="0001" s="192" frq="12610" />
-	</Bouquet>
-	<Bouquet name="Last Scanned" hidden="0" locked="0">
-		<S i="0f9d" n="Pace TDS 866 NSD" t="000c" on="0085" s="192" frq="12304" />
-		<S i="0f9e" n="Pace TDS 866 NSDX" t="000c" on="0085" s="192" frq="12304" />
-		<S i="0fb1" n="Pace TDS 865 NSDX" t="000c" on="0085" s="192" frq="12304" />
-		<S i="0fbc" n="Pace TDS 865 NSD" t="000c" on="0085" s="192" frq="12304" />
-		<S i="0fc3" n="HUMAX PR-HD3000S" t="000c" on="0085" s="192" frq="12304" />
-		<S i="0069" n="Sky Sport HD Extra" t="000c" on="0085" s="192" frq="12304" />
-		<S i="006a" n="Sky Action HD" t="000c" on="0085" s="192" frq="12304" />
-		<S i="006b" n="Sky Christmas HD" t="000c" on="0085" s="192" frq="12304" />
-		<S i="006c" n="Sky Sport News HD" t="000c" on="0085" s="192" frq="12304" />
 	</Bouquet>
 	<Bouquet name="Radio_deutsch" hidden="0" locked="0">
 		<S i="00a0" n="ROCK ANTENNE" t="0007" on="0085" s="192" frq="12148" />
