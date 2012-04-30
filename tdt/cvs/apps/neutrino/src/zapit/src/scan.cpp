@@ -87,14 +87,14 @@ std::map <transponder_id_t, transponder> nittransponders;
 #define TIMER_STOP(label)			\
         gettimeofday(&tv2, NULL);		\
 	msec = tv2.tv_sec - tv.tv_sec;		\
-        printf("%s: %d sec\n", label, msec)
+        fprintf(stderr,"%s: %d sec\n", label, msec)
 
 bool tuneFrequency(FrontendParameters *feparams, uint8_t polarization, t_satellite_position satellitePosition)
 {
 	frontend->setInput(satellitePosition, feparams->frequency, polarization);
 	int ret = frontend->driveToSatellitePosition(satellitePosition, false); //true);
 	if(ret > 0) {
-		printf("[scan] waiting %d seconds for motor to turn satellite dish.\n", ret);
+		fprintf(stderr,"[scan] waiting %d seconds for motor to turn satellite dish.\n", ret);
 		eventServer->sendEvent(CZapitClient::EVT_SCAN_PROVIDER, CEventServer::INITID_ZAPIT, (void *) "moving rotor", 13);
 		for(int i = 0; i < ret; i++) {
 			sleep(1);
@@ -108,7 +108,7 @@ bool tuneFrequency(FrontendParameters *feparams, uint8_t polarization, t_satelli
 int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t polarity, bool fromnit = 0)
 {
 	DBG("add_to_scan: freq %d pol %d tpid %llx\n", feparams->frequency, polarity, TsidOnid);
-//if(fromnit) printf("add_to_scan: freq %d pol %d tpid %llx\n", feparams->frequency, polarity, TsidOnid);
+//if(fromnit) fprintf(stderr,"add_to_scan: freq %d pol %d tpid %llx\n", feparams->frequency, polarity, TsidOnid);
 	freq_id_t freq = feparams->frequency / 1000;
 	uint8_t poltmp1 = polarity & 1;
 	uint8_t poltmp2;
@@ -131,7 +131,7 @@ int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t
 			freq++;
 			TsidOnid = CREATE_TRANSPONDER_ID_FROM_SATELLITEPOSITION_ORIGINALNETWORK_TRANSPORTSTREAM_ID(
 				freq, satellitePosition, original_network_id, transport_stream_id);
-				printf("[scan] add_to_scan: SAME freq %d pol1 %d pol2 %d tpid %llx\n", feparams->frequency, poltmp1, poltmp2, TsidOnid);
+				fprintf(stderr,"[scan] add_to_scan: SAME freq %d pol1 %d pol2 %d tpid %llx\n", feparams->frequency, poltmp1, poltmp2, TsidOnid);
 			feparams->frequency = feparams->frequency+1000;
 			tI = scanedtransponders.find(TsidOnid);
 		}
@@ -146,7 +146,7 @@ int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t
 		DBG("[scan] insert tp-id %llx freq %d rate %d\n", TsidOnid, feparams->frequency, cable? feparams->u.qam.symbol_rate : feparams->u.qpsk.symbol_rate );
 		if(fromnit) {
 			if(nittransponders.find(TsidOnid) == nittransponders.end()) {
-				printf("[scan] insert tp-id %llx freq %d pol %d rate %d\n", TsidOnid, feparams->frequency, polarity, cable? feparams->u.qam.symbol_rate : feparams->u.qpsk.symbol_rate );
+				fprintf(stderr,"[scan] insert tp-id %llx freq %d pol %d rate %d\n", TsidOnid, feparams->frequency, polarity, cable? feparams->u.qam.symbol_rate : feparams->u.qpsk.symbol_rate );
 				nittransponders.insert (
 						std::pair <transponder_id_t, transponder> (
 							TsidOnid,
@@ -197,7 +197,7 @@ int get_sdts(t_satellite_position satellitePosition)
 	stiterator stI;
 	std::map <transponder_id_t, transponder>::iterator sT;
 
-	printf("[scan] scanning tp from sat/service\n");
+	fprintf(stderr,"[scan] scanning tp from sat/service\n");
 _repeat:
 	for (tI = scantransponders.begin(); tI != scantransponders.end(); tI++) {
 		if(abort_scan)
@@ -208,7 +208,7 @@ _repeat:
 		if(sT != scanedtransponders.end())
 			continue;
 #endif
-		printf("[scan] scanning: %llx\n", tI->first);
+		fprintf(stderr,"[scan] scanning: %llx\n", tI->first);
 
 		actual_freq = tI->second.feparams.frequency / 1000;
 		processed_transponders++;
@@ -284,18 +284,18 @@ _repeat:
 		}
 #else
 		if(!scan_mode) {
-			printf("[scan] trying to parse NIT\n");
+			fprintf(stderr,"[scan] trying to parse NIT\n");
 			status = parse_nit(satellitePosition, tI->second.feparams.frequency/1000);
 			if(status < 0)
-				printf("[scan] NIT failed !\n");
+				fprintf(stderr,"[scan] NIT failed !\n");
 		}
 #endif
-		printf("[scan] tpid ready: %llx\n", TsidOnid);
+		fprintf(stderr,"[scan] tpid ready: %llx\n", TsidOnid);
 	}
 	if(!scan_mode) {
-		printf("[scan] found %d transponders (%d failed) and %d channels\n", found_transponders, failed_transponders, found_channels);
+		fprintf(stderr,"[scan] found %d transponders (%d failed) and %d channels\n", found_transponders, failed_transponders, found_channels);
 		scantransponders.clear();
-		if (scan_sat_mode) {
+		if (1 /*scan_sat_mode*/) {
 			for (tI = nittransponders.begin(); tI != nittransponders.end(); tI++) {
 //int add_to_scan(transponder_id_t TsidOnid, FrontendParameters *feparams, uint8_t polarity, bool fromnit = 0)
 				add_to_scan(tI->first, &tI->second.feparams, tI->second.polarization, false);
@@ -371,7 +371,7 @@ void scan_provider(xmlNodePtr search, t_satellite_position satellitePosition, ui
 	TIMER_START();
 	sat_iterator_t sit = satellitePositions.find(satellitePosition);
 	if(sit == satellitePositions.end()) {
-		printf("[zapit] WARNING satellite position %d not found!\n", satellitePosition);
+		fprintf(stderr,"[zapit] WARNING satellite position %d not found!\n", satellitePosition);
 		return;
 	}
 
@@ -477,7 +477,7 @@ void *start_scanthread(void *scanmode)
 	for (tallchans::iterator it = allchans.begin(); it != allchans.end(); it++)
                 it->second.isNewChannel = false;
 
-	printf("[zapit] scan mode %s, satellites %s\n", scan_mode ? "fast" : "NIT", scan_sat_mode ? "all" : "single");
+	fprintf(stderr,"[zapit] scan mode %s, satellites %s\n", scan_mode ? "fast" : "NIT", scan_sat_mode ? "all" : "single");
 	CZapitClient myZapitClient;
 
 	fake_tid = fake_nid = 0;
@@ -517,7 +517,7 @@ void *start_scanthread(void *scanmode)
 			scanedtransponders.clear();
 			nittransponders.clear();
 
-			printf("[scan] scanning %s at %d bouquetMode %d\n", providerName, position, bouquetMode);
+			fprintf(stderr,"[scan] scanning %s at %d bouquetMode %d\n", providerName, position, bouquetMode);
 			scan_provider(search, position, diseqc_pos, satfeed);
 			if(abort_scan) {
 				found_channels = 0;
@@ -534,17 +534,17 @@ void *start_scanthread(void *scanmode)
 	}
 
 	/* report status */
-	printf("[scan] found %d transponders (%d failed) and %d channels\n", found_transponders, failed_transponders, found_channels);
+	fprintf(stderr,"[scan] found %d transponders (%d failed) and %d channels\n", found_transponders, failed_transponders, found_channels);
 
 	if (found_channels) {
 		SaveServices(true);
-		printf("[scan] save services done\n"); fflush(stdout);
+		fprintf(stderr,"[scan] save services done\n"); fflush(stdout);
 	        g_bouquetManager->saveBouquets();
 	        //g_bouquetManager->sortBouquets();
 	        //g_bouquetManager->renumServices();
 	        g_bouquetManager->clearAll();
 		g_bouquetManager->loadBouquets();
-		printf("[scan] save bouquets done\n");
+		fprintf(stderr,"[scan] save bouquets done\n");
 		stop_scan(true);
 		myZapitClient.reloadCurrentServices();
 	} else {
@@ -583,16 +583,16 @@ void * scan_transponder(void * arg)
 	strcpy(providerName, scanProviders.size() > 0 ? scanProviders.begin()->second.c_str() : "unknown provider");
 
 	satellitePosition = scanProviders.begin()->first;
-	printf("[scan_transponder] scanning sat %s position %d\n", providerName, satellitePosition);
+	fprintf(stderr,"[scan_transponder] scanning sat %s position %d\n", providerName, satellitePosition);
 	eventServer->sendEvent(CZapitClient::EVT_SCAN_SATELLITE, CEventServer::INITID_ZAPIT, providerName, strlen(providerName) + 1);
 
 	scan_mode = TP->scan_mode;
 	TP->feparams.inversion = INVERSION_AUTO;
 
 	if (!cable) {
-		printf("[scan_transponder] freq %d rate %d fec %d pol %d NIT %s\n", TP->feparams.frequency, TP->feparams.u.qpsk.symbol_rate, TP->feparams.u.qpsk.fec_inner, TP->polarization, scan_mode ? "no" : "yes");
+		fprintf(stderr,"[scan_transponder] freq %d rate %d fec %d pol %d NIT %s\n", TP->feparams.frequency, TP->feparams.u.qpsk.symbol_rate, TP->feparams.u.qpsk.fec_inner, TP->polarization, scan_mode ? "no" : "yes");
 	} else
-		printf("[scan_transponder] freq %d rate %d fec %d mod %d\n", TP->feparams.frequency, TP->feparams.u.qam.symbol_rate, TP->feparams.u.qam.fec_inner, TP->feparams.u.qam.modulation);
+		fprintf(stderr,"[scan_transponder] freq %d rate %d fec %d mod %d\n", TP->feparams.frequency, TP->feparams.u.qam.symbol_rate, TP->feparams.u.qam.fec_inner, TP->feparams.u.qam.modulation);
 
         if (cable) {
                 /* build special transponder for cable with satfeed */
