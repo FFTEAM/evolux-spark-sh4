@@ -1961,28 +1961,33 @@ void YWPANEL_VFD_ClearAll(void)
 	}
 }
 
+static u8 ywpanel_vfd_map[128] =
+{
+	0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
+	0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
+	0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x1f, 0x2f, 0x21, 0x22, 0x23, 0x24,
+	0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
+	0x2f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+	0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1f,
+	0x2f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
+	0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
+};
+
 void YWPANEL_VFD_DrawChar(char c, u8 position)
 {
-	if(position < 1 || position > 8)
-	{
+	u8 u;
+
+	if(position < 1 || position > 8) {
 		PANEL_PRINT((TRACE_ERROR, "char position error! %d\n", position));
 		return;
 	}
-	if(c >= 65 && c <= 95)
-		c = c - 65;
-	else if(c >= 97 && c <= 122)
-		c = c - 97;
-	else if(c >= 42 && c <= 57)
-		c = c - 11;
-	else if(c == 32)
-		c = 47;
+	if (c < 128)
+		u = ywpanel_vfd_map[(int)c];
 	else
-	{
-		PANEL_PRINT((TRACE_ERROR, "unknown char! make it as space!!\n"));
-		c = 47;
-	}
-	YWPANEL_VFD_SegDigSeg(position, SEGNUM1, CharLib[(u8)c][0]);
-	YWPANEL_VFD_SegDigSeg(position, SEGNUM2, CharLib[(u8)c][1]);
+		u = 47;
+
+	YWPANEL_VFD_SegDigSeg(position, SEGNUM1, CharLib[u][0]);
+	YWPANEL_VFD_SegDigSeg(position, SEGNUM2, CharLib[u][1]);
 
 }
 
@@ -2517,61 +2522,36 @@ int YWVFD_LED_ShowString(const char *str)
 int YWPANEL_VFD_ShowString_StandBy(char* str)
 {
 	int ST_ErrCode = 0 ;
-	u8 lenth;
+	u8 length;
 	u8 i,c;
 
 	YWPANEL_FPData_t	data;
 
-	if (down_interruptible(&vfd_sem))
-	{
+	if (down_interruptible(&vfd_sem)) {
 	   ST_ErrCode =-EBUSY;
 	   return ST_ErrCode;
 	}
-	lenth = strlen(str);
-	if(lenth > 8)
-	{
-		ST_ErrCode = -EINVAL ;
-		PANEL_DEBUG(ST_ErrCode);
 
-		up(&vfd_sem);
-		return ST_ErrCode;
-	}
+	length = strlen(str);
 	data.dataType = YWPANEL_DATATYPE_VFD;
-	for(i = 0; i < 8; i++)
-	{
+	for(i = 0; i < 8; i++) {
 		data.data.vfdData.type = YWPANEL_VFD_DISPLAYSTRING;
-		if(i <lenth)
-		{
-			c = str[i] ;
 
-			if(c >= 65 && c <= 95)
-				c = c - 65;
-			else if(c >= 97 && c <= 122)
-				c = c - 97;
-			else if(c >= 42 && c <= 57)
-				c = c - 11;
-			else if(c == 32)
-				c = 47;
-			else
-			{
-				c = 47;
-			}
-			VfdSegAddr[i+1].CurrValue1 = CharLib[c][0] ;
-			VfdSegAddr[i+1].CurrValue2 = CharLib[c][1] ;
-		}
+		if (i < length && str[i] < 128)
+			c = ywpanel_vfd_map[(int)str[i]];
 		else
-		{
-			VfdSegAddr[i+1].CurrValue1 = 0;
-			VfdSegAddr[i+1].CurrValue2 = 0;
-		}
+			c = 47;
+
+		VfdSegAddr[i+1].CurrValue1 = CharLib[c][0] ;
+		VfdSegAddr[i+1].CurrValue2 = CharLib[c][1] ;
+
 		data.data.vfdData.address[2*i] = VfdSegAddr[i+1].Segaddr1;
 		data.data.vfdData.DisplayValue[2*i] = VfdSegAddr[i+1].CurrValue1;
 		data.data.vfdData.address[2*i+1] = VfdSegAddr[i+1].Segaddr2;
 		data.data.vfdData.DisplayValue[2*i+1] = VfdSegAddr[i+1].CurrValue2;
 	}
 
-	if(YWPANEL_FP_SendData(&data) != true)
-	{
+	if(YWPANEL_FP_SendData(&data) != true) {
 		PANEL_DEBUG("VFD show stings is wrong!!\n");
 		ST_ErrCode = -ETIME;
 	}
@@ -2582,32 +2562,21 @@ int YWPANEL_VFD_ShowString_StandBy(char* str)
 int YWPANEL_VFD_ShowString_Common(char* str)
 {
 	int ST_ErrCode = 0 ;
-	u8 lenth;
+	u8 length;
 	u8 i;
 
-	if (down_interruptible(&vfd_sem))
-	{
+	if (down_interruptible(&vfd_sem)) {
 	   ST_ErrCode =-EBUSY;
 	   return ST_ErrCode;
 	}
-	lenth = strlen(str);
-	if(lenth > 8)
-	{
-		ST_ErrCode = -EINVAL ;
-		PANEL_DEBUG(ST_ErrCode);
-		return ST_ErrCode;
-	}
-	for(i = 0; i < 8; i++)
-	{
-		if(i < lenth)
-		{
+	length = strlen(str);
+
+	for(i = 0; i < 8; i++) {
+		if(i < length) {
 			YWPANEL_VFD_DrawChar(*str, i + 1);
 			str++;
-		}
-		else
-		{
+		} else
 			YWPANEL_VFD_DrawChar(' ', i + 1);
-		}
 	}
 	up(&vfd_sem);
 	return ST_ErrCode;

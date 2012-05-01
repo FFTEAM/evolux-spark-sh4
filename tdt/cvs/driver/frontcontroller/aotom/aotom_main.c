@@ -202,26 +202,26 @@ static void VFD_clr(void)
 static int draw_thread(void *arg)
 {
   struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
-  int count = 0;
   char buf[sizeof(data->data) + 2 * DISPLAYWIDTH];
   int len = data->length;
   int off = 0;
 
-  memset(buf, ' ', sizeof(buf));
-
-  if (data->length > DISPLAYWIDTH)
+  if (len > DISPLAYWIDTH) {
+  	memset(buf, ' ', sizeof(buf));
 	off = DISPLAYWIDTH - 1;
-  memcpy(buf + off, data->data, len);
-  len += off;
+  	memcpy(buf + off, data->data, len);
+	len += off;
+	buf[len + DISPLAYWIDTH] = 0;
+  } else {
+  	memcpy(buf, data->data, len);
+	buf[len] = 0;
+  }
 
   draw_thread_stop = 0;
 
-  count = len;
-  if(len > DISPLAYWIDTH)
-  {
+  if(len > DISPLAYWIDTH) {
     int pos;
-    for(pos = 0; pos < count; pos++)
-    {
+    for(pos = 0; pos < len; pos++) {
        int i;
        if(kthread_should_stop()) {
     	   draw_thread_stop = 1;
@@ -241,10 +241,9 @@ static int draw_thread(void *arg)
     }
   }
 
-  if(count > 0) {
-      clear_display();
+  clear_display();
+  if(len > 0)
       YWPANEL_VFD_ShowString(buf + off);
-  }
 
   draw_thread_stop = 1;
   return 0;
