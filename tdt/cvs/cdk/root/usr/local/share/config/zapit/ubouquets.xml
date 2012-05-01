@@ -30,7 +30,7 @@
 		<S i="6dcb" n="Bayerisches FS Süd" t="044d" on="0001" s="192" frq="11836" />
 		<S i="6dcc" n="hr-fernsehen" t="044d" on="0001" s="192" frq="11836" />
 		<S i="6e45" n="MDR S-Anhalt" t="0431" on="0001" s="192" frq="12109" />
-		<S i="7031" n="EinsExtra" t="041b" on="0001" s="192" frq="10743" />
+		<S i="7031" n="tagesschau24" t="041b" on="0001" s="192" frq="10743" />
 		<S i="7032" n="Einsfestival" t="041b" on="0001" s="192" frq="10743" />
 		<S i="7033" n="EinsPlus" t="041b" on="0001" s="192" frq="10743" />
 		<S i="6d6e" n="zdf_neo" t="0437" on="0001" s="192" frq="11953" />
@@ -102,11 +102,19 @@
 		<S i="4224" n="Redlight 3D-HD" t="3db8" on="013e" s="130" frq="11662" />
 		<S i="4225" n="HUSTLER HD-3D" t="3db8" on="013e" s="130" frq="11662" />
 		<S i="1251" n="Private Spice" t="2b5c" on="013e" s="130" frq="10723" />
-		<S i="227b" n="Dorcel TV" t="238c" on="013e" s="130" frq="12539" />
+		<S i="07fd" n="Dorcel TV" t="0449" on="0035" s="192" frq="12343" />
 	</Bouquet>
 	<Bouquet name="HDTV" hidden="0" locked="0">
-		<S i="2b5c" n="Das Erste HD" t="03f3" on="0001" s="192" frq="11361" />
+		<S i="283d" n="Das Erste HD" t="03fb" on="0001" s="192" frq="11494" />
 		<S i="2b66" n="ZDF HD" t="03f3" on="0001" s="192" frq="11361" />
+		<S i="2b8e" n="3sat HD" t="03f2" on="0001" s="192" frq="11347" />
+		<S i="6eab" n="WDR HD Siegen" t="04b1" on="0001" s="192" frq="12421" />
+		<S i="2855" n="BR Süd HD" t="0401" on="0001" s="192" frq="11582" />
+		<S i="2b84" n="zdf.kultur HD" t="03f3" on="0001" s="192" frq="11361" />
+		<S i="2b7a" n="zdf_neo HD" t="03f3" on="0001" s="192" frq="11361" />
+		<S i="2ba2" n="ZDFinfo HD" t="03f2" on="0001" s="192" frq="11347" />
+		<S i="2859" n="NDR FS HH HD" t="0401" on="0001" s="192" frq="11582" />
+		<S i="2840" n="SWR RP HD" t="03fb" on="0001" s="192" frq="11494" />
 		<S i="0081" n="Sky Sport HD 1" t="0006" on="0085" s="192" frq="11914" />
 		<S i="0072" n="Sky Sport HD 2" t="000d" on="0085" s="192" frq="11992" />
 		<S i="0069" n="Sky Sport HD Extra" t="000c" on="0085" s="192" frq="12304" />
@@ -121,6 +129,7 @@
 		<S i="ef15" n="RTL2 HD" t="0421" on="0001" s="192" frq="10832" />
 		<S i="ef11" n="VOX HD" t="0421" on="0001" s="192" frq="10832" />
 		<S i="ef76" n="kabel eins HD" t="03f9" on="0001" s="192" frq="11464" />
+		<S i="2e9a" n="SUPER RTL HD" t="0405" on="0001" s="192" frq="11641" />
 		<S i="ef14" n="SPORT1 HD" t="0421" on="0001" s="192" frq="10832" />
 		<S i="ef77" n="SIXX HD" t="03f9" on="0001" s="192" frq="11464" />
 		<S i="1519" n="TELE 5 HD" t="0455" on="0001" s="192" frq="12574" />
@@ -131,7 +140,7 @@
 		<S i="007c" n="Fox HD" t="000e" on="0085" s="192" frq="11875" />
 		<S i="330b" n="ESP HD German" t="0190" on="013e" s="130" frq="11278" />
 		<S i="331a" n="EUROSPORT HD " t="0190" on="013e" s="130" frq="11278" />
-		<S i="2b70" n="arte HD" t="03f3" on="0001" s="192" frq="11361" />
+		<S i="2b70" n="arte HD alt" t="03f3" on="0001" s="192" frq="11361" />
 		<S i="6eec" n="Einsfestival HD" t="04b1" on="0001" s="192" frq="12421" />
 		<S i="1331" n="ServusTV HD Oesterreich" t="03ef" on="0001" s="192" frq="11302" />
 		<S i="0075" n="Sky 3D" t="000b" on="0085" s="192" frq="12382" />
@@ -212,5 +221,7 @@
 	<Bouquet name="Radio_deutsch" hidden="0" locked="0">
 		<S i="00a0" n="ROCK ANTENNE" t="0007" on="0085" s="192" frq="12148" />
 		<S i="3174" n="HIT RADIO FFH" t="0459" on="0001" s="192" frq="12633" />
+	</Bouquet>
+	<Bouquet name="favorites" hidden="0" locked="0">
 	</Bouquet>
 </zapit>
