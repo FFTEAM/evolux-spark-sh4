@@ -55,11 +55,7 @@ static short paramDebug = 0;
 if ((paramDebug) && (paramDebug > level)) printk(TAGDEBUG x); \
 } while (0)
 
-#ifdef SPARK
- #define DISPLAYWIDTH 4
-#else
- #define DISPLAYWIDTH 8
-#endif
+#define DISPLAYWIDTH_MAX 8
 
 #define INVALID_KEY    	-1
 
@@ -202,16 +198,16 @@ static void VFD_clr(void)
 static int draw_thread(void *arg)
 {
   struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
-  char buf[sizeof(data->data) + 2 * DISPLAYWIDTH];
+  char buf[sizeof(data->data) + 2 * DISPLAYWIDTH_MAX];
   int len = data->length;
   int off = 0;
 
-  if (len > DISPLAYWIDTH) {
+  if (len > YWPANEL_width) {
   	memset(buf, ' ', sizeof(buf));
-	off = DISPLAYWIDTH - 1;
+	off = YWPANEL_width - 1;
   	memcpy(buf + off, data->data, len);
 	len += off;
-	buf[len + DISPLAYWIDTH] = 0;
+	buf[len + YWPANEL_width] = 0;
   } else {
   	memcpy(buf, data->data, len);
 	buf[len] = 0;
@@ -219,7 +215,7 @@ static int draw_thread(void *arg)
 
   draw_thread_stop = 0;
 
-  if(len > DISPLAYWIDTH) {
+  if(len > YWPANEL_width) {
     int pos;
     for(pos = 0; pos < len; pos++) {
        int i;
@@ -288,8 +284,8 @@ int run_draw_thread(struct vfd_ioctl_data *draw_data)
 	draw_task = 0;
     }
 
-    if (draw_data->length < DISPLAYWIDTH) {
-	char buf[DISPLAYWIDTH];
+    if (draw_data->length < YWPANEL_width) {
+	char buf[DISPLAYWIDTH_MAX];
 	memset(buf, ' ', sizeof(buf));
 	if (draw_data->length)
 		memcpy(buf, draw_data->data, draw_data->length);

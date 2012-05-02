@@ -144,8 +144,6 @@ void* CVFD::TimeThread(void *arg)
 {
 	CVFD *cvfd = CVFD::getInstance();
 	cvfd->timeThreadRunning = true;
-	time_t now;
-	struct tm tm;
 	char buf[10];
 	cvfd->waitSec = 0;
 	struct pollfd fds;
@@ -162,13 +160,7 @@ void* CVFD::TimeThread(void *arg)
 		}
 		switch (res) {
 		case 0: // timeout, update displayed time
-			now = time(NULL);
-			localtime_r(&now, &tm);
-			strftime(buf, sizeof(buf), "%H%M", &tm);
-			cvfd->ShowText(buf, false);
-			cvfd->waitSec = 60 - tm.tm_sec;
-			if (cvfd->waitSec == 0)
-				cvfd->waitSec = 60;
+			cvfd->showTime();
 			continue;
 		case 1: // re-schedule time display
 			continue;
@@ -217,16 +209,6 @@ void CVFD::setlcdparameter(void)
 		: g_settings.lcd_setting[SNeutrinoSettings::LCD_BRIGHTNESS], last_toggle_state_power);
 }
 
-/* show only displaytime
-void CVFD::showServicename(const std::string & name) // UTF-8
-{
-	if(!has_lcd) return;
-
-	printf("CFVD:: force showTime()");
-	showTime();
-	wake_up();
-}
-*/
 void CVFD::showServicename(const std::string & name) // UTF-8
 {
 	if(!has_lcd) return;
@@ -239,45 +221,72 @@ void CVFD::showServicename(const std::string & name) // UTF-8
 	wake_up();
 }
 
-void CVFD::showTime(bool force)
+// from fp_control/Spark.c:
+
+static double modJulianDate(struct tm *theTime)
 {
-#ifdef __sh__
-	return;
-#else
-	if(!has_lcd)
-		return;
+        double date;
+        int month;
+        int day;
+        int year;
 
-	if (showclock) {
-		if (mode == MODE_STANDBY) {
-			char timestr[21];
-			struct timeb tm;
-			struct tm * t;
-			static int hour = 0, minute = 0;
+        year  = theTime->tm_year + 1900;
+        month = theTime->tm_mon + 1;
+        day   = theTime->tm_mday;
 
-			ftime(&tm);
-			t = localtime(&tm.time);
-			if(force || ((hour != t->tm_hour) || (minute != t->tm_min))) {
-				hour = t->tm_hour;
-				minute = t->tm_min;
-				strftime(timestr, 20, "%H%M", t);
-				ShowText((char *) timestr);
-			}
-		} 
+        date = day - 32076 +
+                1461 * (year + 4800 + (month - 14)/12)/4 +
+                367 * (month - 2 - (month - 14)/12*12)/12 -
+                3 * ((year + 4900 + (month - 14)/12)/100)/4;
+
+        date += (theTime->tm_hour + 12.0)/24.0;
+        date += (theTime->tm_min)/1440.0;
+        date += (theTime->tm_sec)/86400.0;
+
+        date -= 2400000.5;
+
+        return date;
+}
+
+void CVFD::showTime(void)
+{
+	int m = g_settings.lcd_setting[ (mode == MODE_STANDBY)
+			? SNeutrinoSettings::LCD_STANDBY_DISPLAYMODE
+			: SNeutrinoSettings::LCD_DISPLAYMODE];
+	switch (m) {
+		case LCD_DISPLAYMODE_TIMEONLY:
+			break;
+		case LCD_DISPLAYMODE_TIMEOFF:
+			return;
+		case LCD_DISPLAYMODE_OFF: // FIXME. May keep time from syncing on Pingulux+
+			Clear();
+			return;
+		default:
+			break;
 	}
 
-	if (CNeutrinoApp::getInstance ()->recordingstatus) {
-		if(clearClock) {
-			clearClock = 0;
-			ShowIcon(VFD_ICON_CAM1, false);
-		} else {
-			clearClock = 1;
-			ShowIcon(VFD_ICON_CAM1, true);
-		}
-	} else if(clearClock) { // in case icon ON after record stopped
-		clearClock = 0;
-		ShowIcon(VFD_ICON_CAM1, false);
+	struct tm tm;
+	time_t now = time(NULL);
+	localtime_r(&now, &tm);
+
+	struct aotom_ioctl_data vData;
+	double mjd = modJulianDate(&tm);
+	int mjd_int = mjd;
+
+	vData.u.time.time[0] = mjd_int >> 8;
+	vData.u.time.time[1] = mjd_int & 0xff;
+	vData.u.time.time[2] = tm.tm_hour;
+	vData.u.time.time[3] = tm.tm_min;
+	vData.u.time.time[4] = tm.tm_sec;
+
+	if (ioctl(fd, VFDSETTIME, &vData) < 0) {
+		char buf[10];
+		strftime(buf, sizeof(buf), "%H%M", &tm);
+		ShowText(buf, false);
 	}
-#endif
+	waitSec = 60 - tm.tm_sec;
+	if (waitSec == 0)
+		waitSec = 60;
 }
 
 void CVFD::showRCLock(int duration)
@@ -440,13 +449,6 @@ void CVFD::setMode(const MODES m, const char * const title)
 
 	if(mode == MODE_AUDIO)
 		ShowIcon(VFD_ICON_MP3, false);
-#if 0
-	else if(mode == MODE_STANDBY) {
-		ShowIcon(VFD_ICON_COL1, false);
-		ShowIcon(VFD_ICON_COL2, false);
-	}
-#endif
-
 	if(strlen(title))
 		ShowText((char *) title);
 	mode = m;
@@ -454,54 +456,21 @@ void CVFD::setMode(const MODES m, const char * const title)
 
 	switch (m) {
 	case MODE_TVRADIO:
-#if 0
-		switch (g_settings.lcd_setting[SNeutrinoSettings::LCD_SHOW_VOLUME])
-		{
-		case 0:
-			showPercentOver(percentOver, false);
-			break;
-		case 1:
-			showVolume(volume, false);
-			break;
-		case 2:
-			showVolume(volume, false);
-			showPercentOver(percentOver, false);
-			break;
-		}
-		// showServicename(servicename);
-#endif
 		resume(m != lastmode);
-		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
 	case MODE_AUDIO:
-	{
-		//ShowIcon(VFD_ICON_MP3, true);
-		//showAudioPlayMode(AUDIO_MODE_STOP);
-	//	showVolume(volume, false);
-		resume();
-		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
-	}
 	case MODE_SCART:
-	//	showVolume(volume, false);
 		resume();
-		//showTime();      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 		break;
 	case MODE_MENU_UTF8:
 		pause();
-		//fonts.menutitle->RenderString(0,28, 140, title, CLCDDisplay::PIXEL_ON, 0, true); // UTF-8
 		break;
 	case MODE_SHUTDOWN:
 		pause();
 		break;
 	case MODE_STANDBY:
-#if 0
-		ShowIcon(VFD_ICON_COL1, true);
-		ShowIcon(VFD_ICON_COL2, true);
-#endif
 		resume();
-		// showTime(true);      /* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
-		                 /* "showTime()" clears the whole lcd in MODE_STANDBY                         */
 		break;
 #ifdef VFD_UPDATE
         case MODE_FILEBROWSER:

@@ -267,7 +267,7 @@ class CVFD
 		void setMode(const MODES m, const char * const title = "");
 
 		void showServicename(const std::string & name); // UTF-8
-		void showTime(bool force = false);
+		void showTime(void);
 		/** blocks for duration seconds */
 		void showRCLock(int duration = 2);
 		void showVolume(const char vol, const bool perform_update = true);

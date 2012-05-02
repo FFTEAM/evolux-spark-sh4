@@ -1428,7 +1428,7 @@ YWPANEL_VFDSTATE_t YWPANEL_FP_GetVFDStatus(void)
 	}
 	if((data.data.VfdStandbyState.On < YWPANEL_VFDSTATE_STANDBYOFF) ||(data.data.VfdStandbyState.On > YWPANEL_VFDSTATE_STANDBYON) )
 	{
-		return YWPANEL_VFDSTATE_UNKNOW;
+		return YWPANEL_VFDSTATE_UNKNOWN;
 	}
 
 	return data.data.VfdStandbyState.On;
@@ -1465,7 +1465,7 @@ YWPANEL_POWERONSTATE_t YWPANEL_FP_GetPowerOnStatus(void)
 	}
 	if((data.data.PowerOnState.state < YWPANEL_POWERONSTATE_RUNNING) ||(data.data.PowerOnState.state > YWPANEL_POWERONSTATE_CHECKPOWERBIT) )
 	{
-		return YWPANEL_POWERONSTATE_UNKNOW;
+		return YWPANEL_POWERONSTATE_UNKNOWN;
 	}
 
 	return data.data.PowerOnState.state;
@@ -1519,7 +1519,7 @@ YWPANEL_CPUSTATE_t YWPANEL_FP_GetCpuStatus(void)
 	}
 	if((data.data.CpuState.state <YWPANEL_CPUSTATE_RUNNING) ||(data.data.CpuState.state> YWPANEL_CPUSTATE_STANDBY) )
 	{
-		return YWPANEL_CPUSTATE_UNKNOW;
+		return YWPANEL_CPUSTATE_UNKNOWN;
 	}
 
 	return data.data.CpuState.state;
@@ -1961,7 +1961,7 @@ void YWPANEL_VFD_ClearAll(void)
 	}
 }
 
-static u8 ywpanel_vfd_map[128] =
+static u8 ywpanel_vfd_map[0x80] =
 {
 	0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
 	0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
@@ -1970,7 +1970,7 @@ static u8 ywpanel_vfd_map[128] =
 	0x2f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
 	0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1f,
 	0x2f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
-	0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f,
+	0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x2f, 0x2f, 0x2f, 0x2f, 0x2f
 };
 
 void YWPANEL_VFD_DrawChar(char c, u8 position)
@@ -1981,10 +1981,10 @@ void YWPANEL_VFD_DrawChar(char c, u8 position)
 		PANEL_PRINT((TRACE_ERROR, "char position error! %d\n", position));
 		return;
 	}
-	if (c < 128)
-		u = ywpanel_vfd_map[(int)c];
-	else
+	if (c & 0x80)
 		u = 47;
+	else
+		u = ywpanel_vfd_map[(int)c];
 
 	YWPANEL_VFD_SegDigSeg(position, SEGNUM1, CharLib[u][0]);
 	YWPANEL_VFD_SegDigSeg(position, SEGNUM2, CharLib[u][1]);
@@ -2041,7 +2041,7 @@ void YWPANEL_Seg_Addr_Init(void)
 	}
 }
 
-int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
+static int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 {
 	int 				ErrorCode = 0;
 	YWPANEL_FPData_t	data;
@@ -2125,7 +2125,7 @@ int YWPANEL_VFD_ShowTime_StandBy(u8 hh,u8 mm)
 	return ErrorCode;
 }
 
-int YWPANEL_VFD_ShowTime_Common(u8 hh,u8 mm)
+static int YWPANEL_VFD_ShowTime_Common(u8 hh,u8 mm)
 {
 	int  ErrorCode = 0;
 	if (down_interruptible(&vfd_sem))
@@ -2146,32 +2146,17 @@ int YWPANEL_VFD_ShowTime_Common(u8 hh,u8 mm)
 }
 
 
-int YWPANEL_VFD_ShowTime(u8 hh,u8 mm)
+static int YWPANEL_VFD_ShowTime_Unknown(u8 hh,u8 mm)
 {
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_ShowTime_StandBy(hh,mm);
-			break;
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_ShowTime_Common(hh,mm);
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
-	return ErrorCode;
+	return -ENODEV;
 }
 
-int YWPANEL_VFD_ShowTimeOff_StandBy(void)
+static int YWPANEL_VFD_ShowTimeOff_StandBy(void)
 {
-	int   ST_ErrCode = 0;
-	ST_ErrCode = YWPANEL_VFD_ShowTime(0,0);
-	return ST_ErrCode;
+	return YWPANEL_VFD_ShowTime(0,0);
 }
 
-int YWPANEL_VFD_ShowTimeOff_Common(void)
+static int YWPANEL_VFD_ShowTimeOff_Common(void)
 {
 	int   ST_ErrCode = 0;
 	if (down_interruptible(&vfd_sem))
@@ -2187,27 +2172,16 @@ int YWPANEL_VFD_ShowTimeOff_Common(void)
 	return ST_ErrCode;
 }
 
-int YWPANEL_VFD_ShowTimeOff(void)
+static int YWPANEL_VFD_ShowTimeOff_Unknown(void)
 {
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_ShowTimeOff_StandBy();
-			break;
-
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_ShowTimeOff_Common();
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
-	return ErrorCode;
+	return -ENODEV;
 }
 
 int YWPANEL_VFD_SetBrightness_StandBy(int level)
 {
+#if 1 // Doesn't work currently. Disabled to avoid side effects. --martii
+	return 0;
+#else
 	int 		ST_ErrCode = 0;
 	YWPANEL_FPData_t	data;
 	if (down_interruptible(&vfd_sem))
@@ -2221,18 +2195,22 @@ int YWPANEL_VFD_SetBrightness_StandBy(int level)
 		level = 7;
 	data.dataType = YWPANEL_DATATYPE_VFD;
 	data.data.vfdData.type = YWPANEL_VFD_SETTING;
-	data.data.vfdData.setValue = level | 0x88;
+	data.data.vfdData.setValue = level | 0x78;
 	if(YWPANEL_FP_SendData(&data) != true)
 	{
 		ywtrace_print(TRACE_ERROR,"SetBrightness wrong!!\n");
 		ST_ErrCode = -ETIME;
 	}
 	up(&vfd_sem);
-	return ST_ErrCode ;
+	return ST_ErrCode;
+#endif
 }
 
-int YWPANEL_VFD_SetBrightness_Common(int level)
+static int YWPANEL_VFD_SetBrightness_Common(int level)
 {
+#if 1 // Doesn't work currently. Disabled to avoid side effects. --martii
+	return 0;
+#else
 	int 		ST_ErrCode = 0;
 	if(level < 0)
 		level = 0;
@@ -2240,35 +2218,18 @@ int YWPANEL_VFD_SetBrightness_Common(int level)
 		level = 7;
 
 	VFD_CS_CLR();
-	YWPANEL_VFD_WR(0x88 | level);
+	YWPANEL_VFD_WR(0x78 | level);
 	VFD_CS_SET();
-	return ST_ErrCode ;
-}
-
-int YWPANEL_VFD_SetBrightness(int level)
-{
-#if 1 // Doesn't work currently. Disabled to avoid side effects. --martii
-	return 0;
-#else
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_SetBrightness_StandBy(level);
-			break;
-
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_SetBrightness_Common(level);
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
-	return ErrorCode;
+	return ST_ErrCode;
 #endif
 }
 
-u8 YWPANEL_VFD_ScanKeyboard_StandBy(void)
+static int YWPANEL_VFD_SetBrightness_Unknown(int level)
+{
+	return -ENODEV;
+}
+
+static u8 YWPANEL_VFD_ScanKeyboard_StandBy(void)
 {
 	YWPANEL_FPData_t		data;
 
@@ -2314,7 +2275,13 @@ u8 YWPANEL_VFD_ScanKeyboard_StandBy(void)
 	}
 	return INVALID_KEY;
 }
-u8 YWPANEL_VFD_ScanKeyboard_Common(void)
+
+static u8 YWPANEL_VFD_ScanKeyboard_Unknown(void)
+{
+  return INVALID_KEY;
+}
+
+static u8 YWPANEL_VFD_ScanKeyboard_Common(void)
 {
 	int   ST_ErrCode = 0;
 	u8 key_val[6] ;
@@ -2322,14 +2289,12 @@ u8 YWPANEL_VFD_ScanKeyboard_Common(void)
 
 	VFD_CS_CLR();
 	ST_ErrCode = YWPANEL_VFD_SetMode(VFDREADMODE);
-	if(ST_ErrCode != 0)
-	{
+	if(ST_ErrCode != 0) {
 		PANEL_DEBUG(ST_ErrCode);
 		return INVALID_KEY;
 	}
 
-	for (i = 0; i < 6; i++)
-	{
+	for (i = 0; i < 6; i++) {
 		key_val[i] = YWPANEL_VFD_RD();
 	}
 	VFD_CS_SET();
@@ -2347,75 +2312,49 @@ int YWPANEL_VFD_GetKeyValue(void)
 {
 	int byte = 0;
 	int key_val = INVALID_KEY;
-	if (down_interruptible(&vfd_sem))
-	{
-	   return key_val;
-	}
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			byte = YWPANEL_VFD_ScanKeyboard_StandBy();
-			break;
 
+	if (down_interruptible(&vfd_sem))
+	   return key_val;
+
+	switch (YWVFD_INFO.vfd_type) {
+		case YWVFD_STAND_BY:
 		case YWVFD_COMMON:
-			byte = YWPANEL_VFD_ScanKeyboard_Common();
+			byte = YWPANEL_VFD_ScanKeyboard();
 			break;
 		default:
 			break;
 	}
-	switch(byte)
-	{
+
+	switch(byte) {
 		case 0x01:
-		{
 			key_val = EXIT_KEY;
 			break;
-		}
 		case 0x02:
-		{
 			key_val = LEFT_KEY;
 			break;
-		}
 		case 0x04:
-		{
 			key_val = UP_KEY;
 			break;
-		}
 		case 0x08:
-		{
 			key_val = SELECT_KEY;
 			break;
-		}
 		case 0x10:
-		{
 			key_val = RIGHT_KEY;
 			break;
-		}
 		case 0x20:
-		{
 			key_val = DOWN_KEY;
 			break;
-		}
 		case 0x40:
-		{
 			key_val = POWER_KEY;
 			break;
-		}
 		case 0x80:
-		{
 			key_val = MENU_KEY;
 			break;
-		}
+		default:
+			PANEL_PRINT((TRACE_ERROR,"Key 0x%s is INVALID\n",byte));
 		case 0x00:
-		{
 			key_val = INVALID_KEY;
 			break;
-		}
-		default :
-		{
-			PANEL_PRINT((TRACE_ERROR,"The key is INVALID or somekeys [0x%x]\n",byte));
-			key_val = INVALID_KEY;
-			break;
-		}
 	}
 	up(&vfd_sem);
 	return key_val;
@@ -2424,72 +2363,62 @@ int YWPANEL_VFD_GetKeyValue(void)
 
 //lwj add begin  for LED panel
 
-#define YWPANEL_MAX_LED_LEGNTH	4
-#define YWPANEL_LOWER_START	10
-#define YWPANEL_UPPER_START	36
-
-//   a
-//f     b
-//   g
-//e     c
-//   d      h
-//a b c d e f g h
+//  aaaaa 
+// f     b
+// f     b
+//  ggggg
+// e     c
+// e     c
+//  ddddd   h
+//
+// a    b    c    d    e    f    g    h
+// 0x80 0x40 0x20 0x10 0x08 0x04 0x02 0x01
+#if 0
 u8 YWPANEL_LedCharArray[]=
 {
-	0xfc,0x60,0xda,0xf2,0x66,0xb6,0xbe,0xe0,0xfe,0xf6,/* 0~9*/
-	0xee,0x3e,0x1a,0x7a,0xde,0x8e,0xf6,0x2e,0x60,0x70,/*a~j*/
-	0x0e,0x1c,0xec,0x2a,0x3a,0xce,0xe6,0x0a,0xb6,0x1e,/* k~t*/
-	0x38,0x46,0x56,0x6e,0x76,0xda, /*u-z*/
-	0xee,0x3e,0x9c,0x7a,0x9e,0x8e,0xf6,0x2e,0x60,0x70,/*A-J*/
-	0x0e,0x1c,0xec,0x2a,0x3a,0xce,0xe6,0x0a,0xb6,0x1e,/*K-T*/
-	0x38,0x46,0x56,0x6e,0x76,0xda/*U-Z*/
+	0xfc, 0x60, 0xda, 0xf2, 0x66, 0xb6, 0xbe, 0xe0, 0xfe, 0xf6,  /*0~9*/
+	0xee, 0x3e, 0x1a, 0x7a, 0xde, 0x8e, 0xf6, 0x2e, 0x60, 0x70, /*a~j*/
+	0x0e, 0x1c, 0xec, 0x2a, 0x3a, 0xce, 0xe6, 0x0a, 0xb6, 0x1e,  /*k~t*/
+	0x38, 0x46, 0x56, 0x6e, 0x76, 0xda,  /*u-z*/
+	0xee, 0x3e, 0x9c, 0x7a, 0x9e, 0x8e, 0xf6, 0x2e, 0x60, 0x70, /*A-J*/
+	0x0e, 0x1c, 0xec, 0x2a, 0x3a, 0xce, 0xe6, 0x0a, 0xb6, 0x1e, /*K-T*/
+	0x38, 0x46, 0x56, 0x6e, 0x76, 0xda/*U-Z*/
 };	//d48zm modify
-
-u8  YWPANEL_LedDisplayData[YWPANEL_MAX_LED_LEGNTH];
-
-void YWPANEL_LEDSetString(const char *LEDStrBuf)
+#else
+// ... and about the same, ordered sequentially by ASCII code:
+static u8 ywpanel_led_map[0x80] =
 {
-	int             i;
-	char		tempData;
-	char 		c;
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9c, 0xf0, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+	0xfc, 0x60, 0xda, 0xf2, 0x66, 0xb6, 0xbe, 0xe0, 0xfe, 0xf6, 0x00, 0x00, 0x00, 0x12, 0x00, 0xca,
+	0x00, 0xee, 0x3e, 0x9c, 0x7a, 0x9e, 0x8e, 0xf6, 0x2e, 0x60, 0x70, 0x0e, 0x1c, 0xec, 0x2a, 0x3a,
+	0xce, 0xe6, 0x0a, 0xb6, 0x1e, 0x38, 0x46, 0x56, 0x6e, 0x76, 0xda, 0x9c, 0x00, 0xf0, 0x00, 0x10,
+	0x00, 0xee, 0x3e, 0x1a, 0x7a, 0xde, 0x8e, 0xf6, 0x2e, 0x60, 0x70, 0x0e, 0x1c, 0xec, 0x2a, 0x3a,
+	0xce, 0xe6, 0x0a, 0xb6, 0x1e, 0x38, 0x46, 0x56, 0x6e, 0x76, 0xda, 0x9c, 0x00, 0xf0, 0x00, 0x00
+};
+#endif
 
-	u16 StrLen = strlen(LEDStrBuf);
-	for(i=0; i<YWPANEL_MAX_LED_LEGNTH; i++)
-	{
-		c = LEDStrBuf[i];
+#define YWPANEL_MAX_LED_LENGTH 4
+static u8  YWPANEL_LedDisplayData[YWPANEL_MAX_LED_LENGTH];
 
-		if(c>='0' && c<='9')
-		{
-			tempData = YWPANEL_LedCharArray[(LEDStrBuf[i]-'0')];
-		}
-		else if(c>='A' && c<='Z')
-		{
-			tempData = YWPANEL_LedCharArray[(c-'A'+YWPANEL_UPPER_START)];
-		}
-		else if(c>='a' && c<='z')
-		{
-			tempData = YWPANEL_LedCharArray[(c-'a'+YWPANEL_LOWER_START)];
-		}
-		else if(c == '-')
-		{
-			tempData = 0x02;
-		}
-		else
-		{
-			tempData = 0;
-		}
+static void YWPANEL_LEDSetString(char *LEDStrBuf)
+{
+	int i, c, len = strlen(LEDStrBuf);
 
-		if(i<StrLen)
-		{
-			YWPANEL_LedDisplayData[i] = tempData;
+	for(i = 0; i < YWPANEL_MAX_LED_LENGTH; i++) {
+		if(i < len) {
+			c = (int) LEDStrBuf[i];
+			if (!(c & 0x80)) {
+				YWPANEL_LedDisplayData[i] = ywpanel_led_map[c];
+				continue;
+			}
 		}
-		else
-		{
-			YWPANEL_LedDisplayData[i] = 0;
-		}
+		YWPANEL_LedDisplayData[i] = 0;
     }
 }
-int YWPANEL_LEDDisplayString(void)
+
+static int YWPANEL_LEDDisplayString(void)
 {
 	int ret = 0;
 	YWPANEL_FPData_t    data;
@@ -2501,8 +2430,7 @@ int YWPANEL_LEDDisplayString(void)
     data.data.ledData.led3 = YWPANEL_LedDisplayData[2];
     data.data.ledData.led4 = YWPANEL_LedDisplayData[3];
 
-    if(YWPANEL_FP_SendData(&data)!= true)
-    {
+    if(YWPANEL_FP_SendData(&data)!= true) {
 		ret = -1;
         ywtrace_print(TRACE_ERROR, "[ERROR][YWPANEL_LEDDisplayString] TIME OUT\n");
     }
@@ -2510,7 +2438,7 @@ int YWPANEL_LEDDisplayString(void)
 	return ret;
 }
 
-int YWVFD_LED_ShowString(const char *str)
+static int YWVFD_LED_ShowString(char *str)
 {
 	YWPANEL_FP_ControlTimer(false);
 	YWPANEL_LEDSetString(str);
@@ -2519,7 +2447,7 @@ int YWVFD_LED_ShowString(const char *str)
 
 //lwj add end
 
-int YWPANEL_VFD_ShowString_StandBy(char* str)
+static int YWPANEL_VFD_ShowString_StandBy(char* str)
 {
 	int ST_ErrCode = 0 ;
 	u8 length;
@@ -2537,7 +2465,7 @@ int YWPANEL_VFD_ShowString_StandBy(char* str)
 	for(i = 0; i < 8; i++) {
 		data.data.vfdData.type = YWPANEL_VFD_DISPLAYSTRING;
 
-		if (i < length && str[i] < 128)
+		if (i < length && !(str[i] & 0x80))
 			c = ywpanel_vfd_map[(int)str[i]];
 		else
 			c = 47;
@@ -2552,14 +2480,14 @@ int YWPANEL_VFD_ShowString_StandBy(char* str)
 	}
 
 	if(YWPANEL_FP_SendData(&data) != true) {
-		PANEL_DEBUG("VFD show stings is wrong!!\n");
+		PANEL_DEBUG("VFD show strings is wrong!!\n");
 		ST_ErrCode = -ETIME;
 	}
 	up(&vfd_sem);
 	return ST_ErrCode;
  }
 
-int YWPANEL_VFD_ShowString_Common(char* str)
+static int YWPANEL_VFD_ShowString_Common(char* str)
 {
 	int ST_ErrCode = 0 ;
 	u8 length;
@@ -2582,61 +2510,12 @@ int YWPANEL_VFD_ShowString_Common(char* str)
 	return ST_ErrCode;
  }
 
-//lwj modify begin
-#if 0
-int YWPANEL_VFD_ShowString(char* str)
+static int YWPANEL_VFD_ShowString_Unknown(char* str)
 {
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_ShowString_StandBy(str);
-			break;
-
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_ShowString_Common(str);
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
-	return ErrorCode;
+	return -ENODEV;
 }
-#else
-int YWPANEL_VFD_ShowString(char* str)
-{
-	int ret = 0;
 
-	if(YWVFD_INFO.vfd_type == YWVFD_STAND_BY)
-	{
-		switch(panel_disp_type)
-		{
-			case YWPANEL_FP_DISPTYPE_VFD:
-                		ywtrace_print(TRACE_INFO, "YWPANEL_VFD_ShowString_StandBy ====\n");
-				ret = YWPANEL_VFD_ShowString_StandBy(str);
-				break;
-
-			case YWPANEL_FP_DISPTYPE_LED:
-            		    	ywtrace_print(TRACE_INFO, "YWVFD_LED_ShowString ====\n");
-				ret = YWVFD_LED_ShowString(str);
-				break;
-
-			default:
-				ret = -1;
-				break;
-		}
-	}
-	else
-	{
-		ret = YWPANEL_VFD_ShowString_Common(str);
-	}
-
-	return ret;
-}
-#endif
-//lwj remove end
-
-int YWPANEL_VFD_ShowIco_StandBy(LogNum_T log_num,int log_stat)
+static int YWPANEL_VFD_ShowIco_StandBy(LogNum_T log_num,int log_stat)
 {
 	int ST_ErrCode = 0 ;
 	int dig_num = 0,seg_num = 0;
@@ -2647,63 +2526,48 @@ int YWPANEL_VFD_ShowIco_StandBy(LogNum_T log_num,int log_stat)
 	data.dataType = YWPANEL_DATATYPE_VFD;
 
 	if (down_interruptible(&vfd_sem))
-	{
-	   ST_ErrCode =-EBUSY;
-	   return ST_ErrCode;
-	}
+	   return -EBUSY;
 
-	if(log_num >= LogNum_Max)
-	{
-		ST_ErrCode = -EINVAL ;
+	if(log_num >= LogNum_Max) {
 		PANEL_DEBUG(ST_ErrCode);
-
 		up(&vfd_sem);
-		return ST_ErrCode;
+		return -EINVAL;
 	}
+
 	dig_num = log_num/16;
 	seg_num = log_num%16;
 	seg_part = seg_num/9;
 
 	data.data.vfdData.type = YWPANEL_VFD_DISPLAY;
 
-	if(seg_part == SEGNUM1)
-	{
+	if(seg_part == SEGNUM1) {
 		seg_offset = 0x01 << ((seg_num%9) - 1);
 		data.data.vfdData.address[0] = VfdSegAddr[dig_num].Segaddr1;
 		if(log_stat == LOG_ON)
-		{
 		   VfdSegAddr[dig_num].CurrValue1 |= seg_offset;
-		}
 		if(log_stat == LOG_OFF)
-		{
 		   VfdSegAddr[dig_num].CurrValue1 &= (0xFF-seg_offset);
-		}
 		data.data.vfdData.DisplayValue[0] = VfdSegAddr[dig_num].CurrValue1 ;
 	}
-	else if(seg_part == SEGNUM2)
-	{
+	else if(seg_part == SEGNUM2) {
 		seg_offset = 0x01 << ((seg_num%8) - 1);
 		data.data.vfdData.address[0] = VfdSegAddr[dig_num].Segaddr2;
 		if(log_stat == LOG_ON)
-		{
 		   VfdSegAddr[dig_num].CurrValue2 |= seg_offset;
-		}
 		if(log_stat == LOG_OFF)
-		{
 		   VfdSegAddr[dig_num].CurrValue2 &= (0xFF-seg_offset);
-		}
 		data.data.vfdData.DisplayValue[0] = VfdSegAddr[dig_num].CurrValue2 ;
 	}
-   if(YWPANEL_FP_SendData(&data) != true)
-   {
+	if(YWPANEL_FP_SendData(&data) != true) {
 		ywtrace_print(TRACE_ERROR,"Show a Ico wrong!!\n");
 		ST_ErrCode = -ETIME;
-   }
+	}
+
 	up(&vfd_sem);
 	return ST_ErrCode ;
 }
 
-int YWPANEL_VFD_ShowIco_Common(LogNum_T log_num,int log_stat)
+static int YWPANEL_VFD_ShowIco_Common(LogNum_T log_num,int log_stat)
 {
 	int ST_ErrCode = 0 ;
 	int dig_num = 0,seg_num = 0;
@@ -2712,48 +2576,34 @@ int YWPANEL_VFD_ShowIco_Common(LogNum_T log_num,int log_stat)
 	u8	addr = 0,val = 0;
 
 	if (down_interruptible(&vfd_sem))
-	{
-	   ST_ErrCode =-EBUSY;
-	   return ST_ErrCode;
-	}
+		return -EBUSY;
 
-	if(log_num >= LogNum_Max)
-	{
-		ST_ErrCode = -EINVAL ;
+	if(log_num >= LogNum_Max) {
 		PANEL_DEBUG(ST_ErrCode);
-		return ST_ErrCode;
+		up(&vfd_sem);
+		return -EINVAL;
 	}
 	dig_num = log_num/16;
 	seg_num = log_num%16;
 	seg_part = seg_num/9;
 
 	VFD_CS_CLR();
-	if(seg_part == SEGNUM1)
-	{
+	if(seg_part == SEGNUM1) {
 		seg_offset = 0x01 << ((seg_num%9) - 1);
 		addr = VfdSegAddr[dig_num].Segaddr1;
 		if(log_stat == LOG_ON)
-		{
 		   VfdSegAddr[dig_num].CurrValue1 |= seg_offset;
-		}
 		if(log_stat == LOG_OFF)
-		{
 		   VfdSegAddr[dig_num].CurrValue1 &= (0xFF-seg_offset);
-		}
 		val = VfdSegAddr[dig_num].CurrValue1 ;
 	}
-	else if(seg_part == SEGNUM2)
-	{
+	else if(seg_part == SEGNUM2) {
 		seg_offset = 0x01 << ((seg_num%8) - 1);
 		addr = VfdSegAddr[dig_num].Segaddr2;
 		if(log_stat == LOG_ON)
-		{
 		   VfdSegAddr[dig_num].CurrValue2 |= seg_offset;
-		}
 		if(log_stat == LOG_OFF)
-		{
 		   VfdSegAddr[dig_num].CurrValue2 &= (0xFF-seg_offset);
-		}
 		val = VfdSegAddr[dig_num].CurrValue2 ;
 	}
 	ST_ErrCode = YWPANEL_VFD_WR(addr);
@@ -2764,27 +2614,13 @@ int YWPANEL_VFD_ShowIco_Common(LogNum_T log_num,int log_stat)
 	return ST_ErrCode ;
 }
 
-int YWPANEL_VFD_ShowIco(LogNum_T log_num,int log_stat)
+static int YWPANEL_VFD_ShowIco_Unknown(LogNum_T log_num,int log_stat)
 {
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_ShowIco_StandBy(log_num,log_stat);
-			break;
-
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_ShowIco_Common(log_num,log_stat);
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
-	return ErrorCode;
+	return -ENODEV;
 }
 
 #ifdef CONFIG_CPU_SUBTYPE_STX7105
-int YWPANEL_VFD_DETECT(void)
+static int YWPANEL_VFD_DETECT(void)
 {
 	int 	ret = 0;
 	softi2c_init();
@@ -2801,14 +2637,14 @@ int YWPANEL_VFD_DETECT(void)
 	return ret;
 }
 #else
-int YWPANEL_VFD_DETECT(void)
+static int YWPANEL_VFD_DETECT(void)
 {
 	int 	ret = 0;
 	u8	localBuff[2] = {0xaa, 0xaa};
 
 	struct i2c_msg i2c_msg = { .addr = I2C_BUS_ADD, .flags = 0, .buf = localBuff, .len = 2 };
 
-	YWVFD_INFO.vfd_type = YWVFD_UNKNOW;
+	YWVFD_INFO.vfd_type = YWVFD_UNKNOWN;
 	//printk("%s:%d\n", __FUNCTION__, __LINE__);
 	panel_i2c_adapter = i2c_get_adapter(I2C_BUS_NUM);
 	if(NULL == panel_i2c_adapter)
@@ -2821,20 +2657,18 @@ int YWPANEL_VFD_DETECT(void)
 	//printk("%s:%d\n", __FUNCTION__, __LINE__);
 	ret = i2c_transfer(panel_i2c_adapter, &i2c_msg, 1);
 	if(ret == 1)
-	{
 		YWVFD_INFO.vfd_type = YWVFD_STAND_BY;
-		ret = 0;
-	}
 	else
-	{
 		YWVFD_INFO.vfd_type = YWVFD_COMMON;
-		ret = -EINVAL;
-	}
 
 	return 0;
 
 }
 #endif
+
+#if 0
+// Not used anyway, and dangerous due to lack of bounds checking
+// --martii
 
 int YWPANEL_VFD_GetRevision(char * version)
 {
@@ -2845,8 +2679,7 @@ int YWPANEL_VFD_GetRevision(char * version)
 	{
 		case YWVFD_STAND_BY:
 		{
-			switch(panel_disp_type)
-			{
+			switch(panel_disp_type) {
 			case YWPANEL_FP_DISPTYPE_VFD:
 				DispType = "VFD";
 				break;
@@ -2862,11 +2695,11 @@ int YWPANEL_VFD_GetRevision(char * version)
 			default:
 				break;
 			}
-			sprintf(version,"%s Type:%s-%s",Revision,"StandBy", DispType);
+			sprintf(version, "%s Type:StandBy-%s", Revision, DispType);
 			break;
 		}
 		case YWVFD_COMMON:
-			sprintf(version,"%s Type:%s",Revision,"Common");
+			sprintf(version, "%s Type:Common", Revision);
 			break;
 		default:
 			ErrorCode = -ENODEV;
@@ -2874,8 +2707,14 @@ int YWPANEL_VFD_GetRevision(char * version)
 	}
 	return ErrorCode;
 }
+#endif
 
-int YWPANEL_VFD_Init_StandBy(void)
+static int YWPANEL_VFD_Init_Unknown(void)
+{
+	return 0;
+}
+
+static int YWPANEL_VFD_Init_StandBy(void)
 {
 	int ErrorCode = 0 ;
 	init_MUTEX(&vfd_sem);
@@ -2887,7 +2726,7 @@ int YWPANEL_VFD_Init_StandBy(void)
 	return ErrorCode;
  }
 
-int YWPANEL_VFD_Init_Common(void)
+static int YWPANEL_VFD_Init_Common(void)
 {
 	int ErrorCode = 0 ;
 
@@ -2899,7 +2738,7 @@ int YWPANEL_VFD_Init_Common(void)
 	pio_cs  = stpio_request_pin(3,5, "pio_cs",  STPIO_OUT);
 	if (!pio_sda || !pio_scl || !pio_cs )
 	{
-	   return ErrorCode;
+	   return ErrorCode; // FIXME -- should't that return -ENODEV ?  --martii
 	}
 	stpio_set_pin(pio_scl, 1);
 	stpio_set_pin(pio_cs,  1);
@@ -2917,89 +2756,121 @@ int YWPANEL_VFD_Init_Common(void)
 	return ErrorCode;
  }
 
+static int  YWPANEL_VFD_Term_Unknown(void);
+static int  YWPANEL_VFD_Term_StandBy(void);
+static int  YWPANEL_VFD_Term_Common(void);
+
+int (*YWPANEL_VFD_Term)(void);
+int (*YWPANEL_VFD_Initialize)(void);
+int (*YWPANEL_VFD_ShowIco)(LogNum_T, int);
+int (*YWPANEL_VFD_ShowTime)(u8 hh,u8 mm);
+int (*YWPANEL_VFD_ShowTimeOff)(void);
+int (*YWPANEL_VFD_SetBrightness)(int);
+u8 (*YWPANEL_VFD_ScanKeyboard)(void);
+int (*YWPANEL_VFD_ShowString)(char *);
+
+int YWPANEL_width = 8;
+
 int YWPANEL_VFD_Init(void)
 {
-	int ErrorCode = 0 ;
-	YWPANEL_Version_t panel_version;
+	int ErrorCode = -ENODEV;
 
-	if (YWPANEL_VFD_DETECT() != 0)
-	{
+	YWPANEL_Version_t panel_version;
+	YWPANEL_VFD_Initialize = YWPANEL_VFD_Init_Unknown;
+	YWPANEL_VFD_Term = YWPANEL_VFD_Term_Unknown;
+	YWPANEL_VFD_ShowIco = YWPANEL_VFD_ShowIco_Unknown;
+	YWPANEL_VFD_ShowTime = YWPANEL_VFD_ShowTime_Unknown;
+	YWPANEL_VFD_ShowTimeOff = YWPANEL_VFD_ShowTimeOff_Unknown;
+	YWPANEL_VFD_SetBrightness = YWPANEL_VFD_SetBrightness_Unknown;
+	YWPANEL_VFD_ScanKeyboard = YWPANEL_VFD_ScanKeyboard_Unknown;
+	YWPANEL_VFD_ShowString = YWPANEL_VFD_ShowString_Unknown;
+
+	if (YWPANEL_VFD_DETECT() != 0) {
 		ywtrace_print(TRACE_ERROR, "vfd detect failed\n");
-		return 0;
+		return ErrorCode;
 	}
 
-	//printk("%s:%d\n", __FUNCTION__, __LINE__);
+	printk("VfdType = %d\n", YWVFD_INFO.vfd_type);
 
-
-	switch (YWVFD_INFO.vfd_type)
-	{
+	switch (YWVFD_INFO.vfd_type) {
 		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_Init_StandBy();
+			YWPANEL_VFD_Initialize = YWPANEL_VFD_Init_StandBy;
+			YWPANEL_VFD_Term = YWPANEL_VFD_Term_StandBy;
+			YWPANEL_VFD_ShowIco = YWPANEL_VFD_ShowIco_StandBy;
+			YWPANEL_VFD_ShowTime = YWPANEL_VFD_ShowTime_StandBy;
+			YWPANEL_VFD_ShowTimeOff = YWPANEL_VFD_ShowTimeOff_StandBy;
+			YWPANEL_VFD_SetBrightness = YWPANEL_VFD_SetBrightness_StandBy;
+			YWPANEL_VFD_ScanKeyboard = YWPANEL_VFD_ScanKeyboard_StandBy;
+			YWPANEL_VFD_ShowString = YWPANEL_VFD_ShowString_StandBy;
 			break;
-
 		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_Init_Common();
+			YWPANEL_VFD_Initialize = YWPANEL_VFD_Init_Common;
+			YWPANEL_VFD_Term = YWPANEL_VFD_Term_Common;
+			YWPANEL_VFD_ShowIco = YWPANEL_VFD_ShowIco_Common;
+			YWPANEL_VFD_ShowTime = YWPANEL_VFD_ShowTime_Common;
+			YWPANEL_VFD_ShowTimeOff = YWPANEL_VFD_ShowTimeOff_Common;
+			YWPANEL_VFD_SetBrightness = YWPANEL_VFD_SetBrightness_Common;
+			YWPANEL_VFD_ScanKeyboard = YWPANEL_VFD_ScanKeyboard_Common;
+			YWPANEL_VFD_ShowString = YWPANEL_VFD_ShowString_Common;
 			break;
 		default:
-			ErrorCode = -ENODEV;
-			break;
+			return ErrorCode;
 	}
 
-	//printk("%s:%d\n", __FUNCTION__, __LINE__);
+	ErrorCode = YWPANEL_VFD_Initialize();
 
 	memset(&panel_version, 0, sizeof(YWPANEL_Version_t));
 
-	if(YWPANEL_FP_GetVersion(&panel_version))
-	{
+	if(YWPANEL_FP_GetVersion(&panel_version)) {
 		panel_disp_type = panel_version.DisplayInfo;
 		if(panel_disp_type<YWPANEL_FP_DISPTYPE_UNKNOWN || panel_disp_type>YWPANEL_FP_DISPTYPE_LBD)
-		{
 			panel_disp_type = YWPANEL_FP_DISPTYPE_VFD;
-		}
-	}
-	else
-	{
-		ErrorCode = -ENODEV;
-	}
 
-	printk("CpuType = %d\n", panel_version.CpuType);
-	printk("DisplayInfo = %d\n", panel_version.DisplayInfo);
-	printk("scankeyNum = %d\n", panel_version.scankeyNum);
-	printk("swMajorVersion = %d\n", panel_version.swMajorVersion);
-	printk("swSubVersion = %d\n", panel_version.swSubVersion);
+		switch(panel_disp_type) {
+			case YWPANEL_FP_DISPTYPE_VFD:
+				YWPANEL_VFD_ShowString = YWPANEL_VFD_ShowString_StandBy;
+				break;
+			case YWPANEL_FP_DISPTYPE_LED:
+				YWPANEL_width = 4;
+				YWPANEL_VFD_ShowString = YWVFD_LED_ShowString;
+				break;
+			default:
+				break;
+		}
+
+		printk("CpuType = %d\n", panel_version.CpuType);
+		printk("DisplayInfo = %d\n", panel_version.DisplayInfo);
+		printk("scankeyNum = %d\n", panel_version.scankeyNum);
+		printk("swMajorVersion = %d\n", panel_version.swMajorVersion);
+		printk("swSubVersion = %d\n", panel_version.swSubVersion);
+	} else
+		ErrorCode = -ENODEV;
 
 	return ErrorCode;
 }
 
-int  YWPANEL_VFD_Term_StandBy(void)
-{
-	return 0;
-}
-int  YWPANEL_VFD_Term_Common(void)
-{
-	return 0;
+static int YWPANEL_VFD_Term_Unknown(void){
+	return -ENODEV;
 }
 
-int YWPANEL_VFD_Term(void)
+static int  YWPANEL_VFD_Term_StandBy(void)
 {
-	int ErrorCode = 0 ;
-	switch (YWVFD_INFO.vfd_type)
-	{
-		case YWVFD_STAND_BY:
-			ErrorCode = YWPANEL_VFD_Term_StandBy();
-			break;
-
-		case YWVFD_COMMON:
-			ErrorCode = YWPANEL_VFD_Term_Common();
-			break;
-		default:
-			ErrorCode = -ENODEV;
-			break;
-	}
 #ifdef CONFIG_CPU_SUBTYPE_STX7105
 	softi2c_cleanup();
 #else
 	i2c_put_adapter(panel_i2c_adapter);
 #endif
-	return ErrorCode;
+	return 0;
 }
+
+static int  YWPANEL_VFD_Term_Common(void)
+{
+#ifdef CONFIG_CPU_SUBTYPE_STX7105
+	softi2c_cleanup();
+#else
+	i2c_put_adapter(panel_i2c_adapter);
+#endif
+	return 0;
+}
+
+// vim:ts=4

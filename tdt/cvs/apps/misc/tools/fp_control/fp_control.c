@@ -230,15 +230,16 @@ void processCommand (Context_t * context, int argc, char* argv[])
 	        {
 	        	time_t theGMTTime;
 
-	            if (argc == 4)
-				{
+	            if (argc == 2) // no arguments, assume current time
+					theGMTTime = time(NULL);
+				else if (argc == 4)
 			   		getTimeFromArg(argv[i + 1], argv[i + 2], &theGMTTime);
-
-					/* set the frontcontroller time */
-					if (((Model_t*)context->m)->SetTime)
-						((Model_t*)context->m)->SetTime(context, &theGMTTime);
-				} else
+				else
 					usage(context, argv[0], argv[1]);
+
+				/* set the frontcontroller time */
+				if (((Model_t*)context->m)->SetTime)
+					((Model_t*)context->m)->SetTime(context, &theGMTTime);
 
 				i += 2;
 		    }
@@ -574,3 +575,4 @@ int main (int argc, char* argv[])
 
     return 0;
 }
+// vim:ts=4
