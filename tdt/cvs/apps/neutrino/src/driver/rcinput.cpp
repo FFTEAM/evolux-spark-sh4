@@ -61,7 +61,8 @@
 
 //const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
 #ifdef __sh__
-const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/event1", "/dev/input/event0"};
+const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
+	"/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3"};
 #else
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir"};
 #endif
