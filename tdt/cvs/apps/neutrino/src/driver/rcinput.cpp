@@ -62,7 +62,7 @@
 //const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
 #ifdef __sh__
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
-	"/dev/input/event1", "/dev/input/event0", "/dev/input/event2", "/dev/input/event3"};
+	"/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3"};
 #else
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir"};
 #endif
@@ -149,20 +149,28 @@ void CRCInput::open()
 {
 	close();
 
+	fd_tdt_rc_event_driver = -1;
+
 	for (int i = 0; i < NUMBER_OF_EVENT_DEVICES; i++)
 	{
 		if ((fd_rc[i] = ::open(RC_EVENT_DEVICE[i], O_RDONLY)) == -1)
 			perror(RC_EVENT_DEVICE[i]);
 		else
 		{
+			char name[80];
+			ioctl(fd_rc[i], EVIOCGNAME(sizeof(name)), name);
+			if(!strcmp("TDT RC event driver", name))
+				fd_tdt_rc_event_driver = fd_rc[i];
 			fcntl(fd_rc[i], F_SETFL, O_NONBLOCK);
 		}
-printf("CRCInput::open: %s fd %d\n", RC_EVENT_DEVICE[i], fd_rc[i]);
 	}
+	if (fd_tdt_rc_event_driver < 0)
+		fd_tdt_rc_event_driver = fd_rc[0];
 
 	//+++++++++++++++++++++++++++++++++++++++
 #ifdef KEYBOARD_INSTEAD_OF_REMOTE_CONTROL
 	fd_keyb = STDIN_FILENO;
+	fd_tdt_rc_event_driver = STDIN_FILENO;
 #else
 	fd_keyb = 0;
 #endif /* KEYBOARD_INSTEAD_OF_REMOTE_CONTROL */

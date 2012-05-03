@@ -122,6 +122,7 @@ class CRCInput
 		int         	fd_rc[NUMBER_OF_EVENT_DEVICES];
 		int		fd_keyb;
 		int		fd_event;
+		int		fd_tdt_rc_event_driver;
 
 		int		fd_max;
 		int		clickfd;
@@ -252,7 +253,7 @@ class CRCInput
 #if HAVE_DVB_API_VERSION == 1
 			return fd_gamerc;
 #else
-			return fd_rc[0];
+			return fd_tdt_rc_event_driver;
 #endif
 		}
 		void stopInput();
