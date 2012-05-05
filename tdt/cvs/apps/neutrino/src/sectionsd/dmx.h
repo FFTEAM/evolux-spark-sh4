@@ -28,14 +28,23 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <vector>
+#include <config.h>
+#if HAVE_COOL_HARDWARE
 #include <dmx_cs.h>
+#endif
+#if HAVE_TRIPLEDRAGON || USE_STB_HAL
+#include <dmx_td.h>
+#endif
+#ifdef __sh__
+#include <dmx_cs.h>
+#endif
 
 typedef uint64_t sections_id_t;
 typedef unsigned char version_number_t;
 
 class DMX
 {
- private:
+private:
 
 	int             fd;
 	cDemux * dmx;
@@ -48,15 +57,17 @@ class DMX
 	unsigned char	eit_version;
 	bool		cache; /* should read sections be cached? true for all but dmxCN */
 
-	inline bool isOpen(void) { return (fd != -1); }
-	
+	inline bool isOpen(void) {
+		return (fd != -1);
+	}
+
 	int immediate_start(void); /* mutex must be locked before and unlocked after this method */
 	int immediate_stop(void);  /* mutex must be locked before and unlocked after this method */
 	bool check_complete(const unsigned char table_id, const unsigned short extension_id, const unsigned short onid, const unsigned short tsid, const unsigned char);
 	sections_id_t create_sections_id(const unsigned char table_id, const unsigned short extension_id, const unsigned char section_number, const unsigned short onid, const unsigned short tsid);
 	ssize_t readNbytes(int fd, char * buf, const size_t n, unsigned timeoutInMSeconds);
 
- public:
+public:
 	struct s_filters
 	{
 		unsigned char filter;
