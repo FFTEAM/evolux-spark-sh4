@@ -36,7 +36,7 @@ bool send_data(int fd, const void * data, const size_t size, const timeval timeo
 	fd_set       writefds;
 	timeval      tv;
 	const void * buffer;
-	int          n;
+	size_t       n;
 	int          rc;
 
 	n = size;
@@ -48,12 +48,10 @@ bool send_data(int fd, const void * data, const size_t size, const timeval timeo
 		
 		if (rc == -1)
 		{
-#if 0
 			perror("[basicsocket] send_data");
 char * buf = (char *) data;
 printf("send_data: errno %d data %X\n", errno, buf[0]);
 			//if (errno == EPIPE)
-#endif
 			if (errno == EPIPE || errno == ESPIPE)
 				return false;
 			
@@ -87,10 +85,11 @@ bool receive_data(int fd, void * data, const size_t size, const timeval timeout)
 	fd_set    readfds;
 	timeval   tv;
 	void    * buffer;
-	int       n;
+	size_t    n;
 	int       rc;
 
 	n = size;
+
 	while (n > 0)
 	{
 		FD_ZERO(&readfds);
