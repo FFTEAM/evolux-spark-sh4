@@ -43,6 +43,10 @@ AC_ARG_ENABLE(restore-prev-mode,
          [  --enable-restore-prev-mode          enable return from graphics mode],
          [AC_DEFINE(RETURN_FROM_GRAPHICS_MODE,1,[enable return from graphics mode])])
 
+AC_ARG_ENABLE(freesatepg,
+	[  --enable-freesatepg                  enable Freesat EPG code (experimental)],
+	[AC_DEFINE(ENABLE_FREESATEPG,1,[enable Freesat EPG code])])
+
 #
 # Check for libtdservicedb - the new one - for testing only
 #
