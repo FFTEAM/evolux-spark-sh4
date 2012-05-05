@@ -519,6 +519,7 @@ bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void 
 			write(proc_stb_audio_ac3, cmd.c_str(), cmd.length());
 			close(proc_stb_audio_ac3);
 		}
+	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_DOLBYDIGITAL)) {
 	} else {
 		// audio_select.cpp, set channel specific volume
 		// FIXME. May need a separate notifier for this in the future.
