@@ -20,6 +20,7 @@
 #include <unistd.h>
 
 #include <system/debug.h>
+#include <system/safe_system.h>
 
 #include <global.h>
 #include <neutrino.h>
@@ -63,6 +64,7 @@ static int touch(const char *filename) {
 	return 0;
 }
 
+#if 0
 static int safe_system(const char *command) {
 	pid_t child = fork();
 	switch(child){
@@ -82,6 +84,7 @@ static int safe_system(const char *command) {
 			return status;
 	}
 }
+#endif
 
 
 static struct {
