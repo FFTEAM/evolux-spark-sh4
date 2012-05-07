@@ -464,7 +464,7 @@ endif
 	rm $(prefix)/release_neutrino/var/plugins/blockad*
 #	rm $(prefix)/release_neutrino/usr/lib/tuxbox/plugins/blockad*
 	rm $(prefix)/release_neutrino/usr/local/share/config/blockad*
-	cp -f $(buildprefix)/root/usr/local/share/config/supplemental_pids.conf $(prefix)/release_neutrino/usr/local/share/config/
+	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino/usr/local/share/config/zapit/
 	touch $(prefix)/release_neutrino/etc/.EVOfirstboot
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino/etc/
 
