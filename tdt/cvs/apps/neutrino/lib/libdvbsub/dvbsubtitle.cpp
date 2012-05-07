@@ -107,8 +107,6 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
     dbgconverter("cDvbSubtitleBitmaps::%s: start\n", __func__);
 
     static CFrameBuffer* fb = CFrameBuffer::getInstance();
-
-    int stride = fb->scaleX(fb->getScreenWidth(true));
     uint32_t *sublfb = fb->getFrameBufferPointer();
 
     int y_start = max_y;
@@ -152,7 +150,7 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 
 	dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 		i, sub.rects[i]->x, sub.rects[i]->y, width, height, sub.rects[i]->nb_colors);
-	fb->blitIcon(width, height, 0, (sub.rects[i]->y * max_y)/picture_yres, width_new, height_new);
+	fb->blitIcon(width, height, min_x, min_y + (sub.rects[i]->y * max_y)/picture_yres, width_new, height_new);
     }
 
     dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
@@ -250,9 +248,10 @@ cDvbSubtitleConverter::cDvbSubtitleConverter(void)
 	//	av_log_set_level(AV_LOG_INFO);
 
 #ifdef __sh__
+	min_x = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenX());
 	min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());
-	max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
-	max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight(true));
+	max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());
+	max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());
 #else
 	min_x = CFrameBuffer::getInstance()->getScreenWidth();
 	min_y = CFrameBuffer::getInstance()->getScreenHeight();
@@ -292,9 +291,10 @@ void cDvbSubtitleConverter::Pause(bool pause)
 		//Reset();
 		running = true;
 #ifdef __sh__
+		min_x = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenX());
 		min_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenY());
-		max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth(true));
-		max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight(true));
+		max_x = CFrameBuffer::getInstance()->scaleX(CFrameBuffer::getInstance()->getScreenWidth());
+		max_y = CFrameBuffer::getInstance()->scaleY(CFrameBuffer::getInstance()->getScreenHeight());
 #endif
 	}
 }
