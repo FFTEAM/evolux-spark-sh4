@@ -410,8 +410,14 @@ bool CPauseSectionsdNotifier::changeNotify(const neutrino_locale_t, void * Data)
 	return true;
 }
 
-bool CSectionsdConfigNotifier::changeNotify(const neutrino_locale_t, void *)
+bool CSectionsdConfigNotifier::changeNotify(const neutrino_locale_t OptionName, void *)
 {
+	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_MISCSETTINGS_EPG_FREESAT_ENABLE)) {
+		CHintBox hintBox(LOCALE_MISCSETTINGS_EPG_FREESAT, g_Locale->getText(LOCALE_MISCSETTINGS_EPG_FREESAT_RESTART)); // UTF-8
+		hintBox.paint();
+		sleep(2);
+		hintBox.hide();
+	}
         CNeutrinoApp::getInstance()->SendSectionsdConfig();
         return true;
 }

@@ -204,6 +204,7 @@ CConfigFile ntp_config(',');
 std::string ntpserver;
 int ntprefresh;
 int ntpenable;
+static int epg_enable_freesat = 0;
 
 static int eit_update_fd = -1;
 static bool update_eit = true;
@@ -2329,8 +2330,10 @@ static void commandPauseScanning(int connfd, char *data, const unsigned dataLeng
 		dmxEIT.request_pause();
 		pthread_cond_broadcast(&dmxEIT.change_cond);
 #ifdef ENABLE_FREESATEPG
-		dmxFSEIT.request_pause();
-		pthread_cond_broadcast(&dmxFSEIT.change_cond);
+		if (epg_enable_freesat) {
+			dmxFSEIT.request_pause();
+			pthread_cond_broadcast(&dmxFSEIT.change_cond);
+		}
 #endif
 #ifdef UPDATE_NETWORKS
 		dmxNIT.request_pause();
@@ -2349,7 +2352,9 @@ static void commandPauseScanning(int connfd, char *data, const unsigned dataLeng
 #endif
 		dmxEIT.request_unpause();
 #ifdef ENABLE_FREESATEPG
-		dmxFSEIT.request_unpause();
+		if (epg_enable_freesat) {
+			dmxFSEIT.request_unpause();
+		}
 #endif
 #ifdef ENABLE_PPT
 		dmxPPT.request_unpause();
@@ -2380,7 +2385,8 @@ static void commandPauseScanning(int connfd, char *data, const unsigned dataLeng
 		dmxCN.change(0);
 		dmxEIT.change(0);
 #ifdef ENABLE_FREESATEPG
-		dmxFSEIT.change(0);
+		if(epg_enable_freesat)
+			dmxFSEIT.change(0);
 #endif
 	}
 
@@ -3224,7 +3230,8 @@ static void commandserviceChanged(int connfd, char *data, const unsigned dataLen
 		dmxCN.setCurrentService(messaging_current_servicekey & 0xffff);
 		dmxEIT.setCurrentService(messaging_current_servicekey & 0xffff);
 #ifdef ENABLE_FREESATEPG
-		dmxFSEIT.setCurrentService(messaging_current_servicekey & 0xffff);
+		if (epg_enable_freesat)
+			dmxFSEIT.setCurrentService(messaging_current_servicekey & 0xffff);
 #endif
 	}
 	else
@@ -8764,17 +8771,18 @@ static void *cnThread(void *)
 //int main(int argc, char **argv)
 	extern cDemux * dmxUTC;
 
-	void sectionsd_main_thread(void * /*data*/)
+	void sectionsd_main_thread(void *data)
 	{
-		pthread_t threadTOT, threadEIT, threadCN, threadHouseKeeping;
+		pthread_t threadTOT = 0, threadEIT = 0, threadCN = 0, threadHouseKeeping = 0;
 #ifdef UPDATE_NETWORKS
-		pthread_t threadSDT, threadNIT;
+		pthread_t threadSDT = 0, threadNIT = 0;
 #endif
 #ifdef ENABLE_FREESATEPG
-		pthread_t threadFSEIT;
+		pthread_t threadFSEIT = 0;
+		epg_enable_freesat = (int)data;
 #endif
 #ifdef ENABLE_PPT
-		pthread_t threadPPT;
+		pthread_t threadPPT = 0;
 #endif
 		int rc;
 
@@ -8862,12 +8870,14 @@ static void *cnThread(void *)
 		}
 
 #ifdef ENABLE_FREESATEPG
-		// EIT-Thread3 starten
-		rc = pthread_create(&threadFSEIT, 0, fseitThread, 0);
+		if (epg_enable_freesat) {
+			// EIT-Thread3 starten
+			rc = pthread_create(&threadFSEIT, 0, fseitThread, 0);
 
-		if (rc) {
-			fprintf(stderr, "[sectionsd] failed to create fseit-thread (rc=%d)\n", rc);
-			return;
+			if (rc) {
+				fprintf(stderr, "[sectionsd] failed to create fseit-thread (rc=%d)\n", rc);
+				return;
+			}
 		}
 #endif
 
@@ -9005,7 +9015,12 @@ static void *cnThread(void *)
 		printf("join 4\n");
 		pthread_join(threadSDT, NULL);
 #endif
-
+#ifdef ENABLE_FREESATEPG
+		if (threadFSEIT) {
+			printf("join 5\n");
+			pthread_join(threadFSEIT, NULL);
+		}
+#endif
 		eit_stop_update_filter(&eit_update_fd);
 		if(eitDmx)
 			delete eitDmx;

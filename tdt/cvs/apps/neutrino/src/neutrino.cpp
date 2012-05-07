@@ -865,6 +865,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         g_settings.epg_old_events       = configfile.getString("epg_old_events", "1");
         g_settings.epg_max_events       = configfile.getString("epg_max_events", "30000");
         g_settings.epg_dir              = configfile.getString("epg_dir", "/media/hdd/epg");
+        g_settings.epg_enable_freesat   = configfile.getBool("epg_enable_freesat", false);
         // NTP-Server for sectionsd
         g_settings.network_ntpserver    = configfile.getString("network_ntpserver", "time.fu-berlin.de");
         g_settings.network_ntprefresh   = configfile.getString("network_ntprefresh", "30" );
@@ -1424,6 +1425,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
         configfile.setString("epg_old_events"           ,g_settings.epg_old_events );
         configfile.setString("epg_max_events"           ,g_settings.epg_max_events );
         configfile.setString("epg_dir"                  ,g_settings.epg_dir);
+        configfile.setBool("epg_enable_freesat"		,g_settings.epg_enable_freesat);
 
         // NTP-Server for sectionsd
         configfile.setString( "network_ntpserver", g_settings.network_ntpserver);
@@ -1997,13 +1999,13 @@ void CNeutrinoApp::CmdParser(int argc, char **argv)
 
 	for(int x=1; x<argc; x++) {
 		if ((!strcmp(argv[x], "-u")) || (!strcmp(argv[x], "--enable-update"))) {
-			dprintf(DEBUG_NORMAL, "Software update enabled\n");
-			softupdate = true;
-			allow_flash = 1;
+			//dprintf(DEBUG_NORMAL, "Software update enabled\n");
+			//softupdate = true;
+			//allow_flash = 1;
 		}
 		else if ((!strcmp(argv[x], "-f")) || (!strcmp(argv[x], "--enable-flash"))) {
-			dprintf(DEBUG_NORMAL, "enable flash\n");
-			fromflash = true;
+			//dprintf(DEBUG_NORMAL, "enable flash\n");
+			//fromflash = true;
 		}
 		else if ((!strcmp(argv[x], "-v")) || (!strcmp(argv[x], "--verbose"))) {
 			int dl = atoi(argv[x+ 1]);
@@ -2434,8 +2436,8 @@ int CNeutrinoApp::run(int argc, char **argv)
 	hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_NEUTRINO_STARTING));
 	hintBox->paint();
 
-	//CVFD::getInstance()->Clear();
-	//CVFD::getInstance()->ShowText((char *) g_Locale->getText(LOCALE_NEUTRINO_STARTING));
+	CVFD::getInstance()->Clear();
+	CVFD::getInstance()->ShowText((char *) g_Locale->getText(LOCALE_NEUTRINO_STARTING));
 
 	pthread_create (&zapit_thread, NULL, zapit_main_thread, (void *) g_settings.video_Mode);
 	audioSetupNotifier        = new CAudioSetupNotifier;
@@ -2480,7 +2482,7 @@ int CNeutrinoApp::run(int argc, char **argv)
 	hintBox->paint();
 
 #ifndef DISABLE_SECTIONSD
-	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) NULL);
+	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
 #endif
 	g_Zapit         = new CZapitClient;
 

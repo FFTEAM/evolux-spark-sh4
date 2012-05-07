@@ -704,6 +704,9 @@ miscsettings.epg_old_events EPG fjerne etter (std.)
 miscsettings.epg_old_events_hint1 Hvor lenge vil EPG-data bli lagret etter at de ble tids avbrutt?
 miscsettings.epg_old_events_hint2 Sett i timer
 miscsettings.epg_save Lagre/gjenopprette EPG ved omstart
+miscsettings.epg.freesat Freesat EPG
+miscsettings.epg.freesat.enable Aktiver Freesat EPG
+miscsettings.epg.freesat.restart Endringen skjer med virkning fra start.
 miscsettings.fb_destination Ekspert! Boot-konsoll
 miscsettings.general Generell
 miscsettings.head Forskj. innstillinger

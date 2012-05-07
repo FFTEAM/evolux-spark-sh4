@@ -705,6 +705,9 @@ miscsettings.epg_old_events EPG remove after (std.)
 miscsettings.epg_old_events_hint1 How long will EPG-Data be stored after they timed out?
 miscsettings.epg_old_events_hint2 Set in hours
 miscsettings.epg_save Save/Restore epg on reboot
+miscsettings.epg.freesat Freesat EPG
+miscsettings.epg.freesat.enable Enable Freesat EPG
+miscsettings.epg.freesat.restart The change will take effect on restart.
 miscsettings.fb_destination Expert! Boot-Console
 miscsettings.general General
 miscsettings.head Misc settings
