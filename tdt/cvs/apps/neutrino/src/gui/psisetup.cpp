@@ -136,12 +136,12 @@ CPSISetup::writeProcPSI (int i)
       ssize_t len = snprintf (buf, sizeof (buf), "%d", psi_list[i].value);
       if (len < sizeof(buf))
 	if (0 > write (fn, buf, len))
-    	  fprintf(stderr, "%s: write(%s): %s\n", __func__, psi_list[i].procfilename, strerror[errno]);
+    	  fprintf(stderr, "%s: write(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
 		
       close (fn);
     }
   else
-    fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror[errno]);
+    fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
 }
 
 int
