@@ -539,6 +539,16 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 			(u_int) (channel_id >> 16) & 0xFFFF,
 			(u_int) cc->getSatellitePosition());
 		int logo_found = !access(logoname, R_OK);
+		if (!logo_found) {
+			snprintf(logoname, sizeof(logoname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+				g_settings.picon_dir_e2,
+				1,
+				(u_int) channel_id & 0xFFFF,
+				(u_int) (channel_id >> 32) & 0xFFFF,
+				(u_int) (channel_id >> 16) & 0xFFFF,
+				(u_int) cc->getSatellitePosition());
+			logo_found = !access(logoname, R_OK);
+		}
 		if (logo_found)
 			fgcolor_arg = fgcolor_found;
 		paint_techinfo_line(xpos, ypos, NONEXISTANT_LOCALE, "Backup Logo", spaceoffset, logoname + strlen(g_settings.picon_dir_e2) + 1);

@@ -651,6 +651,16 @@ bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int w
 			if (len > sizeof(fname))
 				return false;
 			r = access(fname, F_OK);
+			if (r) {
+				snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+					g_settings.picon_dir_e2,
+					1,
+					(u_int) channel_id & 0xFFFF,
+					(u_int) (channel_id >> 32) & 0xFFFF,
+					(u_int) (channel_id >> 16) & 0xFFFF,
+					(u_int) cc->getSatellitePosition());
+				r = access(fname, R_OK);
+			}
 		}
 		if (!r) {
 			if (check_only)
