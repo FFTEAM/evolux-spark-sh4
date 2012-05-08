@@ -27,6 +27,7 @@ $(appsdir)/neutrino/config.status: bootstrap freetype libpng libid3tag openssl c
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
+			--enable-freesatepg \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include"
