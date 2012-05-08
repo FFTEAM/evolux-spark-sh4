@@ -533,7 +533,7 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 		ypos += iheight;
 		snprintf(logoname, sizeof(logoname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
 			g_settings.picon_dir_e2,
-			(u_int) (cc->getVideoPid() > 0) ? 1 : 2,
+			(u_int) cc->getServiceType(true),
 			(u_int) channel_id & 0xFFFF,
 			(u_int) (channel_id >> 32) & 0xFFFF,
 			(u_int) (channel_id >> 16) & 0xFFFF,
