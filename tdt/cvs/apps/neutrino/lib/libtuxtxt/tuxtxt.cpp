@@ -2229,38 +2229,39 @@ skip_pid:
 
 int GetNationalSubset(const char *cc) {
 	if (memcmp(cc, "cze", 3) == 0 || memcmp(cc, "ces", 3) == 0 ||
-	    memcmp(cc, "slo", 3) == 0 || memcmp(cc, "slk", 3) == 0)
-		return 0;
+		memcmp(cc, "slo", 3) == 0 || memcmp(cc, "slk", 3) == 0)
+			return NAT_CZ;
 	if (memcmp(cc, "eng", 3) == 0)
-		return 1;
+			return NAT_UK;
 	if (memcmp(cc, "est", 3) == 0)
-		return 2;
-	if (memcmp(cc, "fre", 3) == 0 || memcmp(cc, "fra", 3) == 0)
-		return 3;
+			return NAT_ET;
+	if (memcmp(cc, "fre", 3) == 0 || memcmp(cc, "fra", 3) == 0 ||
+		memcmp(cc, "lb", 3) == 0 || memcmp(cc, "ltz", 3) == 0)
+		return NAT_FR;
 	if (memcmp(cc, "ger", 3) == 0 || memcmp(cc, "deu", 3) == 0)
-		return 4;
+		return NAT_DE;
 	if (memcmp(cc, "ita", 3) == 0)
-		return 5;
+		return NAT_IT;
 	if (memcmp(cc, "lav", 3) == 0 || memcmp(cc, "lit", 3) == 0)
-		return 6;
+		return NAT_LV;
 	if (memcmp(cc, "pol", 3) == 0)
-		return 7;
+		return NAT_PL;
 	if (memcmp(cc, "spa", 3) == 0 || memcmp(cc, "por", 3) == 0)
-		return 8;
+		return NAT_SP;
 	if (memcmp(cc, "rum", 3) == 0 || memcmp(cc, "ron", 3) == 0)
-		return 9;
+		return NAT_RO;
 	if (memcmp(cc, "scc", 3) == 0 || memcmp(cc, "srp", 3) == 0 ||
 	    memcmp(cc, "scr", 3) == 0 || memcmp(cc, "hrv", 3) == 0 ||
 	    memcmp(cc, "slv", 3) == 0)
-		return 10;
+		return NAT_SR;
 	if (memcmp(cc, "swe", 3) == 0 ||
 	    memcmp(cc, "dan", 3) == 0 ||
 	    memcmp(cc, "nor", 3) == 0 ||
 	    memcmp(cc, "fin", 3) == 0 ||
 	    memcmp(cc, "hun", 3) == 0)
-		return 11;
+		return NAT_SW;
 	if (memcmp(cc, "tur", 3) == 0)
-		return 12;
+		return NAT_TR;
 	if (memcmp(cc, "rus", 3) == 0 ||
 	    memcmp(cc, "bul", 3) == 0 ||
 	    memcmp(cc, "ser", 3) == 0 ||
