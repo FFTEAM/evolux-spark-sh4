@@ -837,6 +837,7 @@ int CPINInput::exec( CMenuTarget* parent, const std::string & )
 		}
 		else if ( (msg==CRCInput::RC_home) || (msg==CRCInput::RC_timeout) || (msg==CRCInput::RC_ok) )
 		{
+			value[0] = 0;
 			loop=false;
 		}
 		else
