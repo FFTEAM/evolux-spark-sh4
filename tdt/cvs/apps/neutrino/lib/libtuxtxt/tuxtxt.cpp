@@ -1258,7 +1258,8 @@ void eval_l25() {
 						}
 					}
 				}
-			} if (opop) { /* POP data used */
+			}
+			if (opop) { /* POP data used */
 				opop = 18*40 + 10*opop;	/* offset to POP link */
 				if (!pop || !(p[opop] & 0x08)) { /* no p27 data or higher prio of MOT link */
 					pop = ((p[opop] << 8) | (p[opop+1] << 4) | p[opop+2]) & 0x7ff;
@@ -1356,6 +1357,7 @@ void eval_l25() {
 #endif
 			APx0 = APy0 = APx = APy = tAPx = tAPy = 0;
 			eval_object(13 * (23-2 + 2), tuxtxt_cache.astCachetable[tuxtxt_cache.page][tuxtxt_cache.subpage], &APx, &APy, &APx0, &APy0, OBJ_ACTIVE, &page_char[40]); /* 1st triplet p26/0 */
+			tuxtxt_clear_p26(pi->ext);
 		}
 
 		{
