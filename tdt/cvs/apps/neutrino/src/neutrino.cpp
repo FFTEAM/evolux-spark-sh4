@@ -2482,7 +2482,8 @@ int CNeutrinoApp::run(int argc, char **argv)
 	hintBox->paint();
 
 #ifndef DISABLE_SECTIONSD
-	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
+	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) NULL);
+	//pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
 #endif
 	g_Zapit         = new CZapitClient;
 

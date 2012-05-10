@@ -24,7 +24,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-bool sections_debug;
+bool sections_debug = false;
 
 void printdate_ms(FILE *f) {
 	timeval now;
