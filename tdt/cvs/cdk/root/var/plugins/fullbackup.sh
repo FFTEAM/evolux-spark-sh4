@@ -9,12 +9,26 @@ cd $B || exit
 
 touch .running
 
+T="Please wait"
+T2=""
 while [ -f .running ]
 do
-	echo please wait > /dev/vfd
-	sleep 3
+	TXT=`echo $T$T2 | sed -e 's/%/%25/g' -e 's/ /%20/g'`
+	wget -qO /dev/null "http://127.0.0.1/control/message?popup=$TXT"
+	sleep 1
+	T2=""
+	if [ -f /tmp/.mkyaffs2-out ]
+	then
+		PERC=`tail -c3 /tmp/.mkyaffs2-out | sed 's/%//' | egrep '^([0-9]| )[0-9]$'`
+		if [ "$PERC" != "" ]
+		then
+			T2=": $PERC/100"
+		fi
+	fi
+	T=`cat .running` 2>/dev/null
 done &
 
+echo "Creating uImage" > .running
 set `dd if=/dev/mtd5 bs=4 skip=3 count=1 | hexdump -C | head -1`
 Z=0x$2$3$4$5
 Z=`printf "%d" $Z`
@@ -25,15 +39,18 @@ dd if=/dev/mtd5 of=$U bs=8192 count=$Z1
 # will be slightly too large, which won't pose a problem.
 truncate -s $Z $U 2>/dev/null
 
+echo "Creating YAFFS2 image" > .running
 # Create YAFFS2 image
 unspare2 /dev/mtd6 oob.img
 mkdir yaffs2
 mount --bind / $R
-mkyaffs2 -o $O $R e2yaffs2.img
+mkyaffs2 -o $O $R e2yaffs2.img > /tmp/.mkyaffs2-out
+rm .mkyaffs2-out
 umount $R
 rmdir $R
 rm $O
 
+echo "Creating restore script" > .running
 # Create restore script
 cat >> restore.sh <<EOT
 #!/bin/sh
@@ -43,9 +60,8 @@ flash_eraseall /dev/mtd6
 nandwrite -a -o /dev/mtd6 e2yaffs2.img
 EOT
 chmod 755 restore.sh
-
+echo "Done. Image is in $B" > .running
+echo "Done. Image is in $B"
+sleep 3
 rm .running
-sleep 4
-
-echo done > /dev/vfd
 
