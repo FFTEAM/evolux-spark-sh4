@@ -519,6 +519,11 @@ release-enigma2-pli-nightly_base:
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/SystemPlugins $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/
 
+if ENABLE_MULTI_YAFFS2
+	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release-enigma2-pli-nightly/sbin/
+	cp -RP $(buildprefix)/root/sbin/unspare2 $(prefix)/release-enigma2-pli-nightly/sbin/
+endif
+
 #	Dont remove pyo files, remove pyc instead
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;

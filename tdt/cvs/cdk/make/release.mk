@@ -74,6 +74,10 @@ release_spark:
 	cp -RP $(buildprefix)/root/usr/lib/libpng* $(prefix)/release/usr/lib/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release/etc/init.d/
+if ENABLE_MULTI_YAFFS2
+	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release/sbin/
+	cp -RP $(buildprefix)/root/sbin/unspare2 $(prefix)/release/sbin/
+endif
 
 if ENABLE_P0209
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
