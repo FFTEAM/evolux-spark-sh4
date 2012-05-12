@@ -196,7 +196,6 @@ static pthread_t nhttpd_thread ;
 extern int sectionsd_stop;
 static pthread_t sections_thread;
 void * sectionsd_main_thread(void *data);
-//extern int sectionsd_scanning; // sectionsd.cpp
 extern bool timeset; // sectionsd
 
 extern cVideo * videoDecoder;
@@ -1982,7 +1981,7 @@ printf("CNeutrinoApp::SetChannelMode %d\n", newmode);
 *          CNeutrinoApp -  run, the main runloop                                      *
 **************************************************************************************/
 extern int cnxt_debug;
-extern int sections_debug;
+extern bool sections_debug;
 extern int zapit_debug;
 
 void CNeutrinoApp::CmdParser(int argc, char **argv)
@@ -1992,6 +1991,7 @@ void CNeutrinoApp::CmdParser(int argc, char **argv)
                 global_argv[i] = argv[i];
         global_argv[argc] = NULL;
 
+	sections_debug = false;
 	softupdate = false;
 	fromflash = false;
 
@@ -2018,7 +2018,7 @@ void CNeutrinoApp::CmdParser(int argc, char **argv)
 			x++;
 		}
 		else if ((!strcmp(argv[x], "-sd"))) {
-			sections_debug = 1;
+			sections_debug = true;
 			x++;
 		}
 		else if ((!strcmp(argv[x], "-zd"))) {
@@ -2442,6 +2442,11 @@ int CNeutrinoApp::run(int argc, char **argv)
 	pthread_create (&zapit_thread, NULL, zapit_main_thread, (void *) g_settings.video_Mode);
 	audioSetupNotifier        = new CAudioSetupNotifier;
 
+#ifndef DISABLE_SECTIONSD
+	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
+#endif
+
+
 	while(!zapit_ready)
 		usleep(0);
 	printf("zapit ready\n\n");
@@ -2481,10 +2486,6 @@ int CNeutrinoApp::run(int argc, char **argv)
 	hintBox->hide(); //FIXME
 	hintBox->paint();
 
-#ifndef DISABLE_SECTIONSD
-	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) NULL);
-	//pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
-#endif
 	g_Zapit         = new CZapitClient;
 
 	if (!scanSettings.loadSettings(NEUTRINO_SCAN_SETTINGS_FILE, (g_info.delivery_system = g_Zapit->getDeliverySystem()))) {

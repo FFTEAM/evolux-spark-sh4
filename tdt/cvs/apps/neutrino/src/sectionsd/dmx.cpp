@@ -38,6 +38,8 @@
 #include <cstring>
 #include <map>
 
+#include <driver/abstime.h>
+
 /*
 #define DEBUG_MUTEX 1
 #define DEBUG_CACHED_SECTIONS 1
@@ -47,17 +49,20 @@ typedef std::map<sections_id_t, version_number_t, std::less<sections_id_t> > MyD
 static MyDMXOrderUniqueKey myDMXOrderUniqueKey;
 
 extern void showProfiling(std::string text);
-extern bool timeset;
-
 
 DMX::DMX(const unsigned short p, const unsigned short bufferSizeInKB, const bool c, int dmx_source)
 {
 	dmx_num = dmx_source;
 	fd = -1;
-	lastChanged = time(NULL);
+	lastChanged = time_monotonic();
 	filter_index = 0;
 	pID = p;
 	dmxBufferSizeInKB = bufferSizeInKB;
+#if HAVE_TRIPLEDRAGON
+	/* hack, to keep the TD changes in one place. */
+	dmxBufferSizeInKB = 128;	/* 128kB is enough on TD */
+	dmx_num = 0;			/* always use demux 0 */
+#endif
 	pthread_mutex_init(&pauselock, NULL);        // default = fast mutex
 #ifdef DEBUG_MUTEX
 	pthread_mutexattr_t start_stop_mutex_attr;
@@ -85,7 +90,7 @@ DMX::~DMX()
 	closefd();
 }
 
-ssize_t DMX::read(char * const buf, const size_t buflength, const unsigned timeoutMInSeconds)
+ssize_t DMX::read(char * const /*buf*/, const size_t /*buflength*/, const unsigned /*timeoutMInSeconds*/)
 {
 	//FIXME is this used ??
 	printf("[sectionsd] ******************************* DMX::read called *******************************\n");
@@ -95,9 +100,9 @@ ssize_t DMX::read(char * const buf, const size_t buflength, const unsigned timeo
 
 void DMX::close(void)
 {
-        if(dmx)
-                delete dmx;
-        dmx = NULL;
+	if(dmx)
+		delete dmx;
+	dmx = NULL;
 }
 
 void DMX::closefd(void)
@@ -105,7 +110,11 @@ void DMX::closefd(void)
 	if (isOpen())
 	{
 		//close(fd);
+#if HAVE_TRIPLEDRAGON
+		dmx->Close();
+#else
 		dmx->Stop();
+#endif
 		fd = -1;
 	}
 }
@@ -122,22 +131,22 @@ int DMX::immediate_stop(void)
 {
 	if (!isOpen())
 		return 1;
-	
+
 	closefd();
-	
+
 	return 0;
 }
 
 int DMX::stop(void)
 {
 	int rc;
-	
+
 	lock();
-	
+
 	rc = immediate_stop();
-	
+
 	unlock();
-	
+
 	return rc;
 }
 
@@ -148,8 +157,10 @@ void DMX::lock(void)
 	int rc = pthread_mutex_lock(&start_stop_mutex);
 	if (rc != 0)
 	{
-		fprintf(stderr, "[sectionsd] mutex_lock: %d %d %d\n", rc, EINVAL, EDEADLK); fflush(stderr);
-		fprintf(stderr, "[sectionsd] pid: %d\n", getpid()); fflush(stderr);
+		fprintf(stderr, "[sectionsd] mutex_lock: %d %d %d\n", rc, EINVAL, EDEADLK);
+		fflush(stderr);
+		fprintf(stderr, "[sectionsd] pid: %d\n", getpid());
+		fflush(stderr);
 	}
 #else
 	pthread_mutex_lock(&start_stop_mutex);
@@ -163,8 +174,10 @@ void DMX::unlock(void)
 	int rc = pthread_mutex_unlock(&start_stop_mutex);
 	if (rc != 0)
 	{
-		fprintf(stderr, "[sectionsd] mutex_unlock: %d %d %d\n", rc, EINVAL, EPERM); fflush(stderr);
-		fprintf(stderr, "[sectionsd] pid: %d\n", getpid()); fflush(stderr);
+		fprintf(stderr, "[sectionsd] mutex_unlock: %d %d %d\n", rc, EINVAL, EPERM);
+		fflush(stderr);
+		fprintf(stderr, "[sectionsd] pid: %d\n", getpid());
+		fflush(stderr);
 	}
 #else
 	pthread_mutex_unlock(&start_stop_mutex);
@@ -181,6 +194,7 @@ sections_id_t DMX::create_sections_id(const unsigned char table_id, const unsign
 					((sections_id_t) tsid));
 }
 
+#ifdef USE_CHECK_COMPLETE_EVEN_THOUGH_IT_SEEMS_BROKEN
 bool DMX::check_complete(const unsigned char table_id, const unsigned short extension_id, const unsigned short onid, const unsigned short tsid, const unsigned char last)
 {
 	int current_section_number = 0;
@@ -189,20 +203,20 @@ bool DMX::check_complete(const unsigned char table_id, const unsigned short exte
 		if (last == 0)
 			return true;
 		MyDMXOrderUniqueKey::iterator di = myDMXOrderUniqueKey.find(create_sections_id(
-							table_id,
-							extension_id,
-							current_section_number,
-							onid,
-							tsid));
+				table_id,
+				extension_id,
+				current_section_number,
+				onid,
+				tsid));
 		if (di != myDMXOrderUniqueKey.end()) {
 			di++;
 		}
 		while ((di != myDMXOrderUniqueKey.end()) && ((uint8_t) ((di->first >> 56) & 0xff) == table_id) &&
-			((uint16_t) ((di->first >> 40) & 0xffff) == extension_id) &&
-			(((uint8_t) ((di->first >> 32) & 0xff) == current_section_number + 1) || 
-			((uint8_t) ((di->first >> 32) & 0xff) == current_section_number + 8)) &&
-			((uint16_t) ((di->first >> 16) & 0xffff) == onid) &&
-			((uint16_t) (di->first & 0xffff) == tsid))
+				((uint16_t) ((di->first >> 40) & 0xffff) == extension_id) &&
+				(((uint8_t) ((di->first >> 32) & 0xff) == current_section_number + 1) ||
+				 ((uint8_t) ((di->first >> 32) & 0xff) == current_section_number + 8)) &&
+				((uint16_t) ((di->first >> 16) & 0xffff) == onid) &&
+				((uint16_t) (di->first & 0xffff) == tsid))
 		{
 			if ((uint8_t) ((di->first >> 32) & 0xff) == last) {
 				return true;
@@ -215,6 +229,18 @@ bool DMX::check_complete(const unsigned char table_id, const unsigned short exte
 	}
 	return false;
 }
+#else
+/* the above version does not seem to work well for table 0x5[0-f], signalling
+ * completeness before it is actually complete
+ * additionally it seems to have problems with table version updates
+ * finally, it saves only little compared to the "HAVE_ALL_SECTIONS" check,
+ * so it is probably cheaper to just skip it
+ */
+bool DMX::check_complete(const unsigned char, const unsigned short, const unsigned short, const unsigned short, const unsigned char)
+{
+	return false;
+}
+#endif
 
 int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 {
@@ -233,7 +259,7 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 #endif
 		unsigned section_length_lo        : 8;
 	} __attribute__ ((packed));  // 3 bytes total
-	
+
 	struct extended_section_header {
 		unsigned table_extension_id_hi    : 8;
 		unsigned table_extension_id_lo    : 8;
@@ -263,7 +289,7 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 	extended_section_header *extended_header;
 	eit_extended_section_header *eit_extended_header;
 	int    rc;
-	unsigned short section_length;
+	short section_length = 0;
 	unsigned short current_onid = 0;
 	unsigned short current_tsid = 0;
 
@@ -275,7 +301,7 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 		timeouts++;
 		return -1;
 	}
-		
+
 	lock();
 
 	//rc = read(buf, 4098, timeoutInMSeconds);
@@ -301,7 +327,7 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 
 	initial_header = (minimal_section_header*)buf;
 	section_length = (initial_header->section_length_hi * 256) | initial_header->section_length_lo;
-	
+
 	if (section_length <= 0)
 	{
 		unlock();
@@ -331,10 +357,10 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 		return -1;
 	}
 
-	unlock();	
+	unlock();
 	// skip sections which are too short
 	if ((section_length < 5) ||
-	    (initial_header->table_id >= 0x4e && initial_header->table_id <= 0x6f && section_length < 14))
+			(initial_header->table_id >= 0x4e && initial_header->table_id <= 0x6f && section_length < 14))
 	{
 		dprintf("section too short: table %x, length: %d\n", initial_header->table_id, section_length);
 		return -1;
@@ -343,9 +369,9 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 	// check if it's extended syntax, e.g. NIT, BAT, SDT, EIT
 	if (initial_header->section_syntax_indicator != 0)
 	{
-		extended_header = (extended_section_header *)(buf+3); 
-		
-		// only current sections 
+		extended_header = (extended_section_header *)(buf+3);
+
+		// only current sections
 		if (extended_header->current_next_indicator != 0) {
 			// if ((initial_header.table_id >= 0x4e) && (initial_header.table_id <= 0x6f))
 			if (pID == 0x12) {
@@ -367,69 +393,60 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 			if (!cache)
 			{
 				if (initial_header->table_id == 0x4e &&
-				    eh_tbl_extension_id == current_service &&
-				    extended_header->version_number != eit_version) {
+						eh_tbl_extension_id == current_service &&
+						extended_header->version_number != eit_version) {
 					dprintf("EIT old: %d new version: %d\n",eit_version,extended_header->version_number);
 					eit_version = extended_header->version_number;
 				}
 				return rc;
 			}
 
+			// the current section
+			sections_id_t s_id = create_sections_id(initial_header->table_id,
+								eh_tbl_extension_id,
+								extended_header->section_number,
+								current_onid,
+								current_tsid);
 			//find current section in list
-			MyDMXOrderUniqueKey::iterator di = myDMXOrderUniqueKey.find(create_sections_id(
-							initial_header->table_id,
-							eh_tbl_extension_id,
-							extended_header->section_number,
-							current_onid,
-							current_tsid));
+			MyDMXOrderUniqueKey::iterator di = myDMXOrderUniqueKey.find(s_id);
 			if (di != myDMXOrderUniqueKey.end())
 			{
 				//the current section was read before
 				if (di->second == extended_header->version_number) {
 #ifdef DEBUG_CACHED_SECTIONS
 					dprintf("[sectionsd] skipped duplicate section for table 0x%02x table_extension 0x%04x section 0x%02x\n",
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number);
+						initial_header->table_id,
+						eh_tbl_extension_id,
+						extended_header->section_number);
 #endif
 					//the version number is still up2date
 					if (first_skipped == 0) {
 						//the last section was new - this is the 1st dup
-						first_skipped = create_sections_id(
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number,
-								current_onid,
-								current_tsid);
+						first_skipped = s_id;
 					}
 					else {
 						//this is not the 1st new - check if it's the last
 						//or to be more precise only dups occured since
-						if (first_skipped == create_sections_id(
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number,
-								current_onid,
-								current_tsid))
+						if (first_skipped == s_id)
 							timeouts = -1;
 					}
 					//since version is still up2date, check if table complete
 					if (check_complete(initial_header->table_id,
-						eh_tbl_extension_id,
-						current_onid,
-						current_tsid,
-						extended_header->last_section_number))
+							   eh_tbl_extension_id,
+							   current_onid,
+							   current_tsid,
+							   extended_header->last_section_number))
 						timeouts = -2;
 					return -1;
 				}
 				else {
 #ifdef DEBUG_CACHED_SECTIONS
 					dprintf("[sectionsd] version update from 0x%02x to 0x%02x for table 0x%02x table_extension 0x%04x section 0x%02x\n",
-								di->second,
-								extended_header->version_number,
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number);
+						di->second,
+						extended_header->version_number,
+						initial_header->table_id,
+						eh_tbl_extension_id,
+						extended_header->section_number);
 #endif
 					//update version number
 					di->second = extended_header->version_number;
@@ -438,25 +455,19 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 			else
 			{
 #ifdef DEBUG_CACHED_SECTIONS
-					dprintf("[sectionsd] new section for table 0x%02x table_extension 0x%04x section 0x%02x\n",
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number);
+				dprintf("[sectionsd] new section for table 0x%02x table_extension 0x%04x section 0x%02x\n",
+					initial_header->table_id,
+					eh_tbl_extension_id,
+					extended_header->section_number);
 #endif
 				//section was not read before - insert in list
-				myDMXOrderUniqueKey.insert(std::make_pair(create_sections_id(
-								initial_header->table_id,
-								eh_tbl_extension_id,
-								extended_header->section_number,
-								current_onid,
-								current_tsid),
-								extended_header->version_number));
+				myDMXOrderUniqueKey.insert(std::make_pair(s_id, extended_header->version_number));
 				//check if table is now complete
 				if (check_complete(initial_header->table_id,
-							eh_tbl_extension_id,
-							current_onid,
-							current_tsid,
-							extended_header->last_section_number))
+						   eh_tbl_extension_id,
+						   current_onid,
+						   current_tsid,
+						   extended_header->last_section_number))
 					timeouts = -2;
 			}
 			//if control comes to here the sections skipped counter must be restarted
@@ -471,7 +482,7 @@ int DMX::immediate_start(void)
 {
 	if (isOpen())
 	{
-xprintf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DMX::imediate_start: isOpen()<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+		xprintf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DMX::imediate_start: isOpen()<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 		closefd();
 	}
 
@@ -493,29 +504,34 @@ xprintf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DMX::imediate_start: isOpen()<<<<<<<<<<<<
 		return 3;
 	}
 #endif
-        if(dmx == NULL) {
-                dmx = new cDemux(dmx_num);
-                dmx->Open(DMX_PSI_CHANNEL, NULL, dmxBufferSizeInKB*1024UL);
-        }
+	if(dmx == NULL) {
+		dmx = new cDemux(dmx_num);
+#if !HAVE_TRIPLEDRAGON
+		dmx->Open(DMX_PSI_CHANNEL, NULL, dmxBufferSizeInKB*1024UL);
+#endif
+	}
+#if HAVE_TRIPLEDRAGON
+	dmx->Open(DMX_PSI_CHANNEL, NULL, dmxBufferSizeInKB*1024UL);
+#endif
 	fd = 1;
 
 	/* setfilter() only if this is no dummy filter... */
 #if 0
 	if (filters[filter_index].filter && filters[filter_index].mask &&
-	    !setfilter(fd, pID, filters[filter_index].filter, filters[filter_index].mask, DMX_IMMEDIATE_START | DMX_CHECK_CRC))
+			!setfilter(fd, pID, filters[filter_index].filter, filters[filter_index].mask, DMX_IMMEDIATE_START | DMX_CHECK_CRC))
 #endif
-	if (filters[filter_index].filter && filters[filter_index].mask)
-	{
-		unsigned char filter[DMX_FILTER_SIZE];
-		unsigned char mask[DMX_FILTER_SIZE];
+		if (filters[filter_index].filter && filters[filter_index].mask)
+		{
+			unsigned char filter[DMX_FILTER_SIZE];
+			unsigned char mask[DMX_FILTER_SIZE];
 
-		filter[0] = filters[filter_index].filter;
-		mask[0] = filters[filter_index].mask;
-		dmx->sectionFilter(pID, filter, mask, 1);
-		//FIXME error check
-		//closefd();
-		//return 4;
-	}
+			filter[0] = filters[filter_index].filter;
+			mask[0] = filters[filter_index].mask;
+			dmx->sectionFilter(pID, filter, mask, 1);
+			//FIXME error check
+			//closefd();
+			//return 4;
+		}
 	/* this is for dmxCN only... */
 	eit_version = 0xff;
 	return 0;
@@ -524,7 +540,7 @@ xprintf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DMX::imediate_start: isOpen()<<<<<<<<<<<<
 int DMX::start(void)
 {
 	int rc;
-	
+
 	lock();
 
 	rc = immediate_start();
@@ -578,11 +594,11 @@ int DMX::request_pause(void)
 
 	lock();
 	//dprintf("request_pause: %d\n", real_pauseCounter);
-	
+
 	real_pauseCounter++;
-	
+
 	unlock();
-	
+
 	return 0;
 }
 
@@ -629,18 +645,19 @@ int DMX::unpause(void)
 #endif
 
 const char *dmx_filter_types [] = {
-			"dummy filter",
-			"actual transport stream, scheduled",
-			"other transport stream, now/next",
-			"other transport stream, scheduled 1",
-			"other transport stream, scheduled 2"
+	"dummy filter",
+	"actual transport stream, scheduled",
+	"other transport stream, now/next",
+	"other transport stream, scheduled 1",
+	"other transport stream, scheduled 2",
+	"dummy filter2"
 };
 
 int DMX::change(const int new_filter_index, const int new_current_service)
 {
 	if (sections_debug)
 		showProfiling("changeDMX: before pthread_mutex_lock(&start_stop_mutex)");
-        lock();
+	lock();
 
 	if (sections_debug)
 		showProfiling("changeDMX: after pthread_mutex_lock(&start_stop_mutex)");
@@ -649,9 +666,9 @@ int DMX::change(const int new_filter_index, const int new_current_service)
 	first_skipped = 0;
 
 #if 0
-/* i have to think about this. This #if 0 now makes .change() automatically unpause the
- * demux.  No idea if there are negative side effects - we will find out :)  -- seife
- */
+	/* i have to think about this. This #if 0 now makes .change() automatically unpause the
+	 * demux.  No idea if there are negative side effects - we will find out :)  -- seife
+	 */
 	if (!isOpen())
 	{
 		pthread_cond_signal(&change_cond);
@@ -666,23 +683,23 @@ int DMX::change(const int new_filter_index, const int new_current_service)
 	if (real_pauseCounter > 0)
 	{
 		printf("changeDMX: for 0x%x not ignored! even though real_pauseCounter> 0 (%d)\n",
-			filters[new_filter_index].filter, real_pauseCounter);
+		       filters[new_filter_index].filter, real_pauseCounter);
 		/* immediate_start() checks for real_pauseCounter again (and
 		   does nothing in that case), so we can just continue here. */
 	}
 
-	if (sections_debug) { // friendly debug output...
+	if (1 /*sections_debug*/) { // friendly debug output...
 		if(pID==0x12 && filters[0].filter != 0x4e) { // Only EIT
 			printdate_ms(stderr);
 			fprintf(stderr, "changeDMX [EIT]-> %d (0x%x/0x%x) %s (%ld seconds)\n",
 				new_filter_index, filters[new_filter_index].filter,
 				filters[new_filter_index].mask, dmx_filter_types[new_filter_index],
-				time(NULL)-lastChanged);
+				time_monotonic()-lastChanged);
 		} else {
 			printdate_ms(stderr);
 			fprintf(stderr, "changeDMX [%x]-> %d (0x%x/0x%x) (%ld seconds)\n", pID,
 				new_filter_index, filters[new_filter_index].filter,
-				filters[new_filter_index].mask, time(NULL)-lastChanged);
+				filters[new_filter_index].mask, time_monotonic()-lastChanged);
 		}
 	}
 
@@ -699,10 +716,9 @@ int DMX::change(const int new_filter_index, const int new_current_service)
 	if (sections_debug)
 		showProfiling("after DMX_SET_FILTER");
 
-        pthread_cond_signal(&change_cond);
+	pthread_cond_signal(&change_cond);
 
-	if (timeset)
-		lastChanged = time(NULL);
+	lastChanged = time_monotonic();
 
 	unlock();
 
@@ -736,8 +752,8 @@ ssize_t DMX::readNbytes(int _fd, char *buf, const size_t n, unsigned timeoutInMS
 	{
 		printdate_ms(stderr);
 		fprintf(stderr, "[sectionsd] DMX::readNbytes received POLLERR, pid 0x%x, filter[%d] "
-		       "filter 0x%02x mask 0x%02x\n", pID, filter_index,
-		       filters[filter_index].filter, filters[filter_index].mask);
+			"filter 0x%02x mask 0x%02x\n", pID, filter_index,
+			filters[filter_index].filter, filters[filter_index].mask);
 		return -1;
 	}
 	if (!(ufds.revents&POLLIN))
@@ -766,7 +782,7 @@ ssize_t DMX::readNbytes(int _fd, char *buf, const size_t n, unsigned timeoutInMS
 
 int DMX::setPid(const unsigned short new_pid)
 {
-        lock();
+	lock();
 
 	if (!isOpen())
 	{
@@ -792,10 +808,9 @@ int DMX::setPid(const unsigned short new_pid)
 		return rc;
 	}
 
-        pthread_cond_signal(&change_cond);
+	pthread_cond_signal(&change_cond);
 
-	if (timeset)
-		lastChanged = time(NULL);
+	lastChanged = time_monotonic();
 
 	unlock();
 
@@ -809,12 +824,12 @@ int DMX::setCurrentService(int new_current_service)
 
 int DMX::dropCachedSectionIDs()
 {
-        lock();
+	lock();
 
-/* i think that those checks are wrong for dropCachedSectionIDs(), since
-   this is called from the housekeeping thread while sectionsd might be
-   idle waiting for the EIT update filter to trigger -- seife
- */
+	/* i think that those checks are wrong for dropCachedSectionIDs(), since
+	   this is called from the housekeeping thread while sectionsd might be
+	   idle waiting for the EIT update filter to trigger -- seife
+	 */
 #if 0
 	if (!isOpen())
 	{
@@ -843,7 +858,7 @@ int DMX::dropCachedSectionIDs()
 	}
 #endif
 
-        pthread_cond_signal(&change_cond);
+	pthread_cond_signal(&change_cond);
 
 	unlock();
 

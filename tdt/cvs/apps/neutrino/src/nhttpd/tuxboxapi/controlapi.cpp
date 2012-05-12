@@ -998,6 +998,7 @@ void CControlAPI::GetBouquetsCGI(CyhookHandler *hh)
 //-----------------------------------------------------------------------------
 void CControlAPI::EpgCGI(CyhookHandler *hh)
 {
+	NeutrinoAPI->eList.clear();
 	//hh->SetHeader(HTTP_OK, "text/plain; charset=UTF-8");
 	if (hh->ParamList.empty())
 	{
@@ -1046,47 +1047,35 @@ void CControlAPI::EpgCGI(CyhookHandler *hh)
 			unsigned long long epgid;
 			sscanf( hh->ParamList["eventid"].c_str(), "%llu", &epgid);
 			CShortEPGData epg;
-			//if (NeutrinoAPI->Sectionsd->getEPGidShort(epgid,&epg))
-			if (sectionsd_getEPGidShort(epgid,&epg))
-			{
+			if (sectionsd_getEPGidShort(epgid, &epg)) {
 				hh->WriteLn(epg.title);
 				hh->WriteLn(epg.info1);
 				hh->WriteLn(epg.info2);
 			}
 		}
-		else if (hh->ParamList["eventid2fsk"] != "")
-		{
-			if (hh->ParamList["starttime"] != "")
-			{
+		else if (hh->ParamList["eventid2fsk"] != "") {
+			if (hh->ParamList["starttime"] != "") {
 				unsigned long long epgid;
 				time_t starttime;
 				sscanf( hh->ParamList["fskid"].c_str(), "%llu", &epgid);
 				sscanf( hh->ParamList["starttime"].c_str(), "%lu", &starttime);
 				CEPGData longepg;
-				//if(NeutrinoAPI->Sectionsd->getEPGid(epgid, starttime, &longepg))
-				if(sectionsd_getEPGid(epgid, starttime, &longepg))
-				{
+				if (sectionsd_getEPGid(epgid, starttime, &longepg)) {
 					hh->printf("%u\n", longepg.fsk);
 					return;
 				}
 			}
 			hh->SendError();
 		}
-		else if (!(hh->ParamList["id"].empty()))
-		{
+		// list EPG for channel id
+		else if (!(hh->ParamList["id"].empty())) {
 			t_channel_id channel_id;
-			sscanf(hh->ParamList["id"].c_str(),
-			       SCANF_CHANNEL_ID_TYPE,
-			       &channel_id);
-			//NeutrinoAPI->eList = NeutrinoAPI->Sectionsd->getEventsServiceKey(channel_id&0xFFFFFFFFFFFFULL);
+			sscanf(hh->ParamList["id"].c_str(), SCANF_CHANNEL_ID_TYPE, &channel_id);
 			sectionsd_getEventsServiceKey(channel_id&0xFFFFFFFFFFFFULL, NeutrinoAPI->eList);
 			CChannelEventList::iterator eventIterator;
-			for (eventIterator = NeutrinoAPI->eList.begin(); eventIterator != NeutrinoAPI->eList.end(); eventIterator++)
-			{
+			for (eventIterator = NeutrinoAPI->eList.begin(); eventIterator != NeutrinoAPI->eList.end(); eventIterator++) {
 				CShortEPGData epg;
-				//if (NeutrinoAPI->Sectionsd->getEPGidShort(eventIterator->eventID,&epg))
-				if (sectionsd_getEPGidShort(eventIterator->eventID,&epg))
-				{
+				if (sectionsd_getEPGidShort(eventIterator->eventID, &epg)) {
 					hh->printf("%llu %ld %d\n", eventIterator->eventID, eventIterator->startTime, eventIterator->duration);
 					hh->printf("%s\n",epg.title.c_str());
 					hh->printf("%s\n",epg.info1.c_str());
@@ -1098,9 +1087,7 @@ void CControlAPI::EpgCGI(CyhookHandler *hh)
 		{
 			//eventlist for a chan
 			t_channel_id channel_id;
-			sscanf(hh->ParamList["1"].c_str(),
-			       SCANF_CHANNEL_ID_TYPE,
-			       &channel_id);
+			sscanf(hh->ParamList["1"].c_str(), SCANF_CHANNEL_ID_TYPE, &channel_id);
 			SendEventList(hh, channel_id);
 		}
 	}
@@ -1239,9 +1226,7 @@ void CControlAPI::ZaptoCGI(CyhookHandler *hh)
 			t_channel_id current_channel = NeutrinoAPI->Zapit->getCurrentServiceID();
 			CSectionsdClient::LinkageDescriptorList desc;
 			CSectionsdClient::responseGetCurrentNextInfoChannelID currentNextInfo;
-			//NeutrinoAPI->Sectionsd->getCurrentNextServiceKey(current_channel&0xFFFFFFFFFFFFULL, currentNextInfo);
 			sectionsd_getCurrentNextServiceKey(current_channel&0xFFFFFFFFFFFFULL, currentNextInfo);
-			//if (NeutrinoAPI->Sectionsd->getLinkageDescriptorsUniqueKey(currentNextInfo.current_uniqueKey,desc))
 			if (sectionsd_getLinkageDescriptorsUniqueKey(currentNextInfo.current_uniqueKey,desc))
 			{
 				for(unsigned int i=0;i< desc.size();i++)
@@ -1418,8 +1403,6 @@ void CControlAPI::LCDAction(CyhookHandler *hh)
 void CControlAPI::SendEventList(CyhookHandler *hh, t_channel_id channel_id)
 {
 	int pos;
-
-	//NeutrinoAPI->eList = NeutrinoAPI->Sectionsd->getEventsServiceKey(channel_id&0xFFFFFFFFFFFFULL);
 	sectionsd_getEventsServiceKey(channel_id&0xFFFFFFFFFFFFULL, NeutrinoAPI->eList);
 	CChannelEventList::iterator eventIterator;
 
@@ -1501,9 +1484,7 @@ void CControlAPI::SendAllCurrentVAPid(CyhookHandler *hh)
 
 	t_channel_id current_channel = NeutrinoAPI->Zapit->getCurrentServiceID();
 	CSectionsdClient::responseGetCurrentNextInfoChannelID currentNextInfo;
-	//NeutrinoAPI->Sectionsd->getCurrentNextServiceKey(current_channel&0xFFFFFFFFFFFFULL, currentNextInfo);
 	sectionsd_getCurrentNextServiceKey(current_channel&0xFFFFFFFFFFFFULL, currentNextInfo);
-	//if (NeutrinoAPI->Sectionsd->getComponentTagsUniqueKey(currentNextInfo.current_uniqueKey,tags))
 	if (sectionsd_getComponentTagsUniqueKey(currentNextInfo.current_uniqueKey,tags))
 	{
 		for (unsigned int i=0; i< tags.size(); i++)
