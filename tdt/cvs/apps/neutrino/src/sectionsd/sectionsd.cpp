@@ -212,6 +212,7 @@ static bool update_eit = true;
 /* messaging_current_servicekey does probably not need locking, since it is
    changed from one place */
 static t_channel_id    messaging_current_servicekey = 0;
+static t_channel_id    messaging_current_servicekey_old = 0;
 static bool channel_is_blacklisted = false;
 // EVENTS...
 
@@ -723,7 +724,11 @@ static void addEvent(const SIevent &evt, const time_t zeit, bool cn = false)
 	if (cn) { // current-next => fill current or next event...
 		readLockMessaging();
 		if (evt.get_channel_id() == messaging_current_servicekey && // but only if it is the current channel...
+#if 0 //FIXME --martii
 				(messaging_got_CN != 0x03)) { // ...and if we don't have them already.
+#else
+				true) {
+#endif
 			unlockMessaging();
 			SIevent *eptr = new SIevent(evt);
 			if (!eptr)
@@ -7849,17 +7854,28 @@ static void *cnThread(void *)
 		} // if (update_eit)
 
 		readLockMessaging();
+#if 0		// FIXME --martii
 		if (messaging_got_CN != messaging_have_CN) // timeoutsDMX < -1)
+#else
+		if (true)
+#endif
 		{
 			unlockMessaging();
 			writeLockMessaging();
 			messaging_have_CN = messaging_got_CN;
 			unlockMessaging();
 			dprintf("[cnThread] got current_next (0x%x) - sending event!\n", messaging_have_CN);
+#if 1 //FIXME --martii
+			if(messaging_current_servicekey != messaging_current_servicekey_old) {
+				messaging_current_servicekey_old = messaging_current_servicekey;
+#endif
 			eventServer->sendEvent(CSectionsdClient::EVT_GOT_CN_EPG,
 					       CEventServer::INITID_SECTIONSD,
 					       &messaging_current_servicekey,
 					       sizeof(messaging_current_servicekey));
+#if 1 //FIXME --martii
+			}
+#endif
 			/* we received an event => reset timeout timer... */
 			eit_waiting_since = zeit;
 			dmxCN.lastChanged = zeit; /* this is ugly - needs somehting better */
@@ -7868,7 +7884,9 @@ static void *cnThread(void *)
 		if (messaging_have_CN == 0x03) // current + next
 		{
 			unlockMessaging();
+#if 0 // FIXME --martii
 			sendToSleepNow = true;
+#endif
 			//timeoutsDMX = 0;
 		}
 		else {
@@ -9155,7 +9173,7 @@ static void *cnThread(void *)
 			SItime zeitEvt1(0, 0);
 			if (!(flag & CSectionsdClient::epgflags::has_current)) {
 				currentEvt = findActualSIeventForServiceUniqueKey(uniqueServiceKey, zeitEvt1, 0, &flag2);
-			} else {
+			} else if(!currentEvt.times.empty()) {
 				zeitEvt1.startzeit = currentEvt.times.begin()->startzeit;
 				zeitEvt1.dauer = currentEvt.times.begin()->dauer;
 			}
@@ -9207,6 +9225,8 @@ NOISY_MESSAGE;
 						nextEvt = findNextSIeventForServiceUniqueKey(uniqueServiceKey, zeitEvt2);
 					}
 
+				/* FIXME what this code should do ? why search channel id as event key ?? */
+#if 0
 					if (nextEvt.service_id != 0)
 					{
 						MySIeventsOrderUniqueKey::iterator eFirst = mySIeventsOrderUniqueKey.find(uniqueServiceKey);
@@ -9222,12 +9242,13 @@ NOISY_MESSAGE;
 							{
 								time_t azeit = time(NULL);
 
-								if (eFirst->second->times.begin()->startzeit < azeit &&
+								if (!eFirst->second->times.empty() && eFirst->second->times.begin()->startzeit < azeit &&
 										eFirst->second->uniqueKey() == nextEvt.uniqueKey() - 1)
 									flag |= CSectionsdClient::epgflags::has_no_current;
 							}
 						}
 					}
+#endif
 				}
 			}
 			if (nextEvt.service_id != 0)
@@ -9265,10 +9286,16 @@ NOISY_MESSAGE;
 		CSectionsdClient::sectionsdTime time_cur;
 		CSectionsdClient::sectionsdTime time_nxt;
 		now = time(NULL);
-		time_cur.startzeit = currentEvt.times.begin()->startzeit;
-		time_cur.dauer = currentEvt.times.begin()->dauer;
-		time_nxt.startzeit = nextEvt.times.begin()->startzeit;
-		time_nxt.dauer = nextEvt.times.begin()->dauer;
+		time_cur.startzeit = time_cur.dauer = 0;
+		if(!currentEvt.times.empty()) {
+			time_cur.startzeit = currentEvt.times.begin()->startzeit;
+			time_cur.dauer = currentEvt.times.begin()->dauer;
+		}
+		time_nxt.startzeit = time_nxt.dauer = 0;
+		if(!nextEvt.times.empty()) {
+			time_nxt.startzeit = nextEvt.times.begin()->startzeit;
+			time_nxt.dauer = nextEvt.times.begin()->dauer;
+		}
 		/* for nvod events that have multiple times, find the one that matches the current time... */
 		if (currentEvt.times.size() > 1) {
 			for (SItimes::iterator t = currentEvt.times.begin(); t != currentEvt.times.end(); ++t) {
@@ -9433,8 +9460,10 @@ NOISY_MESSAGE;
 		if (uniqueServiceKey == messaging_current_servicekey) {
 			if (myCurrentEvent) {
 				evt = *myCurrentEvent;
-				zeit.startzeit = evt.times.begin()->startzeit;
-				zeit.dauer = evt.times.begin()->dauer;
+				if(!evt.times.empty()) {
+					zeit.startzeit = evt.times.begin()->startzeit;
+					zeit.dauer = evt.times.begin()->dauer;
+				}
 				if (evt.times.size() > 1) {
 					time_t now = time(NULL);
 					for (SItimes::iterator t = evt.times.begin(); t != evt.times.end(); ++t) {
@@ -9582,8 +9611,8 @@ NOISY_MESSAGE;
 
 		unlockEvents();
 		return ret;
-
 	}
+
 	/* was static void commandLinkageDescriptorsUniqueKey(int connfd, char *data, const unsigned dataLength) */
 	bool sectionsd_getLinkageDescriptorsUniqueKey(const event_id_t uniqueKey, CSectionsdClient::LinkageDescriptorList& descriptors)
 	{
@@ -9613,8 +9642,8 @@ NOISY_MESSAGE;
 
 		unlockEvents();
 		return ret;
-
 	}
+
 	/* was static void commandTimesNVODservice(int connfd, char *data, const unsigned dataLength) */
 	bool sectionsd_getNVODTimesServiceKey(const t_channel_id uniqueServiceKey, CSectionsdClient::NVODTimesList& nvod_list)
 	{
