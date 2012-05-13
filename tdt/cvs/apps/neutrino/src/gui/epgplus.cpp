@@ -637,10 +637,18 @@ void EpgPlus::init ()
   std::string FileName = std::string (g_settings.font_file);
   for (size_t i = 0; i < NumberOfFontSettings; ++i) {
 	std::string family = g_fontRenderer->getFamily (FileName.c_str ());
+#if 0
 	Font *font = g_fontRenderer->getFont (family.c_str (), fontSettingTable[i].style, fontSettingTable[i].size);
+#else
+	Font *font = g_fontRenderer->getFont (family.c_str (), fontSettingTable[i].style, fontSettingTable[i].size * g_settings.font_percent / 100);
+#endif
 
 	if (font == NULL)
+#if 0
 	  font = g_fontRenderer->getFont (family.c_str (), "Regular", fontSettingTable[i].size);
+#else
+	  font = g_fontRenderer->getFont (family.c_str (), "Regular", fontSettingTable[i].size * g_settings.font_percent / 100);
+#endif
 
 	fonts[i] = font;
   }
