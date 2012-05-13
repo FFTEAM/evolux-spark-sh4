@@ -457,6 +457,15 @@ int CStringInput::exec(CMenuTarget* parent, const std::string & )
 		}
 		else if ((msg ==CRCInput::RC_sat) || (msg == CRCInput::RC_favorites))
 		{
+			value[selected] = '.';
+
+			if (selected + 1 < size)
+			{
+				selected++;
+				paintChar(selected - 1);
+			}
+  
+			paintChar(selected);
 		}
 		else
 		{
