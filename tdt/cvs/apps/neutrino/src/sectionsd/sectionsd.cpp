@@ -189,6 +189,8 @@ static bool messaging_zap_detected = false;
 
 std::string dvbtime_filter_dir = "/var/tuxbox/config/zapit/dvbtimefilter.xml";
 static bool dvb_time_update = false;
+				
+static bool sendEvent_needed = false;
 
 //NTP-Config
 #define CONF_FILE "/var/tuxbox/config/neutrino.conf"
@@ -758,6 +760,7 @@ static void addEvent(const SIevent &evt, const time_t zeit, bool cn = false)
 					unlockMessaging();
 					dprintf("addevent-cn: added running (%d) event 0x%04x '%s'\n",
 						e->runningStatus(), e->eventID, e->getName().c_str());
+					sendEvent_needed = true;
 				} else {
 					writeLockMessaging();
 					messaging_got_CN |= 0x01;
@@ -776,6 +779,7 @@ static void addEvent(const SIevent &evt, const time_t zeit, bool cn = false)
 					unlockMessaging();
 					dprintf("addevent-cn: added next    (%d) event 0x%04x '%s'\n",
 						e->runningStatus(), e->eventID, e->getName().c_str());
+					sendEvent_needed = true;
 				} else {
 					dprintf("addevent-cn: not added next(%d) event 0x%04x '%s'\n",
 						e->runningStatus(), e->eventID, e->getName().c_str());
@@ -7866,7 +7870,7 @@ static void *cnThread(void *)
 			unlockMessaging();
 			dprintf("[cnThread] got current_next (0x%x) - sending event!\n", messaging_have_CN);
 #if 1 //FIXME --martii
-			if(messaging_current_servicekey != messaging_current_servicekey_old) {
+			if(sendEvent_needed || (messaging_current_servicekey != messaging_current_servicekey_old)) {
 				messaging_current_servicekey_old = messaging_current_servicekey;
 #endif
 			eventServer->sendEvent(CSectionsdClient::EVT_GOT_CN_EPG,
@@ -7874,6 +7878,7 @@ static void *cnThread(void *)
 					       &messaging_current_servicekey,
 					       sizeof(messaging_current_servicekey));
 #if 1 //FIXME --martii
+				sendEvent_needed = false;
 			}
 #endif
 			/* we received an event => reset timeout timer... */
