@@ -653,9 +653,18 @@ std::string convertDVBUTF8(const char *data, int len, int table, int tsidonid)
 		++i;
 		{} //eDebug("unsup. Big5 subset of ISO/IEC 10646-1 enc.");
 		break;
+	case 0x1F:
+		{
+#ifdef ENABLE_FREESATEPG
+			std::string decoded_string = freesatHuffmanDecode(std::string(data, len));
+			if (!decoded_string.empty()) return decoded_string;
+#endif
+		}
+		++i;
+		break;
 	case 0x0:
 	case 0xD ... 0xF:
-	case 0x15 ... 0x1F:
+	case 0x15 ... 0x1E:
 	{} //eDebug("reserved %d", data[0]);
 	++i;
 	break;
@@ -697,6 +706,8 @@ std::string convertDVBUTF8(const char *data, int len, int table, int tsidonid)
 			res[t++]= 0x20;
 		else if ((code == 0x8A))
 			res[t++]= '\n'; // 0x8a is vertical tab. Just use newline for now.
+		else if((code >= 0x80) && (code <= 0x9F))
+			continue;
 		else if (code < 0x800) // two byte mapping
 		{
 			res[t++]=(code>>6)|0xC0;

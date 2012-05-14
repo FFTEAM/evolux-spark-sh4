@@ -302,8 +302,7 @@ std::string SIsectionEIT::freesatHuffmanDecode(std::string input)
 
 	if (src[1] == 1 || src[1] == 2)
 	{
-		std::string uncompressed(size * 3, ' ');
-		uint p = 0;
+		std::string uncompressed;
 		struct hufftab *table;
 		unsigned table_length;
 		if (src[1] == 1)
@@ -337,9 +336,7 @@ std::string SIsectionEIT::freesatHuffmanDecode(std::string input)
 				bitShift = 8;
 				if ((nextCh & 0x80) == 0)
 					lastch = nextCh;
-				if (p >= uncompressed.length())
-					uncompressed.resize(p+10);
-				uncompressed[p++] = nextCh;
+				uncompressed.append(&nextCh, 1);
 			}
 			else
 			{
@@ -359,9 +356,7 @@ std::string SIsectionEIT::freesatHuffmanDecode(std::string input)
 							bitShift = table[j].bits;
 							if (nextCh != STOP && nextCh != ESCAPE)
 							{
-								if (p >= uncompressed.length())
-									uncompressed.resize(p+10);
-								uncompressed[p++] = nextCh;
+								uncompressed.append(&nextCh, 1);
 							}
 							found = true;
 							lastch = nextCh;
@@ -389,13 +384,11 @@ std::string SIsectionEIT::freesatHuffmanDecode(std::string input)
 			else
 			{
 				// Entry missing in table.
-				uncompressed.resize(p);
 				uncompressed.append("...");
 				return uncompressed;
 			}
 		} while (lastch != STOP && value != 0);
 
-		uncompressed.resize(p);
 		return uncompressed;
 	}
 	else return input;
