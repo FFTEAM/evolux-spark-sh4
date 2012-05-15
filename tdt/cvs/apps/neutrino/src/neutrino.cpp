@@ -840,6 +840,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         strcpy(g_settings.shutdown_count, configfile.getString("shutdown_count","0").c_str());
 	g_settings.infobar_sat_display   = configfile.getBool("infobar_sat_display"  , true );
 	g_settings.infobar_subchan_disp_pos = configfile.getInt32("infobar_subchan_disp_pos"  , 0 );
+	g_settings.infoviewer_cn = configfile.getInt32("infoviewer_cn", 0 );
 	g_settings.menu_numbers_as_icons = configfile.getBool("menu_numbers_as_icons", true);
 
 	//audio
@@ -1401,6 +1402,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString("shutdown_count"           , g_settings.shutdown_count);
 	configfile.setBool("infobar_sat_display"  , g_settings.infobar_sat_display  );
 	configfile.setInt32("infobar_subchan_disp_pos"  , g_settings.infobar_subchan_disp_pos  );
+	configfile.setInt32("infoviewer_cn"  , g_settings.infoviewer_cn);
 	configfile.setBool("menu_numbers_as_icons", g_settings.menu_numbers_as_icons);
 
 	//audio
@@ -3007,7 +3009,8 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				channelList->numericZap( msg );
 			}
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
-						( msg == NeutrinoMessages::SHOW_INFOBAR ) )
+						(g_settings.infoviewer_cn && (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG) ||
+						( msg == NeutrinoMessages::SHOW_INFOBAR )))
 			{
 				SuspendSubtitles();
 #ifdef WITH_GRAPHLCD
@@ -4805,6 +4808,9 @@ void stop_daemons(bool stopall)
 	if (CNeutrinoApp::getInstance()->EmuMenu)
 		CNeutrinoApp::getInstance()->EmuMenu->suspend();
 
+#ifdef WITH_GRAPHLCD
+	nGLCD::Exit();
+#endif
 	printf("httpd shutdown\n");
 	pthread_cancel(nhttpd_thread);
 	pthread_join(nhttpd_thread, NULL);
@@ -4836,9 +4842,6 @@ void stop_daemons(bool stopall)
 			delete powerManager;
 		}
 	}
-#ifdef WITH_GRAPHLCD
-	nGLCD::Exit();
-#endif
 }
 
 void sighandler (int signum)

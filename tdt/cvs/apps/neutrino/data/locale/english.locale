@@ -1513,3 +1513,4 @@ lcdmenu.displaymode Display
 lcdmenu.standby Standby
 menu.numbers_as_icons Menue numbers as icons
 fontsize.percent Font size scaling (%)
+menu.infobar_cn Infoviewer when show starts

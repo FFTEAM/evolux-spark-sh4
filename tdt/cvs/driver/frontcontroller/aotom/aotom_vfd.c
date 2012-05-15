@@ -2271,7 +2271,7 @@ static u8 YWPANEL_VFD_ScanKeyboard_StandBy(void)
 	}
 	else
 	{
-		printk("YWPANEL_FP_SendData FALSE\n");
+	//	printk("YWPANEL_FP_SendData FALSE\n");
 	}
 	return INVALID_KEY;
 }

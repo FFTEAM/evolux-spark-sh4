@@ -2537,6 +2537,9 @@ void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings, CMenuWidget &fo
 	colorSettings.addItem( new CMenuForwarder(LOCALE_COLORMENU_FONT, true, NULL, &fontSettings, NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE) );
 	colorSettings.addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font"));
 
+	colorSettings.addItem(GenericMenuSeparatorLine);
+	colorSettings.addItem(new CMenuOptionChooser(LOCALE_MENU_INFOBAR_CN, &g_settings.infoviewer_cn, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+
 	CMenuWidget *colorSettings_timing = new CMenuWidget(LOCALE_COLORMENU_TIMING, NEUTRINO_ICON_SETTINGS);
 	InitColorSettingsTiming(*colorSettings_timing);
 

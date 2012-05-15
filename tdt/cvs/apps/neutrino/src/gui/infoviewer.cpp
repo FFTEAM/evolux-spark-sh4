@@ -443,7 +443,7 @@ void CInfoViewer::showTitle (const int ChanNum, const std::string & Channel, con
 	} else {
 		//info_CurrentNext = getEPG (channel_id);
 		sectionsd_getCurrentNextServiceKey(channel_id & 0xFFFFFFFFFFFFULL, info_CurrentNext);
-		if (!evtlist.empty()) {
+		if (virtual_zap_mode && !evtlist.empty()) {
 			if (new_chan) {
 				for ( eli=evtlist.begin(); eli!=evtlist.end(); ++eli ) {
 					if ((uint)eli->startTime >= info_CurrentNext.current_zeit.startzeit + info_CurrentNext.current_zeit.dauer)
@@ -1092,9 +1092,9 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 	  int rest = (info_CurrentNext.current_zeit.dauer / 60) - seit;
 	  if (seit < 0) {
 		runningPercent = 0;
-		sprintf (runningRest, "in %d min", -seit);
-	  } else {
-		runningPercent = (unsigned) ((float) (jetzt - info_CurrentNext.current_zeit.startzeit) / (float) info_CurrentNext.current_zeit.dauer * 100.);
+	sprintf (runningRest, "in %d min", -seit);
+  } else {
+	runningPercent = (unsigned) ((float) (jetzt - info_CurrentNext.current_zeit.startzeit) / (float) info_CurrentNext.current_zeit.dauer * 100.);
 		if(runningPercent > 100)
 			runningPercent = 100;
 		sprintf (runningRest, "%d / %d min", seit, rest);

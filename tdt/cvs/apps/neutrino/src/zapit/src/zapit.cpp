@@ -467,7 +467,7 @@ printf("[zapit] saving channel, apid %x sub pid %x mode %d volume %d\n", channel
 
 	CFrameBuffer::getInstance()->setSplit3D(false);
 	const char *chan = channel->getName().c_str();
-	if (strlen(chan)) {
+	if (chan && strlen(chan)) {
 		FILE *F = fopen (CONFIGDIR "/3dchannels.list", "r");
 		if (F) {
 			char buf[80];

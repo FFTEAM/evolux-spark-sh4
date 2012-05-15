@@ -1513,3 +1513,4 @@ lcdmenu.displaymode Anzeige
 lcdmenu.standby Standby
 menu.numbers_as_icons Menü-Zahlen als Icons
 fontsize.percent Größenanpassung (%)
+menu.infobar_cn Infoviewer bei Sendungsbeginn

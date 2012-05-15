@@ -352,7 +352,9 @@ class FRITZCALL_Menu : public CMenuTarget
 
 static const char * kDefaultConfigFile = "/etc/graphlcd.conf";
 
+#ifndef MAX
 #define MAX(a,b)(((a)<(b)) ? (b) : (a))
+#endif
 
 class nGLCD
 {
