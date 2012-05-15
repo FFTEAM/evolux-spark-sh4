@@ -1519,4 +1519,4 @@ lcdmenu.displaymode отображать
 lcdmenu.standby Standby
 menu.numbers_as_icons Меню номера в виде значков
 fontsize.percent масштабирование шрифта (%)
-menu.infobar_cn Infoviewer когда шоу начинается
+menu.infobar_cn Infobar когда шоу начинается
