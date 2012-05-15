@@ -3820,7 +3820,7 @@ void CNeutrinoApp::ExitRun(const bool write_si, int retcode)
 				int fspeed = 0;
 				funNotifier->changeNotify(NONEXISTANT_LOCALE, (void *) &fspeed);
 			}
-			exit(retcode);
+			_exit(retcode);
 		}
 	}
 }
@@ -4801,6 +4801,8 @@ bool CNeutrinoApp::changeNotify(const neutrino_locale_t OptionName, void *data)
 **************************************************************************************/
 void stop_daemons(bool stopall)
 {
+	streamts_stop = 1;
+	sectionsd_stop = 1;
 	dvbsub_close();
 	tuxtxt_stop();
 	tuxtxt_close();
@@ -4815,9 +4817,7 @@ void stop_daemons(bool stopall)
 	pthread_cancel(nhttpd_thread);
 	pthread_join(nhttpd_thread, NULL);
 	printf("httpd shutdown done\n");
-	streamts_stop = 1;
 	pthread_join(stream_thread, NULL);
-	sectionsd_stop = 1;
 	if(stopall) {
 		printf("timerd shutdown\n");
 		g_Timerd->shutdown();
@@ -4829,7 +4829,7 @@ void stop_daemons(bool stopall)
 	pthread_join(sections_thread, NULL);
 	printf("sectionsd shutdown done\n");
 #endif
-	tuxtx_stop_subtitle();
+	//tuxtx_stop_subtitle();
 	printf("zapit shutdown\n");
 	g_Zapit->shutdown();
 	pthread_join(zapit_thread, NULL);
@@ -4879,6 +4879,7 @@ int main(int argc, char **argv)
 	setDebugLevel(DEBUG_NORMAL);
         signal(SIGTERM, sighandler);
         signal(SIGINT, sighandler);
+	signal(SIGBUS, segvhandler);
 	signal(SIGSEGV, segvhandler);
         signal(SIGHUP, SIG_IGN);
 	signal(SIGPIPE, SIG_IGN);
