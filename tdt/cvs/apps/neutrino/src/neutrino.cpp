@@ -4879,7 +4879,7 @@ int main(int argc, char **argv)
 	setDebugLevel(DEBUG_NORMAL);
         signal(SIGTERM, sighandler);
         signal(SIGINT, sighandler);
-	signal(SIGBUS, segvhandler);
+	//signal(SIGBUS, segvhandler);
 	signal(SIGSEGV, segvhandler);
         signal(SIGHUP, SIG_IGN);
 	signal(SIGPIPE, SIG_IGN);
