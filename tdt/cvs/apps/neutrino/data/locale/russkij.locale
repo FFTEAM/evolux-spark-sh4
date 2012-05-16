@@ -574,12 +574,12 @@ imageinfo.license Лицензия:
 imageinfo.version Версия:
 inetradio.name Интернет-радио
 infobar.bar_color Цвет панели
-infobar.picon Пикон
+infobar.picon Пикон канала
 infobar.picon_big большой
 infobar.picon_move SIG/SNR
 infobar.picon_normal нормальный
-infobar.picon_dir значок каталог
-infobar.picon_dir_e2 значок каталог E2
+infobar.picon_dir Путь для пиконов
+infobar.picon_dir_e2 Путь для пиконов E2
 infoviewer.epgnotload EPG не загружено....
 infoviewer.epgwait Попытка получить программу передач...
 infoviewer.eventlist Телегид
@@ -707,9 +707,6 @@ miscsettings.epg_old_events Удалить после, часов
 miscsettings.epg_old_events_hint1 Удаление устаревших событий
 miscsettings.epg_old_events_hint2 Установка в часах
 miscsettings.epg_save Сохранение EPG
-miscsettings.epg.freesat Freesat EPG
-miscsettings.epg.freesat.enable Включить Freesat EPG
-miscsettings.epg.freesat.restart Изменения вступят в силу при перезагрузке
 miscsettings.fb_destination Эксперт! Консоль загрузки
 miscsettings.general Основное
 miscsettings.head Прочие настройки
@@ -1515,8 +1512,7 @@ adzap.switchback Переключить назад после
 adzap.commit Выбор режима:
 lcdmenu.displaymode.timeonly время
 lcdmenu.displaymode.timeoff без времени
-lcdmenu.displaymode отображать
+lcdmenu.displaymode Режим
 lcdmenu.standby Standby
-menu.numbers_as_icons Меню номера в виде значков
-fontsize.percent масштабирование шрифта (%)
-menu.infobar_cn Infobar когда шоу начинается
+menu.numbers_as_icons Пиконы в меню 
+fontsize.percent Масштаб шрифта (%)
