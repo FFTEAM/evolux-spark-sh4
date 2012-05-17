@@ -1,9 +1,11 @@
+#include <config.h>
 #include <string>
 #include <ctype.h>
 #include <limits.h>
 #include <debug.h>
 #include <map>
 #include <set>
+#include "freesatv2.h"
 
 std::map<std::string, int> CountryCodeDefaultMapping;
 std::map<int, int> TransponderDefaultMapping;
@@ -180,7 +182,7 @@ static unsigned long iso6937[96]={
 // Two Char Mapping ( many polish services and UPC Direct/HBO services)
 // get from http://mitglied.lycos.de/buran/charsets/videotex-suppl.html
 //static inline unsigned int doVideoTexSuppl(int c1, int c2)
-static inline unsigned int doVideoTexSuppl(char c1, char c2)
+static inline unsigned int doVideoTexSuppl(u_char c1, u_char c2)
 {
 	switch (c1)
 	{
@@ -596,6 +598,8 @@ static inline unsigned int recode(unsigned char d, int cp)
 	}
 }
 
+static freesatHuffmanDecoder *huffmanDecoder = NULL;
+
 std::string convertDVBUTF8(const char *data, int len, int table, int tsidonid)
 {
 	int newtable = 0;
@@ -655,10 +659,11 @@ std::string convertDVBUTF8(const char *data, int len, int table, int tsidonid)
 		break;
 	case 0x1F:
 		{
-#ifdef ENABLE_FREESATEPG
-			std::string decoded_string = freesatHuffmanDecode(std::string(data, len));
-			if (!decoded_string.empty()) return decoded_string;
-#endif
+			if (!huffmanDecoder)
+				huffmanDecoder = new freesatHuffmanDecoder;
+			std::string decoded_string = huffmanDecoder->decode((const unsigned char *)data, len);
+			if (!decoded_string.empty())
+				return decoded_string;
 		}
 		++i;
 		break;
