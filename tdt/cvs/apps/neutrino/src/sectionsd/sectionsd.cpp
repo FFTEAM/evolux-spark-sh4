@@ -100,6 +100,10 @@
 // Zeit die fuer die gewartet wird, bevor der Filter weitergeschaltet wird, falls es automatisch nicht klappt
 #define TIME_EIT_SKIPPING 90
 
+#ifndef ENABLE_FREESATEPG
+# define ENABLE_FREESATEPG
+#endif
+
 #ifdef ENABLE_FREESATEPG
 // a little more time for freesat epg
 #define TIME_FSEIT_SKIPPING 240

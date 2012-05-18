@@ -491,18 +491,46 @@ void EpgPlus::Footer::paintButtons (button_label * buttonLabels, int numberOfBut
 
   this->frameBuffer->paintBoxRel (this->x, yPos, this->width, this->fontButtons->getHeight (), COL_MENUHEAD_PLUS_0);
 
-  ::paintButtons (this->frameBuffer, this->fontButtons, this->x + 10, yPos + this->fontButtons->getHeight () - buttonHeight + 3, buttonWidth, numberOfButtons, buttonLabels);
+  ::paintButtons (this->frameBuffer, this->fontButtons, this->x + 10, yPos + this->fontButtons->getHeight () - buttonHeight /*+ 3*/, buttonWidth, numberOfButtons, buttonLabels);
 
   this->frameBuffer->paintIcon (NEUTRINO_ICON_BUTTON_HELP, this->x + this->width - 30, yPos - this->fontButtons->getHeight ());
 }
 
 EpgPlus::EpgPlus ()
 {
+  switch (g_settings.epgplus_viewmode) {
+    	case ViewMode_Stretch:
+	case ViewMode_Scroll:
+		currentViewMode = (TViewMode)g_settings.epgplus_viewmode;
+		break;
+	default:
+		currentViewMode = ViewMode_Scroll;
+  }
+  switch (g_settings.epgplus_swapmode) {
+    	case SwapMode_ByPage:
+	case SwapMode_ByBouquet:
+		currentSwapMode = (TSwapMode)g_settings.epgplus_swapmode;
+		break;
+	default:
+		currentSwapMode =  SwapMode_ByPage;
+  }
+  switch (currentSwapMode) {
+        case SwapMode_ByPage:
+          buttonLabels[1].locale = LOCALE_EPGPLUS_PAGE_DOWN;
+          buttonLabels[2].locale = LOCALE_EPGPLUS_PAGE_UP;
+          break;
+        default:
+          buttonLabels[1].locale = LOCALE_EPGPLUS_PREV_BOUQUET;
+          buttonLabels[2].locale = LOCALE_EPGPLUS_NEXT_BOUQUET;
+   }
+
   this->init ();
 }
 
 EpgPlus::~EpgPlus ()
 {
+  g_settings.epgplus_viewmode = (int)currentViewMode;
+  g_settings.epgplus_swapmode = (int)currentSwapMode;
   this->free ();
 }
 
@@ -629,8 +657,8 @@ void EpgPlus::createChannelEntries (int selectedChannelEntryIndex)
 void EpgPlus::init ()
 {
   frameBuffer = CFrameBuffer::getInstance ();
-  currentViewMode = ViewMode_Scroll;
-  currentSwapMode = SwapMode_ByPage;
+  //currentViewMode = ViewMode_Scroll;
+  //currentSwapMode = SwapMode_ByPage;
   usableScreenWidth = w_max (g_settings.screen_EndX, 4);
   usableScreenHeight = h_max (g_settings.screen_EndY, 4);
 
@@ -730,8 +758,8 @@ void EpgPlus::init ()
   this->duration = 2 * 60 * 60;
 
   this->refreshAll = false;
-  this->currentViewMode = ViewMode_Scroll;
-  this->currentSwapMode = SwapMode_ByPage;
+  //this->currentViewMode = ViewMode_Scroll;
+  //this->currentSwapMode = SwapMode_ByPage;
 
   this->header = new Header (this->frameBuffer, this->headerX, this->headerY, this->headerWidth);
 

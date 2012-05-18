@@ -131,6 +131,8 @@ struct SNeutrinoSettings
 	std::string network_ntpserver;
 	std::string network_ntprefresh;
 	int network_ntpenable;
+	int epgplus_viewmode;
+	int epgplus_swapmode;
 
 	//timing
 #define TIMING_SETTING_COUNT 6

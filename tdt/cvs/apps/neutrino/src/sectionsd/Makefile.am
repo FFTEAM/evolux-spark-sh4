@@ -19,4 +19,4 @@ INCLUDES = \
 AM_CPPFLAGS = -D DO_NOT_INCLUDE_STUFF_NOT_NEEDED_FOR_SECTIONSD -fno-rtti -fexceptions -rdynamic -ggdb
 
 noinst_LIBRARIES = libsectionsd.a
-libsectionsd_a_SOURCES = sectionsd.cpp dmxapi.cpp debug.cpp dmx.cpp SIsections.cpp SIevents.cpp SIutils.cpp SIlanguage.cpp edvbstring.cpp
+libsectionsd_a_SOURCES = sectionsd.cpp dmxapi.cpp debug.cpp dmx.cpp SIsections.cpp SIevents.cpp SIutils.cpp SIlanguage.cpp edvbstring.cpp freesatv2.cpp

@@ -96,10 +96,11 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
          ((pSession->source == DMX_SOURCE_DVR0) && swts)))
     return -1;
 
-
+#if 0
   printk("start dmx %p, sh %d, pid %d, t %d, pt %d\n", demux,
                pSession->session, dvbdmxfeed->pid, dvbdmxfeed->type,
                dvbdmxfeed->pes_type );
+#endif
 
   switch ( dvbdmxfeed->type )
   {
@@ -197,7 +198,7 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
 
   pSession->descramblerindex[pSession->num_pids]= pSession->descramblerForPid[dvbdmxfeed->pid];
 
-  printk ( "SlotHandle = %d\n", pSession->slots[pSession->num_pids] );
+  //printk ( "SlotHandle = %d\n", pSession->slots[pSession->num_pids] );
 
   if(pti_hal_slot_link_buffer ( pSession->session,
                              pSession->slots[pSession->num_pids],
@@ -275,7 +276,7 @@ int stpti_stop_feed ( struct dvb_demux_feed *dvbdmxfeed,
          ((pSession->source == DMX_SOURCE_DVR0) && swts)))
     return -1;
 
-  printk ( "stop sh %d, pid %d, pt %d\n", pSession->session, dvbdmxfeed->pid, dvbdmxfeed->pes_type);
+  //printk ( "stop sh %d, pid %d, pt %d\n", pSession->session, dvbdmxfeed->pid, dvbdmxfeed->pes_type);
   //printk ( "%s(): demux = %p, context = %p, sesison = %p, pid = %d, type = %d, pes_type = %d>", __FUNCTION__, dvbdmxfeed->demux, pContext, pSession, dvbdmxfeed->pid, dvbdmxfeed->type, dvbdmxfeed->pes_type );
 
   if (dvbdmxfeed->type == DMX_TYPE_SEC)
@@ -292,7 +293,7 @@ int stpti_stop_feed ( struct dvb_demux_feed *dvbdmxfeed,
     {
       pSession->references[vLoop]--;
 
-      printk("Reference = %d\n", pSession->references[vLoop]);
+      //printk("Reference = %d\n", pSession->references[vLoop]);
 
       haveFound = 1;
 

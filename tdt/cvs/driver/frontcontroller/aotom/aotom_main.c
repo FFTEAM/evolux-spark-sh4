@@ -608,8 +608,8 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		printk("uStandByKey = %d\n", uStandByKey);
 		#endif
 		YWPANEL_FP_ControlTimer(true);
-		YWPANEL_FP_SetCpuStatus(0x02);
-
+		YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_STANDBY);
+		res = 0;
 #endif
 	   break;
 	}
