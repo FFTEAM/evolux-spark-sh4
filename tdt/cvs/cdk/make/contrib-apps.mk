@@ -1020,7 +1020,7 @@ $(DEPDIR)/opkg.do_prepare: @DEPENDS_opkg@
 $(DEPDIR)/opkg.do_compile: bootstrap opkg.do_prepare 
 	cd @DIR_opkg@ && \
 		$(BUILDENV) \
-		./configure \
+		./autogen.sh \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
