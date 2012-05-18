@@ -4657,29 +4657,33 @@ static void *insertEventsfromFile(void *)
 
 						while (event) {
 
-							SIevent e(onid,tsid,sid,xmlGetNumericAttribute(event, "id", 16));
+							SIevent e(onid,tsid,sid,xmlGetNumericAttribute(event, "id", 32));
 
 							node = event->xmlChildrenNode;
-
-							while (xmlGetNextOccurence(node, "name") != NULL) {
+							
+							while ((node = xmlGetNextOccurence(node, "name")) != NULL) {
 								e.setName(	std::string(UTF8_to_Latin1(xmlGetAttribute(node, "lang"))),
 										std::string(xmlGetAttribute(node, "string")));
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "text") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "text")) != NULL) {
 								e.setText(	std::string(UTF8_to_Latin1(xmlGetAttribute(node, "lang"))),
 										std::string(xmlGetAttribute(node, "string")));
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "item") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "item")) != NULL) {
 								e.item = std::string(xmlGetAttribute(node, "string"));
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "item_description") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "item_description")) != NULL) {
 								e.itemDescription = std::string(xmlGetAttribute(node, "string"));
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "extended_text") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "extended_text")) != NULL) {
 								e.appendExtendedText(	std::string(UTF8_to_Latin1(xmlGetAttribute(node, "lang"))),
 											std::string(xmlGetAttribute(node, "string")));
 								node = node->xmlNextNode;
@@ -4705,14 +4709,16 @@ static void *insertEventsfromFile(void *)
 								node = node->xmlNextNode;
 							}
 							*/
-							while (xmlGetNextOccurence(node, "time") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "time")) != NULL) {
 								e.times.insert(SItime(xmlGetNumericAttribute(node, "start_time", 10),
 										      xmlGetNumericAttribute(node, "duration", 10)));
 								node = node->xmlNextNode;
 							}
 
+							node = event->xmlChildrenNode;
 							unsigned int count = 0;
-							while (xmlGetNextOccurence(node, "content") != NULL) {
+							while ((node = xmlGetNextOccurence(node, "content")) != NULL) {
 								cclass[count] = xmlGetNumericAttribute(node, "class", 16);
 								cuser[count] = xmlGetNumericAttribute(node, "user", 16);
 								node = node->xmlNextNode;
@@ -4723,7 +4729,8 @@ static void *insertEventsfromFile(void *)
 							e.contentClassification = std::string(cclass, count);
 							e.userClassification = std::string(cuser, count);
 
-							while (xmlGetNextOccurence(node, "component") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "component")) != NULL) {
 								SIcomponent c;
 								c.streamContent = xmlGetNumericAttribute(node, "stream_content", 16);
 								c.componentType = xmlGetNumericAttribute(node, "type", 16);
@@ -4732,11 +4739,13 @@ static void *insertEventsfromFile(void *)
 								e.components.insert(c);
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "parental_rating") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "parental_rating")) != NULL) {
 								e.ratings.insert(SIparentalRating(std::string(UTF8_to_Latin1(xmlGetAttribute(node, "country"))), (unsigned char) xmlGetNumericAttribute(node, "rating", 10)));
 								node = node->xmlNextNode;
 							}
-							while (xmlGetNextOccurence(node, "linkage") != NULL) {
+							node = event->xmlChildrenNode;
+							while ((node = xmlGetNextOccurence(node, "linkage")) != NULL) {
 								SIlinkage l;
 								l.linkageType = xmlGetNumericAttribute(node, "type", 16);
 								l.transportStreamId = xmlGetNumericAttribute(node, "transport_stream_id", 16);

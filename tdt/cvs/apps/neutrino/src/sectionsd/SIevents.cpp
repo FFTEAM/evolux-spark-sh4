@@ -73,7 +73,7 @@ SIevent::SIevent(const struct eit_event *e)
 }
 
 SIevent::SIevent(const t_original_network_id _original_network_id, const t_transport_stream_id _transport_stream_id, const t_service_id _service_id,
-		 const unsigned short _event_id)
+		 const unsigned int _event_id)
 {
 	original_network_id = _original_network_id;
 	transport_stream_id = _transport_stream_id;

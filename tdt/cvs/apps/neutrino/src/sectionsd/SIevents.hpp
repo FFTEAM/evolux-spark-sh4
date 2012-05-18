@@ -346,7 +346,7 @@ public:
 	SIevent(const struct eit_event *);
 	// Std-Copy
 	SIevent(const SIevent &);
-	SIevent(const t_original_network_id, const t_transport_stream_id, const t_service_id, const unsigned short);
+	SIevent(const t_original_network_id, const t_transport_stream_id, const t_service_id, const unsigned int);
 	SIevent(void) {
 		service_id = 0;
 		original_network_id = 0;
@@ -359,7 +359,7 @@ public:
 //      dauer=0;
 //      startzeit=0;
 	}
-	unsigned short eventID;
+	unsigned int eventID;
 	// Name aus dem Short-Event-Descriptor
 	std::string getName() const;
 	void setName(const std::string &lang, const std::string &name);
