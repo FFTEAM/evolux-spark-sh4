@@ -1516,3 +1516,4 @@ lcdmenu.displaymode Режим
 lcdmenu.standby Standby
 menu.numbers_as_icons Пиконы в меню 
 fontsize.percent Масштаб шрифта (%)
+menu.infobar_cn Инфопанель по событию
