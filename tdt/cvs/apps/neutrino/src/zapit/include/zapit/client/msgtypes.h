@@ -145,7 +145,11 @@ class CZapitMessages
                         CMD_GET_VOLUME          = 104,
                         CMD_GET_AUDIO_MODE      = 105,
 			CMD_SET_VOLUME_PERCENT		    = 106,
-                        CMD_GET_VOLUME_PERCENT              = 107
+                        CMD_GET_VOLUME_PERCENT              = 107,
+			CMD_GET_ASPECTRATIO		    = 108,
+			CMD_SET_ASPECTRATIO		    = 109,
+			CMD_GET_MODE43			    = 110,
+			CMD_SET_MODE43			    = 111
 
 		};
 
