@@ -866,6 +866,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         g_settings.epg_max_events       = configfile.getString("epg_max_events", "30000");
         g_settings.epg_dir              = configfile.getString("epg_dir", "/media/hdd/epg");
         g_settings.epg_enable_freesat   = configfile.getBool("epg_enable_freesat", false);
+        g_settings.epg_enable_viasat   = configfile.getBool("epg_enable_viasat", false);
 	g_settings.epgplus_viewmode	= configfile.getInt32("epgplus_viewmode", -1);
 	g_settings.epgplus_swapmode	= configfile.getInt32("epgplus_swapmode", -1);
         // NTP-Server for sectionsd
@@ -1429,6 +1430,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
         configfile.setString("epg_max_events"           ,g_settings.epg_max_events );
         configfile.setString("epg_dir"                  ,g_settings.epg_dir);
         configfile.setBool("epg_enable_freesat"		,g_settings.epg_enable_freesat);
+        configfile.setBool("epg_enable_viasat"		,g_settings.epg_enable_viasat);
         configfile.setInt32("epgplus_viewmode"		,g_settings.epgplus_viewmode);
         configfile.setInt32("epgplus_swapmode"		,g_settings.epgplus_swapmode);
 
@@ -2449,7 +2451,10 @@ int CNeutrinoApp::run(int argc, char **argv)
 	audioSetupNotifier        = new CAudioSetupNotifier;
 
 #ifndef DISABLE_SECTIONSD
-	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) g_settings.epg_enable_freesat);
+	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *)
+		((g_settings.epg_enable_freesat ? 0x01 : 0x00) |
+		(g_settings.epg_enable_viasat ? 0x02 : 0x00))
+	);
 #endif
 
 

@@ -294,7 +294,7 @@ int DMX::getSection(char *buf, const unsigned timeoutInMSeconds, int &timeouts)
 	unsigned short current_tsid = 0;
 
 	/* filter == 0 && maks == 0 => EIT dummy filter to slow down EIT thread startup */
-	if (pID == 0x12 && filters[filter_index].filter == 0 && filters[filter_index].mask == 0)
+	if ((pID == 0x12 || pID == 0x39) && filters[filter_index].filter == 0 && filters[filter_index].mask == 0)
 	{
 		//dprintf("dmx: dummy filter, sleeping for %d ms\n", timeoutInMSeconds);
 		usleep(timeoutInMSeconds * 1000);
@@ -688,8 +688,8 @@ int DMX::change(const int new_filter_index, const int new_current_service)
 		   does nothing in that case), so we can just continue here. */
 	}
 
-	if (1 /*sections_debug*/) { // friendly debug output...
-		if(pID==0x12 && filters[0].filter != 0x4e) { // Only EIT
+	if (sections_debug) { // friendly debug output...
+		if((pID==0x12 || pID==0x39) && filters[0].filter != 0x4e) { // Only EIT
 			printdate_ms(stderr);
 			fprintf(stderr, "changeDMX [EIT]-> %d (0x%x/0x%x) %s (%ld seconds)\n",
 				new_filter_index, filters[new_filter_index].filter,

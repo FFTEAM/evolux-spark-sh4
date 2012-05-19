@@ -128,6 +128,7 @@ struct SNeutrinoSettings
 	std::string epg_extendedcache;
 	std::string epg_dir;
 	int epg_enable_freesat;
+	int epg_enable_viasat;
 	std::string network_ntpserver;
 	std::string network_ntprefresh;
 	int network_ntpenable;

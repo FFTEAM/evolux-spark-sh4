@@ -675,15 +675,16 @@ struct parseSIsectionEIT : public std::unary_function<SIsectionEIT, void>
 class SIsectionsEIT : public std::set <SIsectionEIT, std::less<SIsectionEIT> >
 {
 public:
-	int readSections(void) {
+	int readSections(int pid) {
 		SIsections sections;
-		int rc=sections.readSections(0x12, 0x4e, 0xff);
+		int rc=sections.readSections(pid, 0x4e, 0xff);
 
 		for (SIsections::iterator k=sections.begin(); k!=sections.end(); k++)
 			insert(*k);
 
 		return rc;
 	}
+	int readSections(int pid = 0x12);
 };
 
 #ifdef ENABLE_PPT
@@ -708,15 +709,16 @@ public:
 class SIsectionsEITschedule : public std::set <SIsectionEIT, std::less<SIsectionEIT> >
 {
 public:
-	int readSections(void) {
+	int readSections(int pid) {
 		SIsections sections;
-		int rc=sections.readSections(0x12, 0x50, 0xf0);
+		int rc=sections.readSections(pid, 0x50, 0xf0);
 
 		for (SIsections::iterator k=sections.begin(); k!=sections.end(); k++)
 			insert(*k);
 
 		return rc;
 	}
+	int readSections(int pid = 0x12);
 };
 #endif
 

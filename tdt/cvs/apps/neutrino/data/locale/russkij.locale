@@ -707,6 +707,11 @@ miscsettings.epg_old_events Удалить после, часов
 miscsettings.epg_old_events_hint1 Удаление устаревших событий
 miscsettings.epg_old_events_hint2 Установка в часах
 miscsettings.epg_save Сохранение EPG
+miscsettings.epg.freesat Freesat EPG
+miscsettings.epg.freesat.enable Enable Freesat EPG
+miscsettings.epg.viasat VIASAT EPG
+miscsettings.epg.viasat.enable Enable VIASAT EPG
+miscsettings.restart The change will take effect on restart.
 miscsettings.fb_destination Эксперт! Консоль загрузки
 miscsettings.general Основное
 miscsettings.head Прочие настройки

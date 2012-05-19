@@ -1693,6 +1693,7 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
         miscSettings.addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_EPG_DIR, true, g_settings.epg_dir, this, "epgdir"));
 #if 1 //ifdef ENABLE_FREESATEPG
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_EPG_FREESAT_ENABLE, &g_settings.epg_enable_freesat, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, sectionsdConfigNotifier));
+	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_EPG_VIASAT_ENABLE, &g_settings.epg_enable_viasat, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, sectionsdConfigNotifier));
 #endif
 
 #if 0
