@@ -4798,7 +4798,7 @@ static void *insertEventsfromFile(void *)
 
 			xmlFreeDoc(index_parser);
 			printdate_ms(stdout);
-			printf("[sectionsd] Reading Information finished after %ld miliseconds (%d events)\n",
+			printf("[sectionsd] Reading Information finished after %ld milliseconds (%d events)\n",
 			       time_monotonic_ms()-now, ev_count);
 		}
 	}
@@ -6507,15 +6507,13 @@ static void *nitThread(void *)
 
 		waitForTimeset();
 
-		for (;;)
+		while (!sectionsd_stop)
 		{
-			while (!scanning) {
-				if(sectionsd_stop)
-					break;
+			if (!scanning) {
 				sleep(1);
+				continue;
 			}
-			if(sectionsd_stop)
-				break;
+
 			zeit = time_monotonic();
 
 			readLockMessaging();
@@ -6704,15 +6702,11 @@ static void *sdtThread(void *)
 	waitForTimeset();
 
 	while (!sectionsd_stop) {
-		while (!scanning) {
-			if(sectionsd_stop)
-				break;
+		if (!scanning) {
 			sleep(1);
+			continue;
 		}
 		zeit = time_monotonic();
-
-		if(sectionsd_stop)
-			break;
 
 		readLockMessaging();
 		if (messaging_zap_detected)
@@ -6997,10 +6991,9 @@ static void *timeThread(void *)
 
 	while(!sectionsd_stop)
 	{
-		while (!scanning || !reader_ready) {
-			if(sectionsd_stop)
-				break;
+		if (!scanning || !reader_ready) {
 			sleep(1);
+			continue;
 		}
 		if (bTimeCorrect == true) {		// sectionsd started with parameter "-tc"
 			if (first_time == true) {	// only do this once!
@@ -7219,13 +7212,10 @@ static void *fseitThread(void *)
 	dmxFSEIT.lastChanged = time_monotonic();
 
 	while(!sectionsd_stop) {
-		while (!scanning) {
-			if(sectionsd_stop)
-				break;
+		if (!scanning) {
 			sleep(1);
+			continue;
 		}
-		if(sectionsd_stop)
-			break;
 		time_t zeit = time_monotonic();
 
 		rc = dmxFSEIT.getSection(static_buf, timeoutInMSeconds, timeoutsDMX);
@@ -7508,13 +7498,10 @@ static void *eitThread(void *data)
 	dmx->lastChanged = time_monotonic();
 
 	while (!sectionsd_stop) {
-		while (!scanning) {
-			if(sectionsd_stop)
-				break;
+		if (!scanning) {
 			sleep(1);
+			continue;
 		}
-		if(sectionsd_stop)
-			break;
 		time_t zeit = time_monotonic();
 
 		rc = dmx->getSection(static_buf, timeoutInMSeconds, timeoutsDMX);
@@ -7840,13 +7827,10 @@ static void *cnThread(void *)
 
 	while(!sectionsd_stop)
 	{
-		while (!scanning) {
+		if (!scanning) {
 			sleep(1);
-			if(sectionsd_stop)
-				break;
+			continue;
 		}
-		if(sectionsd_stop)
-			break;
 
 		rc = dmxCN.getSection(static_buf, timeoutInMSeconds, timeoutsDMX);
 		time_t zeit = time_monotonic();
