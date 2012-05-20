@@ -2448,3 +2448,17 @@ $(DEPDIR)/pilimaging: bootstrap python @DEPENDS_pilimaging@
 	@touch $@
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+#
+# OpenThreads
+#
+
+$(DEPDIR)/openthreads.do_compile: @DEPENDS_openthreads@
+	@PREPARE_openthreads@
+	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix)
+	touch $@
+
+$(DEPDIR)/openthreads: $(DEPDIR)/openthreads.do_compile
+	@PREPARE_openthreads@
+	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix) install
+	touch $@
+

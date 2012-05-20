@@ -360,10 +360,12 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino/usr/local/bin
 	cp $(targetprefix)/usr/local/bin/neutrino $(prefix)/release_neutrino/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/pzapit $(prefix)/release_neutrino/usr/local/bin/
+	cp $(targetprefix)/usr/local/bin/mhwepg $(prefix)/release_neutrino/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/sectionsdcontrol $(prefix)/release_neutrino/usr/local/bin/
-	find $(prefix)/release_neutrino/usr/local/bin/ -name  neutrino -exec sh4-linux-strip --strip-unneeded {} \;
-	find $(prefix)/release_neutrino/usr/local/bin/ -name  pzapit -exec sh4-linux-strip --strip-unneeded {} \;
-	find $(prefix)/release_neutrino/usr/local/bin/ -name  sectionsdcontrol -exec sh4-linux-strip --strip-unneeded {} \;
+	sh4-linux-strip --strip-unneeded $(prefix)/release_neutrino/usr/local/bin/*
+#	find $(prefix)/release_neutrino/usr/local/bin/ -name  neutrino -exec sh4-linux-strip --strip-unneeded {} \;
+#	find $(prefix)/release_neutrino/usr/local/bin/ -name  pzapit -exec sh4-linux-strip --strip-unneeded {} \;
+#	find $(prefix)/release_neutrino/usr/local/bin/ -name  sectionsdcontrol -exec sh4-linux-strip --strip-unneeded {} \;
 
 #######################################################################################
 
@@ -417,6 +419,8 @@ endif
 	rm -rf $(prefix)/release_neutrino/usr/lib/engines
 	rm -rf $(prefix)/release_neutrino/usr/lib/enigma2
 	rm -rf $(prefix)/release_neutrino/usr/lib/gconv
+	mkdir -m 0755 $(prefix)/release_neutrino/usr/lib/gconv
+	cp -p $(targetprefix)/usr/lib/gconv/gconv-modules $(targetprefix)/usr/lib/gconv/ISO8859-1.so $(prefix)/release_neutrino/usr/lib/gconv
 	rm -rf $(prefix)/release_neutrino/usr/lib/libxslt-plugins
 	rm -rf $(prefix)/release_neutrino/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_neutrino/usr/lib/sigc++-1.2

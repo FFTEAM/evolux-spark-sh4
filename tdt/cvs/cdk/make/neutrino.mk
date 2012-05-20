@@ -13,7 +13,7 @@ $(targetprefix)/var/etc/.version:
 #NORMAL
 #
 
-$(appsdir)/neutrino/config.status: bootstrap freetype libpng libid3tag openssl curl libmad libboost libgif jpeg sdparm nfs-utils graphlcd
+$(appsdir)/neutrino/config.status: bootstrap freetype libpng libid3tag openssl curl libmad libboost libgif jpeg sdparm nfs-utils graphlcd # openthreads libdvbsi++
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -27,6 +27,7 @@ $(appsdir)/neutrino/config.status: bootstrap freetype libpng libid3tag openssl c
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
+			--enable-freesatepg \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include"
@@ -44,6 +45,7 @@ $(DEPDIR)/neutrino: neutrino.do_prepare neutrino.do_compile
 	$(target)-strip $(targetprefix)/usr/local/bin/neutrino
 	$(target)-strip $(targetprefix)/usr/local/bin/pzapit
 	$(target)-strip $(targetprefix)/usr/local/bin/sectionsdcontrol
+	$(target)-strip $(targetprefix)/usr/local/bin/mhwepg
 	touch $@
 
 neutrino-clean neutrino-distclean:
