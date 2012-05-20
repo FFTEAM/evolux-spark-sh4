@@ -852,6 +852,8 @@ std::string  CNeutrinoYParser::func_get_timer_list(CyhookHandler *hh, std::strin
 			case CTimerd::TIMER_EXEC_PLUGIN :
 				sAddData = std::string(timer->pluginName);
 				break;
+			case CTimerd::TIMER_BATCHEPG :
+				break;
 
 			default:{}
 		}

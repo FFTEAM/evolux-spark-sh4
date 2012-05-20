@@ -1908,6 +1908,10 @@ void CControlAPI::doNewTimer(CyhookHandler *hh)
 		strncpy(msg, hh->ParamList["PluginName"].c_str(),EXEC_PLUGIN_NAME_MAXLEN-1);
 		data=msg;
 	}
+	else if(type==CTimerd::TIMER_BATCHEPG)
+	{
+		data=NULL;
+	}
 	// update or add timer
 	if(hh->ParamList["update"]=="1")
 	{

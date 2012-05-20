@@ -390,6 +390,9 @@ std::string CNeutrinoAPI::timerEventType2Str(CTimerd::CTimerEventTypes type)
 	case CTimerd::TIMER_SLEEPTIMER:
 		result = "Sleeptimer";
 		break;
+	case CTimerd::TIMER_BATCHEPG:
+		result = "BatchEPG";
+		break;
 	default:
 		result = "Unknown";
 		break;
