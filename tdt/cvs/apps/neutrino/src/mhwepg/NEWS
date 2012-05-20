@@ -1,0 +1,29 @@
+New in release 0.4.3
+--------------------
+
+- Added the -t option to set manually the local time offset
+- Increased the maximum number of channels from 150 to 180 (for Sky Italia, which now sends EPG for 150 channels)
+- Longer titles for programs
+- Increased input buffer size
+
+New in release 0.4.2
+--------------------
+
+- Fixed a bug relative to the DST time change
+- Improved incorrect data rejection (especially for Sky Italia)
+- Updated the Digital+ EPG channel frequency
+- Changed "Canal Satelite Digital" into "Digital+"
+- Replaced equiv.csd by equiv.digital
+- Changed Telepiù into Sky Italia
+- Updated the Sky Italia EPG channel frequency
+- Replaced equiv.telepiu by equiv.skyitalia
+- Increased the maximum number of channels from 100 to 150 (for Sky Italia, which now sends EPG for 104 channels)
+- Added the -l option to send the channels list to stderr
+- Added the list of next diffusions (available on french channels only)
+
+
+New in release 0.4.1
+--------------------
+
+- mhwepg now exits after a time-out if it can't receive the EPG data
+- Updated the equiv.csn file

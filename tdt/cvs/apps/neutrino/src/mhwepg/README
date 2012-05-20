@@ -1,0 +1,80 @@
+INTRODUCTION
+
+mhwepg is a program to extract proprietary EPG Data sent by the Canal+ group (Mediahighway receivers)
+and parse it into a VDR compatible format.
+It can be used to get a 7-days EPG for Canal Satellite France, Cyfra+,
+Canal Satellite Digitaal, and Sky Italia (Please let me know
+if you find other sources, such as cable TV).
+
+You can use mhwepg to add EPG data to the VDR epg.data file. You can also transform
+the file into HTML with the epg2html.pl script shipped with VDR.
+
+REQUIREMENTS
+
+You need a DVB card supported by the Linux DVB driver (http://www.linuxtv.org)
+and the current DVB driver (API 3).
+
+INSTALLATION
+
+To compile the file :
+
+make
+
+USAGE
+
+With VDR, (n)tuxzap, szap or dvbtune, tune to the frequency of the EPG
+you want to retrieve :
+
+Canal+/CanalSatellite France : Astra 19.2E / 12363 V / 27500
+Canal Digitaal               : Astra 19.2E / 12515 H / 22000
+Sky Italia                   : Hot Bird 13E / 11881 V / 27500
+Cyfra+                       : Hot Bird 13E / 10719 V / 27500
+
+You'll find in the archive a channels.conf file that
+contains the parameters for these four channels.
+
+Since some channels are broadcast on several transponders, you can use mhwepg to get EPG data for them, even if you are not receiving them in a MediaHighWay bouquet.
+That's why you can define equivalences between two channels IDs, simply add a list of the channels in a file with the following format :
+<MediaHighWay_channel_id> <other_channel_id> <comments>
+
+For example, if you are receiving RTL 9 on Hot Bird, you can extract the 7 day EPG data for this channel send on Astra and apply it to the HorBird version of the channel.
+The entry in the equivalence file would look like this:
+S19.2E-1-1080-8805 S13E-318-15900-200 RTL9
+
+You'll find other examples in the archive.
+Note : Only the file for CanalSatellite France is actively maintained, others
+are probably obsolete. Please send me updated files if you have them.
+
+Note that the VDR channels.conf file must contain correct SID, NID and TID parameters.
+
+The program can take several arguments, all optional :
+   -a <adapter number>  : Number of the DVB adapter (default : 0)
+   -d <demux number>    : Number of the DVB demux (default : 0)
+   -s <source>          : Name of the source, as defined by the "sources.conf' file of VDR.
+                          If no source is specified, only the SID will be written to the output file.
+   -e <file>            : Name of the file containing the channels equivalences.
+   -t number            : local time offset (in seconds)\n"
+   -o <output file>     : Output file (default: stdout)
+   -l                   : Send the channels list to stderr
+   -h	                : Help
+
+Exemple for Canal Satellite France :
+./mhwepg -s S19.2E -e equiv.csn -o /video/epg.data
+
+To convert the epg.data file to HTML :
+epg2html <epg.data
+
+You may also use SVDRP to put the new epg data into the VDR epg.data file.
+
+TODO
+
+I have found a new stream carrying EPG data (PID = 221). At this time, I have not understood its structure.
+
+CONTRIBUTORS
+
+Thanks to Graham Croxford,  Patrick Gueneau and Lionel Bergeret for their contributions.
+
+BUG REPORTS
+
+Please send reports and suggestions to <mhwepg@repetto.org> .
+
