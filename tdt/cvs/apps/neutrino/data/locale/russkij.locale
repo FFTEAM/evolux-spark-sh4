@@ -1522,3 +1522,16 @@ lcdmenu.standby Standby
 menu.numbers_as_icons Пиконы в меню 
 fontsize.percent Масштаб шрифта (%)
 menu.infobar_cn Инфопанель по событию
+miscsettings.epg.batch.head EPG Update
+miscsettings.epg.batch.settings EPG Update
+timerlist.batchepg EPG Update
+timerlist.type.batchepg Update EPG
+batchepg.epg.standard Standard
+batchepg.epg.off None
+batchepg.save Save settings
+batchepg.refresh Start update
+batchepg.refreshall Update all
+batchepg.settings Settings
+batchepg.hint EPG data is being updated. Please wait. Channel:
+batchepg.shutdown EPG data is being processed.
+batchepg.run_at_shutdown Update before shutdown

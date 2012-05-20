@@ -576,6 +576,8 @@ const char *locale_real_names[] = {
 	"miscsettings.epg.freesat.enable",
 	"miscsettings.epg.viasat",
 	"miscsettings.epg.viasat.enable",
+	"miscsettings.epg.batch.head",
+	"miscsettings.epg.batch.settings",
 	"miscsettings.restart",
 	"motorcontrol.head",
 	"motorcontrol.user_menu",
@@ -1069,6 +1071,7 @@ const char *locale_real_names[] = {
 	"timerlist.alarmtime",
 	"timerlist.apids",
 	"timerlist.apids_dflt",
+	"timerlist.batchepg",
 	"timerlist.bouquetselect",
 	"timerlist.channel",
 	"timerlist.channelselect",
@@ -1122,6 +1125,7 @@ const char *locale_real_names[] = {
 	"timerlist.type.standby",
 	"timerlist.type.unknown",
 	"timerlist.type.zapto",
+	"timerlist.type.batchepg",
 	"timerlist.weekdays",
 	"timerlist.weekdays.hint_1",
 	"timerlist.weekdays.hint_2",
@@ -1516,6 +1520,15 @@ const char *locale_real_names[] = {
 	"adzap.switchback",
 	"adzap.commit",
 	"menu.numbers_as_icons",
-	"menu.infobar_cn"
+	"menu.infobar_cn",
+	"batchepg.epg.standard",
+	"batchepg.epg.off",
+	"batchepg.save",
+	"batchepg.refresh",
+	"batchepg.refreshall",
+	"batchepg.settings",
+	"batchepg.hint",
+	"batchepg.shutdown",
+	"batchepg.run_at_shutdown"
 };
 #endif

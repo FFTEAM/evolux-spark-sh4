@@ -1516,3 +1516,16 @@ lcdmenu.standby Standby
 menu.numbers_as_icons Menü-Zahlen als Icons
 fontsize.percent Größenanpassung (%)
 menu.infobar_cn Infobar bei Sendungsbeginn
+miscsettings.epg.batch.head EPG-Aktualisierung
+miscsettings.epg.batch.settings EPG-Aktualisierung
+timerlist.batchepg EPG-Aktualisierung
+timerlist.type.batchepg EPG aktualisieren
+batchepg.epg.standard Standard
+batchepg.epg.off Aus
+batchepg.save Einstellungen speichern
+batchepg.refresh Aktualisierung starten
+batchepg.refreshall Alle aktualisieren
+batchepg.settings Einstellungen
+batchepg.hint EPG-Informationen werden aktualisiert. Bitte warten. Kanal:
+batchepg.shutdown EPG-Informationen werden verarbeitet.
+batchepg.run_at_shutdown Aktualisierung vor Ausschalten
