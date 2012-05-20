@@ -1103,7 +1103,10 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 								*data = (unsigned) p;
 								dont_delete_p = true;
 								break;
-
+							case CTimerdClient::EVT_BATCHEPG :
+								*msg = NeutrinoMessages::EVT_BATCHEPG;
+								*data = 0;
+								break;
 							default :
 								printf("[neutrino] event INITID_TIMERD - unknown eventID 0x%x\n",  emsg.eventID );
 

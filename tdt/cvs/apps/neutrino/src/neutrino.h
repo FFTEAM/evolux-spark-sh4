@@ -185,6 +185,7 @@ class CNeutrinoApp : public CMenuTarget, CChangeObserver
                 CTimerList                      *Timerlist;
 		CAdZapMenu			*AdZapChanger;
 		CMenuWidget_Network		*networkSettings;
+		CMenuTarget			*batchEPGSettings;
 
 		TUNERRESET_Menu *TunerMenu;
 

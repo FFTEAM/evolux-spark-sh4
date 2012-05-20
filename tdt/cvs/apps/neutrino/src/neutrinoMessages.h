@@ -147,7 +147,9 @@ struct NeutrinoMessages {
 		EVT_ZAP_GOTPIDS                          = CRCInput::RC_WithData + 21, /* data: (t_channel_id *) */
 
 		/* neutrino */
-		EVT_RECORDING_ENDED                      = CRCInput::RC_WithData + 22
+		EVT_RECORDING_ENDED                      = CRCInput::RC_WithData + 22,
+
+		EVT_BATCHEPG				 = CRCInput::RC_WithData + 23
 	};
 	enum
 	{

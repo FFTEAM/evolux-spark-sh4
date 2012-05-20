@@ -1420,3 +1420,13 @@ void CTimerEvent_ExecPlugin::saveToConfig(CConfigFile *config)
 
 }
 //=============================================================
+// BatchEPG Event
+//=============================================================
+void CTimerEvent_BatchEPG::fireEvent()
+{
+	dprintf("BatchEPG Timer fired\n");
+	//event in neutrinos remoteq. schreiben
+	CTimerManager::getInstance()->getEventServer()->sendEvent(CTimerdClient::EVT_BATCHEPG,
+								  CEventServer::INITID_TIMERD);
+}
+//=============================================================

@@ -225,6 +225,7 @@ bool timerd_parse_command(CBasicMessage::Header &rmsg, int connfd)
 						case CTimerd::TIMER_SLEEPTIMER:
 						case CTimerd::TIMER_EXEC_PLUGIN:
 						case CTimerd::TIMER_IMMEDIATE_RECORD:
+						case CTimerd::TIMER_BATCHEPG:
 							break;
 						case CTimerd::TIMER_RECORD:
 						{
@@ -395,6 +396,15 @@ bool timerd_parse_command(CBasicMessage::Header &rmsg, int connfd)
 									   msgAddTimer.repeatCount);
 					rspAddTimer.eventID = CTimerManager::getInstance()->addEvent(event);
 					break;
+				case CTimerd::TIMER_BATCHEPG :
+					event = new CTimerEvent_BatchEPG(
+						msgAddTimer.announceTime,
+						msgAddTimer.alarmTime,
+						msgAddTimer.eventRepeat,
+						msgAddTimer.repeatCount);
+					rspAddTimer.eventID = CTimerManager::getInstance()->addEvent(event);
+					break;
+
 				default:
 					printf("[timerd] Unknown TimerType\n");
 			}

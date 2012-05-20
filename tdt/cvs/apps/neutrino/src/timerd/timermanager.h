@@ -206,6 +206,16 @@ class CTimerEvent_ExecPlugin : public CTimerEvent
 	virtual void saveToConfig(CConfigFile *config);
 };
 
+class CTimerEvent_BatchEPG : public CTimerEvent
+{
+ public:
+	CTimerEvent_BatchEPG( time_t announceTime, time_t alarmTime, CTimerd::CTimerEventRepeat evrepeat = CTimerd::TIMERREPEAT_ONCE, uint32_t repeatcount = 1) :
+		CTimerEvent(CTimerd::TIMER_BATCHEPG, announceTime, alarmTime, (time_t) 0, evrepeat, repeatcount ){};
+	CTimerEvent_BatchEPG(CConfigFile *config, int iId):
+		CTimerEvent(CTimerd::TIMER_BATCHEPG, config, iId){};
+	virtual void fireEvent();
+};
+
 class CTimerManager
 {
 	//singleton

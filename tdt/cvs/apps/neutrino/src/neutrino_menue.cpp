@@ -120,6 +120,7 @@
 #include "gui/filebrowser.h"
 #include "gui/scale.h"
 #include "gui/upnpbrowser.h"
+#include "gui/batchepg.h"
 
 #include <system/setting_helpers.h>
 #include <system/settings.h>
@@ -1691,10 +1692,10 @@ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings)
         CStringInput * miscSettings_epg_max_events = new CStringInput(LOCALE_MISCSETTINGS_EPG_MAX_EVENTS, &g_settings.epg_max_events, 5,LOCALE_MISCSETTINGS_EPG_MAX_EVENTS_HINT1, LOCALE_MISCSETTINGS_EPG_MAX_EVENTS_HINT2 , "0123456789 ", sectionsdConfigNotifier);
         miscSettings.addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_EPG_MAX_EVENTS, true, g_settings.epg_max_events, miscSettings_epg_max_events));
         miscSettings.addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_EPG_DIR, true, g_settings.epg_dir, this, "epgdir"));
-#if 1 //ifdef ENABLE_FREESATEPG
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_EPG_FREESAT_ENABLE, &g_settings.epg_enable_freesat, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, sectionsdConfigNotifier));
 	miscSettings.addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_EPG_VIASAT_ENABLE, &g_settings.epg_enable_viasat, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, sectionsdConfigNotifier));
-#endif
+	batchEPGSettings = new CBatchEPG_Menu;
+	miscSettings.addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_EPG_BATCH_SETTINGS ,true, NULL, batchEPGSettings));
 
 #if 0
 	miscSettings.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_MISCSETTINGS_DRIVER_BOOT));

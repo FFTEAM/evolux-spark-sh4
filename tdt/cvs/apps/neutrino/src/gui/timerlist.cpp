@@ -91,7 +91,7 @@ private:
 	time_t* stopTime;
 public:
 	CTimerListNewNotifier( int* Type, time_t* time,CMenuItem* a1, CMenuItem* a2,
-			       CMenuItem* a3, CMenuItem* a4, CMenuItem* a5, CMenuItem* a6,char* d)
+			       CMenuItem* a3, CMenuItem* a4, CMenuItem* a5, CMenuItem* a6, char* d)
 	{
 		m1 = a1;
 		m2 = a2;
@@ -813,6 +813,7 @@ const char * CTimerList::convertTimerType2String(const CTimerd::CTimerEventTypes
 		case CTimerd::TIMER_REMIND      : return g_Locale->getText(LOCALE_TIMERLIST_TYPE_REMIND     );
 		case CTimerd::TIMER_SLEEPTIMER  : return g_Locale->getText(LOCALE_TIMERLIST_TYPE_SLEEPTIMER );
 		case CTimerd::TIMER_EXEC_PLUGIN : return g_Locale->getText(LOCALE_TIMERLIST_TYPE_EXECPLUGIN );
+		case CTimerd::TIMER_BATCHEPG    : return g_Locale->getText(LOCALE_TIMERLIST_TYPE_BATCHEPG );
 		default                         : return g_Locale->getText(LOCALE_TIMERLIST_TYPE_UNKNOWN    );
 	}
 }
@@ -890,9 +891,9 @@ const CMenuOptionChooser::keyval TIMERLIST_STANDBY_OPTIONS[TIMERLIST_STANDBY_OPT
 };
 
 #if 1
-#define TIMERLIST_TYPE_OPTION_COUNT 7
-#else
 #define TIMERLIST_TYPE_OPTION_COUNT 8
+#else
+#define TIMERLIST_TYPE_OPTION_COUNT 9
 #endif
 const CMenuOptionChooser::keyval TIMERLIST_TYPE_OPTIONS[TIMERLIST_TYPE_OPTION_COUNT] =
 {
@@ -905,7 +906,8 @@ const CMenuOptionChooser::keyval TIMERLIST_TYPE_OPTIONS[TIMERLIST_TYPE_OPTION_CO
 	{ CTimerd::TIMER_RECORD     , LOCALE_TIMERLIST_TYPE_RECORD      },
 	{ CTimerd::TIMER_SLEEPTIMER , LOCALE_TIMERLIST_TYPE_SLEEPTIMER  },
 	{ CTimerd::TIMER_REMIND     , LOCALE_TIMERLIST_TYPE_REMIND      },
-	{ CTimerd::TIMER_EXEC_PLUGIN, LOCALE_TIMERLIST_TYPE_EXECPLUGIN  }
+	{ CTimerd::TIMER_EXEC_PLUGIN, LOCALE_TIMERLIST_TYPE_EXECPLUGIN  },
+	{ CTimerd::TIMER_BATCHEPG   , LOCALE_TIMERLIST_TYPE_BATCHEPG  }
 };
 
 #define MESSAGEBOX_NO_YES_OPTION_COUNT 2
@@ -1090,6 +1092,7 @@ int CTimerList::newTimer()
 	strcpy(timerNew.pluginName,"---");
 	CPluginChooser plugin_chooser(LOCALE_TIMERLIST_PLUGIN, CPlugins::P_TYPE_SCRIPT | CPlugins::P_TYPE_TOOL, timerNew.pluginName);
 	CMenuForwarder *m10 = new CMenuForwarder(LOCALE_TIMERLIST_PLUGIN, false, timerNew.pluginName, &plugin_chooser);
+	CMenuForwarder *m11 = new CMenuForwarder(LOCALE_TIMERLIST_BATCHEPG, false, timerNew.pluginName, &plugin_chooser);
 
 
 	CTimerListNewNotifier notifier2((int *)&timerNew.eventType,
@@ -1110,6 +1113,7 @@ int CTimerList::newTimer()
 	timerSettings.addItem( m8);
 	timerSettings.addItem( m9);
 	timerSettings.addItem( m10);
+	timerSettings.addItem( m11);
 
 	int ret=timerSettings.exec(this,"");
 
