@@ -1515,16 +1515,16 @@ lcdmenu.standby Standby
 menu.numbers_as_icons Tall som menyikoner
 fontsize.percent Skriftstørrelse Skalering (%)
 menu.infobar_cn Infobar når showet starter
-miscsettings.epg.batch.head EPG Update
-miscsettings.epg.batch.settings EPG Update
-timerlist.batchepg EPG Update
-timerlist.type.batchepg Update EPG
+miscsettings.epg.batch.head EPG oppdatering
+miscsettings.epg.batch.settings EPG oppdatering
+timerlist.batchepg EPG oppdatering
+timerlist.type.batchepg Oppdater EPG
 batchepg.epg.standard Standard
-batchepg.epg.off None
-batchepg.save Save settings
-batchepg.refresh Start update
-batchepg.refreshall Update all
-batchepg.settings Settings
-batchepg.hint EPG data is being updated. Please wait. Channel:
-batchepg.shutdown EPG data is being processed.
-batchepg.run_at_shutdown Update before shutdown
+batchepg.epg.off Ingen
+batchepg.save Lagre innstillinger
+batchepg.refresh Start oppdateringer
+batchepg.refreshall Oppdater alle
+batchepg.settings Innstillinger
+batchepg.hint EPG data blir oppdatert. Vennligst vent. Kanal:
+batchepg.shutdown EPG data blir lest.
+batchepg.run_at_shutdown Oppdater før restart
