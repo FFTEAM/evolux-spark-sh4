@@ -124,7 +124,7 @@ bool CBatchEPG_Menu::Run(int i)
 			std::string cmd = "exec /usr/local/bin/mhwepg -" + mhwVersion
 				+ " -n " + string(tmpdir) + " >" + string(tmpfile) + " 2>&1";
 			fprintf(stderr, "executing %s\n", cmd.c_str());
-			if (AbortableSystem(cmd.c_str())){
+			if (!AbortableSystem(cmd.c_str())){
 				std::ifstream in(tmpfile);
 				std::string buf((std::istreambuf_iterator<char>(in)),
 					std::istreambuf_iterator<char>());
