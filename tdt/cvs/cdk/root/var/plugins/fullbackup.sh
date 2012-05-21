@@ -1,9 +1,13 @@
 #!/bin/sh
 
+PATH=/usr/bin:/bin:/usr/local/bin:/var/bin:/usr/sbin:/sbin
+export PATH
+
 B=/autofs/sda1/enigma2-`date '+%Y%m%d%H%M%S'`
 R=yaffs2
 O=oob.img
 U=uImage
+OUT=/tmp/.mkyaffs2-out
 mkdir $B
 cd $B || exit
 
@@ -17,9 +21,9 @@ do
 	wget -qO /dev/null "http://127.0.0.1/control/message?popup=$TXT"
 	sleep 1
 	T2=""
-	if [ -f /tmp/.mkyaffs2-out ]
+	if [ -f $OUT ]
 	then
-		PERC=`tail -c3 /tmp/.mkyaffs2-out | sed 's/%//' | egrep '^([0-9]| )[0-9]$'`
+		PERC=`tail -c3 $OUT | sed 's/%//' | egrep '^([0-9]| )[0-9]$'`
 		if [ "$PERC" != "" ]
 		then
 			T2=": $PERC/100"
@@ -44,8 +48,8 @@ echo "Creating YAFFS2 image" > .running
 unspare2 /dev/mtd6 oob.img
 mkdir yaffs2
 mount --bind / $R
-mkyaffs2 -o $O $R e2yaffs2.img > /tmp/.mkyaffs2-out
-rm .mkyaffs2-out
+mkyaffs2 -o $O $R e2yaffs2.img > $OUT
+rm $OUT
 umount $R
 rmdir $R
 rm $O
