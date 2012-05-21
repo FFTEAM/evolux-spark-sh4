@@ -175,6 +175,9 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	t_channel_id channel_id;
 	if (1 == sscanf(actionKey.c_str(), "%llx", &channel_id)) {
+		if (CNeutrinoApp::getInstance()->recordingstatus)
+			return menu_return::RETURN_REPAINT;
+		
 		for (int i = 0; i < epgChannels.size(); i++)
 			if (epgChannels[i].channel_id == channel_id && epgChannels[i].type != BATCHEPG_OFF) {
 				channel_id = live_channel_id;
@@ -192,6 +195,8 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		Load();
 
 	if (actionKey == "run" || actionKey == "shutdown" || actionKey == "timer") {
+		if (CNeutrinoApp::getInstance()->recordingstatus)
+			return menu_return::RETURN_REPAINT;
 		channel_id = live_channel_id;
 		int i;
 		for (i = 0; i < epgChannels.size(); i++)
