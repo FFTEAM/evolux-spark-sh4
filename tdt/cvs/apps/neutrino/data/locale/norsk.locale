@@ -1528,3 +1528,4 @@ batchepg.settings Innstillinger
 batchepg.hint EPG data blir oppdatert. Vennligst vent. Kanal:
 batchepg.shutdown EPG data blir lest.
 batchepg.run_at_shutdown Oppdater før restart
+batchepg.standard_wait_time Waiting time for standard EPG

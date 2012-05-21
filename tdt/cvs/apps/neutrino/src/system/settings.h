@@ -130,6 +130,7 @@ struct SNeutrinoSettings
 	int epg_enable_freesat;
 	int epg_enable_viasat;
 	int batchepg_run_at_shutdown;
+	int batchepg_standard_waittime;
 	std::string network_ntpserver;
 	std::string network_ntprefresh;
 	int network_ntpenable;

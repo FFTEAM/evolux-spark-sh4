@@ -24,8 +24,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
 #include <string>
 #include <fstream>
 
@@ -55,6 +58,32 @@ CBatchEPG_Menu::CBatchEPG_Menu()
 
 	x = ((g_settings.screen_EndX - g_settings.screen_StartX) - width)/2 + g_settings.screen_StartX;
 	y = ((g_settings.screen_EndY - g_settings.screen_StartY) - height)/2 + g_settings.screen_StartY;
+}
+
+int CBatchEPG_Menu::AbortableSystem(const char *command) {
+		for(int fd = 3; fd < 256 /* arbitrary, but high enough */; fd++)
+			fcntl(fd, F_SETFD, FD_CLOEXEC);
+		pid_t child = fork();
+		switch(child){
+			case -1:
+				return -1;
+			case 0:
+				signal(SIGTERM, SIG_DFL);
+				signal(SIGINT, SIG_DFL);
+				signal(SIGHUP, SIG_DFL);
+				execl("/bin/sh", "sh", "-c", command, NULL);
+				exit(-1);
+		}
+
+		int status;
+		while(child != waitpid(child, &status, WNOHANG)) {
+			neutrino_msg_t msg;
+			neutrino_msg_data_t data;
+      		g_RCInput->getMsg_ms(&msg, &data, 200);
+			if ( msg <= CRCInput::RC_MaxRC )
+				kill(child, SIGKILL);
+		}
+	return WIFEXITED(status);
 }
 
 bool CBatchEPG_Menu::Run(int i)
@@ -95,15 +124,14 @@ bool CBatchEPG_Menu::Run(int i)
 			std::string cmd = "exec /usr/local/bin/mhwepg -" + mhwVersion
 				+ " -n " + string(tmpdir) + " >" + string(tmpfile) + " 2>&1";
 			fprintf(stderr, "executing %s\n", cmd.c_str());
-			int r = safe_system(cmd.c_str());
-			if (WEXITSTATUS(r)){
+			if (AbortableSystem(cmd.c_str())){
 				std::ifstream in(tmpfile);
 				std::string buf((std::istreambuf_iterator<char>(in)),
 					std::istreambuf_iterator<char>());
 				res = false;
 				hintBox->hide();
 				delete hintBox;
-				hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, buf.c_str(), width);
+				hintBox = new CHintBox(LOCALE_MESSAGEBOX_ERROR, buf.c_str(), width);
 				hintBox->paint();
 				sleep(10);
 			} else
@@ -114,9 +142,18 @@ bool CBatchEPG_Menu::Run(int i)
 			break;
 		}
 		case BATCHEPG_STANDARD:
-			sleep(60); // sectionsd will keep care of this. Just wait.
+		{
+			time_t sleep_until = time(NULL) + g_settings.batchepg_standard_waittime;
+			while(sleep_until >= time(NULL)) {
+					neutrino_msg_t msg;
+					neutrino_msg_data_t data;
+					g_RCInput->getMsg_ms(&msg, &data, 200);
+					if (msg <= CRCInput::RC_MaxRC)
+						break;
+			}
 			res = true;
 			break;
+		}
 		default:
 			break;
 	}
@@ -133,22 +170,22 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (actionKey == "save") {
 		Save();
 		CNeutrinoApp::getInstance()->exec(NULL, "savesettings");
-		return res;
+		return menu_return::RETURN_REPAINT;
 	}
 
 	t_channel_id channel_id;
 	if (1 == sscanf(actionKey.c_str(), "%llx", &channel_id)) {
 		for (int i = 0; i < epgChannels.size(); i++)
-			if (epgChannels[i].channel_id == channel_id) {
+			if (epgChannels[i].channel_id == channel_id && epgChannels[i].type != BATCHEPG_OFF) {
 				channel_id = live_channel_id;
 				if (epgChannels[i].channel_id != live_channel_id)
 						g_Zapit->zapTo_serviceID(epgChannels[i].channel_id);
-				bool res = Run(i);
-				if (i == epgChannels.size() || epgChannels[i].channel_id != live_channel_id)
+				Run(i);
+				if (channel_id != live_channel_id)
 						g_Zapit->zapTo_serviceID(channel_id);
 				break;
 			}
-		return res;
+		return menu_return::RETURN_REPAINT;
 	}
 
 	if (actionKey == "shutdown" || actionKey == "timer")
@@ -156,14 +193,14 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (actionKey == "run" || actionKey == "shutdown" || actionKey == "timer") {
 		channel_id = live_channel_id;
-		bool res = false;
 		int i;
-		for (i = 0; i < epgChannels.size(); i++) {
-			if (epgChannels[i].channel_id != live_channel_id)
+		for (i = 0; i < epgChannels.size(); i++)
+			if (epgChannels[i].type != BATCHEPG_OFF) {
+				if (epgChannels[i].channel_id != live_channel_id)
 					g_Zapit->zapTo_serviceID(epgChannels[i].channel_id);
-			res |= Run(i);
-		}
-		if (i == epgChannels.size() || epgChannels[i].channel_id != live_channel_id)
+				Run(i);
+			}
+		if (channel_id != live_channel_id)
 				g_Zapit->zapTo_serviceID(channel_id);
 
 		if (res && actionKey == "shutdown") {
@@ -174,7 +211,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			hintBox->hide();
 			delete hintBox;
 		}
-		return res;
+		return menu_return::RETURN_REPAINT;
 	}
 
 	if (parent)
@@ -182,7 +219,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	Settings();
 
-	return res;
+	return menu_return::RETURN_REPAINT;
 }
 
 void CBatchEPG_Menu::hide()
@@ -297,6 +334,9 @@ void CBatchEPG_Menu::Settings()
 	}
 
 	menu->addItem(GenericMenuSeparatorLine);
+
+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_BATCHEPG_STANDARD_WAITTIME,
+		&g_settings.batchepg_standard_waittime, true, 10, 1200));
 
 	menu->addItem(new CMenuOptionChooser(LOCALE_BATCHEPG_RUNATSHUTDOWN,
 			&g_settings.batchepg_run_at_shutdown, ONOFF_OPTIONS, ONOFF_OPTION_COUNT,true));

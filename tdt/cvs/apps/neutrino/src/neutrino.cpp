@@ -868,6 +868,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         g_settings.epg_enable_freesat   = configfile.getBool("epg_enable_freesat", false);
         g_settings.epg_enable_viasat   = configfile.getBool("epg_enable_viasat", false);
         g_settings.batchepg_run_at_shutdown   = configfile.getBool("batchepg_run_at_shutdown", false);
+	g_settings.batchepg_standard_waittime = configfile.getInt32("batchepg_standard_waittime", 90);
 	g_settings.epgplus_viewmode	= configfile.getInt32("epgplus_viewmode", -1);
 	g_settings.epgplus_swapmode	= configfile.getInt32("epgplus_swapmode", -1);
         // NTP-Server for sectionsd
@@ -1433,6 +1434,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
         configfile.setBool("epg_enable_freesat"		,g_settings.epg_enable_freesat);
         configfile.setBool("epg_enable_viasat"		,g_settings.epg_enable_viasat);
         configfile.setBool("batchepg_run_at_shutdown"	,g_settings.batchepg_run_at_shutdown);
+        configfile.setInt32("batchepg_standard_waittime",g_settings.batchepg_standard_waittime);
         configfile.setInt32("epgplus_viewmode"		,g_settings.epgplus_viewmode);
         configfile.setInt32("epgplus_swapmode"		,g_settings.epgplus_swapmode);
 

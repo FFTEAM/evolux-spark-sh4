@@ -53,6 +53,7 @@ class CBatchEPG_Menu : public CMenuTarget
 	bool Changed();
 	void Settings();
 	void AddCurrentChannel();
+	int AbortableSystem(const char *command);
     public:
 	enum BatchEPG_type { BATCHEPG_OFF = 0, BATCHEPG_MHW1, BATCHEPG_MHW2, BATCHEPG_STANDARD };
 	CBatchEPG_Menu();

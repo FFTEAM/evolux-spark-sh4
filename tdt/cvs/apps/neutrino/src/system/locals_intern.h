@@ -1529,6 +1529,7 @@ const char *locale_real_names[] = {
 	"batchepg.settings",
 	"batchepg.hint",
 	"batchepg.shutdown",
-	"batchepg.run_at_shutdown"
+	"batchepg.run_at_shutdown",
+	"batchepg.standard_wait_time"
 };
 #endif

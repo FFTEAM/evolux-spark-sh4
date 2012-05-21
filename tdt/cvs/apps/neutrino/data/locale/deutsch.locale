@@ -1529,3 +1529,4 @@ batchepg.settings Einstellungen
 batchepg.hint EPG-Informationen werden aktualisiert. Bitte warten. Kanal:
 batchepg.shutdown EPG-Informationen werden verarbeitet.
 batchepg.run_at_shutdown Aktualisierung vor Ausschalten
+batchepg.standard_wait_time Wartezeit für normalen EPG

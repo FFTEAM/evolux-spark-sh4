@@ -1529,3 +1529,4 @@ batchepg.settings Settings
 batchepg.hint EPG data is being updated. Please wait. Channel:
 batchepg.shutdown EPG data is being processed.
 batchepg.run_at_shutdown Update before shutdown
+batchepg.standard_wait_time Waiting time for standard EPG
