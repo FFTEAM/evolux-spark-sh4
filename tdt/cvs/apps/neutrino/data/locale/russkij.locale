@@ -442,8 +442,8 @@ fontsize.channellist Список каналов
 fontsize.channellist_descr Описание
 fontsize.channellist_number Номер
 fontsize.epg_date EPG дата
-fontsize.epg_info1 EPG Info 1
-fontsize.epg_info2 EPG Info 2
+fontsize.epg_info1 EPG инфо 1
+fontsize.epg_info2 EPG инфо 2
 fontsize.epg_title EPG заголовок
 fontsize.eventlist_datetime Дата / Время
 fontsize.eventlist_itemlarge Большой
@@ -580,7 +580,7 @@ infobar.picon_move SIG/SNR
 infobar.picon_normal нормальный
 infobar.picon_dir Путь для пиконов
 infobar.picon_dir_e2 Путь для пиконов E2
-infoviewer.epgnotload EPG не загружено....
+infoviewer.epgnotload EPG не загружен...
 infoviewer.epgwait Попытка получить программу передач...
 infoviewer.eventlist Телегид
 infoviewer.languages Аудио
@@ -706,12 +706,12 @@ miscsettings.epg_max_events_hint2 Норма 6000, 0 для блокировки
 miscsettings.epg_old_events Удалить после, часов
 miscsettings.epg_old_events_hint1 Удаление устаревших событий
 miscsettings.epg_old_events_hint2 Установка в часах
-miscsettings.epg_save Сохранение EPG
+miscsettings.epg_save Сохранить EPG
 miscsettings.epg.freesat Freesat EPG
-miscsettings.epg.freesat.enable Enable Freesat EPG
+miscsettings.epg.freesat.enable Freesat EPG
 miscsettings.epg.viasat VIASAT EPG
-miscsettings.epg.viasat.enable Enable VIASAT EPG
-miscsettings.restart The change will take effect on restart.
+miscsettings.epg.viasat.enable VIASAT EPG
+miscsettings.restart Изменения вступят в силу после перезагрузки.
 miscsettings.fb_destination Эксперт! Консоль загрузки
 miscsettings.general Основное
 miscsettings.head Прочие настройки
@@ -1522,17 +1522,16 @@ lcdmenu.standby Standby
 menu.numbers_as_icons Пиконы в меню 
 fontsize.percent Масштаб шрифта (%)
 menu.infobar_cn Инфопанель по событию
-miscsettings.epg.batch.head EPG Update
-miscsettings.epg.batch.settings EPG Update
-timerlist.batchepg EPG Update
-timerlist.type.batchepg Update EPG
-batchepg.epg.standard Standard
-batchepg.epg.off None
-batchepg.save Save settings
-batchepg.refresh Start update
-batchepg.refreshall Update all
-batchepg.settings Settings
-batchepg.hint EPG data is being updated. Please wait. Channel:
-batchepg.shutdown EPG data is being processed.
-batchepg.run_at_shutdown Update before shutdown
-batchepg.standard_wait_time Waiting time for standard EPG
+miscsettings.epg.batch.head Обновление EPG 
+miscsettings.epg.batch.settings Обновление EPG
+timerlist.batchepg Обновление EPG
+timerlist.type.batchepg Обновление EPG
+batchepg.epg.standard стандарт
+batchepg.epg.off нет
+batchepg.save Сохранить
+batchepg.refresh Начать обновление
+batchepg.refreshall Обновить все
+batchepg.settings Настройки
+batchepg.hint Данные EPG обновляются, подождите. Канал:
+batchepg.shutdown Данные EPG обрабатываются.
+batchepg.run_at_shutdown Обновить перед выкл.
