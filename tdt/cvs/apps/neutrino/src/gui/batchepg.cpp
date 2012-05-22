@@ -60,7 +60,8 @@ CBatchEPG_Menu::CBatchEPG_Menu()
 	y = ((g_settings.screen_EndY - g_settings.screen_StartY) - height)/2 + g_settings.screen_StartY;
 }
 
-int CBatchEPG_Menu::AbortableSystem(const char *command) {
+bool CBatchEPG_Menu::AbortableSystem(const char *command) {
+		bool killed = false;
 		for(int fd = 3; fd < 256 /* arbitrary, but high enough */; fd++)
 			fcntl(fd, F_SETFD, FD_CLOEXEC);
 		pid_t child = fork();
@@ -80,10 +81,12 @@ int CBatchEPG_Menu::AbortableSystem(const char *command) {
 			neutrino_msg_t msg;
 			neutrino_msg_data_t data;
       		g_RCInput->getMsg_ms(&msg, &data, 200);
-			if ( msg <= CRCInput::RC_MaxRC )
+			if ( msg <= CRCInput::RC_MaxRC ) {
 				kill(child, SIGKILL);
+				killed = true;
+			}
 		}
-	return WIFEXITED(status);
+	return killed || WIFEXITED(status);
 }
 
 bool CBatchEPG_Menu::Run(int i)
