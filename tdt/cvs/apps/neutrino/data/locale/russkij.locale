@@ -1535,3 +1535,4 @@ batchepg.settings Настройки
 batchepg.hint Данные EPG обновляются, подождите. Канал:
 batchepg.shutdown Данные EPG обрабатываются.
 batchepg.run_at_shutdown Обновить перед выкл.
+batchepg.standard_wait_time EPG тайм-аут
