@@ -194,6 +194,9 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		return menu_return::RETURN_REPAINT;
 	}
 
+	if (actionKey == "shutdown" && !g_settings.batchepg_run_at_shutdown)
+	 	return menu_return::RETURN_REPAINT;
+
 	if (actionKey == "shutdown" || actionKey == "timer")
 		Load();
 
