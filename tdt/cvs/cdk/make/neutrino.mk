@@ -1,7 +1,7 @@
 # tuxbox/neutrino
 
 $(targetprefix)/var/etc/.version:
-	echo "imagename=Neutrino-HD" > $@
+	echo "imagename=Ntrino" > $@
 	echo "homepage=http://gitorious.org/open-duckbox-project-sh4" >> $@
 	echo "creator=`id -un`" >> $@
 	echo "docs=http://gitorious.org/open-duckbox-project-sh4/pages/Home" >> $@
