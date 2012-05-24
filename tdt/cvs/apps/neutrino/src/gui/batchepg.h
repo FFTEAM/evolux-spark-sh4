@@ -54,6 +54,7 @@ class CBatchEPG_Menu : public CMenuTarget
 	void Settings();
 	void AddCurrentChannel();
 	bool AbortableSystem(const char *command);
+	void AbortableSleep(time_t);
     public:
 	enum BatchEPG_type { BATCHEPG_OFF = 0, BATCHEPG_MHW1, BATCHEPG_MHW2, BATCHEPG_STANDARD };
 	CBatchEPG_Menu();

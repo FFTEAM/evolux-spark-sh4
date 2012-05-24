@@ -76,10 +76,13 @@ bool CBatchEPG_Menu::AbortableSystem(const char *command) {
 				exit(-1);
 		}
 
+		neutrino_msg_t msg;
+		neutrino_msg_data_t data;
+		do
+			g_RCInput->getMsg_ms(&msg, &data, 100);
+		while (msg != CRCInput::RC_timeout);
 		int status;
 		while(child != waitpid(child, &status, WNOHANG)) {
-			neutrino_msg_t msg;
-			neutrino_msg_data_t data;
       		g_RCInput->getMsg_ms(&msg, &data, 200);
 			if ( msg <= CRCInput::RC_MaxRC ) {
 				kill(child, SIGKILL);
@@ -87,6 +90,20 @@ bool CBatchEPG_Menu::AbortableSystem(const char *command) {
 			}
 		}
 	return killed || WIFEXITED(status);
+}
+
+void CBatchEPG_Menu::AbortableSleep(time_t seconds) {
+	neutrino_msg_t msg;
+	neutrino_msg_data_t data;
+	do
+		g_RCInput->getMsg_ms(&msg, &data, 100);
+	while (msg != CRCInput::RC_timeout);
+	time_t sleep_until = time(NULL) + seconds;
+	while(sleep_until >= time(NULL)) {
+		g_RCInput->getMsg_ms(&msg, &data, 200);
+		if (msg <= CRCInput::RC_MaxRC)
+			break;
+	}
 }
 
 bool CBatchEPG_Menu::Run(int i)
@@ -136,7 +153,7 @@ bool CBatchEPG_Menu::Run(int i)
 				delete hintBox;
 				hintBox = new CHintBox(LOCALE_MESSAGEBOX_ERROR, buf.c_str(), width);
 				hintBox->paint();
-				sleep(10);
+				AbortableSleep(10);
 			} else
 				res = true;
 			g_Sectionsd->readSIfromXML(tmpdir);
@@ -146,14 +163,7 @@ bool CBatchEPG_Menu::Run(int i)
 		}
 		case BATCHEPG_STANDARD:
 		{
-			time_t sleep_until = time(NULL) + g_settings.batchepg_standard_waittime;
-			while(sleep_until >= time(NULL)) {
-					neutrino_msg_t msg;
-					neutrino_msg_data_t data;
-					g_RCInput->getMsg_ms(&msg, &data, 200);
-					if (msg <= CRCInput::RC_MaxRC)
-						break;
-			}
+			AbortableSleep(g_settings.batchepg_standard_waittime);
 			res = true;
 			break;
 		}
@@ -218,7 +228,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			 // sectionsd needs some time to read
 			CHintBox *hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_BATCHEPG_SHUTDOWN), width);
 			hintBox->paint();
-			sleep(30);
+			AbortableSleep(30);
 			hintBox->hide();
 			delete hintBox;
 		}
