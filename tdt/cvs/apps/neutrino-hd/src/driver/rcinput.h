@@ -286,9 +286,9 @@ class CRCInput
 		inline int getFileHandle(void) /* used for plugins (i.e. games) only */
 		{
 #ifdef EVOLUX
-			return fd_rc[0];
+			return fd_remote_control;
 #else
-			return fd_tdt_rc_event_driver;
+			return fd_rc[0];
 #endif
 		}
 		void stopInput();
