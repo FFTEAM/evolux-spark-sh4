@@ -614,6 +614,17 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 #endif
 	   break;
 	}
+	case VFDSETTIME2:
+	{
+		u32 uTime = 0;
+		res = get_user(uTime, (int *)arg);
+		if (! res)
+		{
+			res = YWPANEL_FP_SetTime(uTime);
+			YWPANEL_FP_ControlTimer(true);
+		}
+		break;
+	}
 	case VFDSETTIME:
 		res = aotomSetTime(aotom_data.u.time.time);
 		break;

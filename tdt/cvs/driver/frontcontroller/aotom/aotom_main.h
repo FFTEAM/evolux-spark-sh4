@@ -34,6 +34,7 @@ typedef unsigned long u64;
 #define VFDGETTIME            0xc0425afa
 #define VFDSETTIME            0xc0425afb
 #define VFDSTANDBY            0xc0425afc
+#define VFDSETTIME2           0xc0425afd	// seife, set 'complete' time...
 
 #define VFDSETLED             0xc0425afe
 #define VFDSETMODE            0xc0425aff
