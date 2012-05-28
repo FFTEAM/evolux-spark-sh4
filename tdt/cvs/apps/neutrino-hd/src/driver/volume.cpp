@@ -173,6 +173,10 @@ void CVolume::Init()
 			x = ((sw - vbar_w) / 2) + x;
 			y = sh - sh/15;
 			break;
+#ifdef EVOLUX
+		case 6:// off
+			break;
+#endif
 	}
 
 	icon_x		= x + spacer;
@@ -231,7 +235,11 @@ void CVolume::setvol(int vol)
 	audioDecoder->setVolume(vol, vol);
 }
 
+#ifdef EVOLUX
+void CVolume::setVolume(const neutrino_msg_t key, const bool _bDoPaint, bool nowait)
+#else
 void CVolume::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool nowait)
+#endif
 {
 	if (!g_RCInput) /* don't die... */
 		return;
@@ -249,6 +257,12 @@ void CVolume::setVolume(const neutrino_msg_t key, const bool bDoPaint, bool nowa
 	
 	int vol			= g_settings.current_volume;
 	fb_pixel_t * pixbuf	= NULL;
+
+#ifdef EVOLUX
+	bool bDoPaint = _bDoPaint;
+	if (g_settings.volume_pos == 6)
+		bDoPaint = false;
+#endif
 
 	if(bDoPaint) {
 		pixbuf = new fb_pixel_t[(vbar_w+ShadowOffset) * (vbar_h+ShadowOffset)];

@@ -1385,6 +1385,7 @@ const char * locale_real_names[] =
 	"settings.pos_bottom_right",
 	"settings.pos_default_center",
 	"settings.pos_higher_center",
+	"settings.pos_off",
 	"settings.pos_top_left",
 	"settings.pos_top_right",
 	"settings.restore",

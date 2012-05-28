@@ -1061,9 +1061,15 @@ int CMenuOptionNumberChooser::exec(CMenuTarget*)
 		else
 			(*optionValue)++;
 	}
+#ifndef EVOLUX
 	paint(true);
+#endif
 	if(observ)
 		observ->changeNotify(optionName, optionValue);
+#ifdef EVOLUX
+	// give the observer a chance to modify the value
+	paint(true);
+#endif
 
 	return menu_return::RETURN_NONE;
 }
