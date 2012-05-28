@@ -2462,3 +2462,28 @@ $(DEPDIR)/openthreads: $(DEPDIR)/openthreads.do_compile
 	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix) install
 	touch $@
 
+#
+# libvorbis
+#
+$(DEPDIR)/libvorbis.do_prepare: bootstrap @DEPENDS_libvorbis@
+	@PREPARE_libvorbis@
+	touch $@
+
+$(DEPDIR)/libvorbis.do_compile: $(DEPDIR)/libvorbis.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libvorbis@ && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr && \
+	$(MAKE) all
+	touch $@
+
+$(DEPDIR)/min-libvorbis $(DEPDIR)/std-libvorbis $(DEPDIR)/max-libvorbis \
+$(DEPDIR)/libvorbis: \
+$(DEPDIR)/%libvorbis: $(DEPDIR)/libvorbis.do_compile
+	cd @DIR_libvorbis@ && \
+		@INSTALL_libvorbis@
+#	@DISTCLEANUP_libvorbis@
+	[ "x$*" = "x" ] && touch $@ || true
+

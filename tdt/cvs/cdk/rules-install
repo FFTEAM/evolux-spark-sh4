@@ -111,6 +111,8 @@ tuxtxt32bpp;make:install:prefix=/usr:DESTDIR=TARGETS
 libdreamdvd;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libdreamdvd.pc
 libdreamdvd2;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libdreamdvd.pc
 graphlcd;make:install:DESTDIR=TARGETS
+openthreads;make:install:PREFIX=TARGETS
+libvorbis;make:install:prefix=/usr:DESTDIR=TARGETS:rewrite-libtool:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la
 
 #
 # GSTREAMER

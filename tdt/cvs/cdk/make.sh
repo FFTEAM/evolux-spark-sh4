@@ -219,5 +219,6 @@ echo "make evolux"
 echo "make evolux-pli"
 echo "make evolux-full"
 echo "make evolux-pli-full"
+echo "make neutrino-hd"
 echo "-----------------------"
 

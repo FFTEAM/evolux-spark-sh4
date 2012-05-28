@@ -987,6 +987,7 @@ TUXBOX_RULES_MAKE(libsigc)
 TUXBOX_RULES_MAKE(libmad)
 TUXBOX_RULES_MAKE(libid3tag)
 TUXBOX_RULES_MAKE(libvorbisidec)
+TUXBOX_RULES_MAKE(libvorbis)
 TUXBOX_RULES_MAKE(glib2)
 TUXBOX_RULES_MAKE(libiconv)
 TUXBOX_RULES_MAKE(GD)
@@ -1041,6 +1042,7 @@ TUXBOX_RULES_MAKE(pyopenssl)
 TUXBOX_RULES_MAKE(pythonwifi)
 TUXBOX_RULES_MAKE(pythoncheetah)
 TUXBOX_RULES_MAKE(zope_interface)
+TUXBOX_RULES_MAKE(openthreads)
 #
 # gstreamer
 #
