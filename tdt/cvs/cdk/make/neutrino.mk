@@ -74,7 +74,7 @@ $(appsdir)/libstb-hal/config.status: bootstrap
 			--with-boxtype=spark \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
 
 $(DEPDIR)/libstb-hal.do_prepare: $(appsdir)/libstb-hal/config.status
 	touch $@
@@ -119,7 +119,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap
 			"--with-stb-hal-build=$(appsdir)/libstb-hal" \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
 
 $(DEPDIR)/neutrino-hd.do_prepare: $(appsdir)/neutrino-hd/config.status
 	touch $@
