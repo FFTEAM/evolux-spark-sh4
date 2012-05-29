@@ -86,6 +86,16 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
+yaud-neutrino-hd: yaud-none lirc stslave\
+		boot-elf remote firstboot neutrino-hd neutrino-plugins
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
 evolux: yaud-neutrino \
 		yaud-enigma2-nightly \
 		release_evolux

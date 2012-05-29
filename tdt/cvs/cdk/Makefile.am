@@ -71,6 +71,9 @@ include make/enigma2-pli-plugins.mk
 # Include neutrino gui targets
 include make/neutrino.mk
 
+# Include neutrino-hd gui targets
+include make/neutrino-hd.mk
+
 # A small, but absolutely essential library
 include make/libtuxbox.mk
 
