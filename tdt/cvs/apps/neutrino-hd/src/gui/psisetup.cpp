@@ -151,7 +151,6 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
   neutrino_msg_t msg;
   neutrino_msg_data_t data;
 
-  fb_pixel_t *pixbuf = NULL;
   locWidth = 0;
   for (int i = 0; i < PSI_RESET; i++)
     {
@@ -175,10 +174,6 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 
   dx = SLIDERWIDTH + LOCGAP + locWidth;
   dy = PSI_SCALE_COUNT * locHeight + (PSI_SCALE_COUNT - 1) * 2;
-
-  pixbuf = new fb_pixel_t[dx * dy];
-  if (pixbuf != NULL)
-    frameBuffer->SaveScreen (x, y, dx, dy, pixbuf);
 
   x =
     frameBuffer->getScreenX () + ((frameBuffer->getScreenWidth () - dx) >> 1);
@@ -310,13 +305,6 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
     }
 
   hide ();
-
-  if (pixbuf)
-    {
-      frameBuffer->RestoreScreen (x, y, dx, dy, pixbuf);
-      frameBuffer->blit();
-      delete[]pixbuf;
-    }
 
   return res;
 }

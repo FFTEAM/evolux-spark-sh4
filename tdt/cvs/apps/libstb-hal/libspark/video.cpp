@@ -568,6 +568,56 @@ void cVideo::getPictureInfo(int &width, int &height, int &rate)
 
 void cVideo::SetSyncMode(AVSYNC_TYPE Mode)
 {
+#ifdef EVOLUX
+        int clock;
+	
+	const char *aAVSYNCTYPE[] = {
+	"AVSYNC_DISABLED",
+	"AVSYNC_ENABLED",
+	"AVSYNC_AUDIO_IS_MASTER"
+	};
+
+        const char* av_modes[] = {
+	"disapply",
+	"apply"
+	};
+
+        const char* master_clock[] = {
+	"video",
+	"audio"
+	};
+      
+	printf("%s:%s - mode=%s\n", __FILE__, __FUNCTION__, aAVSYNCTYPE[Mode]);
+
+	int fd = open("/proc/stb/stream/policy/AV_SYNC", O_RDWR);
+
+        if (fd > 0)  
+        {
+           if ((Mode == 0) || (Mode == 1))
+	   {
+	      write(fd, av_modes[Mode], strlen(av_modes[Mode]));
+	      clock = 0;
+	   } else
+           {
+	      write(fd, av_modes[1], strlen(av_modes[1]));
+	      clock = 1;
+	   }
+	   close(fd);
+        }
+	else
+	   printf("error %m\n");
+	
+        printf("set master clock = %s\n", master_clock[clock]);
+
+	fd = open("/proc/stb/stream/policy/MASTER_CLOCK", O_RDWR);
+        if (fd > 0)  
+        {
+	   write(fd, master_clock[clock], strlen(master_clock[clock]));
+	   close(fd);
+        }
+	else
+	   printf("error %m\n");
+#else
 	lt_debug("%s %d\n", __FUNCTION__, Mode);
 	/*
 	 * { 0, LOCALE_OPTIONS_OFF },
@@ -587,6 +637,7 @@ void cVideo::SetSyncMode(AVSYNC_TYPE Mode)
 			ioctl(fd, MPEG_VID_SYNC_ON, VID_SYNC_AUD);
 			break;
 	}
+#endif
 #endif
 };
 

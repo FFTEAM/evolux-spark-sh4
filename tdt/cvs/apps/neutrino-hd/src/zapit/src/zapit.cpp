@@ -221,6 +221,7 @@ void CZapit::SaveSettings(bool write, bool write_a)
                                 (int) audio_map_it->second.apid, (int) audio_map_it->second.mode, (int) audio_map_it->second.volume, 
 				(int) audio_map_it->second.subpid, (int) audio_map_it->second.ttxpid, (int) audio_map_it->second.ttxpage);
                   }
+		  fflush(audio_config_file);
 		  fdatasync(fileno(audio_config_file));
                   fclose(audio_config_file);
 #ifdef EVOLUX
@@ -230,6 +231,7 @@ void CZapit::SaveSettings(bool write, bool write_a)
 				fprintf(volume_config_file, "%llx %d %d\n", (uint64_t) volume_map_it->first.first,
 					(int) volume_map_it->first.second, (int) volume_map_it->second);
 			}
+			fflush(volume_config_file);
 			fdatasync(fileno(volume_config_file));
 			fclose(volume_config_file);
 		  }
@@ -539,39 +541,6 @@ bool CZapit::ZapIt(const t_channel_id channel_id, bool forupdate, bool startplay
 	SaveSettings(false, false);
 
 	printf("[zapit] zap to %s (%llx)\n", current_channel->getName().c_str(), live_channel_id);
-
-#ifdef EVOLUX_FIXME
-{
-// FIXME -- start of 3D support hack
-//	We currently have no way to get access to the 3d information supported in the video stream.
-//	For now, we'll cheat and look up 3D enabled channel names in a manually maintained file.
-//	Channel names need to match exactly. Side-by-Side 3D is implied.
-//
-//	This does admittedly suck badly. --martii
-
-CFrameBuffer::getInstance()->setSplit3D(false);
-const char *chan = current_channel->getName().c_str();
-if (strlen(chan)) {
-	FILE *F = fopen (CONFIGDIR "/3dchannels.list", "r");
-	if (F) {
-		char buf[80];
-		while (fgets(buf, sizeof(buf), F)) {
-			if (buf[0] == '#')
-				continue;
-			char *nl = strchr(buf, '\n');
-			if (nl)
-				*nl = 0;
-			if (strcmp(chan, buf))
-				continue;
-			CFrameBuffer::getInstance()->setSplit3D(true);
-			break;
-		}
-		fclose(F);
-	}
-}
-// FIXME -- end of 3D support hack
-}
-#endif
 
 	if(!TuneChannel(newchannel, transponder_change))
 		return false;

@@ -44,6 +44,7 @@
 #include <gui/adzap.h>
 #include <gui/extra_menu.h>
 #include <gui/psisetup.h>
+#include <gui/3dsetup.h>
 #endif
 #include <timerdclient/timerdtypes.h>
 #include <gui/channellist.h>          /* CChannelList */
@@ -192,6 +193,7 @@ public:
 #ifdef EVOLUX
 	CAdZapMenu			*AdZapChanger;
 	CPSISetup			*chPSISetup;
+	C3DSetup			*threeDSetup;
 	EMU_Menu *EmuMenu;
 	TUNERRESET_Menu *TunerMenu;
 #endif

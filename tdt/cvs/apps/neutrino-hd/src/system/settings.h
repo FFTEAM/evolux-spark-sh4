@@ -624,6 +624,7 @@ struct SNeutrinoSettings
                 ITEM_ADZAP,
                 ITEM_EMU_RESTART,
                 ITEM_TUNER_RESTART,
+                ITEM_THREE_D_MODE,
 #endif
 		ITEM_MAX   // MUST be always the last in the list
 	} USER_ITEM;

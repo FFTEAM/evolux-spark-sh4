@@ -204,7 +204,11 @@ static void *input_thread(void *)
 	lt_info("LIRC/IRMP input converter thread starting...\n");
 
 	/* modprobe does not complain if the module is already loaded... */
+#ifdef EVOLUX
+	system("/sbin/insmod /lib/modules/uinput.ko");
+#else
 	system("/sbin/modprobe uinput");
+#endif
 	do {
 		usleep(100000); /* mdev needs some time to create the device? */
 		uinput = open("/dev/uinput", O_WRONLY|O_NDELAY);
@@ -433,25 +437,6 @@ static void *input_thread(void *)
 
 void start_input_thread(void)
 {
-#ifdef EVOLUX
-	// only run input thread if simubutton isn't loaded
-	const char *input_files[] = {"/dev/input/event0", "/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3", NULL};
-	const char **input_file = input_files;
-	while (input_file) {
-		int fd = open (*input_file, O_RDONLY);
-		if (fd > -1) {
-			char name[80];
-			ioctl(fd, EVIOCGNAME(sizeof(name)), name);
-			close(fd);
-			if(!strcmp("TDT RC event driver", name)) {
-				thread_running = 0;
-				return;
-			}
-		}
-		input_file++;
-	}
-#endif
-
 	if (pthread_create(&thread, 0, input_thread, NULL) != 0)
 	{
 		lt_info("%s: LIRC/IRMP input thread pthread_create: %m\n", __func__);

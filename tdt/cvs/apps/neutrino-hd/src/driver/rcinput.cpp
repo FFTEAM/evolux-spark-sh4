@@ -180,7 +180,7 @@ void CRCInput::open(int dev)
 			ioctl(fd_rc[i], EVIOCGNAME(sizeof(name)), name);
 			if(!strcmp("TDT RC event driver", name) ||
 			   !strcmp("Neutrino LIRC/IRMP to Input Device converter", name))
-				fd_remote_control = fd_rc[i];
+					fd_remote_control = fd_rc[i];
 #endif
 			fcntl(fd_rc[i], F_SETFL, O_NONBLOCK);
 		}
@@ -1250,14 +1250,14 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 					printf("rc_last_key %04x rc_last_repeat_key %04x\n\n", rc_last_key, rc_last_repeat_key);
 #endif
 #ifdef EVOLUX
-				if (firstKey) {
-					firstKey = false;
-					int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
-					if (wtw > -1) {
-						write(wtw, "0\n", 2);
-						::close(wtw);
+					if (firstKey) {
+						firstKey = false;
+						int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
+						if (wtw > -1) {
+							write(wtw, "0\n", 2);
+							::close(wtw);
+						}
 					}
-				}
 #endif
 					uint64_t now_pressed;
 					bool keyok = true;
@@ -1603,8 +1603,24 @@ std::string CRCInput::getKeyName(const unsigned int key)
 **************************************************************************/
 int CRCInput::translate(int code, int /*num*/)
 {
+#ifdef EVOLUX
+	// For simubutton/evremote2, as long as our lircd configuration is
+	// messed up.  --martii
+	switch (code) {
+		case 0x100:
+			return RC_up;
+		case 0x101:
+			return RC_down;
+		case KEY_FASTFORWARD:
+			return RC_forward;
+		case KEY_EXIT:
+		case KEY_HOME:
+			return RC_home;
+	}
+#else
 	if(code == 0x100) code = RC_up;
 	else if(code == 0x101) code = RC_down;
+#endif
 	if ((code >= 0) && (code <= KEY_MAX))
 		return code;
 	else

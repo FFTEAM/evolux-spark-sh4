@@ -761,8 +761,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	for (int i = 1; i < EMU_OPTION_COUNT; i++)
 		if (EMU_list[i].installed) {
 			EMU_list[i].cmf = new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
-				(i == selected) ? g_Locale->getText(LOCALE_ONOFF_ON)
-						: g_Locale->getText(LOCALE_ONOFF_OFF),
+				g_Locale->getText((i == selected) ? LOCALE_ONOFF_ON : LOCALE_ONOFF_OFF),
 				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++));
 			menu->addItem(EMU_list[i].cmf, (i == selected));
 		}
@@ -2419,8 +2418,11 @@ void KernelOptions_Menu::Settings()
 			m.comment = string(comment);
 			std::istringstream in(buf);
 			std::string s;
-			while (in >> s)
+			while (in >> s) {
+				if (!s.empty() && s[s.length()-1] == '\n')
+					s.erase(s.length()-1);
 				m.moduleList.push_back(s);
+			}
 			if (m.moduleList.size() > 0)
 				modules.push_back(m);
 		}

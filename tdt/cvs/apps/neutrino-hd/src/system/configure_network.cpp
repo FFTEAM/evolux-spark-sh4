@@ -21,6 +21,9 @@
 #include <cstdio>               /* perror... */
 #include <sys/wait.h>
 #include <sys/types.h>          /* u_char */
+#ifdef EVOLUX
+#include <sys/stat.h>
+#endif
 #include <string.h>
 #include "configure_network.h"
 #include "libnet.h"             /* netGetNameserver, netSetNameserver   */
@@ -318,4 +321,67 @@ void CNetworkConfig::saveWpaConfig()
 	out << "	pairwise=CCMP TKIP\n";
 	out << "	group=CCMP TKIP\n";
 	out << "}\n";
+
+#ifdef EVOLUX
+	std::ofstream F("/etc/network/if-pre-up.d/wlan");
+	if(F.is_open()) {
+		chmod("/etc/network/if-pre-up.d/wlan", 0755);
+#if 0
+		// We don't have this information  --martii
+
+		std::string authmode = "WPA2PSK"; // WPA2
+		std::string encryptype = "AES"; // WPA2
+		std::string proto = "RSN";
+		if (wlan_mode == "WPA") {
+			proto = "WPA";
+			authmode = "WPAPSK";
+			encryptype = "TKIP";
+		}
+#endif
+		F << "#!/bin/sh\n"
+                  << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
+		  << "grep $IFACE: /proc/net/wireless >/dev/null 2>&1 || exit 0\n"
+		  << "kill -9 $(pidof wpa_supplicant 2>/dev/null) 2>/dev/null\n"
+		  << "E=\"" << ssid << "\"\n"
+#if 0
+		  << "A=\"" << authmode << "\"\n"
+		  << "C=\"" << encryptype << "\"\n"
+		  << "K=\"" << wlan_key << "\"\n"
+#endif
+		  << "ifconfig $IFACE down\n"
+		  << "ifconfig $IFACE up\n"
+		  << "iwconfig $IFACE mode managed\n"
+		  << "iwconfig $IFACE essid \"$E\"\n"
+#if 0
+		  << "iwpriv $IFACE set AuthMode=$A\n"
+		  << "iwpriv $IFACE set EncrypType=$C\n"
+		  << "if ! iwpriv $IFACE set \"WPAPSK=$K\"\n"
+		  << "then\n"
+		  << "\t/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
+		  << "\tsleep 3\n"
+		  << "fi\n";
+#else
+		  << "/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n";
+#endif
+		F.close();
+#if 0
+		// This is our original version.  --martii
+		F.open("/etc/wpa_supplicant.conf");
+		if(F.is_open()) {
+			F << "ctrl_interface=/var/run/wpa_supplicant\n\n"
+			  << "network={\n"
+			  << "\tscan_ssid=1\n"
+			  << "\tssid=\"" << wlan_essid << "\"\n"
+			  << "\tkey_mgmt=WPA-PSK\n"
+			  << "\tproto=" << proto << "\n"
+			  << "\tpairwise=CCMP TKIP\n"
+			  << "\tgroup=CCMP TKIP\n"
+			  << "\tpsk=\"" << wlan_key << "\"\n"
+			  << "}\n";
+			F.close();
+		}
+#endif
+	}
+#endif // EVOLUX
 }
+
