@@ -70,7 +70,7 @@ libid3tag;make:install:DESTDIR=TARGETS;install:-m644:id3tag.pc:TARGETS/usr/lib/p
 hotplug_e2;make:install:prefix=/usr:DESTDIR=TARGETS
 libxml2;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libxml-2.0.pc:TARGETS/usr/lib/pkgconfig/libxslt.pc;rewrite-libtool:TARGETS/usr/lib/libxml2.la;rewrite-dependency:TARGETS/usr/lib/;rewrite-libtool:TARGETS/usr/lib/python2.6/site-packages/libxml2mod.la
 libxslt;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libxslt.pc:TARGETS/usr/lib/pkgconfig/libexslt.pc;rewrite-libtool:TARGETS/usr/lib/libxslt.la:TARGETS/usr/lib/libexslt.la:TARGETS/usr/lib/python2.6/site-packages/libxsltmod.la
-libvorbisidec;make:install:DESTDIR=TARGETS;install:-m644:vorbisidec.pc:TARGETS/usr/lib/pkgconfig;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/vorbisidec.pc;rewrite-libtool:TARGETS/usr/lib/libvorbisidec.la
+libvorbisidec;make:install:prefix=TARGETS;install:-m644:vorbisidec.pc:TARGETS/usr/lib/pkgconfig;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/vorbisidec.pc;rewrite-libtool:TARGETS/usr/lib/libvorbisidec.la:rewrite-dependency:TARGETS/usr/lib/libvorbisidec.la
 glib2;rewrite-pkgconfig:glib-2.0.pc:gmodule-2.0.pc:gio-2.0.pc:gio-unix-2.0.pc:gmodule-export-2.0.pc:gmodule-no-export-2.0.pc:gobject-2.0.pc:gthread-2.0.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libglib-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgmodule-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgmodule-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgio-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgio-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgobject-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgobject-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgthread-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgthread-2.0.la
 libiconv;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libiconv.la
 GD;make:install:DESTDIR=TARGETS
@@ -112,7 +112,7 @@ libdreamdvd;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/u
 libdreamdvd2;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/libdreamdvd.pc
 graphlcd;make:install:DESTDIR=TARGETS
 openthreads;make:install:PREFIX=TARGETS
-libvorbis;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la
+libvorbis;make:install:prefix=TARGETS/usr;rewrite-libtool:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la;rewrite-dependency:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la
 
 #
 # GSTREAMER
@@ -131,7 +131,6 @@ gst_plugins_dvbmediasink;make:install:DESTDIR=TARGETS
 #
 portmap;make:install:BASEDIR=TARGETS;install:-m755:debian/init.d:TARGETS/etc/init.d/portmap
 nfs_utils;make:install:DESTDIR=TARGETS
-#nfs_utils;make:install:DESTDIR=TARGETS;install:-m644:debian/nfs-common.default:TARGETS/etc/default/nfs-common;install:-m755:debian/nfs-common.init:TARGETS/etc/init.d/nfs-common;install:-m644:debian/nfs-kernel-server.default:TARGETS/etc/default/nfs-kernel-server;install:-m755:debian/nfs-kernel-server.init:TARGETS/etc/init.d/nfs-kernel-server;install:-m644:debian/etc.exports:TARGETS/etc/exports;remove:TARGETS/sbin/mount.nfs4:TARGETS/sbin/umount.nfs4
 libnfsidmap;make:install
 libevent;make:install
 
