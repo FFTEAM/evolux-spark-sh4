@@ -1,0 +1,63 @@
+--- /root/OpenThreads/Make/makedefs.orig	2003-07-18 23:16:11.000000000 +0200
++++ b/Make/makedefs	2012-05-06 16:32:19.499501739 +0200
+@@ -78,7 +78,7 @@
+ BININST    = bin
+ LIBINST    = lib
+ 
+-INST_LOCATION      = /usr/local
++INST_LOCATION      = $(PREFIX)/usr
+ INST_LIBS          = $(INST_LOCATION)/lib$(ARCH_EXT)
+ INST_INCLUDE       = $(INST_LOCATION)/include
+ INST_SHARE         = $(INST_LOCATION)/share
+@@ -203,45 +203,17 @@
+ 
+ ifeq ($(OS),Linux)
+ SYSARCH           := $(shell arch)
+-  ifeq ($(COMPILER),intel)
+-    CXX               = ecc
+-    CXXFLAGS          += -x c++
+-    DEF               += -KPIC
+-    OPTF              = -O2
+-    DBGF              = -g
+-    ifeq ($(SYSARCH),ia64)
+-      ARCH              = IA64
+-    else
+-      ARCH              = 32
+-    endif
+-  else
+-    ifeq (x$(CXX),x)
+-      CXX               = g++
+-    endif
+-    ###DEF               += -fPIC
+-    OPTF              = -O2
+-    DBGF              = -ggdb -gstabs
+-    ifeq ($(SYSARCH),x86_64)
+-      ARCH              = 64
+-    ifeq (x$(CXX),x)
+-      CXX               = g++
+-    endif
+-      DEF               += -fPIC
+-    else 
+-      ARCH              = 32
+-    endif
+-  endif
+-
++  CXX               = sh4-linux-g++
++  LD                = linux-sh4-ld
++  OPTF              = -O2
++  DBGF              = -ggdb -gstabs
++  DEF               += -fPIC
++  ARCH              = 32
+   DEPARG            = -M
+   INC               +=  
+   DEF               +=
+   SHARED            = -shared
+   ARCHARGS          = 
+-ifeq ($(SYSARCH),x86_64)
+-  LINKARGS          = -L/usr/X11R6/lib64
+-else
+-  LINKARGS          = -L/usr/X11R6/lib
+-endif
+   MAKEDIST          = $(TOPDIR)/Make/makerpms
+ endif
+ 
