@@ -400,6 +400,7 @@ bool CUserMenu::showUserMenu(int button)
 			}
 			break;
 #endif
+#ifdef EVOLUX
 		case SNeutrinoSettings::ITEM_ADZAP:
 			menu_items++;
 			menu_prev = SNeutrinoSettings::ITEM_ADZAP;
@@ -422,6 +423,15 @@ bool CUserMenu::showUserMenu(int button)
 			menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, NULL, CNeutrinoApp::getInstance()->TunerMenu, "reset-usermenu", key, icon);
 			menu->addItem(menu_item, 0);
 			break;
+		case SNeutrinoSettings::ITEM_THREE_D_MODE:
+			menu_items++;
+			menu_prev = SNeutrinoSettings::ITEM_THREE_D_MODE;
+			keyhelper.get(&key,&icon);
+			//keyhelper.get(&key,&icon);
+			menu_item = new CMenuForwarder(LOCALE_THREE_D_SETTINGS, true, NULL, CNeutrinoApp::getInstance()->threeDSetup, "3dmode", key, icon);
+			menu->addItem(menu_item, 0);
+			break;
+#endif
 		default:
 			printf("[neutrino] WARNING! menu wrong item!!\n");
 			break;

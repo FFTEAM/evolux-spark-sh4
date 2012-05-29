@@ -52,6 +52,9 @@
 
 #include <cs_api.h>
 #include <video.h>
+#ifdef EVOLUX
+#include "3dsetup.h"
+#endif
 
 extern cVideo *videoDecoder;
 extern int prev_video_mode;
@@ -299,6 +302,8 @@ int CVideoSettings::showVideoSetup()
 	videosetup->addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_SATURATION, (int *)&g_settings.psi_saturation, true, 0, 255, psiNotifier));
 	videosetup->addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_BRIGHTNESS, (int *)&g_settings.psi_brightness, true, 0, 255, psiNotifier));
 	videosetup->addItem(new CMenuOptionNumberChooser(LOCALE_VIDEOMENU_PSI_TINT, (int *)&g_settings.psi_tint, true, 0, 255, psiNotifier));
+	videosetup->addItem(GenericMenuSeparatorLine);
+	videosetup->addItem(new CMenuForwarder(LOCALE_THREE_D_SETTINGS, true, NULL, CNeutrinoApp::getInstance()->threeDSetup, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));;
 #endif
  	int res = videosetup->exec(NULL, "");
  	videosetup->hide();

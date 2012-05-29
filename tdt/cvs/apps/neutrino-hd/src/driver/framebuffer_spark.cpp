@@ -1683,12 +1683,13 @@ void CFrameBuffer::blit()
 		bltData.dst_bottom = (s.yres * 2)/3 - 1;
 		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
 			perror("STMFBIO_BLT");
+
 		bltData.src_left   = xRes/2;
 		bltData.src_top    = 0;
 		bltData.src_right  = xRes - 1;
 		bltData.src_bottom = yRes/2 - 1;
 		bltData.dst_left   = 0;
-		bltData.dst_top    = (yRes * 2)/3;
+		bltData.dst_top    = (s.yres * 2)/3;
 		bltData.dst_right  = (s.xres * 1)/3 - 1;
 		bltData.dst_bottom = s.yres - 1;
 		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
@@ -1698,11 +1699,25 @@ void CFrameBuffer::blit()
 		bltData.src_right  = xRes - 1;
 		bltData.src_bottom = yRes - 1;
 		bltData.dst_left   = (s.xres * 1)/3;
-		bltData.dst_top    = (yRes * 2)/3;
+		bltData.dst_top    = (s.yres * 2)/3;
 		bltData.dst_right  = (s.xres * 2)/3 - 1;
 		bltData.dst_bottom = s.yres - 1;
 		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
 			perror("STMFBIO_BLT");
+#if 0
+		// Should clear remaining block. This is just cosmetic, as
+		// it won't be visible on a 3D-capable device. Besides, set3DMode()
+		// did already clear the whose screen, so just forget about it.
+
+		bltData.operation  = BLT_OP_FILL;
+		bltData.dst_left   = (s.xres * 2)/3;
+		bltData.dst_top    = (s.yres * 2)/3;
+		bltData.dst_right  = s.xres - 1;
+		bltData.dst_bottom = s.yres - 1;
+		bltData.colour	   = 0;
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
+			perror("STMFBIO_BLT");
+#endif
 		break;
 	}
 	if(ioctl(fd, STMFBIO_SYNC_BLITTER) < 0)
@@ -1829,7 +1844,26 @@ CFrameBuffer::Mode3D CFrameBuffer::get3DMode() {
 }
 
 void CFrameBuffer::set3DMode(Mode3D m) {
-	mode3D = m;
-	blit();
+	if (mode3D != m) {
+		fb_var_screeninfo s;
+		if (ioctl(fd, FBIOGET_VSCREENINFO, &s) == -1)
+			perror("frameBuffer <FBIOGET_VSCREENINFO>");
+		STMFBIO_BLT_DATA  bltData;
+		memset(&bltData, 0, sizeof(STMFBIO_BLT_DATA));
+		bltData.srcFormat = SURF_BGRA8888;
+		bltData.srcMemBase = STMFBGP_FRAMEBUFFER;
+		bltData.dstPitch   = s.xres * 4;
+		bltData.dstFormat = SURF_BGRA8888;
+		bltData.dstMemBase = STMFBGP_FRAMEBUFFER;
+		bltData.operation  = BLT_OP_FILL;
+		bltData.dst_right  = s.xres - 1;
+		bltData.dst_bottom = s.yres - 1;
+		blit_lock();
+		if (ioctl(fd, STMFBIO_BLT, &bltData ) < 0)
+			perror("STMFBIO_BLT");
+		blit_unlock();
+		mode3D = m;
+		blit();
+	}
 }
 #endif
