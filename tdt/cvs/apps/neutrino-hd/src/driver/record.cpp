@@ -195,7 +195,11 @@ record_error_msg_t CRecordInstance::Start(CZapitChannel * channel /*, APIDList &
 	cCA * ca = cCA::GetInstance();
 	ca->SendPMT(DEMUX_SOURCE_2, pmt, len);
 
+#ifdef EVOLUX
+	CVFD::getInstance()->ShowIcon(VFD_ICON_CAM1, true);
+#else
 	//CVFD::getInstance()->ShowIcon(VFD_ICON_CAM1, true);
+#endif
 	WaitRecMsg(msg_start_time, 2);
 	hintBox.hide();
 	return RECORD_OK;
@@ -237,7 +241,11 @@ bool CRecordInstance::Stop(bool remove_event)
 		g_Timerd->stopTimerEvent(recording_id);
 		recording_id = 0;
 	}
+#ifdef EVOLUX
+        CVFD::getInstance()->ShowIcon(VFD_ICON_CAM1, false);
+#else
         //CVFD::getInstance()->ShowIcon(VFD_ICON_CAM1, false);
+#endif
 	WaitRecMsg(end_time, 2);
 	hintBox.hide();
 	return true;

@@ -39,6 +39,10 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
+#ifdef EVOLUX
+#include "driver/framebuffer.h"
+#endif
+
 #include "tuxtxt_def.h"
 
 #include <ft2build.h>
@@ -203,8 +207,13 @@ const char *ObjectType[] =
 #define NoServicesFound 3
 
 /* framebuffer stuff */
+#ifdef EVOLUX
+static fb_pixel_t *lfb = NULL;
+static fb_pixel_t *lbb = NULL;
+#else
 static unsigned char *lfb = 0;
 static unsigned char *lbb = 0;
+#endif
 struct fb_var_screeninfo var_screeninfo;
 struct fb_fix_screeninfo fix_screeninfo;
 
@@ -1204,6 +1213,20 @@ const unsigned short defaultcolors[] =	/* 0x0bgr */
 	0x420, 0x210, 0x420, 0x000, 0x000
 };
 
+#ifdef EVOLUX
+fb_pixel_t coltab32[] = {
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xff000000, 0xff000000,
+	0xff000000, 0xff000000, 0xc0000000, 0x00000000,
+	0x33000000
+};
+#else
 #if !HAVE_TRIPLEDRAGON
 /* 32bit colortable */
 unsigned char bgra[][5] = { 
@@ -1230,6 +1253,7 @@ unsigned char bgra[][5] = {
 "\xFF\0\0\0", "\xFF\0\0\0", "\xFF\0\0\0", "\xFF\0\0\0",
 "\xFF\0\0\0", "\xFF\0\0\0", "\xC0\0\0\0", "\x00\0\0\0",
 "\x33\0\0\0" };
+#endif
 #endif
 
 /* old 8bit color table */

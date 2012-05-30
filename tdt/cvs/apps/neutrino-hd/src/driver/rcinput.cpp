@@ -151,7 +151,12 @@ CRCInput::CRCInput()
 		fd_rc[i] = -1;
 	}
 	clickfd = -1;
+#ifdef EVOLUX
+	repeat_block = 250000;
+	repeat_block_generic = 800000;
+#else
 	repeat_block = repeat_block_generic = 0;
+#endif
 	open();
 	rc_last_key =  KEY_MAX;
 
@@ -1264,7 +1269,9 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 
 					tv = ev.time;
 					now_pressed = (uint64_t) tv.tv_usec + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+fprintf(stderr, "ev.code == rc_last_key? (%x <=> %x\n", ev.code, rc_last_key);
 					if (ev.code == rc_last_key) {
+fprintf(stderr, "ev.code == rc_last_key\n");
 						/* only allow selected keys to be repeated */
 						/* (why?)                                  */
 						if( 	(trkey == RC_up) || (trkey == RC_down   ) ||

@@ -411,9 +411,11 @@ void CLCD::ShowIcon(vfd_icon icon, bool show)
 {
 	int which;
 	switch (icon) {
-		case VFD_ICON_TIMESHIFT:
+		case VFD_ICON_PLAY:
+		//case VFD_ICON_TIMESHIFT:
 			which = LED_GREEN;
 			break;
+		case VFD_ICON_CAM1:
 		case VFD_ICON_RECORD:
 			which = LED_RED;
 			break;

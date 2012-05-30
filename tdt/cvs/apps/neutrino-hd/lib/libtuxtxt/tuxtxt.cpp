@@ -27,7 +27,11 @@
 #define KEY_REVEAL	KEY_FN_D
 
 #ifdef HAVE_SPARK_HARDWARE
+#ifdef EVOLUX
+#define MARK_FB(a, b, c, d) if ((fb_pixel_t *)p == lfb) CFrameBuffer::getInstance()->mark(a, b, (a) + (c), (b) + (d))
+#else
 #define MARK_FB(a, b, c, d) if (p == lfb) CFrameBuffer::getInstance()->mark(a, b, (a) + (c), (b) + (d))
+#endif
 #else
 #define MARK_FB(a, b, c, d)
 #endif
@@ -45,8 +49,11 @@ static int cfg_national_subset;
 static int screen_x, screen_y, screen_w, screen_h;
 
 //#define USE_FBPAN // FBIOPAN_DISPLAY seems to be working in current driver
-
+#ifdef EVOLUX
+fb_pixel_t *getFBp(int *y)
+#else
 unsigned char *getFBp(int *y)
+#endif
 {
 	if (*y < (int)var_screeninfo.yres)
 		return lfb;
@@ -57,6 +64,19 @@ unsigned char *getFBp(int *y)
 
 void FillRect(int x, int y, int w, int h, int color)
 {
+#ifdef EVOLUX
+	fb_pixel_t *p = getFBp(&y);
+	MARK_FB(x, y, w, h);
+	p += x + y * fix_screeninfo.line_length;
+	fb_pixel_t col = coltab32[color];
+	if (w > 0)
+		for (int count = 0; count < h; count++) {
+			fb_pixel_t *dest0 = p;
+			for (int i = 0; i < w; i++)
+				*dest0++ = col;
+			p += fix_screeninfo.line_length;
+		}
+#else
 	unsigned char *p = getFBp(&y);
 	MARK_FB(x, y, w, h);
 	p += x*4 + y * fix_screeninfo.line_length;
@@ -72,6 +92,7 @@ void FillRect(int x, int y, int w, int h, int color)
 				*(dest0++) = col;
 			p += fix_screeninfo.line_length;
 		}
+#endif
 }
 
 
@@ -306,6 +327,28 @@ void setfontwidth(int newwidth)
 	}
 }
 
+#ifdef EVOLUX
+void setcolors(unsigned short *pcolormap, int offset, int number) {
+	int j = offset; /* index in global color table */
+	int trans_tmp=25-trans_mode;
+
+	coltab32[transp2] = (((trans_tmp+7)<<11 | 0x7FF)>>8) << 24;
+
+	for (int i = 0; i < number; i++) {
+		int r = (pcolormap[i] << 12 & 0xF000) >> 8;
+		int g = (pcolormap[i] << 8 & 0xF000) >> 8;
+		int b = (pcolormap[i] << 4 & 0xF000) >> 8;
+
+		r = (r * (0x3f+(color_mode<<3))) >> 8;
+		g = (g * (0x3f+(color_mode<<3))) >> 8;
+		b = (b * (0x3f+(color_mode<<3))) >> 8;
+
+		coltab32[j] &= 0xff000000;
+		coltab32[j] |= (r << 16) | (g << 8) | b;
+		j++;
+	}
+}
+#else
 #if HAVE_TRIPLEDRAGON
 #define _A 0
 #define _R 1
@@ -343,6 +386,7 @@ void setcolors(unsigned short *pcolormap, int offset, int number)
 		j++;
 	}
 }
+#endif
 
 /* hexdump of page contents to stdout for debugging */
 void dump_page()
@@ -1657,8 +1701,13 @@ int tuxtx_main(int _rc, int pid, int page, int source)
 
 	rc = _rc;
 	CFrameBuffer *fbp = CFrameBuffer::getInstance();
+#ifdef EVOLUX
+	lfb = fbp->getFrameBufferPointer();
+	lbb = fbp->getBackBufferPointer();
+#else
 	lfb = (unsigned char *)fbp->getFrameBufferPointer();
 	lbb = (unsigned char *)fbp->getBackBufferPointer();
+#endif
 
 	tuxtxt_cache.vtxtpid = pid;
 
@@ -1687,7 +1736,11 @@ int tuxtx_main(int _rc, int pid, int page, int source)
 	struct fb_var_screeninfo *var;
 	var = fbp->getScreenInfo();
 	memcpy(&var_screeninfo, var, sizeof(struct fb_var_screeninfo));
+# ifdef EVOLUX
+	fix_screeninfo.line_length = var_screeninfo.xres;
+# else
 	fix_screeninfo.line_length = var_screeninfo.xres * sizeof(fb_pixel_t);
+# endif
 #endif
 	/* set variable screeninfo for double buffering */
 	var_screeninfo.yoffset      = 0;
@@ -4007,6 +4060,9 @@ void SwitchScreenMode(int newscreenmode)
 		setfontwidth(fw);
 
 		CFrameBuffer *f = CFrameBuffer::getInstance();
+#ifdef EVOLUX
+		if (f->get3DMode() == CFrameBuffer::Mode3D_off)
+#endif
 		videoDecoder->Pig(tx, ty, tw, th,
 				  f->getScreenWidth(true), f->getScreenHeight(true));
 #if 0
@@ -4118,7 +4174,11 @@ void SwitchHintMode()
 
 void RenderDRCS( //FIX ME
 	unsigned char *s,	/* pointer to char data, parity undecoded */
+#ifdef EVOLUX
+	fb_pixel_t *d,	/* pointer to frame buffer of top left pixel */
+#else
 	unsigned char *d,	/* pointer to frame buffer of top left pixel */
+#endif
 	unsigned char *ax, /* array[0..12] of x-offsets, array[0..10] of y-offsets for each pixel */
 	unsigned char fgcolor, unsigned char bgcolor)
 {
@@ -4151,7 +4211,11 @@ void RenderDRCS( //FIX ME
 //					memset(d + ax[x], f1, ax[x+1] - ax[x]);
 					for (ltmp=0 ; ltmp <= (ax[x+1]-ax[x]); ltmp++)
 					{
+#ifdef EVOLUX
+						*(d + ax[x] + ltmp) = coltab32[f1];
+#else
 						memmove(d + ax[x]*4 +ltmp*4,bgra[f1],4);
+#endif
 					}
 				}
 				if (ax[x+7] > ax[x+6])
@@ -4159,7 +4223,11 @@ void RenderDRCS( //FIX ME
 //					memset(d + ax[x+6], f2, ax[x+7] - ax[x+6]); /* 2nd byte 6 pixels to the right */
 					for (ltmp=0 ; ltmp <= (ax[x+7]-ax[x+6]); ltmp++)
 					{
+#ifdef EVOLUX
+						*(d + ax[x+6] + ltmp) = coltab32[f2];
+#else
 						memmove(d + ax[x+6]*4 +ltmp*4,bgra[f2],4);
+#endif
 					}
 
 				}
@@ -4171,9 +4239,20 @@ void RenderDRCS( //FIX ME
 	}
 }
 
-
 void DrawVLine(int x, int y, int l, int color)
 {
+#ifdef EVOLUX
+	fb_pixel_t *p = getFBp(&y);
+	fb_pixel_t col = coltab32[color];
+	MARK_FB(x, y, 0, l);
+	p += x + y * fix_screeninfo.line_length;
+
+	for ( ; l > 0 ; l--)
+	{
+		*p = col;
+		p += fix_screeninfo.line_length;
+	}
+#else
 	unsigned char *p = getFBp(&y);
 	MARK_FB(x, y, 0, l);
 	p += x*4 + y * fix_screeninfo.line_length;
@@ -4183,10 +4262,23 @@ void DrawVLine(int x, int y, int l, int color)
 		memmove(p,bgra[color],4);
 		p += fix_screeninfo.line_length;
 	}
+#endif
 }
 
 void DrawHLine(int x, int y, int l, int color)
 {
+#ifdef EVOLUX
+	int ltmp;
+	fb_pixel_t *p = getFBp(&y);
+	fb_pixel_t col = coltab32[color];
+	MARK_FB(x, y, l, 0);
+	p += x + y * fix_screeninfo.line_length;
+	while (l > 0)
+	{
+		*p++ = col;
+		l--;
+	}
+#else
 	int ltmp;
 	unsigned char *p = getFBp(&y);
 	MARK_FB(x, y, l, 0);
@@ -4197,6 +4289,7 @@ void DrawHLine(int x, int y, int l, int color)
 			memmove(p + x*4 + ltmp*4 + y * fix_screeninfo.line_length, bgra[color], 4);
 		}
 	}
+#endif
 }
 
 void FillRectMosaicSeparated(int x, int y, int w, int h, int fgcolor, int bgcolor, int set)
@@ -4210,6 +4303,14 @@ void FillRectMosaicSeparated(int x, int y, int w, int h, int fgcolor, int bgcolo
 
 void FillTrapez(int x0, int y0, int l0, int xoffset1, int h, int l1, int color)
 {
+#ifdef EVOLUX
+	for (int yoffset = 0; yoffset < h; yoffset++) {
+		int l = l0 + ((l1-l0) * yoffset + h/2) / h;
+		int xoffset = (xoffset1 * yoffset + h/2) / h;
+		if (l > 0)
+			DrawHLine(xoffset + x0, yoffset + y0, l, color);
+	}
+#else
 	unsigned char *p = getFBp(&y0);
 	MARK_FB(x0, y0, l0, h);
 	p += x0 * 4 + y0 * fix_screeninfo.line_length;
@@ -4231,9 +4332,27 @@ void FillTrapez(int x0, int y0, int l0, int xoffset1, int h, int l1, int color)
 		}
 		p += fix_screeninfo.line_length;
 	}
+#endif
 }
 void FlipHorz(int x, int y, int w, int h)
 {
+#ifdef EVOLUX
+	uint32_t buf[w];
+	fb_pixel_t *p = getFBp(&y);
+	MARK_FB(x, y, w, h);
+	p += x + y * fix_screeninfo.line_length;
+
+	for (int h1 = 0 ; h1 < h ; h1++) {
+		memcpy(buf, p, w * 4);
+		for (int w1 = 0 ; w1 < w ; w1++) {
+			if (w1 + x > fix_screeninfo.line_length)
+				fprintf(stderr, "%s: x=%d out of bounds\n", __func__, w1 + x);
+			else
+				*(p + w1) = *(buf + w - w1 - 1);
+		}
+		p += fix_screeninfo.line_length;
+	}
+#else
 	unsigned char *buf= new unsigned char[w*4];
 	unsigned char *p = getFBp(&y);
 	MARK_FB(x, y, w, h);
@@ -4252,9 +4371,25 @@ void FlipHorz(int x, int y, int w, int h)
 		}
 		delete [] buf;
 	}
+#endif
 }
 void FlipVert(int x, int y, int w, int h)
 {
+#ifdef EVOLUX
+	fb_pixel_t buf[w];
+	fb_pixel_t *p1, *p2;
+	fb_pixel_t *p = getFBp(&y);
+	p += x + y * fix_screeninfo.line_length;
+
+	for (int h1 = 0 ; h1 < h/2 ; h1++) {
+		p1 = p+(h1*fix_screeninfo.line_length);
+		p2 = p+(h-(h1+1))*fix_screeninfo.line_length;
+
+		memmove(buf, p1, w * 4);
+		memmove(p1, p2, w * 4);
+		memmove(p2, buf, w * 4);
+	}
+#else
 	unsigned char *buf= new unsigned char[w*4];
 	unsigned char *p1, *p2;
 	unsigned char *p = getFBp(&y);
@@ -4273,6 +4408,7 @@ void FlipVert(int x, int y, int w, int h)
 		}
 		delete [] buf;
 	}
+#endif
 }
 
 int ShapeCoord(int param, int curfontwidth, int curfontheight)
@@ -4522,9 +4658,15 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 			{
 				int x,y,f,c;
 				y = yoffset;
+#ifdef EVOLUX
+				fb_pixel_t *p = getFBp(&y);
+				MARK_FB(PosX, PosY, curfontwidth, fontheight);
+				p += PosX + PosY * fix_screeninfo.line_length;
+#else
 				unsigned char *p = getFBp(&y);
 				MARK_FB(PosX, PosY, curfontwidth, fontheight);
 				p += PosX * 4 + PosY * fix_screeninfo.line_length;
+#endif
 
 				for (y=0; y<fontheight;y++)
 				{
@@ -4533,7 +4675,11 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 						for (x=0; x<curfontwidth*xfactor;x++)
 						{
 							c = (y&4 ? (x/3)&1 :((x+3)/3)&1);
+#ifdef EVOLUX
+							*(p + x) = coltab32[c ? fgcolor : bgcolor];
+#else
 							memmove((p+x*4),bgra[(c ? fgcolor : bgcolor)],4);
+#endif
 						}
 						p += fix_screeninfo.line_length;
 					}
@@ -4570,9 +4716,17 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 			}
 			axdrcs[12] = curfontwidth; /* adjust last x-offset according to position, FIXME: double width */
 			int y = yoffset;
+#ifdef EVOLUX
+			fb_pixel_t *q = getFBp(&y);
+#else
 			unsigned char *q = getFBp(&y);
+#endif
 			RenderDRCS(p,
+#ifdef EVOLUX
+					q + PosX + PosY * fix_screeninfo.line_length,
+#else
 					q + PosX * 4 + PosY * fix_screeninfo.line_length,
+#endif
 					axdrcs, fgcolor, bgcolor);
 		}
 		else
@@ -4837,7 +4991,11 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 		}
 	}
 
+#ifdef EVOLUX
+	fb_pixel_t *p;
+#else
 	unsigned char *p;
+#endif
 	int f; /* running counter for zoom factor */
 
 	Row = factor * (ascender - sbit->top + TTFShiftY);
@@ -4848,18 +5006,32 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 
 	int y = yoffset;
 	p = getFBp(&y);
+#ifdef EVOLUX
+	p += PosX + (PosY + Row) * fix_screeninfo.line_length; /* running pointer into framebuffer */
+#else
 	p += PosX * 4 + (PosY + Row) * fix_screeninfo.line_length; /* running pointer into framebuffer */
+#endif
 
 	for (Row = sbit->height; Row; Row--) /* row counts up, but down may be a little faster :) */
 	{
 		int pixtodo = (usettf ? sbit->width : curfontwidth);
-		char *pstart = (char*) p;
 
+#ifdef EVOLUX
+		fb_pixel_t *pstart = p;
+		fb_pixel_t bgcol = coltab32[bgcolor];
+#else
+		char *pstart = (char*) p;
+#endif
 		for (Bit = xfactor * (sbit->left + TTFShiftX); Bit > 0; Bit--) /* fill left margin */
 		{
 			for (f = factor-1; f >= 0; f--)
+#ifdef EVOLUX
+				*(p + f*fix_screeninfo.line_length) = bgcol;
+			p++;
+#else
 				memmove((p + f*fix_screeninfo.line_length),bgra[bgcolor],4);/*bgcolor*/
 			p+=4;
+#endif
 			if (!usettf)
 				pixtodo--;
 		}
@@ -4879,14 +5051,24 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 					color = bgcolor;
 
 				for (f = factor-1; f >= 0; f--)
+#ifdef EVOLUX
+					*(p + f*fix_screeninfo.line_length) = coltab32[color];
+				p++;
+#else
 					memmove((p + f*fix_screeninfo.line_length),bgra[color],4);
 				p+=4;
+#endif
 
 				if (xfactor > 1) /* double width */
 				{
 					for (f = factor-1; f >= 0; f--)
+#ifdef EVOLUX
+						*(p + f*fix_screeninfo.line_length) = coltab32[color];
+					p++;
+#else
 						memmove((p + f*fix_screeninfo.line_length),bgra[color],4);
 					p+=4;
+#endif
 
 					if (!usettf)
 						pixtodo--;
@@ -4898,11 +5080,20 @@ void RenderChar(int Char, tstPageAttr *Attribute, int zoom, int yoffset)
 				Bit > 0; Bit--) /* fill rest of char width */
 		{
 			for (f = factor-1; f >= 0; f--)
+#ifdef EVOLUX
+				*(p + f*fix_screeninfo.line_length) = coltab32[bgcolor];
+			p++;
+#else
 				memmove((p + f*fix_screeninfo.line_length),bgra[bgcolor],4);
 			p+=4;
+#endif
 		}
 
+#ifdef EVOLUX
+		p = pstart + factor*fix_screeninfo.line_length;
+#else
 		p = (unsigned char*) pstart + factor*fix_screeninfo.line_length;
+#endif
 	}
 
 	Row = ascender - sbit->top + sbit->height + TTFShiftY;
@@ -5614,7 +5805,11 @@ void CreateLine25()
 
 void CopyBB2FB()
 {
+#ifdef EVOLUX
+	fb_pixel_t *src, *dst, *topsrc;
+#else
 	unsigned char *src, *dst, *topsrc;
+#endif
 	int fillcolor, i, screenwidth, swtmp;
 #ifdef HAVE_SPARK_HARDWARE
 	CFrameBuffer *f = CFrameBuffer::getInstance();
@@ -5643,7 +5838,11 @@ void CopyBB2FB()
 		f->blit2FB(lbb, var_screeninfo.xres, var_screeninfo.yres, 0, 0, 0, 0, true);
 		f->blit();
 #else
+#ifdef EVOLUX
+		memcpy(lfb, lbb, fix_screeninfo.line_length*var_screeninfo.yres * sizeof(fb_pixel_t));
+#else
 		memcpy(lfb, lbb, fix_screeninfo.line_length*var_screeninfo.yres);
+#endif
 #endif
 #endif
 
@@ -5676,7 +5875,11 @@ void CopyBB2FB()
 #endif
 	/* copy line25 in normal height */
 	if (!pagecatching )
+#ifdef EVOLUX
+		memmove(dst+(24*fontheight)*fix_screeninfo.line_length, src + (24*fontheight)*fix_screeninfo.line_length, fix_screeninfo.line_length*fontheight * sizeof(fb_pixel_t));
+#else
 		memmove(dst+(24*fontheight)*fix_screeninfo.line_length, src + (24*fontheight)*fix_screeninfo.line_length, fix_screeninfo.line_length*fontheight);
+#endif
 
 	if (transpmode)
 		fillcolor = transp;
@@ -5719,7 +5922,11 @@ void CopyBB2FB()
 	{
 		for (swtmp=0; swtmp<=screenwidth; swtmp++)
 		{
+#ifdef EVOLUX
+			*(dst - i*fix_screeninfo.line_length+swtmp) = coltab32[fillcolor];
+#else
 			memmove(dst - i*fix_screeninfo.line_length+swtmp*4, bgra[fillcolor], 4);
+#endif
 		}
 	}
 
@@ -5736,7 +5943,11 @@ void CopyBB2FB()
 	{
 		for (swtmp=0; swtmp<= screenwidth;swtmp++)
 		{
+#ifdef EVOLUX
+			*(dst + fix_screeninfo.line_length*(fontheight+i)+swtmp) = coltab32[fillcolor];
+#else
 			memmove(dst + fix_screeninfo.line_length*(fontheight+i)+swtmp*4, bgra[fillcolor], 4);
+#endif
 		}
 	}
 #ifdef HAVE_SPARK_HARDWARE
@@ -6061,7 +6272,11 @@ void DecodePage()
 						page_char + 20 * (DRCSCOLS * row + col + 2),
 						lfb
 						+ (StartY + fontheight + DRCSYSPC * row + var_screeninfo.yres - var_screeninfo.yoffset) * fix_screeninfo.line_length
+#ifdef EVOLUX
+						+ (StartX + DRCSXSPC * col),
+#else
 						+ (StartX + DRCSXSPC * col)*4,
+#endif
 						ax, white, black);
 
 			memset(page_char + 40, 0xff, 24*40); /* don't render any char below row 0 */
@@ -6580,4 +6795,3 @@ int GetRCCode()
 /* comment-column:0 */
 /* fill-column:120 */
 /* End: */
-

@@ -2132,7 +2132,18 @@ void CChannelList::paintHead()
 	if (g_settings.channellist_new_zap_mode)
 		timestr_len += iw3 + 4;
 	logo_off = timestr_len + 4;
+#ifdef EVOLUX
+	string _name;
+	if(name == "extra.zapit_bouquetname_others")
+		_name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+	else if(name == "extra.zapit_bouquetname_newchannels")
+		_name = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+	else
+		_name = name;
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width - timestr_len, _name, COL_MENUHEAD, 0, true); // UTF-8
+#else
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width - timestr_len, name, COL_MENUHEAD, 0, true); // UTF-8
+#endif
 }
 
 void CChannelList::paint()

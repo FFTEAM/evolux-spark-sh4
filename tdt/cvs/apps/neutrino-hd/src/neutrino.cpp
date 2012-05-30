@@ -88,8 +88,6 @@
 #include "gui/widget/messagebox.h"
 #include "gui/infoclock.h"
 
-#include "gui/3dsetup.h"
-
 #ifdef EVOLUX
 #include "gui/batchepg.h"
 #endif
