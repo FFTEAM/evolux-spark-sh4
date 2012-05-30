@@ -1,3 +1,14 @@
+# tuxbox/neutrino
+
+$(targetprefix)/var/etc/.version:
+	echo "imagename=Ntrino" > $@
+	echo "homepage=http://gitorious.org/open-duckbox-project-sh4" >> $@
+	echo "creator=`id -un`" >> $@
+	echo "docs=http://gitorious.org/open-duckbox-project-sh4/pages/Home" >> $@
+	echo "forum=http://gitorious.org/open-duckbox-project-sh4" >> $@
+	echo "version=0100`date +%Y%m%d%H%M`" >> $@
+	echo "git =`git describe`" >> $@
+
 #
 # libstb-hal
 #
@@ -69,7 +80,7 @@ $(DEPDIR)/neutrino-hd.do_compile: $(appsdir)/neutrino-hd/config.status
 	touch $@
 
 $(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal openthreads neutrino-hd.do_prepare neutrino-hd.do_compile
-	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=$(targetprefix)/usr/local/share/
+	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
 neutrino-hd-clean neutrino-hd-distclean:

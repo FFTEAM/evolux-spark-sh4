@@ -361,7 +361,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino-hd/usr/local/bin
 	cp $(targetprefix)/usr/local/bin/neutrino $(prefix)/release_neutrino-hd/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/pzapit $(prefix)/release_neutrino-hd/usr/local/bin/
-	cp $(targetprefix)/usr/local/bin/mhwepg $(prefix)/release_neutrino-hd/usr/local/bin/
+#	cp $(targetprefix)/usr/local/bin/mhwepg $(prefix)/release_neutrino-hd/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/sectionsdcontrol $(prefix)/release_neutrino-hd/usr/local/bin/
 	sh4-linux-strip --strip-unneeded $(prefix)/release_neutrino-hd/usr/local/bin/*
 #	find $(prefix)/release_neutrino-hd/usr/local/bin/ -name  neutrino -exec sh4-linux-strip --strip-unneeded {} \;
@@ -379,7 +379,7 @@ endif
 #	( cd $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/ && ln -sf tuxtxt2_720.conf tuxtxt2.conf )
 	rm $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/tuxtxt2_*
 #	TODO: HACK
-	cp -aR $(targetprefix)/$(targetprefix)/usr/local/share/neutrino/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino
+	cp -aR $(targetprefix)/usr/local/share/neutrino/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino
 #######################################################################################
 #	cp -aR $(targetprefix)/usr/local/share/fonts $(prefix)/release_neutrino-hd/usr/local/share/
 	mkdir -p $(prefix)/release_neutrino-hd/usr/local/share/fonts
