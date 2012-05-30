@@ -391,7 +391,7 @@ endif
 	cp $(buildprefix)/root/usr/share/fonts/FreeSans.ttf $(prefix)/release_neutrino-hd/usr/share/fonts/
 
 	cp -aR $(targetprefix)/usr/local/share/fonts/micron.ttf $(prefix)/release_neutrino-hd/usr/local/share/fonts/neutrino.ttf
-	cp $(appsdir)/neutrino/src/nhttpd/web/{Y_Baselib.js,Y_VLC.js} $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd-y/
+	cp $(appsdir)/neutrino/src/nhttpd/web/{Y_Baselib.js,Y_VLC.js} $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/
 #	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd-y/{Y_Baselib.js.gz,Y_VLC.js.gz}
 #######################################################################################
 	echo "pingulux-rev#: " > $(prefix)/release_neutrino-hd/etc/imageinfo
@@ -414,7 +414,7 @@ endif
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/tuxbox
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino-hd/usr/lib/
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/libnfsidmap
-	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino-hd/usr/lib/
+#	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino-hd/usr/lib/
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsa-lib
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsaplayer
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/engines
@@ -427,10 +427,10 @@ endif
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/X11
 	mkdir -p $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/logo
-	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo )
-	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd-y && ln -s /usr/local/share/neutrino/icons/logo logos )
-	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd-y httpd )
-	( cd $(prefix)/release_neutrino-hd/var && ln -s /usr/local/share/neutrino/httpd-y httpd )
+	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd && ln -s /usr/local/share/neutrino/icons/logo )
+	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd && ln -s /usr/local/share/neutrino/icons/logo logos )
+	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd httpd )
+	( cd $(prefix)/release_neutrino-hd/var && ln -s /usr/local/share/neutrino/httpd httpd )
 	find $(prefix)/release_neutrino-hd/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino-hd/etc/.fsck
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino-hd/etc/init.d/
