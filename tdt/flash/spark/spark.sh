@@ -16,6 +16,11 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
+if [ -e $TUFSBOXDIR/release-neutrino-hd_with_dev/etc/changelog.txt ]; then
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	cp -RP $TUFSBOXDIR/release-neutrino-hd_with_dev/etc/changelog.txt $TUFSBOXDIR/
+fi
+
 if [ -e $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt ]; then
 	EVOLUXVERSION=`cat $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 	cp -RP $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $TUFSBOXDIR/
@@ -71,27 +76,34 @@ echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
 if [ -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-		echo "   1) Prepare Neutrino     jffs2"
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+		echo "   1) Prepare Ntrino     jffs2"
+	fi
+fi
+if [ -d $TUFSBOXDIR/release_neutrino-hd_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+		echo "   2) Prepare Ntrino-HD     jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_with_dev ]; then
 	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
-		echo "   2) Prepare Enigma2      jffs2"
+		echo "   3) Prepare Enigma2      jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
 	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
-		echo "   3) Prepare Enigma2-PLI  jffs2"
+		echo "   4) Prepare Enigma2-PLI  jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_evolux_with_dev ]; then
-	echo "   4) Prepare Evolux       jffs2"
+	echo "   5) Prepare Evolux       jffs2"
 fi
 if [ -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
-	echo "   5) Prepare Evolux-PLI   jffs2"
+	echo "   6) Prepare Evolux-PLI   jffs2"
 fi
-
+if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+	echo "   7) Prepare Evolux-NTRINO-HD-PLI   jffs2"
+fi
 echo "----------------------------"
 
 read -t 10 -p "Select target (autoskip in 10s)? "
@@ -106,7 +118,16 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf Ntrino-JFFS2.tar.gz e2jffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	2)  echo "Preparing Enigma2 jffs2..."
+	2)  echo "Preparing Neutrino-HD jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_neutrino-hd_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Ntrino-HD jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf NtrinoHD-JFFS2.tar.gz e2jffs2.img uImage
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	3)  echo "Preparing Enigma2 jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Enigma2 jffs2 and uImage..."
@@ -115,7 +136,7 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	3)  echo "Preparing Enigma2-PLI jffs2..."
+	4)  echo "Preparing Enigma2-PLI jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Enigma2 jffs2 and uImage..."
@@ -124,7 +145,7 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf E2-JFFS2.tar.gz e2jffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	4)  echo "Preparing Evolux jffs2..."
+	5)  echo "Preparing Evolux jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
 		echo "Creating Evolux jffs2 and uImage..."
@@ -133,10 +154,19 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	5)  echo "Preparing Evolux-PLI jffs2..."
+	6)  echo "Preparing Evolux-PLI jffs2..."
 		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_pli_with_dev $TMPROOTDIR $TMPKERNELDIR
 		echo "-----------------------------------------------------------------------"
-		echo "Creating Evolux jffs2 and uImage..."
+		echo "Creating Evolux-PLI jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	7)  echo "Preparing Evolux-NTRINO-HD-PLI jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Evolux-NTRINO-HD-PLI jffs2 and uImage..."
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
