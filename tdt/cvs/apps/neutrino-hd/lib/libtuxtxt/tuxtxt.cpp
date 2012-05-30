@@ -20,6 +20,9 @@
 #include "driver/framebuffer.h"
 #include <dmx.h>
 #include <video.h>
+#ifdef EVOLUX
+#include <sys/time.h>
+#endif
 
 /* same as in rcinput.h... */
 #define KEY_TTTV	KEY_FN_1
@@ -1780,6 +1783,10 @@ int tuxtx_main(int _rc, int pid, int page, int source)
 		return 1;
 	}
 	//transpmode = 1;
+#ifdef EVOLUX
+	// clear input queue
+	while (GetRCCode() == 1);
+#endif
 	/* main loop */
 	do {
 		if (GetRCCode() == 1)
@@ -6652,6 +6659,12 @@ int GetRCCode()
 {
 	struct input_event ev;
 	static __u16 rc_last_key = KEY_RESERVED;
+#ifdef EVOLUX
+	struct timeval tv;
+        gettimeofday(&tv, NULL);
+        static uint64_t time_last = 0;
+        uint64_t time_now = (uint64_t) tv.tv_usec + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+#endif
 
 	int val = fcntl(rc, F_GETFL);
 	if(!(val & O_NONBLOCK))
@@ -6662,9 +6675,24 @@ int GetRCCode()
 	{
 		if (ev.value)
 		{
+#ifdef EVOLUX
+			if (ev.code == rc_last_key && time_last + 100000 /* us */ > time_now
+				&& (ev.code == KEY_DOWN || ev.code == KEY_UP || ev.code == KEY_LEFT || ev.code == KEY_RIGHT)) {
+				RCCode = -1;
+				return 0;
+			}
+			if (ev.code == rc_last_key && time_last + 250000 /* us */ > time_now) {
+				RCCode = -1;
+				return 0;
+			}
+			if (time_last + 250000 < time_now)
+				rc_last_key = KEY_RESERVED;
+			time_last = time_now;
+#else
 			if (ev.code != rc_last_key ||
 			    ev.code == KEY_DOWN || ev.code == KEY_UP ||  /* allow direction keys */
 			    ev.code == KEY_LEFT || ev.code == KEY_RIGHT) /* to autorepeat...     */
+#endif
 			{
 				rc_last_key = ev.code;
 				switch (ev.code)
@@ -6718,7 +6746,9 @@ printf("[tuxtxt] new key, code %X\n", RCCode);
 		else
 		{
 			RCCode = -1;
+#ifndef EVOLUX
 			rc_last_key = KEY_RESERVED;
+#endif
 		}
 	}
 
