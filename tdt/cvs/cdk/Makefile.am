@@ -116,6 +116,8 @@ include make/release-enigma2-pli-nightly.mk
 
 include make/release_neutrino.mk
 
+include make/release_neutrino-hd.mk
+
 include make/release_evolux.mk
 
 include make/release_evolux_pli.mk

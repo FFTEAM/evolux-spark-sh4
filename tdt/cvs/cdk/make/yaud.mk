@@ -87,7 +87,7 @@ else
 endif
 
 yaud-neutrino-hd: yaud-none lirc stslave\
-		boot-elf remote firstboot neutrino-hd neutrino-plugins
+		boot-elf remote firstboot neutrino-hd neutrino-plugins release_neutrino-hd
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
@@ -134,6 +134,29 @@ evolux-pli-full: yaud-none host-python lirc stslave \
 		yaud-neutrino \
 		yaud-enigma2-pli-nightly \
 		release_evolux_pli
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-neutrino-hd-pli: yaud-neutrino-hd \
+		yaud-enigma2-pli-nightly \
+		release_evolux_neutrino-hd_pli
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-neutrino-hd-pli-full: yaud-none host-python lirc stslave \
+		yaud-neutrino-hd \
+		yaud-enigma2-pli-nightly \
+		release_evolux_neutrino-hd_pli
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
