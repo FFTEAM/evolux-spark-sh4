@@ -1177,7 +1177,7 @@ $(flashprefix)/root-%/lib: \
 	@TUXBOX_CUSTOMIZE@
 
 #
-# ath9k 
+# ath9k_htc 
 #
 $(DEPDIR)/ath9k.do_prepare: @DEPENDS_ath9k@ 
 	@PREPARE_ath9k@
