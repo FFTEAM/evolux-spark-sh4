@@ -450,6 +450,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	//audio
 	g_settings.audio_AnalogMode = configfile.getInt32( "audio_AnalogMode", 0 );
 	g_settings.audio_DolbyDigital    = configfile.getBool("audio_DolbyDigital"   , false);
+#ifdef EVOLUX
+	g_settings.audio_ac3downmix = configfile.getInt32("audio_ac3downmix", 1); // default downmix
+#endif
 
 	g_settings.auto_lang = configfile.getInt32( "auto_lang", 0 );
 	g_settings.auto_subs = configfile.getInt32( "auto_subs", 0 );
@@ -925,6 +928,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 		configfile.setString(cfg_key, g_settings.pref_subs[i]);
 	}
 	configfile.setString( "audio_PCMOffset", g_settings.audio_PCMOffset );
+#ifdef EVOLUX
+	configfile.setInt32( "audio_ac3downmix", g_settings.audio_ac3downmix );
+#endif
 
 	//vcr
 	configfile.setBool("vcr_AutoSwitch"       , g_settings.vcr_AutoSwitch       );
