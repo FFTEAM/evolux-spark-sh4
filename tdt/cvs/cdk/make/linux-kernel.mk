@@ -1192,6 +1192,8 @@ $(DEPDIR)/ath9k.do_compile: bootstrap $(DEPDIR)/ath9k.do_prepare
 
 $(DEPDIR)/ath9k: \
 $(DEPDIR)/%ath9k: $(DEPDIR)/ath9k.do_compile
+	cd @DIR_ath9k@ && \
+	$(MAKE) INSTALL_MOD_PATH=$(targetprefix)/lib/modules install
 	@TUXBOX_TOUCH@
 	@TUXBOX_YAUD_CUSTOMIZE@
 
