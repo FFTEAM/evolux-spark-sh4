@@ -1176,3 +1176,22 @@ $(flashprefix)/root-%/lib: \
 	-rm $(flashprefix)/root-$*/lib/modules/$(KERNELVERSION)/source
 	@TUXBOX_CUSTOMIZE@
 
+#
+# ath9k
+#
+$(DEPDIR)/ath9k.do_prepare: @DEPENDS_ath9k@
+	@PREPARE_ath9k@
+	cd @DIR_ath9k@ && \
+	./scripts/driver-select ath9k_htc
+	touch $@
+	
+	$(DEPDIR)/ath9k.do_compile: bootstrap $(DEPDIR)/ath9k.do_prepare
+	cd @DIR_ath9k@ && \
+	$(MAKE) KLIB=$(buildprefix)/$(KERNEL_DIR) KLIB_BUILD=$(buildprefix)/$(KERNEL_DIR) ARCH=sh CROSS_COMPILE=$(target)-
+	touch $@
+	
+	$(DEPDIR)/ath9k: \
+	$(DEPDIR)/%ath9k: $(DEPDIR)/ath9k.do_compile
+	@TUXBOX_TOUCH@
+	@TUXBOX_YAUD_CUSTOMIZE@
+

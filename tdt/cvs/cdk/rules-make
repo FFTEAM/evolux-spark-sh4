@@ -209,6 +209,7 @@ zd1211;2_15_0_0;ZD1211LnxDrv_2_15_0_0;zd1211lnxdrv_2_15_0_0.tar.gz:zd1211.diff;e
 wireless_tools;29;wireless_tools.29;wireless_tools.29.tar.gz;extract:wireless_tools.29.tar.gz
 wpa_supplicant;0.5.9.;wpa_supplicant-0.5.9;wpa_supplicant-0.5.9.tar.gz;extract:wpa_supplicant-0.5.9.tar.gz
 ethtool;6;ethtool-6;ethtool-6.tar.gz;extract:ethtool-6.tar.gz
+ath9k;2012-04-25;compat-wireless-2012-04-25;compat-wireless-2012-04-25.tar.bz2;extract:compat-wireless-2012-04-25.tar.bz2
 
 #
 # GUI
