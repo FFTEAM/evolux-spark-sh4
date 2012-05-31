@@ -97,6 +97,9 @@ struct SNeutrinoSettings
 	//audio
 	int audio_AnalogMode;
 	int audio_DolbyDigital;
+#ifdef EVOLUX
+	int audio_ac3downmix;
+#endif
 	int auto_lang;
 	int auto_subs;
 	char audio_PCMOffset[3];

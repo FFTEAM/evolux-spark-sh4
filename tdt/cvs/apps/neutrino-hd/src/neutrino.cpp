@@ -3708,6 +3708,10 @@ void stop_daemons(bool stopall)
 	tuxtxt_stop();
 	tuxtxt_close();
 
+#ifdef EVOLUX
+	if (CNeutrinoApp::getInstance()->EmuMenu)
+		CNeutrinoApp::getInstance()->EmuMenu->suspend();
+#endif
 	printf("httpd shutdown\n");
 	pthread_cancel(nhttpd_thread);
 	pthread_join(nhttpd_thread, NULL);
