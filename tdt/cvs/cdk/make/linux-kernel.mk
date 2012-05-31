@@ -1004,7 +1004,7 @@ $(DEPDIR)/linux-kernel.%.do_compile: \
 
 $(DEPDIR)/min-linux-kernel $(DEPDIR)/std-linux-kernel $(DEPDIR)/max-linux-kernel \
 $(DEPDIR)/linux-kernel: \
-$(DEPDIR)/%linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
+$(DEPDIR)/%linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile ath9k
 	@$(INSTALL) -d $(prefix)/$*cdkroot/boot && \
 	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*$(notdir $(bootprefix))/vmlinux.ub && \
