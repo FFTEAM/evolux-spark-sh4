@@ -837,6 +837,9 @@ bool CRecordManager::Record(const CTimerd::RecordingInfo * const eventinfo, cons
 				if(eventinfo->channel_id == live_channel_id) {
 					recordingstatus = 1;
 					rec_channel_id = live_channel_id;//FIXME
+#ifdef ENABLE_GRAPHLCD
+					nGLCD::Update();
+#endif
 				}
 			} else {
 				delete inst;
@@ -1005,6 +1008,9 @@ bool CRecordManager::Stop(const t_channel_id channel_id)
 		t_channel_id live_channel_id = CZapit::getInstance()->GetCurrentChannelID();
 		if(channel_id == live_channel_id) {
 			recordingstatus = 0;
+#ifdef ENABLE_GRAPHLCD
+			nGLCD::Update();
+#endif
 			rec_channel_id = 0;//FIXME
 		}
 	} else
@@ -1035,6 +1041,9 @@ bool CRecordManager::Stop(const CTimerd::RecordingStopInfo * recinfo)
 		t_channel_id live_channel_id = CZapit::getInstance()->GetCurrentChannelID();
 		if(recinfo->channel_id == live_channel_id)
 			recordingstatus = 0;
+#ifdef ENABLE_GRAPHLCD
+		nGLCD::Update();
+#endif
 	} else {
 		for(nextmap_iterator_t it = nextmap.begin(); it != nextmap.end(); it++) {
 			if((*it)->eventID == recinfo->eventID) {
@@ -1550,6 +1559,9 @@ bool CRecordManager::doGuiRecord()
 		}
 	} else {
 		int recording_id = 0;
+#ifdef ENABLE_GRAPHLCD
+		nGLCD::Update();
+#endif
 		mutex.lock();
 		CRecordInstance * inst = FindInstance(live_channel_id);
 		if(inst)
@@ -1575,6 +1587,9 @@ bool CRecordManager::changeNotify(const neutrino_locale_t OptionName, void * /*d
 			if(recordingstatus)
 				ret = true;
 			recordingstatus = 0;
+#ifdef ENABLE_GRAPHLCD
+			nGLCD::Update();
+#endif
 		}
 	}
 	return ret;

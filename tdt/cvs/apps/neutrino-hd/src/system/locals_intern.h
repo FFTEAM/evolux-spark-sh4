@@ -504,6 +504,7 @@ const char * locale_real_names[] =
 	"extramenu.glcd.color.red",
 	"extramenu.glcd.color.white",
 	"extramenu.glcd.color.yellow",
+	"extramenu.glcd.font",
 	"extramenu.glcd.mirror_osd",
 	"extramenu.glcd.restart",
 	"extramenu.glcd.select.bar",

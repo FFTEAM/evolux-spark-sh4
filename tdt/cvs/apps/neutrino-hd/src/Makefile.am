@@ -51,6 +51,10 @@ else
 FLACLIBS =
 endif
 
+if ENABLE_GRAPHLCD
+GRAPHLCD_LIBS = -lglcddrivers -lglcdgraphics
+endif
+
 neutrino_LDADD = \
 	daemonc/libneutrino_daemonc.a \
 	gui/bedit/libneutrino_gui_bedit.a \
@@ -93,6 +97,7 @@ neutrino_LDADD = \
 	@AVUTIL_LIBS@ \
 	$(FLACLIBS) \
 	$(VORBISLIBS) \
+	$(GRAPHLCD_LIBS) \
 	-lungif \
 	-ljpeg \
 	-lOpenThreads \

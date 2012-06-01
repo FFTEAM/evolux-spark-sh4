@@ -1502,9 +1502,11 @@ void CNeutrinoApp::CmdParser(int argc, char **argv)
 
 	for(int x=1; x<argc; x++) {
 		if ((!strcmp(argv[x], "-u")) || (!strcmp(argv[x], "--enable-update"))) {
+#ifndef EVOLUX
 			dprintf(DEBUG_NORMAL, "Software update enabled\n");
 			softupdate = true;
 			allow_flash = 1;
+#endif
 		}
 		/*else if ((!strcmp(argv[x], "-f")) || (!strcmp(argv[x], "--enable-flash"))) {
 			dprintf(DEBUG_NORMAL, "enable flash\n");
@@ -2026,7 +2028,11 @@ void CNeutrinoApp::quickZap(int msg)
 {
 	int res;
 
+#ifdef ENABLE_GRAPHLCD
+	StopSubtitles(false);
+#else
 	StopSubtitles();
+#endif
 #if 1
 	if(recordingstatus && !autoshift) 
 #else
@@ -2046,7 +2052,11 @@ void CNeutrinoApp::quickZap(int msg)
 
 void CNeutrinoApp::showInfo()
 {
+#ifdef ENABLE_GRAPHLCD
+	StopSubtitles(false);
+#else
 	StopSubtitles();
+#endif
 	g_InfoViewer->showTitle(channelList->getActiveChannelNumber(), channelList->getActiveChannelName(), channelList->getActiveSatellitePosition(), channelList->getActiveChannel_ChannelID());
 	StartSubtitles();
 }
@@ -2138,7 +2148,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_subchannel_up ) {
 				if(g_RemoteControl->subChannels.size() > 0) {
+#ifdef ENABLE_GRAPHLCD
+					StopSubtitles(false);
+#else
 					StopSubtitles();
+#endif
 					g_RemoteControl->subChannelUp();
 					g_InfoViewer->showSubchan();
 				} else if (g_settings.mode_left_right_key_tv == SNeutrinoSettings::VOLUME) {
@@ -2152,7 +2166,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == (neutrino_msg_t) g_settings.key_subchannel_down ) {
 				if(g_RemoteControl->subChannels.size()> 0) {
+#ifdef ENABLE_GRAPHLCD
+					StopSubtitles(false);
+#else
 					StopSubtitles();
+#endif
 					g_RemoteControl->subChannelDown();
 					g_InfoViewer->showSubchan();
 				} else if(g_settings.mode_left_right_key_tv == SNeutrinoSettings::VOLUME) {
@@ -2194,7 +2212,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 #endif
 			else if( msg == (neutrino_msg_t) g_settings.key_lastchannel ) {
 				// Quick Zap
+#ifdef ENABLE_GRAPHLCD
+				StopSubtitles(false);
+#else
 				StopSubtitles();
+#endif
 				int res = channelList->numericZap( msg );
 				StartSubtitles(res < 0);
 			}
@@ -2205,7 +2227,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				CRecordManager::getInstance()->StartTimeshift();
 			}
 			else if (msg == (neutrino_msg_t) g_settings.key_current_transponder){
+#ifdef ENABLE_GRAPHLCD
 				StopSubtitles();
+#else
+				StopSubtitles(false);
+#endif
 				int res = channelList->numericZap( msg );
 				StartSubtitles(res < 0);
 			}
@@ -2263,14 +2289,24 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 			}
 			else if( msg == CRCInput::RC_video || msg == CRCInput::RC_play ) {
 				//open moviebrowser via media player menu object
+#ifdef ENABLE_GRAPHLCD
+				nGLCD::lockChannel("MoviePlayer");
+#endif
 				CMediaPlayerMenu::getInstance()->exec(NULL,"movieplayer");
+#ifdef ENABLE_GRAPHLCD
+				nGLCD::unlockChannel();
+#endif
 			}
 			else if (CRCInput::isNumeric(msg) && g_RemoteControl->director_mode ) {
 				g_RemoteControl->setSubChannel(CRCInput::getNumericValue(msg));
 				g_InfoViewer->showSubchan();
 			}
 			else if (CRCInput::isNumeric(msg)) {
+#ifdef ENABLE_GRAPHLCD
+				StopSubtitles(false);
+#else
 				StopSubtitles();
+#endif
 				int res = channelList->numericZap( msg );
 				StartSubtitles(res < 0);
 			}
@@ -3066,15 +3102,15 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 			saveEpg(true);// true CVFD::MODE_SHUTDOWN  
 		}
 
+#ifdef EVOLUX
+		batchEPGSettings->exec(NULL, "shutdown");
+#endif
 		stop_daemons(retcode);//need here for timer_is_rec before saveSetup
 		g_settings.shutdown_timer_record_type = timer_is_rec;
 		saveSetup(NEUTRINO_SETTINGS_FILE);
 
 #if HAVE_COOL_HARDWARE
 		if(retcode) {
-#endif
-#ifdef EVOLUX
-			batchEPGSettings->exec(NULL, "shutdown");
 #endif
 			const char *neutrino_enter_deepstandby_script = CONFIGDIR "/deepstandby.on";
 			printf("[%s] executing %s\n",__FILE__ ,neutrino_enter_deepstandby_script);
@@ -3718,6 +3754,9 @@ void stop_daemons(bool stopall)
 	if (CNeutrinoApp::getInstance()->EmuMenu)
 		CNeutrinoApp::getInstance()->EmuMenu->suspend();
 #endif
+#ifdef ENABLE_GRAPHLCD
+	nGLCD::Exit();
+#endif
 	printf("httpd shutdown\n");
 	pthread_cancel(nhttpd_thread);
 	pthread_join(nhttpd_thread, NULL);
@@ -3924,7 +3963,11 @@ void CNeutrinoApp::saveKeys(const char * fname)
 		tconfig.saveConfig(fname);
 }
 
+#ifdef ENABLE_GRAPHLCD
+void CNeutrinoApp::StopSubtitles(bool b)
+#else
 void CNeutrinoApp::StopSubtitles()
+#endif
 {
 	printf("[neutrino] %s\n", __FUNCTION__);
 	int ttx, dvbpid, ttxpid, ttxpage;
@@ -3938,11 +3981,18 @@ void CNeutrinoApp::StopSubtitles()
 		tuxtx_pause_subtitle(true);
 		frameBuffer->paintBackground();
 	}
+#ifdef ENABLE_GRAPHLCD
+	if (b)
+		nGLCD::MirrorOSD();
+#endif
 }
 
 void CNeutrinoApp::StartSubtitles(bool show)
 {
 	printf("%s: %s\n", __FUNCTION__, show ? "Show" : "Not show");
+#ifdef ENABLE_GRAPHLCD
+				nGLCD::MirrorOSD(false);
+#endif
 	if(!show)
 		return;
 	dvbsub_start(0);

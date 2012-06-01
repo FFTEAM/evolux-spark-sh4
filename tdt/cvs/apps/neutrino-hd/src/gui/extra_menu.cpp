@@ -50,6 +50,9 @@
 
 #include "extra_menu.h"
 
+#ifdef ENABLE_GRAPHLCD
+static nGLCD *nglcd = NULL;
+#endif
 
 CExtraMenuSetup::CExtraMenuSetup(void)
 {
@@ -59,6 +62,10 @@ CExtraMenuSetup::CExtraMenuSetup(void)
 		CNeutrinoApp::getInstance()->EmuMenu = new EMU_Menu();
 	if (!CNeutrinoApp::getInstance()->TunerMenu)
 		CNeutrinoApp::getInstance()->TunerMenu = new TUNERRESET_Menu();
+#ifdef ENABLE_GRAPHLCD
+	if (!nglcd)
+		new nGLCD;
+#endif
 }
 
 CExtraMenuSetup::~CExtraMenuSetup()
@@ -97,7 +104,7 @@ int CExtraMenuSetup::showExtraMenuSetup()
 				new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE));
 
 		int shortcut = 1;
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 		m->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL,
 				new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(shortcut++)));
 #endif
@@ -166,7 +173,7 @@ static int safe_system(const char *command) {
 static struct {
 #define EXTRA_CAM_SELECTED "cam_selected"
         std::string	cam_selected;
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 #define GLCD_ENABLE "glcd_enable"
         int	glcd_enable;
 #define GLCD_COLOR_FG "glcd_color_fg"
@@ -197,7 +204,7 @@ CConfigFile *configfile = NULL;
 static bool saveSettings() {
 	if (configfile) {
 		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 		configfile->setInt32(GLCD_ENABLE, settings.glcd_enable);
 		configfile->setInt32(GLCD_COLOR_FG, settings.glcd_color_fg);
 		configfile->setInt32(GLCD_COLOR_BG, settings.glcd_color_bg);
@@ -218,7 +225,7 @@ static bool saveSettings() {
 
 static bool initSettings() {
 	settings.cam_selected = "disabled";
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 	settings.glcd_enable = 0;
 	settings.glcd_color_fg = GLCD::cColor::White;
 	settings.glcd_color_bg = GLCD::cColor::Blue;
@@ -239,7 +246,7 @@ static bool loadSettings() {
 		configfile = new CConfigFile('=');
 		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
 			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 			settings.glcd_enable = configfile->getInt32(GLCD_ENABLE, 0);
 			settings.glcd_color_fg = configfile->getInt32(GLCD_COLOR_FG, GLCD::cColor::White);
 			settings.glcd_color_bg = configfile->getInt32(GLCD_COLOR_BG, GLCD::cColor::Blue);
@@ -1465,15 +1472,13 @@ void FRITZCALL_Menu::FRITZCALLSettings()
 	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 
 void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey, CChannelEventList &eList, char search = 0, std::string search_text = "");
 void sectionsd_getCurrentNextServiceKey(t_channel_id uniqueServiceKey, CSectionsdClient::responseGetCurrentNextInfoChannelID& current_next );
 
 #include <string>
 #include <algorithm>
-
-static nGLCD *nglcd = NULL;
 
 nGLCD::nGLCD() {
 	lcd = NULL;
@@ -1757,8 +1762,8 @@ void* nGLCD::Run(void *)
 				nglcd->bitmap->Clear(GLCD::cColor::Black);
 				ts.tv_sec = 0; // don't wait
 				static CFrameBuffer* fb = CFrameBuffer::getInstance();
-				int fb_width = fb->scaleX(fb->getScreenWidth(true));
-				int fb_height = fb->scaleX(fb->getScreenHeight(true));
+				int fb_width = fb->getScreenWidth(true);
+				int fb_height = fb->getScreenHeight(true);
 				int lcd_width = nglcd->bitmap->Width();
 				int lcd_height = nglcd->bitmap->Height();
 				uint32_t *fbp = fb->getFrameBufferPointer();
@@ -2254,7 +2259,7 @@ void GLCD_Menu::GLCD_Menu_Settings()
 	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BAR, &color_bar,
 				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
 				CRCInput::convertDigitToKey(shortcut++)));
-	menu->addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font",
+	menu->addItem( new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_FONT, true, NULL, this, "select_font",
 				CRCInput::convertDigitToKey(shortcut++)));
 	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
 				&settings.glcd_percent_channel, true, 0, 100, notifier));

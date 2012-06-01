@@ -229,7 +229,11 @@ public:
 	};
 	void SetChannelMode(int mode);
 	void quickZap(int msg);
+# ifdef ENABLE_GRAPHLCD
+	void StopSubtitles(bool b = true);
+# else
 	void StopSubtitles();
+# endif
 	void StartSubtitles(bool show = true);
 	void SelectSubtitles();
 	void showInfo(void);

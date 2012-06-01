@@ -348,7 +348,7 @@ class FRITZCALL_Menu : public CMenuTarget
 };
 
 
-#ifdef WITH_GRAPHLCD
+#ifdef ENABLE_GRAPHLCD
 #include <time.h>
 #include <string>
 #include <semaphore.h>
@@ -412,10 +412,10 @@ class nGLCD
 	static void Unlock();
 	void mainLock();
 	void mainUnlock();
-	static void lockChannel(string txt);
+	static void lockChannel(std::string txt);
 	static void unlockChannel();
 	static void* Run(void *);
-	static void MirrorOSD(bool);
+	static void MirrorOSD(bool b = true);
 	static void Update();
 	static void Suspend();
 	static void StandbyMode(bool);
@@ -457,7 +457,7 @@ class GLCD_Menu : public CMenuTarget
 	void GLCD_Menu_Settings();
 };
 
-#endif // WITH_GRAPHLCD
+#endif // ENABLE_GRAPHLCD
 
 class KernelOptions_Menu : public CMenuTarget
 {

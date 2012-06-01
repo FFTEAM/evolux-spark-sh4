@@ -51,7 +51,7 @@ libstb-hal-clean libstb-hal-distclean:
 # neutrino-hd
 #
 
-$(appsdir)/neutrino-hd/config.status: bootstrap
+$(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -65,6 +65,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
 			--enable-freesatepg \
+			--enable-graphlcd \
 			--with-boxtype=spark \
 			"--with-stb-hal-includes=$(appsdir)/libstb-hal/include" \
 			"--with-stb-hal-build=$(appsdir)/libstb-hal" \

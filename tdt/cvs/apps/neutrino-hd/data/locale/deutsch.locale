@@ -477,6 +477,7 @@ extramenu.glcd.color.magenta Magenta
 extramenu.glcd.color.red Rot
 extramenu.glcd.color.white Weiss
 extramenu.glcd.color.yellow Gelb
+extramenu.glcd.font Schriftart
 extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
 extramenu.glcd.restart Neu erkennen
 extramenu.glcd.select.bar Fortschrittsbalken-Farbe
