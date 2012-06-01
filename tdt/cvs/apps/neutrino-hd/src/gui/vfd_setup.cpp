@@ -108,11 +108,31 @@ const CMenuOptionChooser::keyval LCD_INFO_OPTIONS[LCD_INFO_OPTION_COUNT] =
 	{ 1, LOCALE_LCD_INFO_LINE_CLOCK }
 };
 
+#ifdef EVOLUX
+#define OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT 4
+const CMenuOptionChooser::keyval OPTIONS_LCD_DISPLAYMODE_OPTIONS[OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT] =
+{
+        { LCD_DISPLAYMODE_OFF, LOCALE_OPTIONS_OFF },
+        { LCD_DISPLAYMODE_ON, LOCALE_OPTIONS_ON },
+	{ LCD_DISPLAYMODE_TIMEONLY, LOCALE_LCDMENU_DISPLAYMODE_TIMEONLY },
+	{ LCD_DISPLAYMODE_TIMEOFF, LOCALE_LCDMENU_DISPLAYMODE_TIMEOFF }
+};
+#endif
+
 int CVfdSetup::showSetup()
 {
 	CMenuWidget *vfds = new CMenuWidget(LOCALE_MAINMENU_SETTINGS, NEUTRINO_ICON_LCD, width, MN_WIDGET_ID_VFDSETUP);
 	vfds->addIntroItems(LOCALE_LCDMENU_HEAD);
 
+#ifdef EVOLUX
+	CLcdNotifier* lcdnotifier = new CLcdNotifier();
+	vfds->addItem(new CMenuOptionChooser(LOCALE_LCDMENU_DISPLAYMODE_RUNNING,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_DISPLAYMODE],
+		OPTIONS_LCD_DISPLAYMODE_OPTIONS, OPTIONS_LCD_DISPLAYMODE_OPTION_COUNT, true, lcdnotifier));
+	vfds->addItem(new CMenuOptionChooser(LOCALE_LCDMENU_DISPLAYMODE_STANDBY,
+		&g_settings.lcd_setting[SNeutrinoSettings::LCD_STANDBY_DISPLAYMODE],
+		OPTIONS_LCD_DISPLAYMODE_OPTIONS, 2, true));
+#else
 	//vfd brightness menu
 	CMenuWidget* lcd_sliders = new CMenuWidget(LOCALE_LCDMENU_HEAD, NEUTRINO_ICON_LCD,width, MN_WIDGET_ID_VFDSETUP_LCD_SLIDERS);
 	showBrightnessSetup(lcd_sliders);
@@ -134,10 +154,13 @@ int CVfdSetup::showSetup()
 	CMenuOptionChooser* lcd_clock_channelname_menu = new CMenuOptionChooser(LOCALE_LCD_INFO_LINE, &g_settings.lcd_info_line, LCD_INFO_OPTIONS, LCD_INFO_OPTION_COUNT, vfd_enabled);
 	vfds->addItem(oj);
 	vfds->addItem(lcd_clock_channelname_menu);
-	
+#endif
 	int res = vfds->exec(NULL, "");
 	vfds->hide();
-	
+
+#ifdef EVOLUX
+	delete lcdnotifier;
+#endif	
 	delete vfds;
 	return res;
 }

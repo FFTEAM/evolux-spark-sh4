@@ -751,6 +751,10 @@ lcdcontroler.brightnessstandby Standby
 lcdcontroler.contrast Kontrast
 lcdmenu.dim_brightness nach Dimm-Timeout
 lcdmenu.dim_time Dimm-Timeout
+lcdmenu.displaymode.running Anzeige im Betrieb
+lcdmenu.displaymode.standby Anzeige im Standby
+lcdmenu.displaymode.timeoff Ohne Uhrzeit
+lcdmenu.displaymode.timeonly Nur Uhrzeit
 lcdmenu.head VFD Einstellungen
 lcdmenu.lcdcontroler Helligkeit
 lcdmenu.statusline Statuszeile

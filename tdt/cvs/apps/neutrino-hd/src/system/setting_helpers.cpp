@@ -289,12 +289,29 @@ bool CMiscNotifier::changeNotify(const neutrino_locale_t, void *)
    return true;
 }
 
+#ifdef EVOLUX
+bool CLcdNotifier::changeNotify(const neutrino_locale_t OptionName, void *arg)
+{
+	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_DISPLAYMODE_RUNNING) ||
+	    ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_DISPLAYMODE_STANDBY)) {
+		CVFD::getInstance()->ShowText(NULL);
+		CVFD::getInstance()->setlcdparameter();
+	}
+#if 0
+	else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_BRIGHTNESS)) {
+		CVFD::getInstance()->setlcdparameter();
+	}
+#endif
+	return true;
+}
+#else
 bool CLcdNotifier::changeNotify(const neutrino_locale_t, void *)
 {
 	CVFD::getInstance()->setlcdparameter();
 	//CLCD::getInstance()->setAutoDimm(g_settings.lcd_setting[SNeutrinoSettings::LCD_AUTODIMM]);
 	return true;
 }
+#endif
 
 bool CPauseSectionsdNotifier::changeNotify(const neutrino_locale_t, void * Data)
 {
