@@ -1193,7 +1193,9 @@ $(DEPDIR)/ath9k.do_compile: bootstrap $(DEPDIR)/ath9k.do_prepare
 $(DEPDIR)/ath9k: \
 $(DEPDIR)/%ath9k: $(DEPDIR)/ath9k.do_compile
 	cd @DIR_ath9k@ && \
-	$(MAKE) INSTALL_MOD_PATH=$(targetprefix)/lib/modules install
-	@TUXBOX_TOUCH@
-	@TUXBOX_YAUD_CUSTOMIZE@
+	$(MAKE) -C $(buildprefix)/$(KERNEL_DIR)  M=$(buildprefix)/@DIR_ath9k@ \
+	"INSTALL_MOD_DIR=updates" "INSTALL_MOD_PATH=$(targetprefix)" \
+	modules_install
+	find $(targetprefix) -name "*.ko" -exec $(target)-strip --strip-unneeded {} \;
+        @TUXBOX_TOUCH@
 
