@@ -113,7 +113,7 @@ audio.srs_algo_normal Normal
 audio.srs_iq SRS TruVolume algo
 audio.srs_nmgr Noise manager
 audio.srs_volume Reference volume
-audiomenu.PCMOffset Volume reduction PCM
+audiomenu.PCMOffset Volume Reduction PCM
 audiomenu.ac3downmix AC3 downmix
 audiomenu.analog_mode Analog mode
 audiomenu.analog_out Analog output
@@ -185,6 +185,18 @@ audioplayer.spectrum lcd a-spectrum
 audioplayer.stop Stop
 audioplayer.title_artist Title, Artist
 audioplayerpicsettings.general Audioplayer / Picviewer
+batchepg.epg.mhw1 MHW1
+batchepg.epg.mhw2 MHW2
+batchepg.epg.off Off
+batchepg.epg.standard Standard
+batchepg.hint Updating EPG data, please wait. Channel:
+batchepg.refresh Start update
+batchepg.refreshall Update all
+batchepg.run_at_shutdown Update at shutdown
+batchepg.save Save settings
+batchepg.settings Settings
+batchepg.shutdown Processing EPG data
+batchepg.standard_wait_time Wait time für standard EPG
 bookmarkmanager.delete delete
 bookmarkmanager.name bookmarks
 bookmarkmanager.rename rename
@@ -204,18 +216,6 @@ bouqueteditor.return ready
 bouqueteditor.savechanges? Do you want to save the changes?
 bouqueteditor.savingchanges Saving changes. Please wait ...
 bouqueteditor.switch add/remove
-bouqueteditor.delete_question Should the channel be removed from this bouquet?
-bouqueteditor.discardingchanges Discarding changes, please wait ...
-bouqueteditor.hide Hide
-bouqueteditor.lock Lock
-bouqueteditor.move Move
-bouqueteditor.name Bouquet Management
-bouqueteditor.newbouquetname New bouquet name
-bouqueteditor.rename Rename
-bouqueteditor.return Finished
-bouqueteditor.savechanges? Save changes?
-bouqueteditor.savingchanges Saving changes, please wait ...
-bouqueteditor.switch Add/remove channel
 bouqueteditor.switchmode TV/Radio
 bouquetlist.head Bouquets
 cablesetup.provider cable provider
@@ -713,6 +713,10 @@ lcdcontroler.brightnessstandby Standby Brightness
 lcdcontroler.contrast Contrast
 lcdmenu.dim_brightness Brightness after dim timeout
 lcdmenu.dim_time Dim timeout
+lcdmenu.displaymode.running Display in operation
+lcdmenu.displaymode.standby Display in standby
+lcdmenu.displaymode.timeoff No time
+lcdmenu.displaymode.timeonly Time only
 lcdmenu.head VFD Settings
 lcdmenu.lcdcontroler Brightness
 lcdmenu.statusline status line
@@ -723,10 +727,6 @@ ledcontroler.blink Blink in deep standby, if timer set
 ledcontroler.menu Power Button LED�s
 ledcontroler.mode.deepstandby Deep Standby
 ledcontroler.mode.record Blinke in Record
-ledcontroler.blink Blink in Deep-Standby if Timer active
-ledcontroler.menu Power Button LEDs
-ledcontroler.mode.deepstandby Deep-Standby
-ledcontroler.mode.record Blink while recording
 ledcontroler.mode.standby Standby
 ledcontroler.mode.tv TV Mode
 ledcontroler.off Led1 & Led2 off
@@ -735,10 +735,10 @@ ledcontroler.on.led1 Led1 on
 ledcontroler.on.led2 Led2 on
 mainmenu.audioplayer Audioplayer
 mainmenu.clearsectionsd Clear EPG Cache
+mainmenu.extramenu Extras
 mainmenu.games Games
 mainmenu.head Main Menu
 mainmenu.media Media
-mainmenu.media Multimedia
 mainmenu.movieplayer Movieplayer
 mainmenu.pausesectionsd Read EPG
 mainmenu.pictureviewer Picture viewer
@@ -811,18 +811,18 @@ miscsettings.epg_save Save/Restore epg on reboot
 miscsettings.general General
 miscsettings.head Extended settings
 miscsettings.infobar Infobar
+miscsettings.infobar_autoshow_if_cn Show infobar at program start
 miscsettings.infobar_casystem_display CA-System Display
 miscsettings.infobar_casystem_mini mini
 miscsettings.infobar_casystem_mode discreet
 miscsettings.infobar_colored_events Program colored
 miscsettings.infobar_disp_0 without Logo
-miscsettings.infobar_disp_1 Logo No logo
-miscsettings.infobar_disp_2 Logo Logo in number frame
-miscsettings.infobar_disp_3 Logo Logo/channel number
-miscsettings.infobar_disp_4 Logo Logo+channel number/signal bar
-miscsettings.infobar_disp_5 Logo Logo+channel name/channel number
-miscsettings.infobar_disp_6 Logo Logo/signal bar
-miscsettings.infobar_disp_6 Logo+Kanalnummer/Signalbalken
+miscsettings.infobar_disp_1 Logo in number frame
+miscsettings.infobar_disp_2 Logo/channel number
+miscsettings.infobar_disp_3 Logo+channel name/signal bar
+miscsettings.infobar_disp_4 Logo+channel name/channel number
+miscsettings.infobar_disp_5 Logo/signal bar
+miscsettings.infobar_disp_6 Logo+channel number/signal bar
 miscsettings.infobar_disp_log Logo
 miscsettings.infobar_logo_hdd_dir Logo dir
 miscsettings.infobar_logo_hdd_dir_e2 Logo dir E2
