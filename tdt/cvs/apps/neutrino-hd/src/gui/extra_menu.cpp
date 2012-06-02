@@ -161,7 +161,7 @@ int CExtraMenuSetup::exec(CMenuTarget* parent, const std::string &actionKey)
 int CExtraMenuSetup::showExtraMenuSetup()
 {
 	CMenuWidget* m = new CMenuWidget(LOCALE_EXTRAMENU_SETTINGS, NEUTRINO_ICON_SETTINGS, width);
-	m->setSelected(selected);
+	selected = m->getSelected();
 	int shortcut = 1;
 
 	m->addIntroItems(LOCALE_EXTRAMENU_SETTINGS_GENERAL);
@@ -259,7 +259,7 @@ int CExtraMenuSetup::showExtraMenuSetup()
 
 	int res = m->exec (NULL, "");
 	m->hide ();
-	selected = m->getSelected();
+	m->setSelected(selected);
 	delete m;
 	delete evoUpdateMenu;
 
@@ -556,9 +556,11 @@ int EMU_Menu::update_installed()
 
 int EMU_Menu::update_selected()
 {
-	for (int i = 0; i < EMU_OPTION_COUNT && !selected; i++)
-		if (!settings.cam_selected.compare(EMU_list[i].procname) && EMU_list[i].installed)
+	for (int i = 0; i < EMU_OPTION_COUNT; i++)
+		if (!settings.cam_selected.compare(EMU_list[i].procname) && EMU_list[i].installed){
 			selected = i;
+			break;
+		}
 	return selected;
 }
 
@@ -627,10 +629,10 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	if (emu > -1 && emu < EMU_OPTION_COUNT) {
 		int emu_old = selected;
-		if ((emu_old > -1) && ((emu_old != emu) || doReset)) {
-			if (emu_old) {
+		if ((emu_old != emu) || doReset) {
+			if (emu_old > -1) {
 				safe_system(EMU_list[emu_old].stop_command);
-				string m = " " + string(EMU_list[emu_old].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_ENABLED);
+				string m = " " + string(EMU_list[emu_old].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_DISABLED);
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 				if (EMU_list[emu_old].cmf)
 					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_OFF));
@@ -640,7 +642,7 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			string cmd = "(" + string(EMU_list[emu].start_command);
 			if (is_scrambled())
 				safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
-			string m = " " + string(EMU_list[emu].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_DISABLED);
+			string m = " " + string(EMU_list[emu].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_ENABLED);
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 			if (EMU_list[emu].cmf)
 				EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_ON));
@@ -1539,7 +1541,8 @@ void GLCD_Menu::GLCD_Menu_Settings()
 				&settings.glcd_percent_time, true, 0, 100, notifier));
 	m->addItem(GenericMenuSeparatorLine);
 	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY, &settings.glcd_time_in_standby,
-				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
+				CRCInput::convertDigitToKey(shortcut++)));
 	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
 				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
 				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
