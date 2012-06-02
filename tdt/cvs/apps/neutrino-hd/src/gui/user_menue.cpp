@@ -420,7 +420,7 @@ bool CUserMenu::showUserMenu(int button)
 			menu_items++;
 			menu_prev = SNeutrinoSettings::ITEM_TUNER_RESTART;
 			keyhelper.get(&key,&icon);
-			menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, NULL, CNeutrinoApp::getInstance()->TunerMenu, "reset-usermenu", key, icon);
+			menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, CNeutrinoApp::getInstance()->ExtraMenu, "reset-usermenu", key, icon);
 			menu->addItem(menu_item, 0);
 			break;
 		case SNeutrinoSettings::ITEM_THREE_D_MODE:

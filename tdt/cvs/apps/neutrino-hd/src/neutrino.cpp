@@ -436,6 +436,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 
 	g_settings.infobar_sat_display   = configfile.getBool("infobar_sat_display"  , true );
 	g_settings.infobar_subchan_disp_pos = configfile.getInt32("infobar_subchan_disp_pos"  , 0 );
+#ifdef EVOLUX
+	g_settings.infobar_cn = configfile.getInt32("infobar_cn", 0 );
+#endif
 	g_settings.progressbar_color = configfile.getBool("progressbar_color", true );
 	g_settings.infobar_show  = configfile.getInt32("infobar_show", 1);
 	g_settings.infobar_show_channellogo   = configfile.getInt32("infobar_show_channellogo"  , 3 );
@@ -905,6 +908,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString("shutdown_min"  , g_settings.shutdown_min  );
 	configfile.setBool("infobar_sat_display"  , g_settings.infobar_sat_display  );
 	configfile.setInt32("infobar_subchan_disp_pos"  , g_settings.infobar_subchan_disp_pos  );
+#ifdef EVOLUX
+	configfile.setInt32("infobar_cn"  , g_settings.infobar_cn);
+#endif
 	configfile.setBool("progressbar_color"  , g_settings.progressbar_color  );
 	configfile.setInt32("infobar_show", g_settings.infobar_show);
 	configfile.setInt32("infobar_show_channellogo"  , g_settings.infobar_show_channellogo  );
@@ -2311,6 +2317,9 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				StartSubtitles(res < 0);
 			}
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
+#ifdef EVOLUX
+						(g_settings.infobar_cn && (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG)) ||
+#endif
 						( msg == NeutrinoMessages::SHOW_INFOBAR ) )
 			{
 				bool show_info = ((msg != NeutrinoMessages::SHOW_INFOBAR) || (g_InfoViewer->is_visible || g_settings.timing[SNeutrinoSettings::TIMING_INFOBAR] != 0));
@@ -2321,6 +2330,12 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				if(show_info && channelList->getSize()) {
 					showInfo();
 				}
+#ifdef ENABLE_GRAPHLCD
+				if (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG)
+					nGLCD::Update();
+			} else if (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG) {
+				nGLCD::Update();
+#endif
 			}
 			else if (msg == CRCInput::RC_timer) 
 			{
@@ -2379,6 +2394,9 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t _msg, neutrino_msg_data_t data)
 		printf("zapit volume %d new current %d mode %d\n", volume, current_volume, g_settings.audio_AnalogMode);
 		g_volume->retvol(current_volume);
 #endif
+#endif
+#ifdef ENABLE_GRAPHLCD
+		nGLCD::Update();
 #endif
 		g_RCInput->killTimer(scrambled_timer);
 

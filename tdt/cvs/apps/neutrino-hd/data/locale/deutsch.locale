@@ -427,11 +427,15 @@ extramenu.amount.on Ein
 extramenu.amount.select Amount
 extramenu.boot.bootargs.head Änderung der Boot-Parameter
 extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
+extramenu.boot.changed wird bei Neustart aktiv. Bitte rebooten!
 extramenu.boot.enigma2 E2
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.spark Spark
+extramenu.boot.supported wird nicht unterstützt.
+extramenu.boot.this Kein Wechsel auf Spark oder E2 bei Reboot.
 extramenu.boot.unchanged Unverändert
+extramenu.boot.unsupported E2 wird auf diesem System nicht unterstützt!
 extramenu.checkfs CheckFS Menue
 extramenu.checkfs.off Aus
 extramenu.checkfs.on Ein
@@ -440,34 +444,24 @@ extramenu.correctvolume Volume Menue Ext.
 extramenu.correctvolume.off Aus
 extramenu.correctvolume.on Ein
 extramenu.correctvolume.select Correct Volume
+extramenu.disabled wurde deaktiviert.
 extramenu.displaytime DisplayTime Menue
 extramenu.displaytime.off Aus
 extramenu.displaytime.on Ein
 extramenu.displaytime.select DisplayTime
 extramenu.emu Cam Menue
-extramenu.emu.camd3 Camd3
 extramenu.emu.disable Cam deaktivieren
-extramenu.emu.incubus IncubusCamd
-extramenu.emu.mbox Mbox
-extramenu.emu.mgcamd MGCamd
-extramenu.emu.none Nicht aktiv
-extramenu.emu.oscam Oscam
 extramenu.emu.restart Cam neu starten
 extramenu.emu.select Cam Auswahl
-extramenu.emu.spcs Spcs
-extramenu.evoluxupdate Evolux OnlineUpdate
-extramenu.evoluxupdate.off Off
-extramenu.evoluxupdate.on On
-extramenu.evoluxupdate.select OnlineUpdate
-extramenu.evoluxupdate.update OnlineUpdate ausführen
-extramenu.fritzcall Fritzcall Menue
-extramenu.fritzcall.off Aus
-extramenu.fritzcall.on Ein
-extramenu.fritzcall.select Fritzcallmonitor
-extramenu.fsck FSCK Menue
-extramenu.fsck.off Aus
-extramenu.fsck.on Ein
-extramenu.fsck.select FSCK
+extramenu.enabled ist nun aktiv.
+extramenu.evoluxupdate Evolux Online-Update
+extramenu.evoluxupdate.done Aktualisierung ist beendet, bitte jetzt rebooten!
+extramenu.evoluxupdate.notfound Keine Updates verfügbar!
+extramenu.evoluxupdate.update Online-Update ausführen
+extramenu.evoluxupdate.updating Update gefunden, Aktualisierung wird ausgeführt.
+extramenu.fritzcall FritzCallMonitor
+extramenu.fsck.boot Filesystem-Check bei Boot
+extramenu.fsck.shutdown Filesystem-Check bei Shutdown
 extramenu.glcd GraphLCD
 extramenu.glcd.color.black Schwarz
 extramenu.glcd.color.blue Blau
@@ -494,27 +488,15 @@ extramenu.kerneloptions.apply Einstellungen anwenden
 extramenu.kerneloptions.lsmod Status
 extramenu.kerneloptions.modules Kernel-Module
 extramenu.kerneloptions.reset Einstellungen zurücksetzen
-extramenu.nfsserver NFSSERVER Menue
-extramenu.nfsserver.off Aus
-extramenu.nfsserver.on Ein
-extramenu.nfsserver.select NFSSERVER
+extramenu.nfsserver NFS-Server
 extramenu.settings Extras
 extramenu.settings.general Einstellungen
-extramenu.stmfb STMFB Menue
-extramenu.stmfb.off Aus
-extramenu.stmfb.on Ein
-extramenu.stmfb.select STMFB 15m
-extramenu.swap Swap Menue
-extramenu.swap.onoff SWAP
-extramenu.swap.select Swap Auswahl
-extramenu.swap.swapfile SWAPFILE
-extramenu.swap.swappart SWAPPART
-extramenu.swap.swapram SWAPRAM
-extramenu.tunerreset Tuner Menue
-extramenu.tunerreset.off Aus
-extramenu.tunerreset.on Ein
-extramenu.tunerreset.restart Tuner neu starten
-extramenu.tunerreset.select Tuner Reset
+extramenu.swap.select Swap (Speicher-Auslagerung)
+extramenu.swap.swapfile Datei
+extramenu.swap.swappart Partition
+extramenu.swap.swapram RAM
+extramenu.tunerreset Tuner neu starten
+extramenu.tunerreset.restarting Tuner wird neu gestartet
 fan_speed CPU-Lüftergeschwindigkeit
 favorites.addchannel Der aktuelle Kanal wird dem Bouquet \n"Meine Favoriten" hinzugefügt. \nDie Speicherung benötigt einen Moment...
 favorites.bouquetname Meine Favoriten
@@ -850,6 +832,7 @@ miscsettings.epg_save EPG zwischenspeichern
 miscsettings.general Allgemein
 miscsettings.head Erweitert
 miscsettings.infobar Infobar
+miscsettings.infobar_autoshow_if_cn Infobar bei Sendungsbeginn
 miscsettings.infobar_casystem_display CA-System Anzeige
 miscsettings.infobar_casystem_mini Mini
 miscsettings.infobar_casystem_mode Diskret

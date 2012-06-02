@@ -194,8 +194,8 @@ public:
 	CAdZapMenu			*AdZapChanger;
 	CPSISetup			*chPSISetup;
 	C3DSetup			*threeDSetup;
-	EMU_Menu *EmuMenu;
-	TUNERRESET_Menu *TunerMenu;
+	EMU_Menu			*EmuMenu;
+	CExtraMenuSetup			*ExtraMenu;
 #endif
 
 	static CNeutrinoApp* getInstance();

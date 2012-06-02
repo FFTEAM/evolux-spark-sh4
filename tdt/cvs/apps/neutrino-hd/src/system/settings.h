@@ -83,6 +83,9 @@ struct SNeutrinoSettings
 	int zapto_pre_time;
 	int infobar_sat_display;
 	int infobar_subchan_disp_pos;
+#ifdef EVOLUX
+	int infobar_cn; // show infoviewer at current-next epg update
+#endif
 	int fan_speed;
 	int infobar_show;
 	int infobar_show_channellogo;

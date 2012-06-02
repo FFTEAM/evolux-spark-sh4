@@ -92,12 +92,12 @@ bool CBatchEPG_Menu::AbortableSystem(const char *command) {
 }
 
 void CBatchEPG_Menu::AbortableSleep(time_t seconds) {
+	time_t sleep_until = time(NULL) + seconds;
 	neutrino_msg_t msg;
 	neutrino_msg_data_t data;
 	do
 		g_RCInput->getMsg_ms(&msg, &data, 100);
 	while (msg != CRCInput::RC_timeout);
-	time_t sleep_until = time(NULL) + seconds;
 	while(sleep_until >= time(NULL)) {
 		g_RCInput->getMsg_ms(&msg, &data, 200);
 		if (msg <= CRCInput::RC_MaxRC)
