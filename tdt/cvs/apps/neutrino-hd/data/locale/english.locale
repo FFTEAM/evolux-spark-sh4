@@ -96,6 +96,16 @@ GENRE.TRAVEL_HOBBIES.5 cooking
 GENRE.TRAVEL_HOBBIES.6 advertisement/shopping
 GENRE.TRAVEL_HOBBIES.7 gardening
 GENRE.UNKNOWN unknown
+adzap AdZap
+adzap.announce In 15 seconds, the channel will be switched to
+adzap.cancel Timer was cancelled
+adzap.commit (Press (OK) after changing time)
+adzap.disable Deactivate
+adzap.enable Activate once
+adzap.minute minute
+adzap.minutes minutes
+adzap.monitor Stay active during current broadcast
+adzap.switchback Switch back after
 apidselector.head Select language
 audio.srs_algo Type
 audio.srs_algo_light Light
@@ -103,7 +113,8 @@ audio.srs_algo_normal Normal
 audio.srs_iq SRS TruVolume algo
 audio.srs_nmgr Noise manager
 audio.srs_volume Reference volume
-audiomenu.PCMOffset Volume Decrease PCM
+audiomenu.PCMOffset Volume reduction PCM
+audiomenu.ac3downmix AC3 downmix
 audiomenu.analog_mode Analog mode
 audiomenu.analog_out Analog output
 audiomenu.auto_lang Auto select audio
@@ -125,6 +136,7 @@ audiomenu.pref_subs Prefered subtitle language
 audiomenu.pref_subs_head Subtitle language preferences
 audiomenu.spdif_dd Encoded DD on SPDIF
 audiomenu.stereo stereo
+audiomenu.volume_adjustment Volume adjustment (%)
 audiomenu.volume_step Volume step
 audioplayer.add Add
 audioplayer.add_ic Icecast
@@ -192,6 +204,18 @@ bouqueteditor.return ready
 bouqueteditor.savechanges? Do you want to save the changes?
 bouqueteditor.savingchanges Saving changes. Please wait ...
 bouqueteditor.switch add/remove
+bouqueteditor.delete_question Should the channel be removed from this bouquet?
+bouqueteditor.discardingchanges Discarding changes, please wait ...
+bouqueteditor.hide Hide
+bouqueteditor.lock Lock
+bouqueteditor.move Move
+bouqueteditor.name Bouquet Management
+bouqueteditor.newbouquetname New bouquet name
+bouqueteditor.rename Rename
+bouqueteditor.return Finished
+bouqueteditor.savechanges? Save changes?
+bouqueteditor.savingchanges Saving changes, please wait ...
+bouqueteditor.switch Add/remove channel
 bouqueteditor.switchmode TV/Radio
 bouquetlist.head Bouquets
 cablesetup.provider cable provider
@@ -383,6 +407,8 @@ extra.use_gotoxx Use gotoXX
 extra.volume_pos Volumebar
 extra.west West
 extra.zap_cycle Zap cycle
+extra.zapit_bouquetname_newchannels New channels
+extra.zapit_bouquetname_others Others
 extra.zapit_fe_timeout Tune timeout (1 = 10 msec)
 extra.zapit_hvoltage 18V for rotor moving 
 extra.zapit_make_bouquet Make Remaining Channels list
@@ -391,6 +417,65 @@ extra.zapit_motor_speed Motor moving speed (10 = 1deg/sec)
 extra.zapit_scanpids Scan/Use pids
 extra.zapit_sdt_changed Channels changed, reload settings.
 extra.zapit_write_names Write channel names
+extramenu.boot.bootargs.head Boot parameter change
+extramenu.boot.bootargs.text Do not switch off your set-top box!
+extramenu.boot.changed will be active after boot. Please reboot now.
+extramenu.boot.enigma2 E2
+extramenu.boot.head Boot Settings
+extramenu.boot.select System to start on reboot
+extramenu.boot.spark Spark
+extramenu.boot.this No change to Spark or E2 at reboot
+extramenu.boot.unchanged Unchanged
+extramenu.boot.unsupported E2 is not supported on this system!
+extramenu.disabled is disabled.
+extramenu.emu Cam Setup
+extramenu.emu.disable Disable CAM
+extramenu.emu.restart Restart CAM
+extramenu.emu.select CAM Selection
+extramenu.enabled is now active.
+extramenu.evoluxupdate Evolux Online-Update
+extramenu.evoluxupdate.done Updating has been completed, please reboot
+extramenu.evoluxupdate.notfound No updates available!
+extramenu.evoluxupdate.update Run Online-Update
+extramenu.evoluxupdate.updating Update was found, updating your system.
+extramenu.fritzcall FritzCallMonitor
+extramenu.fsck.boot Filesystem Check at Boot
+extramenu.fsck.shutdown Filesystem-Check at Shutdown
+extramenu.glcd GraphLCD
+extramenu.glcd.color.black Black
+extramenu.glcd.color.blue Blue
+extramenu.glcd.color.cyan Blue-Green
+extramenu.glcd.color.green Green
+extramenu.glcd.color.magenta Magenta
+extramenu.glcd.color.red Red
+extramenu.glcd.color.white White
+extramenu.glcd.color.yellow Yellow
+extramenu.glcd.font Font
+extramenu.glcd.mirror_osd Show OSD menue on GraphLCD
+extramenu.glcd.restart Rescan
+extramenu.glcd.select.bar Progress bar color
+extramenu.glcd.select.bg Background color
+extramenu.glcd.select.fg Foreground color
+extramenu.glcd.size_bar Progress bar height
+extramenu.glcd.size_channel Channel height
+extramenu.glcd.size_epg EPG height
+extramenu.glcd.size_time Time height
+extramenu.glcd.time_in_standby Display time in standby
+extramenu.glcd.volume Volume
+extramenu.kerneloptions Kernel Options
+extramenu.kerneloptions.apply Apply
+extramenu.kerneloptions.lsmod Status
+extramenu.kerneloptions.modules Kernel modules
+extramenu.kerneloptions.reset Reset settings
+extramenu.nfsserver NFS-Server
+extramenu.settings Extras
+extramenu.settings.general Settings
+extramenu.swap.select Swap
+extramenu.swap.swapfile File
+extramenu.swap.swappart Partition
+extramenu.swap.swapram RAM
+extramenu.tunerreset Restart tuner
+extramenu.tunerreset.restarting Restarting tuner
 fan_speed CPU Fan speed
 favorites.addchannel The current channel will be added \nto the bouquet "My Favorites". \n This will take a few seconds...
 favorites.bouquetname My Favorites
@@ -638,6 +723,10 @@ ledcontroler.blink Blink in deep standby, if timer set
 ledcontroler.menu Power Button LED�s
 ledcontroler.mode.deepstandby Deep Standby
 ledcontroler.mode.record Blinke in Record
+ledcontroler.blink Blink in Deep-Standby if Timer active
+ledcontroler.menu Power Button LEDs
+ledcontroler.mode.deepstandby Deep-Standby
+ledcontroler.mode.record Blink while recording
 ledcontroler.mode.standby Standby
 ledcontroler.mode.tv TV Mode
 ledcontroler.off Led1 & Led2 off
@@ -649,6 +738,7 @@ mainmenu.clearsectionsd Clear EPG Cache
 mainmenu.games Games
 mainmenu.head Main Menu
 mainmenu.media Media
+mainmenu.media Multimedia
 mainmenu.movieplayer Movieplayer
 mainmenu.pausesectionsd Read EPG
 mainmenu.pictureviewer Picture viewer
@@ -681,6 +771,7 @@ mainsettings.video Video
 menu.back Back
 menu.cancel Cancel
 menu.next Next (press Menu to quit)
+messagebox.accept Do you want to keep the changes?
 messagebox.back Back
 messagebox.cancel Cancel
 messagebox.discard Discard changes?
@@ -696,6 +787,12 @@ miscsettings.colored_events_0 none
 miscsettings.colored_events_1 current
 miscsettings.colored_events_2 next
 miscsettings.energy Energy
+miscsettings.epg.batch.head EPG Update
+miscsettings.epg.batch.settings EPG Update
+miscsettings.epg.freesat Freesat EPG
+miscsettings.epg.freesat.enable Enable Freesat EPG
+miscsettings.epg.viasat VIASAT EPG
+miscsettings.epg.viasat.enable Enable VIASAT EPG
 miscsettings.epg_cache EPG-Cache (Days)
 miscsettings.epg_cache_hint1 How long will EPG-Data in the future cached?
 miscsettings.epg_cache_hint2 Set in days.
@@ -719,20 +816,23 @@ miscsettings.infobar_casystem_mini mini
 miscsettings.infobar_casystem_mode discreet
 miscsettings.infobar_colored_events Program colored
 miscsettings.infobar_disp_0 without Logo
-miscsettings.infobar_disp_1 Logo 1
-miscsettings.infobar_disp_2 Logo 2
-miscsettings.infobar_disp_3 Logo 3
-miscsettings.infobar_disp_4 Logo 4
-miscsettings.infobar_disp_5 Logo 5
-miscsettings.infobar_disp_6 Logo 6
+miscsettings.infobar_disp_1 Logo No logo
+miscsettings.infobar_disp_2 Logo Logo in number frame
+miscsettings.infobar_disp_3 Logo Logo/channel number
+miscsettings.infobar_disp_4 Logo Logo+channel number/signal bar
+miscsettings.infobar_disp_5 Logo Logo+channel name/channel number
+miscsettings.infobar_disp_6 Logo Logo/signal bar
+miscsettings.infobar_disp_6 Logo+Kanalnummer/Signalbalken
 miscsettings.infobar_disp_log Logo
 miscsettings.infobar_logo_hdd_dir Logo dir
+miscsettings.infobar_logo_hdd_dir_e2 Logo dir E2
 miscsettings.infobar_sat_display Satellite display on infobar
 miscsettings.infobar_show show Info on EPG change
 miscsettings.infobar_show_res show resolution on infobar
 miscsettings.infobar_show_res_simple simple
 miscsettings.infobar_show_var_hdd Fill level (var & hdd )
 miscsettings.radiotext Radiotext
+miscsettings.restart The change will be active after restart.
 miscsettings.shutdown_count In standby, switch off after
 miscsettings.shutdown_count_hint1 time (in minutes) to switch from standby
 miscsettings.shutdown_count_hint2 to deep standby (0 = off).
@@ -1226,6 +1326,7 @@ settings.pos_bottom_left bottom left
 settings.pos_bottom_right bottom right
 settings.pos_default_center top center
 settings.pos_higher_center higher center
+settings.pos_off off
 settings.pos_top_left top left
 settings.pos_top_right top right
 settings.restore Image-Settings: Restore
@@ -1256,6 +1357,13 @@ stringinput.caps caps / no caps
 stringinput.clear clear all
 subtitles.head Subtitles
 subtitles.stop Stop subtitles
+three.d.off Inactive
+three.d.save Remember for this channel
+three.d.settings 3D Settings
+three.d.settings.general Variant
+three.d.sideside Side-by-Side
+three.d.tile Tile
+three.d.topbottom Top-and-Bottom
 timer.eventrecord.msg   ... TO be DONE, or not to be done
 timer.eventrecord.title Schedule Record
 timer.eventtimed.msg The event is scheduled.\nThe box will power on and \nswitch to this channel at the given time.
@@ -1265,6 +1373,7 @@ timerbar.recordevent Record
 timerlist.alarmtime Alarm time
 timerlist.apids Audio PIDs
 timerlist.apids_dflt record default audio streams
+timerlist.batchepg EPG Update
 timerlist.bouquetselect choose bouquet
 timerlist.channel Channel
 timerlist.channelselect choose channel
@@ -1309,6 +1418,7 @@ timerlist.standby.off Leave standby
 timerlist.standby.on Enter standby
 timerlist.stoptime Stop time
 timerlist.type Timer typ
+timerlist.type.batchepg Update EPG
 timerlist.type.execplugin Execute plugin
 timerlist.type.nextprogram Next program
 timerlist.type.record Record
@@ -1347,6 +1457,7 @@ usermenu.button_green User menu green
 usermenu.button_red User menu red
 usermenu.button_yellow User menu yellow
 usermenu.head User menu
+usermenu.item_adzap Adzap
 usermenu.item_bar ---- Boarder ----
 usermenu.item_epg_misc EPG functions
 usermenu.item_none (empty)
@@ -1388,6 +1499,13 @@ videomenu.hue Hue
 videomenu.letterbox Letterbox
 videomenu.panscan Pan&Scan
 videomenu.panscan2 14:9 Pan&Scan
+videomenu.psi Color settings
+videomenu.psi.brightness Brightness
+videomenu.psi.contrast Contrast
+videomenu.psi.reset Standard settings
+videomenu.psi.saturation Saturation
+videomenu.psi.step Video slider step size
+videomenu.psi.tint Tint
 videomenu.saturation Saturation
 videomenu.scart Scart
 videomenu.screensetup Screen Setup

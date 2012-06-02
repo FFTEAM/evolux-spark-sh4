@@ -137,10 +137,6 @@ audiomenu.pref_subs_head Untertitelwahl
 audiomenu.spdif_dd DolbyDigital über S/PDIF
 audiomenu.stereo stereo
 audiomenu.volume_adjustment Lautstärkeanpassung (%)
-audiomenu.volume_position Position Lautstärkeregler
-audiomenu.volume_position.center mittig
-audiomenu.volume_position.hidden unsichtbar
-audiomenu.volume_position.upperleft links oben
 audiomenu.volume_step Lautstärke Schrittweite
 audioplayer.add Hinzufügen
 audioplayer.add_ic Icecast
@@ -421,10 +417,6 @@ extra.zapit_motor_speed Rotor Drehzeit (10 = 1°/ sec)
 extra.zapit_scanpids PIDs scannen/nutzen
 extra.zapit_sdt_changed Kanalliste wird neu geladen.
 extra.zapit_write_names Schreibe Kanalname
-extramenu.amount Amount Menue
-extramenu.amount.off Aus
-extramenu.amount.on Ein
-extramenu.amount.select Amount
 extramenu.boot.bootargs.head Änderung der Boot-Parameter
 extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.boot.changed wird bei Neustart aktiv. Bitte rebooten!
@@ -432,27 +424,14 @@ extramenu.boot.enigma2 E2
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.spark Spark
-extramenu.boot.supported wird nicht unterstützt.
 extramenu.boot.this Kein Wechsel auf Spark oder E2 bei Reboot.
 extramenu.boot.unchanged Unverändert
 extramenu.boot.unsupported E2 wird auf diesem System nicht unterstützt!
-extramenu.checkfs CheckFS Menue
-extramenu.checkfs.off Aus
-extramenu.checkfs.on Ein
-extramenu.checkfs.select CheckFS
-extramenu.correctvolume Volume Menue Ext.
-extramenu.correctvolume.off Aus
-extramenu.correctvolume.on Ein
-extramenu.correctvolume.select Correct Volume
 extramenu.disabled wurde deaktiviert.
-extramenu.displaytime DisplayTime Menue
-extramenu.displaytime.off Aus
-extramenu.displaytime.on Ein
-extramenu.displaytime.select DisplayTime
-extramenu.emu Cam Menue
-extramenu.emu.disable Cam deaktivieren
-extramenu.emu.restart Cam neu starten
-extramenu.emu.select Cam Auswahl
+extramenu.emu Cam-Einstellungen
+extramenu.emu.disable CAM deaktivieren
+extramenu.emu.restart CAM neu starten
+extramenu.emu.select CAM Auswahl
 extramenu.enabled ist nun aktiv.
 extramenu.evoluxupdate Evolux Online-Update
 extramenu.evoluxupdate.done Aktualisierung ist beendet, bitte jetzt rebooten!
@@ -471,8 +450,8 @@ extramenu.glcd.color.magenta Magenta
 extramenu.glcd.color.red Rot
 extramenu.glcd.color.white Weiss
 extramenu.glcd.color.yellow Gelb
-extramenu.glcd.font Schriftart
-extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
+extramenu.glcd.font Schrift
+extramenu.glcd.mirror_osd OSD-Menü auf GraphLCD anzeigen
 extramenu.glcd.restart Neu erkennen
 extramenu.glcd.select.bar Fortschrittsbalken-Farbe
 extramenu.glcd.select.bg Hintergrund-Farbe
@@ -874,7 +853,7 @@ motorcontrol.install_menu Motor Installation
 motorcontrol.motor_pos (a) Motorposition:
 motorcontrol.movement (b) Bewegung:
 motorcontrol.msec Millisekunden
-motorcontrol.no_mode keine Sorge (wasn das?)
+motorcontrol.no_mode egal
 motorcontrol.notdef nicht benutzt
 motorcontrol.override übersteuern
 motorcontrol.pos_decrease Motorposition runter (a)
@@ -1097,8 +1076,6 @@ nvod.starting (Beginn in %d min)
 nvodselector.directormode Bildregie-Modus
 nvodselector.head Anfangszeit auswählen
 nvodselector.subservice Perspektiven
-onoff.off Aus
-onoff.on Ein
 options.default Voreinstellungen benutzen
 options.fb framebuffer
 options.ntp_off DVB

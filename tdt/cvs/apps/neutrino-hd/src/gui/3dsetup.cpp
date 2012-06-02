@@ -85,7 +85,7 @@ int C3DSetup::exec(CMenuTarget* parent, const std::string &actionKey)
 		if (actionKey == tdl[i].actionKey) {
 			frameBuffer->set3DMode(tdl[i].mode);
 			for (int j = 0; j < THREE_D_OPTIONS_COUNT; j++)
-				tdl[j].cmf->setOptionValue(g_Locale->getText((i == j) ? LOCALE_ONOFF_ON: LOCALE_ONOFF_OFF));
+				tdl[j].cmf->setOptionValue(g_Locale->getText((i == j) ? LOCALE_OPTIONS_ON: LOCALE_OPTIONS_OFF));
 			return res;
 		}
 	}
@@ -181,7 +181,7 @@ int C3DSetup::show3DSetup()
 
 	for (int i = 0; i < THREE_D_OPTIONS_COUNT; i++) {
 		tdl[i].cmf = new CMenuForwarder(THREE_D_OPTIONS[i].value, true,
-			g_Locale->getText((mode3d == i) ? LOCALE_ONOFF_ON : LOCALE_ONOFF_OFF),
+			g_Locale->getText((mode3d == i) ? LOCALE_OPTIONS_ON : LOCALE_OPTIONS_OFF),
 			this, tdl[i].actionKey.c_str(), CRCInput::convertDigitToKey(shortcut++));
 		m->addItem(tdl[i].cmf, selected == i);
 	}

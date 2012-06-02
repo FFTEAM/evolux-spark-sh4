@@ -319,8 +319,8 @@ static const CMenuOptionChooser::keyval EPG_BATCH_TYPES[EPG_BATCH_TYPES_COUNT] =
 
 #define ONOFF_OPTION_COUNT 2
 const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
-	{ 0, LOCALE_ONOFF_OFF },
-	{ 1, LOCALE_ONOFF_ON },
+	{ 0, LOCALE_OPTIONS_OFF },
+	{ 1, LOCALE_OPTIONS_ON },
 };
 
 void CBatchEPG_Menu::Settings()

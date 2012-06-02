@@ -58,8 +58,8 @@ static nGLCD *nglcd = NULL;
 
 #define ONOFF_OPTION_COUNT 2
 const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
-	{ 0, LOCALE_ONOFF_OFF },
-	{ 1, LOCALE_ONOFF_ON }
+	{ 0, LOCALE_OPTIONS_OFF },
+	{ 1, LOCALE_OPTIONS_ON }
 };
 
 #define BOOT_OPTION_COUNT 3
@@ -80,7 +80,7 @@ const CMenuOptionChooser::keyval SWAP_OPTIONS[SWAP_OPTION_COUNT] =
 #define KEY_SWAP_SWAPRAM 1
 #define KEY_SWAP_SWAPPART 2
 #define KEY_SWAP_SWAPFILE 3
-	{ KEY_SWAP_SWAPOFF, LOCALE_ONOFF_OFF },
+	{ KEY_SWAP_SWAPOFF, LOCALE_OPTIONS_OFF },
 	{ KEY_SWAP_SWAPRAM, LOCALE_EXTRAMENU_SWAP_SWAPRAM },
 	{ KEY_SWAP_SWAPPART, LOCALE_EXTRAMENU_SWAP_SWAPPART },
 	{ KEY_SWAP_SWAPFILE, LOCALE_EXTRAMENU_SWAP_SWAPFILE }
@@ -633,7 +633,7 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				string m = " " + string(EMU_list[emu_old].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_ENABLED);
 				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 				if (EMU_list[emu_old].cmf)
-					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_OFF));
+					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_OFF));
 			}
 			safe_system(EMU_list[emu].start_command);
 
@@ -643,7 +643,7 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			string m = " " + string(EMU_list[emu].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_DISABLED);
 			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
 			if (EMU_list[emu].cmf)
-				EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_ON));
+				EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_ON));
 			settings.cam_selected = string(EMU_list[emu].procname);
 			selected = emu;
 		}
@@ -678,7 +678,7 @@ void EMU_Menu::EMU_Menu_Settings()
 	for (int i = 0; i < EMU_OPTION_COUNT; i++)
 		if (EMU_list[i].installed) {
 			EMU_list[i].cmf = new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
-				g_Locale->getText((i == selected) ? LOCALE_ONOFF_ON : LOCALE_ONOFF_OFF),
+				g_Locale->getText((i == selected) ? LOCALE_OPTIONS_ON : LOCALE_OPTIONS_OFF),
 				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++));
 			menu->addItem(EMU_list[i].cmf, (i == selected));
 		}
