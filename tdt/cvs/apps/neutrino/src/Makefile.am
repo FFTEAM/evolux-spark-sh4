@@ -1,7 +1,7 @@
 #AM_CPPFLAGS = -fno-rtti -fno-exceptions
 AM_CPPFLAGS = -fno-rtti -fexceptions -rdynamic
 
-SUBDIRS = zapit gui daemonc driver system sectionsd timerd nhttpd mhwepg
+SUBDIRS = zapit gui daemonc driver system sectionsd timerd nhttpd
 
 INCLUDES = \
 	-I$(top_srcdir)/daemons \

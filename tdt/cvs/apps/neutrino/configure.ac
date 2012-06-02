@@ -114,6 +114,5 @@ src/timerd/Makefile
 src/zapit/Makefile
 src/zapit/lib/Makefile
 src/zapit/src/Makefile
-src/mhwepg/Makefile
 ])
 
