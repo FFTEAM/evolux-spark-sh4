@@ -46,4 +46,5 @@ hotplug/Makefile
 vfdctl/Makefile
 libmme_host/Makefile
 libmmeimage/Makefile
+mhwepg/Makefile
 ])

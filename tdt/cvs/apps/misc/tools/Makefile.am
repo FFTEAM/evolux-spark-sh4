@@ -14,4 +14,5 @@ SUBDIRS = \
 	hotplug \
 	vfdctl \
 	libmme_host \
-	libmmeimage
+	libmmeimage \
+	mhwepg
