@@ -544,10 +544,13 @@ void CBouquetList::paintItem(int pos)
 	if(npos < (int) Bouquets.size())
 		lname = (Bouquets[npos]->zapitBouquet && Bouquets[npos]->zapitBouquet->bFav) ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : Bouquets[npos]->channelList->getName();
 #ifdef EVOLUX
-		if(!strcmp(lname, "extra.zapit_bouquetname_others"))
-			lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
-		else if(!strcmp(lname, "extra.zapit_bouquetname_newchannels"))
-			lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+		if (lname) {
+			if(!strcmp(lname, "extra.zapit_bouquetname_others"))
+				lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+			else if(!strcmp(lname, "extra.zapit_bouquetname_newchannels"))
+				lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+		} else
+			lname = "";
 #endif
 
 	if (npos == (int) selected) {
