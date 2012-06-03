@@ -349,9 +349,11 @@ void * streamts_live_thread(void *data)
 
 	while (!exit_flag) {
 #ifdef EVOLUX
-		// FIXME -- Read() will/may hang if channels are switched  --martii
-#endif
+		// A non-blocking Read() will/may hang if channels are switched  --martii
+		r = dmx->ReadNB(buf, IN_SIZE, 100);
+#else
 		r = dmx->Read(buf, IN_SIZE, 100);
+#endif
 		if(r > 0)
 			packet_stdout(fd, buf, r, NULL);
 	}

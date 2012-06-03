@@ -39,15 +39,14 @@ class cDemux
 		struct dmx_pes_filter_params p_flt;
 	public:
 
-#ifdef EVOLUX
-		bool Open(DMX_CHANNEL_TYPE pes_type, void * x = NULL, int y = 65536);
-#else
 		bool Open(DMX_CHANNEL_TYPE pes_type, void * x = NULL, int y = 0);
-#endif
 		void Close(void);
 		bool Start(bool record = false);
 		bool Stop(void);
 		int Read(unsigned char *buff, int len, int Timeout = 0);
+#ifdef EVOLUX
+		int ReadNB(unsigned char *buff, int len, int Timeout = 0);
+#endif
 		bool sectionFilter(unsigned short pid, const unsigned char * const filter, const unsigned char * const mask, int len, int Timeout = 0, const unsigned char * const negmask = NULL);
 		bool pesFilter(const unsigned short pid);
 #define AVSYNC_TYPE int

@@ -4,6 +4,10 @@
 #include <poll.h>
 #include <errno.h>
 #include <inttypes.h>
+#ifdef EVOLUX
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #include <cstring>
 #include <cstdio>
@@ -195,6 +199,7 @@ bool cDemux::Start(bool)
 		return false;
 	}
 
+#ifndef EVOLUX
 	for (std::vector<pes_pids>::const_iterator i = pesfds.begin(); i != pesfds.end(); ++i)
 	{
 		lt_debug("%s starting demux fd %d pid 0x%04x\n", __FUNCTION__, (*i).fd, (*i).pid);
@@ -202,6 +207,7 @@ bool cDemux::Start(bool)
 			perror("DMX_START");
 	}
 	ioctl(fd, DMX_START);
+#endif
 	return true;
 }
 
@@ -221,6 +227,18 @@ bool cDemux::Stop(void)
 	ioctl(fd, DMX_STOP);
 	return true;
 }
+
+#ifdef EVOLUX
+int cDemux::ReadNB(unsigned char *buff, int len, int timeout)
+{
+	int f = fcntl(fd, F_GETFL);
+	fcntl(fd, F_SETFL, f | O_NONBLOCK);
+	int res = Read(buff, len, timeout);
+	fcntl(fd, F_SETFL, f | O_NONBLOCK);
+	return res;
+}
+
+#endif
 
 int cDemux::Read(unsigned char *buff, int len, int timeout)
 {
