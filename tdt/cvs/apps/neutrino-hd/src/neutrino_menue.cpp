@@ -42,6 +42,11 @@
 
 #include <system/debug.h>
 
+#ifdef EVOLUX
+#include <sys/statvfs.h>
+#include <sys/vfs.h>
+#endif
+
 #include <cs_api.h>
 
 #include "gui/audio_setup.h"

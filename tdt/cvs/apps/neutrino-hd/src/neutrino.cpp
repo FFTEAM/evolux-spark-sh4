@@ -37,6 +37,12 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef EVOLUX
+#include <sys/statvfs.h>
+#include <sys/vfs.h>
+#endif
+
 #include <signal.h>
 
 #include <fstream>
