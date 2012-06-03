@@ -41,11 +41,11 @@ $(DEPDIR)/neutrino.do_compile: $(appsdir)/neutrino/config.status
 	touch $@
 
 $(DEPDIR)/neutrino: neutrino.do_prepare neutrino.do_compile
-	$(MAKE) -C $(appsdir)/neutrino install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
+	$(MAKE) -C $(appsdir)/neutrino install DESTDIR=$(targetprefix) DATADIR=$(targetprefix)/usr/local/share/
 	$(target)-strip $(targetprefix)/usr/local/bin/neutrino
 	$(target)-strip $(targetprefix)/usr/local/bin/pzapit
 	$(target)-strip $(targetprefix)/usr/local/bin/sectionsdcontrol
-	$(target)-strip $(targetprefix)/usr/local/bin/mhwepg
+	$(target)-strip $(targetprefix)/bin/mhwepg
 	touch $@
 
 neutrino-clean neutrino-distclean:
