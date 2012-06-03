@@ -115,12 +115,20 @@ if [ ! -e /var/etc/.firstboot ]; then
 	else	
 		isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
 		if [ "$isactive1" = 2 ]; then
-			MEMSIZE=4m
+			if [ -e /etc/.nhd ]; then
+				MEMSIZE=12m
+			else
+				MEMSIZE=4m
+			fi
 #		        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
 			insmod $MODDIR/stmcore-display-sti7111.ko STi7111Device_scart_output=1
 			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		else
-			MEMSIZE=8m
+			if [ -e /etc/.nhd ]; then
+				MEMSIZE=12m
+			else
+				MEMSIZE=8m
+			fi
 			insmod $MODDIR/stmcore-display-sti7111.ko
 			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 		fi
@@ -269,7 +277,11 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/bin/evremote2 5 200 & # $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
 		rm -f /etc/.extdisplay >/dev/null 2>&1
 	else
-		/bin/evremote2 5 200 &
+		if [ -e /etc/.nhd ]; then
+			/bin/evremote2 &
+		else
+			/bin/evremote2 5 200 &
+		fi
 	fi
 
 	if [ -n "$START_NEUTRINO" ]; then

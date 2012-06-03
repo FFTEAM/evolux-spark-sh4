@@ -326,6 +326,7 @@ endif
 	rm -rf $(prefix)/release_neutrino-hd/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/
 	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/Makefile*
+	touch $(prefix)/release_neutrino-hd/etc/.nhd
 
 #######################################################################################
 #######################################################################################
