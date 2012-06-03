@@ -86,12 +86,12 @@ if [ -d $TUFSBOXDIR/release_neutrino-hd_with_dev ]; then
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
 		echo "   3) Prepare Enigma2      jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
 		echo "   4) Prepare Enigma2-PLI  jffs2"
 	fi
 fi
