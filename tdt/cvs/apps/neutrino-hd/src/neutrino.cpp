@@ -91,7 +91,6 @@
 #ifdef EVOLUX
 #include "gui/batchepg.h"
 #endif
-
 #if HAVE_COOL_HARDWARE
 #include "gui/widget/progressbar.h"
 #endif
@@ -197,6 +196,9 @@ CVolume        * g_volume;
 bool parentallocked = false;
 static char **global_argv;
 
+/* hack until we have real platform abstraction... */
+static bool can_deepstandby = false;
+
 extern const char * locale_real_names[]; /* #include <system/locals_intern.h> */
 
 // USERMENU
@@ -221,6 +223,13 @@ static void initGlobals(void)
 	g_CamHandler 	= NULL;
 	g_Radiotext     = NULL;
 	g_volume	= NULL;
+
+#if HAVE_SPARK_HARDWARE
+	/* spark has revision == 1 like tripledragon for now */
+	can_deepstandby = true;
+#else
+	can_deepstandby = (cs_get_revision() > 7);
+#endif
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -431,7 +440,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
         strcpy(g_settings.shutdown_count, configfile.getString("shutdown_count","0").c_str());
 
 	strcpy(g_settings.shutdown_min, "000");
-	if (cs_get_revision() > 7 || cs_get_revision() == 1)
+	if (can_deepstandby || cs_get_revision() == 1)
 		strcpy(g_settings.shutdown_min, configfile.getString("shutdown_min","180").c_str());
 
 	g_settings.infobar_sat_display   = configfile.getBool("infobar_sat_display"  , true );
@@ -861,6 +870,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32( "hdmi_cec_mode", g_settings.hdmi_cec_mode );
 	configfile.setInt32( "hdmi_cec_view_on", g_settings.hdmi_cec_view_on );
 	configfile.setInt32( "hdmi_cec_standby", g_settings.hdmi_cec_standby );
+
 	configfile.setInt32( "current_volume", g_settings.current_volume );
 	configfile.setInt32( "current_volume_step", g_settings.current_volume_step );
 	configfile.setInt32( "channel_mode", g_settings.channel_mode );
@@ -1763,14 +1773,14 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 	ZapStart_arg.video_mode = g_settings.video_Mode;
 
 #ifndef DISABLE_SECTIONSD
-#ifdef EVOLUX
+# ifdef EVOLUX
 	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *)
 		((g_settings.epg_enable_freesat ? 0x01 : 0x00) |
 		(g_settings.epg_enable_viasat ? 0x02 : 0x00))
 	);
-#else
+# else
 	pthread_create (&sections_thread, NULL, sectionsd_main_thread, (void *) NULL);
-#endif
+# endif
 #endif
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 	CZapit::getInstance()->Start(&ZapStart_arg);
@@ -1831,7 +1841,6 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 
 	pthread_create (&stream_thread, NULL, streamts_main_thread, (void *) NULL);
-
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 
 	hintBox->hide(); //FIXME
@@ -2028,7 +2037,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 	RealRun(personalize.getWidget(0)/**main**/);
 
-	ExitRun(true, (cs_get_revision() > 7));
+	ExitRun(true, can_deepstandby);
 
 	return 0;
 }
@@ -2395,7 +2404,7 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t _msg, neutrino_msg_data_t data)
 		g_Zapit->getVolume(&volume, &volume);
 		current_volume = 100 - volume*100/63;
 		printf("zapit volume %d new current %d mode %d\n", volume, current_volume, g_settings.audio_AnalogMode);
-		g_volume->retvol(current_volume);
+		g_volume->setvol(current_volume);
 #endif
 #endif
 #ifdef ENABLE_GRAPHLCD
@@ -2765,7 +2774,7 @@ _repeat:
 		return messages_return::handled | messages_return::cancel_all;
 	}
 	else if( msg == NeutrinoMessages::RECORD_STOP) {
-#ifdef EVOLUC
+#ifdef EVOLUX
 		CVFD::getInstance()->ShowIcon(VFD_ICON_RECORD, false);
 #endif
 		CTimerd::RecordingStopInfo* recinfo = (CTimerd::RecordingStopInfo*)data;
@@ -2912,11 +2921,11 @@ _repeat:
 				return messages_return::handled;
 #endif
 				printf("NeutrinoMessages::SLEEPTIMER: shutdown\n");
-				ExitRun(true, (cs_get_revision() > 7));
+				ExitRun(true, can_deepstandby);
 			}
 		}
 		if(g_settings.shutdown_real)
-			ExitRun(true, (cs_get_revision() > 7));
+			ExitRun(true, can_deepstandby);
 		else
 			standbyMode( true );
 		return messages_return::handled;
@@ -2954,7 +2963,7 @@ _repeat:
 	}
 	else if( msg == NeutrinoMessages::SHUTDOWN ) {
 		if(!skipShutdownTimer) {
-			ExitRun(true, (cs_get_revision() > 7));
+			ExitRun(true, can_deepstandby);
 		}
 		else {
 			skipShutdownTimer=false;
@@ -3093,6 +3102,7 @@ extern bool timer_is_rec;//timermanager.cpp
 
 void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 {
+	printf("[neutrino] %s retcode: %d can_deep: %d\n", __func__, retcode, can_deepstandby);
 	bool do_shutdown = true;
 
 	CRecordManager::getInstance()->StopAutoRecord();
@@ -3270,6 +3280,7 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 			//CVFD::getInstance()->ShowText(g_Locale->getText(LOCALE_MAINMENU_REBOOT));
 			stop_video();
 
+			printf("[neutrino] This is the end. exiting with code %d\n", retcode);
 #if 0 /* FIXME this next hack to test, until we find real crash on exit reason */
 			system("/etc/init.d/rcK");
 			system("/bin/sync");

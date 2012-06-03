@@ -348,6 +348,9 @@ void * streamts_live_thread(void *data)
 	ssize_t r;
 
 	while (!exit_flag) {
+#ifdef EVOLUX
+		// FIXME -- Read() will/may hang if channels are switched  --martii
+#endif
 		r = dmx->Read(buf, IN_SIZE, 100);
 		if(r > 0)
 			packet_stdout(fd, buf, r, NULL);
