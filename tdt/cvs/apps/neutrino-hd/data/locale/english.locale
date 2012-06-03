@@ -469,7 +469,6 @@ extramenu.kerneloptions.modules Kernel modules
 extramenu.kerneloptions.reset Reset settings
 extramenu.nfsserver NFS-Server
 extramenu.settings Extras
-extramenu.settings.general Settings
 extramenu.swap.select Swap
 extramenu.swap.swapfile File
 extramenu.swap.swappart Partition
@@ -771,6 +770,7 @@ mainsettings.video Video
 menu.back Back
 menu.cancel Cancel
 menu.next Next (press Menu to quit)
+menu.numbers_as_icons Menue numbers as icons
 messagebox.accept Do you want to keep the changes?
 messagebox.back Back
 messagebox.cancel Cancel

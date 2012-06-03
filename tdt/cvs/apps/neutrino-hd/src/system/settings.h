@@ -589,6 +589,7 @@ struct SNeutrinoSettings
 	char	update_dir[100];
 #ifdef EVOLUX
 	int	adzap_zapBackPeriod;
+	int	menu_numbers_as_icons;
 #endif
 	// USERMENU
 	typedef enum

@@ -469,7 +469,6 @@ extramenu.kerneloptions.modules Kernel-Module
 extramenu.kerneloptions.reset Einstellungen zurücksetzen
 extramenu.nfsserver NFS-Server
 extramenu.settings Extras
-extramenu.settings.general Einstellungen
 extramenu.swap.select Swap (Speicher-Auslagerung)
 extramenu.swap.swapfile Datei
 extramenu.swap.swappart Partition
@@ -771,6 +770,7 @@ mainsettings.video Video
 menu.back Zurück
 menu.cancel Abbrechen
 menu.next Weiter (Menü zum Beenden)
+menu.numbers_as_icons Menü-Zahlen als Icons
 messagebox.accept Wollen Sie die Änderungen beibehalten?
 messagebox.back Zurück
 messagebox.cancel Abbruch

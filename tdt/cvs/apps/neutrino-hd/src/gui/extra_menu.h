@@ -207,16 +207,16 @@ class KernelOptions_Menu : public CMenuTarget
 		void Settings();
 };
 
-class EVOLUXUPDATE_Menu : public CMenuTarget
+class CEvoluxSoftwareUpdate : public CMenuTarget
 {
 	private:
 		int width, selected;
 	public:
-		EVOLUXUPDATE_Menu();
+		CEvoluxSoftwareUpdate();
 		bool CheckUpdate();
 		void hide();
 		int exec(CMenuTarget* parent, const std::string & actionKey);
-		void EVOLUXUPDATESettings();
+		void Settings();
 };
 
 #endif //__extramenu__

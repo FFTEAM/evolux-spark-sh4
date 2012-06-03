@@ -438,6 +438,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.infobar_subchan_disp_pos = configfile.getInt32("infobar_subchan_disp_pos"  , 0 );
 #ifdef EVOLUX
 	g_settings.infobar_cn = configfile.getInt32("infobar_cn", 0 );
+	g_settings.menu_numbers_as_icons = configfile.getBool("menu_numbers_as_icons", true);
 #endif
 	g_settings.progressbar_color = configfile.getBool("progressbar_color", true );
 	g_settings.infobar_show  = configfile.getInt32("infobar_show", 1);
@@ -910,6 +911,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32("infobar_subchan_disp_pos"  , g_settings.infobar_subchan_disp_pos  );
 #ifdef EVOLUX
 	configfile.setInt32("infobar_cn"  , g_settings.infobar_cn);
+	configfile.setBool("menu_numbers_as_icons", g_settings.menu_numbers_as_icons);
 #endif
 	configfile.setBool("progressbar_color"  , g_settings.progressbar_color  );
 	configfile.setInt32("infobar_show", g_settings.infobar_show);

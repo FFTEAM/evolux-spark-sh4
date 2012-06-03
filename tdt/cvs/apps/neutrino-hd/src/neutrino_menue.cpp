@@ -343,8 +343,11 @@ void CNeutrinoApp::InitMenuService()
 	//infomenu
 	personalize.addItem(MENU_SERVICE, new CMenuForwarder(LOCALE_MESSAGEBOX_INFO, true, NULL, new CInfoMenu(), NULL, CRCInput::RC_info, NEUTRINO_ICON_BUTTON_INFO_SMALL) , &g_settings.personalize[SNeutrinoSettings::P_MSER_SERVICE_INFOMENU]);
 	
-#ifndef EVOLUX
 	//firmware update
+#ifdef EVOLUX
+	if (!access("/etc/enigma2/settings", R_OK))
+		personalize.addItem(MENU_SERVICE, new CMenuForwarder(LOCALE_SERVICEMENU_UPDATE, true, NULL, new CEvoluxSoftwareUpdate()) , &g_settings.personalize[SNeutrinoSettings::P_MSER_SOFTUPDATE]);
+#else
 	personalize.addItem(MENU_SERVICE, new CMenuForwarder(LOCALE_SERVICEMENU_UPDATE, true, NULL, new CSoftwareUpdate()) , &g_settings.personalize[SNeutrinoSettings::P_MSER_SOFTUPDATE]);
 #endif
 }

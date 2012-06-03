@@ -160,11 +160,11 @@ int CExtraMenuSetup::exec(CMenuTarget* parent, const std::string &actionKey)
 
 int CExtraMenuSetup::showExtraMenuSetup()
 {
-	CMenuWidget* m = new CMenuWidget(LOCALE_EXTRAMENU_SETTINGS, NEUTRINO_ICON_SETTINGS, width);
+	CMenuWidget* m = new CMenuWidget(LOCALE_MAINSETTINGS_HEAD, NEUTRINO_ICON_SETTINGS, width);
 	selected = m->getSelected();
 	int shortcut = 1;
 
-	m->addIntroItems(LOCALE_EXTRAMENU_SETTINGS_GENERAL);
+	m->addIntroItems(LOCALE_EXTRAMENU_SETTINGS);
 
 	m->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, 
 		CNeutrinoApp::getInstance()->EmuMenu, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
@@ -236,11 +236,14 @@ int CExtraMenuSetup::showExtraMenuSetup()
 		CRCInput::convertDigitToKey(shortcut++)));
 // << Swap support, part 1 of 2
 
-	EVOLUXUPDATE_Menu *evoUpdateMenu = new EVOLUXUPDATE_Menu();
+#if 0
+	// this is now handled by Service > Software Update
+	CEvoluxSoftwareUpdate_Menu *evoUpdateMenu = new CEvoluxSoftwareUpdate_Menu();
 
 	if (!access("/etc/enigma2/settings", R_OK))
 		m->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL,
 			evoUpdateMenu, NULL, CRCInput::convertDigitToKey(shortcut++)));
+#endif
 
 // >> Boot Selection, part 1 of 2
 #define DOTFILE_BOOTE2 "/etc/.start_enigma2"
@@ -261,7 +264,9 @@ int CExtraMenuSetup::showExtraMenuSetup()
 	m->hide ();
 	m->setSelected(selected);
 	delete m;
+#if 0
 	delete evoUpdateMenu;
+#endif
 
 	std::string hintText = "";
 
@@ -1738,12 +1743,12 @@ void KernelOptions_Menu::Settings()
 }
 
 ////////////////////////////// EVOLUXUPDATE Menu START ////////////////////////////////////
-EVOLUXUPDATE_Menu::EVOLUXUPDATE_Menu()
+CEvoluxSoftwareUpdate::CEvoluxSoftwareUpdate()
 {
 	width = w_max (40, 10);
 }
 
-int EVOLUXUPDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
+int CEvoluxSoftwareUpdate::exec(CMenuTarget* parent, const std::string & actionKey)
 {
 	int res = menu_return::RETURN_REPAINT;
 	if(actionKey == "checkupdate") 
@@ -1755,16 +1760,16 @@ int EVOLUXUPDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	if (parent)
 		parent->hide();
 
-	EVOLUXUPDATESettings();
+	Settings();
 
 	return res;
 }
 
-void EVOLUXUPDATE_Menu::hide()
+void CEvoluxSoftwareUpdate::hide()
 {
 }
 
-void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
+void CEvoluxSoftwareUpdate::Settings()
 {
 	//MENU AUFBAUEN
 	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EVOLUXUPDATE, "settings");
@@ -1777,7 +1782,7 @@ void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
 	delete menu;
 }
 
-bool EVOLUXUPDATE_Menu::CheckUpdate()
+bool CEvoluxSoftwareUpdate::CheckUpdate()
 {
 	//EVOLUXUPDATE STARTEN
 	unlink("/tmp/EvoluxUpdatevailable");
