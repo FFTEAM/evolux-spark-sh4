@@ -12,6 +12,10 @@
 #include <syscall.h>
 #include <stdio.h>
 
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
+
 // yhttpd
 #include "yconfig.h"
 #include "ylogging.h"
@@ -106,6 +110,9 @@ void yhttpd_reload_config() {
 //-----------------------------------------------------------------------------
 #ifndef Y_CONFIG_BUILD_AS_DAEMON
 void * nhttpd_main_thread(void *) {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, 0);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	aprintf("Webserver %s tid %ld\n", WEBSERVERNAME, syscall(__NR_gettid));

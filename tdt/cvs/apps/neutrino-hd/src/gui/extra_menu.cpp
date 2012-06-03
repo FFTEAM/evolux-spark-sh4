@@ -23,6 +23,7 @@
 
 #include <system/debug.h>
 #include <system/safe_system.h>
+#include <system/set_threadname.h>
 
 #include <global.h>
 #include <neutrino.h>
@@ -964,6 +965,10 @@ void nGLCD::updateFonts() {
 
 void* nGLCD::Run(void *)
 {
+#ifdef EVOLUX
+	set_threadname("nGLCD::Run");
+#endif
+
 	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
 		fprintf(stderr, "Error loading config file!\n");
 		return NULL;

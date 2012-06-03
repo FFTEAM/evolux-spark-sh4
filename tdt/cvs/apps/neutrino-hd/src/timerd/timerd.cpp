@@ -36,6 +36,9 @@
 
 #include <connection/basicserver.h>
 #include <timerdclient/timerdmsg.h>
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
 
 int timerd_debug = 0;
 
@@ -477,6 +480,10 @@ bool timerd_parse_command(CBasicMessage::Header &rmsg, int connfd)
 
 int timerd_main_thread(void */*data*/)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
+
 	pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, 0);
 
 	printf("timerd startup, tid %ld\n", syscall(__NR_gettid));

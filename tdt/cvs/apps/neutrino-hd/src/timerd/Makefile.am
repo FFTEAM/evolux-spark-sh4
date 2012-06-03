@@ -6,7 +6,8 @@ INCLUDES = \
 	-I$(top_srcdir)/lib/libconfigfile \
 	-I$(top_srcdir)/lib/connection \
 	-I$(top_srcdir)/lib/libeventserver \
-	-I$(top_srcdir)/lib/xmltree
+	-I$(top_srcdir)/lib/xmltree \
+	-I$(top_srcdir)/src
 
 noinst_LIBRARIES = libtimerd.a
 

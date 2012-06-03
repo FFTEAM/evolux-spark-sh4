@@ -78,6 +78,9 @@
 #include <eventserver.h>
 #include <driver/abstime.h>
 #include <system/safe_system.h>
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
 
 #include "SIutils.hpp"
 #include "SIservices.hpp"
@@ -4664,6 +4667,9 @@ std::string UTF8_to_Latin1(const char * s)
 
 static void *insertEventsfromFile(void *)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	xmlDocPtr event_parser = NULL;
 	xmlNodePtr eventfile = NULL;
 	xmlNodePtr service = NULL;
@@ -5354,6 +5360,9 @@ static s_cmd_table connectionCommands[sectionsd::numberOfCommands] = {
 //static void *connectionThread(void *conn)
 bool sectionsd_parse_command(CBasicMessage::Header &rmsg, int connfd)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	/*
 	  pthread_t threadConnection;
 	  rc = pthread_create(&threadConnection, &conn_attrs, connectionThread, client);
@@ -6557,7 +6566,9 @@ static int getscanType()
 //---------------------------------------------------------------------
 static void *nitThread(void *)
 {
-
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	struct SI_section_header *header;
 	const unsigned timeoutInMSeconds = 2500;
 	bool is_new;
@@ -6752,6 +6763,9 @@ static int get_bat_slot( t_bouquet_id bouquet_id, int last_section)
 //---------------------------------------------------------------------
 static void *sdtThread(void *)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	struct SI_section_header *header;
 	const unsigned timeoutInMSeconds = 2500;
 	bool is_new;
@@ -7084,6 +7098,9 @@ static void parseDescriptors(const char *des, unsigned len, const char *countryC
 
 static void *timeThread(void *)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	UTC_t UTC;
 	time_t tim;
 	unsigned int seconds;
@@ -7295,7 +7312,9 @@ int eit_stop_update_filter(int *fd)
 //---------------------------------------------------------------------
 static void *fseitThread(void *)
 {
-
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	struct SI_section_header *header;
 	/* we are holding the start_stop lock during this timeout, so don't
 	   make it too long... */
@@ -8052,7 +8071,9 @@ NOISY_MESSAGE;
 //---------------------------------------------------------------------
 static void *cnThread(void *)
 {
-
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	struct SI_section_header *header;
 	/* we are holding the start_stop lock during this timeout, so don't
 	   make it too long... */
@@ -8383,6 +8404,9 @@ static void *cnThread(void *)
 
 	static void *pptThread(void *)
 	{
+#ifdef EVOLUX
+		set_threadname(__func__);
+#endif
 		struct SI_section_header *header;
 		unsigned timeoutInMSeconds = EIT_READ_TIMEOUT;
 		bool sendToSleepNow = false;
@@ -8689,6 +8713,9 @@ static void *cnThread(void *)
 //---------------------------------------------------------------------
 	static void *houseKeepingThread(void *)
 	{
+#ifdef EVOLUX
+		set_threadname(__func__);
+#endif
 		int count = 0;
 #ifdef UPDATE_NETWORKS
 		char servicename[MAX_SIZE_SERVICENAME];
@@ -9098,6 +9125,8 @@ static void *cnThread(void *)
 #endif
 	{
 #ifdef EVOLUX
+		set_threadname(__func__);
+
 		pthread_t threadTOT = 0, threadEIT = 0, threadCN = 0, threadHouseKeeping = 0;
 		pthread_t threadVSEIT = 0;
 #ifdef UPDATE_NETWORKS

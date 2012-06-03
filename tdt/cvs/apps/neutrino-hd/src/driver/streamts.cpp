@@ -29,6 +29,9 @@
 #include <zapit/cam.h>
 #include <zapit/zapit.h>
 
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
 
 #define TS_SIZE 188
 #define IN_SIZE		(2048 * TS_SIZE)
@@ -167,6 +170,9 @@ int streamts_stop;
 
 void streamts_main_thread(void * /*data*/)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	struct sockaddr_in servaddr;
 	int clilen;
 
@@ -256,6 +262,9 @@ void streamts_main_thread(void * /*data*/)
 
 void * streamts_live_thread(void *data)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	unsigned char * buf;
 	int pid;
 	int pids[MAXPIDS];

@@ -38,6 +38,9 @@
 #if HAVE_COOL_HARDWARE
 #include <coolstream/cs_vfd.h>
 #endif
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
 
 #include <vector>
 #include <cstdlib>
@@ -121,6 +124,9 @@ CTimerManager* CTimerManager::getInstance()
 //------------------------------------------------------------
 void* CTimerManager::timerThread(void *arg)
 {
+#ifdef EVOLUX
+	set_threadname(__func__);
+#endif
 	pthread_mutex_t dummy_mutex = PTHREAD_MUTEX_INITIALIZER;
 	pthread_cond_t dummy_cond = PTHREAD_COND_INITIALIZER;
 	struct timespec wait;

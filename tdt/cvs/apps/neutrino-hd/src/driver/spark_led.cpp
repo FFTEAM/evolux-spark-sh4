@@ -42,6 +42,7 @@
 #include <math.h>
 
 #include <daemonc/remotecontrol.h>
+#include <system/set_threadname.h>
 
 #include <aotom_main.h>
 
@@ -101,6 +102,7 @@ void CLCD::wake_up() {
 
 void* CLCD::TimeThread(void *arg)
 {
+        set_threadname("CLCL::TimeThread");
 	CLCD *cvfd = CLCD::getInstance();
 	cvfd->timeThreadRunning = true;
 	char buf[10];
