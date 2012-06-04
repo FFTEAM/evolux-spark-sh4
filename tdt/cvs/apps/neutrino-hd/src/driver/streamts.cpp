@@ -347,13 +347,13 @@ void * streamts_live_thread(void *data)
 	CCamManager::getInstance()->Start(CZapit::getInstance()->GetCurrentChannelID(), CCamManager::STREAM);
 	ssize_t r;
 
-	while (!exit_flag) {
 #ifdef EVOLUX
-		// A non-blocking Read() will/may hang if channels are switched  --martii
-		r = dmx->ReadNB(buf, IN_SIZE, 100);
-#else
-		r = dmx->Read(buf, IN_SIZE, 100);
+	// A non-blocking Read() will/may hang if channels are switched  --martii
+	int dmxfd = dmx->getFD();
+        fcntl(dmxfd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
 #endif
+	while (!exit_flag) {
+		r = dmx->Read(buf, IN_SIZE, 100);
 		if(r > 0)
 			packet_stdout(fd, buf, r, NULL);
 	}
