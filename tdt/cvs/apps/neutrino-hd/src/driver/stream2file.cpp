@@ -103,7 +103,11 @@ stream2file_error_msg_t start_recording(const char * const filename,
 	char * dir = strdup(buf);
 	int ret = statfs(dirname(dir), &s);
 	free(dir);
+#ifdef EVOLUX
+	if((ret != 0) || (s.f_type == 0x72b6) || (s.f_type == 0x24051905) || (s.f_type == 0x5941ff53)) {
+#else
 	if((ret != 0) || (s.f_type == 0x72b6) || (s.f_type == 0x24051905)) {
+#endif
 		return STREAM2FILE_INVALID_DIRECTORY;
 	}
 	if ((fd = open(buf, O_SYNC | O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) >= 0) {
