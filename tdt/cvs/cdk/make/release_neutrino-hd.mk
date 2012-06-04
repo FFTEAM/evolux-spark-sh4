@@ -449,7 +449,9 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino-hd/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd/
-
+	[ -e $(appsdir)/neutrino-hd/src/nhttpd/web/Y_Boxcontrol_Menue.yhtm.dirty-fix ] && cp -RP $(appsdir)/neutrino-hd/src/nhttpd/web/Y_Boxcontrol_Menue.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm
+	[ -e $(appsdir)/neutrino-hd/src/nhttpd/web/Y_Tools_fbshot.yhtm.dirty-fix ] && cp -RP $(appsdir)/neutrino-hd/src/nhttpd/web/Y_Tools_fbshot.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm
+	[ -e $(appsdir)/neutrino-hd/src/nhttpd/web/scripts/Y_Tools.sh.dirty-fix ] && cp -RP $(appsdir)/neutrino-hd/src/nhttpd/web/scripts/Y_Tools.sh.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd/boot/
 
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino-hd/usr/bin/

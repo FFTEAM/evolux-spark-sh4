@@ -71,7 +71,6 @@ function init(){
 //]]>
 </script>
 </head>
-{=var-set:lcshot={=if-file-exists:/bin/lcshot~true~{=if-file-exists:/var/bin/lcshot~true~false=}=}=}
 {=var-set:fbshot={=if-file-exists:/bin/fbshot~true~{=if-file-exists:/var/bin/fbshot~true~{=if-file-exists:/bin/dboxshot~true~{=if-file-exists:/var/bin/dboxshot~true~false=}=}=}=}=}
 {=var-set:dboxshot={=if-file-exists:/bin/dboxshot~true~{=if-file-exists:/var/bin/dboxshot~true~false=}=}=}
 <body>
