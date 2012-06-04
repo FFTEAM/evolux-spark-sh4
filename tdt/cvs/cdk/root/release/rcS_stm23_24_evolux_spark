@@ -277,7 +277,11 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/bin/evremote2 5 200 & # $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
 		rm -f /etc/.extdisplay >/dev/null 2>&1
 	else
-		/bin/evremote2 5 200 &
+		if [ -e /etc/.nhd ]; then
+			/bin/evremote2 &
+		else
+			/bin/evremote2 5 200 &
+		fi
 	fi
 
 	if [ -n "$START_NEUTRINO" ]; then
@@ -375,7 +379,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 			echo "neutrino ended <- RTV: " $rtv
 			case "$rtv" in
 			0|1)	echo "$rtv"
-				echo "SHUTDOWN"
 				sync
 				[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
 				HDDON=`mount | grep sda1 | cut -d " " -f5 | cut -d " " -f1`
@@ -386,7 +389,18 @@ if [ ! -e /var/etc/.firstboot ]; then
 					umount /dev/sda1
 					fsck.$HDDON -p /dev/sda1
 				fi
-				init 0;;
+				if [ -e /etc/.nhd ]; then
+					if [ -e /tmp/.reboot ]; then # gets created by neutrino
+						echo "rebooting..."
+						init 6
+					else
+						echo "shutting down..."
+						init 0
+					fi
+				else
+					echo "SHUTDOWN"
+					init 0
+				fi;;
 			2)	echo "$rtv"
 				echo "REBOOT"
 				sync
