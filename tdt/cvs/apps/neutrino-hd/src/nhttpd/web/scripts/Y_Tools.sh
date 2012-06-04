@@ -463,21 +463,25 @@ do_lcshot()
 # -----------------------------------------------------------
 do_fbshot()
 {
-	if [ "$1" = "fb" ]; then
-		shift 1
-		if [ -e "/var/bin/fbshot" ]; then
-			/var/bin/fbshot $*
-		else
-			fbshot $*
+#	if [ "$1" = "fb" ]; then
+#		shift 1
+		if [ -e "/bin/fbshot" ]; then
+			/bin/fbshot BMP /tmp # $*
+			if [ ! -z "$1" ]; then
+				mv /tmp/dump.bmp /tmp/dump$1.bmp
+			fi
+			
+#		else
+#			fbshot BMP /tmp
 		fi
-	else
-		shift 1
-		if [ -e "/var/bin/dboxshot" ]; then
-			/var/bin/dboxshot $*
-		else
-			dboxshot $*
-		fi
-	fi
+#	else
+#		shift 1
+#		if [ -e "/bin/fbshot" ]; then
+#			/bin/fbshot BMP /tmp
+#		else
+#			/bin/fbshot BMP /tmp
+#		fi
+#	fi
 }
 # -----------------------------------------------------------
 # delete fbshot created graphics
