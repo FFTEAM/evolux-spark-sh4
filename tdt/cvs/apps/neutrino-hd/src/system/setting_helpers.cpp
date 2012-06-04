@@ -1115,7 +1115,11 @@ int safe_mkdir(char * path)
 	int ret = 0;
 	if(!strncmp(path, "/hdd", 4)) {
 		ret = statfs("/hdd", &s);
+#ifdef EVOLUX
 		if((ret != 0) || (s.f_type == 0x72b6))
+#else
+		if((ret != 0) || (s.f_type == 0x72b6) || (s.f_type == 0x5941ff53))
+#endif
 			ret = -1;
 		else
 			mkdir(path, 0755);

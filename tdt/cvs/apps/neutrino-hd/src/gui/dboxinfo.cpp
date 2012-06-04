@@ -215,6 +215,9 @@ void CDBoxInfoWidget::paint()
 				case 0x4d44L:		/*msdos*/
 					break;
 				case 0x72b6L:		/*jffs2*/
+#ifdef EVOLUX
+				case 0x5941ff53L:	/*yaffs2*/
+#endif
 					height += mheight;
 					break;
 				default:
@@ -372,6 +375,9 @@ void CDBoxInfoWidget::paint()
 					case (int) 0x58465342:  /*xfs*/
 					case (int) 0x4d44:      /*msdos*/
 					case (int) 0x72b6:	/*jffs2*/
+#ifdef EVOLUX
+					case (int) 0x5941ff53:	/*yaffs2*/
+#endif
 						break;
 					default:
 						continue;
@@ -398,7 +404,11 @@ void CDBoxInfoWidget::paint()
 							switch (j)
 							{
 							case 0: {
+#ifdef EVOLUX
+								if ((s.f_type != 0x72b6) && (s.f_type != 0x5941ff53))
+#else
 								if (s.f_type != 0x72b6)
+#endif
 								{
 									char *p1=NULL, *p2=NULL;
 									p1=strchr(g_settings.network_nfs_recordingdir+1,'/') ;

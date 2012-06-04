@@ -107,7 +107,11 @@ int CSettingsManager::exec(CMenuTarget* parent, const std::string &actionKey)
 			char  fname[256];
 			struct statfs s;
 			int ret = ::statfs(fileBrowser.getSelectedFile()->Name.c_str(), &s);
+#ifdef EVOLUX
+			if(ret == 0 && s.f_type != 0x72b6L /*jffs2*/ && s.f_type != 0x5941ff53L /*yaffs2*/)
+#else
 			if(ret == 0 && s.f_type != 0x72b6L) /*jffs2*/
+#endif
 			{ 
 				sprintf(fname, "/bin/backup.sh %s", fileBrowser.getSelectedFile()->Name.c_str());
 				printf("backup: executing [%s]\n", fname);

@@ -228,19 +228,6 @@ bool cDemux::Stop(void)
 	return true;
 }
 
-#ifdef EVOLUX
-int cDemux::ReadNB(unsigned char *buff, int len, int timeout)
-{
-	int f = fcntl(fd, F_GETFL);
-	fcntl(fd, F_SETFL, f | O_NONBLOCK);
-	int res = Read(buff, len, timeout);
-	if (!(f & O_NONBLOCK))
-		fcntl(fd, F_SETFL, f);
-	return res;
-}
-
-#endif
-
 int cDemux::Read(unsigned char *buff, int len, int timeout)
 {
 #if 0
