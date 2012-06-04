@@ -61,7 +61,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd_pli:
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
 	rm -rf $(prefix)/release_evolux_neutrino-hd_pli_with_dev/sbin/fsck.nfs
 	rm -rf $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/local/share/neutrino/icons/mbox_white.raw
-	[ -f $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/tuxtxt2_1080.conf ] && rm $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/tuxtxt2_*
+	[ -f $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/local/share/config/tuxtxt/tuxtxt2_1080.conf ] && rm $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/local/share/config/tuxtxt/tuxtxt2_*
 #if ENABLE_MULTI_YAFFS2
 #	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
 #else
