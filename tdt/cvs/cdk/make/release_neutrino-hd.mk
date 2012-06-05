@@ -377,7 +377,7 @@ endif
 #	$(INSTALL_DIR) $(prefix)/release_neutrino-hd/usr/local/share/config
 	mkdir -p $(prefix)/release_neutrino-hd/usr/local/share/config
 	cp -aR $(buildprefix)/root/usr/local/share/config-hd/* $(prefix)/release_neutrino-hd/usr/local/share/config/
-	mv $(prefix)/release_neutrino-hd/usr/local/share/config/Sportster.conf $(prefix)/usr/local/share/neutrino/themes
+	mv $(prefix)/release_neutrino-hd/usr/local/share/config/Sportster.conf $(prefix)/usr/local/share/neutrino/themes/Sportster.theme
 	cp -aR $(targetprefix)/usr/local/share/neutrino $(prefix)/release_neutrino-hd/usr/local/share/
 #	( cd $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/ && ln -sf tuxtxt2_720.conf tuxtxt2.conf )
 #	rm $(prefix)/release_neutrino-hd/usr/local/share/config/tuxtxt/tuxtxt2_*
