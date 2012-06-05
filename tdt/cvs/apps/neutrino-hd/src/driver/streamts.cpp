@@ -34,10 +34,17 @@
 #endif
 
 #define TS_SIZE 188
+#ifndef EVOLUX
 #define IN_SIZE		(2048 * TS_SIZE)
 //#define IN_SIZE         (TS_SIZE * 362)
+#endif
 
+#ifdef EVOLUX
 #define DMX_BUFFER_SIZE (2 * 3008 * 62)
+#define IN_SIZE DMX_BUFFER_SIZE
+#else
+#define DMX_BUFFER_SIZE (4 * 3008 * 62)
+#endif
 
 /* maximum number of pes pids */
 #define MAXPIDS		64
@@ -368,6 +375,7 @@ void * streamts_live_thread(void *data)
 	return 0;
 }
 
+#ifndef EVOLUX
 void streamts_file_thread(void *data)
 {
 	int dvrfd;
@@ -468,3 +476,4 @@ void streamts_file_thread(void *data)
 
 	return;
 }
+#endif

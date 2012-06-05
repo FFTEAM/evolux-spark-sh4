@@ -87,12 +87,18 @@ function do_check(){
 	~
 		sLog_addRow(sLog_body, "green", "Programs: fbshot is installed at: {=var-get:fbshot=}. OSD Screenshot is enabled.", "ok");
 	=}
+<!-- #ifdef EVOLUX -->
+	{=if-not-equal:{=global-var-get:boxhardware=}~spark~
+<!-- #endif -->
 	{=var-set:dboxshot={=if-file-exists:/bin/dboxshot~/bin/dboxshot~{=if-file-exists:/var/bin/dboxshot~/var/bin/dboxshot~false=}=}=}
 	{=if-equal:{=var-get:dboxshot=}~false~
 		sLog_addRow(sLog_body, "red", "Programs: dboxshot is not installed. Remote &amp; OSD is disabled. <a href='http://www.yjogol.com/faq-diy' target='_blank'><b>[Download]<\/b><\/a>", "failed");
 	~
 		sLog_addRow(sLog_body, "green", "Programs: dboxshot is installed at: {=var-get:dboxshot=}. Remote &amp; OSD is enabled.", "ok");
 	=}
+<!-- #ifdef EVOLUX -->
+	=}
+<!-- #endif -->
 
 	{=if-not-equal:{=global-var-get:boxtype=}~coolstream~
 		{=var-set:fcp={=if-file-exists:/sbin/fcp~/sbin/fcp~{=if-file-exists:/var/bin/fcp~/var/bin/fcp~{=if-file-exists:/bin/fcp~/bin/fcp~false=}=}=}=}

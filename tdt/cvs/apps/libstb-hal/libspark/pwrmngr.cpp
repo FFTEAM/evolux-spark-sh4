@@ -14,7 +14,7 @@ void cCpuFreqManager::Down(void) { lt_debug("%s\n", __FUNCTION__); }
 void cCpuFreqManager::Reset(void) { lt_debug("%s\n", __FUNCTION__); }
 /* those function dummies return true or "harmless" values */
 bool cCpuFreqManager::SetDelta(unsigned long) { lt_debug("%s\n", __FUNCTION__); return true; }
-#ifdef EVOLUX_NOTYET
+#ifdef EVOLUX
 unsigned long cCpuFreqManager::GetCpuFreq(void) {
 	int freq = 0;
 	if (FILE *pll0 = fopen("/proc/cpu_frequ/pll0_ndiv_mdiv", "r")) {
@@ -26,6 +26,7 @@ unsigned long cCpuFreqManager::GetCpuFreq(void) {
 		fclose(pll0);
 		return 1000 * 1000 * (unsigned long) freq;
 	}
+}
 #else
 unsigned long cCpuFreqManager::GetCpuFreq(void) { lt_debug("%s\n", __FUNCTION__); return 0; }
 #endif
@@ -46,7 +47,7 @@ bool cPowerManager::SetStandby(bool Active, bool Passive)
 
 bool cCpuFreqManager::SetCpuFreq(unsigned long f)
 {
-#ifdef EVOLUX_NOTYET
+#ifdef EVOLUX
 	if (f == 0)
 		f = 450000000;
 	FILE *pll0 = fopen ("/proc/cpu_frequ/pll0_ndiv_mdiv", "w");

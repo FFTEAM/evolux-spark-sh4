@@ -56,7 +56,11 @@ bool sectionsd_getComponentTagsUniqueKey(const event_id_t uniqueKey, CSectionsdC
 
 extern CPlugins *g_PluginList;//for relodplugins
 extern CBouquetManager *g_bouquetManager;
+#ifdef EVOLUX
+#define EVENTDEV "/dev/input/event0"
+#else
 #define EVENTDEV "/dev/input/input0"
+#endif
 
 //-----------------------------------------------------------------------------
 enum {	// not defined in input.h but used like that, at least in 2.4.22
@@ -594,17 +598,61 @@ void CControlAPI::InfoCGI(CyhookHandler *hh)
 
 void CControlAPI::HWInfoCGI(CyhookHandler *hh)
 {
+#ifdef EVOLUX
+	unsigned int system_rev = 0;
+#else
 	unsigned int system_rev = cs_get_revision();
+#endif
 	std::string  boxname;
 	static CNetAdapter netadapter; 
 	std::string eth_id = netadapter.getMacAddr();
 	std::transform(eth_id.begin(), eth_id.end(), eth_id.begin(), ::tolower);
 
+#ifdef EVOLUX // should be: HAVE_HARDWARE_SPARK
+	boxname = "SPARK";
+#else
 	if("00:c5:5c" == eth_id.substr(0, 8) )
 		boxname = "Coolstream ";
 	else if("ba:dd:ad"  == eth_id.substr(0, 8) )
 		boxname = "Armas ";
+#endif
 
+#ifdef EVOLUX // should be: HAVE_HARDWARE_SPARK
+	int fn = open("/proc/cmdline", O_RDONLY);
+	if (fn > -1) {
+		char p[1024];
+		int len = read(fn, p, sizeof(p) - 1);
+		close(fn);
+		if (len > 0) {
+			p[len] = 0;
+			int h4, h5, h6;
+			if (3 == sscanf(p, "STB_ID=09:00:08:00:%x:%x:%x", &h4, &h5, &h6))
+				system_rev = (h4 << 16) | (h5 << 8) | h6;
+			else
+				system_rev = 0xdeadbeef;
+
+			switch(system_rev) {
+				case 0x090007:
+					boxname += " GoldenMedia GM990";
+					break;
+				case 0x100008:
+					boxname += " Edision Pingulux";
+					break;
+				case 0x09000a:
+					boxname += " Amiko Alien SDH8900";
+					break;
+				case 0x09000b:
+					boxname += " GalaxyInnovations S8120";
+					break;
+				case 0xdeadbeef:
+					boxname += " (NO STB_ID FOUND)";
+					break;
+				default:
+					boxname += string(std::strstr(p, "STB_ID="));
+			}
+		}
+	}
+#else
 	switch(system_rev)
 	{
 	case 1:
@@ -634,6 +682,7 @@ void CControlAPI::HWInfoCGI(CyhookHandler *hh)
 	break;
 	}
 	boxname += (g_info.delivery_system == DVB_S || (system_rev == 1)) ? " SAT":" CABLE";
+#endif
 	hh->printf("%s\nMAC:%s\n", boxname.c_str(),eth_id.c_str());
 
 
@@ -2494,6 +2543,12 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 			apid_idx=apid_no;
 		if(!pids.APIDs.empty())
 			apid = pids.APIDs[apid_idx].pid;
+#ifdef EVOLUX
+		if (pids.PIDs.vtxtpid)
+			xpids = string_printf("0x%04x,0x%04x,0x%04x,0x%04x",	
+				pids.PIDs.pmtpid,pids.PIDs.vpid,apid,pids.PIDs.vtxtpid);
+		else
+#endif
 		xpids = string_printf("0x%04x,0x%04x,0x%04x",pids.PIDs.pmtpid,pids.PIDs.vpid,apid);
 	}
 	else if ( mode == CZapitClient::MODE_RADIO)
@@ -2512,16 +2567,29 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 		hh->SendError();
 	// build url
 	std::string url = "";
+#ifdef EVOLUX
+	// strip ":<port>" from hostname, if necessary  --martii
+	std::string host = hh->ParamList["host"];
+	if(host == "")
+		host = hh->HeaderList["Host"];
+
+	size_t colon = host.find_last_of(":"); // FIXME -- breaks for IPv6  --martii
+	if (colon != string::npos)
+		host = host.substr(0, colon);
+	url = "http://" + host;
+#else
 	if(hh->ParamList["host"] !="")
 		url = "http://"+hh->ParamList["host"];
 	else
 		url = "http://"+hh->HeaderList["Host"];
+#endif
 	//url += (mode == CZapitClient::MODE_TV) ? ":31339/0," : ":31338/";
 	url += ":31339/0,";
 	url += xpids;
 
 	// response url
 #ifdef EVOLUX
+	// add a secondary VLC icon to use avcodec/avformat, which better cope with broken streams  --martii
 	if(hh->ParamList["vlc_link"] == "avcodec")
 	{
 		FILE *fd = fopen("/tmp/vlc.m3u" ,"w");

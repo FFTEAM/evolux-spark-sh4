@@ -146,6 +146,10 @@ bool cDemux::Open(DMX_CHANNEL_TYPE pes_type, void * /*hVideoBuffer*/, int uBuffe
 	int n = DMX_SOURCE_FRONT0;
 	if (ioctl(fd, DMX_SET_SOURCE, &n) < 0)
 		lt_info("%s DMX_SET_SOURCE failed!\n", __func__);
+#ifdef EVOLUX
+	if (uBufferSize == 0)
+		uBufferSize = 0xffff; // may or may not be reasonable  --martii
+#endif
 	if (uBufferSize > 0)
 	{
 		/* probably uBufferSize == 0 means "use default size". TODO: find a reasonable default */

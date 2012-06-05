@@ -1,4 +1,7 @@
 {=global-var-set:boxtype=coolstream=}
+<!-- #ifdef EVOLUX -->
+{=global-var-set:boxhardware=spark=}
+<!-- #endif -->
 {=global-var-set:alpha=true=}
 {=include-block:Y_Blocks.txt;head=}
 <script type="text/javascript" src="/prototype.js"></script>
@@ -121,9 +124,9 @@ function vlc() {
 				<a target="base" href="Y_Dyn_Pages.yhtm?page=frame_live&dostart=live_tv_popup" title="{=L:main.live_tv_popup_desc=}"><img src="/images/live_popup.gif"></a>&nbsp;
 				<a target="base" href="Y_Tools_remote_osd.yhtm?full=1" title="{=L:main.remote_full_desc=}"><img src="/images/fb.png"></a>&nbsp;
 				<a href="javascript:vlc()" title="{=L:main.stream_to_vlc_client_desc=}"><img src="/images/vlc.gif"></a>
-<!-- EVOLUX START -->
+<!-- #ifdef EVOLUX -->
 				<a href="/control/build_live_url?vlc_link=avcodec" title="Stream to VLC Client (avcodec)"><img src="/images/vlc_av.gif"></a>
-<!-- EVOLUX END -->
+<!-- #endif -->
 			</td>
 			<td align="right">
 				<span id="state" style="color : red;font-family: Courier New, Courier, monospace;">&nbsp;</span>
