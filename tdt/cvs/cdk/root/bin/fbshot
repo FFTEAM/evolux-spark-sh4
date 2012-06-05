@@ -1,0 +1,2 @@
+#!/bin/sh
+exec grab -p "$1"
