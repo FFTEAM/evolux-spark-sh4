@@ -198,6 +198,16 @@ void CImageInfo::paint()
 	ypos += (iheight >>1);
 
 	CConfigFile config('\t');
+#ifdef EVOLUX
+	config.loadConfig("/var/etc/.version");
+
+	const char * imagename = config.getString("imagename", "Ntrino-HD").c_str();
+	const char * homepage  = config.getString("homepage",  "n/a").c_str();
+	const char * creator   = config.getString("creator",   "n/a").c_str();
+	const char * version   = config.getString("version",   "no version").c_str();
+	const char * docs      = config.getString("docs",   "http://wiki.neutrino-hd.de").c_str();
+	const char * forum     = config.getString("forum",   "http://gitorious.org/open-duckbox-project-sh4").c_str();
+#else
 	config.loadConfig("/.version");
 
 	const char * imagename = config.getString("imagename", "Neutrino-HD").c_str();
@@ -206,6 +216,7 @@ void CImageInfo::paint()
 	const char * version   = config.getString("version",   "no version").c_str();
 	const char * docs      = config.getString("docs",      "http://wiki.neutrino-hd.de").c_str();
 	const char * forum     = config.getString("forum",     "http://forum.tuxbox.org").c_str();
+#endif
 #ifdef SVNVERSION
 	const char * builddate     = config.getString("builddate",     SVNVERSION).c_str();
 #else

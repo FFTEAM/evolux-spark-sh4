@@ -343,6 +343,45 @@ void CFlashTool::reboot()
 //-----------------------------------------------------------------------------------------------------------------
 CFlashVersionInfo::CFlashVersionInfo(const std::string & versionString)
 {
+#ifdef EVOLUX
+	for(int i = 0; i < 20; i++)
+//	releaseCycle[i] = versionString[i];
+	//SBBBBYYYYMMTTHHMM -- formatsting
+
+	// recover type
+	snapshot = versionString[0];
+
+	// recover release cycle version
+	releaseCycle[0] = versionString[1];
+	releaseCycle[1] = '.';
+
+	releaseCycle[2] = versionString[2];
+	releaseCycle[3] = versionString[3];
+	releaseCycle[4] = '.';
+	releaseCycle[5] = versionString[4];
+	releaseCycle[6] = '\0';
+
+	// recover date
+	date[0] = versionString[11]; //Day
+	date[1] = versionString[12]; //Day
+	date[2] = '.';
+	date[3] = versionString[9]; //Month
+	date[4] = versionString[10]; //Month
+	date[5] = '.';
+	date[6] = versionString[5]; //Year
+	date[7] = versionString[6]; //Year
+	date[8] = versionString[7]; //Year
+	date[9] = versionString[8]; //Year
+	date[10] = '\0';
+
+	// recover time stamp
+	time[0] = versionString[13]; //Hours
+	time[1] = versionString[14]; //Hours
+	time[2] = ':';
+	time[3] = versionString[15]; //Minutes
+	time[4] = versionString[16]; //Minutes
+	time[5] = '\0';
+#else
 	//SBBBYYYYMMTTHHMM -- formatsting
 
 	// recover type
@@ -386,6 +425,7 @@ CFlashVersionInfo::CFlashVersionInfo(const std::string & versionString)
 	time[3] = versionString[14];
 	time[4] = versionString[15];
 	time[5] = 0;
+#endif
 }
 
 const char *CFlashVersionInfo::getDate(void) const
