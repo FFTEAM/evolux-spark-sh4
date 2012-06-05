@@ -457,6 +457,7 @@ endif
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino-hd/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release_neutrino-hd/bin/
+	cp -RP $(buildprefix)/root/bin/grab $(prefix)/release_neutrino-hd/bin/
 #	cp -RP $(buildprefix)/root/bin/lcd4linux $(prefix)/release_neutrino-hd/bin/
 	cp -RP $(buildprefix)/root/usr/lib/libusb* $(prefix)/release_neutrino-hd/usr/lib/
 #	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release_neutrino-hd/usr/lib/
