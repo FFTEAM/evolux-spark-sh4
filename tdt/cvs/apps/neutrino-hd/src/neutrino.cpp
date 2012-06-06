@@ -3135,13 +3135,13 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 		frameBuffer->paintBackground();
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/shutdown.jpg");
 
+#ifdef EVOLUX
+		batchEPGSettings->exec(NULL, "shutdown");
+#endif
 		if(g_settings.epg_save /* && timeset && g_Sectionsd->getIsTimeSet ()*/) {
 			saveEpg(true);// true CVFD::MODE_SHUTDOWN  
 		}
 
-#ifdef EVOLUX
-		batchEPGSettings->exec(NULL, "shutdown");
-#endif
 		stop_daemons(retcode);//need here for timer_is_rec before saveSetup
 		g_settings.shutdown_timer_record_type = timer_is_rec;
 		saveSetup(NEUTRINO_SETTINGS_FILE);
@@ -3933,8 +3933,13 @@ void CNeutrinoApp::loadKeys(const char * fname)
 	g_settings.menu_left_exit = tconfig.getInt32( "menu_left_exit", 0 );
 	g_settings.audio_run_player = tconfig.getInt32( "audio_run_player", 1 );
 	g_settings.key_click = tconfig.getInt32( "key_click", 1 );
+#ifdef EVOLUX
+	strcpy(g_settings.repeat_blocker, tconfig.getString("repeat_blocker", "125").c_str());
+	strcpy(g_settings.repeat_genericblocker, tconfig.getString("repeat_genericblocker", "250").c_str());
+#else
 	strcpy(g_settings.repeat_blocker, tconfig.getString("repeat_blocker", "450").c_str());
 	strcpy(g_settings.repeat_genericblocker, tconfig.getString("repeat_genericblocker", "100").c_str());
+#endif
 
 	g_settings.bouquetlist_mode = tconfig.getInt32( "bouquetlist_mode", 0 );
 	g_settings.sms_channel = tconfig.getInt32( "sms_channel", 0 );
