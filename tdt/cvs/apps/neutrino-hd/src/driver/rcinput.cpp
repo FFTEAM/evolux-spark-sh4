@@ -66,7 +66,8 @@
 /* this relies on event0 being the AOTOM frontpanel driver device
  * TODO: what if another input device is present? */
 #ifdef EVOLUX
-const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir",
+const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
+	"/dev/input/nevis_ir", "/dev/tdt_rc", "/dev/fulan_fp",
 	"/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3" };
 #else
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
@@ -91,6 +92,7 @@ CRCInput::CRCInput()
 	timerid= 1;
 #ifdef EVOLUX
 	repeatkeys = NULL;
+	fd_remote_control = -1;
 #endif
 
 	// pipe for internal event-queue
@@ -171,19 +173,24 @@ void CRCInput::open(int dev)
 			if (i != dev || fd_rc[i] != -1)
 				continue;
 		}
+#ifdef EVOLUX
+		// skip tdt_rc if lirc rc is there
+		if (i == 1 && fd_rc[0] > -1)
+			continue;
+#endif
 		if ((fd_rc[i] = ::open(RC_EVENT_DEVICE[i], O_RDWR)) == -1)
 			perror(RC_EVENT_DEVICE[i]);
 		else
 		{
 #ifdef EVOLUX
-			char name[80];
-			ioctl(fd_rc[i], EVIOCGNAME(sizeof(name)), name);
-			if(!strcmp("TDT RC event driver", name) ||
-			   !strcmp("Neutrino LIRC/IRMP to Input Device converter", name))
-					fd_remote_control = fd_rc[i];
+			if (fd_remote_control < 0)
+				fd_remote_control = fd_rc[i];
 #endif
 			fcntl(fd_rc[i], F_SETFL, O_NONBLOCK);
 		}
+#ifdef EVOLUX
+		if (fd_rc[i] > -1)
+#endif
 		printf("CRCInput::open: %s fd %d\n", RC_EVENT_DEVICE[i], fd_rc[i]);
 	}
 
@@ -568,17 +575,18 @@ void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, uint6
 
 	*data = 0;
 
-#ifndef EVOLUX
 	/* reopen a missing input device
 	 * TODO: real hot-plugging, e.g. of keyboards and triggering this loop...
 	 *       right now it is only run if some event is happening "by accident" */
 	if (!input_stopped) {
+#ifdef EVOLUX
+		init_td_api();
+#endif
 		for (int i = 0; i < NUMBER_OF_EVENT_DEVICES; i++) {
 			if (fd_rc[i] == -1)
 				open(i);
 		}
 	}
-#endif
 
 	// wiederholung reinmachen - dass wirklich die ganze zeit bis timeout gewartet wird!
 	gettimeofday( &tv, NULL );
@@ -1258,7 +1266,7 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 							::close(wtw);
 						}
 					}
-#endif
+#endif // EVOLUX
 					uint64_t now_pressed;
 					bool keyok = true;
 
@@ -1268,9 +1276,6 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 						/* only allow selected keys to be repeated */
 						/* (why?)                                  */
 						if( 	(trkey == RC_up) || (trkey == RC_down   ) ||
-#ifdef EVOLUX
-							mayRepeat(trkey) ||
-#endif
 							(trkey == RC_plus   ) || (trkey == RC_minus  ) ||
 							(trkey == RC_page_down   ) || (trkey == RC_page_up  ) ||
 							((bAllowRepeatLR) && ((trkey == RC_left ) || (trkey == RC_right))) ||
@@ -1290,7 +1295,7 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 									keyok = false;
 							}
 #endif
-						}
+					}
 						else
 							keyok = false;
 					}
@@ -1606,21 +1611,17 @@ int CRCInput::translate(int code, int /*num*/)
 #ifdef EVOLUX
 	// For simubutton/evremote2, as long as our lircd configuration is
 	// messed up.  --martii
-	switch (code) {
-		case 0x100:
-			return RC_up;
-		case 0x101:
-			return RC_down;
-		case KEY_FASTFORWARD:
-			return RC_forward;
-		case KEY_EXIT:
-		case KEY_HOME:
-			return RC_home;
-	}
-#else
+	if(fd_remote_control == fd_rc[1])
+		switch (code) {
+			case KEY_FASTFORWARD:
+				return RC_forward;
+			case KEY_EXIT:
+			case KEY_HOME:
+				return RC_home;
+		}
+#endif
 	if(code == 0x100) code = RC_up;
 	else if(code == 0x101) code = RC_down;
-#endif
 	if ((code >= 0) && (code <= KEY_MAX))
 		return code;
 	else

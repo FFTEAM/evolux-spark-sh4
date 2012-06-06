@@ -142,7 +142,7 @@ class CRCInput
 		int         	fd_gamerc;
 #ifdef HAVE_SPARK_HARDWARE
 #ifdef EVOLUX
-#define NUMBER_OF_EVENT_DEVICES 5
+#define NUMBER_OF_EVENT_DEVICES 7
 #else
 #define NUMBER_OF_EVENT_DEVICES 2
 #endif
