@@ -1693,12 +1693,13 @@ void KernelOptions_Menu::Settings()
 			module m;
 			m.active = m.active_orig = 0;
 			m.installed = false;
+			char *nl = strchr(comment, '\n');
+			if (nl)
+				*nl = 0;
 			m.comment = string(comment);
 			std::istringstream in(buf);
 			std::string s;
 			while (in >> s) {
-				if (!s.empty() && s[s.length()-1] == '\n')
-					s.erase(s.length()-1);
 				m.moduleList.push_back(s);
 			}
 			if (m.moduleList.size() > 0)
