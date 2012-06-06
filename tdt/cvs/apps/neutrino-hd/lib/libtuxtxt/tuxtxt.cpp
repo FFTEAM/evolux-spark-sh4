@@ -6740,6 +6740,10 @@ int GetRCCode()
 				case KEY_POWER:		RCCode = RC_STANDBY;	break;
 				}
 printf("[tuxtxt] new key, code %X\n", RCCode);
+#ifdef EVOLUX
+				// purge input buffer
+				while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+#endif
 				return 1;
 			}
 		}
