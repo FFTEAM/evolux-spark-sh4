@@ -29,7 +29,11 @@
 #include "controlapi.h"
 #include "lcdapi.h"
 
+#ifdef EVOLUX
+#define EVENTDEV "/dev/input/nevis_ir"
+#else
 #define EVENTDEV "/dev/input/event0"
+#endif
 //-----------------------------------------------------------------------------
 enum {	// not defined in input.h but used like that, at least in 2.4.22
 	KEY_RELEASED = 0,

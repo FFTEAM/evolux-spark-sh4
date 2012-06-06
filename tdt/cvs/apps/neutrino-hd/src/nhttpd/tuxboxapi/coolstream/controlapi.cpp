@@ -57,7 +57,7 @@ bool sectionsd_getComponentTagsUniqueKey(const event_id_t uniqueKey, CSectionsdC
 extern CPlugins *g_PluginList;//for relodplugins
 extern CBouquetManager *g_bouquetManager;
 #ifdef EVOLUX
-#define EVENTDEV "/dev/input/event0"
+#define EVENTDEV "/dev/input/nevis_ir"
 #else
 #define EVENTDEV "/dev/input/input0"
 #endif
