@@ -374,10 +374,34 @@ void cAudio::SetSRS(int /*iq_enable*/, int /*nmgr_enable*/, int /*iq_mode*/, int
 	lt_debug("%s\n", __FUNCTION__);
 };
 
+#ifdef EVOLUX
+void cAudio::SetHdmiDD(bool enable)
+{
+	int fd = open("/proc/stb/hdmi/audio_source", O_RDWR);
+	if(enable) {
+		write(fd, "spdif", strlen("spdif"));
+	}
+	else
+		write(fd, "pcm", strlen("pcm"));
+	close(fd);
+}
+
+void cAudio::SetSpdifDD(bool enable)
+{
+	if(enable) {
+		if (ioctl(fd, AUDIO_SET_BYPASS_MODE, AUDIO_STREAMTYPE_AC3) < 0)
+			lt_info("%s AUDIO_SET_BYPASS_MODE failed(%m)", __func__);
+	} else {
+		if (ioctl(fd, AUDIO_SET_BYPASS_MODE, AUDIO_STREAMTYPE_MPEG) < 0)
+			lt_info("%s AUDIO_SET_BYPASS_MODE failed(%m)", __func__);
+	}
+}
+#else
 void cAudio::SetSpdifDD(bool enable)
 {
 	lt_debug("%s %d\n", __FUNCTION__, enable);
 };
+#endif
 
 void cAudio::ScheduleMute(bool On)
 {
@@ -389,12 +413,10 @@ void cAudio::EnableAnalogOut(bool enable)
 	lt_debug("%s %d\n", __FUNCTION__, enable);
 };
 
-#define AUDIO_BYPASS_ON  0
-#define AUDIO_BYPASS_OFF 1
 void cAudio::setBypassMode(bool disable)
 {
 	lt_debug("%s %d\n", __FUNCTION__, disable);
-	int mode = disable ? AUDIO_BYPASS_OFF : AUDIO_BYPASS_ON;
+	int mode = disable ? AUDIO_STREAMTYPE_MPEG : AUDIO_STREAMTYPE_AC3;
 	if (ioctl(fd, AUDIO_SET_BYPASS_MODE, mode) < 0)
 		lt_info("%s AUDIO_SET_BYPASS_MODE %d: %m\n", __func__, mode);
 	return;
