@@ -52,7 +52,7 @@ static int do_mknod(char *devname, char *i) {
 	}
 }
 
-static int create_input_devices (void) {
+void create_input_devices (void) {
 	DIR *d = opendir (VIRTUALINPUT);
 	if (d) {
 		struct dirent *e;
