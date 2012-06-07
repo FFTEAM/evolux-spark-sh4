@@ -186,7 +186,7 @@ $(DEPDIR)/%release_neutrino-hd:
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release_neutrino-hd/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release_neutrino-hd/usr/lib/
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release_neutrino-hd/etc/
-	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino-hd/etc/lircd.conf
+	cp -dp $(buildprefix)/root/etc/lircd_spark_hd.conf $(prefix)/release_neutrino-hd/etc/lircd.conf
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino-hd/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release_neutrino-hd/usr/bin/
 #	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release_neutrino-hd/etc/lircd.conf.amiko
