@@ -3134,14 +3134,26 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 		StopSubtitles();
 		g_Zapit->stopPlayBack();
 
+#ifdef EVOLUX
+		g_PicViewer->DisplayImage(DATADIR "/neutrino/icons/shutdown.jpg", 0, 0, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
+		frameBuffer->blit();
+#else
 		frameBuffer->paintBackground();
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/shutdown.jpg");
+#endif
 
 		if(g_settings.epg_save /* && timeset && g_Sectionsd->getIsTimeSet ()*/) {
 #ifdef EVOLUX
 			batchEPGSettings->exec(NULL, "shutdown");
+			CHintBox * hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_MISCSETTINGS_EPG_SAVING)); // UTF-8
+			hintBox->paint();
+
 #endif
 			saveEpg(true);// true CVFD::MODE_SHUTDOWN  
+#ifdef EVOLUX
+			hintBox->hide();
+			delete hintBox;
+#endif
 		}
 
 		stop_daemons(retcode);//need here for timer_is_rec before saveSetup

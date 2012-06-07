@@ -195,7 +195,6 @@ batchepg.refreshall Update all
 batchepg.run_at_shutdown Update at shutdown
 batchepg.save Save settings
 batchepg.settings Settings
-batchepg.shutdown Processing EPG data
 batchepg.standard_wait_time Wait time für standard EPG
 bookmarkmanager.delete delete
 bookmarkmanager.name bookmarks
@@ -808,6 +807,7 @@ miscsettings.epg_old_events EPG remove after (std.)
 miscsettings.epg_old_events_hint1 How long will EPG-Data be stored after they timed out?
 miscsettings.epg_old_events_hint2 Set in hours
 miscsettings.epg_save Save/Restore epg on reboot
+miscsettings.epg_saving Saving EPG data ...
 miscsettings.general General
 miscsettings.head Extended settings
 miscsettings.infobar Infobar
