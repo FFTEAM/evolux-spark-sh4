@@ -105,8 +105,7 @@ endif
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
 
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release/etc/
-	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/
-	( cd $(prefix)/release/etc && ln -sf lircd_spark.conf lircd.conf )
+	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
 #	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release/etc/lircd.conf.amiko
 #	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release/bin/
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release/usr/bin/
