@@ -3136,10 +3136,10 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 		frameBuffer->paintBackground();
 		videoDecoder->ShowPicture(DATADIR "/neutrino/icons/shutdown.jpg");
 
-#ifdef EVOLUX
-		batchEPGSettings->exec(NULL, "shutdown");
-#endif
 		if(g_settings.epg_save /* && timeset && g_Sectionsd->getIsTimeSet ()*/) {
+#ifdef EVOLUX
+			batchEPGSettings->exec(NULL, "shutdown");
+#endif
 			saveEpg(true);// true CVFD::MODE_SHUTDOWN  
 		}
 

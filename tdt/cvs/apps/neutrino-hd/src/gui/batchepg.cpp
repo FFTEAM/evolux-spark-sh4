@@ -251,15 +251,6 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		if (channel_id != live_channel_id)
 				g_Zapit->zapTo_serviceID(live_channel_id);
 
-		if (res && actionKey == "shutdown") {
-			 // sectionsd needs some time to read
-			CHintBox *hintBox = new CHintBox(LOCALE_MESSAGEBOX_INFO, g_Locale->getText(LOCALE_BATCHEPG_SHUTDOWN), width);
-			hintBox->paint();
-			AbortableSleep(30);
-			hintBox->hide();
-			delete hintBox;
-		}
-
 		if (!wakeup) {
 			// restore PSI settings
 			CNeutrinoApp::getInstance()->chPSISetup->writeProcPSI();
