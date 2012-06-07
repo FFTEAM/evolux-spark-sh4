@@ -186,9 +186,9 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/smartcard.ko
 	insmod $MODDIR/tun.ko
 	insmod $MODDIR/uinput.ko
-#	if [ ! -e /dev/input/uinput ]; then
-#		mknod -m 644 /dev/input/uinput c 10 223
-#	fi
+	if [ ! -e /dev/input/uinput ]; then
+		mknod -m 644 /dev/input/uinput c 10 223
+	fi
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
 	stfbcontrol a 0
