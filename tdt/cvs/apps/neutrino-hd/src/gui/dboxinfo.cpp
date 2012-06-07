@@ -239,6 +239,21 @@ void CDBoxInfoWidget::paint()
 	int i = 0;
 	frameBuffer->paintBoxRel(x, ypos, width, hheight, COL_MENUHEAD_PLUS_0, RADIUS_LARGE, CORNER_TOP);
 	frameBuffer->paintBoxRel(x, ypos+ hheight, width, height- hheight, COL_MENUCONTENT_PLUS_0, RADIUS_LARGE, CORNER_BOTTOM);
+#ifdef EVOLUX
+	//paint menu head
+	string iconfile = NEUTRINO_ICON_SHELL;
+	int HeadiconOffset = 0;
+	if(!(iconfile.empty())){
+		int w, h;
+		frameBuffer->getIconSize(iconfile.c_str(), &w, &h);
+		HeadiconOffset = w+6;
+	}
+	int fw = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getWidth();
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+(fw/3)+HeadiconOffset,y+hheight+1,
+		width-((fw/3)+HeadiconOffset), g_Locale->getText(LOCALE_EXTRA_DBOXINFO),
+		COL_MENUHEAD, 0, true); // UTF-8
+	frameBuffer->paintIcon(iconfile, x + fw/4, y, hheight);
+#endif
 
 	ypos+= hheight + (mheight >>1);
 	FILE* fd = fopen("/proc/cpuinfo", "rt");
