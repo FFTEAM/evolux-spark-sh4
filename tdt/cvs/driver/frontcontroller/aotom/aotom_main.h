@@ -13,6 +13,8 @@ typedef unsigned int u32;
 
 typedef signed long s64;
 typedef unsigned long u64;
+
+#define bool int
 #endif
 
 #define VFD_MAJOR				147
@@ -696,6 +698,9 @@ u32  YWPANEL_FP_GetPowerOnTime(void);
 int YWPANEL_VFD_GetKeyValue(void);
 int YWPANEL_VFD_SetLed(int which, int on);
 
+# ifndef __KERNEL__
+#  undef bool
+# endif
 #endif /* __AOTOM_MAIN_H__ */
 
 // vim:ts=4

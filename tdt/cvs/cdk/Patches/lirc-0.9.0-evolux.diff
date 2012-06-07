@@ -1,0 +1,76 @@
+--- lirc-0.9.0-orig/daemons/ir_remote.c	2011-03-25 23:28:18.000000000 +0100
++++ lirc-0.9.0/daemons/ir_remote.c	2012-06-07 10:43:06.201880371 +0200
+@@ -506,9 +506,17 @@
+ 	lirc_t min_remaining_gap, max_remaining_gap;
+ 	struct ir_remote *scan;
+ 	struct ir_ncode *scan_ncode;
++	int try_last_remote = 1;
+ 
+ 	/* use remotes carefully, it may be changed on SIGHUP */
++	if (last_remote == NULL) {
+ 	decoding = remote = remotes;
++		try_last_remote = 0;
++	} else {
++		decoding = remote = last_remote;
++		try_last_remote = 1;
++	}
++	
+ 	while (remote) {
+ 		LOGPRINTF(1, "trying \"%s\" remote", remote->name);
+ 
+@@ -556,6 +564,11 @@
+ 			}
+ 		} else {
+ 			LOGPRINTF(1, "failed \"%s\" remote", remote->name);
++			if (try_last_remote == 1) {
++				try_last_remote = 0;
++				decoding = remote = remotes;
++				continue;
++			}
+ 		}
+ 		remote->toggle_mask_state = 0;
+ 		remote = remote->next;
+--- lirc-0.9.0-orig/daemons/lircd.c	2011-03-25 23:28:18.000000000 +0100
++++ lirc-0.9.0/daemons/lircd.c	2012-06-07 10:44:03.601880419 +0200
+@@ -60,6 +60,9 @@
+ #if defined(__linux__)
+ #include <linux/input.h>
+ #include <linux/uinput.h>
++#ifdef EVOLUX
++#include <aotom_main.h>
++#endif
+ #include "input_map.h"
+ #endif
+ 
+@@ -432,7 +435,11 @@
+ 		goto setup_error;
+ 	}
+ 
++#ifdef EVOLUX
++	for (key = KEY_RESERVED; key <= KEY_MAX; key++) {
++#else
+ 	for (key = KEY_RESERVED; key <= KEY_UNKNOWN; key++) {
++#endif
+ 		if (ioctl(fd, UI_SET_KEYBIT, key) != 0) {
+ 			goto setup_error;
+ 		}
+@@ -1788,6 +1795,19 @@
+ 
+ 		if (reps < 2 && get_input_code(button_name, &input_code) != -1) {
+ 			struct input_event event;
++#ifdef EVOLUX
++			static int aotom_fd = -2;
++
++			if (aotom_fd == -2)
++				aotom_fd = open("/dev/vfd", O_RDWR);
++
++			if (aotom_fd > -1 && !release) {
++				struct aotom_ioctl_data vfd_data;
++				vfd_data.u.led.led_nr = 1;
++				vfd_data.u.led.on = 10;
++				ioctl(aotom_fd, VFDSETLED, &vfd_data);
++			}
++#endif
+ 
+ 			memset(&event, 0, sizeof(event));
+ 			event.type = EV_KEY;

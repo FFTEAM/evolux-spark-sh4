@@ -138,7 +138,7 @@ $(DEPDIR)/lirc.do_compile: $(DEPDIR)/lirc.do_prepare
 	cd @DIR_lirc@ && \
 		$(BUILDENV) \
 		ac_cv_path_LIBUSB_CONFIG= \
-		CFLAGS="$(TARGET_CFLAGS) -Os" \
+		CFLAGS="$(TARGET_CFLAGS) -Os -DEVOLUX -I$(driverdir)/frontcontroller/aotom" \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
