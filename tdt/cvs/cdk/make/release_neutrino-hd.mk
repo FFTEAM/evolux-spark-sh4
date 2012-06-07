@@ -186,7 +186,10 @@ $(DEPDIR)/%release_neutrino-hd:
 	cp -f $(buildprefix)/root/usr/lib/libgcrypt* $(prefix)/release_neutrino-hd/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgpg* $(prefix)/release_neutrino-hd/usr/lib/
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release_neutrino-hd/etc/
+	mkdir -p $(prefix)/release_neutrino-hd/etc/lirc
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release_neutrino-hd/etc/lircd.conf
+	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release_neutrino-hd/etc/
+	( cd $(prefix)/release_neutrino-hd/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release_neutrino-hd/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release_neutrino-hd/usr/bin/
 #	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release_neutrino-hd/etc/lircd.conf.amiko
@@ -216,6 +219,7 @@ endif
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release_neutrino-hd/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release_neutrino-hd/lib/modules/
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release_neutrino-hd/lib/modules/
+	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko $(prefix)/release_neutrino-hd/lib/modules/
 
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino-hd/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino-hd/sbin

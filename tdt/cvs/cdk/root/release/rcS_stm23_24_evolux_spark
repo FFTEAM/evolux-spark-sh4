@@ -185,7 +185,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 	mknod /dev/bpamem c 153 0 
 	insmod $MODDIR/smartcard.ko
 	insmod $MODDIR/tun.ko
-
+	insmod $MODDIR/uinput.ko
+#	if [ ! -e /dev/input/uinput ]; then
+#		mknod -m 644 /dev/input/uinput c 10 223
+#	fi
 	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
 
 	stfbcontrol a 0
@@ -267,7 +270,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 	fi
 
 	echo "init lircd"
-	/usr/bin/lircd
+	if [ ! -e /etc/.start_enigma2 ] && [ -e /etc/.nhd ]; then
+		LIRCD_CONF=`sed 's#.*STB_ID=#/etc/lircd.conf.#' < /proc/cmdline`
+		[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
+		/usr/bin/lircd -u $LIRCD_CONF
+	else
+		/usr/bin/lircd
+	fi
 	/usr/bin/irexec -d /etc/lircrc
 	# /bin/evremote2 05 30 &
 
@@ -277,9 +286,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/bin/evremote2 5 200 & # $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
 		rm -f /etc/.extdisplay >/dev/null 2>&1
 	else
-		if [ -e /etc/.nhd ]; then
-			/bin/evremote2 &
-		else
+		if [ ! -e /etc/.nhd ]; then
 			/bin/evremote2 5 200 &
 		fi
 	fi
