@@ -267,6 +267,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 	fi
 
 	echo "init lircd"
+	if [ -e /etc/.start_enigma2 ]; then
+		cd /etc && ln -sf lircd_spark.conf lircd.conf
+	elif [ -e /etc/.nhd ]; then
+		cd /etc && ln -sf lircd_spark_hd.conf lircd.conf
+	else
+		cd /etc && ln -sf lircd_spark.conf lircd.conf
+	fi
 	/usr/bin/lircd
 	/usr/bin/irexec -d /etc/lircrc
 	# /bin/evremote2 05 30 &
