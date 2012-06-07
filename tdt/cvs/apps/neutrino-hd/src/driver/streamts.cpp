@@ -39,11 +39,9 @@
 //#define IN_SIZE         (TS_SIZE * 362)
 #endif
 
-#ifdef EVOLUX
-#define DMX_BUFFER_SIZE (2 * 3008 * 62)
-#define IN_SIZE DMX_BUFFER_SIZE
-#else
 #define DMX_BUFFER_SIZE (4 * 3008 * 62)
+#ifdef EVOLUX
+#define IN_SIZE DMX_BUFFER_SIZE
 #endif
 
 /* maximum number of pes pids */
@@ -357,7 +355,7 @@ void * streamts_live_thread(void *data)
 #ifdef EVOLUX
 	// A non-blocking Read() will/may hang if channels are switched  --martii
 	int dmxfd = dmx->getFD();
-        fcntl(dmxfd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+        fcntl(dmxfd, F_SETFL, fcntl(dmxfd, F_GETFL) | O_NONBLOCK);
 #endif
 	while (!exit_flag) {
 		r = dmx->Read(buf, IN_SIZE, 100);
