@@ -101,7 +101,7 @@ endif
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/
 	( cd $(prefix)/release-enigma2-pli-nightly/etc && ln -sf lircd_spark.conf lircd.conf )
-	#cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
+#	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
 	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release-enigma2-pli-nightly/bin/
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release-enigma2-pli-nightly/usr/bin/
