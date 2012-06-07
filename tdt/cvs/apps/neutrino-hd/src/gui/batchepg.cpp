@@ -35,6 +35,8 @@
 #include <system/debug.h>
 #include <system/safe_system.h>
 
+#include <driver/volume.h>
+
 #include <global.h>
 #include <neutrino.h>
 
@@ -187,42 +189,67 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 	t_channel_id live_channel_id = CZapit::getInstance()->GetCurrentChannelID();
 	t_channel_id channel_id;
+
+	// read EPG from a single channel
 	if (1 == sscanf(actionKey.c_str(), "%llx", &channel_id)) {
 		if (CNeutrinoApp::getInstance()->recordingstatus)
 			return menu_return::RETURN_REPAINT;
 		
 		for (int i = 0; i < epgChannels.size(); i++)
-			if (epgChannels[i].channel_id == channel_id && epgChannels[i].type != BATCHEPG_OFF) {
-				channel_id = live_channel_id;
-				if (epgChannels[i].channel_id != live_channel_id)
+			if (epgChannels[i].channel_id == channel_id) {
+				if (epgChannels[i].type != BATCHEPG_OFF) {
+					if (channel_id != live_channel_id)
 						g_Zapit->zapTo_serviceID(epgChannels[i].channel_id);
-				Run(i);
-				if (channel_id != live_channel_id)
-						g_Zapit->zapTo_serviceID(channel_id);
-				break;
+					Run(i);
+					break;
+				}
 			}
+		if (channel_id != live_channel_id)
+				g_Zapit->zapTo_serviceID(channel_id);
 		return menu_return::RETURN_REPAINT;
 	}
 
 	if (actionKey == "shutdown" && !g_settings.batchepg_run_at_shutdown)
 	 	return menu_return::RETURN_REPAINT;
 
-	if (actionKey == "shutdown" || actionKey == "timer")
-		Load();
-
 	if (actionKey == "run" || actionKey == "shutdown" || actionKey == "timer") {
 		if (CNeutrinoApp::getInstance()->recordingstatus)
 			return menu_return::RETURN_REPAINT;
+
+		int wakeup = 1;
+		if (actionKey == "timer") {
+			FILE *f = fopen ("/proc/stb/fp/was_timer_wakeup", "r");
+			if (f) {
+				fscanf(f, "%d", &wakeup);
+				fclose(f);
+			}
+		}
+
+		bool muted = false;
+
+		if (!wakeup)
+			muted = CNeutrinoApp::getInstance()->isMuted();
+
+		CVolume *g_volume = CVolume::getInstance();
+
+		if (actionKey != "run") {
+			Load();
+			CNeutrinoApp::getInstance()->chPSISetup->blankScreen();
+			g_volume->AudioMute(true, false);
+		}
+
 		channel_id = live_channel_id;
-		int i;
-		for (i = 0; i < epgChannels.size(); i++)
+		// read EPG from all channels
+		for (int i = 0; i < epgChannels.size(); i++) {
+			channel_id = epgChannels[i].channel_id;
 			if (epgChannels[i].type != BATCHEPG_OFF) {
-				if (epgChannels[i].channel_id != live_channel_id)
-					g_Zapit->zapTo_serviceID(epgChannels[i].channel_id);
+				if (channel_id != live_channel_id)
+					g_Zapit->zapTo_serviceID(channel_id);
 				Run(i);
 			}
+		}
 		if (channel_id != live_channel_id)
-				g_Zapit->zapTo_serviceID(channel_id);
+				g_Zapit->zapTo_serviceID(live_channel_id);
 
 		if (res && actionKey == "shutdown") {
 			 // sectionsd needs some time to read
@@ -232,6 +259,15 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			hintBox->hide();
 			delete hintBox;
 		}
+
+		if (!wakeup) {
+			// restore PSI settings
+			CNeutrinoApp::getInstance()->chPSISetup->writeProcPSI();
+			// restore audio
+			if (!muted)
+					g_volume->AudioMute(false, false);
+		}
+
 		return menu_return::RETURN_REPAINT;
 	}
 

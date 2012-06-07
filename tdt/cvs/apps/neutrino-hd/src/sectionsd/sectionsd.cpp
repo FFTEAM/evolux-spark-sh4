@@ -4667,10 +4667,15 @@ std::string UTF8_to_Latin1(const char * s)
 	return r;
 }
 
+#ifdef EVOLUX
+static bool insertEventsfromFile_running = false;
+#endif
+
 static void *insertEventsfromFile(void *)
 {
 #ifdef EVOLUX
 	set_threadname(__func__);
+	insertEventsfromFile_running = true;
 #endif
 	xmlDocPtr event_parser = NULL;
 	xmlNodePtr eventfile = NULL;
@@ -4897,6 +4902,9 @@ static void *insertEventsfromFile(void *)
 		}
 	}
 	reader_ready = true;
+#ifdef EVOLUX
+	insertEventsfromFile_running = false;
+#endif
 
 	pthread_exit(NULL);
 }
@@ -5007,6 +5015,11 @@ static void commandWriteSI2XML(int connfd, char *data, const unsigned dataLength
 	else {
 
 		printf("[sectionsd] Writing Information to file: %s\n", tmpname);
+
+#ifdef EVOLUX
+		while(insertEventsfromFile_running)
+			sleep(1);
+#endif
 
 		write_index_xml_header(indexfile);
 
