@@ -498,6 +498,9 @@ endif
 	find $(prefix)/release_neutrino-hd/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release_neutrino-hd/ -name '*.o' -exec rm -f {} \;
 	find $(prefix)/release_neutrino-hd/ -name '*.la' -exec rm -f {} \;
+
+	[ -e $(prefix)/release_neutrino-hd/lib/udev ] && rm -rf $(prefix)/release_neutrino-hd/lib/udev || true
+
 #
 # AUTOFS
 #
