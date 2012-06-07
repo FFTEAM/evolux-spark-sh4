@@ -2402,7 +2402,8 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t _msg, neutrino_msg_data_t data)
 		// per-audio-channel volume adjustment
 		g_Zapit->getVolumePercent(&g_settings.current_volume_percent, g_RemoteControl->current_PIDs.PIDs.selected_apid);
 		g_volume->setpercent(g_settings.current_volume_percent);
-		g_volume->setvol(g_settings.current_volume);
+		if (!current_muted)
+			g_volume->setvol(g_settings.current_volume);
 		threeDSetup->exec(NULL, "zapped");
 #else
 #if 0 // per-channel auto volume save/restore
