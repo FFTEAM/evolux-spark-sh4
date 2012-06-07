@@ -67,7 +67,7 @@
  * TODO: what if another input device is present? */
 #ifdef EVOLUX
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
-	"/dev/input/nevis_ir", "/dev/tdt_rc", "/dev/fulan_fp",
+	"/dev/input/nevis_ir", "/dev/input/tdt_rc", "/dev/input/fulan_fp",
 	"/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3" };
 #else
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
@@ -179,7 +179,11 @@ void CRCInput::open(int dev)
 			continue;
 #endif
 		if ((fd_rc[i] = ::open(RC_EVENT_DEVICE[i], O_RDWR)) == -1)
+#ifdef EVOLUX
+			while(0);
+#else
 			perror(RC_EVENT_DEVICE[i]);
+#endif
 		else
 		{
 #ifdef EVOLUX
@@ -580,7 +584,7 @@ void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, uint6
 	 *       right now it is only run if some event is happening "by accident" */
 	if (!input_stopped) {
 #ifdef EVOLUX
-		init_td_api();
+		create_input_devices();
 #endif
 		for (int i = 0; i < NUMBER_OF_EVENT_DEVICES; i++) {
 			if (fd_rc[i] == -1)
