@@ -555,12 +555,16 @@ void cVideo::getPictureInfo(int &width, int &height, int &rate)
 		rate   = proc_get_hex("/proc/stb/vmpeg/0/framerate");
 		width  = proc_get_hex("/proc/stb/vmpeg/0/xres");
 		height = proc_get_hex("/proc/stb/vmpeg/0/yres");
+#ifndef EVOLUX
 		rate /= 1000;
+#endif
 		return;
 	}
 	ioctl(fd, VIDEO_GET_SIZE, &s);
 	ioctl(fd, VIDEO_GET_FRAME_RATE, &rate);
+#ifndef EVOLUX
 	rate /= 1000;
+#endif
 	height = s.h;
 	width = s.w;
 	lt_debug("%s: rate: %d, width: %d height: %d\n", __func__, rate, width, height);

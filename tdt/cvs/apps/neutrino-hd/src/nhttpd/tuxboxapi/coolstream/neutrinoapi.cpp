@@ -434,12 +434,19 @@ std::string CNeutrinoAPI::getVideoFramerateAsString(void) {
 	int xres, yres, framerate;
 	std::string sframerate="unknown";
 	videoDecoder->getPictureInfo(xres, yres, framerate);
+#ifdef EVOLUX
+	float f = framerate/1000;
+	char t[20];
+	snprintf(t, sizeof(t), "%1.3ffps", f);
+	sframerate = string(t);
+#else
 	switch(framerate){
 		case 2:
 			sframerate="25fps";break;
 		case 5:
 			sframerate="50fps";break;
 	}
+#endif
 	return sframerate;
 }
 
