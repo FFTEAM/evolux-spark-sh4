@@ -271,7 +271,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	echo "init lircd"
 	if [ ! -e /etc/.start_enigma2 ] && [ -e /etc/.nhd ]; then
-		LIRCD_CONF=`sed 's#.*STB_ID=#/etc/lircd.conf.#' < /proc/cmdline`
+		LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
 		[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
 		/usr/bin/lircd -u $LIRCD_CONF
 	else
