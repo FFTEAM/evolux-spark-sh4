@@ -40,6 +40,7 @@ ramzswap="  root root   0644"
     vfd=" root root 0644"
  tundev="  root root   0644"
  ttyusb="  root root   0644"
+ uinput="  root root   0644"
 
 MAXVT=63
 
@@ -959,7 +960,7 @@ do
 			makedev input/mouse$i c $major `math $i + 32` $mouse
 			makedev input/event$i c $major `math $i + 64` $mouse
 		done
-		makedev input/uinput c 10 223
+		makedev input/uinput c $major 223 $uinput
 		makedev input/mice c $major 63 $mouse
 		;;
 	busmice)
