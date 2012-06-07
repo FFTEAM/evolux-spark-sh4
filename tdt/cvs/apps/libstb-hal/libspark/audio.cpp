@@ -406,7 +406,7 @@ void cAudio::SetSpdifDD(bool enable)
 {
 	lt_debug("%s %d\n", __FUNCTION__, enable);
 #ifdef EVOLUX
-	setBypassMode(enable);
+	setBypassMode(!enable);
 #endif
 };
 
