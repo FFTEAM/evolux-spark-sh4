@@ -32,8 +32,8 @@ begin remote
 
       begin codes
           KEY_POWER                    0x7887
-          KEY_V.Format                 0xF00F
-          KEY_TV/SAT                   0xD02F
+          KEY_V                        0xF00F #VFORMAT
+          KEY_TVSAT                    0xD02F
           KEY_SLEEP                    0x9A65
           KEY_MUTE                     0x5AA5
           KEY_1                        0x58A7
@@ -46,14 +46,14 @@ begin remote
           KEY_8                        0xE817
           KEY_9                        0x0AF5
           KEY_0                        0xC837
-          KEY_TV/Radio                 0x32CD
-          KEY_RECALL                   0x30CF
-          KEY_PAGE+                    0x12ED
-          KEY_PAGE-                    0x22DD
+          KEY_TVRadio                  0x32CD
+          KEY_REPLY                    0x30CF #RECALL
+          KEY_PAGEUP                   0x12ED
+          KEY_PAGEDOWN                 0x22DD
           KEY_FIND                     0x3AC5
-          KEY_FOLDER                   0x9867
-          KEY_VOL+                     0x50AF
-          KEY_VOL-                     0x609F
+          KEY_ARCHIVE                  0x9867 #FOLDER
+          KEY_VOLUMEUP                 0x50AF
+          KEY_VOLUMEDOWN               0x609F
           KEY_MENU                     0x38C7
           KEY_INFO                     0xE01F
           KEY_UP                       0xC03F
@@ -63,9 +63,9 @@ begin remote
           KEY_OK                       0xFA05
           KEY_EXIT                     0x06F9
           KEY_EPG                      0xBA45
-          KEY_FAV                      0xC23D
+          KEY_FAVORITES                0xC23D
           KEY_SAT                      0xF20D
-          KEY_PORTAL                   0xDA25
+          KEY_GUIDE                    0xDA25 #PORTAL
           KEY_RED                      0x926D
           KEY_GREEN                    0x728D
           KEY_YELLOW                   0x8877
@@ -76,12 +76,12 @@ begin remote
           KEY_PLAY                     0xA857
           KEY_PREV                     0x04FB
           KEY_NEXT                     0xC43B
-          KEY_FASTFORWARD              0xCA35
+          KEY_FORWARD                  0xCA35
           KEY_REWIND                   0x807F
           KEY_SLOW                     0x847B
           KEY_FAST                     0x18E7
-          KEY_WHITE                    0x4AB5
-          KEY_USB                      0x20DF
+          KEY_P                        0x4AB5 #PLAYMODE
+          KEY_CLOSE                    0x20DF #USB
           KEY_TimeShift                0xAA55
           KEY_F1                       0x6A95
           KEY_F2                       0xEA15
