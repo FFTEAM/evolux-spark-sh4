@@ -77,6 +77,7 @@ public:
   void hide ();
   void writeProcPSI ();
   void writeProcPSI (int);
+  void blankScreen ();
 };
 
 class CPSISetupNotifier : public CChangeObserver

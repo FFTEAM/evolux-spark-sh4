@@ -145,6 +145,15 @@ CPSISetup::writeProcPSI (int i)
     fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
 }
 
+void CPSISetup::blankScreen() {
+  for (int i = 0; i < PSI_RESET; i++) {
+	// psi_list[i].value_old = psi_list[i].value;
+	psi_list[i].value = 0;
+	writeProcPSI (i);
+	// psi_list[i].value = psi_list[i].value_old;
+  }
+}
+
 int
 CPSISetup::exec (CMenuTarget * parent, const std::string &)
 {
