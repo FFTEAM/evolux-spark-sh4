@@ -617,11 +617,11 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 	int res = menu_return::RETURN_REPAINT;
 
 	bool doReset = false;
-	int emu = selected;
+	int emu = EMU_OPTION_COUNT;
 
-	if(actionKey == "disable")
+	if(actionKey == "disable") {
 		emu = -1;
-	else if (actionKey == "reset") {
+	} else if (actionKey == "reset") {
 		doReset = true;
 		emu = selected;
 	} else if (actionKey == "reset-usermenu") {
@@ -633,16 +633,16 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			if (!strcmp(EMU_list[emu].procname, actionKey.c_str()))
 				break;
 
-	if (emu > -1 && emu < EMU_OPTION_COUNT) {
-		int emu_old = selected;
-		if ((emu_old != emu) || doReset) {
-			if (emu_old > -1) {
-				safe_system(EMU_list[emu_old].stop_command);
-				string m = " " + string(EMU_list[emu_old].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_DISABLED);
-				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
-				if (EMU_list[emu_old].cmf)
-					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_OFF));
-			}
+fprintf(stderr, "### selected: %d emu: %d\n", selected,emu);
+	if (emu < EMU_OPTION_COUNT) {
+		if (selected > -1) {
+			safe_system(EMU_list[selected].stop_command);
+			string m = " " + string(EMU_list[selected].procname) + " " + g_Locale->getText(LOCALE_EXTRAMENU_DISABLED);
+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
+			if (EMU_list[selected].cmf)
+				EMU_list[selected].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_OFF));
+		}
+		if (emu > -1 && (emu != selected || doReset)) {
 			safe_system(EMU_list[emu].start_command);
 
 			string cmd = "(" + string(EMU_list[emu].start_command);
@@ -654,7 +654,8 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_OPTIONS_ON));
 			settings.cam_selected = string(EMU_list[emu].procname);
 			selected = emu;
-		}
+		} else
+			selected = -1;
 		return res;
 	}
 

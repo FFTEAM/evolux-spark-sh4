@@ -1794,6 +1794,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 
 	audioSetupNotifier        = new CAudioSetupNotifier;
 #ifdef EVOLUX
+	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AC3DOWNMIX, NULL);
 	audioSetupNotifierVolPercent = new CAudioSetupNotifierVolPercent;
 #endif
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
