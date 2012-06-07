@@ -266,7 +266,7 @@ void cRecord::RecordThread()
 		{
 			exit_flag = RECORD_FAILED_FILE;
 #ifdef EVOLUX
-			lt_info("%s: aio_return = %d (%m)\n", __func__, r);
+			lt_debug("%s: aio_return = %d (%m)\n", __func__, r);
 #else
 			lt_info("%s: aio_error != EINPROGRESS: %d (%m)\n", __func__, r);
 #endif
@@ -274,7 +274,7 @@ void cRecord::RecordThread()
 		}
 #ifdef EVOLUX
 		else
-			lt_info("%s: aio_return = %d, free: %d\n", __func__, r, BUFSIZE - buf_pos);
+			lt_debug("%s: aio_return = %d, free: %d\n", __func__, r, BUFSIZE - buf_pos);
 #else
 		lt_debug("%s: buf_pos %6d w %6d\n", __func__, buf_pos, (int)queued);
 #endif
