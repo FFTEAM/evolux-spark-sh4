@@ -74,7 +74,6 @@ function make_devs() {
 		echo "Erstelle weitere /dev für SPARK" #$TARGET..."
 		echo "mknod -m 666 rc c 147 1" >> $CURDIR/.fakeroot
 		echo "mknod -m 666 sci0 c 169 0" >> $CURDIR/.fakeroot
-		echo "mknod -m 644 uinput c 10 223" >> $CURDIR/dev/input/
 		make_devs
 #	;;
 #	spark7162)
