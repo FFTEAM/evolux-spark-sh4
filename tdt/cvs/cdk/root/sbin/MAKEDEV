@@ -958,8 +958,8 @@ do
 			makedev input/js$i c $major $i $mouse
 			makedev input/mouse$i c $major `math $i + 32` $mouse
 			makedev input/event$i c $major `math $i + 64` $mouse
-			makedev input/uinput c 10 223
 		done
+		makedev input/uinput c 10 223
 		makedev input/mice c $major 63 $mouse
 		;;
 	busmice)
