@@ -40,7 +40,7 @@ begin remote
           KEY_Picasa                   0x1AE5
           KEY_SHOUTCAST                0x12ED
           KEY_YOUTUBE                  0x32CD
-          KEY_GUIDE                    0x3AC5 #SPARK
+          KEY_EPG                      0x3AC5 #SPARK
           KEY_1                    0x4AB5
           KEY_2                    0x6A95
           KEY_3                    0x42BD

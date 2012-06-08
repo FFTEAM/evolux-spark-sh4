@@ -65,7 +65,7 @@ begin remote
           KEY_EPG                      0xBA45
           KEY_FAVORITES                0xC23D
           KEY_SAT                      0xF20D
-          KEY_GUIDE                    0xDA25 #PORTAL
+          KEY_EPG		       0xDA25 #PORTAL
           KEY_RED                      0x926D
           KEY_GREEN                    0x728D
           KEY_YELLOW                   0x8877
