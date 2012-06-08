@@ -532,13 +532,13 @@ static bool loadSettings() {
 #define EMU_OPTION_COUNT 7
 static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
 {
-	  { "mgcamd", "(rm -f /tmp/camd.socket >/dev/null; sleep 2; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1) &", "kill -9 $(pidof mgcamd)", false }
-	, { "incubusCamd", "(rm -f /tmp/camd.socket 2>/dev/null; sleep 2; /usr/bin/incubusCamd >/dev/null 2>&1) &", "kill -9 $(pidof incubusCamd)", false }
-	, { "camd3", "(sleep 2; /usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1) &", "kill -9 $(pidof camd3)", false }
-	, { "mbox", "(sleep 2; /usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1) &", "kill -9 $(pidof mbox); rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
-	, { "oscam", "(sleep 2; /usr/bin/oscam -b -c /var/keys >/dev/null 2>&1) &", "kill -9 $(pidof oscam)", false }
-	, { "spcs", "(sleep 2; /usr/bin/spcs -c /var/keys >/dev/null 2>&1) &", "kill -9 $(pidof spcs)", false }
-	, { "gbox", "(sleep 2; /usr/bin/gbox >/dev/null 2>&1) &", "touch /tmp/gbox.kill", false }
+	  { "mgcamd", "rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &", "kill -9 $(pidof mgcamd)", false }
+	, { "incubusCamd", "rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &", "kill -9 $(pidof incubusCamd)", false }
+	, { "camd3", "/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &", "kill -9 $(pidof camd3)", false }
+	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &", "kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
+	, { "oscam", "/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof oscam)", false }
+	, { "spcs", "/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof spcs)", false }
+	, { "gbox", "/usr/bin/gbox >/dev/null 2>&1 &", "touch /tmp/gbox.kill", false }
 };
 
 int EMU_Menu::get_installed_count() {
@@ -603,7 +603,7 @@ EMU_Menu::EMU_Menu()
 					scrambled = true;
 		zc.close();
 
-		string cmd = "(" + string(EMU_list[selected].start_command)
+		string cmd = "(" + "sleep 2;" + string(EMU_list[selected].start_command)
 			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
 			+ " >/dev/null 2>&1) &";
 		safe_system(cmd.c_str());
