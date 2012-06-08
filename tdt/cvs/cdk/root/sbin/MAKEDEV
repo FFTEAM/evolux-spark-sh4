@@ -960,7 +960,7 @@ do
 			makedev input/mouse$i c $major `math $i + 32` $mouse
 			makedev input/event$i c $major `math $i + 64` $mouse
 		done
-		makedev input/uinput c $major 223 $uinput
+		makedev input/uinput c 10 223 $uinput
 		makedev input/mice c $major 63 $mouse
 		;;
 	busmice)
