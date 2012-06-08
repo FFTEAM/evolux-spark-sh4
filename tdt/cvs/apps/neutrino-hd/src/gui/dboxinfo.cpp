@@ -213,12 +213,16 @@ void CDBoxInfoWidget::paint()
 				case 0x65735546L:	/*fuse for ntfs*/
 				case 0x58465342L:	/*xfs*/
 				case 0x4d44L:		/*msdos*/
+#ifndef EVOLUX
 					break;
+#endif
 				case 0x72b6L:		/*jffs2*/
 #ifdef EVOLUX
 				case 0x5941ff53L:	/*yaffs2*/
 #endif
+#ifndef EVOLUX
 					height += mheight;
+#endif
 					break;
 				default:
 					continue;
