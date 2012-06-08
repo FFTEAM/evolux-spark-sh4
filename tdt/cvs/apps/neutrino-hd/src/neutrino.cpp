@@ -3107,11 +3107,17 @@ _repeat:
 
 extern time_t timer_minutes;//timermanager.cpp
 extern bool timer_is_rec;//timermanager.cpp
+#ifdef EVOLUX
+bool neutrino_is_exiting = false; // this sucks ...  -martii
+#endif
 
 void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 {
 	printf("[neutrino] %s retcode: %d can_deep: %d\n", __func__, retcode, can_deepstandby);
 	bool do_shutdown = true;
+#ifdef EVOLUX
+	neutrino_is_exiting = true;
+#endif
 
 	CRecordManager::getInstance()->StopAutoRecord();
 	if(CRecordManager::getInstance()->RecordingStatus()) {

@@ -350,11 +350,16 @@ CMovieBrowser::CMovieBrowser(): configfile ('\t')
 	TRACE("$Id: moviebrowser.cpp,v 1.10 2006/09/11 21:11:35 guenther Exp $\r\n");
 	init();
 }
-
+#ifdef EVOLUX
+extern bool neutrino_is_exiting; // This sucks ...  --martii
+#endif
 CMovieBrowser::~CMovieBrowser()
 {
 	//TRACE("[mb] del\r\n");
 	//saveSettings(&m_settings);
+#ifdef EVOLUX
+	if (!neutrino_is_exiting)
+#endif
 	hide();
 	m_dir.clear();
 
