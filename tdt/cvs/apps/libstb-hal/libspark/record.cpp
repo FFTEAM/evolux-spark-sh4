@@ -209,12 +209,19 @@ void cRecord::RecordThread()
 #ifdef EVOLUX
         int dmxfd = dmx->getFD();
         fcntl(dmxfd, F_SETFL, fcntl(dmxfd, F_GETFL) | O_NONBLOCK);
+	int overflow_count = 0;
 #endif
 	bool overflow = false;
 	while (exit_flag == RECORD_RUNNING)
 	{
 		if (buf_pos < BUFSIZE)
 		{
+#ifdef EVOLUX
+			if (overflow_count) {
+				lt_info("%s: Overflow cleared after %d iterations\n", __func__, overflow_count);
+				overflow_count = 0;
+			}
+#endif
 			int toread = BUFSIZE - buf_pos;
 			if (toread > READSIZE)
 				toread = READSIZE;
@@ -241,8 +248,17 @@ void cRecord::RecordThread()
 		}
 		else
 		{
+#ifdef EVOLUX
+			if (!overflow)
+				overflow_count = 0;
+#endif
 			overflow = true;
+#ifdef EVOLUX
+			if (!(overflow_count % 10))
+				lt_info("%s: buffer full! Overflow? (%d)\n", __func__, ++overflow_count);
+#else
 			lt_info("%s: buffer full! Overflow?\n", __func__);
+#endif
 		}
 		r = aio_error(&a);
 		if (r == EINPROGRESS)
