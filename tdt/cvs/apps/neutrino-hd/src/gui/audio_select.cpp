@@ -40,6 +40,9 @@
 #include <gui/widget/icons.h>
 #include <gui/widget/menue.h>
 #include <driver/screen_max.h>
+#ifdef EVOLUX
+#include <driver/volume.h>
+#endif
 
 extern CRemoteControl		* g_RemoteControl; /* neutrino.cpp */
 extern CAudioSetupNotifier	* audioSetupNotifier;
@@ -82,6 +85,12 @@ int CAudioSelectMenuHandler::exec(CMenuTarget* parent, const std::string &action
 		if (g_RemoteControl->current_PIDs.PIDs.selected_apid!= (unsigned int) sel )
 		{
 			g_RemoteControl->setAPID(sel);
+#ifdef EVOLUX
+			int percent;
+			g_Zapit->getVolumePercent((unsigned int *) &percent, g_RemoteControl->current_PIDs.APIDs[sel].pid);
+			CVolume::getInstance()->setpercent(percent);
+			CVolume::getInstance()->setvol(g_settings.current_volume);
+#endif
 		}
 		return menu_return::RETURN_EXIT;
 	}
@@ -190,9 +199,8 @@ int CAudioSelectMenuHandler::doMenu ()
 	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUSTMENT));
 
 	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
-	CZapitClient zapit;
 	for(int count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) {
-		zapit.getVolumePercent((unsigned int *) &percent[count], g_RemoteControl->current_PIDs.APIDs[count].pid);
+		g_Zapit->getVolumePercent((unsigned int *) &percent[count], g_RemoteControl->current_PIDs.APIDs[count].pid);
 		AudioSelector.addItem(new CMenuOptionNumberChooser(NONEXISTANT_LOCALE, &percent[count],
 			count == g_RemoteControl->current_PIDs.PIDs.selected_apid,
 			0, 999, audioSetupNotifierVolPercent, 0, 0, NONEXISTANT_LOCALE,
