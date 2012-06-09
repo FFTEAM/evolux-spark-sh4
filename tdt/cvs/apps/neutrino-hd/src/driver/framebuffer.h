@@ -256,6 +256,8 @@ class CFrameBuffer
 		void SetTransparentDefault(){ m_transparent = m_transparent_default; }
 #ifdef EVOLUX
 #if HAVE_SPARK_HARDWARE
+		bool OSDShot(const std::string &name);
+
 		enum Mode3D { Mode3D_off = 0, Mode3D_SideBySide, Mode3D_TopAndBottom, Mode3D_Tile };
 		void set3DMode(Mode3D);
 		Mode3D get3DMode(void);

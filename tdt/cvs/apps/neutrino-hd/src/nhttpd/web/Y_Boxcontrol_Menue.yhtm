@@ -71,9 +71,15 @@ function init(){
 //]]>
 </script>
 </head>
+<!-- #ifdef EVOLUX -->
+{=var-set:lcshot=false=}
+{=var-set:fbshot=true=}
+{=var-set:dboxshot=false=}
+<!-- #else
 {=var-set:lcshot={=if-file-exists:/bin/lcshot~true~{=if-file-exists:/var/bin/lcshot~true~false=}=}=}
 {=var-set:fbshot={=if-file-exists:/bin/fbshot~true~{=if-file-exists:/var/bin/fbshot~true~{=if-file-exists:/bin/dboxshot~true~{=if-file-exists:/var/bin/dboxshot~true~false=}=}=}=}=}
 {=var-set:dboxshot={=if-file-exists:/bin/dboxshot~true~{=if-file-exists:/var/bin/dboxshot~true~false=}=}=}
+     #endif -->
 <body>
 <div class="y_menu_sec_box">
 	<div class="y_menu_sec_box_head"><h2>{=L:main.boxcontrol=}</h2></div>
