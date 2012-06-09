@@ -553,10 +553,6 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 	sprintf ((char *) buf, "%s:", g_Locale->getText (LOCALE_STREAMINFO_FRAMERATE));
 	g_Font[font_info]->RenderString (xpos, ypos, box_width, buf, COL_INFOBAR, 0, true);	// UTF-8
 	videoDecoder->getPictureInfo(xres, yres, framerate);
-#ifdef EVOLUX
-	float fframerate = framerate/1000;
-	snprintf(buf, sizeof(buf), "%1.3ffps", fframerate);
-#else
 	switch (framerate) {
 		case 0:
 			snprintf ((char *) buf,sizeof(buf), "23.976fps");
@@ -586,7 +582,6 @@ void CStreamInfo2::paint_techinfo(int xpos, int ypos)
 			strncpy (buf, g_Locale->getText (LOCALE_STREAMINFO_FRAMERATE_UNKNOWN), sizeof (buf));
 		break;
 	}
-#endif
 	g_Font[font_info]->RenderString (xpos+spaceoffset, ypos, box_width, buf, COL_INFOBAR, 0, true);	// UTF-8
 	// place for average bitrate
 	average_bitrate_pos = ypos += iheight;

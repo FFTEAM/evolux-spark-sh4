@@ -105,9 +105,6 @@
 // Zeit die fuer die gewartet wird, bevor der Filter weitergeschaltet wird, falls es automatisch nicht klappt
 #define TIME_EIT_SKIPPING 90
 
-#ifdef EVOLUX
-#endif
-
 #ifdef ENABLE_FREESATEPG
 // a little more time for freesat epg
 #define TIME_FSEIT_SKIPPING 240
@@ -4695,7 +4692,6 @@ static void *insertEventsfromFile(void *)
 #define gettid() ((pid_t)syscall(SYS_gettid))
 	/* renice epg-reader process  to 19 */
 	int ret = setpriority(PRIO_PROCESS, gettid(), 19);
-	xprintf("%s setprio ret = %d tid = %d pri = %d\n", ret, gettid(), getpriority(PRIO_PROCESS, gettid()));
 
 	struct stat buf;
 	indexname = epg_dir + "index.tmp";
@@ -6586,6 +6582,7 @@ static int getscanType()
 //---------------------------------------------------------------------
 static void *nitThread(void *)
 {
+
 #ifdef EVOLUX
 	set_threadname(__func__);
 #endif
@@ -7332,6 +7329,7 @@ int eit_stop_update_filter(int *fd)
 //---------------------------------------------------------------------
 static void *fseitThread(void *)
 {
+
 #ifdef EVOLUX
 	set_threadname(__func__);
 #endif
@@ -7612,6 +7610,7 @@ static void *eitThread(void *data)
 static void *eitThread(void *)
 #endif
 {
+
 #ifdef EVOLUX
 	DMX *dmx = (DMX *)data;
 #endif
@@ -8091,6 +8090,7 @@ NOISY_MESSAGE;
 //---------------------------------------------------------------------
 static void *cnThread(void *)
 {
+
 #ifdef EVOLUX
 	set_threadname(__func__);
 #endif
@@ -9457,6 +9457,7 @@ fprintf(stderr, "%s %d thread %d\n", __FILE__, __LINE__, threadHouseKeeping);
 		printf("join 4\n");
 		pthread_join(threadSDT, NULL);
 #endif
+
 #ifdef EVOLUX
 #ifdef ENABLE_FREESATEPG
 		if (threadFSEIT) {
@@ -9676,6 +9677,7 @@ NOISY_MESSAGE;
 							if (eFirst != mySIeventsOrderUniqueKey.begin())
 							{
 								time_t azeit = time(NULL);
+
 #ifdef EVOLUX
 								if (!eFirst->second->times.empty() && eFirst->second->times.begin()->startzeit < azeit &&
 #else

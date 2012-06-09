@@ -146,17 +146,12 @@ cVideo::cVideo(int, void *, void *)
 {
 	lt_debug("%s\n", __FUNCTION__);
 
-#ifndef EVOLUX
-	openDevice();
-#endif
 	//croppingMode = VID_DISPMODE_NORM;
 	//outputformat = VID_OUTFMT_RGBC_SVIDEO;
 	scartvoltage = -1;
 	video_standby = 0;
 	fd = -1;
-#ifdef EVOLUX
 	openDevice();
-#endif
 }
 
 cVideo::~cVideo(void)
@@ -546,103 +541,67 @@ void cVideo::Pig(int x, int y, int w, int h, int osd_w, int osd_h)
 	proc_put("/proc/stb/vmpeg/0/dst_all", buffer, strlen(buffer));
 }
 
+static inline int rate2csapi(int rate)
+{
+	switch (rate)
+	{
+		case 23976:
+			return 0;
+		case 24000:
+			return 1;
+		case 25000:
+			return 2;
+		case 29976:
+			return 3;
+		case 30000:
+			return 4;
+		case 50000:
+			return 5;
+		case 50940:
+			return 6;
+		case 60000:
+			return 7;
+		default:
+			break;
+	}
+	return -1;
+}
+
 void cVideo::getPictureInfo(int &width, int &height, int &rate)
 {
 	video_size_t s;
+	int r;
 	if (fd == -1)
 	{
 		/* in movieplayer mode, fd is not opened -> fall back to procfs */
-		rate   = proc_get_hex("/proc/stb/vmpeg/0/framerate");
+		r      = proc_get_hex("/proc/stb/vmpeg/0/framerate");
 		width  = proc_get_hex("/proc/stb/vmpeg/0/xres");
 		height = proc_get_hex("/proc/stb/vmpeg/0/yres");
-#ifndef EVOLUX
-		rate /= 1000;
-#endif
+		rate   = rate2csapi(r);
 		return;
 	}
 	ioctl(fd, VIDEO_GET_SIZE, &s);
-	ioctl(fd, VIDEO_GET_FRAME_RATE, &rate);
-#ifndef EVOLUX
-	rate /= 1000;
-#endif
+	ioctl(fd, VIDEO_GET_FRAME_RATE, &r);
+	rate = rate2csapi(r);
 	height = s.h;
 	width = s.w;
 	lt_debug("%s: rate: %d, width: %d height: %d\n", __func__, rate, width, height);
 }
 
-void cVideo::SetSyncMode(AVSYNC_TYPE Mode)
+void cVideo::SetSyncMode(AVSYNC_TYPE mode)
 {
-#ifdef EVOLUX
-        int clock;
-	
-	const char *aAVSYNCTYPE[] = {
-	"AVSYNC_DISABLED",
-	"AVSYNC_ENABLED",
-	"AVSYNC_AUDIO_IS_MASTER"
-	};
-
-        const char* av_modes[] = {
-	"disapply",
-	"apply"
-	};
-
-        const char* master_clock[] = {
-	"video",
-	"audio"
-	};
-      
-	printf("%s:%s - mode=%s\n", __FILE__, __FUNCTION__, aAVSYNCTYPE[Mode]);
-
-	int fd = open("/proc/stb/stream/policy/AV_SYNC", O_RDWR);
-
-        if (fd > 0)  
-        {
-           if ((Mode == 0) || (Mode == 1))
-	   {
-	      write(fd, av_modes[Mode], strlen(av_modes[Mode]));
-	      clock = 0;
-	   } else
-           {
-	      write(fd, av_modes[1], strlen(av_modes[1]));
-	      clock = 1;
-	   }
-	   close(fd);
-        }
-	else
-	   printf("error %m\n");
-	
-        printf("set master clock = %s\n", master_clock[clock]);
-
-	fd = open("/proc/stb/stream/policy/MASTER_CLOCK", O_RDWR);
-        if (fd > 0)  
-        {
-	   write(fd, master_clock[clock], strlen(master_clock[clock]));
-	   close(fd);
-        }
-	else
-	   printf("error %m\n");
-#else
-	lt_debug("%s %d\n", __FUNCTION__, Mode);
+	lt_debug("%s %d\n", __func__, mode);
 	/*
 	 * { 0, LOCALE_OPTIONS_OFF },
 	 * { 1, LOCALE_OPTIONS_ON  },
 	 * { 2, LOCALE_AUDIOMENU_AVSYNC_AM }
 	 */
-#if 0
-	switch(Mode)
-	{
-		case 0:
-			ioctl(fd, MPEG_VID_SYNC_OFF);
-			break;
-		case 1:
-			ioctl(fd, MPEG_VID_SYNC_ON, VID_SYNC_VID);
-			break;
-		default:
-			ioctl(fd, MPEG_VID_SYNC_ON, VID_SYNC_AUD);
-			break;
-	}
-#endif
-#endif
+	const char *apply[] = { "disapply", "apply" };
+	const char *clock[] = { "video", "audio" };
+	const char *a = apply[mode > 0]; /* mode == 1 or mode == 2 -> "apply" */
+	const char *c = clock[mode > 1];  /* mode == 2 -> "audio" */
+	proc_put("/proc/stb/stream/policy/AV_SYNC", a, strlen(a));
+	proc_put("/proc/stb/stream/policy/MASTER_CLOCK", c, strlen(c));
 };
 
 int cVideo::SetStreamType(VIDEO_FORMAT type)

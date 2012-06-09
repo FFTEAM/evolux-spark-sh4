@@ -17,6 +17,19 @@
 
 cAudio * audioDecoder = NULL;
 
+static int proc_put(const char *path, const char *value, const int len)
+{
+	int ret, ret2;
+	int pfd = open(path, O_WRONLY);
+	if (pfd < 0)
+		return pfd;
+	ret = write(pfd, value, len);
+	ret2 = close(pfd);
+	if (ret2 < 0)
+		return ret2;
+	return ret;
+}
+
 cAudio::cAudio(void *, void *, void *)
 {
 	fd = -1;
@@ -66,20 +79,15 @@ int cAudio::do_mute(bool enable, bool remember)
 		Muted = enable;
 
 	sprintf(str, "%d", Muted);
-
-	int f = open("/proc/stb/audio/j1_mute", O_RDWR);
-	write(f, str, strlen(str));
-	close(f);
+	proc_put("/proc/stb/audio/j1_mute", str, strlen(str));
 
 	if (!enable)
 	{
-		f = open("/proc/stb/avs/0/volume", O_RDWR);
+		int f = open("/proc/stb/avs/0/volume", O_RDWR);
 		read(f, str, 4);
 		close(f);
 		str[3] = '\0';
-		f = open("/proc/stb/avs/0/volume", O_RDWR);
-		write(f, str, strlen(str));
-		close(f);
+		proc_put("/proc/stb/avs/0/volume", str, strlen(str));
 	}
 	return 0;
 }
@@ -122,9 +130,7 @@ int cAudio::setVolume(unsigned int left, unsigned int right)
 	char str[4];
 	sprintf(str, "%d", v);
 
-	int f = open("/proc/stb/avs/0/volume", O_RDWR);
-	write(f, str, strlen(str));
-	close(f);
+	proc_put("/proc/stb/avs/0/volume", str, strlen(str));
 	return 0;
 }
 
@@ -290,7 +296,7 @@ int cAudio::PrepareClipPlay(int ch, int srate, int bits, int little_endian)
 		if (tmp)
 			mixer_num = atoi(tmp);
 		lt_info("%s: mixer_num is %d -> device %08x\n",
-			__func__, (mixer_num >= 0) ? (1 << mixer_num) : 0);
+			__func__, mixer_num, (mixer_num >= 0) ? (1 << mixer_num) : 0);
 		/* no error checking, you'd better know what you are doing... */
 	} else {
 		mixer_num = 0;
@@ -388,26 +394,17 @@ void cAudio::SetSRS(int /*iq_enable*/, int /*nmgr_enable*/, int /*iq_mode*/, int
 	lt_debug("%s\n", __FUNCTION__);
 };
 
-#ifdef EVOLUX
 void cAudio::SetHdmiDD(bool enable)
 {
-	int fd = open("/proc/stb/hdmi/audio_source", O_RDWR);
-	if (fd > -1) {
-		if(enable)
-			write(fd, "spdif", strlen("spdif"));
-		else
-			write(fd, "pcm", strlen("pcm"));
-		close(fd);
-	}
+	const char *opt[] = { "pcm", "spdif" };
+	lt_debug("%s %d\n", __func__, enable);
+	proc_put("/proc/stb/hdmi/audio_source", opt[enable], strlen(opt[enable]));
 }
-#endif
 
 void cAudio::SetSpdifDD(bool enable)
 {
-	lt_debug("%s %d\n", __FUNCTION__, enable);
-#ifdef EVOLUX
+	lt_debug("%s %d\n", __func__, enable);
 	setBypassMode(!enable);
-#endif
 };
 
 void cAudio::ScheduleMute(bool On)
@@ -420,11 +417,11 @@ void cAudio::EnableAnalogOut(bool enable)
 	lt_debug("%s %d\n", __FUNCTION__, enable);
 };
 
+#define AUDIO_BYPASS_ON  0
+#define AUDIO_BYPASS_OFF 1
 void cAudio::setBypassMode(bool disable)
 {
-	lt_debug("%s %d\n", __FUNCTION__, disable);
-	int mode = disable ? AUDIO_STREAMTYPE_MPEG : AUDIO_STREAMTYPE_AC3;
-	if (ioctl(fd, AUDIO_SET_BYPASS_MODE, mode) < 0)
-		lt_info("%s AUDIO_SET_BYPASS_MODE %d: %m\n", __func__, mode);
-	return;
+	const char *opt[] = { "passthrough", "downmix" };
+	lt_debug("%s %d\n", __func__, disable);
+	proc_put("/proc/stb/audio/ac3", opt[disable], strlen(opt[disable]));
 }
