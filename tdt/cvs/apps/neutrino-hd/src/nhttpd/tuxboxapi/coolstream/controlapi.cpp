@@ -2104,6 +2104,14 @@ void CControlAPI::YWeb_SendRadioStreamingPid(CyhookHandler *hh)
 //-----------------------------------------------------------------------------
 std::string CControlAPI::YexecuteScript(CyhookHandler *, std::string cmd)
 {
+#ifdef EVOLUX
+    {
+	const char *fbshot = "Y_Tools fbshot fb /";
+	int len = strlen(fbshot);
+	if (!strncmp(cmd.c_str(), fbshot, len))
+		return CFrameBuffer::getInstance()->OSDShot(cmd.substr(len - 1)) ? "" : "error";
+    }
+#endif
 	std::string script, para, result;
 	bool found = false;
 

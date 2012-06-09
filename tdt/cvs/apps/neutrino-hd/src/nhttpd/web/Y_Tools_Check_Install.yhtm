@@ -81,7 +81,11 @@ function do_check(){
 	=}
 
 	/*programs*/
+<!-- #ifdef EVOLUX -->
+	{=var-set:fbshot=true=}
+<!-- #else
 	{=var-set:fbshot={=if-file-exists:/bin/fbshot~/bin/fbshot~{=if-file-exists:/var/bin/fbshot~/var/bin/fbshot~false=}=}=}
+     #endif -->
 	{=if-equal:{=var-get:fbshot=}~false~
 		sLog_addRow(sLog_body, "red", "Programs: fbshot is not installed. OSD Screenshot is disabled. "+y_url("Help-BoxControl-OSD_Screenshot"), "failed");
 	~

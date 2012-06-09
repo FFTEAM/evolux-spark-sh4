@@ -39,7 +39,7 @@ function do_clearshot2(){
 		<tr>
 			<td>{=include-block:Y_Blocks.txt;remote=}</td>
 <!-- #ifdef EVOLUX -->
-			<td><img id="shot" src="" {=if-empty:{=full=}~style="width:600px"~=} width="100%"/></td>
+			<td><img id="shot" src="" {=if-empty:{=full=}~style="width:100%; background-color:#000000;"~=}/></td>
 <!-- #else
 			<td><img id="shot" src="" {=if-empty:{=full=}~style="width:600px"~=}/></td>
      #endif -->

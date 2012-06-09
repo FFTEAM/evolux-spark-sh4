@@ -52,6 +52,9 @@
 
 #include <pthread.h>
 
+#ifdef EVOLUX
+#include <png.h>
+#endif
 #define DEFAULT_XRES 1280
 #define DEFAULT_YRES 720
 
@@ -1865,5 +1868,37 @@ void CFrameBuffer::set3DMode(Mode3D m) {
 		mode3D = m;
 		blit();
 	}
+}
+
+bool CFrameBuffer::OSDShot(const std::string &name) {
+	size_t l = name.find_last_of(".");
+	if(l == std::string::npos)
+		return false;
+	if (name.substr(l) != ".png")
+		return false;
+	FILE *out = fopen(name.c_str(), "w");
+	if (!out)
+		return false;
+
+	png_bytep row_pointers[DEFAULT_YRES];
+	png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING,
+		(png_voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL);
+	png_infop info_ptr = png_create_info_struct(png_ptr);
+
+	png_init_io(png_ptr, out);
+
+	for (unsigned int y = 0; y < DEFAULT_YRES; y++)
+		row_pointers[y] = (png_bytep) ((fb_pixel_t *)lbb + y * DEFAULT_XRES);
+
+	png_set_bgr(png_ptr);
+	png_set_IHDR(png_ptr, info_ptr, DEFAULT_XRES, DEFAULT_YRES, 8, PNG_COLOR_TYPE_RGBA,
+		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+	png_write_info(png_ptr, info_ptr);
+	png_write_image(png_ptr, row_pointers);
+	png_write_end(png_ptr, info_ptr);
+	png_destroy_write_struct(&png_ptr, &info_ptr);
+
+	fclose(out);
+	return true;
 }
 #endif
