@@ -354,6 +354,11 @@ int CNetworkSetup::showNetworkSetup()
 	}
 	
 	delete networkSettings;
+#ifdef EVOLUX
+	// Width may have changed.
+	CFrameBuffer::getInstance()->Clear();
+	CFrameBuffer::getInstance()->blit();
+#endif
 	return ret;
 }
 
