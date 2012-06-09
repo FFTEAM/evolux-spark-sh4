@@ -31,15 +31,15 @@ begin remote
 #					  Actual key name on Pingulux remote
 		KEY_POWER	0xDA25	# POWER
 		
-		KEY_RC		0x5AA5	# RC1/RC2
+		KEY_R		0x5AA5	# RC1/RC2
 		KEY_V		0x52AD	# V.FORMAT
 		KEY_TIME	0x728D	# TIME
 		KEY_MUTE	0x7A85	# MUTE
 		
 		KEY_T		0x1AE5	# Tms
-		KEY_PHOTO	0x12ED	# PIP
+		KEY_PRESENTATION	0x12ED	# PIP
 		KEY_F1		0x32CD	# F1
-		KEY_TVSAT	0x3AC5	# TV/SAT
+		KEY_AUX		0x3AC5	# TV/SAT
 		
 		KEY_1		0x4AB5	# 1
 		KEY_2		0x6A95	# 2
@@ -53,7 +53,7 @@ begin remote
 		KEY_8		0xEA15	# 8
 		KEY_9		0xC23D	# 9
 		
-		KEY_TVRADIO	0x8877	# TV/RADIO
+		KEY_TV2		0x8877	# TV/RADIO
 		KEY_0		0xA857	# 0
 		KEY_REPLY	0x807F	# RECALL
 		
@@ -120,15 +120,15 @@ begin remote
 #					  Actual key name on Pingulux remote
 		KEY_POWER	0xDA25	# POWER
 		
-		KEY_RC		0x5AA5	# RC1/RC2
+		KEY_R		0x5AA5	# RC1/RC2
 		KEY_V		0x52AD	# V.FORMAT
 		KEY_TIME	0x728D	# TIME
 		KEY_MUTE	0x7A85	# MUTE
 		
 		KEY_T		0x1AE5	# Tms
-		KEY_PHOTO	0x12ED	# PIP
+		KEY_PRESENTATION	0x12ED	# PIP
 		KEY_F1		0x32CD	# F1
-		KEY_TVSAT	0x3AC5	# TV/SAT
+		KEY_AUX		0x3AC5	# TV/SAT
 		
 		KEY_1		0x4AB5	# 1
 		KEY_2		0x6A95	# 2
@@ -142,7 +142,7 @@ begin remote
 		KEY_8		0xEA15	# 8
 		KEY_9		0xC23D	# 9
 		
-		KEY_TVRADIO	0x8877	# TV/RADIO
+		KEY_TV2		0x8877	# TV/RADIO
 		KEY_0		0xA857	# 0
 		KEY_REPLY	0x807F	# RECALL
 		
@@ -249,7 +249,7 @@ begin remote
 		KEY_FAVORITES	0x08F7	# unverified
 		KEY_SAT		0x44BB	# unverified
 		KEY_FIND	0xB24D	# unverified
-		ZOOM		0xA857	# unverified
+		KEY_ZOOM	0xA857	# unverified
 		KEY_ARCHIVE	0x04FB	# unverified
 		KEY_PHOTO	0x18E7	# unverified
 		KEY_PLAY	0x807F	# unverified
