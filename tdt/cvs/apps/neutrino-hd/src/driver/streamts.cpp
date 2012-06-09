@@ -356,6 +356,8 @@ void * streamts_live_thread(void *data)
 	// A non-blocking Read() will/may hang if channels are switched  --martii
 	int dmxfd = dmx->getFD();
         fcntl(dmxfd, F_SETFL, fcntl(dmxfd, F_GETFL) | O_NONBLOCK);
+	// give the demuxer a second to settle
+	sleep(1);
 #endif
 	while (!exit_flag) {
 		r = dmx->Read(buf, IN_SIZE, 100);
