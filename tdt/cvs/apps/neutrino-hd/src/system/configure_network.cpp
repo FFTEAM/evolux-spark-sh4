@@ -101,6 +101,9 @@ void CNetworkConfig::init_vars(void)
 
 	key = "";
 	ssid = "";
+#ifdef EVOLUX
+	encryption = "WPA2";
+#endif
 	wireless = 0;
 	std::string tmp = "/sys/class/net/" + ifname + "/wireless";
 
@@ -124,6 +127,9 @@ void CNetworkConfig::copy_to_orig(void)
 	orig_ifname	     = ifname;
 	orig_ssid	     = ssid;
 	orig_key	     = key;
+#ifdef EVOLUX
+	orig_encryption	     = encryption;
+#endif
 }
 
 bool CNetworkConfig::modified_from_orig(void)
@@ -149,6 +155,10 @@ bool CNetworkConfig::modified_from_orig(void)
 	if(wireless) {
 		if((ssid != orig_ssid) || (key != orig_key))
 			return 1;
+#ifdef EVOLUX
+		if(encryption != orig_encryption)
+			return 1;
+#endif
 	}
 	/* check for following changes with dhcp enabled trigger apply question on menu quit, 
 	 * even if apply already done */
@@ -200,7 +210,11 @@ void CNetworkConfig::commitConfig(void)
 			addLoopbackDevice("lo", true);
 			setDhcpAttributes(ifname, automatic_start, wireless);
 		}
+#ifdef EVOLUX
+		if(wireless && ((key != orig_key) || (ssid != orig_ssid) || (encryption != orig_encryption)))
+#else
 		if(wireless && ((key != orig_key) || (ssid != orig_ssid)))
+#endif
 			saveWpaConfig();
 
 		copy_to_orig();
@@ -261,6 +275,35 @@ void CNetworkConfig::stopNetwork(void)
 
 }
 
+#ifdef EVOLUX
+void CNetworkConfig::readWpaConfig()
+{
+	std::ifstream F("/etc/network/if-pre-up.d/wlan");
+	ssid = "";
+	key = "";
+	encryption = "WPA2";
+	if(F.is_open()) {
+		std::string line;
+		std::string authmode = "WPA2PSK";
+		while (std::getline(F, line)) {
+			if (line.length() < 5)
+		continue;
+		if (!line.compare(0, 3, "E=\""))
+			ssid = line.substr(3, line.length() - 4);
+		else if (!line.compare(0, 3, "A=\""))
+			authmode = line.substr(3, line.length() - 4);
+		else if (!line.compare(0, 3, "K=\""))
+			key = line.substr(3, line.length() - 4);
+		}
+		F.close();
+		if (authmode == "WPAPSK")
+			encryption = "WPA";
+	}
+#ifdef DEBUG
+	printf("CNetworkConfig::readWpaConfig: ssid %s key %s\n", ssid.c_str(), key.c_str());
+#endif
+}
+#else
 void CNetworkConfig::readWpaConfig()
 {
 	std::string   s;
@@ -300,12 +343,65 @@ void CNetworkConfig::readWpaConfig()
 	printf("CNetworkConfig::readWpaConfig: ssid %s key %s\n", ssid.c_str(), key.c_str());
 #endif
 }
+#endif
 
 void CNetworkConfig::saveWpaConfig()
 {
 #ifdef DEBUG
 	printf("CNetworkConfig::saveWpaConfig\n");
 #endif
+#ifdef EVOLUX
+	std::ofstream F("/etc/network/if-pre-up.d/wlan");
+	if(F.is_open()) {
+		chmod("/etc/network/if-pre-up.d/wlan", 0755);
+		// We don't have this information  --martii
+
+		std::string authmode = "WPA2PSK"; // WPA2
+		std::string encryptype = "AES"; // WPA2
+		std::string proto = "RSN";
+		if (encryption == "WPA") {
+			proto = "WPA";
+			authmode = "WPAPSK";
+			encryptype = "TKIP";
+		}
+		F << "#!/bin/sh\n"
+                  << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
+		  << "grep $IFACE: /proc/net/wireless >/dev/null 2>&1 || exit 0\n"
+		  << "kill -9 $(pidof wpa_supplicant 2>/dev/null) 2>/dev/null\n"
+		  << "E=\"" << ssid << "\"\n"
+		  << "A=\"" << authmode << "\"\n"
+		  << "C=\"" << encryptype << "\"\n"
+		  << "K=\"" << key << "\"\n"
+		  << "ifconfig $IFACE down\n"
+		  << "ifconfig $IFACE up\n"
+		  << "iwconfig $IFACE mode managed\n"
+		  << "iwconfig $IFACE essid \"$E\"\n"
+		  << "iwpriv $IFACE set AuthMode=$A\n"
+		  << "iwpriv $IFACE set EncrypType=$C\n"
+		  << "if ! iwpriv $IFACE set \"WPAPSK=$K\"\n"
+		  << "then\n"
+		  << "\t/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
+		  << "\tsleep 3\n"
+		  << "fi\n";
+		F.close();
+
+		F.open("/etc/wpa_supplicant.conf");
+		if(F.is_open()) {
+			F << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
+			  << "ctrl_interface=/var/run/wpa_supplicant\n\n"
+			  << "network={\n"
+			  << "\tscan_ssid=1\n"
+			  << "\tssid=\"" << ssid << "\"\n"
+			  << "\tkey_mgmt=WPA-PSK\n"
+			  << "\tproto=" << proto << "\n"
+			  << "\tpairwise=CCMP TKIP\n"
+			  << "\tgroup=CCMP TKIP\n"
+			  << "\tpsk=\"" << key << "\"\n"
+			  << "}\n";
+			F.close();
+		}
+	}
+#else
 	std::ofstream out("/etc/wpa_supplicant.conf");
 	if(!out.is_open()) {
 		perror("/etc/wpa_supplicant.conf write error");
@@ -321,67 +417,6 @@ void CNetworkConfig::saveWpaConfig()
 	out << "	pairwise=CCMP TKIP\n";
 	out << "	group=CCMP TKIP\n";
 	out << "}\n";
-
-#ifdef EVOLUX
-	std::ofstream F("/etc/network/if-pre-up.d/wlan");
-	if(F.is_open()) {
-		chmod("/etc/network/if-pre-up.d/wlan", 0755);
-#if 0
-		// We don't have this information  --martii
-
-		std::string authmode = "WPA2PSK"; // WPA2
-		std::string encryptype = "AES"; // WPA2
-		std::string proto = "RSN";
-		if (wlan_mode == "WPA") {
-			proto = "WPA";
-			authmode = "WPAPSK";
-			encryptype = "TKIP";
-		}
 #endif
-		F << "#!/bin/sh\n"
-                  << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
-		  << "grep $IFACE: /proc/net/wireless >/dev/null 2>&1 || exit 0\n"
-		  << "kill -9 $(pidof wpa_supplicant 2>/dev/null) 2>/dev/null\n"
-		  << "E=\"" << ssid << "\"\n"
-#if 0
-		  << "A=\"" << authmode << "\"\n"
-		  << "C=\"" << encryptype << "\"\n"
-		  << "K=\"" << wlan_key << "\"\n"
-#endif
-		  << "ifconfig $IFACE down\n"
-		  << "ifconfig $IFACE up\n"
-		  << "iwconfig $IFACE mode managed\n"
-		  << "iwconfig $IFACE essid \"$E\"\n"
-#if 0
-		  << "iwpriv $IFACE set AuthMode=$A\n"
-		  << "iwpriv $IFACE set EncrypType=$C\n"
-		  << "if ! iwpriv $IFACE set \"WPAPSK=$K\"\n"
-		  << "then\n"
-		  << "\t/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
-		  << "\tsleep 3\n"
-		  << "fi\n";
-#else
-		  << "/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n";
-#endif
-		F.close();
-#if 0
-		// This is our original version.  --martii
-		F.open("/etc/wpa_supplicant.conf");
-		if(F.is_open()) {
-			F << "ctrl_interface=/var/run/wpa_supplicant\n\n"
-			  << "network={\n"
-			  << "\tscan_ssid=1\n"
-			  << "\tssid=\"" << wlan_essid << "\"\n"
-			  << "\tkey_mgmt=WPA-PSK\n"
-			  << "\tproto=" << proto << "\n"
-			  << "\tpairwise=CCMP TKIP\n"
-			  << "\tgroup=CCMP TKIP\n"
-			  << "\tpsk=\"" << wlan_key << "\"\n"
-			  << "}\n";
-			F.close();
-		}
-#endif
-	}
-#endif // EVOLUX
 }
 

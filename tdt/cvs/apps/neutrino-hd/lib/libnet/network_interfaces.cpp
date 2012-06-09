@@ -356,10 +356,12 @@ bool setStaticAttributes(const std::string name, const bool automatic_start, con
 	attribute["address"] = address;
 	attribute["netmask"] = netmask;
 
+#ifndef EVOLUX
 	if(wireless) {
 		attribute["pre-up"] = "/etc/network/pre-" + name + ".sh";
 		attribute["post-down"] = "/etc/network/post-" + name + ".sh";
 	}
+#endif
 
 	if (!broadcast.empty())
 		attribute["broadcast"] = broadcast;

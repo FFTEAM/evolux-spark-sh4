@@ -1048,6 +1048,7 @@ networkmenu.setuponstartup Beim Start Netzwerk setzen
 networkmenu.show Aktive Einstellungen zeigen
 networkmenu.ssid Netzwerkname
 networkmenu.test Netzwerk testen
+networkmenu.wlan_security Sicherheit
 neutrino_starting Neutrino wird gestartet...
 nfs.alreadymounted Verzeichnis bereits gemountet.
 nfs.automount Beim Start mounten

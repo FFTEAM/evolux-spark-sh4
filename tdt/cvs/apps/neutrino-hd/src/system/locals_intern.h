@@ -1075,6 +1075,7 @@ const char * locale_real_names[] =
 	"networkmenu.show",
 	"networkmenu.ssid",
 	"networkmenu.test",
+	"networkmenu.wlan_security",
 	"neutrino_starting",
 	"nfs.alreadymounted",
 	"nfs.automount",
