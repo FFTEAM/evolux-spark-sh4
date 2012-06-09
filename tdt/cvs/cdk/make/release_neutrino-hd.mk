@@ -481,6 +481,7 @@ endif
 	rm $(prefix)/release_neutrino-hd/usr/local/share/config/blockad*
 	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino-hd/usr/local/share/config/zapit/
 	touch $(prefix)/release_neutrino-hd/etc/.EVOfirstboot
+	touch $(prefix)/release_neutrino-hd/etc/.corrvol
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino-hd/etc/
 if ENABLE_MULTI_YAFFS2
 	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release_neutrino-hd/sbin/
