@@ -2035,11 +2035,16 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 
 	g_volume->AudioMute(current_muted, true);
-	SHTDCNT::getInstance()->init();
 #ifdef EVOLUX
+	g_Zapit->getVolumePercent(&g_settings.current_volume_percent, g_RemoteControl->current_PIDs.PIDs.selected_apid);
+	g_volume->setpercent(g_settings.current_volume_percent);
+	if (!current_muted)
+		g_volume->setvol(g_settings.current_volume);
+	threeDSetup->exec(NULL, "zapped");
 	chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
 	chPSISetup->writeProcPSI();
 #endif
+	SHTDCNT::getInstance()->init();
 
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 	RealRun(personalize.getWidget(0)/**main**/);
