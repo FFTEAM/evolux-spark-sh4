@@ -402,6 +402,9 @@ if [ ! -e /var/etc/.firstboot ]; then
 						init 6
 					else
 						echo "shutting down..."
+						if [ -e /etc/.corrvol ]; then
+							cat /proc/stb/avs/0/volume > /etc/.lastVol
+						fi
 						init 0
 					fi
 				else
