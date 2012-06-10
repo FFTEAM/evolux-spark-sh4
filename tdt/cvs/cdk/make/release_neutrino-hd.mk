@@ -220,6 +220,8 @@ endif
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release_neutrino-hd/lib/modules/
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release_neutrino-hd/lib/modules/
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko $(prefix)/release_neutrino-hd/lib/modules/
+	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release_neutrino-hd/lib/modules/
+
 
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino-hd/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino-hd/sbin

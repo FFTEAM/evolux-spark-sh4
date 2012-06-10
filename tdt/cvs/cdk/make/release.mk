@@ -120,6 +120,7 @@ endif
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules
 
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release/lib/modules || true
+	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release/lib/modules/
 
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release/etc/
 #	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release/etc/auto.usb
