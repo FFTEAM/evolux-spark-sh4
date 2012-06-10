@@ -1794,7 +1794,6 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 
 	audioSetupNotifier        = new CAudioSetupNotifier;
 #ifdef EVOLUX
-	audioSetupNotifier->changeNotify(LOCALE_AUDIOMENU_AC3DOWNMIX, NULL);
 	audioSetupNotifierVolPercent = new CAudioSetupNotifierVolPercent;
 #endif
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
@@ -2011,6 +2010,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 		configfile.setModifiedFlag(true);
 		saveSetup(NEUTRINO_SETTINGS_FILE);
 	}
+
 #ifndef EVOLUX
 #ifndef ASSUME_MDEV
         system("mkdir /media/sda1 2> /dev/null");
@@ -2036,10 +2036,6 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 
 	g_volume->AudioMute(current_muted, true);
 #ifdef EVOLUX
-	g_Zapit->getVolumePercent(&g_settings.current_volume_percent, g_RemoteControl->current_PIDs.PIDs.selected_apid);
-	g_volume->setpercent(g_settings.current_volume_percent);
-	if (!current_muted)
-		g_volume->setvol(g_settings.current_volume);
 	threeDSetup->exec(NULL, "zapped");
 	chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
 	chPSISetup->writeProcPSI();
@@ -2315,14 +2311,26 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				CMediaPlayerMenu * media = CMediaPlayerMenu::getInstance();
 				media->setMenuTitel(LOCALE_MAINMENU_AUDIOPLAYER);
 				media->setUsageMode(CMediaPlayerMenu::MODE_AUDIO);
+#ifdef EVOLUX
+				int old_percent = audioDecoder->setPercent(100);
+#endif
 				media->exec(NULL, "");
+#ifdef EVOLUX
+				audioDecoder->setPercent(old_percent);
+#endif
 			}
 			else if( msg == CRCInput::RC_video || msg == CRCInput::RC_play ) {
 				//open moviebrowser via media player menu object
 #ifdef ENABLE_GRAPHLCD
 				nGLCD::lockChannel("MoviePlayer");
 #endif
+#ifdef EVOLUX
+				int old_percent = audioDecoder->setPercent(100);
+#endif
 				CMediaPlayerMenu::getInstance()->exec(NULL,"movieplayer");
+#ifdef EVOLUX
+				audioDecoder->setPercent(old_percent);
+#endif
 #ifdef ENABLE_GRAPHLCD
 				nGLCD::unlockChannel();
 #endif
@@ -2405,11 +2413,6 @@ int CNeutrinoApp::handleMsg(const neutrino_msg_t _msg, neutrino_msg_data_t data)
 			g_settings.audio_AnalogMode = 0;
 
 #ifdef EVOLUX
-		// per-audio-channel volume adjustment
-		g_Zapit->getVolumePercent(&g_settings.current_volume_percent, g_RemoteControl->current_PIDs.PIDs.selected_apid);
-		g_volume->setpercent(g_settings.current_volume_percent);
-		if (!current_muted)
-			g_volume->setvol(g_settings.current_volume);
 		threeDSetup->exec(NULL, "zapped");
 #else
 #if 0 // per-channel auto volume save/restore

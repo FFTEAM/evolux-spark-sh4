@@ -114,7 +114,6 @@ audio.srs_iq SRS TruVolume Technologie
 audio.srs_nmgr Noise-Manager
 audio.srs_volume Referenzlautstärke
 audiomenu.PCMOffset Lautstärkeabsenkung PCM
-audiomenu.ac3downmix AC3 downmix
 audiomenu.analog_mode Analog Modus
 audiomenu.analog_out Analog-Ausgang
 audiomenu.auto_lang Tonwahl automatisch

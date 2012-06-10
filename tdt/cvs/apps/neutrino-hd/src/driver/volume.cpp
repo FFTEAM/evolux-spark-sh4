@@ -65,9 +65,6 @@ CVolume::CVolume()
 	ShadowOffset	= 4;
 	mute_ay		= 0;
 	m_mode = CNeutrinoApp::getInstance()->getMode();
-#ifdef EVOLUX
-	percent		= 100;
-#endif
 
 	Init();
 }
@@ -226,12 +223,6 @@ void CVolume::AudioMute(int newValue, bool isEvent)
 
 void CVolume::setvol(int vol)
 {
-#ifdef EVOLUX
-	vol *= percent;
-	vol /= 100;
-	if (vol > 63)
-		vol = 63;
-#endif
 	audioDecoder->setVolume(vol, vol);
 }
 

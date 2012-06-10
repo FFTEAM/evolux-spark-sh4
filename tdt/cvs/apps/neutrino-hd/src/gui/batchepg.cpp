@@ -35,6 +35,7 @@
 #include <system/debug.h>
 #include <system/safe_system.h>
 
+#include <driver/rcinput.h>
 #include <driver/volume.h>
 
 #include <global.h>
