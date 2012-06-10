@@ -115,7 +115,7 @@ endif
 
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	[ -f $(driverdir)/cec/enigma2-plugin/plugin.py ] && cp -RP $(driverdir)/cec/enigma2-plugin $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/plugins/Extensions/cec
+	[ -f $(driverdir)/cec/enigma2-plugin/plugin.py ] && mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/plugins/Extensions/cec && cp -RP $(driverdir)/cec/enigma2-plugin/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/plugins/Extensions/cec/
 
 #	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release-enigma2-pli-nightly/etc/
 #	echo 'sda    -fstype=auto,noatime,nodiratime          :/dev/sda' >> $(prefix)/release-enigma2-pli-nightly/etc/auto.usb
