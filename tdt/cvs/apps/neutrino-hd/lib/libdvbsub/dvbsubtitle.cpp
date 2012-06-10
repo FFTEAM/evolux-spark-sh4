@@ -261,6 +261,9 @@ void cDvbSubtitleConverter::Pause(bool pause)
 
 void cDvbSubtitleConverter::Clear(void)
 {
+#ifdef EVOLUX
+	CFrameBuffer::getInstance()->Clear();
+#else
 //	dbgconverter("cDvbSubtitleConverter::Clear: x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
 	if(running && (max_x-min_x > 0) && (max_y-min_y > 0)) {
 		CFrameBuffer::getInstance()->paintBackgroundBoxRel (min_x, min_y, max_x-min_x, max_y-min_y);
@@ -271,6 +274,7 @@ void cDvbSubtitleConverter::Clear(void)
 		max_y = screen_h;
 		//CFrameBuffer::getInstance()->paintBackground();
 	}
+#endif
 }
 
 void cDvbSubtitleConverter::Reset(void)
