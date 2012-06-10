@@ -38,7 +38,8 @@ libtool-2.2.6a.tar.gz;http://ftp.gnu.org/gnu/libtool/
 #
 #busybox-1.19.3.tar.bz2;http://www.busybox.net/downloads
 #busybox-1.19.4.tar.bz2;http://www.busybox.net/downloads
-busybox-1.20.0.tar.bz2;http://www.busybox.net/downloads
+#busybox-1.20.0.tar.bz2;http://www.busybox.net/downloads
+busybox-1.20.1.tar.bz2;http://www.busybox.net/downloads
 lsb_3.2-20.tar.gz;http://ftp.uni-erlangen.de/pub/debian/pool/main/l/lsb;http://debian.sdinet.de/etch/sdinet/lsb;ftp://debian.sil.at/grml/src/grml64-small_2008.11/lsb
 #lsb_3.2-20.tar.gz;http://190.9.128.108/repositorios/universo/pool/main/l/lsb
 # lsb_3.2-12.tar.gz;http://ftp.de.debian.org/debian/pool/main/l/lsb
