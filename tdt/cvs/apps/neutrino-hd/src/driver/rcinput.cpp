@@ -173,11 +173,6 @@ void CRCInput::open(int dev)
 			if (i != dev || fd_rc[i] != -1)
 				continue;
 		}
-#ifdef EVOLUX
-		// skip tdt_rc if lirc rc is there
-		if (i == 1 && fd_rc[0] > -1)
-			continue;
-#endif
 		if ((fd_rc[i] = ::open(RC_EVENT_DEVICE[i], O_RDWR)) == -1)
 #ifdef EVOLUX
 			while(0);

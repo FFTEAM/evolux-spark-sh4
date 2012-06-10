@@ -224,8 +224,7 @@ int CMiscMenue::showMiscSettingsMenu()
 	
 	misc_menue->addItem(GenericMenuSeparatorLine);
 	
-//#if !HAVE_TRIPLEDRAGON
-#if !HAVE_TRIPLEDRAGON && !HAVE_SPARK_HARDWARE // EVOLUX
+#if !HAVE_TRIPLEDRAGON
 	//cec settings
 	misc_menue->addItem(new CMenuForwarder(LOCALE_VIDEOMENU_HDMI_CEC, true, NULL, new CCECSetup() , NULL, CRCInput::RC_1));
 #else
