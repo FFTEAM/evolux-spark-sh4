@@ -6742,7 +6742,7 @@ int GetRCCode()
 printf("[tuxtxt] new key, code %X\n", RCCode);
 #ifdef EVOLUX
 				// purge input buffer
-				if(!(val & O_NONBLOCK))
+				if(val & O_NONBLOCK)
 					while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
 #endif
 				return 1;
