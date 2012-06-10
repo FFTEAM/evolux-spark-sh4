@@ -465,6 +465,9 @@ bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void 
 	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_HDMI_DD)) {
 		audioDecoder->SetHdmiDD((HDMI_ENCODED_MODE) g_settings.hdmi_dd);
 	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_SPDIF_DD)) {
+#ifdef EVOLUX
+		// this is actually the same as AC3 Downmix
+#endif
 		audioDecoder->SetSpdifDD(g_settings.spdif_dd ? true : false);
 	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_AVSYNC)) {
 		videoDecoder->SetSyncMode((AVSYNC_TYPE)g_settings.avsync);
@@ -475,20 +478,6 @@ bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void 
 	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_CLOCKREC)) {
 		//.Clock recovery enable/disable
 		// FIXME add code here.
-#ifdef EVOLUX
-	} else if (ARE_LOCALES_EQUAL(OptionName, LOCALE_AUDIOMENU_AC3DOWNMIX)) {
-		int proc_stb_audio_ac3 = open ("/proc/stb/audio/ac3", O_WRONLY);
-		if (proc_stb_audio_ac3 > -1) {
-			std::string cmd = "downmix\n";
-			switch (g_settings.audio_ac3downmix){
-			case 0:
-				cmd = "passthrough\n";
-				break;
-			}
-			write(proc_stb_audio_ac3, cmd.c_str(), cmd.length());
-			close(proc_stb_audio_ac3);
-		}
-#endif
 	} else { // FIXME atm used for SRS
 		audioDecoder->SetSRS(g_settings.srs_enable, g_settings.srs_nmgr_enable, g_settings.srs_algo, g_settings.srs_ref_volume);
 	}
@@ -507,19 +496,19 @@ bool CAudioSetupNotifierVolPercent::changeNotify(const neutrino_locale_t OptionN
 	else
 		g_settings.current_volume_percent -= 4;
 
+	int v = audioDecoder->getVolume();
 	if (g_settings.current_volume_percent < 0)
 		g_settings.current_volume_percent = 0;
-	else if (g_settings.current_volume_percent > 999)
-		g_settings.current_volume_percent = 999;
-
-	g_settings.current_volume_percent /= 5;
-	g_settings.current_volume_percent *= 5;
+	else if (v * g_settings.current_volume_percent > 10000)
+		g_settings.current_volume_percent = 10000 / v;
+	else {
+		g_settings.current_volume_percent /= 5;
+		g_settings.current_volume_percent *= 5;
+	}
 	*((int *) (data)) = g_settings.current_volume_percent;
 
-	CZapitClient zapit;
-	zapit.setVolumePercent(g_settings.current_volume_percent);
-	CVolume::getInstance()->setpercent(g_settings.current_volume_percent);
-	CVolume::getInstance()->setvol(g_settings.current_volume);
+	g_Zapit->setVolumePercent(g_settings.current_volume_percent);
+	audioDecoder->setPercent(g_settings.current_volume_percent);
 	return true;
 }
 #endif

@@ -1871,6 +1871,9 @@ void CFrameBuffer::set3DMode(Mode3D m) {
 }
 
 bool CFrameBuffer::OSDShot(const std::string &name) {
+	struct timeval ts, te;
+	gettimeofday(&ts, NULL);
+
 	size_t l = name.find_last_of(".");
 	if(l == std::string::npos)
 		return false;
@@ -1890,6 +1893,7 @@ bool CFrameBuffer::OSDShot(const std::string &name) {
 	for (unsigned int y = 0; y < DEFAULT_YRES; y++)
 		row_pointers[y] = (png_bytep) ((fb_pixel_t *)lbb + y * DEFAULT_XRES);
 
+	png_set_compression_level(png_ptr, 1);
 	png_set_bgr(png_ptr);
 	png_set_IHDR(png_ptr, info_ptr, DEFAULT_XRES, DEFAULT_YRES, 8, PNG_COLOR_TYPE_RGBA,
 		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
@@ -1899,6 +1903,9 @@ bool CFrameBuffer::OSDShot(const std::string &name) {
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
 	fclose(out);
+
+	gettimeofday(&te, NULL);
+	fprintf(stderr, "%s took %lld us\n", __func__, (te.tv_sec * 1000000LL + te.tv_usec) - (ts.tv_sec * 1000000LL + ts.tv_usec));
 	return true;
 }
 #endif

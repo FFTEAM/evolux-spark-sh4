@@ -27,9 +27,6 @@
 
 #ifndef __CVOLUME__
 #define __CVOLUME__
-#ifdef EVOLUX
-#include <driver/rcinput.h>
-#endif
 
 #define ROUNDED g_settings.rounded_corners ? vbar_h/2 : 0
 
@@ -49,9 +46,6 @@ class CVolume
 		int ShadowOffset;
 		int rounded;
 		int m_mode;
-#ifdef EVOLUX
-		int percent;
-#endif
 		bool paintShadow, paintDigits, MuteIconFrame;
 
 	public:
@@ -62,9 +56,6 @@ class CVolume
 		int spacer, mute_dx;
 		void Init();
 		void AudioMute(int newValue, bool isEvent= false);
-#ifdef EVOLUX
-		void setpercent(int p) { percent = p; }
-#endif
 		void setvol(int vol);
 		void setVolume(const neutrino_msg_t key, const bool bDoPaint = true, bool nowait = false);
 		int getStartPosTop(){ return sy; }

@@ -37,6 +37,9 @@ cAudio::cAudio(void *, void *, void *)
 	mixer_fd = -1;
 	openDevice();
 	Muted = false;
+#ifdef EVOLUX
+	percent = 100;
+#endif
 }
 
 cAudio::~cAudio(void)
@@ -108,7 +111,11 @@ int cAudio::setVolume(unsigned int left, unsigned int right)
 	lt_debug("%s(%d, %d)\n", __func__, left, right);
 
 	volume = (left + right) / 2;
+#ifdef EVOLUX
+	int v = map_volume((volume * percent)/100);
+#else
 	int v = map_volume(volume);
+#endif
 	if (clipfd != -1 && mixer_fd != -1) {
 		int tmp = 0;
 		/* not sure if left / right is correct here, but it is always the same anyways ;-) */
@@ -425,3 +432,20 @@ void cAudio::setBypassMode(bool disable)
 	lt_debug("%s %d\n", __func__, disable);
 	proc_put("/proc/stb/audio/ac3", opt[disable], strlen(opt[disable]));
 }
+
+#ifdef EVOLUX
+int cAudio::getPercent(void) {
+	return percent;
+}
+
+int cAudio::setPercent(int perc) {
+	lt_debug("%s %d (muted: %d)\n", __func__, perc, Muted);
+	int old_percent = percent;
+	percent = perc;
+	if (percent < 0 || percent > 999)
+		percent = 100;
+	if(!Muted)
+		setVolume(volume, volume);
+	return old_percent;
+}
+#endif

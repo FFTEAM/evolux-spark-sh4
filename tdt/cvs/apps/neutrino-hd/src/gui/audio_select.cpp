@@ -41,6 +41,7 @@
 #include <gui/widget/menue.h>
 #include <driver/screen_max.h>
 #ifdef EVOLUX
+#include <audio.h>
 #include <driver/volume.h>
 #endif
 
@@ -48,6 +49,7 @@ extern CRemoteControl		* g_RemoteControl; /* neutrino.cpp */
 extern CAudioSetupNotifier	* audioSetupNotifier;
 #ifdef EVOLUX
 extern CAudioSetupNotifierVolPercent	* audioSetupNotifierVolPercent;
+extern cAudio * audioDecoder;
 #endif
 
 #include <gui/audio_select.h>
@@ -82,16 +84,20 @@ int CAudioSelectMenuHandler::exec(CMenuTarget* parent, const std::string &action
 {
 	int sel= atoi(actionkey.c_str());
 	if(sel >= 0) {
+#ifdef EVOLUX
+		if (g_RemoteControl->current_PIDs.PIDs.selected_apid != (unsigned int) sel )
+		{
+			g_Zapit->setVolumePercent((unsigned int) g_settings.current_volume_percent);
+			g_RemoteControl->setAPID(sel);
+			g_Zapit->getVolumePercent((unsigned int *) &g_settings.current_volume_percent);
+			audioDecoder->setPercent(g_settings.current_volume_percent);
+		}
+#else
 		if (g_RemoteControl->current_PIDs.PIDs.selected_apid!= (unsigned int) sel )
 		{
 			g_RemoteControl->setAPID(sel);
-#ifdef EVOLUX
-			int percent;
-			g_Zapit->getVolumePercent((unsigned int *) &percent, g_RemoteControl->current_PIDs.APIDs[sel].pid);
-			CVolume::getInstance()->setpercent(percent);
-			CVolume::getInstance()->setvol(g_settings.current_volume);
-#endif
 		}
+#endif
 		return menu_return::RETURN_EXIT;
 	}
 
@@ -141,11 +147,13 @@ int CAudioSelectMenuHandler::doMenu ()
 
 	AudioSelector.addItem( oj );
 
+#ifndef EVOLUX // should be: HAVE_SPARK_HARDWARE
 	oj = new CMenuOptionChooser(LOCALE_AUDIOMENU_ANALOG_OUT, &g_settings.analog_out,
 			 OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, 
 			true, audioSetupNotifier, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN);
 
 	AudioSelector.addItem( oj );
+#endif
 
 	CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
 	int curnum = channelList->getActiveChannelNumber();
@@ -195,18 +203,21 @@ int CAudioSelectMenuHandler::doMenu ()
 		if(sep_added) 
 			AudioSelector.addItem(new CMenuForwarder(LOCALE_SUBTITLES_STOP, true, NULL, &SubtitleChanger, "off", CRCInput::RC_stop));
 	}
+
 #ifdef EVOLUX
 	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUSTMENT));
 
 	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
 	for(int count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) {
 		g_Zapit->getVolumePercent((unsigned int *) &percent[count], g_RemoteControl->current_PIDs.APIDs[count].pid);
+		int is_active = count == g_RemoteControl->current_PIDs.PIDs.selected_apid;
 		AudioSelector.addItem(new CMenuOptionNumberChooser(NONEXISTANT_LOCALE, &percent[count],
-			count == g_RemoteControl->current_PIDs.PIDs.selected_apid,
+			is_active,
 			0, 999, audioSetupNotifierVolPercent, 0, 0, NONEXISTANT_LOCALE,
 			g_RemoteControl->current_PIDs.APIDs[count].desc));
+		if (is_active)
+			g_settings.current_volume_percent = percent[count];
 	}
 #endif
-
 	return AudioSelector.exec(NULL, "");
 }

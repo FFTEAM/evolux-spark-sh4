@@ -152,10 +152,6 @@ int CAudioSetup::showAudioSetup()
 	//dd via spdif
 	CMenuOptionChooser * as_oj_dd_spdif 	= new CMenuOptionChooser(LOCALE_AUDIOMENU_SPDIF_DD, &g_settings.spdif_dd, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, audioSetupNotifier);
 	
-#ifdef EVOLUX
-	// dd downmix	
-	CMenuOptionChooser * as_oj_dd_downmix	= new CMenuOptionChooser(LOCALE_AUDIOMENU_AC3DOWNMIX, &g_settings.audio_ac3downmix, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, audioSetupNotifier);
-#endif
 	//av synch
 	CMenuOptionChooser * as_oj_avsync	= new CMenuOptionChooser(LOCALE_AUDIOMENU_AVSYNC, &g_settings.avsync, AUDIOMENU_AVSYNC_OPTIONS, AUDIOMENU_AVSYNC_OPTION_COUNT, true, audioSetupNotifier);
 	
@@ -199,9 +195,6 @@ int CAudioSetup::showAudioSetup()
 	audioSettings->addItem(GenericMenuSeparatorLine);
 	//---------------------------------------------------------
 	audioSettings->addItem(as_oj_avsync);
-#ifdef EVOLUX
-	audioSettings->addItem(as_oj_dd_downmix);
-#endif
 	audioSettings->addItem(as_oj_vsteps);
 //	audioSettings->addItem(as_clockrec);
 	//---------------------------------------------------------

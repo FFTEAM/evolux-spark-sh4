@@ -114,7 +114,6 @@ audio.srs_iq SRS TruVolume algo
 audio.srs_nmgr Noise manager
 audio.srs_volume Reference volume
 audiomenu.PCMOffset Volume Reduction PCM
-audiomenu.ac3downmix AC3 downmix
 audiomenu.analog_mode Analog mode
 audiomenu.analog_out Analog output
 audiomenu.auto_lang Auto select audio

@@ -67,6 +67,7 @@
 
 #include <driver/abstime.h>
 #ifdef EVOLUX
+#include <driver/rcinput.h>
 #include <driver/volume.h>
 #endif
 #include "libdvbsub/dvbsub.h"
@@ -426,13 +427,15 @@ void CZapit::RestoreChannelPids(CZapitChannel * channel)
 	}
 	/* restore saved stereo / left / right channel mode */
 	//audioDecoder->setVolume(volume_left, volume_right);
-#ifdef EVOLUX_FIXME
+#ifdef EVOLUX
 	t_chan_apid chan_apid = make_pair(live_channel_id, channel->getAudioPid());
 		volume_map_it = volume_map.find(chan_apid);
-		if((volume_map_it != volume_map.end()) )
-			setvolume(volume_map_it->second);
-		else if (channel->getAudioChannel()) {
-			setvolume((channel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3) ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
+	if((volume_map_it != volume_map.end()) )
+		audioDecoder->setPercent(volume_map_it->second);
+	else if (channel->getAudioChannel()) {
+		audioDecoder->setPercent(
+			(channel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3)
+			? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
 	}
 #endif
 	audioDecoder->setChannel(audio_mode);
@@ -648,13 +651,15 @@ void CZapit::SetAudioStreamType(CZapitAudioChannel::ZapitAudioChannelType audioC
 
 	printf("[zapit] starting %s audio\n", audioStr);
 
-#ifdef EVOLUX_FIXME
+#ifdef EVOLUX
 	t_chan_apid chan_apid = make_pair(live_channel_id, current_channel->getAudioPid());
 	volume_map_it = volume_map.find(chan_apid);
 	if((volume_map_it != volume_map.end()) )
-		setvolume(volume_map_it->second);
+		audioDecoder->setPercent(volume_map_it->second);
 	else
-		setvolume((audioChannelType == CZapitAudioChannel::AC3) ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
+		audioDecoder->setPercent(
+			(audioChannelType == CZapitAudioChannel::AC3)
+			? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
 #endif
 }
 
@@ -693,13 +698,15 @@ bool CZapit::ChangeAudioPid(uint8_t index)
 	if (audioDemux->Start() < 0)
 		return false;
 
-#ifdef EVOLUX_FIXME
+#ifdef EVOLUX
 	t_chan_apid chan_apid = make_pair(live_channel_id, current_channel->getAudioPid());
 	volume_map_it = volume_map.find(chan_apid);
 	if (volume_map_it != volume_map.end())
-		setvolume(volume_map[chan_apid]);
+		audioDecoder->setPercent(volume_map[chan_apid]);
 	else
-		setvolume((currentAudioChannel->audioChannelType == CZapitAudioChannel::AC3) ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
+		audioDecoder->setPercent(
+			(currentAudioChannel->audioChannelType == CZapitAudioChannel::AC3)
+			? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM);
 #endif
 
 	/* start audio playback */
@@ -1618,15 +1625,14 @@ printf("[zapit] TP_id %d freq %d rate %d fec %d pol %d\n", TP.TP_id, TP.feparams
 		volume_map_it = volume_map.find(chan_apid);
 		if (volume_map_it != volume_map.end())
 			msgVolumePercent.percent = volume_map[chan_apid];
-		else {
-			for (int  i = 0; i < current_channel->getAudioChannelCount(); i++) {
+		else for (int  i = 0; i < current_channel->getAudioChannelCount(); i++)
 				if (msgVolumePercent.apid == current_channel->getAudioPid(i)) {
-					msgVolumePercent.percent = (current_channel->getAudioChannel(i)->audioChannelType == CZapitAudioChannel::AC3) ? VOLUME_DEFAULT_AC3 : VOLUME_DEFAULT_PCM;
-					volume_map[chan_apid] = msgVolumePercent.percent;
+					msgVolumePercent.percent =
+						(current_channel->getAudioChannel(i)->audioChannelType == CZapitAudioChannel::AC3)
+						? VOLUME_DEFAULT_AC3
+						: VOLUME_DEFAULT_PCM;
 					break;
 				}
-			}
-		}
 		CBasicServer::send_data(connfd, &msgVolumePercent, sizeof(msgVolumePercent));
 		break;
 	}
