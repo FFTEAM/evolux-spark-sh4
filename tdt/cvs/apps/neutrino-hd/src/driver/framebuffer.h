@@ -116,7 +116,9 @@ class CFrameBuffer
 		void * int_convertRGB2FB(unsigned char *rgbbuff, unsigned long x, unsigned long y, int transp, bool alpha);
 #if HAVE_SPARK_HARDWARE
 		void blitRect(int x, int y, int width, int height, unsigned long color);
+#ifndef EVOLUX
 		void blitIcon(int src_width, int src_height, int fb_x, int fb_y, int width, int height);
+#endif
 #endif
 		int m_transparent_default, m_transparent;
 
@@ -132,6 +134,7 @@ class CFrameBuffer
 
 #ifdef EVOLUX
 		void init(const char * const fbDevice = "/dev/fb0");
+		void blitIcon(int src_width, int src_height, int fb_x, int fb_y, int width, int height);
 #else
 		void init(const char * const fbDevice = "/dev/fb/0");
 #endif

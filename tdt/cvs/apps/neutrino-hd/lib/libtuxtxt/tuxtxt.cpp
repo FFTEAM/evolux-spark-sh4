@@ -6660,10 +6660,8 @@ int GetRCCode()
 	struct input_event ev;
 	static __u16 rc_last_key = KEY_RESERVED;
 #ifdef EVOLUX
-	struct timeval tv;
-        gettimeofday(&tv, NULL);
         static uint64_t time_last = 0;
-        uint64_t time_now = (uint64_t) tv.tv_usec + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+	RCCode = -1;
 #endif
 
 	int val = fcntl(rc, F_GETFL);
@@ -6676,13 +6674,24 @@ int GetRCCode()
 		if (ev.value)
 		{
 #ifdef EVOLUX
+        		uint64_t time_now = (uint64_t) ev.time.tv_usec + (uint64_t)((uint64_t) ev.time.tv_sec * (uint64_t) 1000000);
 			if (ev.code == rc_last_key && time_last + 100000 /* us */ > time_now
 				&& (ev.code == KEY_DOWN || ev.code == KEY_UP || ev.code == KEY_LEFT || ev.code == KEY_RIGHT)) {
-				RCCode = -1;
+				// purge input buffer
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val | O_NONBLOCK);
+					while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val);
 				return 0;
 			}
 			if (ev.code == rc_last_key && time_last + 250000 /* us */ > time_now) {
-				RCCode = -1;
+				// purge input buffer
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val | O_NONBLOCK);
+					while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val);
 				return 0;
 			}
 			if (time_last + 250000 < time_now)
@@ -6742,22 +6751,34 @@ int GetRCCode()
 printf("[tuxtxt] new key, code %X\n", RCCode);
 #ifdef EVOLUX
 				// purge input buffer
-				if(val & O_NONBLOCK)
-					while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val | O_NONBLOCK);
+				while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+				if(!(val & O_NONBLOCK))
+					fcntl(rc, F_SETFL, val);
 #endif
 				return 1;
 			}
 		}
+#ifndef EVOLUX
 		else
 		{
 			RCCode = -1;
-#ifndef EVOLUX
 			rc_last_key = KEY_RESERVED;
-#endif
 		}
+#endif
 	}
 
+#ifdef EVOLUX
+	// purge input buffer
+	if(!(val & O_NONBLOCK))
+		fcntl(rc, F_SETFL, val | O_NONBLOCK);
+	while (read(rc, &ev, sizeof(ev)) == sizeof(ev));
+	if(!(val & O_NONBLOCK))
+		fcntl(rc, F_SETFL, val);
+#else
 	RCCode = -1;
+#endif
 	usleep(1000000/25);
 
 	return 0;

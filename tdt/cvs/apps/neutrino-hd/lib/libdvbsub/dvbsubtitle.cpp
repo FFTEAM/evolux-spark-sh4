@@ -104,6 +104,54 @@ fb_pixel_t * simple_resize32(uint8_t * orgin, uint32_t * colors, int nb_colors, 
 
 void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 {
+#ifdef EVOLUX
+#define DEFAULT_XRES 1280
+#define DEFAULT_YRES 720
+
+	if (!Count())
+		return;
+
+	dbgconverter("cDvbSubtitleBitmaps::%s: start\n", __func__);
+
+	CFrameBuffer* fb = CFrameBuffer::getInstance();
+	fb_pixel_t *b = fb->getBackBufferPointer();
+
+	int picture_xres = 0, picture_yres = 0;
+
+	switch(sub.rects[0]->h) {
+	case 48:	// 1280x48
+		picture_xres = 1280;
+		picture_yres = 720;
+		break;
+	case 44:	// 720x44
+	default:	// assume default
+		picture_xres = 720;
+		picture_yres = 576;
+	}
+
+	for (int i = 0; i < Count(); i++) {
+		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
+		int width = sub.rects[i]->w;
+		int height = sub.rects[i]->h;
+		size_t bs = sub.rects[i]->h * sub.rects[i]->w;
+		uint8_t *origin = sub.rects[i]->pict.data[0];
+		int nb_colors = sub.rects[i]->nb_colors;
+
+		for (int j = 0; j < bs; j++)
+			if (origin[j] < nb_colors)
+				b[j] = colors[origin[j]];
+
+		int width_new = (width * DEFAULT_XRES) / picture_xres;
+		int height_new = (height * DEFAULT_YRES) / picture_yres;
+
+		dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
+			i, sub.rects[i]->x, sub.rects[i]->y, width, height, sub.rects[i]->nb_colors);
+		fb->blitIcon(width, height, 0, (sub.rects[i]->y * DEFAULT_YRES)/picture_yres, width_new, height_new);
+		fb->blit();
+	}
+
+	dbgconverter("cDvbSubtitleBitmaps::%s: done\n", __func__);
+#else // EVOLUX
 	int i;
 #ifndef HAVE_SPARK_HARDWARE
 	int stride = CFrameBuffer::getInstance()->getScreenWidth(true);
@@ -187,6 +235,7 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 //	if(Count())
 //		dbgconverter("cDvbSubtitleBitmaps::Draw: finish, min/max screen: x=% d y= %d, w= %d, h= %d\n", min_x, min_y, max_x-min_x, max_y-min_y);
 //	dbgconverter("\n");
+#endif // EVOLUX
 }
 
 static int screen_w, screen_h, screen_x, screen_y;
