@@ -31,3 +31,35 @@ begin
      flags  = mode
 end
 
+begin
+     button = KEY_USB
+     prog   = irexec
+     config = /usr/bin/functions.sh 0
+     mode   = mode_USB
+     repeat = 0
+     delay  = 0
+     flags  = mode 
+end
+begin
+     button = KEY_F3
+     prog   = irexec
+     config = /usr/bin/functions.sh 1
+     mode   = mode_F3
+     repeat = 0
+     delay  = 0
+     flags  = mode 
+end
+
+begin
+     button = KEY_OK
+     button = KEY_POWER
+     button = KEY_POWER
+     button = KEY_POWER
+     button = KEY_POWER
+     prog   = irexec
+     config = /usr/bin/functions.sh 2
+     mode   = mode_POWER              
+     repeat = 0    
+     delay  = 0   
+     flags  = mode
+end
