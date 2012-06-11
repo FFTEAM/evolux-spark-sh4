@@ -225,8 +225,10 @@ int CMiscMenue::showMiscSettingsMenu()
 	misc_menue->addItem(GenericMenuSeparatorLine);
 	
 #if !HAVE_TRIPLEDRAGON
+#ifndef EVOLUX // CEC support isn't yet implemented in video.c  --martii
 	//cec settings
 	misc_menue->addItem(new CMenuForwarder(LOCALE_VIDEOMENU_HDMI_CEC, true, NULL, new CCECSetup() , NULL, CRCInput::RC_1));
+#endif
 #else
 	// if (cs_get_revision() == 1)
 		misc_menue->addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_SLEEPTIMER, true, g_settings.shutdown_min, new CSleepTimerWidget, "permanent", CRCInput::RC_1));
