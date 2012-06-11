@@ -180,7 +180,7 @@ libusb2;1.0.8;libusb-1.0.8;libusb-1.0.8.tar.bz2;extract:libusb-1.0.8.tar.bz2
 libusbcompat;0.1.3;libusb-compat-0.1.3;libusb-compat-0.1.3.tar.bz2;extract:libusb-compat-0.1.3.tar.bz2
 libgd2;2.0.35;gd-2.0.35;gd-2.0.35.tar.gz;extract:gd-2.0.35.tar.gz
 #rtmpdump;2.3;rtmpdump-2.3;rtmpdump-2.3.tgz;extract:rtmpdump-2.3.tgz
-rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4
+rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz
 pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz
 libdvbsipp;0.3.6;libdvbsi++-0.3.6;libdvbsi++-0.3.6.tar.bz2;extract:libdvbsi++-0.3.6.tar.bz2;patch:libdvbsi++-0.3.6-fix_unaligned_access.patch
 libtuxtxt;1.0;tuxtxt/libtuxtxt;;
