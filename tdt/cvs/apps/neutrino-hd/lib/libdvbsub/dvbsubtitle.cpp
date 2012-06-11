@@ -146,7 +146,9 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 
 		dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 			i, sub.rects[i]->x, sub.rects[i]->y, width, height, sub.rects[i]->nb_colors);
-		fb->blitIcon(width, height, 0, (sub.rects[i]->y * DEFAULT_YRES)/picture_yres, width_new, height_new);
+		fb->blitIcon(width, height,
+			(sub.rects[i]->x * DEFAULT_XRES)/picture_xres,
+			(sub.rects[i]->y * DEFAULT_YRES)/picture_yres, width_new, height_new);
 		fb->blit();
 	}
 
