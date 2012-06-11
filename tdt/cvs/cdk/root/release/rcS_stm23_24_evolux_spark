@@ -186,7 +186,12 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/smartcard.ko
 	insmod $MODDIR/tun.ko
 	insmod $MODDIR/uinput.ko
-
+# leave dortfilecode in for E2 as pinkpanel will touch dotfile for it. ntrino use other code so no prob
+	if [ -e /etc/.cec ]; then
+		if [ -e $MODDIR/cec.ko ]; then
+			insmod $MODDIR/cec.ko activemode=1
+		fi
+	fi
 	if [ ! -e /dev/input/uinput ]; then
 		mknod -m 644 /dev/input/uinput c 10 223
 	fi
