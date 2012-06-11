@@ -66,9 +66,7 @@
 /* this relies on event0 being the AOTOM frontpanel driver device
  * TODO: what if another input device is present? */
 #ifdef EVOLUX
-const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
-	"/dev/input/nevis_ir", "/dev/input/tdt_rc", "/dev/input/fulan_fp",
-	"/dev/input/event0", "/dev/input/event1", "/dev/input/event2", "/dev/input/event3" };
+const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir"};
 #else
 const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
 #endif
@@ -92,7 +90,6 @@ CRCInput::CRCInput()
 	timerid= 1;
 #ifdef EVOLUX
 	repeatkeys = NULL;
-	fd_remote_control = -1;
 #endif
 
 	// pipe for internal event-queue
@@ -181,10 +178,6 @@ void CRCInput::open(int dev)
 #endif
 		else
 		{
-#ifdef EVOLUX
-			if (fd_remote_control < 0)
-				fd_remote_control = fd_rc[i];
-#endif
 			fcntl(fd_rc[i], F_SETFL, O_NONBLOCK);
 		}
 #ifdef EVOLUX
@@ -574,18 +567,17 @@ void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, uint6
 
 	*data = 0;
 
+#ifndef EVOLUX
 	/* reopen a missing input device
 	 * TODO: real hot-plugging, e.g. of keyboards and triggering this loop...
 	 *       right now it is only run if some event is happening "by accident" */
 	if (!input_stopped) {
-#ifdef EVOLUX
-		create_input_devices();
-#endif
 		for (int i = 0; i < NUMBER_OF_EVENT_DEVICES; i++) {
 			if (fd_rc[i] == -1)
 				open(i);
 		}
 	}
+#endif
 
 	// wiederholung reinmachen - dass wirklich die ganze zeit bis timeout gewartet wird!
 	gettimeofday( &tv, NULL );
@@ -1610,17 +1602,19 @@ int CRCInput::translate(int code, int /*num*/)
 #ifdef EVOLUX
 	// For simubutton/evremote2, as long as our lircd configuration is
 	// messed up.  --martii
-	if(fd_remote_control == fd_rc[1])
-		switch (code) {
-			case KEY_FASTFORWARD:
-				return RC_forward;
-			case KEY_EXIT:
-			case KEY_HOME:
-				return RC_home;
-		}
-#endif
+	switch (code) {
+		case KEY_EXIT:
+		case KEY_HOME:
+			return RC_home;
+		case 0x100:
+			return RC_up;
+		case 0x101:
+			return RC_down;
+	}
+#else
 	if(code == 0x100) code = RC_up;
 	else if(code == 0x101) code = RC_down;
+#endif
 	if ((code >= 0) && (code <= KEY_MAX))
 		return code;
 	else

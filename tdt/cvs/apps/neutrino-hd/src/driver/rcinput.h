@@ -142,7 +142,7 @@ class CRCInput
 		int         	fd_gamerc;
 #ifdef HAVE_SPARK_HARDWARE
 #ifdef EVOLUX
-#define NUMBER_OF_EVENT_DEVICES 7
+#define NUMBER_OF_EVENT_DEVICES 1
 #else
 #define NUMBER_OF_EVENT_DEVICES 2
 #endif
@@ -152,9 +152,6 @@ class CRCInput
 		int         	fd_rc[NUMBER_OF_EVENT_DEVICES];
 		int		fd_keyb;
 		int		fd_event;
-#ifdef EVOLUX
-		int		fd_remote_control;
-#endif
 		int		fd_max;
 		int		clickfd;
 		__u16 rc_last_key;
@@ -277,11 +274,7 @@ class CRCInput
 
 		inline int getFileHandle(void) /* used for plugins (i.e. games) only */
 		{
-#ifdef EVOLUX
-			return fd_remote_control;
-#else
 			return fd_rc[0];
-#endif
 		}
 		void stopInput();
 		void restartInput();
