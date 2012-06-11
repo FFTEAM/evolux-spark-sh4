@@ -187,13 +187,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/tun.ko
 	insmod $MODDIR/uinput.ko
 # leave dotfilecode in for E2 as pinkpanel will touch dotfile for it. ntrino use other code so no prob
-	if [ -n "$START_E2" ]; then
-		if [ -e /etc/.cec ]; then
-			if [ -e $MODDIR/cec.ko ]; then
-				insmod $MODDIR/cec.ko activemode=1
-			fi
-		fi
-	fi
+	[ -n "$START_E2" -a -e /etc/.cec ] && insmod $MODDIR/cec.ko activemode=1
 	if [ ! -e /dev/input/uinput ]; then
 		mknod -m 644 /dev/input/uinput c 10 223
 	fi
