@@ -152,8 +152,18 @@ void CBEChannelWidget::paint()
 
 void CBEChannelWidget::paintHead()
 {
+#ifdef EVOLUX
+	const char *lname = caption.c_str();
+	if(!strcmp(lname, "extra.zapit_bouquetname_others"))
+		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+	else if(!strcmp(lname, "extra.zapit_bouquetname_newchannels"))
+		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+	frameBuffer->paintBoxRel(x,y, width,theight+0, COL_MENUHEAD_PLUS_0, RADIUS_LARGE, CORNER_TOP);
+	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width, lname, COL_MENUHEAD, 0, true);
+#else
 	frameBuffer->paintBoxRel(x,y, width,theight+0, COL_MENUHEAD_PLUS_0, RADIUS_LARGE, CORNER_TOP);
 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(x+10,y+theight+0, width, caption.c_str() , COL_MENUHEAD, 0, true);
+#endif
 }
 
 const struct button_label CBEChannelWidgetButtons[4] =

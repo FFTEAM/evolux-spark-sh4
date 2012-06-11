@@ -113,7 +113,19 @@ void CBEBouquetWidget::paintItem(int pos)
 			frameBuffer->paintIcon(NEUTRINO_ICON_HIDDEN, x + 10, ypos, iheight);
 
 		//g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+68, ypos+ fheight, width-68, (*Bouquets)[current]->Name, color, 0, true);
+#ifdef EVOLUX
+	const char *lname = (*Bouquets)[current]->Name.c_str();
+	if ((*Bouquets)[current]->bFav)
+		lname = g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME);
+	else if(!strcmp(lname, "extra.zapit_bouquetname_others"))
+		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
+	else if(!strcmp(lname, "extra.zapit_bouquetname_newchannels"))
+		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+
+		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+iconoffset+20, ypos + iheight - (iheight-fheight)/2, width-iconoffset-20, lname, color, 0, true);
+#else
 		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+iconoffset+20, ypos + iheight - (iheight-fheight)/2, width-iconoffset-20, (*Bouquets)[current]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[current]->Name, color, 0, true);
+#endif
 	}
 }
 
