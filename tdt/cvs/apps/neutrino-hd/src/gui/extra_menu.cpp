@@ -633,7 +633,6 @@ int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			if (!strcmp(EMU_list[emu].procname, actionKey.c_str()))
 				break;
 
-fprintf(stderr, "### selected: %d emu: %d\n", selected,emu);
 	if (emu < EMU_OPTION_COUNT) {
 		if (selected > -1) {
 			safe_system(EMU_list[selected].stop_command);
@@ -1592,7 +1591,13 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 						for (int i = 0; i < modules.size(); i++) {
 							if (modules[i].active) {
 								for (int j = 0; j < modules[i].moduleList.size(); j++)
-									fprintf(f, "%s\n", modules[i].moduleList[j].c_str());
+									if (modules[i].moduleList[j].second.length())
+											fprintf(f, "%s %s\n",
+												modules[i].moduleList[j].first.c_str(),
+												modules[i].moduleList[j].second.c_str());
+									else
+											fprintf(f, "%s\n",
+												modules[i].moduleList[j].first.c_str());
 							}
 						}
 					fclose(f);
@@ -1601,12 +1606,13 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 					char buf[80];
 					if (modules[i].active)
 						for (int j = 0; j < modules[i].moduleList.size(); j++) {
-							snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko", modules[i].moduleList[j].c_str());
+							snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko %s",
+								modules[i].moduleList[j].first.c_str(), modules[i].moduleList[j].second.c_str());
 							system(buf);
 						}
 					else
 						for (int j = 0; j < modules[i].moduleList.size(); j++) {
-							snprintf(buf, sizeof(buf), "rmmod %s", modules[i].moduleList[j].c_str());
+							snprintf(buf, sizeof(buf), "rmmod %s", modules[i].moduleList[j].first.c_str());
 							system(buf);
 						}
 					modules[i].active_orig = modules[i].active;
@@ -1625,7 +1631,7 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				char name[200];
 				if (1 == sscanf(buf, "%s", name))
 					for (int i = 0; i < modules.size(); i++) {
-						if (name == modules[i].moduleList.back()) {
+						if (name == modules[i].moduleList.back().first) {
 							modules[i].installed = true;
 							break;
 						}
@@ -1636,7 +1642,7 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 		string text = "";
 		for (int i = 0; i < modules.size(); i++) {
-			text += modules[i].comment + " (" + modules[i].moduleList.back() + ") ";
+			text += modules[i].comment + " (" + modules[i].moduleList.back().first + ") ";
 			// FIXME, localizations are missing (but rather not worth adding)
 			if (modules[i].active) {
 				if (modules[i].installed)
@@ -1678,6 +1684,14 @@ void KernelOptions_Menu::Settings()
 	modules.clear();
 
 	FILE *f = fopen("/etc/modules.available", "r");
+	// Syntax:
+	//
+	// # comment
+	// module # description
+	// module module module # description
+	// module module(module arguments) module # description
+	//
+
 	if (f) {
 		char buf[200];
 		while (fgets(buf, sizeof(buf), f)) {
@@ -1698,10 +1712,37 @@ void KernelOptions_Menu::Settings()
 			if (nl)
 				*nl = 0;
 			m.comment = string(comment);
-			std::istringstream in(buf);
-			std::string s;
-			while (in >> s) {
-				m.moduleList.push_back(s);
+			char *b = buf;
+			while (*b) {
+				if (*b == ' ' || *b == '\t') {
+					b++;
+					continue;
+				}
+				string args = "";
+				string mod;
+				char *e = b;
+				char *a = NULL;
+				while (*e && (a && *e != ')' || (!a && *e != ' ' && *e != '\t'))) {
+					if (*e == '(')
+						a = e;
+					e++;
+				}
+				if (a && *e == ')') {
+					*a++ = 0;
+					*e++ = 0;
+					args = string (a);
+					*a = 0;
+					mod = string(b);
+					b = e;
+				} else if (*e) {
+					*e++ = 0;
+					mod = string(b);
+					b = e;
+				} else {
+					mod = string(b);
+					b = e;
+				}
+				m.moduleList.push_back(make_pair(mod, args));
 			}
 			if (m.moduleList.size() > 0)
 				modules.push_back(m);
@@ -1720,7 +1761,7 @@ void KernelOptions_Menu::Settings()
 			if (1 == sscanf(buf, "%s", name)) {
 				int i;
 				for (i = 0; i < modules.size(); i++)
-					if (modules[i].moduleList.back() == name) {
+					if (modules[i].moduleList.back().first == name) {
 						modules[i].active = modules[i].active_orig = 1;
 						break;
 					}

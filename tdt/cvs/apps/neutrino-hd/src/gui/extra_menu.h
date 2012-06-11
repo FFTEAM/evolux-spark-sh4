@@ -194,7 +194,7 @@ class KernelOptions_Menu : public CMenuTarget
 		int width, selected;
 		struct module {
 			std::string comment;
-			std::vector<std::string> moduleList;
+			std::vector<std::pair <std::string,std::string> > moduleList;
 			int active_orig;
 			int active;
 			bool installed;
