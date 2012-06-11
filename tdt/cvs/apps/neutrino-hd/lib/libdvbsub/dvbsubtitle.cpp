@@ -119,8 +119,8 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 	int picture_xres = 0, picture_yres = 0;
 
 	switch(sub.rects[0]->h) {
-	case 36:	// PAL?
-		picture_xres = 544;
+	case 36:
+		picture_xres = 480;
 		picture_yres = 576;
 		break;
 	case 48:	// 1280x48
