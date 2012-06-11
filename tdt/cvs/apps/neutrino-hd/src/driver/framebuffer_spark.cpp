@@ -1553,6 +1553,10 @@ void CFrameBuffer::blitRect(int x, int y, int width, int height, unsigned long c
 
 void CFrameBuffer::blitIcon(int src_width, int src_height, int fb_x, int fb_y, int width, int height)
 {
+#ifdef EVOLUX
+	if (!src_width || !src_height)
+		return;
+#endif
 	STMFBIO_BLT_EXTERN_DATA blt_data;
 	memset(&blt_data, 0, sizeof(STMFBIO_BLT_EXTERN_DATA));
 	blt_data.operation  = BLT_OP_COPY;
@@ -1574,7 +1578,11 @@ void CFrameBuffer::blitIcon(int src_width, int src_height, int fb_x, int fb_y, i
 	blt_data.srcMemBase = (char *)backbuffer;
 	blt_data.dstMemBase = (char *)lfb;
 	blt_data.srcMemSize = backbuf_sz;
+#ifdef EVOLUX
+	blt_data.dstMemSize = stride * yRes + lbb_off;
+#else
 	blt_data.dstMemSize = stride * yRes;
+#endif
 
 	blit_lock();
 	msync(backbuffer, blt_data.srcPitch * src_height, MS_SYNC);
