@@ -2249,7 +2249,9 @@ $(DEPDIR)/rtmpdump.do_prepare: bootstrap openssl openssl-dev libz @DEPENDS_rtmpd
 	touch $@
 
 $(DEPDIR)/rtmpdump.do_compile: $(DEPDIR)/rtmpdump.do_prepare
-	[ -d "rtmpdump" ] && mv "rtmpdump" @DIR_rtmpdump@
+	if [ -e rtmpdump ] && [ ! -e @DIR_rtmpdump@ ]; then \
+		mv rtmpdump @DIR_rtmpdump@; \
+	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_rtmpdump@ && \
 	cp $(hostprefix)/share/libtool/config/ltmain.sh .. && \
