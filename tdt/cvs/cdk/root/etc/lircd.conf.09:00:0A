@@ -26,7 +26,7 @@ begin remote
 
       begin codes
           KEY_POWER                0xDA25
-          KEY_SCREEN               0x52AD # V.FORMAT
+          KEY_MODE		   0x52AD # V.FORMAT
           KEY_TIME                 0x728D
           KEY_MUTE                 0x7A85
           PICASA                   0x1AE5

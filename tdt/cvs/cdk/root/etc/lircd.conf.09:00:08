@@ -32,7 +32,7 @@ begin remote
 		KEY_POWER	0xDA25	# POWER
 		
 		KEY_R		0x5AA5	# RC1/RC2
-		KEY_V		0x52AD	# V.FORMAT
+		KEY_MODE	0x52AD	# V.FORMAT
 		KEY_TIME	0x728D	# TIME
 		KEY_MUTE	0x7A85	# MUTE
 		
@@ -121,7 +121,7 @@ begin remote
 		KEY_POWER	0xDA25	# POWER
 		
 		KEY_R		0x5AA5	# RC1/RC2
-		KEY_V		0x52AD	# V.FORMAT
+		KEY_MODE	0x52AD	# V.FORMAT
 		KEY_TIME	0x728D	# TIME
 		KEY_MUTE	0x7A85	# MUTE
 		
@@ -209,7 +209,7 @@ begin remote
 	begin codes
 #					  Actual key name on PinguluxPlus remote
 		KEY_POWER	0x7887	# unverified
-		KEY_V		0xF00F	# unverified
+		KEY_MODE	0xF00F	# unverified
 		KEY_T		0xD02F	# unverified
 		KEY_F1		0x9A65	# unverified
 		KEY_TIME	0x5AA5	# unverified

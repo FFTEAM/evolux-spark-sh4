@@ -32,7 +32,7 @@ begin remote
 
 	begin codes
 		KEY_POWER	0x7887
-		KEY_V		0xF00F #VFORMAT
+		KEY_MODE	0xF00F #VFORMAT
 		KEY_AUX		0xD02F #TV/SAT
 		KEY_SLEEP	0x9A65
 		KEY_MUTE	0x5AA5
@@ -108,7 +108,7 @@ begin remote
   toggle_bit_mask 0x0
 
       begin codes
-          KEY_V                        0x52AD #VFORMAT
+          KEY_MODE		       0x52AD #VFORMAT
           KEY_POWER                    0xB24D
           KEY_CLOSE                    0xF20D #USB
           KEY_SLEEP                    0x12ED

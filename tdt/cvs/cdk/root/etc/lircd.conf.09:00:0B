@@ -34,7 +34,7 @@ begin remote
 	begin codes
 	  KEY_POWER                0xDA25
           KEY_R		           0x5AA5
-	  KEY_V                    0x52AD
+	  KEY_MODE                 0x52AD
 	  KEY_SLEEP                0x728D
 	  KEY_MUTE                 0x7A85
 	  KEY_AUX                  0x3AC5
