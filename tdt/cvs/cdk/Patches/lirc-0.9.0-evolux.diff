@@ -1,5 +1,5 @@
 --- lirc-0.9.0-orig/daemons/ir_remote.c	2011-03-25 23:28:18.000000000 +0100
-+++ lirc-0.9.0/daemons/ir_remote.c	2012-06-07 10:43:06.201880371 +0200
++++ lirc-0.9.0/daemons/ir_remote.c	2012-06-07 12:54:54.820279365 +0200
 @@ -506,9 +506,17 @@
  	lirc_t min_remaining_gap, max_remaining_gap;
  	struct ir_remote *scan;
@@ -31,7 +31,7 @@
  		remote->toggle_mask_state = 0;
  		remote = remote->next;
 --- lirc-0.9.0-orig/daemons/lircd.c	2011-03-25 23:28:18.000000000 +0100
-+++ lirc-0.9.0/daemons/lircd.c	2012-06-07 10:44:03.601880419 +0200
++++ lirc-0.9.0/daemons/lircd.c	2012-06-09 08:15:45.147450303 +0200
 @@ -60,6 +60,9 @@
  #if defined(__linux__)
  #include <linux/input.h>
@@ -54,9 +54,18 @@
  		if (ioctl(fd, UI_SET_KEYBIT, key) != 0) {
  			goto setup_error;
  		}
-@@ -1788,6 +1795,19 @@
+@@ -1786,8 +1793,28 @@
+ 	if (uinputfd != -1) {
+ 		linux_input_code input_code;
  
++#ifdef EVOLUX
++		int r = get_input_code(button_name, &input_code);
++		if (r == -1)
++			logprintf(LOG_ERR, "writing unknown key name \"%s\" to uinput failed\n", button_name);
++		else if (reps < 2) {
++#else
  		if (reps < 2 && get_input_code(button_name, &input_code) != -1) {
++#endif
  			struct input_event event;
 +#ifdef EVOLUX
 +			static int aotom_fd = -2;
@@ -74,3 +83,17 @@
  
  			memset(&event, 0, sizeof(event));
  			event.type = EV_KEY;
+--- lirc-0.9.0-orig/tools/lirc_client.c	2011-03-25 23:28:18.000000000 +0100
++++ lirc-0.9.0/tools/lirc_client.c	2012-06-11 15:20:00.126849463 +0200
+@@ -1334,7 +1334,11 @@
+ 	int quit_happened;
+ 
+ 	*string = NULL;
++#ifdef EVOLUX
++	if (sscanf(code, "%*x %x %*s %*s\n", &rep) == 4) {
++#else
+ 	if (sscanf(code, "%*x %x %*s %*s\n", &rep) == 1) {
++#endif
+ 		backup = strdup(code);
+ 		if (backup == NULL)
+ 			return (-1);
