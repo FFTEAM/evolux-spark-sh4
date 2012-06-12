@@ -83,17 +83,3 @@
  
  			memset(&event, 0, sizeof(event));
  			event.type = EV_KEY;
---- lirc-0.9.0-orig/tools/lirc_client.c	2011-03-25 23:28:18.000000000 +0100
-+++ lirc-0.9.0/tools/lirc_client.c	2012-06-11 15:20:00.126849463 +0200
-@@ -1334,7 +1334,11 @@
- 	int quit_happened;
- 
- 	*string = NULL;
-+#ifdef EVOLUX
-+	if (sscanf(code, "%*x %x %*s %*s\n", &rep) == 4) {
-+#else
- 	if (sscanf(code, "%*x %x %*s %*s\n", &rep) == 1) {
-+#endif
- 		backup = strdup(code);
- 		if (backup == NULL)
- 			return (-1);
