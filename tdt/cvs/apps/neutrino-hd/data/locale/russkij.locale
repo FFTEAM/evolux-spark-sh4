@@ -6,6 +6,7 @@ audio.srs_iq SRS Выравнивание
 audio.srs_nmgr Менеджер шума
 audio.srs_volume Стандартная громкость
 audiomenu.analogout Аналог
+audiomenu.analog_mode Аналоговый режим
 audiomenu.avs avs
 audiomenu.avs_control Управление громкостью avs/ost
 audiomenu.avsync Синхронизировать A/V
@@ -77,7 +78,7 @@ audioplayer.repeat_on Разрешить повтор
 audioplayer.rewind Назад
 audioplayer.save_playlist Сохранить лист
 audioplayer.screensaver_timeout Screensaver (мин, 0=откл.)
-audioplayer.select_title_by_name Поиск по имени (SMS)
+audioplayer.select_title_by_name Поиск по имени (SMS-режим)
 audioplayer.show_playlist Показать плей-лист
 audioplayer.shuffle Смена порядка
 audioplayer.spectrum LCD-spectrum
@@ -128,7 +129,7 @@ channellist.foot_off Выкл
 channellist.head Все сервисы
 channellist.history История
 channellist.make_hdlist Создать список HD
-channellist.new_zap_mode Быстрый перебор по списку
+channellist.new_zap_mode Быстрый перебор каналов по списку
 channellist.nonefound Нет ни одного канала! \nВыполните сканирование\n(кнопка Меню -> Сервисы)
 channellist.provs Провайдеры
 channellist.sats Спутники
@@ -294,18 +295,19 @@ extra.fec_s2_qpsk_8_9 8/9 s2 qpsk
 extra.fec_s2_qpsk_9_10 9/10 s2 qpsk
 extra.hw_sect Раздел оборудования
 extra.key_click Щелкнуть кнопку
-extra.key_list_end Конец
-extra.key_list_start Домой
+extra.key_list_end В конец списка
+extra.key_list_start В начало списка
 extra.key_plugin Один сенсорный плагин
 extra.key_timeshift Таймшифт
-extra.key_unlock Разблокировать кнопки
+extra.key_unlock Разблокировать ПДУ
+extra.key_current_transponder Текущий транспондер
 extra.ladirection LaDirection
 extra.latitude Широта
 extra.loadcolors Загрузить цвета из
 extra.loadconfig Загрузить настройки из
 extra.loadkeys Загрузить кнопки из
 extra.lodirection LoDirection
-extra.logo Лого
+extra.logo Логотип
 extra.longitude Долгота
 extra.manual_scan Сканирование вручную
 extra.menu_left_exit "Влево" - выход из меню
@@ -321,7 +323,7 @@ extra.savekeys Сохранить кнопки как
 extra.scan_fast Быстро
 extra.scan_full Полный
 extra.scan_mode Режим сканирования
-extra.sms_channel sms-режим канала
+extra.sms_channel SMS-режим выбора канала
 extra.south Юг
 extra.spts_mode Режим SPTS
 extra.start_tostandby Запуск в standby
@@ -346,7 +348,7 @@ extra.use_log Лог в /tmp/log
 extra.show_mute_icon Иконка при уровне звука 0
 extra.volume_pos Индикатор громкости
 extra.west Запад
-extra.zap_cycle Перебор по кругу
+extra.zap_cycle Перебор каналов по кругу
 extra.zapit_backup Копия каналов в /tmp
 extra.zapit_fast_zap Быстрое переключение
 extra.zapit_fe_timeout Ожидание захвата (1=10 мс)
@@ -461,10 +463,10 @@ fontmenu.channellist Список каналов
 fontmenu.epg EPG
 fontmenu.eventlist Список событий
 fontmenu.gamelist Список игр
-fontmenu.head Настройки размера шрифтов
+fontmenu.head Настройка шрифтов
 fontmenu.infobar Инфопанель
 fontmenu.sizes Размеры шрифта
-fontsize.channel_num_zap Прямой выбор
+fontsize.channel_num_zap Прямой набор канала
 fontsize.channellist Список каналов
 fontsize.channellist_descr Описание
 fontsize.channellist_number Номер
@@ -639,10 +641,11 @@ keybindingmenu.channellist Список каналов
 keybindingmenu.channelup Канал вверх
 keybindingmenu.head Настройка кнопок
 keybindingmenu.lastchannel Вернуться на канал
+keybindingmenu.misc Прочее
 keybindingmenu.modechange Изменение режима
 keybindingmenu.pagedown Страница вниз
 keybindingmenu.pageup Страница вверх
-keybindingmenu.quickzap Быстрый перебор
+keybindingmenu.quickzap Быстрый перебор каналов
 keybindingmenu.RC ПДУ
 keybindingmenu.repeatblock Задержка повтора
 keybindingmenu.repeatblockgeneric Общая задержка
@@ -650,7 +653,12 @@ keybindingmenu.sort Порядок сортировки
 keybindingmenu.subchanneldown Подканалы вниз
 keybindingmenu.subchannelup Подканалы вверх
 keybindingmenu.tvradiomode ТВ/Радио-режим
-keybindingmenu.zaphistory Список переключений
+keybindingmenu.zaphistory История переключений
+keybindingmenu.mode_left_right_key_tv Влево<->Вправо в ТВ режиме
+keybindingmenu.mode_left_right_key_tv_infobar инфопанель
+keybindingmenu.mode_left_right_key_tv_volume громкость
+keybindingmenu.mode_left_right_key_tv_vzap переключение
+keybindingmenu.mode_left_right_key_tv_zap смена канала
 keychooser.head Настроить новые кнопки
 keychooser.text1 Нажмите новую кнопку
 keychooser.text2 Подождите несколько секунд
@@ -788,7 +796,7 @@ miscsettings.shutdown_real Разрешить standby
 miscsettings.shutdown_real_rcdelay Задержка выключения
 miscsettings.sleeptimer Таймер выключения
 miscsettings.sptsmode Использовать SPTS-Mode 
-miscsettings.virtual_zap_mode Виртуальный zap
+miscsettings.virtual_zap_mode переключение
 miscsettings.zapto_pre_time Переключить к, время (минуты)
 motorcontrol.calc_positions Пересчитать позиции
 motorcontrol.disable_limit Запретить лимиты (soft)
@@ -1082,7 +1090,7 @@ personalize.button_yellow желтая
 personalize.disabled Откл
 personalize.enabled Вкл
 personalize.features Features menue
-personalize.head Настройки пользователя
+personalize.head Персонализация
 personalize.help Помощь
 personalize.help_line1  С помощью личного меню вы можете настроить большую
 personalize.help_line2 часть меню "под себя". Меню могут быть  скрыты  или
@@ -1192,7 +1200,7 @@ recordingmenu.tsdir Каталог Timeshift
 recordingmenu.use_fdatasync Синхрозапись (fdatasync)
 recordingmenu.use_o_sync Синхронизация (O_SYNC)
 recordingmenu.vcr VCR
-recordingmenu.zap_on_announce Zap при записи
+recordingmenu.zap_on_announce Переключение при записи
 recordtimer.announce Запись начинается через несколько минут
 repeatblocker.hint_1 Время в ms для распознавания 2-го нажатия кнопки
 repeatblocker.hint_2 Нажмите  0 для переключения (красная - пробел)
@@ -1243,7 +1251,7 @@ satsetup.uncomm_input Uncommited вход
 satsetup.usals_repeat Повторы USALS
 satsetup.use_nit Использовать NIT
 satsetup.use_usals Использовать usals
-satsetup.use_fta_flag Только ФТА-каналы
+satsetup.use_fta_flag Только FTA каналы
 scale.display_type Вид индикатора
 scale.display_type_dots Точки
 scale.display_type_full Сплошной
@@ -1272,6 +1280,8 @@ scants.select_tp Выбрать транспондер
 scants.startnow Начать сканирование
 scants.test Тест сигнала
 scants.transponders Транспондер:
+scants.preverences_receiving_system Параметры поиска
+scants.preverences_scan Режим поиска
 scrambled_channel Кодированный канал
 extra.scrambled_message Сообщение о кодированном канале
 screensetup.lowerright Зелёная = Снизу/Справа
@@ -1313,7 +1323,7 @@ sleeptimerbox.title2 Таймер отключения STB
 streamfeatures.head Меню дополнений
 streaminfo.aratio Аспект 
 streaminfo.aratio_unknown Неизвестен
-streaminfo.audiotype Язык
+streaminfo.audiotype Аудио
 streaminfo.audiotype_unknown Неизвестен
 streaminfo.bitrate Битрейт
 streaminfo.framerate Фреймрейт
@@ -1466,7 +1476,7 @@ usermenu.item_epg_misc Функции EPG
 usermenu.item_none Ничего
 usermenu.item_vtxt Телетекст
 usermenu.name Имя
-usermenu.item_adzap Ad-Zap
+usermenu.item_adzap Автопереключение
 video_mode_ok Этот видео-режим вас устраивает?
 videomenu.43mode Масштаб 4:3 
 videomenu.analog_hd_rgb_cinch RGB (HD)
@@ -1488,6 +1498,13 @@ videomenu.dbdr_none Выкл
 videomenu.enabled_modes Режимы кнопки V.Format
 videomenu.fullscreen Полный экран
 videomenu.hdmi_color_space HDMI-выход
+videomenu.hdmi_cec CSTLink (HDMI-CEC)
+videomenu.hdmi_cec_mode Режим
+videomenu.hdmi_cec_mode_off Выкл
+videomenu.hdmi_cec_mode_recorder как Sat/Cable PVR
+videomenu.hdmi_cec_mode_tuner как Sat/Cable STB
+videomenu.hdmi_cec_standby Разрешить CEC standby
+videomenu.hdmi_cec_view_on Разрешить CEC View on
 videomenu.head Настройки изображения
 videomenu.letterbox Letterbox
 videomenu.osd OSD
@@ -1573,6 +1590,7 @@ extramenu.boot.select Выбор системы:
 extramenu.boot.unchanged без изменений
 extramenu.boot.bootargs.head Параметры загрузки STB
 extramenu.boot.bootargs.text Не выключайте ваш STB!
+extramenu.boot.changed режим активирован. Перезагрузите STB.
 extramenu.fsck Меню FSCK
 extramenu.fsck.select FSCK
 extramenu.fsck.on Вкл
@@ -1594,6 +1612,9 @@ extramenu.evoluxupdate.select Обновить?
 extramenu.evoluxupdate.on Да
 extramenu.evoluxupdate.off Нет
 extramenu.evoluxupdate.update Обновление прошивки
+extramenu.evoluxupdate.done Обновление закончено, перезагрузите STB!
+extramenu.evoluxupdate.notfound Обновлений нет.
+extramenu.evoluxupdate.updating Обновление найдено, подождите... 
 extramenu.glcd.volume Громкость
 extramenu.glcd.color.black Черный
 extramenu.glcd.color.white Белый
@@ -1637,7 +1658,7 @@ videomenu.psi.tint Тон
 videomenu.psi Настройки цвета
 videomenu.psi.reset Сброс
 videomenu.psi.step Шаг настройки
-adzap Ad-Zap
+adzap Автопереключение
 adzap.announce Возвращаемся назад, к  
 adzap.cancel Таймер отменен
 adzap.enable Включить один раз
