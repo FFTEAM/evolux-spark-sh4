@@ -30,6 +30,39 @@ static bool DebugConverter = true;
 
 #define dbgconverter(a...) if (DebugConverter) sub_debug.print(Debug::VERBOSE, a)
 
+#ifdef EVOLUX
+// CAVEAT EMPTOR
+// THIS IS COPIED FROM ffmpeg-0.9.1/libavcodec/dvbsubdec.c
+//
+// WE'RE ACCESSING PRIVATE DATA HERE. THIS WILL BREAK SOONER OR LATER
+//
+//   --martii
+//
+typedef struct DVBSubDisplayDefinition {
+    int version;
+
+    int x;
+    int y;
+    int width;
+    int height;
+} DVBSubDisplayDefinition;
+
+typedef struct DVBSubContext {
+    int composition_id;
+    int ancillary_id;
+
+    int version;
+    int time_out;
+    void /*DVBSubRegion*/ *region_list;
+    void /*DVBSubCLUT*/   *clut_list;
+    void /*DVBSubObject*/ *object_list;
+
+    int display_list_size;
+    void /*DVBSubRegionDisplay*/ *display_list;
+    DVBSubDisplayDefinition *display_definition;
+} DVBSubContext;
+#endif
+
 // --- cDvbSubtitleBitmaps ---------------------------------------------------
 
 class cDvbSubtitleBitmaps : public cListObject 
@@ -134,7 +167,7 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
 		int width = sub.rects[i]->w;
 		int height = sub.rects[i]->h;
-		size_t bs = sub.rects[i]->h * sub.rects[i]->w;
+		size_t bs = width * height;
 		uint8_t *origin = sub.rects[i]->pict.data[0];
 		int nb_colors = sub.rects[i]->nb_colors;
 
@@ -144,12 +177,14 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 
 		int width_new = (width * DEFAULT_XRES) / max_x;
 		int height_new = (height * DEFAULT_YRES) / max_y;
+		int x_new = (sub.rects[i]->x * DEFAULT_XRES) / max_x;
+		int y_new = (sub.rects[i]->y * DEFAULT_YRES) / max_y;
 
-		dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
+		dbgconverter("cDvbSubtitleBitmaps::Draw: original bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 			i, sub.rects[i]->x, sub.rects[i]->y, width, height, sub.rects[i]->nb_colors);
-		fb->blitIcon(width, height,
-			(sub.rects[i]->x * DEFAULT_XRES)/max_x,
-			(sub.rects[i]->y * DEFAULT_YRES)/max_y, width_new, height_new);
+		dbgconverter("cDvbSubtitleBitmaps::Draw: scaled bitmap=%d x_new=%d y_new=%d, w_new=%d, h_new=%d\n",
+			i, x_new, y_new, width_new, height_new);
+		fb->blitIcon(width, height, x_new, y_new, width_new, height_new);
 		fb->blit();
 	}
 
@@ -308,6 +343,17 @@ void cDvbSubtitleConverter::Pause(bool pause)
 	} else {
 		//Reset();
 		running = true;
+#ifdef EVOLUX
+	DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
+	DVBSubDisplayDefinition *display_def = ctx->display_definition;
+
+	if (display_def) {
+		display_def->x = 0;
+		display_def->y = 0;
+		display_def->width = 0;
+		display_def->height = 0;
+	}
+#endif
 	}
 }
 
@@ -386,38 +432,6 @@ int cDvbSubtitleConverter::Convert(const uchar *Data, int Length, int64_t pts)
 
 void dvbsub_get_stc(int64_t * STC);
 
-#ifdef EVOLUX
-// CAVEAT EMPTOR
-// THIS IS COPIED FROM ffmpeg-0.9.1/libavcodec/dvbsubdec.c
-//
-// WE'RE ACCESSING PRIVATE DATA HERE. THIS WILL BREAK SOONER OR LATER
-//
-//   --martii
-//
-typedef struct DVBSubDisplayDefinition {
-    int version;
-
-    int x;
-    int y;
-    int width;
-    int height;
-} DVBSubDisplayDefinition;
-
-typedef struct DVBSubContext {
-    int composition_id;
-    int ancillary_id;
-
-    int version;
-    int time_out;
-    void /*DVBSubRegion*/ *region_list;
-    void /*DVBSubCLUT*/   *clut_list;
-    void /*DVBSubObject*/ *object_list;
-
-    int display_list_size;
-    void /*DVBSubRegionDisplay*/ *display_list;
-    DVBSubDisplayDefinition *display_definition;
-} DVBSubContext;
-#endif
 int cDvbSubtitleConverter::Action(void)
 {
 	int WaitMs = WAITMS;
