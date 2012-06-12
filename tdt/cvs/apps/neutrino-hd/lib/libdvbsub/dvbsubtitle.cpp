@@ -116,22 +116,19 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 	CFrameBuffer* fb = CFrameBuffer::getInstance();
 	fb_pixel_t *b = fb->getBackBufferPointer();
 
-	int picture_xres = 0, picture_yres = 0;
-
-	switch(sub.rects[0]->h) {
-	case 36:
-		picture_xres = 480;
-		picture_yres = 576;
-		break;
-	case 48:	// 1280x48
-		picture_xres = 1280;
-		picture_yres = 720;
-		break;
-	case 44:	// 720x44
-	default:	// assume default
-		picture_xres = 720;
-		picture_yres = 576;
-	}
+	if (!max_x)
+		switch(sub.rects[0]->h) {
+		case 48:	// 1280x48
+			min_x = min_y = 0;
+			max_x = 1280;
+			max_y = 720;
+			break;
+		case 44:	// 720x44
+		default:	// assume default
+			min_x = min_y = 0;
+			min_x = 720;
+			max_y = 576;
+		}
 
 	for (int i = 0; i < Count(); i++) {
 		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
@@ -145,14 +142,14 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 			if (origin[j] < nb_colors)
 				b[j] = colors[origin[j]];
 
-		int width_new = (width * DEFAULT_XRES) / picture_xres;
-		int height_new = (height * DEFAULT_YRES) / picture_yres;
+		int width_new = (width * DEFAULT_XRES) / max_x;
+		int height_new = (height * DEFAULT_YRES) / max_y;
 
 		dbgconverter("cDvbSubtitleBitmaps::Draw: bitmap=%d x=%d y=%d, w=%d, h=%d col=%d\n",
 			i, sub.rects[i]->x, sub.rects[i]->y, width, height, sub.rects[i]->nb_colors);
 		fb->blitIcon(width, height,
-			(sub.rects[i]->x * DEFAULT_XRES)/picture_xres,
-			(sub.rects[i]->y * DEFAULT_YRES)/picture_yres, width_new, height_new);
+			(sub.rects[i]->x * DEFAULT_XRES)/max_x,
+			(sub.rects[i]->y * DEFAULT_YRES)/max_y, width_new, height_new);
 		fb->blit();
 	}
 
@@ -366,7 +363,6 @@ int cDvbSubtitleConverter::Convert(const uchar *Data, int Length, int64_t pts)
 
 	avcodec_decode_subtitle2(avctx, sub, &got_subtitle, &avpkt);
 //	dbgconverter("cDvbSubtitleConverter::Convert: pts %lld subs ? %s, %d bitmaps\n", pts, got_subtitle? "yes" : "no", sub->num_rects);
-
 	if(got_subtitle) {
 		if(DebugConverter) {
 			unsigned int i;
@@ -390,6 +386,38 @@ int cDvbSubtitleConverter::Convert(const uchar *Data, int Length, int64_t pts)
 
 void dvbsub_get_stc(int64_t * STC);
 
+#ifdef EVOLUX
+// CAVEAT EMPTOR
+// THIS IS COPIED FROM ffmpeg-0.9.1/libavcodec/dvbsubdec.c
+//
+// WE'RE ACCESSING PRIVATE DATA HERE. THIS WILL BREAK SOONER OR LATER
+//
+//   --martii
+//
+typedef struct DVBSubDisplayDefinition {
+    int version;
+
+    int x;
+    int y;
+    int width;
+    int height;
+} DVBSubDisplayDefinition;
+
+typedef struct DVBSubContext {
+    int composition_id;
+    int ancillary_id;
+
+    int version;
+    int time_out;
+    void /*DVBSubRegion*/ *region_list;
+    void /*DVBSubCLUT*/   *clut_list;
+    void /*DVBSubObject*/ *object_list;
+
+    int display_list_size;
+    void /*DVBSubRegionDisplay*/ *display_list;
+    DVBSubDisplayDefinition *display_definition;
+} DVBSubContext;
+#endif
 int cDvbSubtitleConverter::Action(void)
 {
 	int WaitMs = WAITMS;
@@ -404,7 +432,21 @@ int cDvbSubtitleConverter::Action(void)
 		dbgconverter("cDvbSubtitleConverter::Action: no context\n");
 		return -1;
 	}
+#ifdef EVOLUX
+	DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
+	DVBSubDisplayDefinition *display_def = ctx->display_definition;
 
+	if (display_def
+			&& display_def->width
+			&& display_def->height) {
+		min_x = display_def->x;
+		min_y = display_def->y;
+		max_x = display_def->width;
+		max_y = display_def->height;
+		dbgconverter("cDvbSubtitleConverter::Action: Display Definition: min_x=%d min_y=%d max_x=%d max_y=%d\n", min_x, min_y, max_x, max_y);
+	} else
+		min_x = min_y = max_x = max_y = 0;
+#endif
 	Lock();
 	if (cDvbSubtitleBitmaps *sb = bitmaps->First()) {
 		int64_t STC;
