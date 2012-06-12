@@ -47,7 +47,7 @@ begin remote
 		KEY_9		0x0AF5
 		KEY_0		0xC837
 		KEY_TV2		0x32CD	# TV/RADIO
-		KEY_BACK	0x30CF #RECALL
+		KEY_LAST	0x30CF #RECALL
 		KEY_PAGEUP	0x12ED
 		KEY_PAGEDOWN	0x22DD
 		KEY_FIND	0x3AC5
@@ -127,7 +127,7 @@ begin remote
           KEY_9                        0x6A95
           KEY_0                        0xD827
           KEY_TV2                      0x9A65	# TV/RADIO
-          KEY_BACK                     0x5AA5 #RECALL
+          KEY_LAST                     0x5AA5 #RECALL
           KEY_MENU                     0xA05F
           KEY_INFO                     0xE21D
           KEY_EXIT                     0xD22D
