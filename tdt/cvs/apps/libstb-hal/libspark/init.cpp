@@ -29,7 +29,6 @@
 #include <sys/types.h>
 #include <sys/prctl.h>
 #include <string.h>
-#include <signal.h>
 
 #define VIRTUALINPUT "/sys/devices/virtual/input"
 #define DEVINPUT "/dev/input"
@@ -207,18 +206,12 @@ static void poll_input_devices(void) {
 	}
 }
 
-void  inmux_sighandler(int)
-{
-	// do nothing. We just need poll() to interrupt.
-}
-
 static void *inmux_thread(void *)
 {
 	char threadname[17];
 	strncpy(threadname, __func__, sizeof(threadname));
 	threadname[16] = 0;
 	prctl (PR_SET_NAME, (unsigned long)&threadname);
-	signal(SIGALRM, inmux_sighandler);
 
 	inmux_thread_running = 1;
 	while (inmux_thread_running) {
@@ -253,7 +246,7 @@ void stop_inmux_thread(void)
 	if (! inmux_thread_running)
 		return;
 	inmux_thread_running = 0;
-	pthread_kill(inmux_task, SIGALRM);
+	pthread_detach(inmux_task);
 	close_input_devices();
 	pthread_join(inmux_task, NULL);
 }
