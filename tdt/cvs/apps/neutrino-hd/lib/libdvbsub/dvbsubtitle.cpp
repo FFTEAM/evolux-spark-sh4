@@ -327,6 +327,15 @@ void cDvbSubtitleConverter::Pause(bool pause)
 		Unlock();
 		//Reset();
 	} else {
+#ifdef EVOLUX
+		DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
+		DVBSubDisplayDefinition *display_def = ctx->display_definition;
+
+		display_def->x = 0;
+		display_def->y = 0;
+		display_def->width = 720;
+		display_def->height = 576;
+#endif
 		//Reset();
 		running = true;
 	}
@@ -431,11 +440,6 @@ int cDvbSubtitleConverter::Action(void)
 		max_x = display_def->width;
 		max_y = display_def->height;
 		dbgconverter("cDvbSubtitleConverter::Action: Display Definition: min_x=%d min_y=%d max_x=%d max_y=%d\n", min_x, min_y, max_x, max_y);
-		// These values were only valid for a single display set. Reset them to the defaults:
-		display_def->x = 0;
-		display_def->y = 0;
-		display_def->width = 720;
-		display_def->height = 576;
 	} else {
 		min_x = min_y = 0;
 		max_x = 720;
