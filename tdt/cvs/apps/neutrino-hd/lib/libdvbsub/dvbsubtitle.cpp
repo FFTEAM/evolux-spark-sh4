@@ -331,10 +331,12 @@ void cDvbSubtitleConverter::Pause(bool pause)
 		DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
 		DVBSubDisplayDefinition *display_def = ctx->display_definition;
 
-		display_def->x = 0;
-		display_def->y = 0;
-		display_def->width = 720;
-		display_def->height = 576;
+		if (display_def) {
+			display_def->x = 0;
+			display_def->y = 0;
+			display_def->width = 720;
+			display_def->height = 576;
+		}
 #endif
 		//Reset();
 		running = true;
