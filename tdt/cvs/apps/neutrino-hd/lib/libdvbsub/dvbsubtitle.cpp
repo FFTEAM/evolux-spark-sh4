@@ -149,20 +149,6 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 	CFrameBuffer* fb = CFrameBuffer::getInstance();
 	fb_pixel_t *b = fb->getBackBufferPointer();
 
-	if (!max_x)
-		switch(sub.rects[0]->h) {
-		case 48:	// 1280x48
-			min_x = min_y = 0;
-			max_x = 1280;
-			max_y = 720;
-			break;
-		case 44:	// 720x44
-		default:	// assume default
-			min_x = min_y = 0;
-			min_x = 720;
-			max_y = 576;
-		}
-
 	for (int i = 0; i < Count(); i++) {
 		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
 		int width = sub.rects[i]->w;
@@ -343,17 +329,6 @@ void cDvbSubtitleConverter::Pause(bool pause)
 	} else {
 		//Reset();
 		running = true;
-#ifdef EVOLUX
-	DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
-	DVBSubDisplayDefinition *display_def = ctx->display_definition;
-
-	if (display_def) {
-		display_def->x = 0;
-		display_def->y = 0;
-		display_def->width = 0;
-		display_def->height = 0;
-	}
-#endif
 	}
 }
 
@@ -450,16 +425,23 @@ int cDvbSubtitleConverter::Action(void)
 	DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
 	DVBSubDisplayDefinition *display_def = ctx->display_definition;
 
-	if (display_def
-			&& display_def->width
-			&& display_def->height) {
+	if (display_def && display_def->width && display_def->height) {
 		min_x = display_def->x;
 		min_y = display_def->y;
 		max_x = display_def->width;
 		max_y = display_def->height;
 		dbgconverter("cDvbSubtitleConverter::Action: Display Definition: min_x=%d min_y=%d max_x=%d max_y=%d\n", min_x, min_y, max_x, max_y);
-	} else
-		min_x = min_y = max_x = max_y = 0;
+		// These values were only valid for a single display set. Reset them to the defaults:
+		display_def->x = 0;
+		display_def->y = 0;
+		display_def->width = 720;
+		display_def->height = 576;
+	} else {
+		min_x = min_y = 0;
+		max_x = 720;
+		max_y = 576;
+	}
+
 #endif
 	Lock();
 	if (cDvbSubtitleBitmaps *sb = bitmaps->First()) {
