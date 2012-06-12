@@ -125,9 +125,9 @@ static void create_input_devices (void) {
 			if (stat(name, &st))
 				continue;
 			for (int i = 0; i < number_of_input_devices; i++)
-				if (input_device[i].major && input_device[i].minor &&
-				    gnu_dev_major(st.st_dev) == input_device[i].major &&
-				    gnu_dev_minor(st.st_dev) == input_device[i].minor)
+				if (input_device[i].major &&
+				    gnu_dev_major(st.st_rdev) == input_device[i].major &&
+				    gnu_dev_minor(st.st_rdev) == input_device[i].minor)
 					unlink(name);
 		}
 		closedir(d);
