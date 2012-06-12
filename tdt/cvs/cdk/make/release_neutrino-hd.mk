@@ -482,6 +482,7 @@ endif
 #	rm $(prefix)/release_neutrino-hd/usr/lib/tuxbox/plugins/blockad*
 	rm $(prefix)/release_neutrino-hd/usr/local/share/config/blockad*
 	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino-hd/usr/local/share/config/zapit/
+	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/locale && rm b* c* f* i* ne* p* s* )
 	touch $(prefix)/release_neutrino-hd/etc/.EVOfirstboot
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino-hd/etc/
 if ENABLE_MULTI_YAFFS2

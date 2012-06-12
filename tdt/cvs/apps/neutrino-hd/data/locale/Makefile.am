@@ -18,6 +18,7 @@ install_DATA = \
 	suomi.locale \
 	svenska.locale
 
+install_DATA += norsk.locale
 
 if MAINTAINER_MODE
 
