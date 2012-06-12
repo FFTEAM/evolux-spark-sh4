@@ -134,7 +134,7 @@ static void create_input_devices (void) {
 	}
 }
 
-static pthread_t inmux_task;
+static pthread_t inmux_task = 0;
 static int inmux_thread_running = 0;
 
 static void count_input_devices(void) {
@@ -235,19 +235,12 @@ void start_inmux_thread(void)
 		inmux_thread_running = 0;
 		return;
 	}
-	while (!inmux_thread_running)
-		usleep(1000);
-	if (inmux_thread_running == 2)
-		inmux_thread_running = 0;
+	pthread_detach(inmux_task);
 }
 
 void stop_inmux_thread(void)
 {
-	if (! inmux_thread_running)
-		return;
 	inmux_thread_running = 0;
-	pthread_detach(inmux_task);
-	close_input_devices();
 }
 
 #endif
@@ -285,6 +278,7 @@ void shutdown_td_api()
 	if (initialized) {
 		stop_input_thread();
 		stop_inmux_thread();
+		close_input_devices();
 	}
 #else
 	if (initialized)
