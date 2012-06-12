@@ -248,7 +248,6 @@ void stop_inmux_thread(void)
 	inmux_thread_running = 0;
 	pthread_detach(inmux_task);
 	close_input_devices();
-	pthread_join(inmux_task, NULL);
 }
 
 #endif
