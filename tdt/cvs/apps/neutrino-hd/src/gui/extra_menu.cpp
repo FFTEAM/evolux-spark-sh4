@@ -1303,6 +1303,7 @@ void nGLCD::Exit() {
 		void *res;
 		pthread_join(nglcd->thrGLCD, &res);
 		delete nglcd;
+		nglcd = NULL;
 	}
 }
 
