@@ -38,33 +38,35 @@ typedef struct {
 	const char *name;
 	const char *desc;
 	int fd;
+	int major;
+	int minor;
 	time_t discovery;
 } input_device_t;
 
 static input_device_t input_device[] = {
-	{ "/dev/input/nevis_ir",	"lircd",			-1, 0 },
-	{ "/dev/input/tdt_rc",		"TDT RC event driver",		-1, 0 },
-	{ "/dev/input/fulan_fp",	"fulan front panel buttons",	-1, 0 },
-	{ "/dev/input/event0",		NULL,				-1, 0 },
-	{ "/dev/input/event1",		NULL,				-1, 0 },
-	{ "/dev/input/event2",		NULL,				-1, 0 },
-	{ "/dev/input/event3",		NULL,				-1, 0 },
-	{ "/dev/input/event4",		NULL,				-1, 0 },
-	{ "/dev/input/event5",		NULL,				-1, 0 },
-	{ "/dev/input/event6",		NULL,				-1, 0 },
-	{ "/dev/input/event7",		NULL,				-1, 0 },
-	{ NULL,				NULL,				-1, 0 }
+	{ "/dev/input/nevis_ir",	"lircd",			-1, 0, 0, 0 },
+	{ "/dev/input/tdt_rc",		"TDT RC event driver",		-1, 0, 0, 0 },
+	{ "/dev/input/fulan_fp",	"fulan front panel buttons",	-1, 0, 0, 0 },
+	{ "/dev/input/event0",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event1",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event2",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event3",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event4",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event5",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event6",		NULL,				-1, 0, 0, 0 },
+	{ "/dev/input/event7",		NULL,				-1, 0, 0, 0 },
+	{ NULL,				NULL,				-1, 0, 0, 0 }
 };
 
 static int number_of_input_devices = 0;
 
-static int do_mknod(const char *devname, char *i) {
+static int do_mknod(int i, char *d_name) {
 	char name[255];
 	int dev = -1;
 	// I've no idea how the event device number is actually calculated. Just loop.  --martii
 
 	for (int j = 0; j < 99 && dev < 0; j++) {
-		snprintf(name, sizeof(name), VIRTUALINPUT "/%s/event%d/dev", i, j);
+		snprintf(name, sizeof(name), VIRTUALINPUT "/%s/event%d/dev", d_name, j);
 		dev = open (name, O_RDONLY);
 	}
 
@@ -74,9 +76,9 @@ static int do_mknod(const char *devname, char *i) {
 		close(dev);
 		if (l > -1) {
 			buf[l] = 0;
-			int major, minor;
-			if (2 == sscanf(buf, "%d:%d", &major, &minor)) {
-				mknod(devname, 0666 | S_IFCHR, makedev(major, minor));
+			if (2 == sscanf(buf, "%d:%d", &input_device[i].major, &input_device[i].minor)) {
+				mknod(input_device[i].name, 0666 | S_IFCHR,
+					gnu_dev_makedev(input_device[i].major, input_device[i].minor));
 			}
 		}
 	}
@@ -103,7 +105,7 @@ static void create_input_devices (void) {
 
 					for (int i = 0; i < number_of_input_devices; i++)
 						if (input_device[i].desc && !strcmp(buf, input_device[i].desc)) {
-							do_mknod(input_device[i].name, e->d_name);
+							do_mknod(i, e->d_name);
 							break;
 						}
 				}
@@ -117,29 +119,18 @@ static void create_input_devices (void) {
 		struct dirent *e;
 		while ((e = readdir(d))) {
 			char name[255];
-			if (e->d_name[0] == '.')
-				continue;
 			if (strncmp(e->d_name, "event", 5))
 				continue;
 			snprintf(name, sizeof(name), DEVINPUT "/%s", e->d_name);
-			int n = open(name, O_RDONLY);
-			if (n > -1) {
-				char buf[255];
-				int l = ioctl(n, EVIOCGNAME(sizeof(buf)), buf);
-				close(n);
-				if (l > 1) {
-					do
-						buf[l--] = 0;
-					while (l > 1 && buf[l] == '\n');
-
-					for (int i = 0; i < number_of_input_devices; i++)
-						if (input_device[i].desc && !strcmp(buf, input_device[i].desc)) {
-							unlink(name);
-							break;
-						}
-					}
-				}
-			}
+			struct stat st;
+			if (stat(name, &st))
+				continue;
+			for (int i = 0; i < number_of_input_devices; i++)
+				if (input_device[i].major && input_device[i].minor &&
+				    gnu_dev_major(st.st_dev) == input_device[i].major &&
+				    gnu_dev_minor(st.st_dev) == input_device[i].minor)
+					unlink(name);
+		}
 		closedir(d);
 	}
 }
@@ -194,8 +185,10 @@ static void poll_input_devices(void) {
 
 	int r = poll(fds, nfds, 60000 /* ms */);
 	if (r < 0) {
-		if (errno != EAGAIN)
+		if (errno != EAGAIN) {
+			lt_info("%s: poll(): %m\n", __func__);
 			inmux_thread_running = 0;
+		}
 		return;
 	}
 	for (int i = 0; i < nfds && r > 0; i++) {
@@ -214,12 +207,18 @@ static void poll_input_devices(void) {
 	}
 }
 
+void  inmux_sighandler(int)
+{
+	// do nothing. We just need poll() to interrupt.
+}
+
 static void *inmux_thread(void *)
 {
 	char threadname[17];
 	strncpy(threadname, __func__, sizeof(threadname));
 	threadname[16] = 0;
 	prctl (PR_SET_NAME, (unsigned long)&threadname);
+	signal(SIGALRM, inmux_sighandler);
 
 	inmux_thread_running = 1;
 	while (inmux_thread_running) {
@@ -254,7 +253,7 @@ void stop_inmux_thread(void)
 	if (! inmux_thread_running)
 		return;
 	inmux_thread_running = 0;
-	pthread_kill(inmux_task, SIGKILL);
+	pthread_kill(inmux_task, SIGALRM);
 	close_input_devices();
 	pthread_join(inmux_task, NULL);
 }
