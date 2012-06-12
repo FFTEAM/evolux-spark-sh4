@@ -290,7 +290,27 @@ static void* reader_thread(void * /*arg*/)
 		len = dmx->Read(tmp, 6, 1000);
 		if(len <= 0)
 			continue;
+#ifdef EVOLUX
+		if(!memcmp(tmp, "\x00\x00\x01\xb3", 4)) { // padding stream
+			packlen =  getbits(tmp, 4*8, 16) + 6;
+			buf = (uint8_t*) malloc(packlen);
 
+			// actually, we're doing slightly too much here ...
+			memmove(buf, tmp, 6);
+			/* read rest of the packet */
+			while((count < packlen) && !dvbsub_stopped) {
+				len = dmx->Read(buf+count, packlen-count, 1000);
+				if (len < 0) {
+					continue;
+				} else {
+					count += len;
+				}
+			}
+			free(buf);
+			buf = NULL;
+			continue;
+		}
+#endif
 		if(memcmp(tmp, "\x00\x00\x01\xbd", 4)) {
 			if (!bad_startcode) {
 				sub_debug.print(Debug::VERBOSE, "[subtitles] bad start code: %02x%02x%02x%02x\n", tmp[0], tmp[1], tmp[2], tmp[3]);
