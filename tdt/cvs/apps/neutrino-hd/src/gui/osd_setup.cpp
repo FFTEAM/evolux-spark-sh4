@@ -745,7 +745,11 @@ int COsdSetup::showContextChanlistMenu()
 
 #ifdef SCREENSHOT
 //screenshot
+#ifdef EVOLUX
 #define SCREENSHOT_FMT_OPTION_COUNT 3
+#else
+#define SCREENSHOT_FMT_OPTION_COUNT 3
+#endif
 const CMenuOptionChooser::keyval_ext SCREENSHOT_FMT_OPTIONS[SCREENSHOT_FMT_OPTION_COUNT] =
 {
 	{ CScreenShot::FORMAT_PNG,   NONEXISTANT_LOCALE, "PNG"  },

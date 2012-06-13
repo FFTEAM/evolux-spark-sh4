@@ -85,6 +85,7 @@ CScreenShot::~CScreenShot()
 bool CScreenShot::GetData()
 {
 #ifdef EVOLUX
+	CVFD::getInstance()->ShowText("screenshot");
 	xres = CFrameBuffer::getInstance()->getScreenWidth(true);
 	yres = CFrameBuffer::getInstance()->getScreenHeight(true);
 	pixel_data = (unsigned char *) cs_malloc_uncached(xres * yres * sizeof(fb_pixel_t));
@@ -181,6 +182,7 @@ bool CScreenShot::SaveFile()
 	}
 
 	cs_free_uncached((void *) pixel_data);
+	CVFD::getInstance()->ShowText(NULL);
 	return ret;
 }
 
