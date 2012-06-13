@@ -71,7 +71,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
 			"--with-stb-hal-build=$(appsdir)/libstb-hal" \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DSCREENSHOT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
 
 $(DEPDIR)/neutrino-hd.do_prepare: $(appsdir)/neutrino-hd/config.status
 	touch $@

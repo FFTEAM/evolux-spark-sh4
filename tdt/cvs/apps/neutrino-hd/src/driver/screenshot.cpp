@@ -43,6 +43,11 @@
 #include <video.h>
 #include <cs_api.h>
 #include <driver/screenshot.h>
+#ifdef EVOLUX
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <sys/syscall.h> /* SYS_gettid */
+#endif
 
 extern "C" {
 #include <jpeglib.h>
@@ -59,9 +64,17 @@ CScreenShot::CScreenShot(const std::string fname, screenshot_format_t fmt)
 	fd = NULL;
 	xres = 0;
 	yres = 0;
+#ifdef EVOLUX
+	get_video = false;
+#else
 	get_video = g_settings.screenshot_video;
+#endif
 	get_osd = g_settings.screenshot_mode;
+#ifdef EVOLUX
+	scale_to_video = false;
+#else
 	scale_to_video = g_settings.screenshot_scale;
+#endif
 }
 
 CScreenShot::~CScreenShot()
@@ -71,6 +84,12 @@ CScreenShot::~CScreenShot()
 /* try to get video frame data in ARGB format, restore GXA state */
 bool CScreenShot::GetData()
 {
+#ifdef EVOLUX
+	xres = CFrameBuffer::getInstance()->getScreenWidth(true);
+	yres = CFrameBuffer::getInstance()->getScreenHeight(true);
+	pixel_data = (unsigned char *) cs_malloc_uncached(xres * yres * sizeof(fb_pixel_t));
+	memcpy(pixel_data, CFrameBuffer::getInstance()->getFrameBufferPointer(), xres * yres * sizeof(fb_pixel_t));
+#else
 	static OpenThreads::Mutex mutex;
 	bool res = false;
 
@@ -96,6 +115,7 @@ bool CScreenShot::GetData()
 		printf("CScreenShot::Start: GetScreenImage failed\n");
 		return false;
 	}
+#endif
 
 	printf("CScreenShot::GetData: data: %x %d x %d\n", (int) pixel_data, xres, yres);
 	return true;
@@ -118,7 +138,12 @@ void CScreenShot::run()
 	printf("CScreenShot::run save to %s format %d\n", filename.c_str(), format);
 	detach();
 	setCancelModeDisable();
+#ifdef EVOLUX
+#define gettid() ((pid_t)syscall(SYS_gettid))
+	setpriority(PRIO_PROCESS, gettid(), 19);
+#else
 	setSchedulePriority(THREAD_PRIORITY_MIN);
+#endif
 	bool ret = SaveFile();
 	printf("CScreenShot::run: %s finished: %d\n", filename.c_str(), ret);
 	delete this;

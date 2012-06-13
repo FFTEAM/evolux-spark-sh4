@@ -1303,20 +1303,6 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 #endif
 						{
 							last_keypress = now_pressed;
-#ifdef EVOLUX
-							if (trkey == RC_osdshot) {
-								char d[80];
-								char p[255];
-								time_t now = time(NULL);
-								struct tm *tm = localtime(&now);
-								strftime(d, sizeof(d), "%%s/osdshot-%Y%m%d%H%M%S.png", tm);
-								snprintf(p, sizeof(p), d, g_settings.network_nfs_picturedir);
-								CVFD::getInstance()->ShowText("OSD SHOT RUNNING");
-								CFrameBuffer::getInstance()->OSDShot(p);
-								CVFD::getInstance()->ShowText(NULL);
-								continue;
-							}
-#endif
 
 							*msg = trkey;
 							*data = 0; /* <- button pressed */

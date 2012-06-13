@@ -677,7 +677,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.screenshot_video = configfile.getInt32( "screenshot_video",  1);
 	g_settings.screenshot_scale = configfile.getInt32( "screenshot_scale",  0);
 
-	g_settings.screenshot_dir = configfile.getString( "screenshot_dir", "/media/sda1/movies" );
+	g_settings.screenshot_dir = configfile.getString( "screenshot_dir", "/media/hdd/pictures" );
 	g_settings.cacheTXT = configfile.getInt32( "cacheTXT",  0);
 	g_settings.minimode = configfile.getInt32( "minimode",  0);
 	g_settings.mode_clock = configfile.getInt32( "mode_clock",  0);

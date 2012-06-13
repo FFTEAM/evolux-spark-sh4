@@ -752,12 +752,20 @@ const CMenuOptionChooser::keyval_ext SCREENSHOT_FMT_OPTIONS[SCREENSHOT_FMT_OPTIO
 	{ CScreenShot::FORMAT_JPG,   NONEXISTANT_LOCALE, "JPEG" },
 	{ CScreenShot::FORMAT_BMP,   NONEXISTANT_LOCALE, "BMP" }
 };
+#ifdef EVOLUX
+#define SCREENSHOT_OPTION_COUNT 1
+const CMenuOptionChooser::keyval SCREENSHOT_OPTIONS[SCREENSHOT_OPTION_COUNT] =
+{
+	{ 1, LOCALE_SCREENSHOT_OSD   }
+};
+#else
 #define SCREENSHOT_OPTION_COUNT 2
 const CMenuOptionChooser::keyval SCREENSHOT_OPTIONS[SCREENSHOT_OPTION_COUNT] =
 {
 	{ 0, LOCALE_SCREENSHOT_TV },
 	{ 1, LOCALE_SCREENSHOT_OSD   }
 };
+#endif
 
 void COsdSetup::showOsdScreenshottSetup(CMenuWidget *menu_screenshot)
 {
@@ -768,9 +776,11 @@ void COsdSetup::showOsdScreenshottSetup(CMenuWidget *menu_screenshot)
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_FORMAT, &g_settings.screenshot_format, SCREENSHOT_FMT_OPTIONS, SCREENSHOT_FMT_OPTION_COUNT, true));
 	menu_screenshot->addItem(new CMenuForwarder(LOCALE_SCREENSHOT_DEFDIR, true, g_settings.screenshot_dir, this, "screenshot_dir"));
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_RES, &g_settings.screenshot_mode, SCREENSHOT_OPTIONS, SCREENSHOT_OPTION_COUNT, true));
+#ifndef EVOLUX
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_VIDEO, &g_settings.screenshot_video, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_SCALE, &g_settings.screenshot_scale, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_COVER, &g_settings.screenshot_cover, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+#endif
 
 
 }

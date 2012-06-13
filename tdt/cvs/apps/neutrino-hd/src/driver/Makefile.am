@@ -35,6 +35,8 @@ libneutrino_driver_a_SOURCES = \
 	ringbuffer.c \
 	volume.cpp
 
+libneutrino_driver_a_SOURCES += screenshot.cpp
+
 if BOXTYPE_SPARK
 libneutrino_driver_a_SOURCES += \
 	framebuffer_spark.cpp

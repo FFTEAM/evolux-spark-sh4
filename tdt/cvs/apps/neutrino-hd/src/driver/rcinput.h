@@ -258,11 +258,6 @@ class CRCInput
 			RC_zoomin	= KEY_ZOOMIN,
 			RC_zoomout	= KEY_ZOOMOUT,
 
-#ifdef EVOLUX
-			/* SPARK keys */
-			RC_osdshot	= KEY_PRESENTATION,
-#endif
-
 			RC_timeout	= 0xFFFFFFFF,
 			RC_nokey	= 0xFFFFFFFE
 		};
