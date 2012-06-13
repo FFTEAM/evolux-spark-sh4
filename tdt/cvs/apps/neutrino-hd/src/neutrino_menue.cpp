@@ -191,6 +191,10 @@ void CNeutrinoApp::InitMenuMain()
 	// service, also as pin protected option in personalize menu, as a result of parameter value CPersonalizeGui::PERSONALIZE_SHOW_AS_ACCESS_OPTION
 	personalize.addItem(MENU_MAIN, new CMenuForwarder(LOCALE_MAINMENU_SERVICE, true, NULL, &personalize.getWidget(MENU_SERVICE)/**service**/), &g_settings.personalize[SNeutrinoSettings::P_MAIN_SERVICE], false, CPersonalizeGui::PERSONALIZE_SHOW_AS_ACCESS_OPTION);
 	
+#ifdef EVOLUX
+	// extra menu
+	personalize.addItem(MENU_MAIN, new CMenuForwarder(LOCALE_MAINMENU_EXTRAMENU, true, NULL, new CExtraMenuSetup()), &g_settings.personalize[SNeutrinoSettings::P_EXTRA_MENU], false, CPersonalizeGui::PERSONALIZE_SHOW_AS_ACCESS_OPTION);
+#endif
 	//separator
 	personalize.addSeparator(MENU_MAIN);
 	
@@ -295,10 +299,6 @@ void CNeutrinoApp::InitMenuSettings()
 	// audioplayer/pictureviewer settings
 	personalize.addItem(MENU_SETTINGS, new CMenuForwarder(LOCALE_AUDIOPLAYERPICSETTINGS_GENERAL, true, NULL, new CMediaPlayerSetup()), &g_settings.personalize[SNeutrinoSettings::P_MSET_MEDIAPLAYER]);
 
-#ifdef EVOLUX
-	// extra menu
-	personalize.addItem(MENU_SETTINGS, new CMenuForwarder(LOCALE_MAINMENU_EXTRAMENU, true, NULL, new CExtraMenuSetup()), &g_settings.personalize[SNeutrinoSettings::P_EXTRA_MENU]);
-#endif
 }
 	
 

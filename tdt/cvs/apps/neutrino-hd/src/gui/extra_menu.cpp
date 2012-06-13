@@ -161,11 +161,11 @@ int CExtraMenuSetup::exec(CMenuTarget* parent, const std::string &actionKey)
 
 int CExtraMenuSetup::showExtraMenuSetup()
 {
-	CMenuWidget* m = new CMenuWidget(LOCALE_MAINSETTINGS_HEAD, NEUTRINO_ICON_SETTINGS, width);
+	CMenuWidget* m = new CMenuWidget(LOCALE_EXTRAMENU_SETTINGS, NEUTRINO_ICON_SETTINGS, width);
 	selected = m->getSelected();
 	int shortcut = 1;
 
-	m->addIntroItems(LOCALE_EXTRAMENU_SETTINGS);
+	m->addIntroItems(NONEXISTANT_LOCALE);
 
 	m->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, 
 		CNeutrinoApp::getInstance()->EmuMenu, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
