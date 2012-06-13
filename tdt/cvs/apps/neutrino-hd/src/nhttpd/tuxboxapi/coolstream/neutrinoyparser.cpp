@@ -31,6 +31,9 @@
 #include <zapit/getservices.h>
 #include <cs_api.h>
 #include <system/configure_network.h>
+#ifdef EVOLUX
+#include <system/localize_bouquetnames.h>
+#endif
 
 extern CBouquetManager *g_bouquetManager;
 
@@ -223,8 +226,14 @@ std::string  CNeutrinoYParser::func_get_bouquets_as_dropdown(CyhookHandler *, st
 		ZapitChannelList * channels = mode == CZapitClient::MODE_RADIO ? &g_bouquetManager->Bouquets[i]->radioChannels : &g_bouquetManager->Bouquets[i]->tvChannels;
 		sel=(nr==(i+1)) ? "selected=\"selected\"" : "";
 		if(!channels->empty() && (!g_bouquetManager->Bouquets[i]->bHidden || do_show_hidden == "true"))
+#ifdef EVOLUX
+			localizeBouquetNames();
+			yresult += string_printf("<option value=%u %s>%s</option>\n", i + 1, sel.c_str(),
+				(encodeString(g_bouquetManager->Bouquets[i]->lName.c_str())).c_str());
+#else
 			yresult += string_printf("<option value=%u %s>%s</option>\n", i + 1, sel.c_str(),
 				(encodeString(std::string(g_bouquetManager->Bouquets[i]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) :g_bouquetManager->Bouquets[i]->Name.c_str()))).c_str());
+#endif
 			//yresult += string_printf("<option value=%u %s>%s</option>\n", i + 1, sel.c_str(), (encodeString(std::string(g_bouquetManager->Bouquets[i]->Name.c_str()))).c_str());
 	}
 	return yresult;
@@ -244,7 +253,12 @@ std::string  CNeutrinoYParser::func_get_bouquets_as_templatelist(CyhookHandler *
 	for (int i = 0; i < (int) g_bouquetManager->Bouquets.size(); i++) {
 		ZapitChannelList * channels = mode == CZapitClient::MODE_RADIO ? &g_bouquetManager->Bouquets[i]->radioChannels : &g_bouquetManager->Bouquets[i]->tvChannels;
 		if(!channels->empty() && (!g_bouquetManager->Bouquets[i]->bHidden || do_show_hidden == "true")) {
+#ifdef EVOLUX
+			localizeBouquetNames();
+			yresult += string_printf(ytemplate.c_str(), i + 1, g_bouquetManager->Bouquets[i]->lName.c_str());
+#else
 			yresult += string_printf(ytemplate.c_str(), i + 1, g_bouquetManager->Bouquets[i]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : g_bouquetManager->Bouquets[i]->Name.c_str());
+#endif
 			yresult += "\r\n";
 		}
 	}
@@ -1034,9 +1048,15 @@ std::string  CNeutrinoYParser::func_bouquet_editor_main(CyhookHandler *hh, std::
 			yresult += string_printf(para.c_str(), classname, akt.c_str(),
 				i + 1, lock_action.c_str(), lock_img.c_str(), lock_alt.c_str(), //lock
 				i + 1, hidden_action.c_str(), hidden_img.c_str(), hidden_alt.c_str(), //hhidden
+#ifdef EVOLUX
+				i + 1, bouquet->lName.c_str(), bouquet->lName.c_str(), //link
+				i + 1, bouquet->lName.c_str(), //rename
+				i + 1, bouquet->lName.c_str(), //delete
+#else
 				i + 1, bouquet->Name.c_str(), bouquet->Name.c_str(), //link
 				i + 1, bouquet->Name.c_str(), //rename
 				i + 1, bouquet->Name.c_str(), //delete
+#endif
 				down_show.c_str(), i + 1, //down arrow
 				up_show.c_str(), i + 1); //up arrow
 		}

@@ -112,6 +112,9 @@
 #include <system/setting_helpers.h>
 #include <system/settings.h>
 #include <system/safe_system.h>
+#ifdef EVOLUX
+#include <system/localize_bouquetnames.h>
+#endif
 
 #include <timerdclient/timerdmsg.h>
 
@@ -1451,6 +1454,9 @@ void CNeutrinoApp::channelsInit(bool bOnly)
 			myinfo.arena, myinfo.arena / 1024, myinfo.uordblks);
 #endif
 
+#ifdef EVOLUX
+	localizeBouquetNames();
+#endif
 	reloadhintBox->hide();
 }
 

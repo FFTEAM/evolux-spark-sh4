@@ -46,6 +46,9 @@
 // nhttpd
 #include "neutrinoapi.h"
 #include "controlapi.h"
+#ifdef EVOLUX
+#include <system/localize_bouquetnames.h>
+#endif
 
 bool sectionsd_getEPGidShort(event_id_t epgID, CShortEPGData * epgdata);
 bool sectionsd_getEPGid(const event_id_t epgID, const time_t startzeit, CEPGData * epgdata);
@@ -1220,13 +1223,20 @@ void CControlAPI::GetBouquetsCGI(CyhookHandler *hh) {
 	if (hh->ParamList["encode"] == "true")
 		encode = true;
 
+#ifdef EVOLUX
+	localizeBouquetNames();
+#endif
 	int mode = NeutrinoAPI->Zapit->getMode();
 	std::string bouquet;
 	for (int i = 0, size = (int) g_bouquetManager->Bouquets.size(); i < size; i++) {
 		std::string item = "";
 		ZapitChannelList * channels = mode == CZapitClient::MODE_RADIO ? &g_bouquetManager->Bouquets[i]->radioChannels : &g_bouquetManager->Bouquets[i]->tvChannels;
 		if (!channels->empty() && (!g_bouquetManager->Bouquets[i]->bHidden || show_hidden)) {
+#ifdef EVOLUX
+			bouquet = std::string(g_bouquetManager->Bouquets[i]->lName.c_str());
+#else
 			bouquet = std::string(g_bouquetManager->Bouquets[i]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : g_bouquetManager->Bouquets[i]->Name.c_str());
+#endif
 			if (encode)
 				bouquet = encodeString(bouquet); // encode (URLencode) the bouquetname
 			item = hh->outPair("number", string_printf("%u", i + 1), true);
@@ -1340,6 +1350,9 @@ void CControlAPI::epgDetailList(CyhookHandler *hh) {
 	TOutType outType = hh->outStart();
 	std::string result = "";
 
+#ifdef EVOLUX
+	localizeBouquetNames();
+#endif
 	NeutrinoAPI->eList.clear();
 	if (bouquetnr >= 0 || all_bouquets) {
 		int bouquet_size = (int) g_bouquetManager->Bouquets.size();
@@ -1355,7 +1368,11 @@ void CControlAPI::epgDetailList(CyhookHandler *hh) {
 
 		for (int i = start_bouquet; i < bouquet_size; i++) {
 			channels = mode == CZapitClient::MODE_RADIO ? g_bouquetManager->Bouquets[i]->radioChannels : g_bouquetManager->Bouquets[i]->tvChannels;
+#ifdef EVOLUX
+			std::string bouquet = std::string(g_bouquetManager->Bouquets[i]->lName.c_str());
+#else
 			std::string bouquet = std::string(g_bouquetManager->Bouquets[i]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : g_bouquetManager->Bouquets[i]->Name.c_str());
+#endif
 			bouquet = encodeString(bouquet); // encode (URLencode) the bouquetname
 			std::string res_channels = "";
 
