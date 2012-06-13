@@ -298,6 +298,7 @@ extra.key_click Щелкнуть кнопку
 extra.key_list_end В конец списка
 extra.key_list_start В начало списка
 extra.key_plugin Один сенсорный плагин
+extra.key_screenshot Снимок экрана
 extra.key_timeshift Таймшифт
 extra.key_unlock Разблокировать ПДУ
 extra.key_current_transponder Текущий транспондер
