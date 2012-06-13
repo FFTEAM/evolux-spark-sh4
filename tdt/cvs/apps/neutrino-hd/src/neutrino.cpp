@@ -1108,7 +1108,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString ( "plugin_hdd_dir", g_settings.plugin_hdd_dir );
 	configfile.setString ( "logo_hdd_dir", g_settings.logo_hdd_dir );
 #ifdef EVOLUX
-	configfile.setString ( "logo_hdd_dir", g_settings.logo_hdd_dir_e2 );
+	configfile.setString ( "logo_hdd_dir_e2", g_settings.logo_hdd_dir_e2 );
 #endif
 
 	saveKeys();
