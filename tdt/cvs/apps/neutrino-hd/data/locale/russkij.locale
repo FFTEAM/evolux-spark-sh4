@@ -260,8 +260,8 @@ eventlistbar.recordevent Запись
 extra.add_to_bouquet Добавить в пакет
 extra.audio_run_player "Аудио" запускает плеер
 extra.auto_delete Авто-удаление
-extra.auto_timeshift Timeshift, сек. (0=откл)
-extra.auto_to_record Сдвиг Timeshift при записи
+extra.auto_timeshift Таймшифт, сек. (0=откл)
+extra.auto_to_record Сдвиг таймшифт при записи
 extra.bigwindows Крупные окна OSD
 extra.cache_txt Кеш телетекста
 extra.chadded Канал добавлен в выбранный пакет....\n
@@ -327,8 +327,8 @@ extra.sms_channel SMS-режим выбора канала
 extra.south Юг
 extra.spts_mode Режим SPTS
 extra.start_tostandby Запуск в standby
-extra.temp_timeshift Timeshift
-extra.timeshift_pause Пауза Timeshift
+extra.temp_timeshift Таймшифт
+extra.timeshift_pause Пауза таймшифт
 extra.timezone Часовой пояс
 extra.tp_fec FEC
 extra.tp_freq Частота
@@ -379,10 +379,10 @@ favorites.menueadd Добавить в избранное
 favorites.nobouquets Избранное доступно только из активных пакетов.
 filebrowser.delete Удалить
 filebrowser.denydirectoryleave Корневой каталог
-filebrowser.dodelete1 удаляем раз
-filebrowser.dodelete2 удаляем два
-filebrowser.filter.active фильтр вкл.
-filebrowser.filter.inactive фильтр выкл.
+filebrowser.dodelete1 Вы уверены, что хотите удалить файл
+filebrowser.dodelete2 окончательно?
+filebrowser.filter.active Фильтр включен
+filebrowser.filter.inactive Фильтр отключен
 filebrowser.head Проводник по каталогам
 filebrowser.mark Пометить
 filebrowser.nextpage След. страница
@@ -645,6 +645,7 @@ keybindingmenu.misc Прочее
 keybindingmenu.modechange Изменение режима
 keybindingmenu.pagedown Страница вниз
 keybindingmenu.pageup Страница вверх
+keybindingmenu.poweroff Выключение
 keybindingmenu.quickzap Быстрый перебор каналов
 keybindingmenu.RC ПДУ
 keybindingmenu.repeatblock Задержка повтора
@@ -1165,6 +1166,9 @@ rclock.lockmsg Ваш пульт управления заблокирован.\
 rclock.menueadd Заблокировать ПДУ 
 rclock.title Заблокировать Пульт управления
 rclock.unlockmsg Пульт управления активирован.
+recording.is_running Запись этого канала уже активна!
+recording.start Начало записи, подождите...
+recording.stop Остановка записи, подождите...
 recordingmenu.apids Аудио потоки
 recordingmenu.apids_ac3 AC3 поток
 recordingmenu.apids_alt Другие потоки
@@ -1180,9 +1184,16 @@ recordingmenu.filesettings Настройки direkt (в файл)
 recordingmenu.head Настройки записи
 recordingmenu.help Режимы записи:\n--------------------------\nсервер:\nиспользуется софт установленный на ПК\n\n(analog) vcr:\nиспользуется выход vcr\n\ndirect (в файл):\nзапись в предварительно монтированный NFS-каталог\nили в каталоги внутреннего жесткого диска\nTS: использует spts-режим (для dbox2)\nPES: spts-режим должен быть выключен (для dbox2)\n\n\nМакс.размер файла:\n---------------------\nNFS V2: 2 GB (2048 MB)\nNFS V3: без ограничений (0 MB)\nFAT: 2 GB (2048 MB)\nFAT32: 4 GB (4096 MB)
 recordingmenu.no_scart Не переключаться на SCART
-recordingmenu.off Отключить
+recordingmenu.off Выкл
+recordingmenu.multimenu.ask_stop_all Остановить все %d записи?
+recordingmenu.multimenu.info_stop_all %d из %d записей будут остановлены.
+recordingmenu.multimenu.rec_akt Запись текущего канала
+recordingmenu.multimenu.stop_all Остановить все
+recordingmenu.multimenu.timeshift Таймшифт
 recordingmenu.record_in_spts_mode Переключить в spts режим перед записью
 recordingmenu.recording_type Режим записи
+recordingmenu.record_is_not_running Запись не включена!
+recordingmenu.record_is_running Запись активна!
 recordingmenu.ringbuffers Значение для ringbuffers
 recordingmenu.save_in_channeldir Создать каталог по имени канала
 recordingmenu.server Сервер
@@ -1196,7 +1207,8 @@ recordingmenu.stopplayback Остановить воспроизведение
 recordingmenu.stopsectionsd Остановить sectionsd
 recordingmenu.stream_pmt_pid Записать PMT
 recordingmenu.stream_vtxt_pid Запись телетекста
-recordingmenu.tsdir Каталог Timeshift
+recordingmenu.timeshift Таймшифт
+recordingmenu.tsdir Каталог для таймшифт-записи
 recordingmenu.use_fdatasync Синхрозапись (fdatasync)
 recordingmenu.use_o_sync Синхронизация (O_SYNC)
 recordingmenu.vcr VCR
@@ -1545,6 +1557,7 @@ extramenu.tunerreset Рестарт тюнера
 extramenu.tunerreset.select Рестарт тюнера
 extramenu.tunerreset.on Вкл
 extramenu.tunerreset.off Выкл
+extramenu.tunerreset.restarting Рестартуем тюнер...
 extramenu.tunerreset.restart Перезапуск тюнера
 extramenu.correctvolume Коррекция уровня звука
 extramenu.correctvolume.select Коррекция уровня
@@ -1579,6 +1592,8 @@ extramenu.emu.spcs Spcs
 extramenu.emu.select Выбор Cam 
 extramenu.emu.restart Рестарт Cam
 extramenu.emu.disable Отключить Cam
+extramenu.disabled отключен.
+extramenu.enabled запущен.
 extramenu.swap Меню Swap
 extramenu.swap.swapram SWAPRAM
 extramenu.swap.swappart SWAPPART
@@ -1590,7 +1605,8 @@ extramenu.boot.select Выбор системы:
 extramenu.boot.unchanged без изменений
 extramenu.boot.bootargs.head Параметры загрузки STB
 extramenu.boot.bootargs.text Не выключайте ваш STB!
-extramenu.boot.changed режим активирован. Перезагрузите STB.
+extramenu.boot.changed режим активирован. Перезагрузите STB!
+extramenu.boot.this Изменения в режим загрузки не произведены.
 extramenu.fsck Меню FSCK
 extramenu.fsck.select FSCK
 extramenu.fsck.on Вкл
