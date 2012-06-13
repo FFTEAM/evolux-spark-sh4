@@ -59,6 +59,7 @@ release-enigma2-pli-nightly_spark:
 	cp -f $(targetprefix)/usr/sbin/exportfs $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	cp -f $(targetprefix)/usr/sbin/showmount $(prefix)/release-enigma2-pli-nightly/usr/sbin/
 	cp -f $(targetprefix)/usr/sbin/rpc* $(prefix)/release-enigma2-pli-nightly/usr/sbin/
+	( cd $(prefix)/release-enigma2-pli-nightly/usr/bin && ln -sf /bin/grab grab )
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/var
 	cp -RP $(targetprefix)/var/lib $(prefix)/release-enigma2-pli-nightly/var/
 	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release-enigma2-pli-nightly/etc/
