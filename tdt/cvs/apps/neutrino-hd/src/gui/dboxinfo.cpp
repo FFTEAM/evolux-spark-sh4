@@ -432,7 +432,11 @@ void CDBoxInfoWidget::paint()
 									char *p1=NULL, *p2=NULL;
 									p1=strchr(g_settings.network_nfs_recordingdir+1,'/') ;
 									p2=strchr(mnt->mnt_dir+1,'/') ;
+#ifdef EVOLUX
+									if (p1 && p2) {
+#else
 									if (p2) {
+#endif
 										if (strstr(p1,p2)) {
 
 											rec_mp = true;
