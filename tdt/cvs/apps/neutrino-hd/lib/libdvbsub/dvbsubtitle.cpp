@@ -138,8 +138,8 @@ fb_pixel_t * simple_resize32(uint8_t * orgin, uint32_t * colors, int nb_colors, 
 void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 {
 #ifdef EVOLUX
-#define DEFAULT_XRES 1280
-#define DEFAULT_YRES 720
+#define DEFAULT_XRES 1280	// backbuffer width
+#define DEFAULT_YRES 720	// backbuffer height
 
 	if (!Count())
 		return;
@@ -153,10 +153,10 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
 		int width = sub.rects[i]->w;
 		int height = sub.rects[i]->h;
-		size_t bs = width * height;
 		uint8_t *origin = sub.rects[i]->pict.data[0];
 		int nb_colors = sub.rects[i]->nb_colors;
 
+		size_t bs = width * height;
 		for (int j = 0; j < bs; j++)
 			if (origin[j] < nb_colors)
 				b[j] = colors[origin[j]];
@@ -328,14 +328,12 @@ void cDvbSubtitleConverter::Pause(bool pause)
 		//Reset();
 	} else {
 #ifdef EVOLUX
+		// Assume that we've switched channel. Drop the existing display_definition.
 		DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
-		DVBSubDisplayDefinition *display_def = ctx->display_definition;
-
-		if (display_def) {
-			display_def->x = 0;
-			display_def->y = 0;
-			display_def->width = 720;
-			display_def->height = 576;
+		if (ctx) {
+			DVBSubDisplayDefinition *display_def = ctx->display_definition;
+			if (ctx->display_definition)
+				av_freep(&ctx->display_definition);
 		}
 #endif
 		//Reset();
@@ -433,21 +431,21 @@ int cDvbSubtitleConverter::Action(void)
 		return -1;
 	}
 #ifdef EVOLUX
+	min_x = min_y = 0;
+	max_x = 720;
+	max_y = 576;
+
 	DVBSubContext *ctx = (DVBSubContext *) avctx->priv_data;
-	DVBSubDisplayDefinition *display_def = ctx->display_definition;
-
-	if (display_def && display_def->width && display_def->height) {
-		min_x = display_def->x;
-		min_y = display_def->y;
-		max_x = display_def->width;
-		max_y = display_def->height;
-		dbgconverter("cDvbSubtitleConverter::Action: Display Definition: min_x=%d min_y=%d max_x=%d max_y=%d\n", min_x, min_y, max_x, max_y);
-	} else {
-		min_x = min_y = 0;
-		max_x = 720;
-		max_y = 576;
+	if (ctx) {
+		DVBSubDisplayDefinition *display_def = ctx->display_definition;
+		if (display_def && display_def->width && display_def->height) {
+			min_x = display_def->x;
+			min_y = display_def->y;
+			max_x = display_def->width;
+			max_y = display_def->height;
+			dbgconverter("cDvbSubtitleConverter::Action: Display Definition: min_x=%d min_y=%d max_x=%d max_y=%d\n", min_x, min_y, max_x, max_y);
+		}
 	}
-
 #endif
 	Lock();
 	if (cDvbSubtitleBitmaps *sb = bitmaps->First()) {

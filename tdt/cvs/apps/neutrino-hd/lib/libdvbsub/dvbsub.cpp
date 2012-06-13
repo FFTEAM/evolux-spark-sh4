@@ -291,7 +291,7 @@ static void* reader_thread(void * /*arg*/)
 		if(len <= 0)
 			continue;
 #ifdef EVOLUX
-		if(!memcmp(tmp, "\x00\x00\x01\xb3", 4)) { // padding stream
+		if(!memcmp(tmp, "\x00\x00\x01\xbe", 4)) { // padding stream
 			packlen =  getbits(tmp, 4*8, 16) + 6;
 			buf = (uint8_t*) malloc(packlen);
 
