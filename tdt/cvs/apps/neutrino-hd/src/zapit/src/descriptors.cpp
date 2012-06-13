@@ -447,8 +447,15 @@ void service_descriptor(const unsigned char * const buffer, const t_service_id s
 		return;
 	}
 
-	service_type = fix_service_type(service_type);
+#ifdef EVOLUX
 	uint8_t real_type = service_type;
+fprintf(stderr, "******** real service type is 0x%.2x\n", real_type);
+#endif
+	service_type = fix_service_type(service_type);
+#ifndef EVOLUX
+	uint8_t real_type = service_type;
+#endif
+
 
 	switch ( scanType ) {
 		case CZapitClient::ST_TVRADIO:
@@ -681,8 +688,14 @@ void current_service_descriptor(const unsigned char * const buffer, const t_serv
 	bool service_wr = false;
 	uint8_t service_type = buffer[2];
 
-	service_type = fix_service_type(service_type); 
+#ifdef EVOLUX
 	uint8_t real_type = service_type;
+#endif
+	service_type = fix_service_type(service_type); 
+#ifndef EVOLUX
+	uint8_t real_type = service_type;
+fprintf(stderr, "******** real service type is 0x%.2x\n", real_type);
+#endif
 
 #if 0
 	switch ( scanType ) {
