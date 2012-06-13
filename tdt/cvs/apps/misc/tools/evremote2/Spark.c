@@ -452,6 +452,8 @@ static tButton *pSparkGetButton(char *pData)
 					procCmdLine[len] = 0;
 					if (strstr(procCmdLine, "STB_ID=" STB_ID_EDISION_PINGULUX))
 						cButtons = cButtonsEdisionSpark;
+					if (strstr(procCmdLine, "STB_ID=" STB_ID_GALAXYINNOVATIONS_S8120))
+						cButtons = cButtonsSparkRc09;
 				}
 				close(fn);
 			}
