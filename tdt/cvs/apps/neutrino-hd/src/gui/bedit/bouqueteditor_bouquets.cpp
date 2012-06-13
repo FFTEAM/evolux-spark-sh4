@@ -46,6 +46,9 @@
 #include <gui/widget/icons.h>
 #include <gui/widget/messagebox.h>
 #include <gui/widget/stringinput.h>
+#ifdef EVOLUX
+#include <system/localize_bouquetnames.h>
+#endif
 
 #include <zapit/client/zapitclient.h>
 #include <zapit/client/zapittools.h>
@@ -114,15 +117,7 @@ void CBEBouquetWidget::paintItem(int pos)
 
 		//g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+68, ypos+ fheight, width-68, (*Bouquets)[current]->Name, color, 0, true);
 #ifdef EVOLUX
-	const char *lname = (*Bouquets)[current]->Name.c_str();
-	if ((*Bouquets)[current]->bFav)
-		lname = g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME);
-	else if(!strcmp(lname, "extra.zapit_bouquetname_others"))
-		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
-	else if(!strcmp(lname, "extra.zapit_bouquetname_newchannels"))
-		lname = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
-
-		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+iconoffset+20, ypos + iheight - (iheight-fheight)/2, width-iconoffset-20, lname, color, 0, true);
+		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+iconoffset+20, ypos + iheight - (iheight-fheight)/2, width-iconoffset-20, (*Bouquets)[current]->lName, color, 0, true);
 #else
 		g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST]->RenderString(x+iconoffset+20, ypos + iheight - (iheight-fheight)/2, width-iconoffset-20, (*Bouquets)[current]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[current]->Name, color, 0, true);
 #endif
@@ -228,6 +223,9 @@ int CBEBouquetWidget::exec(CMenuTarget* parent, const std::string & /*actionKey*
         x = frameBuffer->getScreenX() + (frameBuffer->getScreenWidth() - width) / 2;
         y = frameBuffer->getScreenY() + (frameBuffer->getScreenHeight() - height) / 2;
 
+#ifdef EVOLUX
+	localizeBouquetNames();
+#endif
 	Bouquets = &g_bouquetManager->Bouquets;
 	paintHead();
 	paint();
@@ -437,7 +435,11 @@ int CBEBouquetWidget::exec(CMenuTarget* parent, const std::string & /*actionKey*
 				if (selected < Bouquets->size()) /* Bouquets->size() might be 0 */
 				{
 					//CBEChannelWidget* channelWidget = new CBEChannelWidget((*Bouquets)[selected]->Name, selected);
+#ifdef EVOLUX
+					CBEChannelWidget* channelWidget = new CBEChannelWidget((*Bouquets)[selected]->lName, selected);
+#else
 					CBEChannelWidget* channelWidget = new CBEChannelWidget((*Bouquets)[selected]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[selected]->Name, selected);
+#endif
 					channelWidget->exec( this, "");
 					if (channelWidget->hasChanged())
 						bouquetsChanged = true;
@@ -482,7 +484,11 @@ void CBEBouquetWidget::deleteBouquet()
 	if (selected >= Bouquets->size()) /* Bouquets->size() might be 0 */
 		return;
 
+#ifdef EVOLUX
+	if (ShowMsgUTF(LOCALE_FILEBROWSER_DELETE, (*Bouquets)[selected]->lName, CMessageBox::mbrNo, CMessageBox::mbYes|CMessageBox::mbNo)!=CMessageBox::mbrYes)
+#else
 	if (ShowMsgUTF(LOCALE_FILEBROWSER_DELETE, (*Bouquets)[selected]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : (*Bouquets)[selected]->Name, CMessageBox::mbrNo, CMessageBox::mbYes|CMessageBox::mbNo)!=CMessageBox::mbrYes)
+#endif
 		return;
 
 	//g_Zapit->deleteBouquet(selected);
@@ -574,6 +580,10 @@ void CBEBouquetWidget::renameBouquet()
 {
 	if ((*Bouquets)[selected]->bFav)
 		return;
+#ifdef EVOLUX
+	if((*Bouquets)[selected]->Name.find("extra.zapit_bouquetname_") == 0)
+		return;
+#endif
 
 	std::string newName = inputName((*Bouquets)[selected]->Name.c_str(), LOCALE_BOUQUETEDITOR_NEWBOUQUETNAME);
 	if (newName != (*Bouquets)[selected]->Name)

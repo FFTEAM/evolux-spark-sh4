@@ -32,14 +32,15 @@
 #include <config.h>
 #endif
 
-#include <gui/adzap.h>
-#include <widget/hintbox.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <global.h>
 #include <neutrino.h>
 #include <algorithm>
+#include <gui/adzap.h>
+#include <widget/hintbox.h>
+#include "driver/screen_max.h"
 
 #define ZAPBACK_ALERT_PERIOD 15	// seconds. Keep this in sync with the locales.
 
@@ -53,7 +54,7 @@ CAdZapMenu::CAdZapMenu()
 
     azm = this;
     frameBuffer = CFrameBuffer::getInstance();
-    width = 400;
+    width = w_max (40, 10);
     hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
     mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
     height = hheight + 13 * mheight + 10;

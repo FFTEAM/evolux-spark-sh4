@@ -63,6 +63,9 @@
 
 #include <system/settings.h>
 #include <system/fsmounter.h>
+#ifdef EVOLUX
+#include <system/localize_bouquetnames.h>
+#endif
 
 #include <global.h>
 #include <neutrino.h>
@@ -1147,6 +1150,9 @@ int CTimerList::newTimer()
 	CMenuWidget mctv(LOCALE_TIMERLIST_BOUQUETSELECT, NEUTRINO_ICON_SETTINGS);
 	CMenuWidget mcradio(LOCALE_TIMERLIST_BOUQUETSELECT, NEUTRINO_ICON_SETTINGS);
 
+#ifdef EVOLUX
+	localizeBouquetNames();
+#endif
 	for (int i = 0; i < (int) g_bouquetManager->Bouquets.size(); i++) {
 		if (!g_bouquetManager->Bouquets[i]->bHidden) {
 			CMenuWidget* mwtv = new CMenuWidget(LOCALE_TIMERLIST_CHANNELSELECT, NEUTRINO_ICON_SETTINGS);
@@ -1161,7 +1167,11 @@ int CTimerList::newTimer()
 				mwtv->addItem(new CMenuForwarderNonLocalized((*channels)[j]->getName().c_str(), true, NULL, this, (std::string(cChannelId) + (*channels)[j]->getName()).c_str(), CRCInput::RC_nokey, NULL, (*channels)[j]->scrambled ? NEUTRINO_ICON_SCRAMBLED : NULL));
 			}
 			if (!channels->empty())
+#ifdef EVOLUX
+				mctv.addItem(new CMenuForwarderNonLocalized(g_bouquetManager->Bouquets[i]->lName.c_str(), true, NULL, mwtv));
+#else
 				mctv.addItem(new CMenuForwarderNonLocalized(g_bouquetManager->Bouquets[i]->bFav ? g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME) : g_bouquetManager->Bouquets[i]->Name.c_str() /*g_bouquetManager->Bouquets[i]->Name.c_str()*/, true, NULL, mwtv));
+#endif
 
 
 			channels = &(g_bouquetManager->Bouquets[i]->radioChannels);
@@ -1171,7 +1181,11 @@ int CTimerList::newTimer()
 				mwradio->addItem(new CMenuForwarderNonLocalized((*channels)[j]->getName().c_str(), true, NULL, this, (std::string(cChannelId) + (*channels)[j]->getName()).c_str(), CRCInput::RC_nokey, NULL, (*channels)[j]->scrambled ? NEUTRINO_ICON_SCRAMBLED : NULL));
 			}
 			if (!channels->empty())
+#ifdef EVOLUX
+				mcradio.addItem(new CMenuForwarderNonLocalized(g_bouquetManager->Bouquets[i]->lName.c_str(), true, NULL, mwradio));
+#else
 				mcradio.addItem(new CMenuForwarderNonLocalized(g_bouquetManager->Bouquets[i]->Name.c_str(), true, NULL, mwradio));
+#endif
 		}
 	}
 
