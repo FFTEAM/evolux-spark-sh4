@@ -1068,20 +1068,23 @@ options.off Выкл
 options.on Вкл
 options.on.without_messages молча
 options.serial СОМ
+parentallock.bouquetmode Пакеты по умолчанию
 parentallock.changepin Изменить PIN-код
 parentallock.changepin_hint1 Введите новый PIN-код.
 parentallock.changetolocked На пакет
+parentallock.defaultlocked закрыты
+parentallock.defaultunlocked открыты
 parentallock.head Введите PIN-код
 parentallock.lockage Передачи
 parentallock.lockage12 до 12 лет
 parentallock.lockage16 до 16 лет
 parentallock.lockage18 до 18 лет
 parentallock.lockedchannel Установлена защита на просмотр...
-parentallock.lockedprogram Установлена зашита на просмотр (с %d лет по)
+parentallock.lockedprogram Установлена защита на просмотр (с %d лет по)
 parentallock.never Не использовать
 parentallock.onsignal На все
 parentallock.parentallock Возрастная защита
-parentallock.prompt Зашита PIN-кодом
+parentallock.prompt Защита PIN-кодом
 personalize.access Настройки доступа
 personalize.apply_settings Применить?
 personalize.button_auto авто
@@ -1091,7 +1094,7 @@ personalize.button_red красная
 personalize.button_yellow желтая
 personalize.disabled Откл
 personalize.enabled Вкл
-personalize.features Features menue
+personalize.features Дополнительные возможности
 personalize.head Персонализация
 personalize.help Помощь
 personalize.help_line1  С помощью личного меню вы можете настроить большую
