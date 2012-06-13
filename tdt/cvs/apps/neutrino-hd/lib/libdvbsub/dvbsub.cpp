@@ -53,7 +53,11 @@ static void clear_queue();
 int dvbsub_init() {
 	int trc;
 
+#ifdef EVOLUX
+	sub_debug.set_level(0);
+#else
 	sub_debug.set_level(3);
+#endif
 
 	reader_running = true;
 	dvbsub_stopped = 1;
