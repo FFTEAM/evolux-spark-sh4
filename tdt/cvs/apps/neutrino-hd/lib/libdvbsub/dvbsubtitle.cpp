@@ -26,7 +26,11 @@ extern "C" {
 #include "Debug.hpp"
 
 // Set these to 'true' for debug output:
+#ifdef EVOLUX
+static bool DebugConverter = false;
+#else
 static bool DebugConverter = true;
+#endif
 
 #define dbgconverter(a...) if (DebugConverter) sub_debug.print(Debug::VERBOSE, a)
 
