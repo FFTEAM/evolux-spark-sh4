@@ -746,23 +746,24 @@ int COsdSetup::showContextChanlistMenu()
 #ifdef SCREENSHOT
 //screenshot
 #ifdef EVOLUX
-#define SCREENSHOT_FMT_OPTION_COUNT 3
-#else
-#define SCREENSHOT_FMT_OPTION_COUNT 3
-#endif
+#define SCREENSHOT_FMT_OPTION_COUNT 1
 const CMenuOptionChooser::keyval_ext SCREENSHOT_FMT_OPTIONS[SCREENSHOT_FMT_OPTION_COUNT] =
 {
-	{ CScreenShot::FORMAT_PNG,   NONEXISTANT_LOCALE, "PNG"  },
-	{ CScreenShot::FORMAT_JPG,   NONEXISTANT_LOCALE, "JPEG" },
-	{ CScreenShot::FORMAT_BMP,   NONEXISTANT_LOCALE, "BMP" }
+	{ CScreenShot::FORMAT_PNG,   NONEXISTANT_LOCALE, "PNG"  }
 };
-#ifdef EVOLUX
 #define SCREENSHOT_OPTION_COUNT 1
 const CMenuOptionChooser::keyval SCREENSHOT_OPTIONS[SCREENSHOT_OPTION_COUNT] =
 {
 	{ 1, LOCALE_SCREENSHOT_OSD   }
 };
 #else
+#define SCREENSHOT_FMT_OPTION_COUNT 3
+const CMenuOptionChooser::keyval_ext SCREENSHOT_FMT_OPTIONS[SCREENSHOT_FMT_OPTION_COUNT] =
+{
+	{ CScreenShot::FORMAT_PNG,   NONEXISTANT_LOCALE, "PNG"  },
+	{ CScreenShot::FORMAT_JPG,   NONEXISTANT_LOCALE, "JPEG" },
+	{ CScreenShot::FORMAT_BMP,   NONEXISTANT_LOCALE, "BMP" }
+};
 #define SCREENSHOT_OPTION_COUNT 2
 const CMenuOptionChooser::keyval SCREENSHOT_OPTIONS[SCREENSHOT_OPTION_COUNT] =
 {
@@ -776,7 +777,9 @@ void COsdSetup::showOsdScreenshottSetup(CMenuWidget *menu_screenshot)
 	menu_screenshot->addIntroItems(LOCALE_SCREENSHOT_MENU);
 	if((uint)g_settings.key_screenshot == CRCInput::RC_nokey)
 		menu_screenshot->addItem( new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_SCREENSHOT_INFO));
+#ifndef EVOLUX
 	menu_screenshot->addItem(new CMenuOptionNumberChooser(LOCALE_SCREENSHOT_COUNT, &g_settings.screenshot_count, true, 1, 5, NULL));
+#endif
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_FORMAT, &g_settings.screenshot_format, SCREENSHOT_FMT_OPTIONS, SCREENSHOT_FMT_OPTION_COUNT, true));
 	menu_screenshot->addItem(new CMenuForwarder(LOCALE_SCREENSHOT_DEFDIR, true, g_settings.screenshot_dir, this, "screenshot_dir"));
 	menu_screenshot->addItem(new CMenuOptionChooser(LOCALE_SCREENSHOT_RES, &g_settings.screenshot_mode, SCREENSHOT_OPTIONS, SCREENSHOT_OPTION_COUNT, true));

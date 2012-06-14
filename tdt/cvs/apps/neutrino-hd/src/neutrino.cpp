@@ -670,10 +670,11 @@ int CNeutrinoApp::loadSetup(const char * fname)
 
 	g_settings.timeshift_pause = configfile.getInt32( "timeshift_pause", 1 );
 
-	g_settings.screenshot_count = configfile.getInt32( "screenshot_count",  1);
 #ifdef EVOLUX
-	g_settings.screenshot_format = configfile.getInt32( "screenshot_format", CScreenShot::FORMAT_PNG);
+	g_settings.screenshot_count = 1;
+	g_settings.screenshot_format = CScreenShot::FORMAT_PNG;
 #else
+	g_settings.screenshot_count = configfile.getInt32( "screenshot_count",  1);
 	g_settings.screenshot_format = configfile.getInt32( "screenshot_format",  1);
 #endif
 	g_settings.screenshot_cover = configfile.getInt32( "screenshot_cover",  0);
