@@ -209,7 +209,7 @@ void CMenuItem::paintItemButton(const bool select_mode, const int &item_height, 
 
 	//define icon name depends of numeric value
 #ifdef EVOLUX
-	if (!g_settings.menu_numbers_as_icons && icon_name.empty() && CRCInput::isNumeric(directKey))
+	if (g_settings.menu_numbers_as_icons && icon_name.empty() && CRCInput::isNumeric(directKey))
 #else
 	if (icon_name.empty() && CRCInput::isNumeric(directKey))
 #endif
