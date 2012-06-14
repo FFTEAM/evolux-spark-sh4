@@ -279,7 +279,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 		[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
 		/usr/bin/lircd -u $LIRCD_CONF
 	else
-		/usr/bin/lircd
+		LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
+		[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
+		/usr/bin/lircd $LIRCD_CONF
+
 	fi
 	/usr/bin/irexec -d /etc/lircrc
 	# /bin/evremote2 05 30 &
