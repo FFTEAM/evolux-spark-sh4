@@ -2568,13 +2568,25 @@ void CControlAPI::build_live_url(CyhookHandler *hh)
 			apid_idx=apid_no;
 		if(!pids.APIDs.empty())
 			apid = pids.APIDs[apid_idx].pid;
-#ifdef EVOLUX
-		if (pids.PIDs.vtxtpid)
-			xpids = string_printf("0x%04x,0x%04x,0x%04x,0x%04x",	
-				pids.PIDs.pmtpid,pids.PIDs.vpid,apid,pids.PIDs.vtxtpid);
-		else
-#endif
 		xpids = string_printf("0x%04x,0x%04x,0x%04x",pids.PIDs.pmtpid,pids.PIDs.vpid,apid);
+#ifdef EVOLUX
+		char tmp[20];
+		if (pids.PIDs.vtxtpid) {
+			snprintf(tmp, sizeof(tmp), ",0x%04x", pids.PIDs.vtxtpid);
+			xpids += string(tmp);
+		}
+		CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
+		int curnum = channelList->getActiveChannelNumber();
+		CZapitChannel * cc = channelList->getChannel(curnum);
+		for (int i = 0 ; i < (int)cc->getSubtitleCount() ; ++i) {
+			CZapitAbsSub* s = cc->getChannelSub(i);
+			if (s->thisSubType == CZapitAbsSub::DVB) {
+				CZapitDVBSub* sd = reinterpret_cast<CZapitDVBSub*>(s);
+				snprintf(tmp, sizeof(tmp), ",0x%04x", sd->pId);
+				xpids += string(tmp);
+			}
+		}
+#endif
 	}
 	else if ( mode == CZapitClient::MODE_RADIO)
 	{
