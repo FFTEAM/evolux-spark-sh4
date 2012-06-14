@@ -46,6 +46,7 @@
 #ifdef EVOLUX
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/statfs.h>
 #include <sys/syscall.h> /* SYS_gettid */
 #endif
 
@@ -378,6 +379,17 @@ bool sectionsd_getEPGidShort(event_id_t epgID, CShortEPGData * epgdata);
  */
 void CScreenShot::MakeFileName(const t_channel_id channel_id)
 {
+#ifdef EVOLUX
+	struct statfs s;
+	int ret = ::statfs(g_settings.screenshot_dir.c_str(), &s);
+	if(ret == 0 && s.f_type != 0x72b6L /*jffs2*/ && s.f_type != 0x5941ff53L /*yaffs2*/) {
+		// trying to write to flash. Permit, if enough free space (5 MB)
+		if (((s.f_bfree  * s.f_bsize) / (1024 * 1024)) < 5)
+			filename = "/dev/null";
+		printf("CScreenShot::MakeFileName: not enough free space left on file system.\n", format);
+		return;
+	}
+#endif
 	char		fname[512]; // UTF-8
 	std::string	channel_name;
 	CEPGData	epgData;
