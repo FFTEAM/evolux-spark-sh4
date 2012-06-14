@@ -1127,6 +1127,9 @@ void CInfoViewer::showIcon_Resolution() const
 			case 1920:
 				icon_name = NEUTRINO_ICON_RESOLUTION_1920;
 				break;
+#ifdef EVOLUX	// 1088 just a typo? --martii
+			case 1080:
+#endif
 			case 1088:
 				icon_name = NEUTRINO_ICON_RESOLUTION_1080;
 				break;
