@@ -1542,7 +1542,11 @@ const char * CRCInput::getSpecialKeyName(const unsigned int key)
 			case RC_timeshift:
 				return "timeshift";
 			case RC_mode:
+#ifdef EVOLUX
+				return "v.format";
+#else
 				return "mode";
+#endif
 			case RC_record:
 				return "record";
 			case RC_pause:
@@ -1573,6 +1577,22 @@ const char * CRCInput::getSpecialKeyName(const unsigned int key)
 				return "analog off";
 			case RC_www:
 				return "window print";
+#ifdef EVOLUX
+			case RC_pip:
+				return "pip";
+			case RC_archive:
+				return "archive";
+			case RC_slow:
+				return "slow";
+			case RC_fastforward:
+				return "fast";
+			case RC_playmode:
+				return "play mode";
+			case RC_usb:
+				return "usb";
+			case RC_timer:
+				return "time";
+#endif
 			default:
 				printf("unknown key: %d (0x%x) \n", key, key);
 				return "unknown";

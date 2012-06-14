@@ -232,7 +232,11 @@ class CRCInput
 			RC_forward	= KEY_FORWARD,
 			RC_rewind	= KEY_REWIND,
 			RC_stop		= KEY_STOP,
+#ifdef EVOLUX
+			RC_timeshift	= KEY_T,
+#else
 			RC_timeshift	= KEY_TIME,
+#endif
 			RC_mode		= KEY_MODE,
 			RC_games	= KEY_GAMES,
 			RC_next		= KEY_NEXT,
@@ -257,6 +261,17 @@ class CRCInput
 			RC_ttreveal	= KEY_REVEAL,
 			RC_zoomin	= KEY_ZOOMIN,
 			RC_zoomout	= KEY_ZOOMOUT,
+
+#ifdef EVOLUX
+			/* SPARK keys */
+			RC_find		= KEY_FIND,
+			RC_pip		= KEY_PRESENTATION,
+			RC_archive	= KEY_ARCHIVE,
+			RC_fastforward	= KEY_FASTFORWARD,
+			RC_slow		= KEY_SLOW,
+			RC_playmode	= KEY_P,
+			RC_usb		= KEY_CLOSE,
+#endif
 
 			RC_timeout	= 0xFFFFFFFF,
 			RC_nokey	= 0xFFFFFFFE
