@@ -430,6 +430,65 @@ static tButton cButtonsSparkDefault[] = {
     {""               , ""  , KEY_NULL},
 };
 
+/* GALAXY RC */
+static tButton cButtonsGalaxy[] = {
+    {"POWER"          , "25", KEY_POWER},
+	{"R"              , "A5", KEY_R},
+	{"V.FORMAT"       , "AD", KEY_V},
+	{"TIME"           , "8D", KEY_TIME},
+	{"MUTE"           , "85", KEY_MUTE},
+	{"TV/SAT"         , "C5", KEY_AUX},
+	{"Tms"            , "E5", KEY_T},
+	{"PRESENTATION"   , "ED", KEY_PRESENTATION},
+	{"F1"             , "CD", KEY_F1},
+	{"0BUTTON"        , "57", KEY_0},
+	{"1BUTTON"        , "B5", KEY_1},
+	{"2BUTTON"        , "95", KEY_2},
+	{"3BUTTON"        , "BD", KEY_3},
+	{"4BUTTON"        , "F5", KEY_4},
+	{"5BUTTON"        , "D5", KEY_5},
+	{"6BUTTON"        , "FD", KEY_6},
+	{"7BUTTON"        , "35", KEY_7},
+	{"8BUTTON"        , "15", KEY_8},
+	{"9BUTTON"        , "3D", KEY_9},
+	{"TV/RADIO"       , "77", KEY_TV2},
+	{"RECALL"         , "7F", KEY_BACK},
+	{"VOL+"           , "C7", KEY_VOLUMEDOWN},
+	{"VOL-"           , "DD", KEY_VOLUMEUP},
+	{"PAGE-"          , "5F", KEY_PAGEDOWN},
+	{"PAGE+"          , "07", KEY_PAGEUP},
+	{"FIND"           , "9D", KEY_FIND},
+	{"SAT"            , "1D", KEY_SAT},
+	{"REC"            , "45", KEY_RECORD},
+	{"FAV"            , "87", KEY_FAVORITES},
+	{"MENU"           , "65", KEY_MENU},
+	{"INFO"           , "A7", KEY_INFO},
+	{"EXIT"           , "4D", KEY_EXIT},
+	{"EPG"            , "8F", KEY_EPG},
+	{"OK"             , "2F", KEY_OK},
+	{"UP"             , "27", KEY_UP},
+	{"DOWN"           , "0F", KEY_DOWN},
+	{"LEFT"           , "6D", KEY_LEFT},
+	{"RIGHT"          , "AF", KEY_RIGHT},
+	{"FOLDER"         , "75", KEY_ARCHIVE},
+	{"STOP"           , "F7", KEY_STOP},
+	{"PAUSE"          , "37", KEY_PAUSE},
+	{"PLAY"           , "B7", KEY_PLAY},
+	{"PREV"           , "55", KEY_PREVIOUS},
+	{"NEXT"           , "D7", KEY_NEXT},
+	{"REWIND"         , "17", KEY_REWIND},
+	{"FORWARD"        , "97", KEY_FORWARD},
+	{"USB"            , "9F", KEY_CLOSE},
+	{"RED"            , "7D", KEY_RED},
+	{"GREEN"          , "FF", KEY_GREEN},
+	{"YELLOW"         , "3F", KEY_YELLOW},
+	{"BLUE"           , "BF", KEY_BLUE},
+	{"PLAY_MODE"      , "1F", KEY_P},
+	{"SLOW"           , "5D", KEY_SLOW},
+	{"FAST"	          , "DF", KEY_FASTFORWARD},
+	{""               , ""  , KEY_NULL},
+};
+
 #define STB_ID_GOLDENMEDIA_GM990		"09:00:07"
 #define STB_ID_EDISION_PINGULUX			"09:00:08"
 #define STB_ID_AMIKO_ALIEN_SDH8900		"09:00:0A"
@@ -453,7 +512,7 @@ static tButton *pSparkGetButton(char *pData)
 					if (strstr(procCmdLine, "STB_ID=" STB_ID_EDISION_PINGULUX))
 						cButtons = cButtonsEdisionSpark;
 					if (strstr(procCmdLine, "STB_ID=" STB_ID_GALAXYINNOVATIONS_S8120))
-						cButtons = cButtonsEdisionSpark;
+						cButtons = cButtonsGalaxy;
 				}
 				close(fn);
 			}
