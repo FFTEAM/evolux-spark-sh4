@@ -52,6 +52,9 @@
 
 #include <sys/sysinfo.h>
 #include <sys/vfs.h>
+#ifdef EVOLUX
+#include <map>
+#endif
 
 static const int FSHIFT = 16;              /* nr of bits of precision */
 #define FIXED_1         (1<<FSHIFT)     /* 1.0 as fixed-point */
@@ -184,7 +187,11 @@ void CDBoxInfoWidget::paint()
 	int fontWidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getWidth();
 	int sizeOffset = fontWidth * 7;//9999.99M
 	int percOffset = fontWidth * 3 ;//100%
+#ifdef EVOLUX
+	int nameOffset = fontWidth * 19;//WWWwwwwwww
+#else
 	int nameOffset = fontWidth * 9;//WWWwwwwwww
+#endif
 	int offsetw = nameOffset+ (sizeOffset+10)*3 +10+percOffset+10;
 	offsetw += 20;
 	width = offsetw + 10 + 120;
@@ -199,10 +206,19 @@ void CDBoxInfoWidget::paint()
 	if ((mountFile = setmntent("/proc/mounts", "r")) == NULL) {
 		perror("/proc/mounts");
 	} else {
+#ifdef EVOLUX
+		map<dev_t,bool>seen;
+#endif
 		while ((mnt = getmntent(mountFile)) != NULL) {
 			if (strcmp(mnt->mnt_fsname, "rootfs") == 0)
 				continue;
 			if (::statfs(mnt->mnt_dir, &s) == 0) {
+#ifdef EVOLUX
+				struct stat st;
+				if (!stat(mnt->mnt_dir, &st) && seen.find(st.st_dev) != seen.end())
+					continue;
+				seen[st.st_dev] = true;
+#endif
 				switch (s.f_type)	/* f_type is long */
 				{
 				case 0xEF53L:		/*EXT2 & EXT3*/
@@ -376,13 +392,24 @@ void CDBoxInfoWidget::paint()
 			perror("/proc/mounts");
 		}
 		else {
+#ifdef EVOLUX
+			map<dev_t,bool>seen;
+#endif
 			while ((mnt = getmntent(mountFile)) != 0) {
 				if (::statfs(mnt->mnt_dir, &s) == 0) {
+#ifndef EVOLUX
 					if (strcmp(mnt->mnt_fsname, "rootfs") == 0) {
 						strcpy(mnt->mnt_fsname, "memory");
 						memory_flag = true;
 					}
+#endif
 
+#ifdef EVOLUX
+				struct stat st;
+				if (!stat(mnt->mnt_dir, &st) && seen.find(st.st_dev) != seen.end())
+					continue;
+				seen[st.st_dev] = true;
+#endif
 					switch (s.f_type)
 					{
 					case (int) 0xEF53:      /*EXT2 & EXT3*/
@@ -449,7 +476,11 @@ void CDBoxInfoWidget::paint()
 									}
 								}
 								mpOffset = 10;
+#ifdef EVOLUX
+								snprintf(ubuf,buf_size,"%-20.20s", mnt->mnt_dir);
+#else
 								snprintf(ubuf,buf_size,"%-10.10s",basename(mnt->mnt_fsname));
+#endif
 							}
 							break;
 							case 1:
