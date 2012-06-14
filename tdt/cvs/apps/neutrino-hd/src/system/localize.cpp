@@ -46,9 +46,9 @@
 
 //static const char * iso639filename = "/usr/share/iso-codes/iso-639.tab";
 #ifdef EVOLUX
-static const char * iso639filename = "/share/iso-codes/iso-639.tab";
-#else
 static const char * iso639filename = "/usr/local/share/iso-codes/iso-639.tab";
+#else
+static const char * iso639filename = "/share/iso-codes/iso-639.tab";
 #endif
 
 #define DEFAULT_LOCALE "english"
