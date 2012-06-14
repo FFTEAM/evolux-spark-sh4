@@ -8,7 +8,9 @@ mknod /dev/vfd c 147 0 2>/dev/null
 mknod /dev/rc c 147 1 2>/dev/null
 mknod /dev/sci0 c 169 0 2>/dev/null
 insmod $MODDIR/aotom.ko
-insmod $MODDIR/simu_button.ko
+if [ -e /etc/.start_enigma2 ] || [ ! -e /etc/.nhd ]; then
+	insmod $MODDIR/simu_button.ko
+fi
 [ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
 
 if [ ! -e /dev/.devfsd ]; then
