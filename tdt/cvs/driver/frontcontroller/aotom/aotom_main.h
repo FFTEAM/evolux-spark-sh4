@@ -13,8 +13,6 @@ typedef unsigned int u32;
 
 typedef signed long s64;
 typedef unsigned long u64;
-
-#define bool int
 #endif
 
 #define VFD_MAJOR				147
@@ -462,12 +460,12 @@ typedef struct YWPANEL_Time_s
 
 typedef struct YWPANEL_ControlTimer_s
 {
-	bool	startFlag;	  // 0 - stop  1-start
+	int	startFlag;	  // 0 - stop  1-start
 } YWPANEL_ControlTimer_t;
 
 typedef struct YWPANEL_VfdStandbyState_s
 {
-	bool	On; 		  // 0 - off  1-on
+	int	On; 		  // 0 - off  1-on
 } YWPANEL_VfdStandbyState_T;
 
 typedef struct YWPANEL_BlueKey_s
@@ -632,7 +630,7 @@ typedef struct YWPANEL_FPData_s
 		YWPANEL_LoopState_t 		LoopState;
 	} data;
 
-	bool	ack;
+	int	ack;
 
 } YWPANEL_FPData_t;
 
@@ -676,31 +674,28 @@ extern int YWPANEL_width;
 
 //int YWPANEL_VFD_GetRevision(char * version);
 YWPANEL_VFDSTATE_t YWPANEL_FP_GetVFDStatus(void);
-bool  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t state);
+int  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t state);
 YWPANEL_CPUSTATE_t YWPANEL_FP_GetCpuStatus(void);
-bool  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state);
-bool  YWPANEL_FP_ControlTimer(bool on);
+int  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state);
+int  YWPANEL_FP_ControlTimer(int on);
 YWPANEL_POWERONSTATE_t YWPANEL_FP_GetPowerOnStatus(void);
-bool  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state);
+int  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state);
 u32  YWPANEL_FP_GetTime(void);
-bool  YWPANEL_FP_SetTime(u32 value);
+int  YWPANEL_FP_SetTime(u32 value);
 u32  YWPANEL_FP_GetStandByKey(u8 index);
-bool  YWPANEL_FP_SetStandByKey(u8 index,u8 key);
+int  YWPANEL_FP_SetStandByKey(u8 index,u8 key);
 u32  YWPANEL_FP_GetBlueKey(u8 index);
-bool  YWPANEL_FP_SetBlueKey(u8 index,u8 key);
+int  YWPANEL_FP_SetBlueKey(u8 index,u8 key);
 int YWPANEL_LBD_SetStatus(YWPANEL_LBDStatus_T  LBDStatus );
-bool YWPANEL_FP_GetStartUpState(YWPANEL_STARTUPSTATE_t *State);
-bool  YWPANEL_FP_GetVersion(YWPANEL_Version_t *version);
+int YWPANEL_FP_GetStartUpState(YWPANEL_STARTUPSTATE_t *State);
+int  YWPANEL_FP_GetVersion(YWPANEL_Version_t *version);
 
 //u32  YWPANEL_FP_GetIRKey(void);
-bool YWPANEL_FP_SetPowerOnTime(u32 Value);
+int YWPANEL_FP_SetPowerOnTime(u32 Value);
 u32  YWPANEL_FP_GetPowerOnTime(void);
 int YWPANEL_VFD_GetKeyValue(void);
 int YWPANEL_VFD_SetLed(int which, int on);
 
-# ifndef __KERNEL__
-#  undef bool
-# endif
 #endif /* __AOTOM_MAIN_H__ */
 
 // vim:ts=4

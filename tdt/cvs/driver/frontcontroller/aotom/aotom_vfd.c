@@ -437,9 +437,9 @@ int  YWPANEL_TranslateKeyCode(u8  KeyPress)
 	return iUSIF_Key;
 }
 
-bool to_primitive_key(u8 key,	u32 *prim_key_p)
+int to_primitive_key(u8 key,	u32 *prim_key_p)
 {
-	bool ret = false;
+	int ret = false;
 	int i;
 	u32 tmp = 0;
 
@@ -528,7 +528,7 @@ u16 YWPANEL_GenerateCRC16( u8 * buffer, u32 bufLength )
 		nAccum = ( nAccum << 8 ) ^ ( u16 )Table_CRC[( nAccum >> 8 ) ^ *buffer++];
 	return nAccum;
 }
-bool YWPANEL_FP_SetI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t   *I2CData)
+int YWPANEL_FP_SetI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t   *I2CData)
 {
 	u16 			usCRC16 = 0;
 
@@ -971,7 +971,7 @@ bool YWPANEL_FP_SetI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t   *I2CData)
 	return true;
 }
 
-bool YWPANEL_FP_ParseI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t	 *I2CData)
+int YWPANEL_FP_ParseI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t	 *I2CData)
 {
 	u16 	crc16Code = 0;
 	u16 	receiveCode = 0;
@@ -1309,7 +1309,7 @@ bool YWPANEL_FP_ParseI2cData(YWPANEL_FPData_t  *data,YWPANEL_I2CData_t	 *I2CData
 }
 
 #ifdef CONFIG_CPU_SUBTYPE_STX7105
-static bool YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
+static int YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
 										u8 * writeBufer,
 										u32 writeBufLen,
 										u8 *readBuffer,
@@ -1328,7 +1328,7 @@ static bool YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
 	return true;
 }
 #else
-static bool YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
+static int YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
 										u8 * writeBufer,
 										u32 writeBufLen,
 										u8 *readBuffer,
@@ -1366,9 +1366,9 @@ static bool YWPANEL_FPWriteDataToI2c(	struct i2c_adapter* I2CHandle,
 }
 #endif  /* 0 */
 
-bool YWPANEL_FP_SendData(YWPANEL_FPData_t  *data)
+int YWPANEL_FP_SendData(YWPANEL_FPData_t  *data)
 {
-	bool				ret = false;
+	int				ret = false;
 	YWPANEL_I2CData_t	I2CData;
 	if (down_interruptible(&vfd_sem_rw))
 	{
@@ -1434,7 +1434,7 @@ YWPANEL_VFDSTATE_t YWPANEL_FP_GetVFDStatus(void)
 	return data.data.VfdStandbyState.On;
 }
 
-bool  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t On)
+int  YWPANEL_FP_SetVFDStatus(YWPANEL_VFDSTATE_t On)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1471,7 +1471,7 @@ YWPANEL_POWERONSTATE_t YWPANEL_FP_GetPowerOnStatus(void)
 	return data.data.PowerOnState.state;
 }
 
-bool  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state)
+int  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1488,7 +1488,7 @@ bool  YWPANEL_FP_SetPowerOnStatus(YWPANEL_POWERONSTATE_t state)
 	return true;
 }
 
-bool YWPANEL_FP_GetStartUpState(YWPANEL_STARTUPSTATE_t *State)
+int YWPANEL_FP_GetStartUpState(YWPANEL_STARTUPSTATE_t *State)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1525,7 +1525,7 @@ YWPANEL_CPUSTATE_t YWPANEL_FP_GetCpuStatus(void)
 	return data.data.CpuState.state;
 }
 
-bool  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state)
+int  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1542,7 +1542,7 @@ bool  YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_t state)
 	return true;
 }
 
-bool  YWPANEL_FP_GetVersion(YWPANEL_Version_t *version)
+int  YWPANEL_FP_GetVersion(YWPANEL_Version_t *version)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1596,7 +1596,7 @@ u32  YWPANEL_FP_GetStandByKey(u8 index)
 	return YWPANEL_TranslateKeyCode(key);
 }
 
-bool  YWPANEL_FP_SetStandByKey(u8 index,u8 key)
+int  YWPANEL_FP_SetStandByKey(u8 index,u8 key)
 {
 	YWPANEL_FPData_t   data;
 	u32 value;
@@ -1637,7 +1637,7 @@ u32  YWPANEL_FP_GetBlueKey(u8 index)
 	return YWPANEL_TranslateKeyCode(key);
 }
 
-bool  YWPANEL_FP_SetBlueKey(u8 index,u8 key)
+int  YWPANEL_FP_SetBlueKey(u8 index,u8 key)
 {
 	YWPANEL_FPData_t   data;
 	u32 value;
@@ -1676,7 +1676,7 @@ u32  YWPANEL_FP_GetTime(void)
 	return data.data.time.second;
 }
 
-bool  YWPANEL_FP_SetTime(u32 value)
+int  YWPANEL_FP_SetTime(u32 value)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1692,7 +1692,7 @@ bool  YWPANEL_FP_SetTime(u32 value)
 	return true;
 }
 
-bool  YWPANEL_FP_SetPowerOnTime(u32 Value)
+int  YWPANEL_FP_SetPowerOnTime(u32 Value)
 {
 	YWPANEL_FPData_t   data;
 
@@ -1722,7 +1722,7 @@ u32  YWPANEL_FP_GetPowerOnTime(void)
 	return data.data.time.second;
 }
 
-bool  YWPANEL_FP_ControlTimer(bool on)
+int  YWPANEL_FP_ControlTimer(int on)
 {
 	YWPANEL_FPData_t   data;
 
