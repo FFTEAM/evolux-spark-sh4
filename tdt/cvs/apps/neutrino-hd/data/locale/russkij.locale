@@ -1,5 +1,5 @@
 apidselector.head Выбор языка
-audio.srs_algo Тип
+audio.srs_algo Алгоритм SRS
 audio.srs_algo_light Лёгкий
 audio.srs_algo_normal Нормальный
 audio.srs_iq SRS Выравнивание 
@@ -10,7 +10,7 @@ audiomenu.analog_mode Аналоговый режим
 audiomenu.avs avs
 audiomenu.avs_control Управление громкостью avs/ost
 audiomenu.avsync Синхронизировать A/V
-audiomenu.avsync_am Аудио мастер
+audiomenu.avsync_am по аудио
 audiomenu.auto_lang Автоматический выбор
 audiomenu.auto_subs Автоматический выбор
 audiomenu.clockrec Время записи
@@ -128,7 +128,7 @@ channellist.foot_next события
 channellist.foot_off Выкл
 channellist.head Все сервисы
 channellist.history История
-channellist.make_hdlist Создать список HD
+channellist.make_hdlist Создать список HD каналов
 channellist.new_zap_mode Быстрый перебор каналов по списку
 channellist.nonefound Нет ни одного канала! \nВыполните сканирование\n(кнопка Меню -> Сервисы)
 channellist.provs Провайдеры
@@ -168,7 +168,7 @@ colorthememenu.red_theme Простой красный
 cpu.freq Частота CPU
 cpu.freq_default по умолчанию
 cpu.freq_normal Нормальная частота
-cpu.freq_standby Частота в Standby
+cpu.freq_standby Частота в standby
 date.Apr  Апр
 date.Aug  Авг
 date.Dec  Дек
@@ -314,7 +314,7 @@ extra.manual_scan Сканирование вручную
 extra.menu_left_exit "Влево" - выход из меню
 extra.north Север
 extra.record_time Время записи (часы)
-extra.rotor_swap Поменять East/West
+extra.rotor_swap Поменять местами Восток/Запад
 extra.rounded_corners Форма углов
 extra.rounded_corners_off острые
 extra.rounded_corners_on скругленные
@@ -799,41 +799,41 @@ miscsettings.shutdown_real_rcdelay Задержка выключения
 miscsettings.sleeptimer Таймер выключения
 miscsettings.sptsmode Использовать SPTS-Mode 
 miscsettings.virtual_zap_mode переключение
-miscsettings.zapto_pre_time Переключить к, время (минуты)
+miscsettings.zapto_pre_time Перейти на канал за время до начала (минуты)
 motorcontrol.calc_positions Пересчитать позиции
 motorcontrol.disable_limit Запретить лимиты (soft)
 motorcontrol.drive_mode Движение
 motorcontrol.drive_mode_auto Стоп движение/авто
-motorcontrol.east_limit Восточный лимит (soft)
-motorcontrol.enable_limit Разрешить лимиты (soft)
+motorcontrol.east_limit Восточный предел (soft)
+motorcontrol.enable_limit Разрешить пределы (soft)
 motorcontrol.goto Идти на позицию (a)
 motorcontrol.halt Стоп мотор
 motorcontrol.head Настройки мотора
 motorcontrol.install_menu Установить меню
-motorcontrol.motor_pos (a) Поз. мотора:
+motorcontrol.motor_pos (a) Позиция мотора:
 motorcontrol.movement (b) Движение:
 motorcontrol.msec милисек.
 motorcontrol.no_mode Нет режима
 motorcontrol.notdef Не определен
-motorcontrol.pos_decrease Уменьшить поз.мотора (a)
-motorcontrol.pos_increase Увеличить поз.мотора (a)
+motorcontrol.pos_decrease Уменьшить позицию мотора (a)
+motorcontrol.pos_increase Увеличить позицию мотора (a)
 motorcontrol.ref_position Идти на позицию 0.
-motorcontrol.sat_pos Позиция спутника (Пошагово):
+motorcontrol.sat_pos Позиция спутника (пошагово):
 motorcontrol.settings Настройки управления мотором
 motorcontrol.status Состояние
-motorcontrol.step_decrease Размер уменьш.шага (c)
-motorcontrol.step_drive Переключение  Шаг/движ. (b)
+motorcontrol.step_decrease Уменьшить шаг (c)
+motorcontrol.step_drive Переключение  Шаг/движение (b)
 motorcontrol.step_east Шаг/движение на восток (b,c)
-motorcontrol.step_increase Размер увелич.шага (c)
+motorcontrol.step_increase Увеличить шаг (c)
 motorcontrol.step_mode Пошагово
 motorcontrol.step_size (c) Размер шага:
 motorcontrol.step_west Шаг/движение на запад (b,c)
-motorcontrol.stop_moving Стоп на хорошем сигнале(движение)
-motorcontrol.stop_stopped Стоп на хорошем сигнале(остановка)
+motorcontrol.stop_moving Стоп на хорошем сигнале (движение)
+motorcontrol.stop_stopped Стоп на хорошем сигнале (остановка)
 motorcontrol.store Сохранить позицию мотора (a)
-motorcontrol.timed_mode Уст.пошаговый режим
+motorcontrol.timed_mode Установить пошаговый режим
 motorcontrol.user_menu Пользовательское меню
-motorcontrol.west_limit Западный лимит (soft)
+motorcontrol.west_limit Западный предел (soft)
 moviebrowser.book_clear_all Очистить все
 moviebrowser.book_head Закладки
 moviebrowser.book_lastmoviestop Последняя остановка:
@@ -1003,7 +1003,7 @@ mpkey.rewind Назад
 mpkey.stop Стоп
 mpkey.time Показать время
 networkmenu.interface Интерфейс
-networkmenu.broadcast Broadcast
+networkmenu.broadcast Широковещательный
 networkmenu.dhcp DHCP
 networkmenu.gateway Основной шлюз
 networkmenu.head Настройки сети
@@ -1118,7 +1118,7 @@ personalize.pinstatus требуется PIN
 personalize.plugins Плагины
 personalize.setupmenuwithpin Меню настроек с PIN-кодом
 personalize.usermenu_preferred_buttons Назначение кнопок
-personalize.usermenu_show_cancel показать "Cancel"-кнопку
+personalize.usermenu_show_cancel Пункт меню "Назад"
 personalize.visible отобразить
 pictureviewer.decode_server_ip Адрес декодирующего сервера
 pictureviewer.decode_server_port Порт декодирующего сервера
@@ -1302,6 +1302,17 @@ scrambled_channel Кодированный канал
 extra.scrambled_message Сообщение о кодированном канале
 screensetup.lowerright Зелёная = Снизу/Справа
 screensetup.upperleft Красная = Сверху/Слева
+screenshot.count Счетчик снимков
+screenshot.cover Создать обложку для Moviebrowser
+screenshot.defdir Каталог для снимков
+screenshot.format Формат снимка
+screenshot.info Кнопка снимка экрана не настроена
+screenshot.menu Снимок экрана
+screenshot.osd как у OSD
+screenshot.res Разрешение снимка
+screenshot.scale Масштабирование снимка
+screenshot.tv как у TV
+screenshot.video Снимок с видеокадром в фоне
 servicemenu.getplugins Перезагрузить плагины
 servicemenu.getplugins_hint Перезагрузка плагинов,\nподождите...
 servicemenu.head Сервисы
