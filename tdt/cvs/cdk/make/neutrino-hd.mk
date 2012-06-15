@@ -84,7 +84,7 @@ $(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng l
 	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
-neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean
+neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean neutrino-hd-plugins-clean
 	rm -f $(DEPDIR)/neutrino-hd
 	rm -f $(DEPDIR)/neutrino-hd.do_compile
 	rm -f $(DEPDIR)/neutrino-hd.do_prepare
