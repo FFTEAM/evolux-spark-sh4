@@ -94,4 +94,42 @@ neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean
 		rm -rf $(appsdir)/neutrino-hd/autom4te.cache
 
 
+#
+# neutrino-hd-plugins
+#
+
+$(appsdir)/neutrino-hd-plugins/config.status: bootstrap
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd $(appsdir)/neutrino-hd-plugins && \
+		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--with-datadir=/usr/local/share \
+			--with-libdir=/usr/lib \
+			--with-boxtype=spark \
+			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
+			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
+
+$(DEPDIR)/neutrino-hd-plugins.do_prepare: $(appsdir)/neutrino-hd-plugins/config.status
+	touch $@
+
+$(DEPDIR)/neutrino-hd-plugins.do_compile: $(appsdir)/neutrino-hd-plugins/config.status
+	cd $(appsdir)/neutrino-hd-plugins && $(MAKE)
+	touch $@
+
+$(DEPDIR)/neutrino-hd-plugins: neutrino-hd-plugins.do_prepare neutrino-hd-plugins.do_compile
+	$(MAKE) -C $(appsdir)/neutrino-hd-plugins install DESTDIR=$(targetprefix) DATADIR=$(targetprefix)/usr/local/share/
+	touch $@
+
+neutrino-hd-plugins-clean neutrino-hd-plugins-distclean:
+	rm -f $(DEPDIR)/neutrino-hd-plugins
+	rm -f $(DEPDIR)/neutrino-hd-plugins.do_compile
+	rm -f $(DEPDIR)/neutrino-hd-plugins.do_prepare
+	cd $(appsdir)/neutrino-hd-plugins && \
+		$(MAKE) distclean && \
+		find $(appsdir)/neutrino-hd-plugins -name "Makefile.in" -exec rm -rf {} \; && \
+		rm -rf $(appsdir)/neutrino-hd-plugins/autom4te.cache
+
 

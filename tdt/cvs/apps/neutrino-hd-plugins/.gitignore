@@ -1,0 +1,10 @@
+# automake stuff
+*.in
+autom4te.cache/
+config.guess
+config.sub
+configure
+depcomp
+install-sh
+ltmain.sh
+missing
