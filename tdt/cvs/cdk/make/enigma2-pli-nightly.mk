@@ -50,7 +50,7 @@ enigma2-pli-nightly-clean enigma2-pli-nightly-distclean:
 $(DEPDIR)/enigma2-pli-nightly-misc:
 #	workarounds to allow rebuild
 	find $(targetprefix)/usr/local/share/enigma2/ -name .svn |xargs rm -fr
-	rm -f $(targetprefix)/usr/local/etc
+	rm -rf $(targetprefix)/usr/local/etc
 
 	$(INSTALL_DIR) $(targetprefix)/usr/bin && \
 	$(INSTALL_DIR) $(targetprefix)/usr/share && \
