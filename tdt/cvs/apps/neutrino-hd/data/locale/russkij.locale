@@ -294,11 +294,14 @@ extra.fec_s2_qpsk_7_8 7/8 s2 qpsk
 extra.fec_s2_qpsk_8_9 8/9 s2 qpsk
 extra.fec_s2_qpsk_9_10 9/10 s2 qpsk
 extra.hw_sect Раздел оборудования
-extra.key_click Щелкнуть кнопку
+extra.key_click Звук нажатия кнопок
+extra.key_help Помощь
+extra.key_plugin Плагин
 extra.key_list_end В конец списка
 extra.key_list_start В начало списка
-extra.key_plugin Один сенсорный плагин
 extra.key_screenshot Снимок экрана
+extra.key_showclock Показать часы
+extra.key_timerlist Список таймеров
 extra.key_timeshift Таймшифт
 extra.key_unlock Разблокировать ПДУ
 extra.key_current_transponder Текущий транспондер
@@ -656,7 +659,7 @@ keybindingmenu.subchanneldown Подканалы вниз
 keybindingmenu.subchannelup Подканалы вверх
 keybindingmenu.tvradiomode ТВ/Радио-режим
 keybindingmenu.zaphistory История переключений
-keybindingmenu.mode_left_right_key_tv Влево<->Вправо в ТВ режиме
+keybindingmenu.mode_left_right_key_tv "Влево" <-> "Вправо" в ТВ режиме
 keybindingmenu.mode_left_right_key_tv_infobar инфопанель
 keybindingmenu.mode_left_right_key_tv_volume громкость
 keybindingmenu.mode_left_right_key_tv_vzap переключение
@@ -710,7 +713,7 @@ mainmenu.tvmode Режим ТВ
 mainmenu.media Мультимедия
 mainsettings.audio Аудио
 mainsettings.head Настройки
-mainsettings.keybinding Настройки кнопок
+mainsettings.keybinding Настройка кнопок ПДУ
 mainsettings.language Язык и часовой пояс
 mainsettings.lcd VFD-дисплей
 mainsettings.manage Управление настройками
@@ -724,6 +727,7 @@ mainsettings.streaming Видеоплеер
 mainsettings.timezone Часовой пояс
 mainsettings.video Видео
 menu.back Назад
+menu.cancel Отмена
 messagebox.back Назад
 messagebox.cancel Отменить
 messagebox.discard Отменить изменения?
@@ -864,7 +868,7 @@ moviebrowser.error_no_movies Фильмы не найдены
 moviebrowser.foot_filter Фильтр:
 moviebrowser.foot_play Начало фильма
 moviebrowser.foot_sort Sort:
-moviebrowser.head MovieBrowser
+moviebrowser.head Просмотр TS-файлов
 moviebrowser.head_filter Фильтровать фильмы по категориям:
 moviebrowser.head_playlist Последний запущеный:
 moviebrowser.head_recordlist Последний записанный:
@@ -956,8 +960,8 @@ movieplayer.bookmarkname_hint2 для новой закладки
 movieplayer.buffering Буферизация...
 movieplayer.defdir Каталог по умолчанию
 movieplayer.defplugin Старт плагина
-movieplayer.dvdplayback Просмотр DVD (VLC)
-movieplayer.fileplayback Просмотр файлов VLC
+movieplayer.dvdplayback Просмотр DVD
+movieplayer.fileplayback Просмотр медиа-файлов
 movieplayer.goto Перейти в ...
 movieplayer.goto.h1 = -> абсолютный переход
 movieplayer.goto.h2 +,- -> относительный переход
@@ -1083,7 +1087,7 @@ parentallock.lockedchannel Установлена защита на просмо
 parentallock.lockedprogram Установлена защита на просмотр (с %d лет по)
 parentallock.never Не использовать
 parentallock.onsignal На все
-parentallock.parentallock Возрастная защита
+parentallock.parentallock Родительский контроль
 parentallock.prompt Защита PIN-кодом
 personalize.access Настройки доступа
 personalize.apply_settings Применить?
@@ -1118,7 +1122,7 @@ personalize.pinstatus требуется PIN
 personalize.plugins Плагины
 personalize.setupmenuwithpin Меню настроек с PIN-кодом
 personalize.usermenu_preferred_buttons Назначение кнопок
-personalize.usermenu_show_cancel Пункт меню "Назад"
+personalize.usermenu_show_cancel Пункт меню "Отмена"
 personalize.visible отобразить
 pictureviewer.decode_server_ip Адрес декодирующего сервера
 pictureviewer.decode_server_port Порт декодирующего сервера
