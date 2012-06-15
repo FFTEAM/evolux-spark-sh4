@@ -7,6 +7,17 @@ begin
      delay  = 0
      flags  = mode 
 end
+
+begin
+     button = CLOSE
+     prog   = irexec
+     config = /usr/bin/functions.sh 0
+     mode   = mode_USB
+     repeat = 0
+     delay  = 0
+     flags  = mode 
+end
+
 begin
      button = F3
      prog   = irexec
@@ -40,6 +51,17 @@ begin
      delay  = 0
      flags  = mode 
 end
+
+begin
+     button = KEY_CLOSE
+     prog   = irexec
+     config = /usr/bin/functions.sh 0
+     mode   = mode_USB
+     repeat = 0
+     delay  = 0
+     flags  = mode 
+end
+
 begin
      button = KEY_F3
      prog   = irexec
