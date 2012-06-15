@@ -1578,6 +1578,8 @@ const char * CRCInput::getSpecialKeyName(const unsigned int key)
 			case RC_www:
 				return "window print";
 #ifdef EVOLUX
+			case RC_tvradio:
+				return "tv/radio";
 			case RC_find:
 				return "find";
 			case RC_pip:
