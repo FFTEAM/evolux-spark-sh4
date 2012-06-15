@@ -91,7 +91,13 @@ int CMediaPlayerMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 	{
 		if (audioPlayer == NULL)
 			audioPlayer = new CAudioPlayerGui();
+#ifdef EVOLUX
+		CNeutrinoApp::getInstance()->chPSISetup->blankScreen();
+#endif
 		audioPlayer->exec(NULL, "init");
+#ifdef EVOLUX
+		CNeutrinoApp::getInstance()->chPSISetup->blankScreen(false);
+#endif
 		
 		return menu_return::RETURN_REPAINT;
 	}
@@ -99,8 +105,13 @@ int CMediaPlayerMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 	{
 		if (inetPlayer == NULL)
 			inetPlayer = new CAudioPlayerGui(true);
+#ifdef EVOLUX
+		CNeutrinoApp::getInstance()->chPSISetup->blankScreen();
+#endif
 		inetPlayer->exec(NULL, "init");
-		
+#ifdef EVOLUX
+		CNeutrinoApp::getInstance()->chPSISetup->blankScreen(false);
+#endif
 		return menu_return::RETURN_REPAINT;
 	}
 	else if (actionKey == "movieplayer")

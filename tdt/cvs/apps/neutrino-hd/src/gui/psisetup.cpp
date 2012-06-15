@@ -145,13 +145,17 @@ CPSISetup::writeProcPSI (int i)
     fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
 }
 
-void CPSISetup::blankScreen() {
-  for (int i = 0; i < PSI_RESET; i++) {
-	// psi_list[i].value_old = psi_list[i].value;
-	psi_list[i].value = 0;
-	writeProcPSI (i);
-	// psi_list[i].value = psi_list[i].value_old;
-  }
+void CPSISetup::blankScreen(bool b) {
+  if (b) 
+	  for (int i = 0; i < PSI_RESET; i++) {
+		psi_list[i].value_old = psi_list[i].value;
+		psi_list[i].value = 0;
+		writeProcPSI (i);
+		psi_list[i].value = psi_list[i].value_old;
+	  }
+   else /* unblank */
+	  for (int i = 0; i < PSI_RESET; i++)
+		writeProcPSI (i);
 }
 
 int
