@@ -361,6 +361,8 @@ extra.key_list_end Listenende
 extra.key_list_start Listenanfang
 extra.key_plugin One-touch-Plugin
 extra.key_screenshot Screenshot Taste
+extra.key_showclock Zeitanzeige
+extra.key_timerlist Timer-Liste
 extra.key_timeshift Timeshift
 extra.key_unlock Entsperrtaste
 extra.ladirection Breitengrad-Ausrichtung

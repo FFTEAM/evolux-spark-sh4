@@ -75,6 +75,10 @@ class CKeybindSetup : public CMenuTarget
 			MPKEY_PLUGIN,
 			KEY_PLUGIN,
 			KEY_UNLOCK,
+#ifdef EVOLUX
+			KEY_TIMERLIST,
+			KEY_SHOWCLOCK,
+#endif
 			KEY_SCREENSHOT,
 			
 			KEYBINDS_COUNT

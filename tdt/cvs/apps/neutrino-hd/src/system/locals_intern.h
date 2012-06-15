@@ -388,6 +388,8 @@ const char * locale_real_names[] =
 	"extra.key_list_start",
 	"extra.key_plugin",
 	"extra.key_screenshot",
+	"extra.key_showclock",
+	"extra.key_timerlist",
 	"extra.key_timeshift",
 	"extra.key_unlock",
 	"extra.ladirection",
