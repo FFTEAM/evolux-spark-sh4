@@ -10,6 +10,10 @@ function rcsim(_key) {
 	window.setTimeout("do_dboxshot()",50);
 }
 function do_dboxshot(){
+<!-- #ifdef EVOLUX -->
+	$('statusline').show();
+	$('buttons').hide();
+<!-- #endif -->
 	var res = dbox_exec_tools("fbshot fb /tmp/a.png");
 	var _shot = document.getElementById("shot");
 	_shot.src = "/tmp/a.png?"+Math.random();
