@@ -1592,6 +1592,22 @@ const char * CRCInput::getSpecialKeyName(const unsigned int key)
 				return "usb";
 			case RC_timer:
 				return "time";
+			case RC_f1:
+				return "f1";
+			case RC_f2:
+				return "f2";
+			case RC_f3:
+				return "f3";
+			case RC_f4:
+				return "f4";
+			case RC_prog1:
+				return "prog1";
+			case RC_prog2:
+				return "prog2";
+			case RC_prog3:
+				return "prog3";
+			case RC_prog4:
+				return "prog4";
 #endif
 			default:
 				printf("unknown key: %d (0x%x) \n", key, key);

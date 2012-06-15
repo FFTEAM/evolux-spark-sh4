@@ -271,6 +271,14 @@ class CRCInput
 			RC_slow		= KEY_SLOW,
 			RC_playmode	= KEY_P,
 			RC_usb		= KEY_CLOSE,
+			RC_f1		= KEY_F1,
+			RC_f2		= KEY_F2,
+			RC_f3		= KEY_F3,
+			RC_f4		= KEY_F4,
+			RC_prog1	= KEY_PROG1,
+			RC_prog2	= KEY_PROG2,
+			RC_prog3	= KEY_PROG3,
+			RC_prog4	= KEY_PROG4,
 #endif
 
 			RC_timeout	= 0xFFFFFFFF,
