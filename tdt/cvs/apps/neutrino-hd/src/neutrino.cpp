@@ -2359,7 +2359,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				int res = channelList->numericZap( msg );
 				StartSubtitles(res < 0);
 			}
+#ifdef EVOLUX
+			else if( ( msg == g_settings.key_help ) || ( msg == CRCInput::RC_info) ||
+#else
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
+#endif
 #ifdef EVOLUX
 						(g_settings.infobar_cn && (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG)) ||
 #endif
@@ -3968,6 +3972,7 @@ void CNeutrinoApp::loadKeys(const char * fname)
 #ifdef EVOLUX
 	g_settings.key_timerlist = tconfig.getInt32( "key_timerlist", CRCInput::RC_timer);
 	g_settings.key_showclock = tconfig.getInt32( "key_showclock", CRCInput::RC_nokey );
+	g_settings.key_help = tconfig.getInt32( "key_help", CRCInput::RC_help );
 #endif
 
 	g_settings.mpkey_rewind = tconfig.getInt32( "mpkey.rewind", CRCInput::RC_rewind );
@@ -4035,6 +4040,7 @@ void CNeutrinoApp::saveKeys(const char * fname)
 #ifdef EVOLUX
 	tconfig.getInt32( "key_timerliste", g_settings.key_timerlist );
 	tconfig.getInt32( "key_showclock", g_settings.key_showclock );
+	tconfig.getInt32( "key_help", g_settings.key_help );
 #endif
 
 	tconfig.setInt32( "mpkey.rewind", g_settings.mpkey_rewind );

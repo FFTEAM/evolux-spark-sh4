@@ -1738,7 +1738,11 @@ bool CMovieBrowser::onButtonPressMainFrame(neutrino_msg_t msg)
 		if ((m_vMovieInfo.size() > 0) && (m_movieSelectionHandler != NULL) && (IsRecord == false))
 		 	onDeleteFile(*m_movieSelectionHandler);
 	}
+#ifdef EVOLUX
+	else if (msg == g_settings.key_help || msg == CRCInput::RC_info)
+#else
 	else if (msg == CRCInput::RC_help || msg == CRCInput::RC_info)
+#endif
 	{
 		if(m_movieSelectionHandler != NULL)
 		{
@@ -3049,7 +3053,11 @@ bool CMovieBrowser::showMenu(MI_MOVIE_INFO* /*movie_info*/)
     mainMenu.addItem( new CMenuForwarder(LOCALE_MOVIEBROWSER_SCAN_FOR_MOVIES,       true, NULL, this,        "reload_movie_info",                   CRCInput::RC_blue,   NEUTRINO_ICON_BUTTON_BLUE));
     //mainMenu.addItem( new CMenuForwarder(LOCALE_MOVIEBROWSER_MENU_NFS_HEAD,       true, NULL, nfs,         NULL,                                  CRCInput::RC_setup,  NEUTRINO_ICON_BUTTON_MENU_SMALL));
     mainMenu.addItem(GenericMenuSeparatorLine);
+#ifdef EVOLUX
+    mainMenu.addItem( new CMenuForwarder(LOCALE_MOVIEBROWSER_MENU_HELP_HEAD,        true, NULL, movieHelp,   NULL,                                  g_settings.key_help,   NEUTRINO_ICON_BUTTON_HELP_SMALL));
+#else
     mainMenu.addItem( new CMenuForwarder(LOCALE_MOVIEBROWSER_MENU_HELP_HEAD,        true, NULL, movieHelp,   NULL,                                  CRCInput::RC_help,   NEUTRINO_ICON_BUTTON_HELP_SMALL));
+#endif
     //mainMenu.addItem(GenericMenuSeparator);
 
     mainMenu.exec(NULL, " ");

@@ -1104,8 +1104,12 @@ int EpgPlus::exec (CChannelList * pchannelList, int selectedChannelIndex, CBouqu
 						}
 						break;
 				}
-			} 
+			}
+#ifdef EVOLUX 
+			else if (msg == g_settings.key_help || msg == CRCInput::RC_info) {
+#else
 			else if (msg == CRCInput::RC_help || msg == CRCInput::RC_info) {
+#endif
 				TCChannelEventEntries::const_iterator It = this->getSelectedEvent();
 
 				if (It != this->selectedChannelEntry->channelEventEntries.end()) {

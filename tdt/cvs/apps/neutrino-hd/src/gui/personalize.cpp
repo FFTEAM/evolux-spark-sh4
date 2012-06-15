@@ -321,7 +321,11 @@ int CPersonalizeGui::ShowPersonalizationMenu()
 	
 	//help
 	pMenu->addItem(GenericMenuSeparatorLine);
+#ifdef EVOLUX
+	pMenu->addItem(new CMenuForwarder(LOCALE_PERSONALIZE_HELP, true, NULL, this, "personalize_help", g_settings.key_help, NEUTRINO_ICON_BUTTON_HELP));
+#else
 	pMenu->addItem(new CMenuForwarder(LOCALE_PERSONALIZE_HELP, true, NULL, this, "personalize_help", CRCInput::RC_help, NEUTRINO_ICON_BUTTON_HELP));
+#endif
 	
 	int res = pMenu->exec(NULL, "");
 	pMenu->hide();

@@ -748,7 +748,11 @@ int CAudioPlayerGui::show()
 				}
 			}
 		}
+#ifdef EVOLUX
+		else if (msg == g_settings.key_help)
+#else
 		else if (msg == CRCInput::RC_help)
+#endif
 		{
 			if (m_key_level == 2)
 				m_key_level = 0;

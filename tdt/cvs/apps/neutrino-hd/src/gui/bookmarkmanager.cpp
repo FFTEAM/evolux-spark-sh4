@@ -340,7 +340,11 @@ const CBookmark * CBookmarkManager::getBookmark(CMenuTarget* parent)
 			res=-1;
 			loop=false;
 		}
+#ifdef EVOLUX
+		else if ( msg == g_settings.key_help )
+#else
 		else if ( msg == CRCInput::RC_help )
+#endif
 		{
 			// TODO Add Help
 		}

@@ -602,7 +602,11 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 			eplus.exec(NULL, "");
 			loop = false;
 		}
+#ifdef EVOLUX
+		else if (msg==g_settings.key_help || msg==CRCInput::RC_right || msg==CRCInput::RC_ok || msg==CRCInput::RC_info)
+#else
 		else if (msg==CRCInput::RC_help || msg==CRCInput::RC_right || msg==CRCInput::RC_ok || msg==CRCInput::RC_info)
+#endif
 		{
 			if ( evtlist[selected].eventID != 0 )
 			{

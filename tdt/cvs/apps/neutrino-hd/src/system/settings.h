@@ -397,6 +397,7 @@ struct SNeutrinoSettings
 #ifdef EVOLUX
 	int key_timerlist;
 	int key_showclock;
+	int key_help;
 #endif
 
 	int mpkey_rewind;

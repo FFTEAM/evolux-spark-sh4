@@ -191,6 +191,7 @@ const key_settings_struct_t key_settings[CKeybindSetup::KEYBINDS_COUNT] =
 #ifdef EVOLUX
 	{LOCALE_EXTRA_KEY_TIMERLIST,		&g_settings.key_timerlist,		},
 	{LOCALE_EXTRA_KEY_SHOWCLOCK,		&g_settings.key_showclock,		},
+	{LOCALE_EXTRA_KEY_HELP,			&g_settings.key_help,			},
 #endif
 	{LOCALE_EXTRA_KEY_SCREENSHOT,		&g_settings.key_screenshot,		}
 };
@@ -290,6 +291,7 @@ void CKeybindSetup::showKeyBindSetup(CMenuWidget *bindSettings)
 #ifdef EVOLUX
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_TIMERLIST].keydescription, true, keychooser[KEY_TIMERLIST]->getKeyName(), keychooser[KEY_TIMERLIST]));
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SHOWCLOCK].keydescription, true, keychooser[KEY_SHOWCLOCK]->getKeyName(), keychooser[KEY_SHOWCLOCK]));
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_Help].keydescription, true, keychooser[KEY_Help]->getKeyName(), keychooser[KEY_Help]));
 #endif
 #ifdef SCREENSHOT
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SCREENSHOT].keydescription, true, keychooser[KEY_SCREENSHOT]->getKeyName(), keychooser[KEY_SCREENSHOT]));

@@ -384,6 +384,7 @@ const char * locale_real_names[] =
 	"extra.fec_s2_qpsk_8_9",
 	"extra.fec_s2_qpsk_9_10",
 	"extra.key_current_transponder",
+	"extra.key_help",
 	"extra.key_list_end",
 	"extra.key_list_start",
 	"extra.key_plugin",

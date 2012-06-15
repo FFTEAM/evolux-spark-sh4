@@ -443,7 +443,11 @@ int CPictureViewerGui::show()
 					m_state = SLIDESHOW;
 			}
 		}
+#ifdef EVOLUX
+		else if (msg==g_settings.key_help)
+#else
 		else if (msg==CRCInput::RC_help)
+#endif
 		{
 			if (m_state == MENU)
 			{

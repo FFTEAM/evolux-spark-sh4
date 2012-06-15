@@ -277,7 +277,11 @@ int CNetworkSetup::showNetworkSetup()
 	//-------------------------------------------------
 	networkSettings->addItem( m0 ); //apply
 	networkSettings->addItem(new CMenuForwarder(LOCALE_NETWORKMENU_TEST, true, NULL, this, "networktest", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); //test
+#ifdef EVOLUX
+	networkSettings->addItem(new CMenuForwarder(LOCALE_NETWORKMENU_SHOW, true, NULL, this, "networkshow", g_settings.key_help, NEUTRINO_ICON_BUTTON_HELP));	//show settings
+#else
 	networkSettings->addItem(new CMenuForwarder(LOCALE_NETWORKMENU_SHOW, true, NULL, this, "networkshow", CRCInput::RC_help, NEUTRINO_ICON_BUTTON_HELP));	//show settings
+#endif
 	networkSettings->addItem(GenericMenuSeparatorLine);
 	//------------------------------------------------
 	if(ifcount)

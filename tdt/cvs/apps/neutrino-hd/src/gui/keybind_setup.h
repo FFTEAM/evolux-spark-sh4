@@ -78,6 +78,7 @@ class CKeybindSetup : public CMenuTarget
 #ifdef EVOLUX
 			KEY_TIMERLIST,
 			KEY_SHOWCLOCK,
+			KEY_Help,
 #endif
 			KEY_SCREENSHOT,
 			
