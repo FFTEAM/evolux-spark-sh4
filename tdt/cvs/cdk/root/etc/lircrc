@@ -12,7 +12,7 @@ begin
      button = CLOSE
      prog   = irexec
      config = /usr/bin/functions.sh 0
-     mode   = mode_USB
+     mode   = mode_CLOSE
      repeat = 0
      delay  = 0
      flags  = mode 
@@ -56,7 +56,7 @@ begin
      button = KEY_CLOSE
      prog   = irexec
      config = /usr/bin/functions.sh 0
-     mode   = mode_USB
+     mode   = mode_CLOSE
      repeat = 0
      delay  = 0
      flags  = mode 
