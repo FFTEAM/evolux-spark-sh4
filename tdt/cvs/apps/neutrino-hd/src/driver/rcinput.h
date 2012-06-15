@@ -279,7 +279,6 @@ class CRCInput
 			RC_prog2	= KEY_PROG2,
 			RC_prog3	= KEY_PROG3,
 			RC_prog4	= KEY_PROG4,
-			RC_tvradio	= KEY_TV2,
 #endif
 
 			RC_timeout	= 0xFFFFFFFF,

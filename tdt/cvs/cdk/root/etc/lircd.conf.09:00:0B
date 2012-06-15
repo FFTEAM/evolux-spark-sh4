@@ -51,7 +51,7 @@ begin remote
           KEY_7                    0xCA35
           KEY_8                    0xEA15
           KEY_9                    0xC23D
-          KEY_TV2                  0x8877
+          KEY_TV                   0x8877
           KEY_REPLY                 0x807F
           KEY_VOLUMEDOWN	   0x38C7
           KEY_VOLUMEUP	           0x22DD

@@ -53,7 +53,7 @@ begin remote
 		KEY_8		0xEA15	# 8
 		KEY_9		0xC23D	# 9
 		
-		KEY_TV2		0x8877	# TV/RADIO
+		KEY_TV		0x8877	# TV/RADIO
 		KEY_0		0xA857	# 0
 		KEY_LAST	0x807F	# RECALL
 		
@@ -142,7 +142,7 @@ begin remote
 		KEY_8		0xEA15	# 8
 		KEY_9		0xC23D	# 9
 		
-		KEY_TV2		0x8877	# TV/RADIO
+		KEY_TV		0x8877	# TV/RADIO
 		KEY_0		0xA857	# 0
 		KEY_LAST	0x807F	# RECALL
 		
@@ -227,7 +227,7 @@ begin remote
 		KEY_8		0xE817	# unverified
 		KEY_9		0x0AF5	# unverified
 
-		KEY_TV2		0x32CD	# unverified
+		KEY_TV		0x32CD	# unverified
 		KEY_0		0xC837	# unverified
 		KEY_LAST	0x30CF	# unverified
 
