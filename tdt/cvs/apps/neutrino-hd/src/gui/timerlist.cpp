@@ -607,7 +607,11 @@ int CTimerList::show()
 			res=menu_return::RETURN_EXIT_ALL;
 			loop=false;
 		}
+#ifdef EVOLUX
+		else if ( msg == g_settings.key_help || msg == CRCInput::RC_info)
+#else
 		else if ( msg == CRCInput::RC_help || msg == CRCInput::RC_info)
+#endif
 		{
 			CTimerd::responseGetTimer* timer=&timerlist[selected];
 			if (timer!=NULL)

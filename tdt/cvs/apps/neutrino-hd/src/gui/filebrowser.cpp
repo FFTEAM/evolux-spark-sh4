@@ -66,7 +66,6 @@
 #include <driver/encoding.h>
 
 #include <xmltree/xmlinterface.h>
-
 #ifdef __USE_FILE_OFFSET64
 typedef struct dirent64 dirent_struct;
 #define my_alphasort alphasort64
@@ -1091,7 +1090,11 @@ bool CFileBrowser::exec(const char * const dirname)
 				}
 			}
 		}
+#ifdef EVOLUX
+		else if (msg==g_settings.key_help)
+#else
 		else if (msg==CRCInput::RC_help)
+#endif
 		{
 			if (++g_settings.filebrowser_sortmethod >= FILEBROWSER_NUMBER_OF_SORT_VARIANTS)
 				g_settings.filebrowser_sortmethod = 0;

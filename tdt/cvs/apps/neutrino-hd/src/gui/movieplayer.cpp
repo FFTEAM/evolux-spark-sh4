@@ -573,7 +573,11 @@ void CMoviePlayerGui::PlayFile(void)
 			playback->SetPosition(-10 * 1000);
 		} else if (msg == CRCInput::RC_0) {	// cancel bookmark jump
 			handleMovieBrowser(CRCInput::RC_0, position);
+#ifdef EVOLUX
+		} else if (msg == g_settings.key_help || msg == CRCInput::RC_info) {
+#else
 		} else if (msg == CRCInput::RC_help || msg == CRCInput::RC_info) {
+#endif
 			callInfoViewer(duration, position);
 			update_lcd = true;
 			//showHelpTS();

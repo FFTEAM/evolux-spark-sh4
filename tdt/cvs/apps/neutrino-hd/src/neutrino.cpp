@@ -2359,7 +2359,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				int res = channelList->numericZap( msg );
 				StartSubtitles(res < 0);
 			}
+#ifdef EVOLUX
+			else if( ( msg == g_settings.key_help ) || ( msg == CRCInput::RC_info) ||
+#else
 			else if( ( msg == CRCInput::RC_help ) || ( msg == CRCInput::RC_info) ||
+#endif
 #ifdef EVOLUX
 						(g_settings.infobar_cn && (msg == NeutrinoMessages::EVT_CURRENTNEXT_EPG)) ||
 #endif
@@ -2380,7 +2384,15 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				nGLCD::Update();
 #endif
 			}
-			else if (msg == CRCInput::RC_timer) 
+#ifdef EVOLUX
+			else if (msg == g_settings.key_showclock)
+			{
+				switchClockOnOff();
+			}
+			else if (msg == g_settings.key_timerlist)
+#else
+			else if (msg == CRCInput::RC_timer)
+#endif
 			{
 				CTimerList Timerlist;
 				Timerlist.exec(NULL, "");
@@ -3957,6 +3969,11 @@ void CNeutrinoApp::loadKeys(const char * fname)
 
 	g_settings.key_bouquet_up = tconfig.getInt32( "key_bouquet_up",  CRCInput::RC_right);
 	g_settings.key_bouquet_down = tconfig.getInt32( "key_bouquet_down",  CRCInput::RC_left);
+#ifdef EVOLUX
+	g_settings.key_timerlist = tconfig.getInt32( "key_timerlist", CRCInput::RC_timer);
+	g_settings.key_showclock = tconfig.getInt32( "key_showclock", CRCInput::RC_nokey );
+	g_settings.key_help = tconfig.getInt32( "key_help", CRCInput::RC_help );
+#endif
 
 	g_settings.mpkey_rewind = tconfig.getInt32( "mpkey.rewind", CRCInput::RC_rewind );
 	g_settings.mpkey_forward = tconfig.getInt32( "mpkey.forward", CRCInput::RC_forward );
@@ -4020,6 +4037,11 @@ void CNeutrinoApp::saveKeys(const char * fname)
 
 	tconfig.setInt32( "key_bouquet_up", g_settings.key_bouquet_up );
 	tconfig.setInt32( "key_bouquet_down", g_settings.key_bouquet_down );
+#ifdef EVOLUX
+	tconfig.getInt32( "key_timerliste", g_settings.key_timerlist );
+	tconfig.getInt32( "key_showclock", g_settings.key_showclock );
+	tconfig.getInt32( "key_help", g_settings.key_help );
+#endif
 
 	tconfig.setInt32( "mpkey.rewind", g_settings.mpkey_rewind );
 	tconfig.setInt32( "mpkey.forward", g_settings.mpkey_forward );

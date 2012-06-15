@@ -254,7 +254,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 		if (!wakeup) {
 			// restore PSI settings
-			CNeutrinoApp::getInstance()->chPSISetup->writeProcPSI();
+			CNeutrinoApp::getInstance()->chPSISetup->blankScreen(false);
 			// restore audio
 			if (!muted)
 					g_volume->AudioMute(false, false);

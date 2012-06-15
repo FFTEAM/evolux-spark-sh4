@@ -394,6 +394,11 @@ struct SNeutrinoSettings
 	int temp_timeshift;
 	int auto_delete;
 	int record_hours;
+#ifdef EVOLUX
+	int key_timerlist;
+	int key_showclock;
+	int key_help;
+#endif
 
 	int mpkey_rewind;
 	int mpkey_forward;

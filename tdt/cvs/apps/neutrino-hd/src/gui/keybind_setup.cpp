@@ -188,6 +188,11 @@ const key_settings_struct_t key_settings[CKeybindSetup::KEYBINDS_COUNT] =
 	{LOCALE_MPKEY_PLUGIN,			&g_settings.mpkey_plugin,		},
 	{LOCALE_EXTRA_KEY_PLUGIN,		&g_settings.key_plugin,			},
 	{LOCALE_EXTRA_KEY_UNLOCK,		&g_settings.key_unlock,			},
+#ifdef EVOLUX
+	{LOCALE_EXTRA_KEY_TIMERLIST,		&g_settings.key_timerlist,		},
+	{LOCALE_EXTRA_KEY_SHOWCLOCK,		&g_settings.key_showclock,		},
+	{LOCALE_EXTRA_KEY_HELP,			&g_settings.key_help,			},
+#endif
 	{LOCALE_EXTRA_KEY_SCREENSHOT,		&g_settings.key_screenshot,		}
 };
 
@@ -283,6 +288,11 @@ void CKeybindSetup::showKeyBindSetup(CMenuWidget *bindSettings)
 	bindSettings->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_KEYBINDINGMENU_MISC));
 	//bindSettings->addItem(new CMenuForwarder(keydescription[KEY_PLUGIN], true, NULL, keychooser[KEY_PLUGIN]));
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_UNLOCK].keydescription, true, keychooser[KEY_UNLOCK]->getKeyName(), keychooser[KEY_UNLOCK]));
+#ifdef EVOLUX
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_TIMERLIST].keydescription, true, keychooser[KEY_TIMERLIST]->getKeyName(), keychooser[KEY_TIMERLIST]));
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SHOWCLOCK].keydescription, true, keychooser[KEY_SHOWCLOCK]->getKeyName(), keychooser[KEY_SHOWCLOCK]));
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_Help].keydescription, true, keychooser[KEY_Help]->getKeyName(), keychooser[KEY_Help]));
+#endif
 #ifdef SCREENSHOT
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SCREENSHOT].keydescription, true, keychooser[KEY_SCREENSHOT]->getKeyName(), keychooser[KEY_SCREENSHOT]));
 #endif

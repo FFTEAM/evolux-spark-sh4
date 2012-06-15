@@ -908,7 +908,11 @@ int CChannelList::show()
 			paintHead(); // update button bar
 			showChannelLogo();
 		}
+#ifdef EVOLUX
+		else if ((msg == CRCInput::RC_info) || (msg == g_settings.key_help)) {
+#else
 		else if ((msg == CRCInput::RC_info) || (msg == CRCInput::RC_help)) {
+#endif
 			hide();
 			CChannelEvent *p_event=NULL;
 			if (displayNext)
