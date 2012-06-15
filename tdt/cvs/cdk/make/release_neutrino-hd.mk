@@ -479,6 +479,7 @@ endif
 	cp -RP $(targetprefix)/usr/var/tuxbox/config/* $(prefix)/release_neutrino-hd/usr/local/share/config/
 #	cp -RP $(targetprefix)/usr/bin/blockad $(prefix)/release_neutrino-hd/bin/
 	rm $(prefix)/release_neutrino-hd/var/plugins/blockad*
+	rm $(prefix)/release_neutrino-hd/var/plugins/tuxcom*
 #	rm $(prefix)/release_neutrino-hd/usr/lib/tuxbox/plugins/blockad*
 	rm $(prefix)/release_neutrino-hd/usr/local/share/config/blockad*
 	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino-hd/usr/local/share/config/zapit/
