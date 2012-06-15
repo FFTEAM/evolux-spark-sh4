@@ -80,7 +80,7 @@ $(DEPDIR)/neutrino-hd.do_compile: $(appsdir)/neutrino-hd/config.status
 	cd $(appsdir)/neutrino-hd && $(MAKE)
 	touch $@
 
-$(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal openthreads neutrino-hd.do_prepare neutrino-hd.do_compile
+$(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal openthreads neutrino-hd-plugins neutrino-hd.do_prepare neutrino-hd.do_compile
 	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
