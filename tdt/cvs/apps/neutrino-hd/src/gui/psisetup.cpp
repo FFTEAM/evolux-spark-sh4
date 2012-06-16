@@ -48,22 +48,25 @@
 #include <global.h>
 #include <neutrino.h>
 
+#include <video.h>
 #include <linux/stmfb.h>
+
+extern cVideo * videoDecoder;
 
 #define PSI_SCALE_COUNT 5
 static
   CPSISetup::PSI_list
   psi_list[PSI_SCALE_COUNT] = {
 #define PSI_CONTRAST 0
-  {"/proc/stb/video/plane/psi_contrast", LOCALE_VIDEOMENU_PSI_CONTRAST, true}
+    { VIDEO_CONTROL_CONTRAST, LOCALE_VIDEOMENU_PSI_CONTRAST, true}
 #define PSI_SATURATION 1
-  , {"/proc/stb/video/plane/psi_saturation", LOCALE_VIDEOMENU_PSI_SATURATION}
+  , { VIDEO_CONTROL_SATURATION, LOCALE_VIDEOMENU_PSI_SATURATION}
 #define PSI_BRIGHTNESS 2
-  , {"/proc/stb/video/plane/psi_brightness", LOCALE_VIDEOMENU_PSI_BRIGHTNESS}
+  , { VIDEO_CONTROL_BRIGHTNESS, LOCALE_VIDEOMENU_PSI_BRIGHTNESS}
 #define PSI_TINT 3
-  , {"/proc/stb/video/plane/psi_tint", LOCALE_VIDEOMENU_PSI_TINT}
+  , { VIDEO_CONTROL_HUE, LOCALE_VIDEOMENU_PSI_TINT}
 #define PSI_RESET 4
-  , {"/dev/null", LOCALE_VIDEOMENU_PSI_RESET}
+  , { -1, LOCALE_VIDEOMENU_PSI_RESET}
 };
 
 #define SLIDERWIDTH 200
@@ -87,75 +90,18 @@ CPSISetup::CPSISetup (const neutrino_locale_t Name)
   psi_list[PSI_TINT].value = g_settings.psi_tint;
 
   for (int i = 0; i < PSI_RESET; i++)
-    writeProcPSI (i);
+    videoDecoder->SetControl (psi_list[i].control, psi_list[i].value);
 
   needsBlit = true;
 }
 
-#if 0
-unsigned char
-CPSISetup::readProcPSI (int i)
-{
-// Broken, don't try this, read(2) will block.
-  int fn, v = 128;
-  if ((i > -1) && (i < PSI_RESET)
-      && ((fn = open (psi_list[i].procfilename, O_RDONLY) > -1)))
-    {
-      char buf[10];
-      ssize_t len = read (fn, buf, sizeof (buf));
-      close (fn);
-      if (len > -1)
-	{
-	  buf[len] = 0;
-	  int v = atoi (buf);
-	  if (v & ~0xff)
-	    v = 128;
-	}
-    }
-  return (unsigned char) v;
-}
-#endif
-
-void
-CPSISetup::writeProcPSI ()
-{
-  for (int i = 0; i < PSI_RESET; i++)
-    writeProcPSI (i);
-}
-
-void
-CPSISetup::writeProcPSI (int i)
-{
-  int fn;
-  if (i < 0 || i > PSI_SCALE_COUNT - 2)
-	return;
-
-  fn = open (psi_list[i].procfilename, O_WRONLY);
-  if (fn > -1)
-    {
-      char buf[10];
-      ssize_t len = snprintf (buf, sizeof (buf), "%d", psi_list[i].value);
-      if (len < sizeof(buf))
-	if (0 > write (fn, buf, len))
-    	  fprintf(stderr, "%s: write(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
-		
-      close (fn);
-    }
-  else
-    fprintf(stderr, "%s: open(%s): %s\n", __func__, psi_list[i].procfilename, strerror(errno));
-}
-
 void CPSISetup::blankScreen(bool b) {
   if (b) 
-	  for (int i = 0; i < PSI_RESET; i++) {
-		psi_list[i].value_old = psi_list[i].value;
-		psi_list[i].value = 0;
-		writeProcPSI (i);
-		psi_list[i].value = psi_list[i].value_old;
-	  }
+	  for (int i = 0; i < PSI_RESET; i++)
+		videoDecoder->SetControl(psi_list[i].control, 0);
    else /* unblank */
 	  for (int i = 0; i < PSI_RESET; i++)
-		writeProcPSI (i);
+		videoDecoder->SetControl(psi_list[i].control, psi_list[i].value);
 }
 
 int
@@ -265,7 +211,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 	      int val = psi_list[selected].value + g_settings.psi_step;
 	      psi_list[selected].value = (val > 255) ? 255 : val;
 	      paintSlider (selected);
-	      writeProcPSI (selected);
+	      videoDecoder->SetControl(psi_list[selected].control, psi_list[selected].value);
 	    }
 	  break;
 	case CRCInput::RC_left:
@@ -274,7 +220,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 	      int val = psi_list[selected].value - g_settings.psi_step;
 	      psi_list[selected].value = (val < 0) ? 0 : val;
 	      paintSlider (selected);
-	      writeProcPSI (selected);
+	      videoDecoder->SetControl(psi_list[selected].control, psi_list[selected].value);
 	    }
 	  break;
 	case CRCInput::RC_home:	// exit -> revert changes
@@ -291,7 +237,7 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 	      for (i = 0; i < PSI_RESET; i++)
 		{
 		  psi_list[i].value = psi_list[i].value_old;
-		  writeProcPSI (i);
+		  videoDecoder->SetControl(psi_list[selected].control, psi_list[selected].value);
 		}
 	case CRCInput::RC_ok:
           loop = false;
@@ -303,14 +249,13 @@ CPSISetup::exec (CMenuTarget * parent, const std::string &)
 	      g_settings.psi_tint = psi_list[PSI_TINT].value;
 	      break;
 	    }
-	case CRCInput::RC_red:
+	case CRCInput::RC_red: // || selected == PSI_RESET
 	  for (int i = 0; i < PSI_RESET; i++)
 	    {
 	      psi_list[i].value = 128;
-	      writeProcPSI (i);
+	      videoDecoder->SetControl(psi_list[i].control, psi_list[i].value);
+	      paintSlider (i);
 	    }
-	  for (i = 0; i < PSI_RESET; i++)
-	    paintSlider (i);
 	  break;
 	default:
 	  ;
@@ -366,7 +311,7 @@ CPSISetupNotifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
     if (OptionName == psi_list[i].loc)
       {
 	psi_list[i].value = *((int *) Data);
-	psisetup->writeProcPSI (i);
+	videoDecoder->SetControl(psi_list[i].control, psi_list[i].value);
 	return true;
       }
   return false;

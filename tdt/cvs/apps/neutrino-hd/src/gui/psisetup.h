@@ -57,7 +57,7 @@ private:
 public:
   struct PSI_list
   {
-    const char *procfilename;
+    int control;
     const neutrino_locale_t loc;
     bool selected;
     CProgressBar *scale;

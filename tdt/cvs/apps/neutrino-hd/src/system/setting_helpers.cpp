@@ -1136,7 +1136,11 @@ int check_dir(const char * newdir)
 			case 0x858458f6: 	/*ramfs*/
 				return 0;//ok
 			default:
+#ifdef EVOLUX
+				fprintf(stderr,"%s Unknown File system type: 0x%x\n", newdir, s.f_type);
+#else
 				fprintf( stderr,"%s Unknow File system type: %i\n",newdir ,s.f_type);
+#endif
 				break;
 		}
 	}

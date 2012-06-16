@@ -610,10 +610,21 @@ int CNeutrinoApp::loadSetup(const char * fname)
 		sprintf(cfg_key, "network_nfs_mac_%d", i);
 		strcpy( g_settings.network_nfs_mac[i], configfile.getString( cfg_key, "11:22:33:44:55:66").c_str() );
 	}
+#ifdef EVOLUX
+	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/hdd/music" ).c_str() );
+	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/hdd/pictures" ).c_str() );
+	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/hdd/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/hdd/movies" ).c_str() );
+	safe_mkdir(g_settings.network_nfs_audioplayerdir);
+	safe_mkdir(g_settings.network_nfs_picturedir);
+	safe_mkdir(g_settings.network_nfs_moviedir);
+	safe_mkdir(g_settings.network_nfs_recordingdir);
+#else
 	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/sda1/music" ).c_str() );
 	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/sda1/pictures" ).c_str() );
 	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/sda1/movies" ).c_str() );
 	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/sda1/movies" ).c_str() );
+#endif
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
 	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 0 );
@@ -623,13 +634,18 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	char timeshiftDir[255];
 	if(strlen(g_settings.timeshiftdir) == 0) {
 		sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
+#ifndef EVOLUX
 		safe_mkdir(timeshiftDir);
+#endif
 	} else {
 		if(strcmp(g_settings.timeshiftdir, g_settings.network_nfs_recordingdir))
 			strncpy(timeshiftDir, g_settings.timeshiftdir, sizeof(timeshiftDir));
 		else
 			sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
 	}
+#ifdef EVOLUX
+	safe_mkdir(timeshiftDir);
+#endif
 	printf("***************************** rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
 	CRecordManager::getInstance()->SetTimeshiftDirectory(timeshiftDir);
 
@@ -652,6 +668,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 
 	g_settings.recording_stream_vtxt_pid       = configfile.getBool("recordingmenu.stream_vtxt_pid"      , false);
 	g_settings.recording_stream_pmt_pid        = configfile.getBool("recordingmenu.stream_pmt_pid"      , false);
+#ifdef EVOLUX
+	g_settings.recording_stream_subtitle_pids  = configfile.getBool("recordingmenu.stream_subtitle_pids", false);
+#endif
 	g_settings.recording_choose_direct_rec_dir = configfile.getInt32( "recording_choose_direct_rec_dir", 0 );
 	g_settings.recording_epg_for_filename      = configfile.getBool("recording_epg_for_filename"         , true);
 	g_settings.recording_epg_for_end           = configfile.getBool("recording_epg_for_end"              , false);
@@ -1098,6 +1117,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 
 	configfile.setBool  ("recordingmenu.stream_vtxt_pid"      , g_settings.recording_stream_vtxt_pid      );
 	configfile.setBool  ("recordingmenu.stream_pmt_pid"       , g_settings.recording_stream_pmt_pid      );
+#ifdef EVOLUX
+	configfile.setBool  ("recordingmenu.stream_subtitle_pids"       , g_settings.recording_stream_subtitle_pids);
+#endif
 	configfile.setInt32 ("recording_choose_direct_rec_dir"    , g_settings.recording_choose_direct_rec_dir);
 	configfile.setBool  ("recording_epg_for_filename"         , g_settings.recording_epg_for_filename     );
 	configfile.setBool  ("recording_epg_for_end"              , g_settings.recording_epg_for_end          );
@@ -1725,7 +1747,11 @@ void CNeutrinoApp::InitZapper()
 void CNeutrinoApp::setupRecordingDevice(void)
 {
 	CRecordManager::getInstance()->SetDirectory(g_settings.network_nfs_recordingdir);
+#ifdef EVOLUX
+	CRecordManager::getInstance()->Config(g_settings.recording_stopsectionsd, g_settings.recording_stream_vtxt_pid, g_settings.recording_stream_pmt_pid, g_settings.recording_stream_subtitle_pids);
+#else
 	CRecordManager::getInstance()->Config(g_settings.recording_stopsectionsd, g_settings.recording_stream_vtxt_pid, g_settings.recording_stream_pmt_pid);
+#endif
 }
 
 static void CSSendMessage(uint32_t msg, uint32_t data)
@@ -2049,7 +2075,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 #ifdef EVOLUX
 	threeDSetup->exec(NULL, "zapped");
 	chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
-	chPSISetup->writeProcPSI();
+	chPSISetup->blankScreen(false);
 #endif
 	SHTDCNT::getInstance()->init();
 
@@ -2921,7 +2947,13 @@ _repeat:
 				}
 			}
 			if(has_hdd) {
+#ifdef EVOLUX
+				std::string cmd = "(rm " + string(g_settings.network_nfs_recordingdir) + "/.wakeup;touch "
+					+ string(g_settings.network_nfs_recordingdir) + "/.wakeup;sync) >/dev/null 2>&1 &";
+				safe_system(cmd.c_str()); // wakeup hdd
+#else
 				safe_system("(rm /media/sda1/.wakeup; touch /media/sda1/.wakeup; sync) > /dev/null  2> /dev/null &"); // wakeup hdd
+#endif
 			}
 		}
 		if( g_settings.recording_zap_on_announce ) {
