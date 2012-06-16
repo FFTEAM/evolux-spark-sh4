@@ -2049,7 +2049,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 #ifdef EVOLUX
 	threeDSetup->exec(NULL, "zapped");
 	chPSISetup = new CPSISetup(LOCALE_VIDEOMENU_PSI);
-	chPSISetup->writeProcPSI();
+	chPSISetup->blankScreen(false);
 #endif
 	SHTDCNT::getInstance()->init();
 
