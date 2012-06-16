@@ -610,10 +610,17 @@ int CNeutrinoApp::loadSetup(const char * fname)
 		sprintf(cfg_key, "network_nfs_mac_%d", i);
 		strcpy( g_settings.network_nfs_mac[i], configfile.getString( cfg_key, "11:22:33:44:55:66").c_str() );
 	}
+#ifdef EVOLUX
+	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/hdd/music" ).c_str() );
+	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/hdd/pictures" ).c_str() );
+	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/hdd/movies" ).c_str() );
+	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/hdd/movies" ).c_str() );
+#else
 	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/sda1/music" ).c_str() );
 	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/sda1/pictures" ).c_str() );
 	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/sda1/movies" ).c_str() );
 	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/sda1/movies" ).c_str() );
+#endif
 	strcpy( g_settings.timeshiftdir, configfile.getString( "timeshiftdir", "" ).c_str() );
 
 	g_settings.temp_timeshift = configfile.getInt32( "temp_timeshift", 0 );
@@ -2931,7 +2938,13 @@ _repeat:
 				}
 			}
 			if(has_hdd) {
+#ifdef EVOLUX
+				std::string cmd = "(rm " + string(g_settings.network_nfs_recordingdir) + "/.wakeup;touch "
+					+ string(g_settings.network_nfs_recordingdir) + "/.wakeup;sync) >/dev/null 2>&1 &";
+				safe_system(cmd.c_str()); // wakeup hdd
+#else
 				safe_system("(rm /media/sda1/.wakeup; touch /media/sda1/.wakeup; sync) > /dev/null  2> /dev/null &"); // wakeup hdd
+#endif
 			}
 		}
 		if( g_settings.recording_zap_on_announce ) {
