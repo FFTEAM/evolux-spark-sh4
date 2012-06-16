@@ -572,7 +572,7 @@ int parse_pmt(CZapitChannel * const channel)
 	}
 #endif
 
-#ifdef EVOLUX_NO_LONGER_NEEDED
+#ifdef EVOLUX
 #define PID_CONFIG_FILE CONFIGDIR "/zapit/supplemental_pids.conf"
 	// This file is maintained manually and is currently used for adding TTX subtitle pids on ARD/ZDF only. --martii
 	//
@@ -590,28 +590,28 @@ int parse_pmt(CZapitChannel * const channel)
 		memset(tmp_Lang, 0, sizeof(tmp_Lang));
 		while (fgets(buf, sizeof(buf), SUPPIDS)) {
 			t_channel_id chan;
-			unsigned int desc, type;
-			char typespecific[128];
+			unsigned int desc, ty;
+			char typespecific[sizeof(buf)];
 			if ((buf[0] == '#') || !buf[0])
 				continue;
-			if (4 == sscanf(buf, "%llx %x %d %[^\n]", &chan, &desc, &type, typespecific)) {
+			if (4 == sscanf(buf, "%llx %x %d %[^\n]", &chan, &desc, &ty, typespecific)) {
 				if (chan == curChan) {
 					switch(desc) {
 						case 0x56: {
-							switch(type) {
+							switch(ty) {
 								case 1:
 									strncpy(tmp_Lang, typespecific, 3);
 									break;
 								case 2:
 								case 5: {
-									unsigned elementary_PID;
+									unsigned int elementary_PID;
 									unsigned int teletext_magazine_number;
 									unsigned int teletext_page_number;
 									if (3 == sscanf(typespecific, "%x %x %x", &elementary_PID,
 										&teletext_magazine_number, &teletext_page_number))
 										channel->addTTXSubtitle(elementary_PID, tmp_Lang,
-										(u_char) teletext_magazine_number,
-										(u_char) teletext_page_number, (type == 5));
+											(u_char) teletext_magazine_number,
+											(u_char) teletext_page_number, (ty == 5));
 										break;
 								}
 							}
@@ -621,8 +621,8 @@ int parse_pmt(CZapitChannel * const channel)
 					}
 				}
 			}
-			fclose(SUPPIDS);
 		}
+		fclose(SUPPIDS);
 	}
 #endif
 
