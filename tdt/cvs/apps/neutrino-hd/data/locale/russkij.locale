@@ -16,6 +16,8 @@ audiomenu.auto_subs Автоматический выбор
 audiomenu.clockrec Время записи
 audiomenu.dolbydigital Dolby Digital
 audiomenu.hdmi_dd DD через HDMI
+audiomenu.hdmi_dd_auto авто
+audiomenu.hdmi_dd_force принудительно
 audiomenu.head Настройки звука
 audiomenu.lirc Управление пультом
 audiomenu.monoleft Левый
@@ -116,6 +118,16 @@ cam.removed CAM удален из слота
 cam.settings САМ модуль
 cam.timeout Ждем меню CI...
 cam.waiting Ожидание ответа от CI...
+ci.empty Нет CAM в слоте
+ci.init_failed Не удалось определить CAM
+ci.init_ok запуск CAM завершен
+ci.inserted CAM вставлен в слот
+ci.removed CAM извлечен из слота
+ci.reset Сброс
+ci.reset_standby Сброс после выхода из standby
+ci.settings Условный доступ
+ci.timeout Ожидание готовности CI
+ci.waiting Ожидание ответа от CI
 channellist.current_tp Текущий транспондер
 channellist.edit Править
 channellist.epgtext_align_left слева
@@ -135,6 +147,8 @@ channellist.provs Провайдеры
 channellist.sats Спутники
 channellist.since начало  
 channellist.start старт в  
+clock_switch_off Скрыть время
+clock_switch_on Показать время
 colorchooser.alpha альфа
 colorchooser.blue синий
 colorchooser.green зеленый
@@ -577,7 +591,7 @@ hdd_20min 20 мин.
 hdd_30min 30 мин.
 hdd_5min 5 мин.
 hdd_60min 60 мин.
-hdd_activate Активировать настройки
+hdd_activate Применить настройки
 hdd_check Проверить файловую систему
 hdd_check_failed Проверка HDD неудачна!
 hdd_extended_settings Дополнительные параметры
@@ -590,11 +604,11 @@ hdd_format_warn Действительно хотите форматироват
 hdd_fs Файловая система
 hdd_manage Диск
 hdd_middle Средне
-hdd_noise Шум диска
+hdd_noise Скорость диска
 hdd_not_found  HDD не найден
 hdd_reiser ReiserFS
 hdd_settings Настройки HDD
-hdd_sleep Время бездействия
+hdd_sleep Отключить при простое через
 hdd_slow Медленно
 hdd_umount_warn отключение HDD не удалось!
 imageinfo.creator Автор:
@@ -710,6 +724,7 @@ mainmenu.settings Настройки
 mainmenu.shutdown Выключить
 mainmenu.sleeptimer Таймер сна
 mainmenu.tvmode Режим ТВ
+mainmenu.tvradio_switch TВ/Радио
 mainmenu.media Мультимедия
 mainsettings.audio Аудио
 mainsettings.head Настройки
@@ -803,7 +818,7 @@ miscsettings.shutdown_real_rcdelay Задержка выключения
 miscsettings.sleeptimer Таймер выключения
 miscsettings.sptsmode Использовать SPTS-Mode 
 miscsettings.virtual_zap_mode переключение
-miscsettings.zapto_pre_time Перейти на канал за время до начала (минуты)
+miscsettings.zapto_pre_time Перейти на канал за, время (минуты)
 motorcontrol.calc_positions Пересчитать позиции
 motorcontrol.disable_limit Запретить лимиты (soft)
 motorcontrol.drive_mode Движение
@@ -813,7 +828,7 @@ motorcontrol.enable_limit Разрешить пределы (soft)
 motorcontrol.goto Идти на позицию (a)
 motorcontrol.halt Стоп мотор
 motorcontrol.head Настройки мотора
-motorcontrol.install_menu Установить меню
+motorcontrol.install_menu Установочное меню
 motorcontrol.motor_pos (a) Позиция мотора:
 motorcontrol.movement (b) Движение:
 motorcontrol.msec милисек.
@@ -895,7 +910,7 @@ moviebrowser.info_parental_lockage_18year 18 лет
 moviebrowser.info_parental_lockage_6year 6 лет
 moviebrowser.info_parental_lockage_always Всегда 
 moviebrowser.info_path Путь
-moviebrowser.info_prevplaydate Последняя дата проигр.
+moviebrowser.info_prevplaydate Последняя дата
 moviebrowser.info_prodcountry Страна
 moviebrowser.info_prodyear Год
 moviebrowser.info_quality Качество
@@ -921,8 +936,8 @@ moviebrowser.menu_parental_lock_rate_head Залочить фильмы от
 moviebrowser.menu_save Сохранить изменения
 moviebrowser.menu_save_all Запустить обновления для инфо-файлов кино
 moviebrowser.option_browser Опции браузера
-moviebrowser.reload_at_start Перезагр. инф. о кино при старте
-moviebrowser.remount_at_start перемонтировать при старте
+moviebrowser.reload_at_start Перезагрузить инфo о видео при старте
+moviebrowser.remount_at_start Перемонтировать при старте
 moviebrowser.scan_for_movies Сканировать фильмы ...
 moviebrowser.serie_auto_create Авто создание серии
 moviebrowser.serie_head Серия
@@ -1006,6 +1021,8 @@ mpkey.plugin Запустить плагин
 mpkey.rewind Назад
 mpkey.stop Стоп
 mpkey.time Показать время
+networkmenu.apply_settings Применяем изменения...
+networkmenu.apply_settings_now Применить изменения сейчас?
 networkmenu.interface Интерфейс
 networkmenu.broadcast Широковещательный
 networkmenu.dhcp DHCP
@@ -1223,7 +1240,7 @@ recordingmenu.vcr VCR
 recordingmenu.zap_on_announce Переключение при записи
 recordtimer.announce Запись начинается через несколько минут
 repeatblocker.hint_1 Время в ms для распознавания 2-го нажатия кнопки
-repeatblocker.hint_2 Нажмите  0 для переключения (красная - пробел)
+repeatblocker.hint_2 Нажмите 0 для переключения (красная - пробел)
 reset_all Полный сброс STB
 reset_channels Удалить все каналы
 reset_confirm Вы уверены?
@@ -1307,7 +1324,7 @@ extra.scrambled_message Сообщение о кодированном кана�
 screensetup.lowerright Зелёная = Снизу/Справа
 screensetup.upperleft Красная = Сверху/Слева
 screenshot.count Счетчик снимков
-screenshot.cover Создать обложку для Moviebrowser
+screenshot.cover Создать обложку для видео
 screenshot.defdir Каталог для снимков
 screenshot.format Формат снимка
 screenshot.info Кнопка снимка экрана не настроена
@@ -1315,7 +1332,7 @@ screenshot.menu Снимок экрана
 screenshot.osd как у OSD
 screenshot.res Разрешение снимка
 screenshot.scale Масштабирование снимка
-screenshot.tv как у TV
+screenshot.tv как у TV-кадра
 screenshot.video Снимок с видеокадром в фоне
 servicemenu.getplugins Перезагрузить плагины
 servicemenu.getplugins_hint Перезагрузка плагинов,\nподождите...
