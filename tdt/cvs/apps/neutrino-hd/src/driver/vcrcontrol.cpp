@@ -552,6 +552,16 @@ bool CVCRControl::CFileDevice::Record(const t_channel_id channel_id, int mode, c
                 apids[numpids++] = si.pmtpid;
         }
 
+#ifdef EVOLUX
+	if (StreamSubtitlePids)
+		for (int i = 0 ; i < (int)channel->getSubtitleCount() ; ++i) {
+			CZapitAbsSub* s = channel->getChannelSub(i);
+			if (s->thisSubType == CZapitAbsSub::DVB) {
+				CZapitDVBSub* sd = reinterpret_cast<CZapitDVBSub*>(s);
+				apids[numpids++] = sd->pId;
+			}
+		}
+#endif
 	// Create filename for recording
 	pos = Directory.size();
 	strcpy(filename, Directory.c_str());

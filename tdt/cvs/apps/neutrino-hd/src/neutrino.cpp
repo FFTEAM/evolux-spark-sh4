@@ -652,6 +652,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 
 	g_settings.recording_stream_vtxt_pid       = configfile.getBool("recordingmenu.stream_vtxt_pid"      , false);
 	g_settings.recording_stream_pmt_pid        = configfile.getBool("recordingmenu.stream_pmt_pid"      , false);
+#ifdef EVOLUX
+	g_settings.recording_stream_subtitle_pids  = configfile.getBool("recordingmenu.stream_subtitle_pids", false);
+#endif
 	g_settings.recording_choose_direct_rec_dir = configfile.getInt32( "recording_choose_direct_rec_dir", 0 );
 	g_settings.recording_epg_for_filename      = configfile.getBool("recording_epg_for_filename"         , true);
 	g_settings.recording_epg_for_end           = configfile.getBool("recording_epg_for_end"              , false);
@@ -1098,6 +1101,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 
 	configfile.setBool  ("recordingmenu.stream_vtxt_pid"      , g_settings.recording_stream_vtxt_pid      );
 	configfile.setBool  ("recordingmenu.stream_pmt_pid"       , g_settings.recording_stream_pmt_pid      );
+#ifdef EVOLUX
+	configfile.setBool  ("recordingmenu.stream_subtitle_pids"       , g_settings.recording_stream_subtitle_pids);
+#endif
 	configfile.setInt32 ("recording_choose_direct_rec_dir"    , g_settings.recording_choose_direct_rec_dir);
 	configfile.setBool  ("recording_epg_for_filename"         , g_settings.recording_epg_for_filename     );
 	configfile.setBool  ("recording_epg_for_end"              , g_settings.recording_epg_for_end          );
@@ -1725,7 +1731,11 @@ void CNeutrinoApp::InitZapper()
 void CNeutrinoApp::setupRecordingDevice(void)
 {
 	CRecordManager::getInstance()->SetDirectory(g_settings.network_nfs_recordingdir);
+#ifdef EVOLUX
+	CRecordManager::getInstance()->Config(g_settings.recording_stopsectionsd, g_settings.recording_stream_vtxt_pid, g_settings.recording_stream_pmt_pid, g_settings.recording_stream_subtitle_pids);
+#else
 	CRecordManager::getInstance()->Config(g_settings.recording_stopsectionsd, g_settings.recording_stream_vtxt_pid, g_settings.recording_stream_pmt_pid);
+#endif
 }
 
 static void CSSendMessage(uint32_t msg, uint32_t data)

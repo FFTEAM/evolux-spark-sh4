@@ -145,6 +145,9 @@ class CVCRControl
 			bool         Use_Fdatasync;
 			bool         StreamVTxtPid;
 			bool         StreamPmtPid;
+#ifdef EVOLUX
+			bool         StreamSubtitlePids;
+#endif
 			unsigned int RingBuffers;
 				
 			virtual CVCRDevices getDeviceType(void) const
@@ -156,7 +159,11 @@ class CVCRControl
 			virtual bool Record(const t_channel_id channel_id = 0, int mode=1, const event_id_t epgid = 0, const std::string& epgTitle = "", unsigned char apidmode = 0, const time_t epg_time=0); // epg_time added for .xml (MovieBrowser)
 			virtual bool Update(void);
 
+#ifdef EVOLUX
+			CFileDevice(const bool stopplayback, const bool stopsectionsd, const char * const directory, const unsigned int splitsize, const bool use_o_sync, const bool use_fdatasync, const bool stream_vtxt_pid, const bool stream_pmt_pid, const bool stream_subtitle_pids, const unsigned int ringbuffers)
+#else
 			CFileDevice(const bool stopplayback, const bool stopsectionsd, const char * const directory, const unsigned int splitsize, const bool use_o_sync, const bool use_fdatasync, const bool stream_vtxt_pid, const bool stream_pmt_pid, const unsigned int ringbuffers)
+#endif
 				{
 					StopPlayBack       = stopplayback;
 					StopSectionsd      = stopsectionsd;
@@ -166,6 +173,9 @@ class CVCRControl
 					Use_Fdatasync      = use_fdatasync;
 					StreamVTxtPid      = stream_vtxt_pid;
 					StreamPmtPid	   = stream_pmt_pid;
+#ifdef EVOLUX
+					StreamSubtitlePids = stream_subtitle_pids;
+#endif
 					RingBuffers        = ringbuffers;
 				};
 			virtual ~CFileDevice()

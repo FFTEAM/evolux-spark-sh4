@@ -347,6 +347,9 @@ struct SNeutrinoSettings
 	int recording_audio_pids_ac3;
 	int  recording_stream_vtxt_pid;
 	int  recording_stream_pmt_pid;
+#ifdef EVOLUX
+	int  recording_stream_subtitle_pids;
+#endif
 	int recording_choose_direct_rec_dir;
 	int recording_epg_for_filename;
 	int recording_epg_for_end;

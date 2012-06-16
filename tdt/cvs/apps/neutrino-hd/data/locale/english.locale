@@ -1194,6 +1194,7 @@ recordingmenu.apids_ac3 record AC3 streams
 recordingmenu.apids_alt record alternative streams
 recordingmenu.apids_std record standard stream
 recordingmenu.defdir Recording directory
+recordingmenu.dvbsub_pids record subtitles
 recordingmenu.end_of_recording_epg EPG act. Event
 recordingmenu.end_of_recording_max max. Recordingtime
 recordingmenu.end_of_recording_name Endtime of Recording
@@ -1205,6 +1206,7 @@ recordingmenu.multimenu.rec_akt record current channel
 recordingmenu.multimenu.stop_all stop all recordings
 recordingmenu.multimenu.timeshift Timeshift
 recordingmenu.off off
+recordingmenu.pmt_pid record PMT
 recordingmenu.record_is_not_running No record is running!
 recordingmenu.record_is_running Record is running!
 recordingmenu.save_in_channeldir Save in channel dir
@@ -1214,6 +1216,7 @@ recordingmenu.setupnow activate changes
 recordingmenu.timeshift Timeshift
 recordingmenu.tsdir Timeshift directory
 recordingmenu.vcr vcr
+recordingmenu.vtxt_pid record teletext
 recordingmenu.zap_on_announce zap on recording announce
 recordtimer.announce Recording starts in a few minutes
 repeatblocker.hint_1 Shortest time (in ms) to recognize 2 keystrokes

@@ -1194,6 +1194,7 @@ recordingmenu.apids_ac3 AC3 Tonspuren aufnehmen
 recordingmenu.apids_alt Alternative Tonspuren aufn.
 recordingmenu.apids_std Standard Tonspur aufnehmen
 recordingmenu.defdir Aufnahmeverzeichnis
+recordingmenu.dvbsub_pids Untertitel aufnehmen
 recordingmenu.end_of_recording_epg EPG aktuelles Event
 recordingmenu.end_of_recording_max max. Aufnahmezeit
 recordingmenu.end_of_recording_name Ende der Sofortaufnahme
@@ -1205,6 +1206,7 @@ recordingmenu.multimenu.rec_akt Aufnahme aktueller Kanal
 recordingmenu.multimenu.stop_all Alle Aufnahmen beenden
 recordingmenu.multimenu.timeshift Timeshift
 recordingmenu.off aus
+recordingmenu.pmt_pid PMT aufnehmen
 recordingmenu.record_is_not_running Keine laufende Aufnahme verfügbar!
 recordingmenu.record_is_running Aufnahme läuft!
 recordingmenu.save_in_channeldir Speichere im Kanalverzeichnis
@@ -1214,6 +1216,7 @@ recordingmenu.setupnow Einstellungen jetzt übernehmen
 recordingmenu.timeshift Timeshift
 recordingmenu.tsdir Timeshift Aufnahmeverzeichnis
 recordingmenu.vcr Videorekorder
+recordingmenu.vtxt_pid Teletext aufnehmen
 recordingmenu.zap_on_announce Umschalten bei Ankündigung
 recordtimer.announce Die Aufnahme beginnt in wenigen Minuten.
 repeatblocker.hint_1 Mindestzeit (in ms) zwischen 2 Tastendrücken
