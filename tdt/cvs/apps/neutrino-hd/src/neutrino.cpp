@@ -615,6 +615,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/hdd/pictures" ).c_str() );
 	strcpy( g_settings.network_nfs_moviedir, configfile.getString( "network_nfs_moviedir", "/media/hdd/movies" ).c_str() );
 	strcpy( g_settings.network_nfs_recordingdir, configfile.getString( "network_nfs_recordingdir", "/media/hdd/movies" ).c_str() );
+	safe_mkdir(g_settings.network_nfs_recordingdir);
 #else
 	strcpy( g_settings.network_nfs_audioplayerdir, configfile.getString( "network_nfs_audioplayerdir", "/media/sda1/music" ).c_str() );
 	strcpy( g_settings.network_nfs_picturedir, configfile.getString( "network_nfs_picturedir", "/media/sda1/pictures" ).c_str() );
@@ -630,13 +631,18 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	char timeshiftDir[255];
 	if(strlen(g_settings.timeshiftdir) == 0) {
 		sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
+#ifndef EVOLUX
 		safe_mkdir(timeshiftDir);
+#endif
 	} else {
 		if(strcmp(g_settings.timeshiftdir, g_settings.network_nfs_recordingdir))
 			strncpy(timeshiftDir, g_settings.timeshiftdir, sizeof(timeshiftDir));
 		else
 			sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
 	}
+#ifdef EVOLUX
+		safe_mkdir(timeshiftDir);
+#endif
 	printf("***************************** rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
 	CRecordManager::getInstance()->SetTimeshiftDirectory(timeshiftDir);
 
