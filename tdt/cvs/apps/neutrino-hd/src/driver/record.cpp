@@ -1321,6 +1321,16 @@ int CRecordManager::exec(CMenuTarget* parent, const std::string & actionKey )
 			ShowHintUTF(LOCALE_MAINMENU_RECORDING_STOP, g_Locale->getText(LOCALE_RECORDINGMENU_RECORD_IS_NOT_RUNNING), 450, 2);
 			return menu_return::RETURN_EXIT_ALL;
 		}		
+#ifdef EVOLUX
+		if (recmap.size() == 1) {
+			CRecordInstance *inst = recmap.begin()->second;
+			if(inst && inst->tshift_mode) {
+				int recording_id = inst->GetRecordingId();
+				g_Timerd->stopTimerEvent(recording_id);
+				return menu_return::RETURN_EXIT_ALL;
+			}
+		}
+#endif
 	}
 	
 
