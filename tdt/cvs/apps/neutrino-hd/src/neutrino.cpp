@@ -2306,10 +2306,22 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				}
 			}
 			else if( msg == CRCInput::RC_record) {
+#ifdef EVOLUX
+				StopSubtitles();
+#endif
 				CRecordManager::getInstance()->exec(NULL, "Record");
+#ifdef EVOLUX
+				StartSubtitles();
+#endif
 			}
 			else if( msg == CRCInput::RC_stop ) {
+#ifdef EVOLUX
+				StopSubtitles();
+#endif
 				CRecordManager::getInstance()->exec(NULL, "Stop_record");
+#ifdef EVOLUX
+				StartSubtitles();
+#endif
 			}
 			else if( msg == CRCInput::RC_red ) {
 				// eventlist
