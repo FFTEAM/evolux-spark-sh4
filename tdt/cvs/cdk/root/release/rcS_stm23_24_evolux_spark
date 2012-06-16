@@ -223,7 +223,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			mkdir -p /media/hdd
 		fi
 		mount -o bind /autofs/sda1 /media/hdd
-		stdFolders="movie music picture swap epg"
+		stdFolders="movie music picture swap epg timeshift"
 		for i in $stdFolders
 		do
 		mkdir -p /media/hdd/$i
@@ -234,7 +234,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			mkdir -p /media/hdd2
 		fi
 		mount -o bind /autofs/sda1 /media/hdd2
-		stdFolders="movie music picture swap epg"
+		stdFolders="movie music picture swap epg timeshift"
 		for i in $stdFolders
 		do
 		mkdir -p /media/hdd2/$i
