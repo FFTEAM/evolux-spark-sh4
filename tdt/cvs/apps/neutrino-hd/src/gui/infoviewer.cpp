@@ -1498,6 +1498,16 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 
 void CInfoViewer::showButton_SubServices ()
 {
+#ifdef EVOLUX
+	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW,
+	ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2, BBarY, InfoHeightY_Info);
+	std::string txt = g_settings.usermenu_text[SNeutrinoSettings::BUTTON_YELLOW];
+	if (txt.empty())
+		txt = g_Locale->getText((g_RemoteControl->are_subchannels) ? LOCALE_INFOVIEWER_SUBSERVICE : LOCALE_INFOVIEWER_SELECTTIME);
+	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(
+		ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2 + icol_w + 4,
+		BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
+#else
 	if (!(g_RemoteControl->subChannels.empty ())) {
 		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW,
 				       ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2, BBarY, InfoHeightY_Info);
@@ -1511,6 +1521,7 @@ void CInfoViewer::showButton_SubServices ()
 			/*ChanInfoX + 10 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 4 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 4 + asize + 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 4,*/
 			BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
 	}
+#endif
 }
 
 void CInfoViewer::getEPG(const t_channel_id for_channel_id, CSectionsdClient::CurrentNextInfo &info)
