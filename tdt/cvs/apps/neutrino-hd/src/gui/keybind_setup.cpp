@@ -220,7 +220,9 @@ int CKeybindSetup::showKeySetup()
 	int shortcut = 1;
 	showKeyBindSetup(bindSettings);
 	keySettings->addItem(new CMenuForwarder(LOCALE_KEYBINDINGMENU_HEAD, true, NULL, bindSettings, NULL, CRCInput::convertDigitToKey(shortcut++)));
+#ifndef EVOLUX
 	keySettings->addItem(GenericMenuSeparator);
+#endif
 	keySettings->addItem(new CMenuForwarder(LOCALE_EXTRA_LOADKEYS, true, NULL, this, "loadkeys", CRCInput::convertDigitToKey(shortcut++)));
 	keySettings->addItem(new CMenuForwarder(LOCALE_EXTRA_SAVEKEYS, true, NULL, this, "savekeys", CRCInput::convertDigitToKey(shortcut++)));
 
