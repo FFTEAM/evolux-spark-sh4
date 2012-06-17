@@ -77,6 +77,9 @@ class CUserMenu : public CChangeObserver
 		CUserMenu();
 		~CUserMenu();
 		bool showUserMenu(int button);
+#ifdef EVOLUX
+		static const char *getUserMenuButtonName(int button);
+#endif
 };
 
 

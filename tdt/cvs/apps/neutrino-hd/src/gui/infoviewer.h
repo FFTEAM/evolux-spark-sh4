@@ -131,8 +131,13 @@ class CInfoViewer
 			  bool update_current = true, bool update_next = true);
 	void paintTime( bool show_dot, bool firstPaint );
 	
+#ifdef EVOLUX
+	std::string buttonName[4];
+	void showButtons(bool start = false);
+#else
 	void showButton_Audio();
 	void showButton_SubServices();
+#endif
 	
 	void showIcon_16_9();
 	void showIcon_RadioText(bool rt_available) const;
