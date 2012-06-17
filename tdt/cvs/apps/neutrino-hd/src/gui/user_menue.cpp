@@ -525,7 +525,6 @@ const char *CUserMenu::getUserMenuButtonName(int button)
 				if (!g_RemoteControl->subChannels.empty()) {
 					locCheck(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD);
 				}
-				return_title = true;
 				continue;
                         case SNeutrinoSettings::ITEM_RECORD:
 				locCheck(LOCALE_FAVORITES_MENUEADD);
@@ -572,19 +571,7 @@ const char *CUserMenu::getUserMenuButtonName(int button)
 			return text;
 		return g_Locale->getText(loc);
 	}
-
-        std::string txt = g_settings.usermenu_text[button];
-	if(txt.empty()) {
-		if (button == SNeutrinoSettings::BUTTON_RED)
-			return g_Locale->getText(LOCALE_INFOVIEWER_EVENTLIST);
-		if( button == SNeutrinoSettings::BUTTON_GREEN)
-			return g_Locale->getText(LOCALE_INFOVIEWER_LANGUAGES);
-		if( button == SNeutrinoSettings::BUTTON_YELLOW)
-			return g_Locale->getText((g_RemoteControl->are_subchannels) ? LOCALE_INFOVIEWER_SUBSERVICE : LOCALE_INFOVIEWER_SELECTTIME);
-		if( button == SNeutrinoSettings::BUTTON_BLUE)
-			return g_Locale->getText(LOCALE_INFOVIEWER_STREAMINFO);
-	}
-	return txt.c_str();
+	return return_title ? g_settings.usermenu_text[button].c_str() : NULL;
 }
 #endif
 

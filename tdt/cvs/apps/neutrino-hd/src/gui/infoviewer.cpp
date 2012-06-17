@@ -15,7 +15,7 @@
 	Steuerung getrennt. Diese wird dann von Daemons uebernommen.
 
 
-	License:  GPL
+	License: GPL
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1514,16 +1514,6 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 #ifndef EVOLUX
 void CInfoViewer::showButton_SubServices ()
 {
-#ifdef EVOLUX
-	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW,
-	ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2, BBarY, InfoHeightY_Info);
-	std::string txt = g_settings.usermenu_text[SNeutrinoSettings::BUTTON_YELLOW];
-	if (txt.empty())
-		txt = g_Locale->getText((g_RemoteControl->are_subchannels) ? LOCALE_INFOVIEWER_SUBSERVICE : LOCALE_INFOVIEWER_SELECTTIME);
-	g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(
-		ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2 + icol_w + 4,
-		BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
-#else
 	if (!(g_RemoteControl->subChannels.empty ())) {
 		frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_YELLOW,
 				       ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 2, BBarY, InfoHeightY_Info);
@@ -1537,7 +1527,6 @@ void CInfoViewer::showButton_SubServices ()
 			/*ChanInfoX + 10 + NEUTRINO_ICON_BUTTON_RED_WIDTH + 4 + asize + 2 + NEUTRINO_ICON_BUTTON_GREEN_WIDTH + 4 + asize + 2 + NEUTRINO_ICON_BUTTON_YELLOW_WIDTH + 4,*/
 			BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
 	}
-#endif
 }
 #endif
 
@@ -1986,9 +1975,11 @@ void CInfoViewer::showButtons (bool start)
 	int icons_offset = (2*(icon_large_width + 2)) + icon_small_width +2 +2;
 	ButtonWidth = (BoxEndX - ChanInfoX - icons_offset) >> 2;
 	for (int i = 0; i < 4; i++) {
+		const char *txt =  CUserMenu::getUserMenuButtonName(i);
+		if (!txt)
+			continue;
 		if (start)
 			frameBuffer->paintIcon(icon[i], ChanInfoX + 10 + (icol_w + 4 + asize + 2) * i , BBarY, InfoHeightY_Info);
-		const char *txt =  CUserMenu::getUserMenuButtonName(i);
 		if (strcmp(txt, buttonName[i].c_str())) {
 			frameBuffer->paintBoxRel (
 				ChanInfoX + 10 + (icol_w + 4 + asize + 2) * i + icol_w + 4, BBarFontY - fontheight,
