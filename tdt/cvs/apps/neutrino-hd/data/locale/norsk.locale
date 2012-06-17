@@ -403,7 +403,7 @@ infoviewer.motor_moving Antenneposisjon
 infoviewer.nocurrent Ingen info for nåværende program tilgjengelig
 infoviewer.noepg EPG ikke tilgjengelig
 infoviewer.notavailable Kanal ikke tilgjengelig
-infoviewer.selecttime Tidsvalg
+infoviewer.selecttime Portal
 infoviewer.streaminfo Tjenester
 infoviewer.subchan_disp_pos Underkanal visning
 infoviewer.subservice Underkanaler
