@@ -491,6 +491,103 @@ bool CUserMenu::showUserMenu(int button)
  	return 0;
 }
 
+#ifdef EVOLUX
+const char *CUserMenu::getUserMenuButtonName(int button)
+{
+        if(button < 0 || button >= SNeutrinoSettings::BUTTON_MAX)
+                return false;
+
+	bool return_title = false;
+	neutrino_locale_t loc = NONEXISTANT_LOCALE;
+	char *text = NULL;
+
+	#define locCheck(L) if(loc != NONEXISTANT_LOCALE) return_title = true; else loc=L;continue
+
+        for(int pos = 0; pos < SNeutrinoSettings::ITEM_MAX && !return_title; pos++) {
+                switch(g_settings.usermenu[button][pos]) {
+                        case SNeutrinoSettings::ITEM_NONE:
+                        case SNeutrinoSettings::ITEM_BAR:
+				continue;
+                        case SNeutrinoSettings::ITEM_EPG_LIST:
+				locCheck(LOCALE_EPGMENU_EVENTLIST);
+                        case SNeutrinoSettings::ITEM_EPG_SUPER:
+				locCheck(LOCALE_EPGMENU_EPGPLUS);
+                        case SNeutrinoSettings::ITEM_EPG_INFO:
+                                locCheck(LOCALE_EPGMENU_EVENTINFO);
+                        case SNeutrinoSettings::ITEM_EPG_MISC:
+				return_title = true; continue;
+                        case SNeutrinoSettings::ITEM_AUDIO_SELECT:
+				if (g_RemoteControl->current_PIDs.APIDs.size() > 0)
+                        		text = g_RemoteControl->current_PIDs.APIDs[
+						g_RemoteControl->current_PIDs.PIDs.selected_apid].desc;
+				locCheck(LOCALE_AUDIOSELECTMENUE_HEAD);
+			case SNeutrinoSettings::ITEM_SUBCHANNEL:
+				if (!g_RemoteControl->subChannels.empty()) {
+					locCheck(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD);
+				}
+				return_title = true;
+				continue;
+                        case SNeutrinoSettings::ITEM_RECORD:
+				locCheck(LOCALE_FAVORITES_MENUEADD);
+                        case SNeutrinoSettings::ITEM_MOVIEPLAYER_MB:
+                                locCheck(LOCALE_MOVIEBROWSER_HEAD);
+                        case SNeutrinoSettings::ITEM_TIMERLIST:
+                                locCheck(LOCALE_TIMERLIST_NAME);
+                        case SNeutrinoSettings::ITEM_FAVORITS:
+				locCheck(LOCALE_FAVORITES_MENUEADD);
+			case SNeutrinoSettings::ITEM_VTXT:
+				locCheck(LOCALE_USERMENU_ITEM_VTXT);
+                        case SNeutrinoSettings::ITEM_TECHINFO:
+                                locCheck(LOCALE_EPGMENU_STREAMINFO);
+                        case SNeutrinoSettings::ITEM_REMOTE:
+                                locCheck(LOCALE_RCLOCK_MENUEADD);
+                        case SNeutrinoSettings::ITEM_PLUGIN:
+				return_title = true;
+				continue;
+                        case SNeutrinoSettings::ITEM_IMAGEINFO:
+                                locCheck(LOCALE_SERVICEMENU_IMAGEINFO);
+                        case SNeutrinoSettings::ITEM_BOXINFO:
+				locCheck(LOCALE_EXTRA_DBOXINFO);
+                        case SNeutrinoSettings::ITEM_CAM:
+				locCheck(LOCALE_CI_SETTINGS);
+                        case SNeutrinoSettings::ITEM_CLOCK:
+				locCheck(!g_settings.mode_clock ? LOCALE_CLOCK_SWITCH_ON:LOCALE_CLOCK_SWITCH_OFF);
+                        case SNeutrinoSettings::ITEM_GAMES:
+				locCheck(LOCALE_MAINMENU_GAMES);
+                        case SNeutrinoSettings::ITEM_SCRIPTS:
+				locCheck(LOCALE_MAINMENU_SCRIPTS);
+			case SNeutrinoSettings::ITEM_ADZAP:
+				locCheck(LOCALE_USERMENU_ITEM_ADZAP);
+                        case SNeutrinoSettings::ITEM_EMU_RESTART:
+				locCheck(LOCALE_EXTRAMENU_EMU_RESTART);
+                        case SNeutrinoSettings::ITEM_TUNER_RESTART:
+				locCheck(LOCALE_EXTRAMENU_TUNERRESET);
+                        case SNeutrinoSettings::ITEM_THREE_D_MODE:
+				locCheck(LOCALE_THREE_D_SETTINGS);
+                }
+        }
+
+	if (!return_title && (loc != NONEXISTANT_LOCALE)) {
+		if(text)
+			return text;
+		return g_Locale->getText(loc);
+	}
+
+        std::string txt = g_settings.usermenu_text[button];
+	if(txt.empty()) {
+		if (button == SNeutrinoSettings::BUTTON_RED)
+			return g_Locale->getText(LOCALE_INFOVIEWER_EVENTLIST);
+		if( button == SNeutrinoSettings::BUTTON_GREEN)
+			return g_Locale->getText(LOCALE_INFOVIEWER_LANGUAGES);
+		if( button == SNeutrinoSettings::BUTTON_YELLOW)
+			return g_Locale->getText((g_RemoteControl->are_subchannels) ? LOCALE_INFOVIEWER_SUBSERVICE : LOCALE_INFOVIEWER_SELECTTIME);
+		if( button == SNeutrinoSettings::BUTTON_BLUE)
+			return g_Locale->getText(LOCALE_INFOVIEWER_STREAMINFO);
+	}
+	return txt.c_str();
+}
+#endif
+
 /**************************************************************************************
 *          changeNotify - features menu recording start / stop                        *
 **************************************************************************************/

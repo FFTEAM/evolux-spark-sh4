@@ -57,6 +57,9 @@
 #include <gui/customcolor.h>
 #include <gui/pictureviewer.h>
 #include <gui/movieplayer.h>
+#ifdef EVOLUX
+#include <gui/user_menue.h>
+#endif
 
 #include <daemonc/remotecontrol.h>
 #include <driver/record.h>
@@ -464,6 +467,7 @@ void CInfoViewer::paintshowButtonBar()
 	frameBuffer->paintBoxRel(ChanInfoX, BBarY, BoxEndX - ChanInfoX, InfoHeightY_Info, COL_INFOBAR_BUTTONS_BACKGROUND, RADIUS_SMALL, CORNER_BOTTOM); //round
 
 	showSNR();
+#ifndef EVOLUX
 	//frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_BLUE, ChanInfoX + 16*3 + asize * 3 + 2*6,
 	frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_BLUE, ChanInfoX + 10 + (icol_w + 4 + asize + 2) * 3,
 			       BBarY, InfoHeightY_Info);
@@ -479,6 +483,9 @@ void CInfoViewer::paintshowButtonBar()
 
 	showButton_Audio ();
 	showButton_SubServices ();
+#else
+	showButtons(true);
+#endif
 	showIcon_CA_Status(0);
 	showIcon_16_9 ();
 	showIcon_VTXT ();
@@ -1427,7 +1434,11 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 	} else if (msg == NeutrinoMessages::EVT_ZAP_GOTAPIDS) {
 		if ((*(t_channel_id *) data) == channel_id) {
 			if (is_visible && showButtonBar)
+#ifdef EVOLUX
+				showButtons ();
+#else
 				showButton_Audio ();
+#endif
 			if (g_settings.radiotext_enable && g_Radiotext && ((CNeutrinoApp::getInstance()->getMode()) == NeutrinoMessages::mode_radio))
 				g_Radiotext->setPid(g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].pid);
 		}
@@ -1435,7 +1446,11 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 	} else if (msg == NeutrinoMessages::EVT_ZAP_GOT_SUBSERVICES) {
 		if ((*(t_channel_id *) data) == channel_id) {
 			if (is_visible && showButtonBar)
+#ifdef EVOLUX
+				showButtons ();
+#else
 				showButton_SubServices ();
+#endif
 		}
 		return messages_return::handled;
 	} else if (msg == NeutrinoMessages::EVT_ZAP_SUB_COMPLETE) {
@@ -1496,6 +1511,7 @@ int CInfoViewer::handleMsg (const neutrino_msg_t msg, neutrino_msg_data_t data)
 	return messages_return::unhandled;
 }
 
+#ifndef EVOLUX
 void CInfoViewer::showButton_SubServices ()
 {
 	if (!(g_RemoteControl->subChannels.empty ())) {
@@ -1512,6 +1528,7 @@ void CInfoViewer::showButton_SubServices ()
 			BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
 	}
 }
+#endif
 
 void CInfoViewer::getEPG(const t_channel_id for_channel_id, CSectionsdClient::CurrentNextInfo &info)
 {
@@ -1807,6 +1824,9 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 			frameBuffer->paintBackgroundBoxRel (BoxEndX - 108, posy, 112, height2);
 		}
 #endif
+#ifdef EVOLUX
+		showButtons();
+#else
 		if (info_CurrentNext.flags & CSectionsdClient::epgflags::has_anything) {
 			frameBuffer->paintIcon(NEUTRINO_ICON_BUTTON_RED, ChanInfoX + 10, BBarY, InfoHeightY_Info);
 			std::string txt = g_settings.usermenu_text[SNeutrinoSettings::BUTTON_RED];
@@ -1814,6 +1834,7 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 				txt = g_Locale->getText(LOCALE_INFOVIEWER_EVENTLIST);
 			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(ChanInfoX + (10 + icol_w + 4), BBarFontY, asize, txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
 		}
+#endif
 	}
 
 	if ((info_CurrentNext.flags & CSectionsdClient::epgflags::not_broadcast) ||
@@ -1941,6 +1962,34 @@ void CInfoViewer::show_Data (bool calledFromEvent)
 #endif
 }
 
+#ifdef EVOLUX
+void CInfoViewer::showButtons (bool start)
+{
+	const char *icon[4] = { NEUTRINO_ICON_BUTTON_RED, NEUTRINO_ICON_BUTTON_GREEN, NEUTRINO_ICON_BUTTON_YELLOW, NEUTRINO_ICON_BUTTON_BLUE };
+
+	if (start)
+		for (int i = 0; i < 4; i++)
+			buttonName[i] = "";
+
+	int fontheight = g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->getHeight();
+	int icons_offset = (2*(icon_large_width + 2)) + icon_small_width +2 +2;
+	ButtonWidth = (BoxEndX - ChanInfoX - icons_offset) >> 2;
+	for (int i = 0; i < 4; i++) {
+		if (start)
+			frameBuffer->paintIcon(icon[i], ChanInfoX + 10 + (icol_w + 4 + asize + 2) * i , BBarY, InfoHeightY_Info);
+		const char *txt =  CUserMenu::getUserMenuButtonName(i);
+		if (strcmp(txt, buttonName[i].c_str())) {
+			frameBuffer->paintBoxRel (
+				ChanInfoX + 10 + (icol_w + 4 + asize + 2) * i + icol_w + 4, BBarFontY - fontheight,
+				asize, fontheight, COL_INFOBAR_BUTTONS_BACKGROUND);
+			buttonName[i] = std::string(txt);
+			g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL]->RenderString(
+				ChanInfoX + 10 + (icol_w + 4 + asize + 2) * i + icol_w + 4, BBarFontY,
+				ButtonWidth - (2 + icol_w + 4 + 2), txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
+		}
+	}
+}
+#endif
 void CInfoViewer::showInfoFile()
 {
 	/*if (recordModeActive)
@@ -1982,6 +2031,7 @@ void CInfoViewer::showInfoFile()
 }
 
 
+#ifndef EVOLUX
 void CInfoViewer::showButton_Audio ()
 {
 	// green, in case of several APIDs
@@ -2015,6 +2065,7 @@ void CInfoViewer::showButton_Audio ()
 	frameBuffer->paintIcon(dd_icon, BoxEndX - (icon_large_width + 2*icon_small_width + 3*2),
 			       BBarY, InfoHeightY_Info, 1, true, true, COL_INFOBAR_BUTTONS_BACKGROUND);
 }
+#endif
 
 void CInfoViewer::killTitle()
 {
