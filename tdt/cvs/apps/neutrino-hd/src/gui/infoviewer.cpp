@@ -1990,6 +1990,17 @@ void CInfoViewer::showButtons (bool start)
 				ButtonWidth - (2 + icol_w + 4 + 2), txt, COL_INFOBAR_BUTTONS, 0, true); // UTF-8
 		}
 	}
+	const char *dd_icon;
+	uint32_t count = g_RemoteControl->current_PIDs.APIDs.size ();
+	if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < count) && (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
+		dd_icon = NEUTRINO_ICON_DD;
+	else if (g_RemoteControl->has_ac3)
+		dd_icon = NEUTRINO_ICON_DD_AVAIL;
+	else
+		dd_icon = NEUTRINO_ICON_DD_GREY;
+
+	frameBuffer->paintIcon(dd_icon, BoxEndX - (icon_large_width + 2*icon_small_width + 3*2),
+			       BBarY, InfoHeightY_Info, 1, true, true, COL_INFOBAR_BUTTONS_BACKGROUND);
 }
 #endif
 void CInfoViewer::showInfoFile()
