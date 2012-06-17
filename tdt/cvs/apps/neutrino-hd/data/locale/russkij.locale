@@ -805,7 +805,7 @@ miscsettings.infobar_logo_hdd_dir_e2 Каталог с лого E2:
 miscsettings.infobar_show_var_hdd Показать уровнень заполненности (var/HDD)
 miscsettings.infobar_show Инфопанель при смене события
 miscsettings.infobar_show_res Показать разрешение
-miscsettings.infobar_show_res_simple кратко
+miscsettings.infobar_show_res_simple SD/HD
 miscsettings.radiotext Радиотекст
 miscsettings.noaviawatchdog Разрешить AVIA контроль
 miscsettings.noenxwatchdog Разрешить eNX контроль
@@ -1021,7 +1021,7 @@ mpkey.plugin Запустить плагин
 mpkey.rewind Назад
 mpkey.stop Стоп
 mpkey.time Показать время
-networkmenu.apply_settings Применяем изменения...
+networkmenu.apply_settings Применение изменений...
 networkmenu.apply_settings_now Применить изменения сейчас?
 networkmenu.interface Интерфейс
 networkmenu.broadcast Широковещательный
@@ -1200,6 +1200,7 @@ recordingmenu.apids_alt Другие потоки
 recordingmenu.apids_std Основной поток
 recordingmenu.choose_direct_rec_dir Куда вести запись
 recordingmenu.defdir Каталог записи
+recordingmenu.dvbsub_pids Запись субтитров
 recordingmenu.end_of_recording_epg по событию EPG
 recordingmenu.end_of_recording_max по максимальному времени
 recordingmenu.end_of_recording_name Окончание записи
@@ -1219,6 +1220,8 @@ recordingmenu.record_in_spts_mode Переключить в spts режим пе
 recordingmenu.recording_type Режим записи
 recordingmenu.record_is_not_running Запись не включена!
 recordingmenu.record_is_running Запись активна!
+recordingmenu.pmt_pid Запись PMT
+recordingmenu.vtxt_pid Запись телетекста
 recordingmenu.ringbuffers Значение для ringbuffers
 recordingmenu.save_in_channeldir Создать каталог по имени канала
 recordingmenu.server Сервер
