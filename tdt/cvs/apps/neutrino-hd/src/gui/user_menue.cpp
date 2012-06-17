@@ -516,10 +516,23 @@ const char *CUserMenu::getUserMenuButtonName(int button)
                                 locCheck(LOCALE_EPGMENU_EVENTINFO);
                         case SNeutrinoSettings::ITEM_EPG_MISC:
 				return_title = true; continue;
+#ifdef EVOLUX
                         case SNeutrinoSettings::ITEM_AUDIO_SELECT:
 				return_title = true; continue;
 			case SNeutrinoSettings::ITEM_SUBCHANNEL:
 				return_title = true; continue;
+#else
+                        case SNeutrinoSettings::ITEM_AUDIO_SELECT:
+				if (g_RemoteControl->current_PIDs.APIDs.size() > 0)
+                        		text = g_RemoteControl->current_PIDs.APIDs[
+						g_RemoteControl->current_PIDs.PIDs.selected_apid].desc;
+				locCheck(LOCALE_AUDIOSELECTMENUE_HEAD);
+			case SNeutrinoSettings::ITEM_SUBCHANNEL:
+				if (!g_RemoteControl->subChannels.empty()) {
+					locCheck(g_RemoteControl->are_subchannels ? LOCALE_NVODSELECTOR_SUBSERVICE : LOCALE_NVODSELECTOR_HEAD);
+				}
+				continue;
+#endif
                         case SNeutrinoSettings::ITEM_RECORD:
 				locCheck(LOCALE_FAVORITES_MENUEADD);
                         case SNeutrinoSettings::ITEM_MOVIEPLAYER_MB:
