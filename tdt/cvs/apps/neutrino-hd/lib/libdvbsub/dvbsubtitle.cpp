@@ -153,6 +153,13 @@ void cDvbSubtitleBitmaps::Draw(int &min_x, int &min_y, int &max_x, int &max_y)
 	CFrameBuffer* fb = CFrameBuffer::getInstance();
 	fb_pixel_t *b = fb->getBackBufferPointer();
 
+	// HACK. When having just switched channels we may not yet have yet
+	// received valid authoring data. This check triggers for the most
+	// common HD subtitle format and sets our authoring display format
+	// accordingly.
+	if (max_x == 720 && max_y == 576 && sub.rects[0]->h == 48 && sub.rects[0]->w == 1280)
+		min_x = min_y = 0, max_x = 1280, max_y = 720;
+
 	for (int i = 0; i < Count(); i++) {
 		uint32_t * colors = (uint32_t *) sub.rects[i]->pict.data[1];
 		int width = sub.rects[i]->w;
