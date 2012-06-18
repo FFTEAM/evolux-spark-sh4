@@ -2400,6 +2400,21 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 	extern int pmt_caids[4][11];
 	int caids[] = { 0x600, 0x1700, 0x0100, 0x0500, 0x1800, 0xB00, 0xD00, 0x900, 0x2600, 0x4a00, 0x0E00 };
 	int i = 0;
+#ifdef EVOLUX
+	int acaid = 0;
+	if(!notfirst) {
+		FILE *f = fopen("/tmp/ecm.info", "rt");
+			if (f != NULL) {
+				char buf[80];
+				if (buf && fgets(buf, sizeof(buf), f) != NULL) {
+						while (buf[i] != '0')
+							i++;
+						sscanf(&buf[i], "%X", &acaid);
+					}
+				}
+				fclose(f);
+			}
+#endif
 	if (g_settings.casystem_display == 2) {
 		bool fta = true;
 		for (i=0; i < (int)(sizeof(caids)/sizeof(int)); i++) {
@@ -2417,6 +2432,9 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 
 	const char * white = (char *) "white";
 	const char * yellow = (char *) "yellow";
+#ifdef EVOLUX
+	const char * green = (char *) "green";
+#endif
 	static int icon_space_offset = 0;
 	bool paintIconFlag = false;
 
@@ -2436,6 +2454,11 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 					paintIconFlag = true;
 			}
 			if (paintIconFlag) {
+#ifdef EVOLUX
+			if ((caids[i] & 0xFF00) == (acaid & 0xFF00) || (caids[i] == 0x1700 && (acaid & 0xFF00) == 0x0600))
+				paint_ca_icons(caids[i], (char *) green, icon_space_offset);
+			else
+#endif
 				paint_ca_icons(caids[i], (char *) (pmt_caids[0][i] ? yellow : white),icon_space_offset);
 				paintIconFlag = false;
 			}
