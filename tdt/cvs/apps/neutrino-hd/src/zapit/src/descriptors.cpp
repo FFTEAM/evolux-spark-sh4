@@ -449,7 +449,6 @@ void service_descriptor(const unsigned char * const buffer, const t_service_id s
 
 #ifdef EVOLUX
 	uint8_t real_type = service_type;
-fprintf(stderr, "******** real service type is 0x%.2x\n", real_type);
 #endif
 	service_type = fix_service_type(service_type);
 #ifndef EVOLUX
@@ -694,7 +693,6 @@ void current_service_descriptor(const unsigned char * const buffer, const t_serv
 	service_type = fix_service_type(service_type); 
 #ifndef EVOLUX
 	uint8_t real_type = service_type;
-fprintf(stderr, "******** real service type is 0x%.2x\n", real_type);
 #endif
 
 #if 0
