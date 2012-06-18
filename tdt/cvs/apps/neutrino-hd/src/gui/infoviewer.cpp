@@ -891,6 +891,11 @@ void CInfoViewer::loop(bool show_dot)
 			else
 				res = messages_return::cancel_info;
 		} else if ((msg == NeutrinoMessages::EVT_TIMER) && (data == sec_timer_id)) {
+#ifdef EVOLUX
+			// doesn't belong here, but easiest way to check for a change ...
+			if (is_visible && showButtonBar)
+				showIcon_CA_Status(0);
+#endif
 			showSNR ();
 			paintTime (show_dot, false);
 			showRecordIcon (show_dot);
