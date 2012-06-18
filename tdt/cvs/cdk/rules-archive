@@ -140,9 +140,9 @@ libxmlccwrap-0.0.12.tar.gz;http://www.ant.uni-bremen.de/whomes/rinas/libxmlccwra
 zope.interface-3.3.0.tar.gz;http://www.zope.org/Products/ZopeInterface/3.3.0
 Zope-3.3.1.tgz;http://www.zope.org/Products/Zope3/3.3.1
 setuptools-0.6c8.tar.gz;http://pypi.python.org/packages/source/s/setuptools
-Twisted-8.2.0.tar.bz2;http://tmrc.mit.edu/mirror/twisted/Twisted/8.2
-TwistedWeb2-8.1.0.tar.bz2;http://tmrc.mit.edu/mirror/twisted/Web2/8.1
-Twisted-2.5.0.tar.bz2;http://tmrc.mit.edu/mirror/twisted/Twisted/2.5
+Twisted-8.2.0.tar.bz2;http://buildbot.net/pkgs;http://twistedmatrix.com/Releases/Twisted/8.2
+TwistedWeb2-8.1.0.tar.bz2;http://pkgs.fedoraproject.org/repo/pkgs/python-twisted-web2/TwistedWeb2-8.1.0.tar.bz2/e34b48edf6fef075bd41ddbd215aed32/
+Twisted-2.5.0.tar.bz2;http://twistedmatrix.com/Releases/Twisted/2.5
 a52dec-0.7.4.tar.gz;http://liba52.sourceforge.net/files
 libdvdcss-1.2.10.tar.gz;http://download.videolan.org/pub/libdvdcss/1.2.10
 #libdvdnav-0.1.10.tar.gz;ftp://ftp.videolan.org/pub/videolan/contrib
