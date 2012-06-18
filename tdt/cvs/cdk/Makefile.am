@@ -109,6 +109,10 @@ include make/tags.mk
 # Target for building source distributions (hardly used these days of CVS :-)
 include make/disttargets.mk
 
+# vdr
+include make/vdrdev2.mk
+include make/release_vdrdev2.mk
+
 #Trick
 include make/release.mk
 

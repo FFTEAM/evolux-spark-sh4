@@ -724,13 +724,13 @@ $(DEPDIR)/dfbpp: dfbpp.do_compile
 	touch $@
 
 #
-# EXPAT
+# expat
 #
-$(DEPDIR)/expat.do_prepare: @DEPENDS_expat@
+$(DEPDIR)/expat.do_prepare: bootstrap @DEPENDS_expat@
 	@PREPARE_expat@
 	touch $@
 
-$(DEPDIR)/expat.do_compile: bootstrap expat.do_prepare
+$(DEPDIR)/expat.do_compile: $(DEPDIR)/expat.do_prepare
 	cd @DIR_expat@ && \
 		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -Os" \
@@ -741,10 +741,13 @@ $(DEPDIR)/expat.do_compile: bootstrap expat.do_prepare
 		$(MAKE) all
 	touch $@
 
-$(DEPDIR)/expat: expat.do_compile
+$(DEPDIR)/min-expat $(DEPDIR)/std-expat $(DEPDIR)/max-expat \
+$(DEPDIR)/expat: \
+$(DEPDIR)/%expat: $(DEPDIR)/expat.do_compile
 	cd @DIR_expat@ && \
 		@INSTALL_expat@
-	touch $@
+#	@DISTCLEANUP_expat@
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # FONTCONFIG
@@ -1985,7 +1988,7 @@ $(DEPDIR)/%libusb: $(DEPDIR)/libusb.do_compile
 #
 # graphlcd
 #
-$(DEPDIR)/graphlcd.do_prepare: bootstrap libusb libxslt libxml2 fontconfig @DEPENDS_graphlcd@
+$(DEPDIR)/graphlcd.do_prepare: bootstrap libusb python libxslt libxml2 fontconfig @DEPENDS_graphlcd@
 	@PREPARE_graphlcd@
 	touch $@
 
@@ -2147,7 +2150,7 @@ $(DEPDIR)/%brofs: $(DEPDIR)/brofs.do_compile
 #
 # libcap
 #
-$(DEPDIR)/libcap.do_prepare:  @DEPENDS_libcap@
+$(DEPDIR)/libcap.do_prepare: bootstrap @DEPENDS_libcap@
 	@PREPARE_libcap@
 	touch $@
 
@@ -2181,7 +2184,8 @@ $(DEPDIR)/%libcap: $(DEPDIR)/libcap.do_compile
 		PAM_CAP=no \
 		LIBATTR=no \
 		CC=sh4-linux-gcc
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_libcap@
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # alsa-lib
@@ -2489,4 +2493,30 @@ $(DEPDIR)/%libvorbis: $(DEPDIR)/libvorbis.do_compile
 		@INSTALL_libvorbis@
 #	@DISTCLEANUP_libvorbis@
 	[ "x$*" = "x" ] && touch $@ || true
+
+#
+# tiff
+#
+$(DEPDIR)/tiff.do_prepare: bootstrap @DEPENDS_tiff@
+	@PREPARE_tiff@
+	touch $@
+
+$(DEPDIR)/tiff.do_compile: $(DEPDIR)/tiff.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_tiff@ && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr && \
+	$(MAKE) all
+	touch $@
+
+$(DEPDIR)/min-tiff $(DEPDIR)/std-tiff $(DEPDIR)/max-tiff \
+$(DEPDIR)/tiff: \
+$(DEPDIR)/%tiff: $(DEPDIR)/tiff.do_compile
+	cd @DIR_tiff@ && \
+		@INSTALL_tiff@
+#	@DISTCLEANUP_tiff@
+	[ "x$*" = "x" ] && touch $@ || true
+
 

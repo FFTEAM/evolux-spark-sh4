@@ -78,6 +78,7 @@ mplayer;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-exp
 mencoder;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
 jfsutils;1.1.15;jfsutils-1.1.15;jfsutils-1.1.15.tar.gz;extract:jfsutils-1.1.15.tar.gz
 opkg;0.1.8+svnr587;opkg-0.1.8+svnr587;opkg-0.1.8+svnr587.tar.gz;extract:opkg-0.1.8+svnr587.tar.gz
+imagemagick;6.6.7-3;ImageMagick-6.6.7-3;ImageMagick-6.6.7-3.tar.bz2;extract:ImageMagick-6.6.7-3.tar.bz2
 
 #
 # contrib libs
@@ -147,6 +148,7 @@ pyopenssl;0.8;pyOpenSSL-0.8;pyOpenSSL-0.8.tar.gz;extract:pyOpenSSL-0.8.tar.gz
 ffmpeg;0.9.1;ffmpeg-0.9.1;ffmpeg-0.9.1.tar.gz;extract:ffmpeg-0.9.1.tar.gz
 libass;0.9.11;libass-0.9.11;libass-0.9.11.tar.gz;extract:libass-0.9.11.tar.gz
 libcap;2.22;libcap-2.22;libcap-2.22.tar.gz;extract:libcap-2.22.tar.gz
+tiff;4.0.1;tiff-4.0.1;tiff-4.0.1.tar.gz;extract:tiff-4.0.1.tar.gz
 
 libogg;1.2.2;libogg-1.2.2;libogg-1.2.2.tar.gz;extract:libogg-1.2.2.tar.gz
 libflac;1.2.1;flac-1.2.1;flac-1.2.1.tar.gz:flac-1.2.1.patch;extract:flac-1.2.1.tar.gz;patch:flac-1.2.1.patch

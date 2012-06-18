@@ -967,7 +967,7 @@ TUXBOX_RULES_MAKE(opkg)
 TUXBOX_RULES_MAKE(sysstat)
 TUXBOX_RULES_MAKE(hotplug_e2)
 TUXBOX_RULES_MAKE(autofs)
-
+TUXBOX_RULES_MAKE(imagemagick)
 #
 # contrib libs
 #
@@ -998,6 +998,7 @@ TUXBOX_RULES_MAKE(openssl)
 TUXBOX_RULES_MAKE(directfb)
 TUXBOX_RULES_MAKE(dfbpp)
 TUXBOX_RULES_MAKE(expat)
+TUXBOX_RULES_MAKE(tiff)
 TUXBOX_RULES_MAKE(fontconfig)
 TUXBOX_RULES_MAKE(libxmlccwrap)
 TUXBOX_RULES_MAKE(a52dec)
