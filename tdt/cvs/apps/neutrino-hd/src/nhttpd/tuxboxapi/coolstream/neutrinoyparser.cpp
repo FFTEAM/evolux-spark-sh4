@@ -673,11 +673,48 @@ std::string  CNeutrinoYParser::func_get_boxtype(CyhookHandler *, std::string)
 	std::string eth_id = netadapter.getMacAddr();
 	std::transform(eth_id.begin(), eth_id.end(), eth_id.begin(), ::tolower);
 
+#ifdef EVOLUX // should be: HAVE_HARDWARE_SPARK
+	boxname = "SPARK";
+#else
 	if("00:c5:5c" == eth_id.substr(0, 8) )
 		boxname = "Coolstream ";
 	else if("ba:dd:ad"  == eth_id.substr(0, 8) )
 		boxname = "Armas ";
+#endif
 
+#ifdef EVOLUX // should be: HAVE_HARDWARE_SPARK
+	int fn = open("/proc/cmdline", O_RDONLY);
+	if (fn > -1) {
+		char buf[1024];
+		int len = read(fn, buf, sizeof(buf) - 1);
+		close(fn);
+		if (len > 0) {
+			buf[len] = 0;
+			char *p = std::strstr(buf, "STB_ID=");
+			int h0, h1, h2;
+			if (p && 3 == sscanf(p, "STB_ID=%x:%x:%x:", &h0, &h1, &h2)) {
+				system_rev = (h0 << 16) | (h1 << 8) | h2;
+				switch(system_rev) {
+					case 0x090007:
+						boxname += " GoldenMedia GM990";
+						break;
+					case 0x090008:
+						boxname += " Edision Pingulux";
+						break;
+					case 0x09000a:
+						boxname += " Amiko Alien SDH8900";
+						break;
+					case 0x09000b:
+						boxname += " GalaxyInnovations S8120";
+						break;
+					default:
+						boxname += " " + string(p);
+				}
+			} else
+				boxname += " (NO STB_ID FOUND)";
+		}
+	}
+#else
 	switch(system_rev)
 	{
 	case 1:
@@ -708,6 +745,7 @@ std::string  CNeutrinoYParser::func_get_boxtype(CyhookHandler *, std::string)
 	}
 
 	boxname += (g_info.delivery_system == DVB_S || (system_rev == 1)) ? " SAT":" CABLE";
+#endif
 	return boxname;
 }
 //-------------------------------------------------------------------------
