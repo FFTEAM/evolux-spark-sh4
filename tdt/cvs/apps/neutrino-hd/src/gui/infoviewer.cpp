@@ -2404,16 +2404,16 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 	int acaid = 0;
 	if(!notfirst) {
 		FILE *f = fopen("/tmp/ecm.info", "rt");
-			if (f != NULL) {
-				char buf[80];
-				if (buf && fgets(buf, sizeof(buf), f) != NULL) {
-						while (buf[i] != '0')
-							i++;
-						sscanf(&buf[i], "%X", &acaid);
-					}
+		if (f) {
+			char buf[80];
+			if (buf && fgets(buf, sizeof(buf), f) != NULL) {
+					while (buf[i] != '0')
+						i++;
+					sscanf(&buf[i], "%X", &acaid);
 				}
-				fclose(f);
-			}
+			fclose(f);
+		}
+	}
 #endif
 	if (g_settings.casystem_display == 2) {
 		bool fta = true;
