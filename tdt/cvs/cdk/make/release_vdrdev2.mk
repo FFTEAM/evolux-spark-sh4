@@ -121,7 +121,7 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release_vdrdev2/etc/init.d/
 	cp $(buildprefix)/root/release/rc $(prefix)/release_vdrdev2/etc/init.d/
 	cp $(buildprefix)/root/release/sendsigs $(prefix)/release_vdrdev2/etc/init.d/
-	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/release_vdrdev2/etc/init.d/halt
+	cp $(buildprefix)/root/release/halt_spark $(prefix)/release_vdrdev2/etc/init.d/halt
 	chmod 755 $(prefix)/release_vdrdev2/etc/init.d/umountfs
 	chmod 755 $(prefix)/release_vdrdev2/etc/init.d/rc
 	chmod 755 $(prefix)/release_vdrdev2/etc/init.d/sendsigs
