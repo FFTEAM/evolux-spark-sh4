@@ -212,8 +212,8 @@ epglist.noevents Программа передач отсутствует...
 EPGMenu.epgplus Телегид всех каналов
 EPGMenu.eventinfo Передачи подробно
 EPGMenu.eventlist Телегид канала
-EPGMenu.head Телегид-Информ
-EPGMenu.streaminfo Тех-инфо канала
+EPGMenu.head Телегид
+EPGMenu.streaminfo Информация о потоке
 EPGPlus.actions Действия 
 EPGPlus.bybouquet_mode по пакетам 
 EPGPlus.bypage_mode по страницам 
@@ -233,10 +233,10 @@ EPGPlus.footer_fontbouquetchannelname Шрифт инф.канала в снос
 EPGPlus.footer_fontbuttons Шрифт подписей кнопок
 EPGPlus.footer_fonteventdescription Шрифт названия передачи в сноске
 EPGPlus.footer_fonteventshortdescription Шрифт инф.передачи в сноске 
-EPGPlus.head Телегид по всем каналам (просмотр/обзор)
+EPGPlus.head Программа передач для всех каналов
 EPGPlus.header_font Шрифт Заголовка
-EPGPlus.horgap1_height Высота верх.поля раздела
-EPGPlus.horgap2_height Высота ниж.поля раздела
+EPGPlus.horgap1_height Высота верхнего поля раздела
+EPGPlus.horgap2_height Высота нижнего поля раздела
 EPGPlus.next_bouquet Пакет вперед 
 EPGPlus.options Опции
 EPGPlus.page_down вниз страницы
@@ -255,8 +255,8 @@ EPGPlus.stretch_mode Режим протяжки
 EPGPlus.swap_mode Режим обмена
 EPGPlus.timeline_fontdate Шрифт даты
 EPGPlus.timeline_fonttime Шрифт времени
-EPGPlus.vergap1_width Ширина прав.поля раздела
-EPGPlus.vergap2_width Ширина лев.поля раздела
+EPGPlus.vergap1_width Ширина правого поля раздела
+EPGPlus.vergap2_width Ширина левого поля раздела
 EPGPlus.view_mode Режим просмотра
 epgviewer.More_Screenings Дата/время показа и повтора на этом канале
 epgviewer.nodetailed Подробная информация отсутствует
@@ -593,14 +593,14 @@ hdd_5min 5 мин.
 hdd_60min 60 мин.
 hdd_activate Применить настройки
 hdd_check Проверить файловую систему
-hdd_check_failed Проверка HDD неудачна!
+hdd_check_failed Тест провален!
 hdd_extended_settings Дополнительные параметры
 hdd_ext3 Ext3
 hdd_ext2 Ext2
 hdd_fast Быстро
 hdd_format Форматировать HDD
 hdd_format_failed Форматирование HDD неудачно!
-hdd_format_warn Действительно хотите форматировать? Потеряете все данные!
+hdd_format_warn Действительно форматировать? Все данные будут потеряны!
 hdd_fs Файловая система
 hdd_manage Диск
 hdd_middle Средне
@@ -1618,8 +1618,8 @@ extramenu.checkfs Меню CheckFS
 extramenu.checkfs.select CheckFS
 extramenu.checkfs.on Вкл
 extramenu.checkfs.off Выкл
-extramenu.fsck.boot Проверка HDD при старте
-extramenu.fsck.shutdown Проверка HDD при выключении
+extramenu.fsck.boot Тест HDD при старте
+extramenu.fsck.shutdown Тест HDD при выключении
 extramenu.emu Меню Cam
 extramenu.emu.none нет
 extramenu.emu.mgcamd MGCamd
