@@ -76,6 +76,18 @@ max-:
 #
 # YAUD
 #
+yaud-vdr: yaud-none lirc stslave\
+		boot-elf remote firstboot vdrdev2 release_vdrdev2
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+
+
 yaud-neutrino: yaud-none lirc stslave\
 		boot-elf remote firstboot neutrino neutrino-plugins release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
