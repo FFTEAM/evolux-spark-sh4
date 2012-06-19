@@ -128,6 +128,9 @@ const CNeutrinoYParser::TyFuncCall CNeutrinoYParser::yFuncCallList[]=
 	{"set_timer_form",				&CNeutrinoYParser::func_set_timer_form},
 	{"bouquet_editor_main",			&CNeutrinoYParser::func_bouquet_editor_main},
 	{"set_bouquet_edit_form",		&CNeutrinoYParser::func_set_bouquet_edit_form},
+#ifdef EVOLUX
+	{"get_logo_name",		&CNeutrinoYParser::func_get_logo_name},
+#endif
 
 };
 //-------------------------------------------------------------------------
@@ -1144,3 +1147,15 @@ std::string  CNeutrinoYParser::func_set_bouquet_edit_form(CyhookHandler *hh, std
 	else
 		return "No Bouquet selected";
 }
+#ifdef EVOLUX
+//-------------------------------------------------------------------------
+// func: Get Logo Name
+//-------------------------------------------------------------------------
+std::string  CNeutrinoYParser::func_get_logo_name(CyhookHandler *hh, std::string channelId)
+{
+	t_channel_id cid;
+	if (1 == sscanf(channelId.c_str(), "%llx", &cid))
+		return NeutrinoAPI->getLogoFile(hh->WebserverConfigList["Tuxbox.LogosURL"] /* unused */, cid);
+	return "";
+}
+#endif

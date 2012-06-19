@@ -465,11 +465,7 @@ void CPictureViewer::getSize(const char* name, int* width, int *height)
 #define LOGO_DIR1 "/share/tuxbox/neutrino/icons/logo"
 #define LOGO_FMT ".jpg"
 
-#ifdef EVOLUX
-bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, std::string & name, int *width, int *height, bool namesOnly)
-#else
 bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, std::string & name, int *width, int *height)
-#endif
 {
 	int i, j;
 	char strChanId[16];
@@ -488,14 +484,6 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 		for (j = 0; j < 3; j++)
 		{
 			std::string tmp(g_settings.logo_hdd_dir + "/" + strLogoName[i] + strLogoExt[j]);
-#ifdef EVOLUX
-			if (namesOnly) {
-				if (name.length())
-					name += "\n";
-				name += tmp;
-			}
-			else
-#endif
 			if (access(tmp.c_str(), R_OK) != -1)
 			{
 				if(width && height)
@@ -510,14 +498,6 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
                 for (j = 0; j < 3; j++)
                 {
 			std::string tmp(LOGO_DIR1 "/" + strLogoName[i] + strLogoExt[j]);
-#ifdef EVOLUX
-			if (namesOnly) {
-				if (name.length())
-					name += "\n";
-				name += tmp;
-			}
-			else
-#endif
                         if (access(tmp.c_str(), R_OK) != -1)
                         {
 				if(width && height)
@@ -542,13 +522,7 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 		if (len > sizeof(fname))
 			return false;
 		int r = -1;
-		if (namesOnly) {
-			if (name.length())
-				name += "\n";
-			name += string(fname);
-		}
-		else
-			r = access(fname, R_OK);
+		r = access(fname, R_OK);
 		if (r) {
 			snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
 				g_settings.logo_hdd_dir_e2.c_str(),
@@ -557,12 +531,7 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 				(u_int) (channel_id >> 32) & 0xFFFF,
 				(u_int) (channel_id >> 16) & 0xFFFF,
 				(u_int) cc->getSatellitePosition());
-			if (namesOnly) {
-				if (name.length())
-					name += "\n";
-				name += string(fname);
-			} else
-				r = access(fname, R_OK);
+			r = access(fname, R_OK);
 		}
 		if (!r) {
 			if(width && height)
