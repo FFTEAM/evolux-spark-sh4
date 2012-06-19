@@ -148,7 +148,6 @@ $(DEPDIR)/%release_vdrdev2:
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
 	rm -f $(prefix)/release_vdrdev2/bin/evremote
 	rm -f $(prefix)/release_vdrdev2/bin/gotosleep
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/button/button.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/led/led.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_vdrdev2/lib/modules/
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
