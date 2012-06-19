@@ -148,7 +148,6 @@ $(DEPDIR)/%release_vdrdev2:
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
 	rm -f $(prefix)/release_vdrdev2/bin/evremote
 	rm -f $(prefix)/release_vdrdev2/bin/gotosleep
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/led/led.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_vdrdev2/lib/modules/
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmfb.ko $(prefix)/release_vdrdev2/lib/modules/
@@ -157,7 +156,6 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshm/embxshm.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/mme/mme_host.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/release_vdrdev2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_compress.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_decompress.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/release_vdrdev2/lib/modules/
