@@ -85,7 +85,7 @@ pngquant-1.0-src.tgz;ftp://ftp.simplesystems.org/pub/libpng/png/applications
 mplayer-export-snapshot.tar.bz2;ftp://ftp.mplayerhq.hu/MPlayer/releases
 jfsutils-1.1.15.tar.gz;http://fossies.org/linux/misc
 opkg-0.1.8+svnr587.tar.gz;http://src.evolux.yourweb.de
-ImageMagick-6.7.6-9.tar.bz2;http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick
+ImageMagick-6.6.7-3.tar.bz2;http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick
 
 #
 # contrib libs
