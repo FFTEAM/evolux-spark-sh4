@@ -1147,9 +1147,9 @@ $(DEPDIR)/imagemagick.do_prepare: bootstrap @DEPENDS_imagemagick@
 	touch $@
 
 $(DEPDIR)/imagemagick.do_compile: $(DEPDIR)/imagemagick.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_imagemagick@ && \
 	$(BUILDENV) \
-	CFLAGS="-O1" \
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
