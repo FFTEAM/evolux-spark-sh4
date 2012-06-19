@@ -16,8 +16,13 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
+if [ -e $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt ]; then
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	cp -RP $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt $TUFSBOXDIR/
+fi
+
 if [ -e $TUFSBOXDIR/release_neutrino-hd_with_dev/etc/changelog.txt ]; then
-	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_neutrino-hd_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 	cp -RP $TUFSBOXDIR/release_neutrino-hd_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
@@ -104,6 +109,11 @@ fi
 if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
 	echo "   7) Prepare Evolux-NTRINO-HD-PLI   yaffs2"
 fi
+if [ -d $TUFSBOXDIR/release_vdrdev2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
+		echo "   8) Prepare VDR2     yaffs2"
+	fi
+fi
 read -t 10 -p "Select target (autoskip in 10s)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
@@ -154,6 +164,13 @@ case "$REPLY" in
 		cp $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	8)  echo "Creating VDR2  yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_vdrdev2_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_vdrdev2_with_dev/boot/uImage $CURDIR/out/uImage
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf VDR2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	*)  echo "Skipping...";;
