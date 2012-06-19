@@ -944,6 +944,7 @@ TUXBOX_RULES_MAKE(ath9k)
 #
 # contrib apps
 #
+TUXBOX_RULES_MAKE(bzip2)
 TUXBOX_RULES_MAKE(grep)
 TUXBOX_RULES_MAKE(openrdate)
 TUXBOX_RULES_MAKE(e2fsprogs)
