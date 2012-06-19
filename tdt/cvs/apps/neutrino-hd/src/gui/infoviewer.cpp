@@ -2411,11 +2411,11 @@ void CInfoViewer::showIcon_CA_Status (int notfirst)
 		FILE *f = fopen("/tmp/ecm.info", "rt");
 		if (f) {
 			char buf[80];
-			if (buf && fgets(buf, sizeof(buf), f) != NULL) {
-					while (buf[i] != '0')
-						i++;
-					sscanf(&buf[i], "%X", &acaid);
-				}
+			if (fgets(buf, sizeof(buf), f) != NULL) {
+				while (buf[i] != '0')
+					i++;
+				sscanf(&buf[i], "%X", &acaid);
+			}
 			fclose(f);
 		}
 	}
