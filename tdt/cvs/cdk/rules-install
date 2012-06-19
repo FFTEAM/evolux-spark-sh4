@@ -113,6 +113,7 @@ libdreamdvd2;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/
 graphlcd;make:install:DESTDIR=TARGETS
 openthreads;make:install:PREFIX=TARGETS
 libvorbis;make:install:prefix=TARGETS/usr;rewrite-libtool:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la;rewrite-dependency:TARGETS/usr/lib/libvorbis.la:TARGETS/usr/lib/libvorbisfile.la
+tiff;make:install:prefix=/usr:DESTDIR=TARGETS
 
 #
 # GSTREAMER
