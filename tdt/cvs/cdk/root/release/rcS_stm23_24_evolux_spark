@@ -22,7 +22,10 @@ fi
 
 rm -f /etc/.start_spark >/dev/null 2>&1
 
-if [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
+if [ -f /etc/.start_vdr ] && [ -e /usr/local/bin/vdr ]
+then
+	START_VDR=1
+elif [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
 then
 	START_E2=1
 elif [ -e /usr/local/bin/neutrino ]
@@ -114,6 +117,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 			insmod $MODDIR/stmcore-display-sti7111.ko STi7111Device_scart_output=1
 	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		fi
+	elif [ -e /etc/.start_vdr ]; then
+			MEMSIZE=12m
+			insmod $MODDIR/stmcore-display-sti7111.ko
+			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 	else	
 		isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
 		if [ "$isactive1" = 2 ]; then
@@ -378,6 +385,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 				;;
 			esac
 		done 
+
+	elif [ -n "$START_VDR" ]; then
+		/usr/local/bin/runvdrdev2 &
+
 	else
 		echo "LOADING neutrino"
 

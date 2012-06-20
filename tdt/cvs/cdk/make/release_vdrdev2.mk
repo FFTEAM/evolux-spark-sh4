@@ -28,7 +28,6 @@ $(DEPDIR)/%release_vdrdev2:
 	$(INSTALL_DIR) $(prefix)/release_vdrdev2/var/etc && \
 	export CROSS_COMPILE=$(target)- && \
 		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_vdrdev2 && \
-	touch $(prefix)/release_vdrdev2/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_vdrdev2/bin/ && \
 	ln -s /bin/showiframe $(prefix)/release_vdrdev2/usr/bin/showiframe && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release_vdrdev2/sbin/ && \
