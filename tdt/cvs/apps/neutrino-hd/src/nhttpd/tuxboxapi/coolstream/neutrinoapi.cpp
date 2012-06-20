@@ -39,7 +39,6 @@
 #include <zapit/bouquets.h>
 #include <zapit/getservices.h>
 #ifdef EVOLUX
-#include <boost/algorithm/string.hpp>
 #include <driver/pictureviewer/pictureviewer.h>
 extern CPictureViewer *g_PicViewer;
 #endif

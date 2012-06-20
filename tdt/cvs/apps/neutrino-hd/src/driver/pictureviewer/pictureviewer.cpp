@@ -584,16 +584,17 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			(u_int) cc->getSatellitePosition());
 		if (len > sizeof(fname))
 			return false;
-		int r = -1;
-		r = access(fname, R_OK);
+		int r = access(fname, R_OK);
 		if (r) {
-			snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+			len = snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
 				g_settings.logo_hdd_dir_e2.c_str(),
 				1,
 				(u_int) channel_id & 0xFFFF,
 				(u_int) (channel_id >> 32) & 0xFFFF,
 				(u_int) (channel_id >> 16) & 0xFFFF,
 				(u_int) cc->getSatellitePosition());
+			if (len > sizeof(fname))
+				return false;
 			r = access(fname, R_OK);
 		}
 		if (!r) {
