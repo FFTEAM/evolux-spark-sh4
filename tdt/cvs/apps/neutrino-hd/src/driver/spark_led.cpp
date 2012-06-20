@@ -102,7 +102,7 @@ void CLCD::wake_up() {
 
 void* CLCD::TimeThread(void *arg)
 {
-        set_threadname("CLCL::TimeThread");
+        set_threadname("CLCD::TimeThread");
 	CLCD *cvfd = CLCD::getInstance();
 	cvfd->timeThreadRunning = true;
 	char buf[10];
