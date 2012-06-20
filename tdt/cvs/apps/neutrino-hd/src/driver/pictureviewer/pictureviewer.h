@@ -105,6 +105,12 @@ class CPictureViewer
 	int m_starty;
 	int m_endx;
 	int m_endy;
+#ifdef EVOLUX
+	int logo_dir1_exists;
+	std::string logo_hdd_dir;
+	std::string logo_hdd_dir_e2;
+	std::map<uint64_t, std::string> logo_map;
+#endif
 	
 	CFormathandler * fh_getsize(const char *name,int *x,int *y, int width_wanted, int height_wanted);
 	void init_handlers(void);

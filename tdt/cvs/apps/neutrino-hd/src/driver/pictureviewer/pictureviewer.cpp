@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#ifdef EVOLUX
+#include <sys/stat.h>
+#endif
 
 #include <cs_api.h>
 
@@ -365,6 +368,11 @@ CPictureViewer::CPictureViewer ()
 	m_aspect_ratio_correction = m_aspect / ((double) xs / ys);
 
 	m_busy_buffer = NULL;
+#ifdef EVOLUX
+	logo_dir1_exists = -2;
+	logo_hdd_dir = string(g_settings.logo_hdd_dir);
+	logo_hdd_dir_e2 = string(g_settings.logo_hdd_dir_e2);
+#endif
 
 	init_handlers ();
 }
@@ -472,6 +480,24 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 
 #ifdef EVOLUX
 	name = "";
+
+	if ((logo_hdd_dir != g_settings.logo_hdd_dir) ||
+	    (logo_hdd_dir_e2 != g_settings.logo_hdd_dir_e2)) {
+		logo_map.clear();
+		logo_hdd_dir = g_settings.logo_hdd_dir;
+		logo_hdd_dir_e2 = g_settings.logo_hdd_dir_e2;
+	}
+
+	std::map<uint64_t, std::string>::iterator it;
+	it = logo_map.find(channel_id);
+	if (it != logo_map.end()) {
+		if (it->second == "") {
+			return false;
+		} else {
+			name = it->second;
+			return true;
+		}
+	}
 #endif
 	sprintf(strChanId, "%llx", channel_id & 0xFFFFFFFFFFFFULL);
 	/* first the channel-id, then the channelname */
@@ -489,10 +515,22 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
 				name = tmp;
+#ifdef EVOLUX
+				logo_map[channel_id] = name;
+#endif
 				return true;
 			}
 		}
 	}
+#ifdef EVOLUX
+	if (logo_dir1_exists == -2) {
+		logo_dir1_exists = 0;
+		struct stat st;
+		if (stat(LOGO_DIR1, &st) && (st.st_mode & S_IFDIR))
+			logo_dir1_exists = 1;
+	}
+	if (logo_dir1_exists)
+#endif
         for (i = 0; i < 2; i++)
         {
                 for (j = 0; j < 3; j++)
@@ -503,6 +541,9 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
                                 name = tmp;
+#ifdef EVOLUX
+				logo_map[channel_id] = name;
+#endif
                                 return true;
                         }
                 }
@@ -537,9 +578,11 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			if(width && height)
 				getSize(fname, width, height);
 			name = string(fname);
+			logo_map[channel_id] = name;
 			return true;
 		}
 	}
+	logo_map[channel_id] = "";
 #endif
 	return false;
 }
