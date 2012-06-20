@@ -109,7 +109,12 @@ class CPictureViewer
 	int logo_dir1_exists;
 	std::string logo_hdd_dir;
 	std::string logo_hdd_dir_e2;
-	std::map<uint64_t, std::string> logo_map;
+	struct logo_data {
+		std::string name;
+		int width;
+		int height;
+	};
+	std::map<uint64_t, logo_data> logo_map;
 #endif
 	
 	CFormathandler * fh_getsize(const char *name,int *x,int *y, int width_wanted, int height_wanted);

@@ -488,13 +488,17 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 		logo_hdd_dir_e2 = g_settings.logo_hdd_dir_e2;
 	}
 
-	std::map<uint64_t, std::string>::iterator it;
+	std::map<uint64_t, logo_data>::iterator it;
 	it = logo_map.find(channel_id);
 	if (it != logo_map.end()) {
-		if (it->second == "") {
+		if (it->second.name == "") {
 			return false;
 		} else {
-			name = it->second;
+			name = it->second.name;
+			if (width)
+				*width = it->second.width;
+			if (height)
+				*height = it->second.height;
 			return true;
 		}
 	}
@@ -512,11 +516,20 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			std::string tmp(g_settings.logo_hdd_dir + "/" + strLogoName[i] + strLogoExt[j]);
 			if (access(tmp.c_str(), R_OK) != -1)
 			{
+#ifdef EVOLUX
+				int w, h;
+				getSize(tmp.c_str(), &w, &h);
+				if(width && height)
+					*width = w, *height = h;
+#else
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
+#endif
 				name = tmp;
 #ifdef EVOLUX
-				logo_map[channel_id] = name;
+				logo_map[channel_id].name = name;
+				logo_map[channel_id].width = w;
+				logo_map[channel_id].height = h;
 #endif
 				return true;
 			}
@@ -538,11 +551,20 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			std::string tmp(LOGO_DIR1 "/" + strLogoName[i] + strLogoExt[j]);
                         if (access(tmp.c_str(), R_OK) != -1)
                         {
+#ifdef EVOLUX
+				int w, h;
+				getSize(tmp.c_str(), &w, &h);
+				if(width && height)
+					*width = w, *height = h;
+#else
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
+#endif
                                 name = tmp;
 #ifdef EVOLUX
-				logo_map[channel_id] = name;
+				logo_map[channel_id].name = name;
+				logo_map[channel_id].width = w;
+				logo_map[channel_id].height = h;
 #endif
                                 return true;
                         }
@@ -575,14 +597,18 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			r = access(fname, R_OK);
 		}
 		if (!r) {
+			int w, h;
+			getSize(fname, &w, &h);
 			if(width && height)
-				getSize(fname, width, height);
+				*width = w, *height = h;
 			name = string(fname);
-			logo_map[channel_id] = name;
+			logo_map[channel_id].name = name;
+			logo_map[channel_id].width = w;
+			logo_map[channel_id].height = h;
 			return true;
 		}
 	}
-	logo_map[channel_id] = "";
+	logo_map[channel_id].name = "";
 #endif
 	return false;
 }

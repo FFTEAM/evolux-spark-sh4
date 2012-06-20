@@ -2124,7 +2124,11 @@ int CInfoViewer::showChannelLogo(const t_channel_id logo_channel_id, const int c
 
 	std::string strAbsIconPath;
 
+#ifdef EVOLUX
+	int logo_w = 0, logo_h = 0;
+#else
 	int logo_w, logo_h;
+#endif
 	int logo_x = 0, logo_y = 0;
 	int res = 0;
 	int start_x = ChanNameX;
@@ -2137,11 +2141,21 @@ int CInfoViewer::showChannelLogo(const t_channel_id logo_channel_id, const int c
 	if (! logo_available)
 		return 0;
 
+#ifdef EVOLUX
+	if ((logo_w < 1) || (logo_h < 1)) // corrupt logo size?
+#else
 	if ((logo_w == 0) || (logo_h == 0)) // corrupt logo size?
+#endif
 	{
+#ifdef EVOLUX
+		fprintf(stderr, "[infoviewer] channel logo:\n"
+		       " -> %s (%s) has no or invalid size (w=%d h=%d)\n"
+		       " -> please check logo file!\n", strAbsIconPath.c_str(), ChannelName.c_str(), logo_w, logo_h);
+#else
 		printf("[infoviewer] channel logo: \n"
 		       " -> %s (%s) has no size\n"
 		       " -> please check logo file!\n", strAbsIconPath.c_str(), ChannelName.c_str());
+#endif
 		return 0;
 	}
 	int y_mid;
