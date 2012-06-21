@@ -493,6 +493,9 @@ release-enigma2-pli-nightly_base:
 
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/lib
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release-enigma2-pli-nightly/usr/lib/
+	if [ -e $(prefix)/release-enigma2-pli-nightly/usr/lib/tuxbox/plugins ]; then \
+		rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/tuxbox/plugins; \
+	fi;
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/libnfsidmap
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/engines
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2
