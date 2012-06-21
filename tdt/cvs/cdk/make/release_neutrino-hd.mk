@@ -326,9 +326,9 @@ endif
 	( cd $(prefix)/release_neutrino-hd/var/share/icons/ && ln -s /usr/local/share/neutrino/icons/logo )
 	( cd $(prefix)/release_neutrino-hd/ && ln -s /usr/local/share/neutrino/icons/logo logos )
 	( cd $(prefix)/release_neutrino-hd/usr/lib && ln -s libcrypto.so.0.9.8 libcrypto.so.0.9.7 )
-	( cd $(prefix)/release_neutrino-hd/lib/tuxbox && ln -s /var/plugins )
-	( cd $(prefix)/release_neutrino-hd/var/tuxbox && ln -s /var/plugins )
-	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && ln -s /var/plugins )
+	( cd $(prefix)/release_neutrino-hd/lib/tuxbox && ln -sf /var/plugins plugins )
+	( cd $(prefix)/release_neutrino-hd/var/tuxbox && ln -sf /var/plugins plugins )
+	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && ln -sf /var/plugins plugins )
 	rm -rf $(prefix)/release_neutrino-hd/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/
 	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/Makefile*
