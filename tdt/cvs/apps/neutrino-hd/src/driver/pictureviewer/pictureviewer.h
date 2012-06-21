@@ -31,6 +31,9 @@
 #include <stdio.h>    /* printf       */
 #include <sys/time.h> /* gettimeofday */
 #include "driver/framebuffer.h"
+#ifdef EVOLUX
+#include <pthread.h>
+#endif
 class CPictureViewer
 {
 	struct cformathandler 
@@ -115,6 +118,7 @@ class CPictureViewer
 		int height;
 	};
 	std::map<uint64_t, logo_data> logo_map;
+	pthread_mutex_t logo_map_mutex;
 #endif
 	
 	CFormathandler * fh_getsize(const char *name,int *x,int *y, int width_wanted, int height_wanted);
