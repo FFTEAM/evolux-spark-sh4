@@ -328,7 +328,6 @@ endif
 	( cd $(prefix)/release_neutrino-hd/usr/lib && ln -s libcrypto.so.0.9.8 libcrypto.so.0.9.7 )
 	( cd $(prefix)/release_neutrino-hd/lib/tuxbox && ln -sf /var/plugins plugins )
 	( cd $(prefix)/release_neutrino-hd/var/tuxbox && ln -sf /var/plugins plugins )
-	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && ln -sf /var/plugins plugins )
 	rm -rf $(prefix)/release_neutrino-hd/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/
 	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/Makefile*
@@ -422,6 +421,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino-hd/usr/lib
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/tuxbox
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino-hd/usr/lib/
+	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && rm -rf .plugins && ln -sf /var/plugins plugins )
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/libnfsidmap
 #	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino-hd/usr/lib/
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsa-lib
