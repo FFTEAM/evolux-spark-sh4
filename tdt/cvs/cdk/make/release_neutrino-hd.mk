@@ -421,7 +421,7 @@ endif
 	$(INSTALL_DIR) $(prefix)/release_neutrino-hd/usr/lib
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/tuxbox
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino-hd/usr/lib/
-	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && rm -rf .plugins && ln -sf /var/plugins plugins )
+	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && rm -rf $(prefix)/release_neutrino-hd/usr/lib/tuxbox/plugins && ln -sf /var/plugins plugins )
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/libnfsidmap
 #	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino-hd/usr/lib/
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsa-lib
