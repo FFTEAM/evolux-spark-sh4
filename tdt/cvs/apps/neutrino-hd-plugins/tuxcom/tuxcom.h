@@ -75,6 +75,9 @@ int MENUSIZE, MINBOX, BUTTONWIDTH, BUTTONHEIGHT;
 #define RIGHTFRAME   1
 
 #define DEFAULT_PATH "/"
+#ifdef EVOLUX
+#define CONFIGDIR "/usr/local/share/config"
+#endif
 static const char *charset = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#!$%&?*()@\\/=<>+-_,.;:";
 
 #define FILEBUFFER_SIZE (100 * 1024) // Edit files up to 100k
@@ -339,7 +342,7 @@ static unsigned char bgra[][4] = {
 "\x00\x00\xFF\xFF", "\xB0\xB0\xB0\xFF", "\x00\xFF\x00\xFF", "\x50\x50\x50\xFF",
 "\x80\x00\x00\xC0", "\x50\x50\x50\xC0", "\xFF\x40\x00\xFf" };
 #endif
-#define CONFIG_FILE "/var/tuxbox/config/tuxcom.conf"
+#define CONFIG_FILE "/usr/local/share/config/tuxcom.conf"
 
 unsigned short rd[] = {0xFF<<8, 0x00<<8, 0x00<<8, 0x00<<8, 0xFF<<8, 0x00<<8, 0xE8<<8, 0xFF<<8, 0xb0<<8, 0x00<<8, 0x50<<8, 0x00<<8, 0x50<<8, 0x00<<8};
 unsigned short gn[] = {0xFF<<8, 0x00<<8, 0x00<<8, 0x80<<8, 0xC0<<8, 0xd0<<8, 0xE8<<8, 0x00<<8, 0xb0<<8, 0xff<<8, 0x50<<8, 0x00<<8, 0x50<<8, 0x40<<8};
