@@ -1999,7 +1999,7 @@ void CInfoViewer::showButtons (bool start)
 	uint32_t count = g_RemoteControl->current_PIDs.APIDs.size ();
 	if ((g_RemoteControl->current_PIDs.PIDs.selected_apid < count) && (g_RemoteControl->current_PIDs.APIDs[g_RemoteControl->current_PIDs.PIDs.selected_apid].is_ac3))
 		dd_icon = NEUTRINO_ICON_DD;
-	else if (g_RemoteControl->has_ac3)
+	else if (g_settings.infobar_show_dd_available && g_RemoteControl->has_ac3)
 		dd_icon = NEUTRINO_ICON_DD_AVAIL;
 	else
 		dd_icon = NEUTRINO_ICON_DD_GREY;

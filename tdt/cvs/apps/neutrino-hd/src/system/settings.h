@@ -97,6 +97,9 @@ struct SNeutrinoSettings
 	int menu_pos;
 	int infobar_show_var_hdd;
 	int infobar_show_res;
+#ifdef EVOLUX
+	int infobar_show_dd_available;
+#endif
 	//audio
 	int audio_AnalogMode;
 	int audio_DolbyDigital;

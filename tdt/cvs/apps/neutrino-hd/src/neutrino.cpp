@@ -468,6 +468,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.infobar_show_var_hdd   = configfile.getBool("infobar_show_var_hdd"  , true );
 	g_settings.show_mute_icon = configfile.getInt32("show_mute_icon" ,0);
 	g_settings.infobar_show_res = configfile.getInt32("infobar_show_res", 0 );
+#ifdef EVOLUX
+	g_settings.infobar_show_dd_available = configfile.getInt32("infobar_show_dd_available", 1 );
+#endif
 	g_settings.radiotext_enable = configfile.getBool("radiotext_enable"          , false);
 	//audio
 	g_settings.audio_AnalogMode = configfile.getInt32( "audio_AnalogMode", 0 );
@@ -966,6 +969,9 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setInt32("infobar_show_var_hdd"  , g_settings.infobar_show_var_hdd  );
 	configfile.setInt32("show_mute_icon"   , g_settings.show_mute_icon);
 	configfile.setInt32("infobar_show_res"  , g_settings.infobar_show_res  );
+#ifdef EVOLUX
+	configfile.setInt32("infobar_show_dd_available"  , g_settings.infobar_show_dd_available  );
+#endif
 	configfile.setBool("radiotext_enable"          , g_settings.radiotext_enable);
 	//audio
 	configfile.setInt32( "audio_AnalogMode", g_settings.audio_AnalogMode );
