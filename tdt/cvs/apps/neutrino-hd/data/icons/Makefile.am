@@ -109,6 +109,7 @@ install_DATA = \
 	mute_small.png \
 	mute_zap_gray.png \
 	mute_zap_green.png \
+	multimedia.png \
 	nagra_green.png \
 	nagra_white.png \
 	nagra_yellow.png \
