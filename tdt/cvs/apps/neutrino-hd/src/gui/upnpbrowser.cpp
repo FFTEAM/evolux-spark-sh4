@@ -114,7 +114,9 @@ int CUpnpBrowserGui::exec(CMenuTarget* parent, const std::string & /*actionKey*/
 
 	g_Zapit->stopPlayBack();
 
+#ifndef EVOLUX
 	videoDecoder->ShowPicture(DATADIR "/neutrino/icons/mp3.jpg");
+#endif
 
 	// tell neutrino we're in audio mode
 	CNeutrinoApp::getInstance()->handleMsg( NeutrinoMessages::CHANGEMODE , NeutrinoMessages::mode_audio );
