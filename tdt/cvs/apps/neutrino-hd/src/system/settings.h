@@ -153,6 +153,8 @@ struct SNeutrinoSettings
 	int epg_enable_viasat;
 	int batchepg_run_at_shutdown;
 	int batchepg_standard_waittime;
+
+	std::string streaming_server_url;
 #endif
 
 	//network
@@ -223,6 +225,9 @@ struct SNeutrinoSettings
 		//movieplayer menu
 		P_MPLAYER_MBROWSER,
 		P_MPLAYER_FILEPLAY,
+#ifdef EVOLUX
+		P_MPLAYER_INETPLAY,
+#endif
 		
 		//feature keys
 		P_FEAT_KEY_FAVORIT,

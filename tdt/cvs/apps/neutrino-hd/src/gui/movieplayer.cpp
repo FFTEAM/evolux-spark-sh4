@@ -188,6 +188,9 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		perror(MOVIEPLAYER_START_SCRIPT " failed");
 	
 	isMovieBrowser = false;
+#ifdef EVOLUX
+	bool isHTTP = false;
+#endif
 	isBookmark = false;
 	timeshift = 0;
 	if (actionKey == "tsmoviebrowser") {
@@ -209,10 +212,22 @@ int CMoviePlayerGui::exec(CMenuTarget * parent, const std::string & actionKey)
 		isBookmark = true;
 	}
 #endif
+#ifdef EVOLUX
+	else if (actionKey == "netstream") 
+	{
+		isHTTP = true;
+		full_name = g_settings.streaming_server_url;
+		p_movie_info = NULL;
+		PlayFile();
+	}
+#endif
 	else {
 		return menu_return::RETURN_REPAINT;
 	}
 
+#ifdef EVOLUX
+	if (!isHTTP)
+#endif
 	while(SelectFile()) {
 		PlayFile();
 		if(timeshift)
@@ -240,7 +255,11 @@ void CMoviePlayerGui::updateLcd()
 	std::string lcd;
 	std::string name;
 
+#ifdef EVOLUX
+	if (isMovieBrowser && p_movie_info && strlen(p_movie_info->epgTitle.c_str()) && strncmp(p_movie_info->epgTitle.c_str(), "not", 3))
+#else
 	if (isMovieBrowser && strlen(p_movie_info->epgTitle.c_str()) && strncmp(p_movie_info->epgTitle.c_str(), "not", 3))
+#endif
 		name = p_movie_info->epgTitle;
 	else
 		name = file_name;

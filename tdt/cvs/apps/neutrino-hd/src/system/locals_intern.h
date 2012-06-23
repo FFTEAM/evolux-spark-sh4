@@ -1027,6 +1027,8 @@ const char * locale_real_names[] =
 	"movieplayer.defplugin",
 	"movieplayer.fileplayback",
 	"movieplayer.head",
+	"movieplayer.networkplayback",
+	"movieplayer.networkplayback.url",
 	"movieplayer.toomanybookmarks",
 	"movieplayer.tshelp1",
 	"movieplayer.tshelp10",

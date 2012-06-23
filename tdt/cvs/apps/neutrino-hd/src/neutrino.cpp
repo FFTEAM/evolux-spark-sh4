@@ -688,6 +688,8 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.logo_hdd_dir_2 = configfile.getString( "logo_hdd_dir_2", "" );
 	if (g_settings.logo_hdd_dir_2.length() == 0) // backwards compatibility only, will be removed 08/2012  --martii
 		g_settings.logo_hdd_dir_2 = configfile.getString( "logo_hdd_dir_e2", "" );
+
+	g_settings.streaming_server_url = configfile.getString("streaming_server_url", "http://podfiles.zdf.de/podcast/zdf_podcasts/110924_hjo_p.mp4?2011-09-24+21-25");
 #endif
 
 	loadKeys();
@@ -1140,6 +1142,8 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString ( "logo_hdd_dir", g_settings.logo_hdd_dir );
 #ifdef EVOLUX
 	configfile.setString ( "logo_hdd_dir_2", g_settings.logo_hdd_dir_2 );
+
+	configfile.setString ( "streaming_server_url", g_settings.streaming_server_url);
 #endif
 
 	saveKeys();

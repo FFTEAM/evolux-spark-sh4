@@ -136,6 +136,13 @@ int CMediaPlayerMenu::exec(CMenuTarget* parent, const std::string &actionKey)
 #endif		
 		return menu_return::RETURN_REPAINT;;
 	}
+#ifdef EVOLUX
+	else if (actionKey == "netstream") {
+		g_settings.streaming_server_url = std::string(streaming_server_url);
+		CMoviePlayerGui::getInstance().exec(this, "netstream");
+		return menu_return::RETURN_REPAINT;;
+	}
+#endif
 	
 	int res = initMenuMedia();
 	
@@ -261,6 +268,20 @@ void CMediaPlayerMenu::showMoviePlayer(CMenuWidget *moviePlayer, CPersonalizeGui
 	
 	//fileplayback
 	p->addItem(moviePlayer, fw_file, &g_settings.personalize[SNeutrinoSettings::P_MPLAYER_FILEPLAY]);
+#ifdef EVOLUX_NOTYET
+	// Works, basically, but isn't useful without a sane way of entering URLs.  --martii
+
+	//network playback
+	CMenuForwarder *fw_network = new CMenuForwarder(LOCALE_MOVIEPLAYER_NETWORKPLAYBACK, true, NULL, this, "netstream", CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW);
+	strncpy(streaming_server_url, g_settings.streaming_server_url.c_str(), sizeof(streaming_server_url));
+	CStringInputSMS *cs_network_url = new CStringInputSMS(LOCALE_MOVIEPLAYER_NETWORKPLAYBACK_URL, streaming_server_url, 60,
+		NONEXISTANT_LOCALE, NONEXISTANT_LOCALE,
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_/()<>=+.,:!?%*'");
+	CMenuForwarder *fw_network_url = new CMenuForwarder(LOCALE_MOVIEPLAYER_NETWORKPLAYBACK_URL, true, streaming_server_url, cs_network_url);
+	p->addItem(moviePlayer, GenericMenuSeparatorLine);
+	p->addItem(moviePlayer, fw_network, &g_settings.personalize[SNeutrinoSettings::P_MPLAYER_INETPLAY]);
+	p->addItem(moviePlayer, fw_network_url, &g_settings.personalize[SNeutrinoSettings::P_MPLAYER_INETPLAY]);
+#endif
 
 // #if 0
 // 	//moviePlayer->addItem(new CMenuForwarder(LOCALE_MOVIEPLAYER_PESPLAYBACK, true, NULL, moviePlayerGui, "pesplayback"));
