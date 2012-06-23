@@ -113,6 +113,9 @@ CPictureViewerGui::~CPictureViewerGui()
 //------------------------------------------------------------------------
 int CPictureViewerGui::exec(CMenuTarget* parent, const std::string & /*actionKey*/)
 {
+#ifdef EVOLUX
+	CNeutrinoApp::getInstance()->chPSISetup->blankScreen();
+#endif
 	selected = 0;
 	width  = w_max (710, 0);
 	height = h_max (570, 0);
@@ -196,6 +199,9 @@ int CPictureViewerGui::exec(CMenuTarget* parent, const std::string & /*actionKey
 	CNeutrinoApp::getInstance()->handleMsg( NeutrinoMessages::CHANGEMODE , m_LastMode );
 
 	// always exit all
+#ifdef EVOLUX
+	CNeutrinoApp::getInstance()->chPSISetup->blankScreen(false);
+#endif
 	return menu_return::RETURN_REPAINT;
 }
 
