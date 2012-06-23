@@ -24,9 +24,9 @@ audiomenu.monoleft Левый
 audiomenu.monoright Правый
 audiomenu.ost ost
 audiomenu.PCMOffset Уменьшение громкости PCM
-audiomenu.pref_languages Настройки аудио
+audiomenu.pref_languages Язык аудио и субтитров
 audiomenu.pref_lang Предпочтительный язык
-audiomenu.pref_lang_head Приоритет языка для аудио/EPG
+audiomenu.pref_lang_head Приоритет языка для аудио и телегида
 audiomenu.pref_subs Предпочтительный язык
 audiomenu.pref_subs_head Приоритет языка субтитров
 audiomenu.ac3downmix AC3 downmix
@@ -81,7 +81,7 @@ audioplayer.rewind Назад
 audioplayer.save_playlist Сохранить лист
 audioplayer.screensaver_timeout Screensaver (мин, 0=откл.)
 audioplayer.select_title_by_name Поиск по имени (SMS-режим)
-audioplayer.show_playlist Показать плей-лист
+audioplayer.show_playlist Показывать плей-лист
 audioplayer.shuffle Смена порядка
 audioplayer.spectrum LCD-spectrum
 audioplayer.stop Остановить
@@ -148,13 +148,13 @@ channellist.sats Спутники
 channellist.since начало  
 channellist.start старт в  
 clock_switch_off Скрыть время
-clock_switch_on Показать время
+clock_switch_on Отобразить время
 colorchooser.alpha альфа
 colorchooser.blue синий
 colorchooser.green зеленый
 colorchooser.red красный
 colormenu.background Фон
-colormenu.fade Fade-режим для меню
+colormenu.fade Затухание меню
 colormenu.font Выбор шрифта
 colormenu.gtx_alpha Прозрачность (GTX)
 colormenu.head Настройки цвета
@@ -172,13 +172,18 @@ colormenusetup.menucontent_selected Содержимое окна выбранн
 colormenusetup.menuhead Заголовок меню
 colorstatusbar.head Инфопанель
 colorstatusbar.text Инфопанель
-colorthememenu.classic_theme Classic
-colorthememenu.dblue_theme DarkBlue
+colorthememenu.question Сохранить текущую тему?
+colorthememenu.save Сохранить текущую тему
+colorthememenu.head2 Выбор темы
+colorthememenu.select1 Темы пользователя
+colorthememenu.select2 Стандартные темы
+colorthememenu.classic_theme Классическая
+colorthememenu.dblue_theme Темно синяя
 colorthememenu.dvb2k_theme DVB2000
-colorthememenu.gray Gray Theme
+colorthememenu.gray Серая
 colorthememenu.head Выбор темы
 colorthememenu.neutrino_theme Neutrino
-colorthememenu.red_theme Простой красный
+colorthememenu.red_theme Красная
 cpu.freq Частота CPU
 cpu.freq_default по умолчанию
 cpu.freq_normal Нормальная частота
@@ -260,13 +265,13 @@ EPGPlus.vergap2_width Ширина левого поля раздела
 EPGPlus.view_mode Режим просмотра
 epgviewer.More_Screenings Дата/время показа и повтора на этом канале
 epgviewer.nodetailed Подробная информация отсутствует
-epgviewer.notfound EPG не найден
-eventfinder.head Поиск в EPG
+epgviewer.notfound Телегид не найден
+eventfinder.head Поиск по телегиду
 eventfinder.keyword Ключевое слово
 eventfinder.search Искать
 eventfinder.search_within_epg Поиск в пределах
 eventfinder.search_within_list Поиск в пределах
-eventfinder.searching Поиск ключевого слова в EPG...
+eventfinder.searching Поиск ключевого слова по телегиду ...
 eventfinder.start_search  Начало поиска
 eventlistbar.channelswitch Список
 eventlistbar.eventsort Сортировка
@@ -276,7 +281,7 @@ extra.audio_run_player "Аудио" запускает плеер
 extra.auto_delete Авто-удаление
 extra.auto_timeshift Таймшифт, сек. (0=откл)
 extra.auto_to_record Сдвиг таймшифт при записи
-extra.bigwindows Крупные окна OSD
+extra.bigwindows Крупные окна меню
 extra.cache_txt Кеш телетекста
 extra.chadded Канал добавлен в выбранный пакет....\n
 extra.chalreadyinbq Канал уже существует в выбранном пакете....\n
@@ -399,20 +404,20 @@ filebrowser.delete Удалить
 filebrowser.denydirectoryleave Корневой каталог
 filebrowser.dodelete1 Вы уверены, что хотите удалить файл
 filebrowser.dodelete2 окончательно?
-filebrowser.filter.active Фильтр включен
-filebrowser.filter.inactive Фильтр отключен
+filebrowser.filter.active Включить фильтр
+filebrowser.filter.inactive Отключить фильтр
 filebrowser.head Проводник по каталогам
 filebrowser.mark Пометить
-filebrowser.nextpage След. страница
-filebrowser.prevpage Пред. страница
+filebrowser.nextpage Следующая страница
+filebrowser.prevpage Предыдущая страница
 filebrowser.scan Сканирование каталога
 filebrowser.select Выбор
 filebrowser.showrights Показывать права файлов
-filebrowser.sort.date Сорт.(дата)
-filebrowser.sort.name Сорт.(имя)
-filebrowser.sort.namedirsfirst Сорт.(иначе)
-filebrowser.sort.size Сорт.(размер)
-filebrowser.sort.type Сорт.(тип)
+filebrowser.sort.date Сортировка по дате
+filebrowser.sort.name Сортировка по имени
+filebrowser.sort.namedirsfirst Сортировка по каталогам
+filebrowser.sort.size Сортировка по размеру
+filebrowser.sort.type Сортировка по типу
 filesystem.is.utf8 Кодировка ФС
 filesystem.is.utf8.option.iso8859.1 ISO-8859-1
 filesystem.is.utf8.option.utf8 UTF-8
@@ -478,7 +483,7 @@ fontmenu.scaling_x_hint2 горизонталь - (в %), мин 50 / макс 2
 fontmenu.scaling_y По вертикали (в %)
 fontmenu.scaling_y_hint2 вертикаль - (в %) мин 50 / макс 200
 fontmenu.channellist Список каналов
-fontmenu.epg EPG
+fontmenu.epg Телегид
 fontmenu.eventlist Список событий
 fontmenu.gamelist Список игр
 fontmenu.head Настройка шрифтов
@@ -488,10 +493,10 @@ fontsize.channel_num_zap Прямой набор канала
 fontsize.channellist Список каналов
 fontsize.channellist_descr Описание
 fontsize.channellist_number Номер
-fontsize.epg_date EPG дата
-fontsize.epg_info1 EPG инфо 1
-fontsize.epg_info2 EPG инфо 2
-fontsize.epg_title EPG заголовок
+fontsize.epg_date Дата телегида
+fontsize.epg_info1 Телегид инфо 1
+fontsize.epg_info2 Телегид инфо 2
+fontsize.epg_title Заголовок телегида
 fontsize.eventlist_datetime Дата / Время
 fontsize.eventlist_itemlarge Большой
 fontsize.eventlist_itemsmall Маленький
@@ -626,7 +631,9 @@ infobar.picon Пикон канала
 infobar.picon_big большой
 infobar.picon_move SIG/SNR
 infobar.picon_normal нормальный
-infoviewer.epgnotload EPG не загружен...
+infobar.picon_dir Путь для пиконов
+infobar.picon_dir_e2 Путь для пиконов E2
+infoviewer.epgnotload Телегид не найден
 infoviewer.epgwait Попытка получить программу передач...
 infoviewer.eventlist Телегид
 infoviewer.languages Аудио
@@ -695,7 +702,7 @@ lcdmenu.displaymode.timeonly только время
 lcdmenu.autodimm Автодиммер 
 lcdmenu.dim_brightness Яркость 
 lcdmenu.dim_time Тайм-аут диммера
-lcdmenu.head Настройки Дисплея (VFD)
+lcdmenu.head Настройки VFD дисплея
 lcdmenu.inverse Инвертировать изображение
 lcdmenu.lcdcontroler Контрастность / Яркость
 lcdmenu.power Питание
@@ -704,11 +711,11 @@ lcdmenu.statusline.both Громкость / время
 lcdmenu.statusline.playtime Время 
 lcdmenu.statusline.volume Громкость
 mainmenu.audioplayer Аудиоплеер
-mainmenu.clearsectionsd Очистить кеш EPG
+mainmenu.clearsectionsd Очистить кеш телегида
 mainmenu.games Игры
 mainmenu.head Главное меню
 mainmenu.movieplayer Видеоплеер
-mainmenu.pausesectionsd Чтение EPG
+mainmenu.pausesectionsd Чтение телегида
 mainmenu.pictureviewer Просмотр фотографий
 mainmenu.radiomode Радио-каналы
 mainmenu.reboot Перезагрузить STB
@@ -732,7 +739,7 @@ mainsettings.lcd VFD-дисплей
 mainsettings.manage Управление настройками
 mainsettings.misc Прочие настройки
 mainsettings.network Сеть
-mainsettings.osd Установки OSD
+mainsettings.osd Настройки OSD
 mainsettings.recording Запись
 mainsettings.savesettingsnow Сохранить изменения
 mainsettings.savesettingsnow_hint Сохранение изменений...
@@ -759,13 +766,13 @@ miscsettings.colored_events_1 текущая
 miscsettings.colored_events_2 следующая
 miscsettings.driver_boot Загрузка системы 
 miscsettings.energy Энергосбережение
-miscsettings.epg_head Установки EPG
-miscsettings.epg_cache EPG-кеш, дни
-miscsettings.epg_cache_hint1 Хранение EPG после синхронизации
+miscsettings.epg_head Настройки телегида
+miscsettings.epg_cache Кеш телегида, дни
+miscsettings.epg_cache_hint1 Хранение телегида после синхронизации
 miscsettings.epg_cache_hint2 Установка в днях
-miscsettings.epg_dir Путь EPG
-miscsettings.epg_extendedcache Кеш EPG, часы
-miscsettings.epg_extendedcache_hint1 Хранение расширенных описания EPG
+miscsettings.epg_dir Путь телегида:
+miscsettings.epg_extendedcache Кеш телегида, часы
+miscsettings.epg_extendedcache_hint1 Хранение расширенных описаний телегида
 miscsettings.epg_extendedcache_hint2 Установка в часах
 miscsettings.epg_max_events Максимум сохраняемых событий
 miscsettings.epg_max_events_hint1 Сколько событий хранить?
@@ -773,20 +780,21 @@ miscsettings.epg_max_events_hint2 Норма 6000, 0 для блокировки
 miscsettings.epg_old_events Удалить после, часов
 miscsettings.epg_old_events_hint1 Удаление устаревших событий
 miscsettings.epg_old_events_hint2 Установка в часах
-miscsettings.epg_save Сохранить EPG
-miscsettings.epg.freesat Freesat EPG
-miscsettings.epg.freesat.enable Freesat EPG
-miscsettings.epg.viasat VIASAT EPG
-miscsettings.epg.viasat.enable VIASAT EPG
+miscsettings.epg_save Сохранить телегид
+miscsettings.epg_saving Запись данных телегида...
+miscsettings.epg.freesat Freesat-телегид 
+miscsettings.epg.freesat.enable Freesat-телегид
+miscsettings.epg.viasat VIASAT-телегид
+miscsettings.epg.viasat.enable VIASAT-телегид
 miscsettings.restart Изменения вступят в силу после перезагрузки.
 miscsettings.fb_destination Эксперт! Консоль загрузки
-miscsettings.general Основное
+miscsettings.general Общие
 miscsettings.head Прочие настройки
 miscsettings.hwsections Использовать раздел HW
 miscsettings.infobar Инфопанель
 miscsettings.infobar_sat_display Название спутника в инфопанели
 miscsettings.infobar_autoshow_if_cn Показать инфопанель при смене события
-miscsettings.infobar_casystem_display Показать иконки CA систем
+miscsettings.infobar_casystem_display Показывать иконки CA систем
 miscsettings.infobar_casystem_mini мини
 miscsettings.infobar_casystem_mode отдельно
 miscsettings.infobar_colored_events Подсветка программ
@@ -799,11 +807,12 @@ miscsettings.infobar_disp_5 лого/уровень сигнала
 miscsettings.infobar_disp_6 лого/номер канала/уровень сигнала
 miscsettings.infobar_disp_log Логотип канала
 miscsettings.infobar_logo_hdd_dir Каталог с лого:
-miscsettings.infobar_logo_hdd_dir_e2 Каталог с лого 2:
-miscsettings.infobar_show_var_hdd Показать уровнень заполненности (var/HDD)
+miscsettings.infobar_logo_hdd_dir_e2 Каталог с лого E2:
+miscsettings.infobar_show_var_hdd Показывать уровнень заполненности (var/HDD)
 miscsettings.infobar_show Инфопанель при смене события
-miscsettings.infobar_show_res Показать разрешение
+miscsettings.infobar_show_res Показывать иконку разрешения
 miscsettings.infobar_show_res_simple SD/HD
+miscsettings.infobar_show_dd_available Показывать иконку Dolby Digital
 miscsettings.radiotext Радиотекст
 miscsettings.noaviawatchdog Разрешить AVIA контроль
 miscsettings.noenxwatchdog Разрешить eNX контроль
@@ -880,7 +889,7 @@ moviebrowser.edit_serie Введие имя серии
 moviebrowser.error_no_movies Фильмы не найдены
 moviebrowser.foot_filter Фильтр:
 moviebrowser.foot_play Начало фильма
-moviebrowser.foot_sort Sort:
+moviebrowser.foot_sort Сортировка:
 moviebrowser.head Просмотр TS-файлов
 moviebrowser.head_filter Фильтровать фильмы по категориям:
 moviebrowser.head_playlist Последний запущеный:
@@ -898,7 +907,7 @@ moviebrowser.info_genre_major Жанр
 moviebrowser.info_genre_minor Жанр
 moviebrowser.info_head Информация о фильме
 moviebrowser.info_head_update Сохранить изменения во всех инфо-файлах кино
-moviebrowser.info_info1 Инфо 1
+moviebrowser.info_info1 Информация
 moviebrowser.info_length Длина (минут)
 moviebrowser.info_parental_lockage Родительский замок
 moviebrowser.info_parental_lockage_0year Всегда
@@ -923,8 +932,8 @@ moviebrowser.load_default Загрузить настройки по умолч�
 moviebrowser.menu_directories_head Пути
 moviebrowser.menu_help_head Помощь
 moviebrowser.menu_main_bookmarks Закладки
-moviebrowser.menu_main_head Установки
-moviebrowser.menu_nfs_head NFS установки
+moviebrowser.menu_main_head Настройки
+moviebrowser.menu_nfs_head Настройки NFS
 moviebrowser.menu_parental_lock_activated Активирован
 moviebrowser.menu_parental_lock_activated_no Нет
 moviebrowser.menu_parental_lock_activated_no_temp Нет (временный)
@@ -948,24 +957,24 @@ moviebrowser.short_filename Имя
 moviebrowser.short_format Формат
 moviebrowser.short_genre_major Жанр
 moviebrowser.short_genre_minor Жанр
-moviebrowser.short_info1 Инфо 1
-moviebrowser.short_info2 Инфо 2
+moviebrowser.short_info1 Информация
+moviebrowser.short_info2 Информация
 moviebrowser.short_length Мин.
 moviebrowser.short_parental_lockage Возраст
 moviebrowser.short_path Путь
 moviebrowser.short_prevplaydate Последний
 moviebrowser.short_prodyear Год
-moviebrowser.short_quality * (качество)
+moviebrowser.short_quality Качество
 moviebrowser.short_recorddate Дата
 moviebrowser.short_serie Серия
-moviebrowser.short_size MB
+moviebrowser.short_size Размер
 moviebrowser.short_title Заголовок
 moviebrowser.start_head Начать от:
-moviebrowser.start_record_start Начать фильм
+moviebrowser.start_record_start Начало записи
 moviebrowser.update_if_dest_empty_only Копировать, если адресат пустой
-moviebrowser.use_dir Использ. директорию
-moviebrowser.use_movie_dir Использ.каталог кино
-moviebrowser.use_rec_dir Использ. каталог записи
+moviebrowser.use_dir Использовать каталог
+moviebrowser.use_movie_dir Использовать каталог фильмов
+moviebrowser.use_rec_dir Использовать каталог записи
 movieplayer.bookmark Закладки
 movieplayer.bookmarkname Название закладки
 movieplayer.bookmarkname_hint1 Введите название
@@ -1018,7 +1027,7 @@ mpkey.play Проиграть
 mpkey.plugin Запустить плагин
 mpkey.rewind Назад
 mpkey.stop Стоп
-mpkey.time Показать время
+mpkey.time Отобразить время
 networkmenu.apply_settings Применение изменений...
 networkmenu.apply_settings_now Применить изменения сейчас?
 networkmenu.interface Интерфейс
@@ -1034,10 +1043,10 @@ networkmenu.netmask Маска подсети
 networkmenu.ntpenable Синхронизация
 networkmenu.ntprefresh Интервал NTP/DVB (минуты)
 networkmenu.ntprefresh_hint1 Время в минутах
-networkmenu.ntprefresh_hint2 Нужна перезагрузка, или обновление EPG
+networkmenu.ntprefresh_hint2 Нужна перезагрузка STB, или обновление телегида
 networkmenu.ntpserver NTP-сервер
 networkmenu.ntpserver_hint1 Пример NTP-сервера: ntp1.ptb.de
-networkmenu.ntpserver_hint2 Нужна перезагрузка, или обновление EPG
+networkmenu.ntpserver_hint2 Нужна перезагрузка STB, или обновление телегида 
 networkmenu.ntptitle Синхронизация времени
 networkmenu.select_if Интерфейс
 networkmenu.setupnow Применить изменения
@@ -1197,9 +1206,9 @@ recordingmenu.apids_ac3 AC3 поток
 recordingmenu.apids_alt Другие потоки
 recordingmenu.apids_std Основной поток
 recordingmenu.choose_direct_rec_dir Куда вести запись
-recordingmenu.defdir Каталог записи
+recordingmenu.defdir Путь для записи
 recordingmenu.dvbsub_pids Запись субтитров
-recordingmenu.end_of_recording_epg по событию EPG
+recordingmenu.end_of_recording_epg по событию телегида
 recordingmenu.end_of_recording_max по максимальному времени
 recordingmenu.end_of_recording_name Окончание записи
 recordingmenu.epg_for_filename Имя файла с данными о программе
@@ -1352,7 +1361,7 @@ settings.backup Резервное копирование прошивки
 settings.help Помощь
 settings.missingoptionsconffile Настройки системы обновлены.\nНовые установки заменят настройки по умолчанию.
 settings.noconffile Настройки системы отсутствуют.\nИспользуются настройки по умолчанию.
-settings.menu_pos Расположение OSD
+settings.menu_pos Положение меню
 settings.pos_bottom_left внизу слева
 settings.pos_bottom_right внизу справа
 settings.pos_top_left вверху слева
@@ -1495,14 +1504,14 @@ timersettings.record_safety_time_before.hint_1 Коррекция времени
 timersettings.record_safety_time_before.hint_2 будет отниматься от каждого таймера записи.
 timersettings.separator Настройки таймера
 timing.chanlist Список каналов
-timing.epg EPG
+timing.epg Телегид
 timing.filebrowser Проводник по каталогам
 timing.head Время показа OSD
 timing.hint_1 Время в секундах. После этого
 timing.hint_2 инфопанель будет прозрачной.
 timing.infobar Инфопанель
-timing.infobar_movieplayer Инфопанель (при просмотре медиа)
-timing.infobar_radio Инфопанель (в радио режиме)
+timing.infobar_movieplayer Инфопанель (мультимедия)
+timing.infobar_radio Инфопанель (радио режим)
 timing.menu Меню
 timing.numericzap Набор цифр с пульта
 ucodecheck.avia500 Avia 500
@@ -1521,7 +1530,7 @@ usermenu.button_red Красное меню
 usermenu.button_yellow Желтое меню
 usermenu.head Меню пользователя
 usermenu.item_bar ---- полоса ----
-usermenu.item_epg_misc Функции EPG
+usermenu.item_epg_misc Функции телегида
 usermenu.item_none Ничего
 usermenu.item_vtxt Телетекст
 usermenu.name Имя
@@ -1561,7 +1570,7 @@ videomenu.panscan Pan&Scan
 videomenu.panscan2 14:9 Pan&Scan
 videomenu.rgb_centering Центровка RGB
 videomenu.scart SCART-выход
-videomenu.screensetup Настройки экрана
+videomenu.screensetup Настройка экрана
 videomenu.tv-scart Видео выходы
 videomenu.vcr-scart VCR SCART
 videomenu.vcrsignal Тип выходного сигнала VCR
@@ -1683,11 +1692,11 @@ extramenu.glcd.select.fg Цвет текста
 extramenu.glcd.select.bg Цвет фона
 extramenu.glcd.select.bar Цвет индикатора
 extramenu.glcd.size_channel Размер шрифта канала
-extramenu.glcd.size_epg Размер шрифта EPG
+extramenu.glcd.size_epg Размер шрифта телегида
 extramenu.glcd.size_bar Размер индикатора
 extramenu.glcd.size_time Размер шрифта времени
 extramenu.glcd.restart Обновить
-extramenu.glcd.mirror_osd Показать меню на LCD
+extramenu.glcd.mirror_osd Показывать меню на LCD
 extramenu.glcd.time_in_standby Время в standby
 extramenu.wlan Меню WLAN 
 extramenu.wlan.select WLAN
@@ -1725,21 +1734,21 @@ lcdmenu.displaymode.timeonly время
 lcdmenu.displaymode.timeoff без времени
 lcdmenu.displaymode Режим
 lcdmenu.standby Standby
-menu.numbers_as_icons Пиконы в меню 
+menu.numbers_as_icons Иконки меню 
 fontsize.percent Масштаб шрифта (%)
 menu.infobar_cn Инфопанель по событию
-miscsettings.epg.batch.head Обновление EPG 
-miscsettings.epg.batch.settings Обновление EPG
-timerlist.batchepg Обновление EPG
-timerlist.type.batchepg Обновление EPG
+miscsettings.epg.batch.head Обновление телегида 
+miscsettings.epg.batch.settings Обновление телегида
+timerlist.batchepg Обновление телегида
+timerlist.type.batchepg Обновление телегида
 batchepg.epg.standard стандарт
 batchepg.epg.off нет
 batchepg.save Сохранить
 batchepg.refresh Начать обновление
 batchepg.refreshall Обновить все
 batchepg.settings Настройки
-batchepg.hint Данные EPG обновляются, подождите. Канал:
-batchepg.shutdown Данные EPG обрабатываются.
+batchepg.hint Данные телегида обновляются, подождите. Канал:
+batchepg.shutdown Данные телегида обрабатываются.
 batchepg.run_at_shutdown Обновить перед выкл.
-batchepg.standard_wait_time EPG тайм-аут
+batchepg.standard_wait_time Тайм-аут телегида
 word.from c
