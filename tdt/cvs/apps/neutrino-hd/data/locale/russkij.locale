@@ -626,8 +626,6 @@ infobar.picon Пикон канала
 infobar.picon_big большой
 infobar.picon_move SIG/SNR
 infobar.picon_normal нормальный
-infobar.picon_dir Путь для пиконов
-infobar.picon_dir_e2 Путь для пиконов E2
 infoviewer.epgnotload EPG не загружен...
 infoviewer.epgwait Попытка получить программу передач...
 infoviewer.eventlist Телегид
@@ -801,7 +799,7 @@ miscsettings.infobar_disp_5 лого/уровень сигнала
 miscsettings.infobar_disp_6 лого/номер канала/уровень сигнала
 miscsettings.infobar_disp_log Логотип канала
 miscsettings.infobar_logo_hdd_dir Каталог с лого:
-miscsettings.infobar_logo_hdd_dir_e2 Каталог с лого E2:
+miscsettings.infobar_logo_hdd_dir_e2 Каталог с лого 2:
 miscsettings.infobar_show_var_hdd Показать уровнень заполненности (var/HDD)
 miscsettings.infobar_show Инфопанель при смене события
 miscsettings.infobar_show_res Показать разрешение

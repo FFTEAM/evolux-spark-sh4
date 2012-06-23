@@ -826,8 +826,8 @@ miscsettings.infobar_disp_4 Logo+Kanalname/Kanalnummer
 miscsettings.infobar_disp_5 Logo/Signalbalken
 miscsettings.infobar_disp_6 Logo+Kanalnummer/Signalbalken
 miscsettings.infobar_disp_log Logo
-miscsettings.infobar_logo_hdd_dir Logo Verz.
-miscsettings.infobar_logo_hdd_dir_e2 Logo Verz. E2
+miscsettings.infobar_logo_hdd_dir Logo Verzeichnis
+miscsettings.infobar_logo_hdd_dir_e2 Logo Verz. 2
 miscsettings.infobar_sat_display Kabel-/Satellitenanbieter
 miscsettings.infobar_show Info bei EPG Änderungen
 miscsettings.infobar_show_dd_available DD-Verfügbarkeit anzeigen
