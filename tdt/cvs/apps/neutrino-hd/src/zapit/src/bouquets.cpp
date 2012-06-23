@@ -452,7 +452,11 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 	}
 #endif
 
+#ifdef EVOLUX
+	if(CServiceManager::getInstance()->GetAllUnusedChannels(unusedChannels) == false)
+#else
 	if(!tomake || CServiceManager::getInstance()->GetAllUnusedChannels(unusedChannels) == false)
+#endif
 		return;
 
 	sort(unusedChannels.begin(), unusedChannels.end(), CmpChannelByChName());
@@ -473,6 +477,10 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 
 	renumChannels(remainChannels->tvChannels, i);
 	renumChannels(remainChannels->radioChannels, j);
+#ifdef EVOLUX
+	if (!tomake && Bouquets.size() > 1)
+		deleteBouquet(remainChannels);
+#endif
 }
 
 void CBouquetManager::renumServices()
@@ -505,7 +513,11 @@ CZapitBouquet* CBouquetManager::addBouquet(const std::string & name, bool ub, bo
 
 void CBouquetManager::deleteBouquet(const unsigned int id)
 {
-	if (id < Bouquets.size() && Bouquets[id] != remainChannels)
+#ifdef EVOLUX
+ 	if (id < Bouquets.size() && Bouquets[id] != remainChannels && Bouquets[id] != newChannels)
+#else
+ 	if (id < Bouquets.size() && Bouquets[id] != remainChannels)
+#endif
 		deleteBouquet(Bouquets[id]);
 }
 
@@ -646,6 +658,9 @@ void CBouquetManager::clearAll()
 
 	Bouquets.clear();
 	remainChannels = NULL;
+#ifdef EVOLUX
+	newChannels = NULL;
+#endif
 }
 
 CBouquetManager::ChannelIterator::ChannelIterator(CBouquetManager* owner, const bool TV)

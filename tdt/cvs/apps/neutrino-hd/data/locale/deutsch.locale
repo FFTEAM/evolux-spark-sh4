@@ -230,6 +230,8 @@ channellist.foot_off aus
 channellist.head Alle Kanäle
 channellist.history Verlauf
 channellist.make_hdlist Erzeuge "HD"- Bouquet
+channellist.make_new Erzeuge "Neue Kanäle"- Bouquet
+channellist.make_others Erzeuge "Andere"- Bouquet
 channellist.new_zap_mode Quickzap in Liste
 channellist.nonefound Es wurden keine Kanäle gefunden!\nFühren Sie bitte eine Kanalsuche durch\n(MENU-Taste -> Service)
 channellist.provs Anbieter

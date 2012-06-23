@@ -32,7 +32,12 @@
 #include <system/settings.h>
 
 #include <string>
+#ifdef EVOLUX
+#include <zapit/zapit.h>
+#endif
+#ifndef EVOLUX // no need to include this twice
 #include "gui/widget/menue.h"
+#endif
 
 //#define CPU_FREQ
 
@@ -53,6 +58,10 @@ class CMiscMenue : public CMenuTarget
 #endif /*CPU_FREQ*/
 #if 0
 		void showMiscSettingsMenuEmLog(CMenuWidget *ms_emlog);
+#endif
+#ifdef EVOLUX
+		int makeRemainingChannelsBouquet;
+		int makeNewChannelsBouquet;
 #endif
 	public:
 		CMiscMenue();

@@ -58,6 +58,9 @@
 
 //#define ONE_KEY_PLUGIN
 
+#ifdef EVOLUX
+extern Zapit_config zapitCfg;
+#endif
 extern CPlugins       * g_PluginList;
 
 CMiscMenue::CMiscMenue()
@@ -235,6 +238,11 @@ int CMiscMenue::showMiscSettingsMenu()
 #endif
 	
 	//channellist
+#ifdef EVOLUX
+	CZapit::getInstance()->GetConfig(zapitCfg);
+	makeNewChannelsBouquet = zapitCfg.makeNewChannelsBouquet;
+	makeRemainingChannelsBouquet = zapitCfg.makeRemainingChannelsBouquet;
+#endif
 	CMenuWidget *misc_menue_chanlist = new CMenuWidget(LOCALE_MISCSETTINGS_HEAD, NEUTRINO_ICON_SETTINGS, width, MN_WIDGET_ID_MISCSETUP_CHANNELLIST);
 	showMiscSettingsMenuChanlist(misc_menue_chanlist);
 	misc_menue->addItem( new CMenuForwarder(LOCALE_MISCSETTINGS_CHANNELLIST, true, NULL, misc_menue_chanlist, NULL, CRCInput::RC_2));
@@ -250,6 +258,13 @@ int CMiscMenue::showMiscSettingsMenu()
 #endif /*CPU_FREQ*/
 
 	int res = misc_menue->exec(NULL, "");
+#ifdef EVOLUX
+	if (zapitCfg.makeNewChannelsBouquet != makeNewChannelsBouquet || zapitCfg.makeRemainingChannelsBouquet != makeRemainingChannelsBouquet) {
+		zapitCfg.makeNewChannelsBouquet = makeNewChannelsBouquet;
+		zapitCfg.makeRemainingChannelsBouquet = makeRemainingChannelsBouquet;
+		CZapit::getInstance()->SetConfig(&zapitCfg);
+	}
+#endif
 	misc_menue->hide();
 	delete fanNotifier;
 	delete misc_menue;
@@ -346,6 +361,10 @@ void CMiscMenue::showMiscSettingsMenuChanlist(CMenuWidget *ms_chanlist)
 	ms_chanlist->addIntroItems(LOCALE_MISCSETTINGS_CHANNELLIST);
 	
 	ms_chanlist->addItem(new CMenuOptionChooser(LOCALE_CHANNELLIST_MAKE_HDLIST , &g_settings.make_hd_list            , OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+#ifdef EVOLUX
+	ms_chanlist->addItem(new CMenuOptionChooser(LOCALE_CHANNELLIST_MAKE_NEW, &makeNewChannelsBouquet, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+	ms_chanlist->addItem(new CMenuOptionChooser(LOCALE_CHANNELLIST_MAKE_OTHERS, &makeRemainingChannelsBouquet, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+#endif
 	ms_chanlist->addItem(new CMenuOptionChooser(LOCALE_EXTRA_ZAP_CYCLE         , &g_settings.zap_cycle               , OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 	ms_chanlist->addItem(new CMenuOptionChooser(LOCALE_CHANNELLIST_NEW_ZAP_MODE, &g_settings.channellist_new_zap_mode, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true ));
 }
