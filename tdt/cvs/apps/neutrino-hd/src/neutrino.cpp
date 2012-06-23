@@ -685,7 +685,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.plugin_hdd_dir = configfile.getString( "plugin_hdd_dir", "/hdd/tuxbox/plugins" );
 	g_settings.logo_hdd_dir = configfile.getString( "logo_hdd_dir", "/var/share/icons/logo" );
 #ifdef EVOLUX
-	g_settings.logo_hdd_dir_e2 = configfile.getString( "logo_hdd_dir_e2", "/usr/local/share/enigma2/picon" );
+	g_settings.logo_hdd_dir_2 = configfile.getString( "logo_hdd_dir_2", "" );
+	if (g_settings.logo_hdd_dir_2.length() == 0) // backwards compatibility only, will be removed 08/2012  --martii
+		g_settings.logo_hdd_dir_2 = configfile.getString( "logo_hdd_dir_e2", "" );
 #endif
 
 	loadKeys();
@@ -1137,7 +1139,7 @@ void CNeutrinoApp::saveSetup(const char * fname)
 	configfile.setString ( "plugin_hdd_dir", g_settings.plugin_hdd_dir );
 	configfile.setString ( "logo_hdd_dir", g_settings.logo_hdd_dir );
 #ifdef EVOLUX
-	configfile.setString ( "logo_hdd_dir_e2", g_settings.logo_hdd_dir_e2 );
+	configfile.setString ( "logo_hdd_dir_2", g_settings.logo_hdd_dir_2 );
 #endif
 
 	saveKeys();
@@ -2181,7 +2183,11 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				StopSubtitles();
 				tuxtx_stop_subtitle();
 
+#ifdef EVOLUX
+				tuxtx_main(g_RCInput->getFileHandle(), g_RemoteControl->current_PIDs.PIDs.vtxtpid, 0, 0, atoi(g_settings.repeat_blocker), atoi(g_settings.repeat_genericblocker));
+#else
 				tuxtx_main(g_RCInput->getFileHandle(), g_RemoteControl->current_PIDs.PIDs.vtxtpid);
+#endif
 
 				frameBuffer->paintBackground();
 				//if(!g_settings.cacheTXT)

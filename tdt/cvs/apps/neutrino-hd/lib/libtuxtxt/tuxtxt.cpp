@@ -1665,10 +1665,21 @@ int tuxtx_subtitle_running(int *pid, int *page, int *running)
 	return ret;
 }
 
+#ifdef EVOLUX
+static int ttx_repeat_blocker = 125000;
+static int ttx_repeat_genericblocker = 250000;
+
+int tuxtx_main(int _rc, int pid, int page, int source, int repeat_blocker, int repeat_genericblocker)
+#else
 int tuxtx_main(int _rc, int pid, int page, int source)
+#endif
 {
 	char cvs_revision[] = "$Revision: 1.95 $";
 
+#ifdef EVOLUX
+	ttx_repeat_blocker = repeat_blocker * 1000;
+	ttx_repeat_genericblocker = repeat_genericblocker * 1000;
+#endif
 	use_gui = 1;
 	boxed = 0;
 //printf("to init tuxtxt\n");fflush(stdout);
@@ -6675,7 +6686,7 @@ int GetRCCode()
 		{
 #ifdef EVOLUX
         		uint64_t time_now = (uint64_t) ev.time.tv_usec + (uint64_t)((uint64_t) ev.time.tv_sec * (uint64_t) 1000000);
-			if (ev.code == rc_last_key && time_last + 100000 /* us */ > time_now
+			if (ev.code == rc_last_key && time_last + ttx_repeat_blocker> time_now
 				&& (ev.code == KEY_DOWN || ev.code == KEY_UP || ev.code == KEY_LEFT || ev.code == KEY_RIGHT)) {
 				// purge input buffer
 				if(!(val & O_NONBLOCK))
@@ -6685,7 +6696,7 @@ int GetRCCode()
 					fcntl(rc, F_SETFL, val);
 				return 0;
 			}
-			if (ev.code == rc_last_key && time_last + 250000 /* us */ > time_now) {
+			if (ev.code == rc_last_key && time_last + ttx_repeat_genericblocker > time_now) {
 				// purge input buffer
 				if(!(val & O_NONBLOCK))
 					fcntl(rc, F_SETFL, val | O_NONBLOCK);
@@ -6694,7 +6705,7 @@ int GetRCCode()
 					fcntl(rc, F_SETFL, val);
 				return 0;
 			}
-			if (time_last + 250000 < time_now)
+			if (time_last + ttx_repeat_genericblocker < time_now)
 				rc_last_key = KEY_RESERVED;
 			time_last = time_now;
 #else
