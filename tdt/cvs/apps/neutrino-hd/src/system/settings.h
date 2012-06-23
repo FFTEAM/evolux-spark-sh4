@@ -368,7 +368,7 @@ struct SNeutrinoSettings
 	
 	std::string logo_hdd_dir;
 #ifdef EVOLUX
-	std::string logo_hdd_dir_e2;
+	std::string logo_hdd_dir_2;
 #endif
 
 	//key configuration

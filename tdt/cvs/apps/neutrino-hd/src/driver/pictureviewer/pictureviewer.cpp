@@ -369,9 +369,8 @@ CPictureViewer::CPictureViewer ()
 
 	m_busy_buffer = NULL;
 #ifdef EVOLUX
-	logo_dir1_exists = -2;
 	logo_hdd_dir = string(g_settings.logo_hdd_dir);
-	logo_hdd_dir_e2 = string(g_settings.logo_hdd_dir_e2);
+	logo_hdd_dir_2 = string(g_settings.logo_hdd_dir_2);
 
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
@@ -478,21 +477,20 @@ void CPictureViewer::getSize(const char* name, int* width, int *height)
 #define LOGO_DIR1 "/share/tuxbox/neutrino/icons/logo"
 #define LOGO_FMT ".jpg"
 
+#ifdef EVOLUX
 bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, std::string & name, int *width, int *height)
 {
-	int i, j;
 	char strChanId[16];
 
-#ifdef EVOLUX
 	name = "";
 
 	pthread_mutex_lock(&logo_map_mutex);
 
 	if ((logo_hdd_dir != g_settings.logo_hdd_dir) ||
-	    (logo_hdd_dir_e2 != g_settings.logo_hdd_dir_e2)) {
+	    (logo_hdd_dir_2 != g_settings.logo_hdd_dir_2)) {
 		logo_map.clear();
 		logo_hdd_dir = g_settings.logo_hdd_dir;
-		logo_hdd_dir_e2 = g_settings.logo_hdd_dir_e2;
+		logo_hdd_dir_2 = g_settings.logo_hdd_dir_2;
 	}
 
 	std::map<uint64_t, logo_data>::iterator it;
@@ -511,7 +509,75 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			return true;
 		}
 	}
-#endif
+
+	sprintf(strChanId, "%llx", channel_id & 0xFFFFFFFFFFFFULL);
+
+	std::string strLogoE2[2] = { "", "" };
+	CZapitChannel * cc = CNeutrinoApp::getInstance()->channelList->getChannel(channel_id);
+	if (cc) {
+		char fname[255];
+		snprintf(fname, sizeof(fname), "1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+			(u_int) cc->getServiceType(true),
+			(u_int) channel_id & 0xFFFF,
+			(u_int) (channel_id >> 32) & 0xFFFF,
+			(u_int) (channel_id >> 16) & 0xFFFF,
+			(u_int) cc->getSatellitePosition());
+		strLogoE2[0] = std::string(fname);
+		snprintf(fname, sizeof(fname), "1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
+			(u_int) 1,
+			(u_int) channel_id & 0xFFFF,
+			(u_int) (channel_id >> 32) & 0xFFFF,
+			(u_int) (channel_id >> 16) & 0xFFFF,
+			(u_int) cc->getSatellitePosition());
+		strLogoE2[1] = std::string(fname);
+	}
+	/* first the channel-id, then the channelname */
+	std::string strLogoName[2] = { (std::string)strChanId, ChannelName };
+	/* first png, then jpg, then gif */
+	std::string strLogoExt[3] = { ".png", ".jpg" , ".gif" };
+	std::string dirs[2] = { g_settings.logo_hdd_dir, g_settings.logo_hdd_dir_2 };
+
+	std::string tmp;
+
+	for (int k = 0; k < 2; k++) {
+		if (dirs[k].length() < 1)
+			continue;
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 3; j++) {
+				tmp = dirs[k] + "/" + strLogoName[i] + strLogoExt[j];
+				if (!access(tmp.c_str(), R_OK))
+					goto found;
+			}
+		if (!cc)
+			continue;
+		for (int i = 0; i < 2; i++) {
+			tmp = dirs[k] + "/" + strLogoE2[i];
+			if (!access(tmp.c_str(), R_OK))
+				goto found;
+		}
+	}
+	logo_map[channel_id].name = "";
+	pthread_mutex_unlock(&logo_map_mutex);
+	return false;
+
+found:
+	int w, h;
+	getSize(tmp.c_str(), &w, &h);
+	if(width && height)
+		*width = w, *height = h;
+	name = tmp;
+	logo_map[channel_id].name = name;
+	logo_map[channel_id].width = w;
+	logo_map[channel_id].height = h;
+	pthread_mutex_unlock(&logo_map_mutex);
+	return true;
+}
+#else
+bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, std::string & name, int *width, int *height)
+{
+	int i, j;
+	char strChanId[16];
+
 	sprintf(strChanId, "%llx", channel_id & 0xFFFFFFFFFFFFULL);
 	/* first the channel-id, then the channelname */
 	std::string strLogoName[2] = { (std::string)strChanId, ChannelName };
@@ -525,35 +591,13 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			std::string tmp(g_settings.logo_hdd_dir + "/" + strLogoName[i] + strLogoExt[j]);
 			if (access(tmp.c_str(), R_OK) != -1)
 			{
-#ifdef EVOLUX
-				int w, h;
-				getSize(tmp.c_str(), &w, &h);
-				if(width && height)
-					*width = w, *height = h;
-#else
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
-#endif
 				name = tmp;
-#ifdef EVOLUX
-				logo_map[channel_id].name = name;
-				logo_map[channel_id].width = w;
-				logo_map[channel_id].height = h;
-				pthread_mutex_unlock(&logo_map_mutex);
-#endif
 				return true;
 			}
 		}
 	}
-#ifdef EVOLUX
-	if (logo_dir1_exists == -2) {
-		logo_dir1_exists = 0;
-		struct stat st;
-		if (stat(LOGO_DIR1, &st) && (st.st_mode & S_IFDIR))
-			logo_dir1_exists = 1;
-	}
-	if (logo_dir1_exists)
-#endif
         for (i = 0; i < 2; i++)
         {
                 for (j = 0; j < 3; j++)
@@ -561,75 +605,16 @@ bool CPictureViewer::GetLogoName(uint64_t channel_id, std::string ChannelName, s
 			std::string tmp(LOGO_DIR1 "/" + strLogoName[i] + strLogoExt[j]);
                         if (access(tmp.c_str(), R_OK) != -1)
                         {
-#ifdef EVOLUX
-				int w, h;
-				getSize(tmp.c_str(), &w, &h);
-				if(width && height)
-					*width = w, *height = h;
-#else
 				if(width && height)
 					getSize(tmp.c_str(), width, height);
-#endif
                                 name = tmp;
-#ifdef EVOLUX
-				logo_map[channel_id].name = name;
-				logo_map[channel_id].width = w;
-				logo_map[channel_id].height = h;
-				pthread_mutex_unlock(&logo_map_mutex);
-#endif
                                 return true;
                         }
                 }
         }
-#ifdef EVOLUX
-	// nothing found yet, try E2 ...
-	CZapitChannel * cc = CNeutrinoApp::getInstance()->channelList->getChannel(channel_id);
-	if (cc) {
-		char fname[255];
-		int len = snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
-			g_settings.logo_hdd_dir_e2.c_str(),
-			(u_int) cc->getServiceType(true),
-			(u_int) channel_id & 0xFFFF,
-			(u_int) (channel_id >> 32) & 0xFFFF,
-			(u_int) (channel_id >> 16) & 0xFFFF,
-			(u_int) cc->getSatellitePosition());
-		if (len > sizeof(fname)) {
-			pthread_mutex_unlock(&logo_map_mutex);
-			return false;
-		}
-		int r = access(fname, R_OK);
-		if (r) {
-			len = snprintf(fname, sizeof(fname), "%s/1_0_%X_%X_%X_%X_%X0000_0_0_0.png",
-				g_settings.logo_hdd_dir_e2.c_str(),
-				1,
-				(u_int) channel_id & 0xFFFF,
-				(u_int) (channel_id >> 32) & 0xFFFF,
-				(u_int) (channel_id >> 16) & 0xFFFF,
-				(u_int) cc->getSatellitePosition());
-			if (len > sizeof(fname)) {
-				pthread_mutex_unlock(&logo_map_mutex);
-				return false;
-			}
-			r = access(fname, R_OK);
-		}
-		if (!r) {
-			int w, h;
-			getSize(fname, &w, &h);
-			if(width && height)
-				*width = w, *height = h;
-			name = string(fname);
-			logo_map[channel_id].name = name;
-			logo_map[channel_id].width = w;
-			logo_map[channel_id].height = h;
-			pthread_mutex_unlock(&logo_map_mutex);
-			return true;
-		}
-	}
-	logo_map[channel_id].name = "";
-	pthread_mutex_unlock(&logo_map_mutex);
-#endif
 	return false;
 }
+#endif
 
 bool CPictureViewer::DisplayLogo (uint64_t channel_id, int posx, int posy, int width, int height)
 {

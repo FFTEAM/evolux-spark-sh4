@@ -263,9 +263,9 @@ int COsdSetup::exec(CMenuTarget* parent, const std::string &actionKey)
 		return menu_return::RETURN_REPAINT;
 	}
 #ifdef EVOLUX
-	else if(actionKey=="logo_dir_e2") {
-		const char *action_str = "logo_e2";
-		chooserDir(g_settings.logo_hdd_dir_e2, false, action_str);
+	else if(actionKey=="logo_dir_2") {
+		const char *action_str = "logo_2";
+		chooserDir(g_settings.logo_hdd_dir_2, false, action_str);
 		return menu_return::RETURN_REPAINT;
 	}
 #endif
@@ -642,7 +642,7 @@ void COsdSetup::showOsdInfobarSetup(CMenuWidget *menu_infobar)
 	menu_infobar->addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_INFOBAR_DISP_LOG, &g_settings.infobar_show_channellogo, LOCALE_MISCSETTINGS_INFOBAR_DISP_OPTIONS, LOCALE_MISCSETTINGS_INFOBAR_DISP_OPTIONS_COUNT, true));
 	menu_infobar->addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_INFOBAR_LOGO_HDD_DIR, true, g_settings.logo_hdd_dir, this, "logo_dir"));
 #ifdef EVOLUX
-	menu_infobar->addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_INFOBAR_LOGO_HDD_DIR_E2, true, g_settings.logo_hdd_dir_e2, this, "logo_dir_e2"));
+	menu_infobar->addItem(new CMenuForwarder(LOCALE_MISCSETTINGS_INFOBAR_LOGO_HDD_DIR_E2, true, g_settings.logo_hdd_dir_2, this, "logo_dir_2"));
 #endif
 	menu_infobar->addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_INFOBAR_SAT_DISPLAY, &g_settings.infobar_sat_display, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
 	menu_infobar->addItem(new CMenuOptionChooser(LOCALE_MISCSETTINGS_INFOBAR_SHOW_VAR_HDD, &g_settings.infobar_show_var_hdd, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));

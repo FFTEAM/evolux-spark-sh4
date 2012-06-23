@@ -109,9 +109,8 @@ class CPictureViewer
 	int m_endx;
 	int m_endy;
 #ifdef EVOLUX
-	int logo_dir1_exists;
 	std::string logo_hdd_dir;
-	std::string logo_hdd_dir_e2;
+	std::string logo_hdd_dir_2;
 	struct logo_data {
 		std::string name;
 		int width;
