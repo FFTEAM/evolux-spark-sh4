@@ -65,10 +65,9 @@ DEVICE_TYPE_UNREG };
 
 #ifdef EVOLUX
 extern char *deviceName;
-#else
+#endif
 static unsigned char logicalDeviceType = DEVICE_TYPE_DVD1;
 static unsigned char deviceType = DEVICE_TYPE_DVD;
-#endif
 
 static unsigned short ActiveSource = 0x0000;
 
