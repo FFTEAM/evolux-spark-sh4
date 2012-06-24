@@ -110,6 +110,7 @@ int CCECSetup::showMenu()
 	g_settings.hdmi_cec_mode = ko.isEnabled("cec");
 	CMenuOptionChooser *cec_ch = new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_CEC_MODE, &g_settings.hdmi_cec_mode, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true, this);
 	cec1 = new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_CEC_STANDBY, &g_settings.hdmi_cec_standby, VIDEOMENU_HDMI_CEC_STANDBY_OPTIONS, VIDEOMENU_HDMI_CEC_STANDBY_OPTION_COUNT, g_settings.hdmi_cec_mode != 0, this);
+	cec2 = new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_CEC_BROADCAST, &g_settings.hdmi_cec_broadcast, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, g_settings.hdmi_cec_mode != VIDEO_HDMI_CEC_MODE_OFF, this);
 #else
 	CMenuOptionChooser *cec_ch = new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_CEC_MODE, &g_settings.hdmi_cec_mode, VIDEOMENU_HDMI_CEC_MODE_OPTIONS, VIDEOMENU_HDMI_CEC_MODE_OPTION_COUNT, true, this);
 	cec1 = new CMenuOptionChooser(LOCALE_VIDEOMENU_HDMI_CEC_VIEW_ON, &g_settings.hdmi_cec_view_on, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, g_settings.hdmi_cec_mode != VIDEO_HDMI_CEC_MODE_OFF, this);
@@ -117,12 +118,12 @@ int CCECSetup::showMenu()
 #endif
 	
 	cec->addItem(cec_ch);
+#ifndef EVOLUX
 	cec->addItem(GenericMenuSeparatorLine);
+#endif
 	//-------------------------------------------------------
 	cec->addItem(cec1);
-#ifndef EVOLUX
 	cec->addItem(cec2);
-#endif
 	
 	int res = cec->exec(NULL, "");
 	cec->hide();
@@ -151,7 +152,7 @@ void CCECSetup::setCECSettings(bool b)
 			if (!was_timer_wakeup) {
 				int otp = ::open("/proc/stb/cec/onetouchplay", O_WRONLY);
 				if (otp > -1) {
-					write(otp, "0\n", 2);
+					write(otp, g_settings.hdmi_cec_broadcast ? "f\n" : "0\n", 2);
 					close(otp);
 				}
 			}
@@ -160,7 +161,7 @@ void CCECSetup::setCECSettings(bool b)
 		if (g_settings.hdmi_cec_mode && g_settings.hdmi_cec_standby) {
 			int otp = ::open("/proc/stb/cec/systemstandby", O_WRONLY);
 			if (otp > -1) {
-				write(otp, "0\n", 2);
+				write(otp, g_settings.hdmi_cec_broadcast ? "f\n" : "0\n", 2);
 				close(otp);
 			}
 		}
@@ -184,6 +185,7 @@ bool CCECSetup::changeNotify(const neutrino_locale_t OptionName, void * /*data*/
 	{
 		printf("[neutrino CEC Settings] %s set CEC settings...\n", __FUNCTION__);
 		cec1->setActive(g_settings.hdmi_cec_mode != 0);
+		cec2->setActive(g_settings.hdmi_cec_mode != 0);
 		KernelOptions_Menu ko;
 		ko.Enable("cec", g_settings.hdmi_cec_mode != 0);
 		g_settings.hdmi_cec_mode = ko.isEnabled("cec");

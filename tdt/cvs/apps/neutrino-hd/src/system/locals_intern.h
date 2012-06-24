@@ -1527,6 +1527,7 @@ const char * locale_real_names[] =
 	"videomenu.enabled_modes",
 	"videomenu.fullscreen",
 	"videomenu.hdmi_cec",
+	"videomenu.hdmi_cec_broadcast",
 	"videomenu.hdmi_cec_mode",
 	"videomenu.hdmi_cec_mode_off",
 	"videomenu.hdmi_cec_mode_recorder",
