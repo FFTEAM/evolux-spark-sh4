@@ -1,3 +1,13 @@
+adzap Автопереключение
+adzap.announce Возвращаемся назад, к  
+adzap.cancel Таймер отменен
+adzap.enable Включить один раз
+adzap.disable Отключить
+adzap.monitor Включить на сессию
+adzap.minute минуты
+adzap.minutes минут
+adzap.switchback Переключить назад после
+adzap.commit Выбор режима:
 apidselector.head Выбор языка
 audio.srs_algo Алгоритм SRS
 audio.srs_algo_light Лёгкий
@@ -5,10 +15,9 @@ audio.srs_algo_normal Нормальный
 audio.srs_iq SRS Выравнивание 
 audio.srs_nmgr Менеджер шума
 audio.srs_volume Стандартная громкость
-audiomenu.analogout Аналог
 audiomenu.analog_mode Аналоговый режим
+audiomenu.analog_out Аналоговый выход
 audiomenu.avs avs
-audiomenu.avs_control Управление громкостью avs/ost
 audiomenu.avsync Синхронизировать A/V
 audiomenu.avsync_am по аудио
 audiomenu.auto_lang Автоматический выбор
@@ -18,31 +27,21 @@ audiomenu.dolbydigital Dolby Digital
 audiomenu.hdmi_dd DD через HDMI
 audiomenu.hdmi_dd_auto авто
 audiomenu.hdmi_dd_force принудительно
-audiomenu.head Настройки звука
-audiomenu.lirc Управление пультом
 audiomenu.monoleft Левый
 audiomenu.monoright Правый
-audiomenu.ost ost
 audiomenu.PCMOffset Уменьшение громкости PCM
 audiomenu.pref_languages Язык аудио и субтитров
 audiomenu.pref_lang Предпочтительный язык
 audiomenu.pref_lang_head Приоритет языка для аудио и телегида
 audiomenu.pref_subs Предпочтительный язык
 audiomenu.pref_subs_head Приоритет языка субтитров
-audiomenu.ac3downmix AC3 downmix
 audiomenu.spdif_dd DD через SPDIF
 audiomenu.stereo Стерео
-audiomenu.volume_position Индикатор звука
-audiomenu.volume_position.upperleft слева вверху
-audiomenu.volume_position.center по центру
-audiomenu.volume_position.hidden скрыт
 audiomenu.volume_step Шаг регулировки громкости
 audiomenu.volume_adjustment Коррекция громкости
-audiomenu.volume_adjustment.ac3 Уровень AC3
-audiomenu.volume_adjustment.pcm Уровень PCM
 audioplayer.add Добавить
 audioplayer.add_ic Icecast
-audioplayer.add_loc Локальный список радио
+audioplayer.add_loc Локальный список станций
 audioplayer.add_sc Shoutcast
 audioplayer.artist_title Артист, Альбом.
 audioplayer.building_search_index Построение индекса поиска
@@ -63,7 +62,7 @@ audioplayer.jump_dialog_hint2 (в секундах)
 audioplayer.jump_dialog_title Выбор направление отката
 audioplayer.jump_forwards Шаг вперёд
 audioplayer.keylevel Другие кнопки управления
-audioplayer.load_radio_stations Загрузить интернет-радио
+audioplayer.load_radio_stations Загрузить плей-лист
 audioplayer.name Аудиоплеер 
 audioplayer.pause Пауза
 audioplayer.play Играть
@@ -88,7 +87,17 @@ audioplayer.stop Остановить
 audioplayer.title_artist Альбом, Артист
 audioplayerpicsettings.general Аудиоплеер и Фото
 AUDIOSelectMenue.head Выбор языка
-AUDIOSelectMenue.no_tracks Нет аудио
+batchepg.epg.standard стандарт
+batchepg.epg.off нет
+batchepg.epg.mhw1 MHW1
+batchepg.epg.mhw2 MHW2
+batchepg.save Сохранить
+batchepg.refresh Начать обновление
+batchepg.refreshall Обновить все
+batchepg.settings Настройки
+batchepg.hint Данные телегида обновляются, подождите. Канал:
+batchepg.run_at_shutdown Обновить перед выключением
+batchepg.standard_wait_time Тайм-аут телегида
 bookmarkmanager.delete Удалить
 bookmarkmanager.name Закладки
 bookmarkmanager.rename Переименовать
@@ -96,7 +105,7 @@ bookmarkmanager.select Выбрать
 bouqueteditor.add Добавить
 bouqueteditor.bouquetname Имя пакета
 bouqueteditor.delete Удалить
-bouqueteditor.delete_channel Удалить канал из пакета?
+bouqueteditor.delete_question Удалить канал из пакета?
 bouqueteditor.discardingchanges Отмена изменений. /nподождите пожалуйста...
 bouqueteditor.hide Спрятать
 bouqueteditor.lock Блокировать
@@ -111,13 +120,6 @@ bouqueteditor.switch добавить/удалить
 bouqueteditor.switchmode ТВ/Радио
 bouquetlist.head Пакеты
 cablesetup.provider кабельный провайдер
-cam.empty Нет CAM в слоте
-cam.init_ok Инициализация CAM закончена
-cam.inserted CAM вставлен в слот
-cam.removed CAM удален из слота
-cam.settings САМ модуль
-cam.timeout Ждем меню CI...
-cam.waiting Ожидание ответа от CI...
 ci.empty Нет CAM в слоте
 ci.init_failed Не удалось определить CAM
 ci.init_ok запуск CAM завершен
@@ -138,12 +140,15 @@ channellist.foot Информация о канале
 channellist.foot_freq Sat/Freq
 channellist.foot_next события
 channellist.foot_off Выкл
-channellist.head Все сервисы
+channellist.head Все каналы
 channellist.history История
 channellist.make_hdlist Создать список HD каналов
+channellist.make_new Создать список каналов "Новые"
+channellist.make_others Создать список каналов "Прочие"
 channellist.new_zap_mode Быстрый перебор каналов по списку
 channellist.nonefound Нет ни одного канала! \nВыполните сканирование\n(кнопка Меню -> Сервисы)
 channellist.provs Провайдеры
+channellist.recording_not_possible Запись невозможна!
 channellist.sats Спутники
 channellist.since начало  
 channellist.start старт в  
@@ -153,37 +158,31 @@ colorchooser.alpha альфа
 colorchooser.blue синий
 colorchooser.green зеленый
 colorchooser.red красный
+colormenu.hd_preset LCD
+colormenu.osd_preset Предустановка ТВ 
+colormenu.sd_preset CRT
 colormenu.background Фон
 colormenu.fade Затухание меню
 colormenu.font Выбор шрифта
-colormenu.gtx_alpha Прозрачность (GTX)
-colormenu.head Настройки цвета
 colormenu.menucolors Выбор цветов в меню
-colormenu.statusbar Информационная панель
 colormenu.textcolor Цвет текста
 colormenu.themeselect Выбор темы
 colormenu.timing Время показа OSD
 colormenu.contrast_fonts Контрастный шрифт
 colormenu.font_ttx Выбор шрифта телетекста
-colormenusetup.head Выбор цветов в меню
 colormenusetup.menucontent Содержимое окна
 colormenusetup.menucontent_inactive Содержимое окна неактивное
 colormenusetup.menucontent_selected Содержимое окна выбранное
 colormenusetup.menuhead Заголовок меню
-colorstatusbar.head Инфопанель
 colorstatusbar.text Инфопанель
 colorthememenu.question Сохранить текущую тему?
 colorthememenu.save Сохранить текущую тему
 colorthememenu.head2 Выбор темы
 colorthememenu.select1 Темы пользователя
 colorthememenu.select2 Стандартные темы
-colorthememenu.classic_theme Классическая
-colorthememenu.dblue_theme Темно синяя
-colorthememenu.dvb2k_theme DVB2000
-colorthememenu.gray Серая
+colorthememenu.name Названиие темы
 colorthememenu.head Выбор темы
 colorthememenu.neutrino_theme Neutrino
-colorthememenu.red_theme Красная
 cpu.freq Частота CPU
 cpu.freq_default по умолчанию
 cpu.freq_normal Нормальная частота
@@ -213,7 +212,7 @@ epgextended.guests В эпизодах
 epgextended.original_title Оригинальное название
 epgextended.presenter Вещатель
 epgextended.year_of_production Год выпуска
-epglist.noevents Программа передач отсутствует...
+epglist.noevents Программа передач отсутствует
 EPGMenu.epgplus Телегид всех каналов
 EPGMenu.eventinfo Передачи подробно
 EPGMenu.eventlist Телегид канала
@@ -222,26 +221,7 @@ EPGMenu.streaminfo Информация о потоке
 EPGPlus.actions Действия 
 EPGPlus.bybouquet_mode по пакетам 
 EPGPlus.bypage_mode по страницам 
-EPGPlus.change_font_size Размер шрифта 
-EPGPlus.change_font_style Вид шрифта 
-EPGPlus.change_size Изменить размер 
-EPGPlus.channelentry_font Шрифт для Канала
-EPGPlus.channelentry_separationlineheigt Высота строк
-EPGPlus.channelentry_width Ширина ячейки канала
-EPGPlus.channelevententry_font Шрифт для Передачи
-EPGPlus.edit_fonts Установка шрифтов 
-EPGPlus.edit_sizes Установка размеров 
-EPGPlus.font_style_bold Жирный
-EPGPlus.font_style_italic Курсив
-EPGPlus.font_style_regular Обычный
-EPGPlus.footer_fontbouquetchannelname Шрифт инф.канала в сноске
-EPGPlus.footer_fontbuttons Шрифт подписей кнопок
-EPGPlus.footer_fonteventdescription Шрифт названия передачи в сноске
-EPGPlus.footer_fonteventshortdescription Шрифт инф.передачи в сноске 
 EPGPlus.head Программа передач для всех каналов
-EPGPlus.header_font Шрифт Заголовка
-EPGPlus.horgap1_height Высота верхнего поля раздела
-EPGPlus.horgap2_height Высота нижнего поля раздела
 EPGPlus.next_bouquet Пакет вперед 
 EPGPlus.options Опции
 EPGPlus.page_down вниз страницы
@@ -250,22 +230,13 @@ EPGPlus.prev_bouquet Пакет обратно
 EPGPlus.record запись
 EPGPlus.refresh_epg обновить
 EPGPlus.remind запомнить
-EPGPlus.reset_settings Настройки по умолчанию 
-EPGPlus.save_settings Сохранить настройки
 EPGPlus.scroll_mode Режим листания
-EPGPlus.select_font_name Выбор шрифта
-EPGPlus.settings Настройки
-EPGPlus.slider_width Ширина поля всех программ
 EPGPlus.stretch_mode Режим протяжки
 EPGPlus.swap_mode Режим обмена
-EPGPlus.timeline_fontdate Шрифт даты
-EPGPlus.timeline_fonttime Шрифт времени
-EPGPlus.vergap1_width Ширина правого поля раздела
-EPGPlus.vergap2_width Ширина левого поля раздела
 EPGPlus.view_mode Режим просмотра
 epgviewer.More_Screenings Дата/время показа и повтора на этом канале
 epgviewer.nodetailed Подробная информация отсутствует
-epgviewer.notfound Телегид не найден
+epgviewer.notfound Телегид отсутствует
 eventfinder.head Поиск по телегиду
 eventfinder.keyword Ключевое слово
 eventfinder.search Искать
@@ -280,15 +251,14 @@ extra.add_to_bouquet Добавить в пакет
 extra.audio_run_player "Аудио" запускает плеер
 extra.auto_delete Авто-удаление
 extra.auto_timeshift Таймшифт, сек. (0=откл)
-extra.auto_to_record Сдвиг таймшифт при записи
 extra.bigwindows Крупные окна меню
 extra.cache_txt Кеш телетекста
 extra.chadded Канал добавлен в выбранный пакет....\n
 extra.chalreadyinbq Канал уже существует в выбранном пакете....\n
-extra.clear_log Очистить лог
 extra.dboxinfo Информация о STB
 extra.east Восток
-extra.english Приоритет английского
+extra.fec_auto Авто DVB-S
+extra.fec_auto_s2 Авто DVB-S2
 extra.fec_1_2 1/2
 extra.fec_2_3 2/3
 extra.fec_3_4 3/4
@@ -312,8 +282,6 @@ extra.fec_s2_qpsk_5_6 5/6 s2 qpsk
 extra.fec_s2_qpsk_7_8 7/8 s2 qpsk
 extra.fec_s2_qpsk_8_9 8/9 s2 qpsk
 extra.fec_s2_qpsk_9_10 9/10 s2 qpsk
-extra.hw_sect Раздел оборудования
-extra.key_click Звук нажатия кнопок
 extra.key_help Помощь
 extra.key_plugin Плагин
 extra.key_list_end В конец списка
@@ -324,15 +292,13 @@ extra.key_timerlist Список таймеров
 extra.key_timeshift Таймшифт
 extra.key_unlock Разблокировать ПДУ
 extra.key_current_transponder Текущий транспондер
-extra.ladirection LaDirection
+extra.ladirection Направление по широте
 extra.latitude Широта
-extra.loadcolors Загрузить цвета из
 extra.loadconfig Загрузить настройки из
 extra.loadkeys Загрузить кнопки из
-extra.lodirection LoDirection
+extra.lodirection Направление по долготе
 extra.logo Логотип
 extra.longitude Долгота
-extra.manual_scan Сканирование вручную
 extra.menu_left_exit "Влево" - выход из меню
 extra.north Север
 extra.record_time Время записи (часы)
@@ -340,19 +306,15 @@ extra.rotor_swap Поменять местами Восток/Запад
 extra.rounded_corners Форма углов
 extra.rounded_corners_off острые
 extra.rounded_corners_on скругленные
-extra.savecolors Сохранить цвета как
 extra.saveconfig Сохранить настройки как
 extra.savekeys Сохранить кнопки как
 extra.scan_fast Быстро
 extra.scan_full Полный
-extra.scan_mode Режим сканирования
 extra.sms_channel SMS-режим выбора канала
 extra.south Юг
-extra.spts_mode Режим SPTS
 extra.start_tostandby Запуск в standby
 extra.temp_timeshift Таймшифт
 extra.timeshift_pause Пауза таймшифт
-extra.timezone Часовой пояс
 extra.tp_fec FEC
 extra.tp_freq Частота
 extra.tp_mod Модуляция
@@ -363,33 +325,82 @@ extra.tp_mod_32 QAM/32
 extra.tp_mod_64 QAM/64
 extra.tp_pol Поляризация
 extra.tp_pol_h H
-extra.tp_rate Симв. скорость
+extra.tp_rate Символьная скорость
 extra.tp.pol_v V
 extra.update_dir Каталог для обновлений
 extra.use_gotoxx gotoXX
-extra.use_log Лог в /tmp/log
 extra.show_mute_icon Иконка при уровне звука 0
 extra.volume_pos Индикатор громкости
 extra.west Запад
 extra.zap_cycle Перебор каналов по кругу
-extra.zapit_backup Копия каналов в /tmp
-extra.zapit_fast_zap Быстрое переключение
 extra.zapit_fe_timeout Ожидание захвата (1=10 мс)
 extra.zapit_hvoltage Повышенное напряжение  (13.5/18.5 В)
-extra.zapit_make_bouquet Создать пакет "Прочее"
-extra.zapit_make_newbouquet Создать пакет "Новые"
+extra.zapit_make_bouquet Создать пакет "Прочие"
 extra.zapit_bouquetname_others Прочие
 extra.zapit_bouquetname_newchannels Новые каналы
 extra.zapit_menu Параметры Zapit
 extra.zapit_motor_speed Скорость (10=1 гр/с)
-extra.zapit_restore Восстановить каналы из /tmp
-extra.zapit_rezap_time Re-Zap on emu switch time
-extra.zapit_save_last_chan Помнить последний
-extra.zapit_scan_sdt Обновить SDT
 extra.zapit_scanpids Сканировать пиды
-extra.zapit_sdt_changed Каналы изменились, перегрузка настроек...
-extra.zapit_sort_names Сортировать каналы 
+extra.zapit_sdt_changed Каналы изменились, перезагрузка списка...
 extra.zapit_write_names Имена в bouquets.xml
+extramenu.fsck.boot Тест HDD при старте
+extramenu.fsck.shutdown Тест HDD при выключении
+extramenu.emu Меню Cam
+extramenu.emu.select Выбор Cam 
+extramenu.emu.restart Рестарт Cam
+extramenu.emu.disable Отключить Cam
+extramenu.disabled отключен.
+extramenu.enabled запущен.
+extramenu.swap.swapram SWAPRAM
+extramenu.swap.swappart SWAPPART
+extramenu.swap.swapfile SWAPFILE
+extramenu.swap.select Тип Swap 
+extramenu.settings Дополнения
+extramenu.tunerreset Рестарт тюнера
+extramenu.tunerreset.restarting Рестартуем тюнер...
+extramenu.boot.head Boot-менеджер 
+extramenu.boot.enigma2 E2
+extramenu.boot.spark Spark
+extramenu.boot.select Выбор системы:
+extramenu.boot.unchanged без изменений
+extramenu.boot.unsupported Режим E2 не поддерживается на этом STB!
+extramenu.boot.bootargs.head Параметры загрузки STB
+extramenu.boot.bootargs.text Не выключайте ваш STB!
+extramenu.boot.changed режим активирован. Перезагрузите STB!
+extramenu.boot.this Изменения в режим загрузки не произведены.
+extramenu.nfsserver NFS сервер
+extramenu.fritzcall Fritzcall монитор
+extramenu.evoluxupdate Обновление STB 
+extramenu.evoluxupdate.update Обновление прошивки
+extramenu.evoluxupdate.done Обновление закончено, перезагрузите STB!
+extramenu.evoluxupdate.notfound Обновлений нет.
+extramenu.evoluxupdate.updating Обновление найдено, подождите... 
+extramenu.glcd.volume Громкость
+extramenu.glcd.color.black Черный
+extramenu.glcd.color.white Белый
+extramenu.glcd.color.red Красный
+extramenu.glcd.color.green Зеленый
+extramenu.glcd.color.blue Синий
+extramenu.glcd.color.magenta Пурпурный
+extramenu.glcd.color.cyan Голубой
+extramenu.glcd.color.yellow Желтый
+extramenu.glcd.font Шрифт
+extramenu.glcd Внешний LCD
+extramenu.glcd.select.fg Цвет текста
+extramenu.glcd.select.bg Цвет фона
+extramenu.glcd.select.bar Цвет индикатора
+extramenu.glcd.size_channel Размер шрифта канала
+extramenu.glcd.size_epg Размер шрифта телегида
+extramenu.glcd.size_bar Размер индикатора
+extramenu.glcd.size_time Размер шрифта времени
+extramenu.glcd.restart Обновить
+extramenu.glcd.mirror_osd Показывать меню на LCD
+extramenu.glcd.time_in_standby Время в standby
+extramenu.kerneloptions Модули ядра
+extramenu.kerneloptions.apply Применить
+extramenu.kerneloptions.lsmod Статус
+extramenu.kerneloptions.modules Модули
+extramenu.kerneloptions.reset Сброс
 fan_speed Скорость кулера CPU
 favorites.addchannel Этот канал будет добавлен \nв пакет каналов "Избранное". \n Это займет несколько секунд...
 favorites.bouquetname Избранное
@@ -422,15 +433,13 @@ filesystem.is.utf8 Кодировка ФС
 filesystem.is.utf8.option.iso8859.1 ISO-8859-1
 filesystem.is.utf8.option.utf8 UTF-8
 flashupdate.actionreadflash Чтение
-flashupdate.cantopenfile Не могу открыть файл
-flashupdate.cantopenmtd Не могу открыть устройство mtd
+flashupdate.cantopenfile Не удалось открыть файл
+flashupdate.cantopenmtd Не удалось открыть устройство mtd
 flashupdate.checkupdate Поиск новой версии
-flashupdate.currentreleasecycle Версия релиза
 flashupdate.currentversion_sep Текущая версия
 flashupdate.currentversiondate Дата
-flashupdate.currentversionsnapshot Тип прошивки
 flashupdate.currentversiontime Время
-flashupdate.erasefailed Не могу стереть флеш
+flashupdate.erasefailed Не удалось стереть флеш
 flashupdate.erasing Стирание флеш
 flashupdate.experimentalimage Выбранная прошивка не проверена и ваш\nтюнер возможно не загрузится после обновления.\n\nВы действительно хотите обновить на эту версию?
 flashupdate.expertfunctions Экспертные функции
@@ -438,11 +447,13 @@ flashupdate.fileis0bytes Размер файла 0 байт
 flashupdate.fileselector Выбор файла
 flashupdate.flashreadyreboot Прошивка успешно записана.\nТюнер сейчас перегрузится.
 flashupdate.getinfofile Запрос версии
-flashupdate.getinfofileerror Не могу определить версию
+flashupdate.getinfofileerror Не удалось определить версию
 flashupdate.getupdatefile Обновление
-flashupdate.getupdatefileerror Не могу обновить
+flashupdate.getupdatefileerror Обновление не удалось
 flashupdate.globalprogress Общий прогресс:
 flashupdate.head Обновление софта
+flashupdate.new_found Найдена новая версия!
+flashupdate.new_notfound Новых версий не найдено
 flashupdate.md5check Проверка прошивки
 flashupdate.md5sumerror Прошивка без ошибок
 flashupdate.msgbox Найдена следующая новая прошивка:\nДата: %s, %s\nбазовый имидж: %s\nтип имиджа: %s\n\nХотите загрузить и установить эту версию сейчас? 
@@ -601,7 +612,6 @@ hdd_check Проверить файловую систему
 hdd_check_failed Тест провален!
 hdd_extended_settings Дополнительные параметры
 hdd_ext3 Ext3
-hdd_ext2 Ext2
 hdd_fast Быстро
 hdd_format Форматировать HDD
 hdd_format_failed Форматирование HDD неудачно!
@@ -612,6 +622,7 @@ hdd_middle Средне
 hdd_noise Скорость диска
 hdd_not_found  HDD не найден
 hdd_reiser ReiserFS
+hdd_removable_device Съемное устройство
 hdd_settings Настройки HDD
 hdd_sleep Отключить при простое через
 hdd_slow Медленно
@@ -626,28 +637,22 @@ imageinfo.image Образ:
 imageinfo.license Лицензия:
 imageinfo.version Версия:
 inetradio.name Интернет-радио
-infobar.bar_color Цвет панели
-infobar.picon Пикон канала
-infobar.picon_big большой
-infobar.picon_move SIG/SNR
-infobar.picon_normal нормальный
-infobar.picon_dir Путь для пиконов
-infobar.picon_dir_e2 Путь для пиконов E2
-infoviewer.epgnotload Телегид не найден
-infoviewer.epgwait Попытка получить программу передач...
+infoviewer.epgnotload Телегид отсутствует
+infoviewer.epgwait Загрузка программы передач...
 infoviewer.eventlist Телегид
 infoviewer.languages Аудио
 infoviewer.motor_moving Позиционирование антенны
 infoviewer.next Дальше
 infoviewer.nocurrent Нет информации о текущей передаче
-infoviewer.noepg Нет доступа к программе передач
-infoviewer.notavailable Канал не доступен
+infoviewer.noepg Программа передач отсутствует
+infoviewer.notavailable Канал недоступен
 infoviewer.now Сейчас
 infoviewer.selecttime Время выбора
 infoviewer.streaminfo Функции
 infoviewer.subchan_disp_pos Субканал
+infoviewer.subchan_infobar Полная инфопанель
 infoviewer.subservice Дополнительно
-infoviewer.waittime Попытка получить текущее время...
+infoviewer.waittime Получение текущего времени...
 ipsetup.hint_1 Используйте 0..9, или Up/Down,
 ipsetup.hint_2 OK - сохранено, EXIT - Отмена
 keybindingmenu.addrecord Добавить таймер записи
@@ -671,6 +676,14 @@ keybindingmenu.pageup Страница вверх
 keybindingmenu.poweroff Выключение
 keybindingmenu.quickzap Быстрый перебор каналов
 keybindingmenu.RC ПДУ
+keybindingmenu.remotecontrol_hardware Устройство
+keybindingmenu.remotecontrol_hardware_coolstream Coolstream
+keybindingmenu.remotecontrol_hardware_dbox d-box Nokia
+keybindingmenu.remotecontrol_hardware_msg_part1 Пульт ДУ изменен с '
+keybindingmenu.remotecontrol_hardware_msg_part2 ' на '
+keybindingmenu.remotecontrol_hardware_msg_part3 ' \nПрименить?\nПодтвердите выбор в течении 15 секунд.\nИначе изменения будут отменены.
+keybindingmenu.remotecontrol_hardware_philips Philips
+keybindingmenu.remotecontrol_hardware_tripledragon Triple Dragon
 keybindingmenu.repeatblock Задержка повтора
 keybindingmenu.repeatblockgeneric Общая задержка
 keybindingmenu.sort Порядок сортировки
@@ -692,26 +705,38 @@ keychoosermenu.setnone нет кнопки
 languagesetup.head Настройка языка
 languagesetup.osd Язык OSD 
 languagesetup.select Язык
+lcd_info_line показать в инфостроке
+lcd_info_line_channel имя канала
+lcd_info_line_clock время
 lcdcontroler.brightness В работе
 lcdcontroler.brightnessstandby В standby
+lcdcontroler.brightnessdeepstandby В выключенном состоянии
 lcdcontroler.contrast Контрастность
 lcdmenu.displaymode.running При включении
 lcdmenu.displaymode.standby В standby
 lcdmenu.displaymode.timeoff без времени
 lcdmenu.displaymode.timeonly только время
-lcdmenu.autodimm Автодиммер 
 lcdmenu.dim_brightness Яркость 
 lcdmenu.dim_time Тайм-аут диммера
 lcdmenu.head Настройки VFD дисплея
-lcdmenu.inverse Инвертировать изображение
 lcdmenu.lcdcontroler Контрастность / Яркость
-lcdmenu.power Питание
 lcdmenu.statusline В строке статуса
 lcdmenu.statusline.both Громкость / время
 lcdmenu.statusline.playtime Время 
 lcdmenu.statusline.volume Громкость
+ledcontroler.blink Мигать в standby, если установлен таймер
+ledcontroler.menu Светодиоды на передней панели
+ledcontroler.mode.deepstandby Выключено
+ledcontroler.mode.record Мигать при записи
+ledcontroler.mode.standby Standby
+ledcontroler.mode.tv ТВ-режим
+ledcontroler.off Led1 и Led2 выкл
+ledcontroler.on.all Led1 и Led2 вкл
+ledcontroler.on.led1 Led1 вкл
+ledcontroler.on.led2 Led2 вкл
 mainmenu.audioplayer Аудиоплеер
 mainmenu.clearsectionsd Очистить кеш телегида
+mainmenu.extramenu Дополнения
 mainmenu.games Игры
 mainmenu.head Главное меню
 mainmenu.movieplayer Видеоплеер
@@ -722,7 +747,6 @@ mainmenu.reboot Перезагрузить STB
 mainmenu.recording Запись
 mainmenu.recording_start Старт
 mainmenu.recording_stop Стоп
-mainmenu.scartmode SCART-режим
 mainmenu.scripts Скрипты
 mainmenu.service Сервисы
 mainmenu.settings Настройки
@@ -743,28 +767,27 @@ mainsettings.osd Настройки OSD
 mainsettings.recording Запись
 mainsettings.savesettingsnow Сохранить изменения
 mainsettings.savesettingsnow_hint Сохранение изменений...
-mainsettings.streaming Видеоплеер
 mainsettings.timezone Часовой пояс
 mainsettings.video Видео
+menu.next Дальше (нажмите Menu для выхода)
 menu.back Назад
 menu.cancel Отмена
+menu.numbers_as_icons Иконки меню 
 messagebox.back Назад
 messagebox.cancel Отменить
 messagebox.discard Отменить изменения?
 messagebox.error Ошибка!
 messagebox.info Информация
+messagebox.ok Ok
 messagebox.no Нет
 messagebox.yes Да
 messagebox.accept Применить?
-miscsettings.bootinfo Показывать информацию при старте
-miscsettings.bootmenu Показывать меню загрузки
 miscsettings.channellist Список каналов
 miscsettings.channellist_epgtext_align Выровнять текст
 miscsettings.channellist_colored_events Подсветка программ
 miscsettings.colored_events_0 Выкл
 miscsettings.colored_events_1 текущая
 miscsettings.colored_events_2 следующая
-miscsettings.driver_boot Загрузка системы 
 miscsettings.energy Энергосбережение
 miscsettings.epg_head Настройки телегида
 miscsettings.epg_cache Кеш телегида, дни
@@ -786,11 +809,11 @@ miscsettings.epg.freesat Freesat-телегид
 miscsettings.epg.freesat.enable Freesat-телегид
 miscsettings.epg.viasat VIASAT-телегид
 miscsettings.epg.viasat.enable VIASAT-телегид
+miscsettings.epg.batch.head Обновление телегида 
+miscsettings.epg.batch.settings Обновление телегида
 miscsettings.restart Изменения вступят в силу после перезагрузки.
-miscsettings.fb_destination Эксперт! Консоль загрузки
 miscsettings.general Общие
 miscsettings.head Прочие настройки
-miscsettings.hwsections Использовать раздел HW
 miscsettings.infobar Инфопанель
 miscsettings.infobar_sat_display Название спутника в инфопанели
 miscsettings.infobar_autoshow_if_cn Показать инфопанель при смене события
@@ -814,52 +837,48 @@ miscsettings.infobar_show_res Показывать иконку разрешен
 miscsettings.infobar_show_res_simple SD/HD
 miscsettings.infobar_show_dd_available Показывать иконку Dolby Digital
 miscsettings.radiotext Радиотекст
-miscsettings.noaviawatchdog Разрешить AVIA контроль
-miscsettings.noenxwatchdog Разрешить eNX контроль
-miscsettings.pmtupdate Разрешить обновление pmt
 miscsettings.shutdown_count Выключить после
 miscsettings.shutdown_count_hint1 Время (в минутах) до выключения в standby
 miscsettings.shutdown_count_hint2 в deep standby (0 = выкл).
 miscsettings.shutdown_real Разрешить standby
 miscsettings.shutdown_real_rcdelay Задержка выключения
 miscsettings.sleeptimer Таймер выключения
-miscsettings.sptsmode Использовать SPTS-Mode 
-miscsettings.virtual_zap_mode переключение
 miscsettings.zapto_pre_time Перейти на канал за, время (минуты)
-motorcontrol.calc_positions Пересчитать позиции
-motorcontrol.disable_limit Запретить лимиты (soft)
-motorcontrol.drive_mode Движение
-motorcontrol.drive_mode_auto Стоп движение/авто
-motorcontrol.east_limit Восточный предел (soft)
-motorcontrol.enable_limit Разрешить пределы (soft)
-motorcontrol.goto Идти на позицию (a)
-motorcontrol.halt Стоп мотор
-motorcontrol.head Настройки мотора
-motorcontrol.install_menu Установочное меню
-motorcontrol.motor_pos (a) Позиция мотора:
-motorcontrol.movement (b) Движение:
-motorcontrol.msec милисек.
-motorcontrol.no_mode Нет режима
-motorcontrol.notdef Не определен
-motorcontrol.pos_decrease Уменьшить позицию мотора (a)
-motorcontrol.pos_increase Увеличить позицию мотора (a)
-motorcontrol.ref_position Идти на позицию 0.
-motorcontrol.sat_pos Позиция спутника (пошагово):
-motorcontrol.settings Настройки управления мотором
+motorcontrol.calc_positions пересчитать позиции
+motorcontrol.disable_limit запретить пределы (soft)
+motorcontrol.drive_mode перемещение вручную
+motorcontrol.drive_mode_auto авто перемещение
+motorcontrol.east_limit восточный предел (soft)
+motorcontrol.enable_limit разрешить пределы (soft)
+motorcontrol.goto перейти на позицию (a)
+motorcontrol.halt стоп
+motorcontrol.head Настройка позиционера
+motorcontrol.install_menu Меню установок
+motorcontrol.motor_pos (a) Позиция:
+motorcontrol.movement (b) Тип движения:
+motorcontrol.msec мсек
+motorcontrol.no_mode не применимо
+motorcontrol.notdef действие не назначено 
+motorcontrol.override Перезаписать позицию для
+motorcontrol.pos_decrease уменьшить позицию (a)
+motorcontrol.pos_increase увеличить позицию (a)
+motorcontrol.ref_position перейти на позицию "0"
+motorcontrol.sat_pos Позиция спутника (пошагово): 
+motorcontrol.settings Настройки позиционера
 motorcontrol.status Состояние
-motorcontrol.step_decrease Уменьшить шаг (c)
-motorcontrol.step_drive Переключение  Шаг/движение (b)
-motorcontrol.step_east Шаг/движение на восток (b,c)
-motorcontrol.step_increase Увеличить шаг (c)
-motorcontrol.step_mode Пошагово
+motorcontrol.step_decrease уменьшить шаг (c)
+motorcontrol.step_drive переключить режим (b)
+motorcontrol.step_east движение на восток (b,c)
+motorcontrol.step_increase увеличить шаг (c)
+motorcontrol.step_mode пошагово
 motorcontrol.step_size (c) Размер шага:
-motorcontrol.step_west Шаг/движение на запад (b,c)
-motorcontrol.stop_moving Стоп на хорошем сигнале (движение)
-motorcontrol.stop_stopped Стоп на хорошем сигнале (остановка)
-motorcontrol.store Сохранить позицию мотора (a)
-motorcontrol.timed_mode Установить пошаговый режим
-motorcontrol.user_menu Пользовательское меню
-motorcontrol.west_limit Западный предел (soft)
+motorcontrol.step_west движение на запад (b,c)
+motorcontrol.stop_moving стоп при захвате
+motorcontrol.stop_stopped стоп при захвате
+motorcontrol.store сохранить позицию (a)
+motorcontrol.timed_mode по времени
+motorcontrol.user_menu Меню пользователя
+motorcontrol.west_limit западный предел (soft)
 moviebrowser.book_clear_all Очистить все
 moviebrowser.book_head Закладки
 moviebrowser.book_lastmoviestop Последняя остановка:
@@ -979,18 +998,11 @@ movieplayer.bookmark Закладки
 movieplayer.bookmarkname Название закладки
 movieplayer.bookmarkname_hint1 Введите название
 movieplayer.bookmarkname_hint2 для новой закладки
-movieplayer.buffering Буферизация...
-movieplayer.defdir Каталог по умолчанию
 movieplayer.defplugin Старт плагина
-movieplayer.dvdplayback Просмотр DVD
 movieplayer.fileplayback Просмотр медиа-файлов
-movieplayer.goto Перейти в ...
-movieplayer.goto.h1 = -> абсолютный переход
-movieplayer.goto.h2 +,- -> относительный переход
 movieplayer.head Видеоплеер
-movieplayer.nostreamingserver Стрим-сервер недоступен.
-movieplayer.pesplayback Просмотр PES-файлов
-movieplayer.pleasewait Подождите пожалуйста.\nСоединение со стрим-сервером...
+movieplayer.networkplayback Потоковое видео
+movieplayer.networkplayback.url URL потока
 movieplayer.toomanybookmarks Слишком много закладок.\n Удалите одну из уже существующих.
 movieplayer.tshelp1 Стоп 
 movieplayer.tshelp10 Назад на 10 мин. 
@@ -1005,20 +1017,6 @@ movieplayer.tshelp7 Вперед на 1 мин.
 movieplayer.tshelp8 Назад на 5 мин. 
 movieplayer.tshelp9 Вперед на 5 мин.
 movieplayer.tsplayback Просмотр TS-файлов
-movieplayer.vcdplayback Просмотр (S)VCD (VLC)
-movieplayer.vlchelp1 Стоп 
-movieplayer.vlchelp10 Назад на 10 мин. 
-movieplayer.vlchelp11 Вперед на 10 мин.
-movieplayer.vlchelp12 Подробнее смотри на: http://www.giggo.de/dbox2/movieplayer.html\n 
-movieplayer.vlchelp2 Ресинхронизазия
-movieplayer.vlchelp3 Пауза/продолжить
-movieplayer.vlchelp4 Добавить закладку 
-movieplayer.vlchelp5 Общее время
-movieplayer.vlchelp6 Назад на 1 мин. 
-movieplayer.vlchelp7 Вперед на 1 мин.
-movieplayer.vlchelp8 Назад на 5 мин. 
-movieplayer.vlchelp9 Вперед на 5 мин.
-movieplayer.wrongvlcversion Эта функция не поддерживается текущей версией VLC 
 mpkey.audio Аудио трек
 mpkey.bookmark Сохранить закладку
 mpkey.forward Вперед
@@ -1030,17 +1028,16 @@ mpkey.stop Стоп
 mpkey.time Отобразить время
 networkmenu.apply_settings Применение изменений...
 networkmenu.apply_settings_now Применить изменения сейчас?
-networkmenu.interface Интерфейс
 networkmenu.broadcast Широковещательный
 networkmenu.dhcp DHCP
 networkmenu.gateway Основной шлюз
-networkmenu.head Настройки сети
 networkmenu.hostname Сетевое имя
 networkmenu.ipaddress IP-адрес
+networkmenu.error_no_address Пропущен %s-адрес!
 networkmenu.mount NFS/CIFS/FTPFS
 networkmenu.nameserver DNS-сервер
 networkmenu.netmask Маска подсети
-networkmenu.ntpenable Синхронизация
+networkmenu.ntpenable Синхронизация через
 networkmenu.ntprefresh Интервал NTP/DVB (минуты)
 networkmenu.ntprefresh_hint1 Время в минутах
 networkmenu.ntprefresh_hint2 Нужна перезагрузка STB, или обновление телегида
@@ -1053,14 +1050,11 @@ networkmenu.setupnow Применить изменения
 networkmenu.setuponstartup Запуск сети при старте
 networkmenu.show Текущие настройки
 networkmenu.test Тест сетевого соединения
-networkmenu.wlan Настройки WLAN
-networkmenu.wlan.essid Имя сети
-networkmenu.wlan.key Ключ
-networkmenu.wlan.mode Безопасность
-networkmenu.wlan.apply Применить
-networkmenu.wlan.reset Сбросить
-networkmenu.setup_title Настройка сети
-networkmenu.setup_hint Обновление настроек. Подождите, пожалуйста ...
+networkmenu.inactive_network Сеть неактивна!
+networkmenu.password Ключ сети
+networkmenu.reset_settings_now Восстановить предыдущие настройки?
+networkmenu.ssid Имя сети
+networkmenu.wlan_security Безопасность
 neutrino_starting Старт Neutrino...
 nfs.alreadymounted Уже подключен
 nfs.automount Подключать при включении
@@ -1092,6 +1086,8 @@ nvodselector.subservice Выбор субканала
 options.default Настройки по умолчанию
 options.fb Буфер кадров
 options.null null
+options.ntp_off DVB
+options.ntp_on NTP
 options.off Выкл
 options.on Вкл
 options.on.without_messages молча
@@ -1131,7 +1127,7 @@ personalize.help_line3 отображены, быть  активными или
 personalize.help_line4 PIN-кодом.
 personalize.help_line5  Доступ к личным  настройкам  так же можно защитить
 personalize.help_line6 PIN-кодом, который  одинаков для  всех  групп  меню
-personalize.help_line7 (это не относится к PIN-коду возрастной защиты).
+personalize.help_line7 (это не относится к PIN-коду родительского контроля)
 personalize.help_line8 PIN по умолчанию: 0000
 personalize.menuconfiguration Конфигурация меню
 personalize.menudisabledhint Текущее меню сейчас отключено!\nДля активации используйте "Настройки пользователя".
@@ -1142,14 +1138,12 @@ personalize.pin_in_use Доступ по PIN-коду
 personalize.pincode PIN-код
 personalize.pinhint Введите PIN-код
 personalize.pinprotect да
-personalize.pinstatus требуется PIN
+personalize.pinstatus - требовать ввод PIN кода
 personalize.plugins Плагины
 personalize.setupmenuwithpin Меню настроек с PIN-кодом
 personalize.usermenu_preferred_buttons Назначение кнопок
 personalize.usermenu_show_cancel Пункт меню "Отмена"
 personalize.visible отобразить
-pictureviewer.decode_server_ip Адрес декодирующего сервера
-pictureviewer.decode_server_port Порт декодирующего сервера
 pictureviewer.defdir Каталог по умолчанию
 pictureviewer.head Просмотр фотографий
 pictureviewer.help1 Режим меню
@@ -1168,7 +1162,7 @@ pictureviewer.help20 Смена порядка сортировки
 pictureviewer.help21 В оригнальный размер
 pictureviewer.help22 Выход
 pictureviewer.help3 Смена порядка сортировки
-pictureviewer.help4 Не менять размеры
+pictureviewer.help4 Не изменять размер
 pictureviewer.help5 Режим слайдов
 pictureviewer.help6 Предыдущая картинка
 pictureviewer.help7 Следующая картинка
@@ -1181,7 +1175,6 @@ pictureviewer.scaling Масштабирование
 pictureviewer.show Показать
 pictureviewer.slide_time Задержка в режиме слайдов
 pictureviewer.slideshow Режим слайдов
-pictureviewer.sortorder Порядок сортировки
 pictureviewer.sortorder.date (дата)
 pictureviewer.sortorder.filename (имя файла)
 ping.ok Доступен (ping)
@@ -1190,13 +1183,12 @@ ping.socket Недоступен (ошибка сокета)
 ping.unreachable Недоступен
 pinprotection.head Введите PIN-код
 pinprotection.wrongcode Неверный PIN-код! Повторите ввод.
-play.button.action "Play"
 plugins.hdd_dir Каталог плагинов на HDD:
 plugins.result Вывод плагина
 progressbar.color Цветные индикаторы
 rclock.lockmsg Ваш пульт управления заблокирован.\n Для разблокирования, нажмите <КРАСНУЮ> \n и <MENU> на вашем пульте управления.
 rclock.menueadd Заблокировать ПДУ 
-rclock.title Заблокировать Пульт управления
+rclock.title Заблокировать пульт управления
 rclock.unlockmsg Пульт управления активирован.
 recording.is_running Запись этого канала уже активна!
 recording.start Начало записи, подождите...
@@ -1205,47 +1197,29 @@ recordingmenu.apids Аудио потоки
 recordingmenu.apids_ac3 AC3 поток
 recordingmenu.apids_alt Другие потоки
 recordingmenu.apids_std Основной поток
-recordingmenu.choose_direct_rec_dir Куда вести запись
 recordingmenu.defdir Путь для записи
 recordingmenu.dvbsub_pids Запись субтитров
 recordingmenu.end_of_recording_epg по событию телегида
 recordingmenu.end_of_recording_max по максимальному времени
 recordingmenu.end_of_recording_name Окончание записи
-recordingmenu.epg_for_filename Имя файла с данными о программе
 recordingmenu.file direkt (в файл)
-recordingmenu.filesettings Настройки direkt (в файл)
-recordingmenu.head Настройки записи
 recordingmenu.help Режимы записи:\n--------------------------\nсервер:\nиспользуется софт установленный на ПК\n\n(analog) vcr:\nиспользуется выход vcr\n\ndirect (в файл):\nзапись в предварительно монтированный NFS-каталог\nили в каталоги внутреннего жесткого диска\nTS: использует spts-режим (для dbox2)\nPES: spts-режим должен быть выключен (для dbox2)\n\n\nМакс.размер файла:\n---------------------\nNFS V2: 2 GB (2048 MB)\nNFS V3: без ограничений (0 MB)\nFAT: 2 GB (2048 MB)\nFAT32: 4 GB (4096 MB)
-recordingmenu.no_scart Не переключаться на SCART
 recordingmenu.off Выкл
 recordingmenu.multimenu.ask_stop_all Остановить все %d записи?
 recordingmenu.multimenu.info_stop_all %d из %d записей будут остановлены.
 recordingmenu.multimenu.rec_akt Запись текущего канала
 recordingmenu.multimenu.stop_all Остановить все
 recordingmenu.multimenu.timeshift Таймшифт
-recordingmenu.record_in_spts_mode Переключить в spts режим перед записью
-recordingmenu.recording_type Режим записи
 recordingmenu.record_is_not_running Запись не включена!
 recordingmenu.record_is_running Запись активна!
 recordingmenu.pmt_pid Запись PMT
 recordingmenu.vtxt_pid Запись телетекста
-recordingmenu.ringbuffers Значение для ringbuffers
 recordingmenu.save_in_channeldir Создать каталог по имени канала
 recordingmenu.server Сервер
-recordingmenu.server_ip IP-адрес сервера записи
 recordingmenu.server_mac MAC-адрес
-recordingmenu.server_port Порт сервера записи
-recordingmenu.server_wakeup WOL сервера записи
 recordingmenu.setupnow Применить изменения
-recordingmenu.splitsize Макс.размер файла (MB)
-recordingmenu.stopplayback Остановить воспроизведение
-recordingmenu.stopsectionsd Остановить sectionsd
-recordingmenu.stream_pmt_pid Записать PMT
-recordingmenu.stream_vtxt_pid Запись телетекста
 recordingmenu.timeshift Таймшифт
 recordingmenu.tsdir Каталог для таймшифт-записи
-recordingmenu.use_fdatasync Синхрозапись (fdatasync)
-recordingmenu.use_o_sync Синхронизация (O_SYNC)
 recordingmenu.vcr VCR
 recordingmenu.zap_on_announce Переключение при записи
 recordtimer.announce Запись начинается через несколько минут
@@ -1255,17 +1229,6 @@ reset_all Полный сброс STB
 reset_channels Удалить все каналы
 reset_confirm Вы уверены?
 reset_settings Сброс настроек
-rfmod.carrier Частота
-rfmod.carrier4500 4.5
-rfmod.carrier5500 5.5
-rfmod.carrier6000 6.0
-rfmod.carrier6500 6.5
-rfmod.channel Канал
-rfmod.enable Включить звук
-rfmod.finetune Точная настройка
-rfmod.rfmod RF модулятор
-rfmod.standby Включить модулятор
-rfmod.test Тестовый шаблон
 satsetup.auto_scan Сканировать спутник
 satsetup.auto_scan_all Сканировать все спутники
 satsetup.comm_input Commited вход
@@ -1273,36 +1236,45 @@ satsetup.diseqc DiSEqC
 satsetup.diseqc_advanced Расширенный
 satsetup.diseqc_com_uncom Commited/Uncommited
 satsetup.diseqc_input Diseqc вход
-satsetup.diseqc_order Input order
 satsetup.diseqc_uncom_com Uncommited/Commited
 satsetup.diseqc10 DiSEqC 1.0
 satsetup.diseqc11 DiSEqC 1.1
 satsetup.diseqc12 DiSEqC 1.2
 satsetup.diseqcrepeat DiSEqC-повторы
-satsetup.do_scan Включить во все скан.
 satsetup.extended Настройки DiSEqC
-satsetup.extended_motor Настройки мотора
+satsetup.extended_motor Дополнительные настройки
+satsetup.fastscan_all SD и HD
+satsetup.fastscan_hd только HD 
+satsetup.fastscan_head Быстрый поиск (Astra 19.2E, 12.515Mhz)
+satsetup.fastscan_prov Провайдер
+satsetup.fastscan_prov_cd CanalDigitaal
+satsetup.fastscan_prov_telesat TeleSAT
+satsetup.fastscan_prov_tvv TV Vlaanderen
+satsetup.fastscan_sd только SD
+satsetup.fastscan_type Режим поиска
 satsetup.lofh LNB High Offset
 satsetup.lofl LNB Low Offset
 satsetup.lofs LNB switch Offset
 satsetup.manual_scan Сканирование вручную
 satsetup.minidiseqc Мини-DiSEqC
-satsetup.motor_pos Позиция мотора
-satsetup.motorcontrol Ручная настройка мотора
+satsetup.motor_pos Позиция
 satsetup.nodiseqc Без DiSEqC
 satsetup.sat_setup Настройка LNB 
 satsetup.satellite Спутник
-satsetup.savesettingsnow Сохранить изменения
 satsetup.smatvremote SMATV
 satsetup.uncomm_input Uncommited вход
 satsetup.usals_repeat Повторы USALS
 satsetup.use_nit Использовать NIT
-satsetup.use_usals Использовать usals
+satsetup.use_usals Использовать USALS
 satsetup.use_fta_flag Только FTA каналы
-scale.display_type Вид индикатора
-scale.display_type_dots Точки
-scale.display_type_full Сплошной
-scale.display_type_rainbow Радуга
+sc.empty Нет сарты в слоте
+sc.init_failed Карта не определена
+sc.init_ok Карта успешно опознана
+sc.inserted Карта вставлена
+sc.removed Карта извлечена
+sc.reset Сброс карты
+sc.timeout Таймаут карты
+sc.waiting Ожидание ответа от карты
 scants.abort_body Действительно прервать поиск?
 scants.abort_header Прекратить сканирование каналов
 scants.actcable Кабель:
@@ -1318,7 +1290,7 @@ scants.failed Неудачное сканирование транспондер
 scants.finished Сканирование транспондеров завершено!
 scants.freqdata Частота:
 scants.head Сканирование транспондеров
-scants.numberofdataservices  Data
+scants.numberofdataservices Data
 scants.numberofradioservices Радио
 scants.numberoftotalservices Всего
 scants.numberoftvservices ТВ
@@ -1351,17 +1323,17 @@ servicemenu.imageinfo Информация о прошивке
 servicemenu.reload Перезагрузить список
 servicemenu.reload_hint Перезагрузка списка каналов,\nвыполняется...
 servicemenu.restart Рестарт Neutrino
-servicemenu.restart_failed Рестарт неудачен!
 servicemenu.restart_hint Перезапуск, ждите...
 servicemenu.restart_refused_recording Запись активна, перезапуск отменен
 servicemenu.scants Поиск каналов
-servicemenu.ucodecheck Проверка ucodes
 servicemenu.update Обновление прошивки
 settings.backup Резервное копирование прошивки
+settings.backup_failed Резервное копирование не удалось!
 settings.help Помощь
 settings.missingoptionsconffile Настройки системы обновлены.\nНовые установки заменят настройки по умолчанию.
 settings.noconffile Настройки системы отсутствуют.\nИспользуются настройки по умолчанию.
 settings.menu_pos Положение меню
+settings.pos_off Выкл
 settings.pos_bottom_left внизу слева
 settings.pos_bottom_right внизу справа
 settings.pos_top_left вверху слева
@@ -1378,11 +1350,10 @@ sleeptimerbox.hint2 STB будет выключен через указанно�
 sleeptimerbox.title Таймер перехода в дежурный режим
 sleeptimerbox.hint3 STB будет выключен через указанное время.
 sleeptimerbox.title2 Таймер отключения STB
-streamfeatures.head Меню дополнений
 streaminfo.aratio Аспект 
 streaminfo.aratio_unknown Неизвестен
+streaminfo.average_bitrate avg
 streaminfo.audiotype Аудио
-streaminfo.audiotype_unknown Неизвестен
 streaminfo.bitrate Битрейт
 streaminfo.framerate Фреймрейт
 streaminfo.framerate_unknown Неизвестен
@@ -1390,36 +1361,9 @@ streaminfo.head Информация о потоке
 streaminfo.not_available Не доступен
 streaminfo.resolution Разрешение
 streaminfo.signal Сигнал
-streaming.buffer_overflow Запись прервана,\n скорость получения данных низкая.
-streaming.busy Идет запись!\n Если запись не включена, а Вы получили это сообщение, то пожалуйста перегрузите Neutrino.
+streaming.busy Идет запись!\n Если запись не включена, а Вы получили это сообщение, то пожалуйста, перегрузите Neutrino.
 streaming.dir_not_writable Нет доступа в папку для записи.\nЗапись невозможна.
-streaming.success Запись прошла успешно.
-streaming.write_error Запись прервана,\n ошибка в процессе самой записи.
-streaming.write_error_open Запись прервана,\n файл для записи не может быть открыт.
-streamingmenu.352x288 352x288
-streamingmenu.352x576 352x576
-streamingmenu.480x576 480x576
-streamingmenu.704x576 704x576
-streamingmenu.head Настройки видеоплеера
-streamingmenu.mpeg1 MPEG1
-streamingmenu.mpeg2 MPEG2
-streamingmenu.off Откл
-streamingmenu.on Вкл
-streamingmenu.server_ip IP-адрес стрим-сервера
-streamingmenu.server_port Порт стрим-сервера
-streamingmenu.streaming_audiorate Аудио-поток (kbs)
-streamingmenu.streaming_force_avi_rawaudio AC3 для AVI
-streamingmenu.streaming_force_transcode_video Транскод видео (MPG/VCD)
-streamingmenu.streaming_resolution Размер кадра
-streamingmenu.streaming_server_cddrive DVD-привод
-streamingmenu.streaming_server_startdir Каталог (VLC)
-streamingmenu.streaming_transcode_audio Транскод аудио (DVD/VCD/MPG)
-streamingmenu.streaming_transcode_video_codec Видео-кодек MPEG
-streamingmenu.streaming_type Стрим-сервер
-streamingmenu.streaming_videorate Видео-поток (kbs)
-streamingserver.noconnect Нет соединения со стрим-сервером.\nПринятие данных остановлено.
-stringinput.insert Вставить
-stringinput.clear_all Удалить все
+streaming.write_error Запись прервана,\n ошибка в процессе записи.
 stringinput.caps Большие / маленькие
 stringinput.clear Удалить
 subtitles.head Субтитры
@@ -1431,7 +1375,7 @@ three.d.settings.general Режим
 three.d.sideside Сторона к стороне
 three.d.tile Мозаика
 three.d.topbottom Сверху и снизу
-timer.eventrecord.msg   ... Делать или не делать? ;-)
+timer.eventrecord.msg Добавление программы в расписание записи
 timer.eventrecord.title Расписание записи
 timer.eventtimed.msg Событие запланировано.\nВаш ресивер будет включен и \nпереключится на этот канал в заданное время.
 timer.eventtimed.title Расписание событий
@@ -1441,6 +1385,8 @@ timerlist.alarmtime Старт:
 timerlist.apids Аудио PIDs
 timerlist.apids_dflt Записать аудио поток по умолчанию
 timerlist.bouquetselect Выбор пакета
+timerlist.batchepg Обновление телегида
+timerlist.type.batchepg Обновление телегида
 timerlist.channel Канал
 timerlist.channelselect Выбор канала
 timerlist.delete Удалить
@@ -1506,7 +1452,6 @@ timersettings.separator Настройки таймера
 timing.chanlist Список каналов
 timing.epg Телегид
 timing.filebrowser Проводник по каталогам
-timing.head Время показа OSD
 timing.hint_1 Время в секундах. После этого
 timing.hint_2 инфопанель будет прозрачной.
 timing.infobar Инфопанель
@@ -1514,12 +1459,6 @@ timing.infobar_movieplayer Инфопанель (мультимедия)
 timing.infobar_radio Инфопанель (радио режим)
 timing.menu Меню
 timing.numericzap Набор цифр с пульта
-ucodecheck.avia500 Avia 500
-ucodecheck.avia600 Avia 600
-ucodecheck.cam-alpha Cam-Alpha
-ucodecheck.head Проверка UCode
-ucodecheck.ucode UCode
-ucodes.failure ВНИМАНИЕ, , mCodes нет в наличии!\nПожалуйста загрузите их через FTP(или с помощью DBox-BootManager),\nзатем перегрузите ваш box!
 upnpbrowser.head Браузер UPnP
 upnpbrowser.noservers Не найдено UPnP сервисов!
 upnpbrowser.rescan Отсканируйте снова
@@ -1529,13 +1468,16 @@ usermenu.button_green Зеленое меню
 usermenu.button_red Красное меню
 usermenu.button_yellow Желтое меню
 usermenu.head Меню пользователя
+usermenu.item_adzap Автопереключение
 usermenu.item_bar ---- полоса ----
 usermenu.item_epg_misc Функции телегида
 usermenu.item_none Ничего
 usermenu.item_vtxt Телетекст
 usermenu.name Имя
-usermenu.item_adzap Автопереключение
-video_mode_ok Этот видео-режим вас устраивает?
+usermenu.msg_info_is_empty Вы не назначили имя для этого меню!\nИспользуется имя по умолчанию:\n
+usermenu.msg_warning_name Вы назначили более одного пункта меню,\nно не назначили имя для этого меню.\nРекомендуется ввести новое имя!
+usermenu.msg_warning_no_items Не назначены пункты меню!\nИмя будет сброшено!
+video_mode_ok Этот режим вас устраивает?
 videomenu.43mode Масштаб 4:3 
 videomenu.analog_hd_rgb_cinch RGB (HD)
 videomenu.analog_hd_rgb_scart RGB (HD)
@@ -1547,6 +1489,11 @@ videomenu.analog_sd_rgb_scart RGB (SD)
 videomenu.analog_sd_yprpb_cinch YPbPr (SD)
 videomenu.analog_sd_yprpb_scart YPbPr (SD)
 videomenu.auto Авто
+videomenu.brightness Яркость
+videomenu.contrast Контраст
+videomenu.hue Тон
+videomenu.saturation Насыщенность
+videomenu.sharpness Четкость
 videomenu.cinch RCA-выход
 videomenu.csync Коррекция синхронизации
 videomenu.dbdr MPEG2 de-block
@@ -1554,39 +1501,39 @@ videomenu.dbdr_both de-block+de-ring
 videomenu.dbdr_deblock de-block
 videomenu.dbdr_none Выкл
 videomenu.enabled_modes Режимы кнопки V.Format
-videomenu.fullscreen Полный экран
-videomenu.hdmi_color_space HDMI-выход
+videomenu.fullscreen Растянуть
 videomenu.hdmi_cec CSTLink (HDMI-CEC)
-videomenu.hdmi_cec_mode Режим
+videomenu.hdmi_cec_mode Активировать HDMI-CEC
 videomenu.hdmi_cec_mode_off Выкл
 videomenu.hdmi_cec_mode_recorder как Sat/Cable PVR
 videomenu.hdmi_cec_mode_tuner как Sat/Cable STB
 videomenu.hdmi_cec_standby Разрешить CEC standby
+videomenu.hdmi_cec_standby_not_timer по таймеру
 videomenu.hdmi_cec_view_on Разрешить CEC View on
-videomenu.head Настройки изображения
 videomenu.letterbox Letterbox
-videomenu.osd OSD
 videomenu.panscan Pan&Scan
-videomenu.panscan2 14:9 Pan&Scan
-videomenu.rgb_centering Центровка RGB
+videomenu.panscan2 Полный экран
 videomenu.scart SCART-выход
 videomenu.screensetup Настройка экрана
 videomenu.tv-scart Видео выходы
-videomenu.vcr-scart VCR SCART
 videomenu.vcrsignal Тип выходного сигнала VCR
 videomenu.vcrsignal_composite CVBS
 videomenu.vcrsignal_svideo S-Video
-videomenu.vcrswitch Авто-включение на SCART
 videomenu.videoformat Формат
 videomenu.videoformat_149 14:9
 videomenu.videoformat_169 16:9
 videomenu.videoformat_43 4:3
-videomenu.videoformat_autodetect Авто-формат
 videomenu.videomode Видео режим
-videomenu.videomode_auto Конфигурация авторазрешения
-videomenu.videomode_ntsc NTSC
-videomenu.videomode_pal PAL
-videomenu.videomode_palm PAL-M
+videomenu.psi.contrast Контраст
+videomenu.psi.saturation Насыщенность
+videomenu.psi.brightness Яркость
+videomenu.psi.tint Тон
+videomenu.psi Настройки цвета
+videomenu.psi.reset Сброс
+videomenu.psi.step Шаг настройки
+wizard.welcome_head Добро пожаловать в мастер установки!
+wizard.welcome_text Следующие шаги помогут вам в первоначальной настройке устройства.\nВнимание: Ваш STB может управляться через веб-интерфейс,\nс помощью которого можно назначать таймеры записи, просматривать видео поток в веб-браузере и т.д.\nНе делайте ваш STB доступным по сети для кого попало!\nПродолжить настройку?
+word.from c
 zapit.scantype Каналы
 zapit.scantype.all Все
 zapit.scantype.radio Только радио
@@ -1598,157 +1545,3 @@ zapitsetup.last_radio Радио канал
 zapitsetup.last_tv ТВ канал
 zapitsetup.last_use Старт с последнего канала
 zaptotimer.announce Таймер переключения канала\n сработает через 1 минуту
-mainmenu.extramenu Дополнения
-extramenu.tunerreset Рестарт тюнера
-extramenu.tunerreset.select Рестарт тюнера
-extramenu.tunerreset.on Вкл
-extramenu.tunerreset.off Выкл
-extramenu.tunerreset.restarting Рестартуем тюнер...
-extramenu.tunerreset.restart Перезапуск тюнера
-extramenu.correctvolume Коррекция уровня звука
-extramenu.correctvolume.select Коррекция уровня
-extramenu.correctvolume.on Вкл
-extramenu.correctvolume.off Выкл
-extramenu.amount Меню Amount
-extramenu.amount.select Amount
-extramenu.amount.on Вкл
-extramenu.amount.off Выкл
-extramenu.displaytime Меню DisplayTime
-extramenu.displaytime.select DisplayTime
-extramenu.displaytime.on Вкл
-extramenu.displaytime.off Выкл
-extramenu.wwwdate Меню wwwDate
-extramenu.wwwdate.select wwwDate
-extramenu.wwwdate.on Вкл
-extramenu.wwwdate.off Выкл
-extramenu.checkfs Меню CheckFS
-extramenu.checkfs.select CheckFS
-extramenu.checkfs.on Вкл
-extramenu.checkfs.off Выкл
-extramenu.fsck.boot Тест HDD при старте
-extramenu.fsck.shutdown Тест HDD при выключении
-extramenu.emu Меню Cam
-extramenu.emu.none нет
-extramenu.emu.mgcamd MGCamd
-extramenu.emu.incubus IncubusCamd
-extramenu.emu.camd3 Camd3
-extramenu.emu.mbox Mbox
-extramenu.emu.oscam Oscam
-extramenu.emu.spcs Spcs
-extramenu.emu.select Выбор Cam 
-extramenu.emu.restart Рестарт Cam
-extramenu.emu.disable Отключить Cam
-extramenu.disabled отключен.
-extramenu.enabled запущен.
-extramenu.swap Меню Swap
-extramenu.swap.swapram SWAPRAM
-extramenu.swap.swappart SWAPPART
-extramenu.swap.swapfile SWAPFILE
-extramenu.swap.select Тип Swap 
-extramenu.swap.onoff SWAP
-extramenu.boot.head Boot-менеджер 
-extramenu.boot.select Выбор системы:
-extramenu.boot.unchanged без изменений
-extramenu.boot.bootargs.head Параметры загрузки STB
-extramenu.boot.bootargs.text Не выключайте ваш STB!
-extramenu.boot.changed режим активирован. Перезагрузите STB!
-extramenu.boot.this Изменения в режим загрузки не произведены.
-extramenu.fsck Меню FSCK
-extramenu.fsck.select FSCK
-extramenu.fsck.on Вкл
-extramenu.fsck.off Выкл
-extramenu.nfsserver NFS сервер
-extramenu.nfsserver.select NFS сервер
-extramenu.nfsserver.on Вкл
-extramenu.nfsserver.off Выкл
-extramenu.stmfb Меню STMFB
-extramenu.stmfb.select STMFB 15m
-extramenu.stmfb.on Вкл
-extramenu.stmfb.off Выкл
-extramenu.fritzcall Fritzcall монитор
-extramenu.fritzcall.select Fritzcall
-extramenu.fritzcall.on Вкл
-extramenu.fritzcall.off Выкл
-extramenu.evoluxupdate Обновление STB 
-extramenu.evoluxupdate.select Обновить?
-extramenu.evoluxupdate.on Да
-extramenu.evoluxupdate.off Нет
-extramenu.evoluxupdate.update Обновление прошивки
-extramenu.evoluxupdate.done Обновление закончено, перезагрузите STB!
-extramenu.evoluxupdate.notfound Обновлений нет.
-extramenu.evoluxupdate.updating Обновление найдено, подождите... 
-extramenu.glcd.volume Громкость
-extramenu.glcd.color.black Черный
-extramenu.glcd.color.white Белый
-extramenu.glcd.color.red Красный
-extramenu.glcd.color.green Зеленый
-extramenu.glcd.color.blue Синий
-extramenu.glcd.color.magenta Пурпурный
-extramenu.glcd.color.cyan Голубой
-extramenu.glcd.color.yellow Желтый
-extramenu.glcd.font Шрифт
-extramenu.glcd Внешний LCD
-extramenu.glcd.select.fg Цвет текста
-extramenu.glcd.select.bg Цвет фона
-extramenu.glcd.select.bar Цвет индикатора
-extramenu.glcd.size_channel Размер шрифта канала
-extramenu.glcd.size_epg Размер шрифта телегида
-extramenu.glcd.size_bar Размер индикатора
-extramenu.glcd.size_time Размер шрифта времени
-extramenu.glcd.restart Обновить
-extramenu.glcd.mirror_osd Показывать меню на LCD
-extramenu.glcd.time_in_standby Время в standby
-extramenu.wlan Меню WLAN 
-extramenu.wlan.select WLAN
-extramenu.wlan.on Вкл
-extramenu.wlan.off Выкл
-extramenu.kerneloptions Модули ядра
-extramenu.kerneloptions.apply Применить
-extramenu.kerneloptions.lsmod Статус
-extramenu.kerneloptions.modules Модули
-extramenu.kerneloptions.reset Сброс
-setting.saved Настройки сохранены 
-dvb.subtitle.placement Расположение субтитров
-dvb.subtitle.placement.bottom вверху
-dvb.subtitle.placement.top снизу
-onoff.on Вкл
-onoff.off Выкл
-videomenu.psi.contrast Контраст
-videomenu.psi.saturation Насыщенность
-videomenu.psi.brightness Яркость
-videomenu.psi.tint Тон
-videomenu.psi Настройки цвета
-videomenu.psi.reset Сброс
-videomenu.psi.step Шаг настройки
-adzap Автопереключение
-adzap.announce Возвращаемся назад, к  
-adzap.cancel Таймер отменен
-adzap.enable Включить один раз
-adzap.disable Отключить
-adzap.monitor Включить на сессию
-adzap.minute минуты
-adzap.minutes минут
-adzap.switchback Переключить назад после
-adzap.commit Выбор режима:
-lcdmenu.displaymode.timeonly время
-lcdmenu.displaymode.timeoff без времени
-lcdmenu.displaymode Режим
-lcdmenu.standby Standby
-menu.numbers_as_icons Иконки меню 
-fontsize.percent Масштаб шрифта (%)
-menu.infobar_cn Инфопанель по событию
-miscsettings.epg.batch.head Обновление телегида 
-miscsettings.epg.batch.settings Обновление телегида
-timerlist.batchepg Обновление телегида
-timerlist.type.batchepg Обновление телегида
-batchepg.epg.standard стандарт
-batchepg.epg.off нет
-batchepg.save Сохранить
-batchepg.refresh Начать обновление
-batchepg.refreshall Обновить все
-batchepg.settings Настройки
-batchepg.hint Данные телегида обновляются, подождите. Канал:
-batchepg.shutdown Данные телегида обрабатываются.
-batchepg.run_at_shutdown Обновить перед выкл.
-batchepg.standard_wait_time Тайм-аут телегида
-word.from c
