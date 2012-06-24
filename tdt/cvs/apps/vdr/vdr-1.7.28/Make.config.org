@@ -1,0 +1,61 @@
+#
+# User defined Makefile options for the Video Disk Recorder
+#
+# Copy this file to 'Make.config' and change the parameters as necessary.
+#
+# See the main source file 'vdr.c' for copyright information and
+# how to reach the author.
+#
+# $Id: Make.config.template 2.2 2010/02/06 14:50:03 kls Exp $
+
+### The C compiler and options:
+
+CC       = gcc
+CFLAGS   = -g -O2 -Wall
+
+CXX      = g++
+CXXFLAGS = -g -O2 -Wall -Woverloaded-virtual -Wno-parentheses
+
+ifdef PLUGIN
+CFLAGS   += -fPIC
+CXXFLAGS += -fPIC
+endif
+
+INCLUDES = -I$(TOOLCHAIN_DIR)/include -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/GraphicsMagick$(if $(CONFIG_AB43_SETUP), -I$(STAGING_DIR)/usr/lib/libiconv/include)$(if $(CONFIG_USE_UCLIBC), -I$(STAGING_DIR)/usr/lib/libiconv-full/include)$(if $(CONFIG_USE_UCLIBC), -I$(STAGING_DIR)/usr/lib/libintl-full/include)
+LIBS     = -L$(STAGING_DIR)/usr/lib -ljpeg -lpthread -ldl -lrt -lfreetype -lexpat -lfontconfig -lz$(if $(CONFIG_USE_UCLIBC), -L$(STAGING_DIR)/usr/lib/libiconv-full/lib -liconv)$(if $(CONFIG_USE_UCLIBC), -L$(STAGING_DIR)/usr/lib/libintl-full/lib -lintl)$(if $(CONFIG_AB43_SETUP), -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv)
+DEFINES  += $(BUILD_CFLAGS)
+
+ifdef HAS_LIBCAP
+LIBS     += -lcap
+endif
+
+### The directory environment:
+
+#DVBDIR   = /usr/src/v4l-dvb/linux
+#DVBDIR   = $(LINUX_DIR)
+BINDIR   = /usr/bin
+MANDIR   = /usr/share/man
+
+LOCDIR   = /usr/share/locale
+PLUGINDIR= ./PLUGINS
+PLUGINLIBDIR= /usr/lib/vdr
+VIDEODIR = /media/video
+CONFDIR  = /etc/vdr
+
+### The remote control:
+
+LIRC_DEVICE = /dev/lircd
+RCU_DEVICE  = /dev/ttyAS1
+
+## Define if you want vdr to not run as root
+#VDR_USER = vdr
+
+### You don't need to touch the following:
+
+ifdef DVBDIR
+INCLUDES += -I$(DVBDIR)/include
+endif
+
+DEFINES += $(EXT_DEFINES)
+
+#INCLUDES += -I$(prefix)/usr/include/GraphicsMagick

@@ -8,7 +8,7 @@ mknod /dev/vfd c 147 0 2>/dev/null
 mknod /dev/rc c 147 1 2>/dev/null
 mknod /dev/sci0 c 169 0 2>/dev/null
 insmod $MODDIR/aotom.ko
-if [ -e /etc/.start_enigma2 ] || [ ! -e /etc/.nhd ]; then
+if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
 	insmod $MODDIR/simu_button.ko
 fi
 [ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
@@ -24,6 +24,7 @@ rm -f /etc/.start_spark >/dev/null 2>&1
 
 if [ -f /etc/.start_vdr ] && [ -e /usr/local/bin/vdr ]
 then
+	rm -f /etc/.start_enigma2 >/dev/null 2>&1
 	START_VDR=1
 elif [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
 then
@@ -281,7 +282,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	fi
 
 	echo "init lircd"
-	if [ ! -e /etc/.start_enigma2 ] && [ -e /etc/.nhd ]; then
+	if [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.start_vdr ] && [ -e /etc/.nhd ]; then
 		LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
 		[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
 		/usr/bin/lircd -u $LIRCD_CONF
@@ -294,7 +295,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	/usr/bin/irexec -d /etc/lircrc
 	# /bin/evremote2 05 30 &
 
-	if [ -n "$START_E2" ]; then
+	if [ -n "$START_E2" ] || [ -n "$START_VDR" ]; then
 #		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
 #		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
 		/bin/evremote2 5 200 & # $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
@@ -387,7 +388,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		done 
 
 	elif [ -n "$START_VDR" ]; then
-		/usr/local/bin/runvdrdev2 &
+		/usr/local/bin/runvdr
 
 	else
 		echo "LOADING neutrino"
@@ -443,7 +444,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 fi
 
 #never reached
-echo "REBOOT PINGULUX" > /dev/vfd
-echo "REBOOT PINGULUX"
-reboot -f
+#echo "REBOOT PINGULUX" > /dev/vfd
+#echo "REBOOT PINGULUX"
+#reboot -f
 

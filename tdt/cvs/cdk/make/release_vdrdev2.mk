@@ -92,7 +92,7 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(buildprefix)/root/usr/local/bin/mplayer.sh $(prefix)/release_vdrdev2/usr/local/bin/ && \
 	chmod 755 $(prefix)/release_vdrdev2/usr/local/bin/mplayer.sh && \
 	cp -rd $(buildprefix)/root/var/vdr/themes/* $(prefix)/release_vdrdev2/usr/local/share/vdr/themes/ && \
-	cp $(buildprefix)/root/usr/local/bin/runvdrdev2 $(prefix)/release_vdrdev2/usr/local/bin/runvdr && \
+	cp $(buildprefix)/root/usr/local/bin/runvdr $(prefix)/release_vdrdev2/usr/local/bin/ && \
 	chmod 755 $(prefix)/release_vdrdev2/usr/local/bin/runvdr && \
 	cp $(buildprefix)/root/usr/local/bin/vdrshutdown $(prefix)/release_vdrdev2/usr/local/bin/ && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release_vdrdev2/etc/init.d/ && \
@@ -273,8 +273,8 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -rd $(targetprefix)/usr/lib/libfontconfi* $(prefix)/release_vdrdev2/usr/lib/
 	mkdir -p $(prefix)/release_vdrdev2/usr/lib/vdr/
 
-	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.22 $(prefix)/release_vdrdev2/usr/lib/vdr/
-	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.22 $(prefix)/release_vdrdev2/usr/lib/vdr/
+	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/
+	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/
 
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsa-lib
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsaplayer
@@ -329,7 +329,7 @@ $(DEPDIR)/%release_vdrdev2:
 #	cp -rd $(targetprefix)/var/vdr/sources.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr/channels.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr $(prefix)/release_vdrdev2/var/vdr/
-
+	cp -RP $(buildprefix)/root/usr/local/share/vdr $(prefix)/release_vdrdev2/usr/local/share/
 #######################################################################################
 #######################################################################################
 #######################################################################################
