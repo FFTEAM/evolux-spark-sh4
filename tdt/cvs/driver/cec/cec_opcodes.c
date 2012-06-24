@@ -52,6 +52,19 @@ static unsigned char isFirstKiss = 0;
 static unsigned char logicalDeviceTypeChoicesIndex = 0;
 
 
+#ifdef EVOLUX
+static const unsigned char logicalDeviceTypeChoices[][2] =  { 
+  { 1 << DEVICE_TYPE_DVD, DEVICE_TYPE_DVD1 }, 
+  { 1 << DEVICE_TYPE_DVD, DEVICE_TYPE_DVD2 }, 
+  { 1 << DEVICE_TYPE_DVD, DEVICE_TYPE_DVD3 }, 
+  { 1 << DEVICE_TYPE_STB, DEVICE_TYPE_STB1 }, 
+  { 1 << DEVICE_TYPE_STB, DEVICE_TYPE_STB2 }, 
+  { 1 << DEVICE_TYPE_STB, DEVICE_TYPE_STB3 },
+  { 1 << DEVICE_TYPE_REC, DEVICE_TYPE_REC1 },
+  { 1 << DEVICE_TYPE_REC, DEVICE_TYPE_REC2 },
+  { 0xFF, DEVICE_TYPE_UNREG }
+ };
+#else
 static const unsigned char logicalDeviceTypeChoices[] =  { 
 DEVICE_TYPE_DVD1, 
 DEVICE_TYPE_DVD2, 
@@ -62,12 +75,17 @@ DEVICE_TYPE_STB3,
 DEVICE_TYPE_REC1, //PREV_KEY_WORKING
 DEVICE_TYPE_REC2, 
 DEVICE_TYPE_UNREG };
+#endif
 
 #ifdef EVOLUX
 extern char *deviceName;
 #endif
 static unsigned char logicalDeviceType = DEVICE_TYPE_DVD1;
+#ifdef EVOLUX
+extern unsigned char deviceType;
+#else
 static unsigned char deviceType = DEVICE_TYPE_DVD;
+#endif
 
 static unsigned short ActiveSource = 0x0000;
 
@@ -650,14 +668,29 @@ void sendPingWithAutoIncrement(void)
 {
   unsigned char responseBuffer[1];
 
+#ifdef EVOLUX
+  char ldt = 1 << deviceType;
+  // advance to the first matching device type
+  while (!(ldt & logicalDeviceTypeChoices[logicalDeviceTypeChoicesIndex][0]))
+    logicalDeviceTypeChoicesIndex++;
+#endif
   printk("[CEC] sendPingWithAutoIncrement - 1\n");
   setIsFirstKiss(1);
 
+#ifdef EVOLUX
+  logicalDeviceType = logicalDeviceTypeChoices[logicalDeviceTypeChoicesIndex++][1];
+#else
   logicalDeviceType = logicalDeviceTypeChoices[logicalDeviceTypeChoicesIndex++];
+#endif
   responseBuffer[0] = (logicalDeviceType << 4) + (logicalDeviceType & 0xF);
   printk("[CEC] sendPingWithAutoIncrement - 2\n");
   sendMessage(1, responseBuffer);
   printk("[CEC] sendPingWithAutoIncrement - 3\n");
+#ifdef EVOLUX
+  // advance to the next matching device type
+  while (!(ldt & logicalDeviceTypeChoices[logicalDeviceTypeChoicesIndex][0]))
+    logicalDeviceTypeChoicesIndex++;
+#endif
 }
 
 void sendOneTouchPlay(void)
