@@ -268,9 +268,10 @@ void CMediaPlayerMenu::showMoviePlayer(CMenuWidget *moviePlayer, CPersonalizeGui
 	
 	//fileplayback
 	p->addItem(moviePlayer, fw_file, &g_settings.personalize[SNeutrinoSettings::P_MPLAYER_FILEPLAY]);
-#ifdef EVOLUX_NOTYET
-	// Works, basically, but isn't useful without a sane way of entering URLs.  --martii
+#ifdef EVOLUX
+	// active for now -- if it breaks, you may keep the pieces ...   --martii
 
+	// Works, basically, but isn't useful without a sane way of entering URLs.  --martii
 	//network playback
 	CMenuForwarder *fw_network = new CMenuForwarder(LOCALE_MOVIEPLAYER_NETWORKPLAYBACK, true, NULL, this, "netstream", CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW);
 	strncpy(streaming_server_url, g_settings.streaming_server_url.c_str(), sizeof(streaming_server_url));
