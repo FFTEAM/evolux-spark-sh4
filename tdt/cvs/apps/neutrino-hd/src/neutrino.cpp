@@ -1862,6 +1862,12 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 	g_videoSettings->setVideoSettings();
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
 
+#ifdef EVOLUX
+	{
+		CCECSetup cecsetup;
+		cecsetup.setCECSettings(true);
+	}
+#else
 	init_cec_setting = true;
 	if(!(g_settings.shutdown_timer_record_type && timer_wakeup && g_settings.hdmi_cec_mode)){
 		//init cec settings
@@ -1869,6 +1875,7 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 		cecsetup.setCECSettings();
 		init_cec_setting = false;
 	}
+#endif
 	g_settings.shutdown_timer_record_type = false;
 	timer_wakeup = false;	  
 
@@ -3396,6 +3403,12 @@ void CNeutrinoApp::ExitRun(const bool /*write_si*/, int retcode)
 			}
 			//CVFD::getInstance()->ShowText(g_Locale->getText(LOCALE_MAINMENU_REBOOT));
 			stop_video();
+#ifdef EVOLUX
+			if (retcode == 1) {
+				CCECSetup cecsetup;
+				cecsetup.setCECSettings(false);
+			}
+#endif
 
 			printf("[neutrino] This is the end. exiting with code %d\n", retcode);
 #if 0 /* FIXME this next hack to test, until we find real crash on exit reason */
@@ -3534,6 +3547,10 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 	//printf( ( bOnOff ) ? "mode: standby on\n" : "mode: standby off\n" );
 	
 	if( bOnOff ) {
+#ifdef EVOLUX
+		CCECSetup cecsetup;
+		cecsetup.setCECSettings(false);
+#endif
 		if( mode == mode_scart ) {
 			//g_Controld->setScartMode( 0 );
 		}
@@ -3597,12 +3614,19 @@ void CNeutrinoApp::standbyMode( bool bOnOff )
 	} else {
 		// Active standby off
 
+#ifdef EVOLUX
+		if (timer_wakeup) {
+			CCECSetup cecsetup;
+			cecsetup.setCECSettings(true);
+		}
+#else
 		if(init_cec_setting){
 			//init cec settings
 			CCECSetup cecsetup;
 			cecsetup.setCECSettings();
 			init_cec_setting = false;
 		}
+#endif
 
 		cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
 

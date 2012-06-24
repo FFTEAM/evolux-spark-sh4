@@ -1532,6 +1532,7 @@ const char * locale_real_names[] =
 	"videomenu.hdmi_cec_mode_recorder",
 	"videomenu.hdmi_cec_mode_tuner",
 	"videomenu.hdmi_cec_standby",
+	"videomenu.hdmi_cec_standby_not_timer",
 	"videomenu.hdmi_cec_view_on",
 	"videomenu.hue",
 	"videomenu.letterbox",

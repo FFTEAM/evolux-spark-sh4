@@ -200,11 +200,15 @@ class KernelOptions_Menu : public CMenuTarget
 			bool installed;
 		};
 		std::vector<module> modules;
+		void load();
+		void save();
 	public:
 		KernelOptions_Menu();
 		void hide();
 		int exec(CMenuTarget* parent, const std::string & actionKey);
 		void Settings();
+		bool isEnabled(std::string name);
+		bool Enable(std::string name, bool active);
 };
 
 class CEvoluxSoftwareUpdate : public CMenuTarget

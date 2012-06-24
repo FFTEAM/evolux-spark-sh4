@@ -61,6 +61,9 @@
 #include <driver/shutdown_count.h>
 #include <neutrino.h>
 #include <cs_api.h>
+#ifdef EVOLUX
+#include <gui/cec_setup.h> // FIXME
+#endif
 
 #if HAVE_SPARK_HARDWARE
 /* this relies on event0 being the AOTOM frontpanel driver device
@@ -1250,11 +1253,21 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 #endif
 #ifdef EVOLUX
 					if (firstKey) {
+						char c = '0';
 						firstKey = false;
-						int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
+						int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_RDONLY);
 						if (wtw > -1) {
-							write(wtw, "0\n", 2);
+							::read(wtw, &c, 1);
 							::close(wtw);
+						}
+						wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
+						if (wtw > -1) {
+							::write(wtw, "0\n", 2);
+							::close(wtw);
+						}
+						if (c != '0') {
+							CCECSetup cecsetup;
+							cecsetup.setCECSettings(true);
 						}
 					}
 #endif // EVOLUX
