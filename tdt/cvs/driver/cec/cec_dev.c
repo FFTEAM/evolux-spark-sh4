@@ -265,6 +265,9 @@ int init_dev(void)
 int cleanup_dev(void)
 {
 	unregister_chrdev(CEC_MAJOR,"CEC");
+#ifdef EVOLUX
+	return 0;
+#endif
 }
 
 

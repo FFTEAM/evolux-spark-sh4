@@ -6,6 +6,7 @@ obj-m           += cec.o
 cec-objs        += cec_main.o cec_worker.o cec_opcodes.o cec_internal.o cec_proc.o cec_rc.o cec_dev.o
 
 EXTRA_CFLAGS    := -I$(DRIVER_TOPDIR)/cec -I$(DRIVER_TOPDIR)/include -I$(DRIVER_TOPDIR)/dvb/drivers/media/dvb
+EXTRA_CFLAGS	+= -DEVOLUX
 
 ifdef UFS912
 EXTRA_CFLAGS	+= -DSTx7111

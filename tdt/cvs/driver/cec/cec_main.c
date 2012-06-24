@@ -49,6 +49,9 @@
 
 static unsigned char cancelStart = 0;
 int activemode = 0;
+#ifdef EVOLUX
+char *deviceName = "DUCKBOX";
+#endif
 
 //----------------------------
 
@@ -134,6 +137,12 @@ MODULE_LICENSE          ("GPL");
 
 module_param(debug, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
 module_param(activemode, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+#ifdef EVOLUX
+module_param(deviceName, charp, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+#endif
 MODULE_PARM_DESC(debug, "Debug Output 0=disabled >0=enabled(debuglevel)");
 MODULE_PARM_DESC(activemode, "Active mode 0=disabled >0=enabled(activemode)");
+#ifdef EVOLUX
+MODULE_PARM_DESC(deviceName, "Name (default: DUCKBOX)");
+#endif
 

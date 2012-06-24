@@ -63,8 +63,12 @@ DEVICE_TYPE_REC1, //PREV_KEY_WORKING
 DEVICE_TYPE_REC2, 
 DEVICE_TYPE_UNREG };
 
+#ifdef EVOLUX
+extern char *deviceName;
+#else
 static unsigned char logicalDeviceType = DEVICE_TYPE_DVD1;
 static unsigned char deviceType = DEVICE_TYPE_DVD;
+#endif
 
 static unsigned short ActiveSource = 0x0000;
 
@@ -94,7 +98,7 @@ unsigned char getDeviceType(void) {
 unsigned short getPhysicalAddress(void) {
   unsigned int value = 0;
   stmhdmiio_get_cec_address(&value);
-  
+
   return value & 0xffff;
 }
 
@@ -305,6 +309,15 @@ void parseMessage(unsigned char src, unsigned char dst, unsigned int len, unsign
       {
       responseBuffer[0] = (getLogicalDeviceType() << 4) + (src & 0xF);
       responseBuffer[1] = SET_OSD_NAME;
+#ifdef EVOLUX
+      {
+	int len = strlen(deviceName);
+	if (len > CEC_MAX_DATA_LEN - 2)
+		len = CEC_MAX_DATA_LEN - 2;
+	strncpy(responseBuffer + 2, deviceName, len);
+	sendMessage(len + 2, responseBuffer);
+      }
+#else
       responseBuffer[2] = 'D';
       responseBuffer[3] = 'U';
       responseBuffer[4] = 'C'; 
@@ -313,6 +326,7 @@ void parseMessage(unsigned char src, unsigned char dst, unsigned int len, unsign
       responseBuffer[7] = 'O'; 
       responseBuffer[8] = 'X'; 
       sendMessage(9, responseBuffer);
+#endif
       }
       break;
 
