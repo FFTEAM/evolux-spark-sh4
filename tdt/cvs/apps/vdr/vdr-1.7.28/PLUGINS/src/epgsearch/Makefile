@@ -18,7 +18,7 @@
 #WITHOUT_QUICKSEARCH=1
 
 ### comment this if you don't want epgsearch to auto config itself
-AUTOCONFIG=1
+#AUTOCONFIG=1
 
 ### if AUTOCONFIG is not active (i.e. commented) you can manually enable the
 ### optional modules or patches for other plugins
