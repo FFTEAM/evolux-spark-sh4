@@ -39,7 +39,7 @@ typedef struct {
 	int fd;
 	int major;
 	int minor;
-	time_t discovery;
+	time_t next_discovery;
 } input_device_t;
 
 static input_device_t input_device[] = {
@@ -146,8 +146,8 @@ static void count_input_devices(void) {
 static void open_input_devices(void) {
 	time_t now = time(NULL);
 	for (int i = 0; i < number_of_input_devices; i++)
-		if ((input_device[i].fd < 0) && (input_device[i].discovery + 60 < now)) {
-			input_device[i].discovery = now + 60;
+		if ((input_device[i].fd < 0) && (input_device[i].next_discovery <= now)) {
+			input_device[i].next_discovery = now + 60;
 			input_device[i].fd = open(input_device[i].name, O_RDWR | O_NONBLOCK);
 		}
 }
@@ -162,14 +162,14 @@ static void close_input_devices(void) {
 
 static void poll_input_devices(void) {
 	struct pollfd fds[number_of_input_devices];
-	input_device_t inputs[number_of_input_devices];
+	input_device_t *inputs[number_of_input_devices];
 	int nfds = 0;
 	for (int i = 1; i < number_of_input_devices; i++)
 		if (input_device[i].fd > -1) {
 			fds[nfds].fd = input_device[i].fd;
 			fds[nfds].events = POLLIN | POLLHUP | POLLERR;
 			fds[nfds].revents = 0;
-			inputs[nfds] = input_device[i];
+			inputs[nfds] = &input_device[i];
 			nfds++;
 		}
 
@@ -192,15 +192,15 @@ static void poll_input_devices(void) {
 	}
 	for (int i = 0; i < nfds && r > 0; i++) {
 		if (fds[i].revents & POLLIN) {
-//fprintf(stderr, "### input from fd %d (%s)\n", fds[i].fd, inputs[i].name);
+//fprintf(stderr, "### input from fd %d (%s)\n", fds[i].fd, inputs[i]->name);
 			struct input_event ev;
 			while (sizeof(ev) == read(fds[i].fd, &ev, sizeof(ev)))
 				write(input_device[0].fd, &ev, sizeof(ev));
 			r--;
 		} else if (fds[i].revents & (POLLHUP | POLLERR | POLLNVAL)) {
-//fprintf(stderr, "### error on %d (%s)\n", fds[i].fd, inputs[i].name);
+//fprintf(stderr, "### error on %d (%s)\n", fds[i].fd, inputs[i]->name);
 			close (fds[i].fd);
-			fds[i].fd = -1;
+			inputs[i]->fd = -1;
 			r--;
 		}
 	}
