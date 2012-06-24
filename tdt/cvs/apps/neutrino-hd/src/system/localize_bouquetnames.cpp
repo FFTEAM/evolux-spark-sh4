@@ -41,6 +41,8 @@ void localizeBouquetNames (void) {
 			g_bouquetManager->Bouquets[i]->lName = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_OTHERS);
 		else if (g_bouquetManager->Bouquets[i]->Name == "extra.zapit_bouquetname_newchannels")
 			g_bouquetManager->Bouquets[i]->lName = g_Locale->getText(LOCALE_EXTRA_ZAPIT_BOUQUETNAME_NEWCHANNELS);
+		else if (g_bouquetManager->Bouquets[i]->Name == "channellist.head")
+			g_bouquetManager->Bouquets[i]->lName = g_Locale->getText(LOCALE_CHANNELLIST_HEAD);
 		else
 			g_bouquetManager->Bouquets[i]->lName = g_bouquetManager->Bouquets[i]->Name;
 }

@@ -433,12 +433,12 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 	}
 
 #ifdef EVOLUX
+	if (newChannels) {
+		deleteBouquet(newChannels);
+		newChannels = NULL;
+	}
 	if(tomake_new) {
 		ZapitChannelList newChannelList;
-		if (newChannels) {
-			deleteBouquet(newChannels);
-			newChannels = NULL;
-		}
 		if (CServiceManager::getInstance()->GetAllNewChannels(newChannelList)) {
 			newChannels = addBouquet("extra.zapit_bouquetname_newchannels", true); // UTF-8 encoded
 			sort(newChannelList.begin(), newChannelList.end(), CmpChannelByChName());
@@ -462,8 +462,13 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 	sort(unusedChannels.begin(), unusedChannels.end(), CmpChannelByChName());
 
 #ifdef EVOLUX
+	if (remainChannels) {
+		deleteBouquet(remainChannels);
+		remainChannels = NULL;
+	}
+
 	if (Bouquets.size() == 0)
-		remainChannels = addBouquet("All Channels", false); // UTF-8 encoded
+		remainChannels = addBouquet("channellist.head", false); // UTF-8 encoded
 	else
 		remainChannels = addBouquet("extra.zapit_bouquetname_others", true); // UTF-8 encoded
 #else
@@ -478,8 +483,10 @@ void CBouquetManager::makeRemainingChannelsBouquet(void)
 	renumChannels(remainChannels->tvChannels, i);
 	renumChannels(remainChannels->radioChannels, j);
 #ifdef EVOLUX
-	if (!tomake && Bouquets.size() > 1)
+	if (!tomake && Bouquets.size() > 1) {
 		deleteBouquet(remainChannels);
+		remainChannels = NULL;
+	}
 #endif
 }
 
