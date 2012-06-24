@@ -1583,26 +1583,11 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		return res;
 	}
 
-	if (actionKey == "apply") {
+	if (actionKey == "apply" || actionKey == "change") {
+		bool needs_save = false;
 		for (int i = 0; i < modules.size(); i++)
 			if (modules[i].active != modules[i].active_orig) {
-				FILE *f = fopen("/etc/modules.extra", "w");
-					if (f) {
-						chmod("/etc/modules.extra", 0644);
-						for (int i = 0; i < modules.size(); i++) {
-							if (modules[i].active) {
-								for (int j = 0; j < modules[i].moduleList.size(); j++)
-									if (modules[i].moduleList[j].second.length())
-											fprintf(f, "%s %s\n",
-												modules[i].moduleList[j].first.c_str(),
-												modules[i].moduleList[j].second.c_str());
-									else
-											fprintf(f, "%s\n",
-												modules[i].moduleList[j].first.c_str());
-							}
-						}
-					fclose(f);
-				}
+				needs_save = true;
 				for (int i = 0; i < modules.size(); i++) {
 					char buf[80];
 					if (modules[i].active)
@@ -1620,6 +1605,10 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 				}
 				break;
 			}
+		if (needs_save)
+			save();
+		if (actionKey == "change")
+			return res; // whatever
 	}
 
 	if (actionKey == "apply" || actionKey == "lsmod") {
@@ -1675,13 +1664,28 @@ void KernelOptions_Menu::hide()
 {
 }
 
-void KernelOptions_Menu::Settings()
-{
-	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings");
-	menu->addItem(GenericMenuSeparator);
-	menu->addItem(GenericMenuBack);
-	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES));
+bool KernelOptions_Menu::isEnabled(string name) {
+	load();
+	for (int i = 0; i < modules.size(); i++)
+		if (name == modules[i].moduleList.back().first)
+			return modules[i].active;
+	return false;
+}
 
+bool KernelOptions_Menu::Enable(string name, bool active) {
+	load();
+	for (int i = 0; i < modules.size(); i++)
+		if (name == modules[i].moduleList.back().first) {
+				if (modules[i].active != active) {
+					modules[i].active = active;
+					exec(NULL, "change");
+				}
+				return true;
+		}
+	return false;
+}
+
+void KernelOptions_Menu::load() {
 	modules.clear();
 
 	FILE *f = fopen("/etc/modules.available", "r");
@@ -1690,7 +1694,7 @@ void KernelOptions_Menu::Settings()
 	// # comment
 	// module # description
 	// module module module # description
-	// module module(module arguments) module # description
+	// module module(arguments) module # description
 	//
 
 	if (f) {
@@ -1770,6 +1774,37 @@ void KernelOptions_Menu::Settings()
 		}
 		fclose(f);
 	}
+}
+
+void KernelOptions_Menu::save()
+{
+	FILE *f = fopen("/etc/modules.extra", "w");
+	if (f) {
+		chmod("/etc/modules.extra", 0644);
+		for (int i = 0; i < modules.size(); i++) {
+			if (modules[i].active) {
+				for (int j = 0; j < modules[i].moduleList.size(); j++)
+					if (modules[i].moduleList[j].second.length())
+						fprintf(f, "%s %s\n",
+							modules[i].moduleList[j].first.c_str(),
+							modules[i].moduleList[j].second.c_str());
+					else
+						fprintf(f, "%s\n",
+							modules[i].moduleList[j].first.c_str());
+			}
+		}
+		fclose(f);
+	}
+}
+
+void KernelOptions_Menu::Settings()
+{
+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings");
+	menu->addItem(GenericMenuSeparator);
+	menu->addItem(GenericMenuBack);
+	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES));
+
+	load();
 
 	int shortcut = 0;
 
