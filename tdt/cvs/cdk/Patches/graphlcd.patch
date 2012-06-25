@@ -136,28 +136,6 @@
  
  #include "port.h"
  
-@@ -31,17 +54,21 @@
- static inline int port_in(int port)
- {
-     unsigned char value;
-+#ifndef __sh__
-     __asm__ volatile ("inb %1,%0"
-                       : "=a" (value)
-                       : "d" ((unsigned short) port));
-+#endif
-     return value;
- }
- 
- static inline void port_out(unsigned short int port, unsigned char val)
- {
-+#ifndef __sh__
-     __asm__ volatile ("outb %0,%1\n"
-                       :
-                       : "a" (val), "d" (port));
-+#endif
- }
- 
- cParallelPort::cParallelPort()
 --- graphlcd-base/graphlcd.conf.orig	2012-03-07 01:52:17.571231592 +0100
 +++ graphlcd-base/graphlcd.conf	2012-03-07 01:54:58.223427153 +0100
 @@ -29,7 +29,7 @@
