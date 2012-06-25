@@ -345,6 +345,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 	#fi
 	/etc/init.d/Swap.sh &
 	[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common start;/etc/init.d/nfs-kernel-server start) &
+# correct volume output level as orig
+	/usr/bin/amixer -c 1 set Analog playback '100%' unmute
+	/usr/bin/amixer -c 1 set SPDIF playback '100%' unmute
+	/usr/bin/amixer -c 1 set HDMI playback '100%' unmute
 
 	echo "run" > /dev/vfd
 	if [ -n "$START_E2" ]; then

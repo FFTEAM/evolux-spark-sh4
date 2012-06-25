@@ -615,7 +615,8 @@ endif
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Components/
 #	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap_*.xml
 	touch $(prefix)/release-enigma2-pli-nightly/etc/changelog.txt
-
+	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release-enigma2-pli-nightly/usr/bin/
+	find $(prefix)/release-enigma2-pli-nightly/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 #	rm $(prefix)/release-enigma2-pli-nightly/bin/showiframe
 #	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi

@@ -558,6 +558,8 @@ release_base:
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Components/Converter $(prefix)/release/usr/lib/enigma2/python/Components/
 	rm $(prefix)/release/usr/local/share/enigma2/keymap_*.xml
 	touch $(prefix)/release/etc/changelog.txt
+	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release/usr/bin/
+	find $(prefix)/release/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma2 #############
 	rm $(prefix)/release/bin/showiframe
 	rm $(prefix)/release/usr/local/share/enigma2/radio.mvi

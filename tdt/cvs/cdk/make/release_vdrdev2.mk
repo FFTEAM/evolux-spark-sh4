@@ -295,7 +295,8 @@ $(DEPDIR)/%release_vdrdev2:
 	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
 	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
 	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.so* -exec sh4-linux-strip --strip-unneeded {} \;
-
+	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release_vdrdev2/usr/bin/
+	find $(prefix)/release_vdrdev2/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/vdr #############
 	cp -RP $(buildprefix)/own_build/vdr/* $(prefix)/release_vdrdev2/
 	ln -sf /usr/share/zoneinfo/CET $(prefix)/release_vdrdev2/etc/localtime
