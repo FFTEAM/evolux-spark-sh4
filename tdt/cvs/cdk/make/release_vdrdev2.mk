@@ -114,6 +114,9 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/simu_button/simu_button.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
+	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
+	rm -rf $(prefix)/release_vdrdev2/etc/vdr
+	( cd $(prefix)/release_vdrdev2/etc && ln -sf $(prefix)/release_vdrdev2/usr/local/share/vdr vdr )
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
 	rm -f $(prefix)/release_vdrdev2/sbin/halt
 	cp -f $(targetprefix)/sbin/halt $(prefix)/release_vdrdev2/sbin/
@@ -295,8 +298,7 @@ $(DEPDIR)/%release_vdrdev2:
 	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
 	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
 	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.so* -exec sh4-linux-strip --strip-unneeded {} \;
-	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release_vdrdev2/usr/bin/
-	find $(prefix)/release_vdrdev2/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
+
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/vdr #############
 	cp -RP $(buildprefix)/own_build/vdr/* $(prefix)/release_vdrdev2/
 	ln -sf /usr/share/zoneinfo/CET $(prefix)/release_vdrdev2/etc/localtime

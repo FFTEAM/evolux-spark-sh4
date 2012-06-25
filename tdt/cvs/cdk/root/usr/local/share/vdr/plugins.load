@@ -9,12 +9,12 @@
 
 # remote control receiver plugin
 remote -i /dev/input/event1
-#setup
-# UFS9xx front panel display
-#vfd
+setup
+vfd
 dvbdevice
-#text2skin
-#osdteletext
+text2skin
+osdteletext -d /tmp/cache/vtx --max-cache=1
+reelchannelscan
 # shows infos about the system
 #sysinfo
 
