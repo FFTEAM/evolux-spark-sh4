@@ -995,6 +995,10 @@ int CStreamInfo2::ts_setup ()
 	last_tv.tv_sec = first_tv.tv_sec;
 	last_tv.tv_usec = first_tv.tv_usec;
 	b_total = 0;
+#ifdef EVOLUX
+	int dmxfd = dmx->getFD();
+	fcntl(dmxfd, F_SETFL, fcntl(dmxfd, F_GETFL) | O_NONBLOCK);
+#endif
 	return 0;
 }
 
