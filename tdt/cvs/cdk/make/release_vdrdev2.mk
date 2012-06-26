@@ -269,7 +269,8 @@ $(DEPDIR)/%release_vdrdev2:
 	mkdir -p $(prefix)/release_vdrdev2/etc/fonts
 	cp -d $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/share/fonts/vdr.ttf
 	cp -d $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/etc/fonts/
-
+	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release_vdrdev2/usr/bin/
+	find $(prefix)/release_vdrdev2/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #######################################################################################
 	echo "duckbox-rev#: " > $(prefix)/release_vdrdev2/etc/imageinfo
