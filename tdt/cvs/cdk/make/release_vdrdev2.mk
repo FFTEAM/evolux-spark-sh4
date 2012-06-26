@@ -119,10 +119,6 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -RP $(targetprefix)/etc/fonts/* $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
 	rm -rf $(prefix)/release_vdrdev2/etc/fonts
 	(cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr/fonts fonts )
-	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	cp -RP $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	rm -rf $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	(cd $(prefix)/release_vdrdev2/usr/local/share/ && ln -sf ../usr/local/share/vdr/locale locale )
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
 	rm -f $(prefix)/release_vdrdev2/sbin/halt
@@ -333,7 +329,9 @@ $(DEPDIR)/%release_vdrdev2:
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/locale
 #	cp -rd $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/locale
 	cp -rd $(targetprefix)/usr/local/share/locale/de_DE $(prefix)/release_vdrdev2/usr/local/share/locale/
-
+	cp -RP $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	rm -rf $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	(cd $(prefix)/release_vdrdev2/usr/local/share/ && ln -sf ../vdr/locale locale )
 #######################################################################################
 #######################################################################################
 

@@ -76,7 +76,7 @@ max-:
 #
 # YAUD
 #
-yaud-vdr: yaud-none lirc stslave\
+yaud-vdr2: yaud-none lirc stslave\
 		boot-elf remote firstboot vdrdev2 release_vdrdev2
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
@@ -169,6 +169,29 @@ evolux-neutrino-hd-pli-full: yaud-none host-python lirc stslave \
 		yaud-neutrino-hd \
 		yaud-enigma2-pli-nightly \
 		release_evolux_neutrino-hd_pli
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-neutrino-vdr2: yaud-neutrino-hd \
+		yaud-vdr \
+		release_evolux_neutrino-vdr2
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-neutrino-vdr2-full: yaud-none lirc stslave \
+		yaud-neutrino-hd \
+		yaud-vdr \
+		release_evolux_neutrino-vdr2
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
