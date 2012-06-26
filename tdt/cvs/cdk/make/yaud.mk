@@ -178,7 +178,7 @@ else
 endif
 
 evolux-neutrino-vdr2: yaud-neutrino-hd \
-		yaud-vdr \
+		yaud-vdr2 \
 		release_evolux_neutrino-vdr2
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
@@ -190,7 +190,7 @@ endif
 
 evolux-neutrino-vdr2-full: yaud-none lirc stslave \
 		yaud-neutrino-hd \
-		yaud-vdr \
+		yaud-vdr2 \
 		release_evolux_neutrino-vdr2
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img

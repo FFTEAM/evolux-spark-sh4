@@ -95,6 +95,7 @@ neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean neutrino-hd-plugins-cl
 	cd $(appsdir)/neutrino-hd/data/locale && \
 		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq > /tmp/log \
 		cut -d' ' -f1 deutsch.locale | uniq  | diff - /tmp/log || \
+			(echo "ERROR: deutsch.locale not ordered or contains empty lines" && false) \
 		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | tr [:lower:] [:upper:] | tr \. \_  | tr \- \_ | tr -d \? | ./create.locals.h \
 		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | ./create.locals_intern.h \
 		cp locals.h locals_intern.h ../../src/system
