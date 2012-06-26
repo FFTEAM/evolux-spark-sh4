@@ -205,5 +205,7 @@ yaud-none:	bare-os \
 		net-utils \
 		disk-utils \
 		driver \
+		alsa-lib \
+		alsa-utils \
 		misc-tools
 	@TUXBOX_YAUD_CUSTOMIZE@
