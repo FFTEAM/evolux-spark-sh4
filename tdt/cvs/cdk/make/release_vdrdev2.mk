@@ -279,8 +279,8 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/
 	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/
 
-	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsa-lib
-	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsaplayer
+#	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsa-lib
+#	rm -rf $(prefix)/release_vdrdev2/usr/lib/alsaplayer
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/engines
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/enigma2
 
@@ -294,9 +294,10 @@ $(DEPDIR)/%release_vdrdev2:
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/X11
-	rm -f $(prefix)/release_vdrdev2/usr/lib/*.a
-	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
-	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
+#	rm -f $(prefix)/release_vdrdev2/usr/lib/*.a
+#	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
+#	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
+	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.a *.o *.la -exec rm {} \;
 	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.so* -exec sh4-linux-strip --strip-unneeded {} \;
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/vdr #############
