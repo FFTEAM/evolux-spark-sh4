@@ -115,8 +115,15 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
+	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts
+	cp -RP $(targetprefix)/etc/fonts/* $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
+	rm -rf $(prefix)/release_vdrdev2/etc/fonts
+	(cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr/fonts fonts )
+	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	cp -RP $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	rm -rf $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	(cd $(prefix)/release_vdrdev2/usr/local/share/ && ln -sf ../usr/local/share/vdr/locale locale )
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
-	( cd $(prefix)/release_vdrdev2/etc && ln -sf $(prefix)/release_vdrdev2/usr/local/share/vdr vdr )
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
 	rm -f $(prefix)/release_vdrdev2/sbin/halt
 	cp -f $(targetprefix)/sbin/halt $(prefix)/release_vdrdev2/sbin/
@@ -297,7 +304,10 @@ $(DEPDIR)/%release_vdrdev2:
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.a
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
-	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.a *.o *.la -exec rm {} \;
+	chmod 755 -R $(prefix)/release_vdrdev2/usr/lib/
+	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.a -exec rm {} \;
+	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.o -exec rm {} \;
+	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.la -exec rm {} \;
 	find $(prefix)/release_vdrdev2/usr/lib/ -name  *.so* -exec sh4-linux-strip --strip-unneeded {} \;
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/vdr #############
@@ -334,7 +344,7 @@ $(DEPDIR)/%release_vdrdev2:
 #	cp -rd $(targetprefix)/var/vdr/channels.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr $(prefix)/release_vdrdev2/var/vdr/
 	cp -RP $(buildprefix)/root/usr/local/share/vdr $(prefix)/release_vdrdev2/usr/local/share/
-	( cd $(prefix)/release_vdrdev2/etc && ln -sf $(prefix)/release_vdrdev2/usr/local/share/vdr vdr )
+	( cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr vdr )
 #######################################################################################
 #######################################################################################
 #######################################################################################
