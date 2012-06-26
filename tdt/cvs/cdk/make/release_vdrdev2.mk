@@ -333,6 +333,7 @@ $(DEPDIR)/%release_vdrdev2:
 #	cp -rd $(targetprefix)/var/vdr/channels.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr $(prefix)/release_vdrdev2/var/vdr/
 	cp -RP $(buildprefix)/root/usr/local/share/vdr $(prefix)/release_vdrdev2/usr/local/share/
+	( cd $(prefix)/release_vdrdev2/etc && ln -sf $(prefix)/release_vdrdev2/usr/local/share/vdr vdr )
 #######################################################################################
 #######################################################################################
 #######################################################################################

@@ -18,6 +18,9 @@ $(DEPDIR)/vdrdev2: vdrdev2.do_compile
 	    done;
 	cp -RP $(appsdir)/vdr/vdr-1.7.28/PLUGINS/src/setup/examples/minivdr $(targetprefix)/etc/vdr/plugins/
 	mv $(targetprefix)/etc/vdr/plugins/minivdr $(targetprefix)/etc/vdr/plugins/setup
+	cp -RP $(appsdir)/vdr/vdr-1.7.28/PLUGINS/src/streamdev/streamdev-server $(targetprefix)/etc/vdr/plugins/
+	mv $(targetprefix)/etc/vdr/plugins/streamdev-server $(targetprefix)/etc/vdr/plugins/streamdev
+	( cd $(targetprefix)/etc/vdr/plugins && ln -sf streamdev streamdev-server )
 	touch $@
 
 vdrdev2-clean:
