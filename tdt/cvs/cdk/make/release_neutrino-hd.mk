@@ -102,7 +102,7 @@ $(DEPDIR)/%release_neutrino-hd:
 	cp $(buildprefix)/root/release/networking $(prefix)/release_neutrino-hd/etc/init.d/ && \
 	cp $(buildprefix)/root/release/getfb.awk $(prefix)/release_neutrino-hd/etc/init.d/ && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release_neutrino-hd/lib/ && \
-	-find $(prefix)/release_neutrino-hd/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
+	find $(prefix)/release_neutrino-hd/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release_neutrino-hd/sbin/
 
