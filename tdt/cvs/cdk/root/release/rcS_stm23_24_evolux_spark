@@ -25,6 +25,7 @@ rm -f /etc/.start_spark >/dev/null 2>&1
 if [ -f /etc/.start_vdr ] && [ -e /usr/local/bin/vdr ]
 then
 	rm -f /etc/.start_enigma2 >/dev/null 2>&1
+	(sleep 20;echo bestfit > /proc/stb/video/policy) &
 	START_VDR=1
 elif [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
 then
