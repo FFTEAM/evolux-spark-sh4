@@ -116,8 +116,9 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts
 	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
-	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/fonts/vdr.ttf
+	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/vdr.ttf
 	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
+	rm -rf $(prefix)/release_vdrdev2/etc/fonts
 	(cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr/fonts fonts )
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
