@@ -63,15 +63,17 @@ const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
 	{ 1, LOCALE_OPTIONS_ON }
 };
 
-#define BOOT_OPTION_COUNT 3
+#define BOOT_OPTION_COUNT 4
 const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 {
 #define BOOT_NEUTRINO 0
 #define BOOT_E2       1
 #define BOOT_SPARK    2
+#define BOOT_VDR      2
 	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 	{ BOOT_E2, LOCALE_EXTRAMENU_BOOT_ENIGMA2 },
-	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK }
+	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
+	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_VDR }
 };
 
 #define SWAP_OPTION_COUNT 4
@@ -249,11 +251,14 @@ int CExtraMenuSetup::showExtraMenuSetup()
 // >> Boot Selection, part 1 of 2
 #define DOTFILE_BOOTE2 "/etc/.start_enigma2"
 #define DOTFILE_BOOTSPARK "/etc/.start_spark"
+#define DOTFILE_BOOTVDR "/etc/.start_vdr"
 	int boot = BOOT_NEUTRINO;
 	if (!access(DOTFILE_BOOTSPARK, F_OK))
 		boot = BOOT_SPARK;
 	else if (!access(DOTFILE_BOOTE2, F_OK))
 		boot = BOOT_E2;
+	else if (!access(DOTFILE_BOOTVDR, F_OK))
+		boot = BOOT_VDR;
 	int old_boot = boot;
 
 	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_HEAD, &boot,
@@ -415,8 +420,20 @@ int CExtraMenuSetup::showExtraMenuSetup()
 				hintText += "E2 " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED));
 			}
 		}
+		else if (boot == BOOT_VDR && old_boot == BOOT_NEUTRINO) {
+			if (hintText.length())
+				hintText += "\n";
+			if (access("/usr/local/bin/vdr", X_OK)) {
+				hintText += "VDR " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_UNSUPPORTED));
+			} else {
+				touch(DOTFILE_BOOTVDR);
+				hintText += "VDR " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED));
+			}
+		}
 		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
 			unlink(DOTFILE_BOOTE2);
+		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_VDR)
+			unlink(DOTFILE_BOOTVDR);
 		if (boot == BOOT_NEUTRINO) {
 			if (hintText.length())
 				hintText += "\n";
