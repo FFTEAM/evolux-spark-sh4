@@ -97,7 +97,7 @@ neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean neutrino-hd-plugins-cl
 		cut -d' ' -f1 deutsch.locale | uniq  | diff - /tmp/log || \
 		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | tr [:lower:] [:upper:] | tr \. \_  | tr \- \_ | tr -d \? | ./create.locals.h \
 		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | ./create.locals_intern.h \
-		cp locals.h locals_intern.h ../../src/system \
+		cp locals.h locals_intern.h ../../src/system
 #
 # neutrino-hd-plugins
 #
