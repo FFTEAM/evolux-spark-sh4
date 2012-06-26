@@ -424,6 +424,7 @@ extramenu.boot.bootargs.head Änderung der Boot-Parameter
 extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.boot.changed wird bei Neustart aktiv. Bitte rebooten!
 extramenu.boot.enigma2 E2
+extramenu.boot.vdr VDR
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.spark Spark

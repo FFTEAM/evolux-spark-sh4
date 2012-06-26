@@ -424,6 +424,7 @@ extramenu.boot.bootargs.head Boot parameter change
 extramenu.boot.bootargs.text Do not switch off your set-top box!
 extramenu.boot.changed will be active after boot. Please reboot now.
 extramenu.boot.enigma2 E2
+extramenu.boot.vdr VDR
 extramenu.boot.head Boot Settings
 extramenu.boot.select System to start on reboot
 extramenu.boot.spark Spark

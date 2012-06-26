@@ -451,6 +451,7 @@ const char * locale_real_names[] =
 	"extramenu.boot.bootargs.text",
 	"extramenu.boot.changed",
 	"extramenu.boot.enigma2",
+	"extramenu.boot.vdr",
 	"extramenu.boot.head",
 	"extramenu.boot.select",
 	"extramenu.boot.spark",
