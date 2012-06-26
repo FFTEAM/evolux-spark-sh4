@@ -109,9 +109,6 @@ include make/tags.mk
 # Target for building source distributions (hardly used these days of CVS :-)
 include make/disttargets.mk
 
-#e1hd
-include make/enigma1-hd.mk
-include make/release_enigma1_hd.mk
 # vdr
 include make/vdrdev2.mk
 include make/release_vdrdev2.mk
