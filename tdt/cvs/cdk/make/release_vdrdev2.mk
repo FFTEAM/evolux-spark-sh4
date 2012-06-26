@@ -114,10 +114,10 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/simu_button/simu_button.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
-	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts
-	cp -RP $(targetprefix)/etc/fonts/* $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
-	rm -rf $(prefix)/release_vdrdev2/etc/fonts
+	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
+	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/fonts/vdr.ttf
+	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
 	(cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr/fonts fonts )
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
@@ -261,10 +261,6 @@ $(DEPDIR)/%release_vdrdev2:
 #	cp -aR $(targetprefix)/$(targetprefix)/usr/local/share/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr
 #	cp -aR $(targetprefix)/usr/local/share/fonts $(prefix)/release_vdrdev2/usr/local/share/
 #	ln -s /usr/local/share/fonts/micron.ttf $(prefix)/release_vdrdev2/usr/local/share/fonts/vdr.ttf
-	mkdir -p $(prefix)/release_vdrdev2/usr/share/fonts
-	mkdir -p $(prefix)/release_vdrdev2/etc/fonts
-	cp -d $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/share/fonts/vdr.ttf
-	cp -d $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/etc/fonts/
 	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release_vdrdev2/usr/bin/
 	find $(prefix)/release_vdrdev2/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -326,12 +322,13 @@ $(DEPDIR)/%release_vdrdev2:
 #	mkdir -p $(prefix)/release_vdrdev2/usr/share/locale/
 	cp -rd $(targetprefix)/usr/share/locale/* $(prefix)/release_vdrdev2/usr/share/locale
 
-	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/locale
 #	cp -rd $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/locale
-	cp -rd $(targetprefix)/usr/local/share/locale/de_DE $(prefix)/release_vdrdev2/usr/local/share/locale/
-	cp -RP $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	rm -rf $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	(cd $(prefix)/release_vdrdev2/usr/local/share/ && ln -sf ../vdr/locale locale )
+	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
+	cp -RP $(targetprefix)/usr/local/share/locale/de_DE $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
+	cp -RP $(targetprefix)/usr/local/share/locale/ru_RU $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
+	cp -RP $(targetprefix)/usr/local/share/locale/nn_NO $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
+	cp -RP $(targetprefix)/usr/local/share/locale/uk_UA $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
+	( cd $(prefix)/release_vdrdev2/usr/local/share && ln -sf ./vdr/locale locale )
 #######################################################################################
 #######################################################################################
 
