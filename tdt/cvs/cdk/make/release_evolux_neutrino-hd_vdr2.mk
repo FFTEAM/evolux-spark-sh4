@@ -7,13 +7,12 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	rm -rf $(prefix)/uImage || true
 	rm -rf $(prefix)/e2jffs2.img || true
 	mkdir -p $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev
-	$(USERS) cp -RP $(prefix)/release_neutrino_with_dev/* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/
+	$(USERS) cp -RP $(prefix)/release_neutrino-hd_with_dev/* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/
 	$(USERS) chmod 777 -R $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev
 	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
 		$(buildprefix)/doEVOLUX.sh; \
 	fi;
-	cp -RP $(prefix)/release_vdrdev2_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/lib/firmware/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/var $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/
+	cp -RP $(prefix)/release_vdrdev2_with_dev/var/vdr $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/var/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/sbin $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/bin $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/sbin $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/
@@ -24,19 +23,12 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/fonts
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/local $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/network/interfaces $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/network/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/dropbear $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/enigma2 $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/fonts $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/tuxbox $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/Wireless $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/changelog.txt $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
-	echo "EVOVDR2" > $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/hostname
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/image-version $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
+	echo "EVOVDR" > $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/hostname
 	if [ -e $(prefix)/release_vdrdev2_with_dev/etc/graphlcd.conf ]; then \
 		cp -RP $(prefix)/release_vdrdev2_with_dev/etc/graphlcd.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/; \
 	fi;
-	cp -RP $(prefix)/release_vdrdev2_with_dev/bin/mumudvb $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/bin/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/mumudvb $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/inetd.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/localtime $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/rc.d/
@@ -55,7 +47,8 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/local/share/vdr $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/local/share/locale $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/vdr $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/fonts $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
+	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/fonts/* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/fonts/
+	cp -RP $(appsdir)/vdr/vdr-1.7.28/diseqc.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/diseqc.conf.example
 #	cp -RP $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/boot/uImage $(prefix)/
 	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/ )

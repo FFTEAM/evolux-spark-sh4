@@ -114,12 +114,13 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/simu_button/simu_button.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
-	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts
+	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr
 	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
-	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/vdr.ttf
-	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/usr/local/share/vdr/fonts/
-	rm -rf $(prefix)/release_vdrdev2/etc/fonts
-	(cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr/fonts fonts )
+	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/etc/fonts/vdr.ttf
+	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/etc/fonts/
+	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_vdrdev2/sbin/
+	cp -RP $(buildprefix)/root/etc/init.d/ntpupdate.sh $(prefix)/release_vdrdev2/sbin/
+	touch $(prefix)/release_vdrdev2/etc/changelog.txt
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
 	rm -f $(prefix)/release_vdrdev2/sbin/halt
@@ -290,11 +291,14 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -rd $(targetprefix)/usr/lib/gconv/ISO8859-9.so $(prefix)/release_vdrdev2/usr/lib/gconv/
 	cp -rd $(targetprefix)/usr/lib/gconv/ISO8859-15.so $(prefix)/release_vdrdev2/usr/lib/gconv/
 	cp -rd $(targetprefix)/usr/lib/gconv/UTF-32.so $(prefix)/release_vdrdev2/usr/lib/gconv/
-
+	mkdir -p $(prefix)/release_vdrdev2/usr/script
+	mkdir -p $(prefix)/release_vdrdev2/usr/keys
+	( cd $(prefix)/release_vdrdev2/var && ln -s ../usr/keys keys )
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/libxslt-plugins
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/sigc++-1.2
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/X11
+	rm -rf $(prefix)/release_vdrdev2/usr/lib/tuxbox
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.a
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.o
 #	rm -f $(prefix)/release_vdrdev2/usr/lib/*.la
