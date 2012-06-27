@@ -24,13 +24,13 @@
 #define FE_CAN_TURBO_FEC  0x8000000 // TODO: remove this once it is defined in the driver
 
 #define DVBS_TUNE_TIMEOUT  9000 //ms
-#define DVBS_LOCK_TIMEOUT  2000 //ms
+#define DVBS_LOCK_TIMEOUT  5000 //ms
 #define DVBC_TUNE_TIMEOUT  9000 //ms
-#define DVBC_LOCK_TIMEOUT  2000 //ms
+#define DVBC_LOCK_TIMEOUT  5000 //ms
 #define DVBT_TUNE_TIMEOUT  9000 //ms
-#define DVBT_LOCK_TIMEOUT  2000 //ms
+#define DVBT_LOCK_TIMEOUT  5000 //ms
 #define ATSC_TUNE_TIMEOUT  9000 //ms
-#define ATSC_LOCK_TIMEOUT  2000 //ms
+#define ATSC_LOCK_TIMEOUT  5000 //ms
 
 #define SCR_RANDOM_TIMEOUT  500 // ms (add random value up to this when tuning SCR device to avoid lockups)
 #define FE_CAN_2G_MODULATION 1
