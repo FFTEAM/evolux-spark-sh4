@@ -16,6 +16,11 @@ if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
 	cp -RP $TUFSBOXDIR/release_with_dev/etc/changelog.txt $TUFSBOXDIR/
 fi
 
+if [ -e $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt ]; then
+	EVOLUXVERSION=`cat $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
+	cp -RP $TUFSBOXDIR/release_vdrdev2_with_dev/etc/changelog.txt $TUFSBOXDIR/
+fi
+
 if [ -e $TUFSBOXDIR/release-neutrino-hd_with_dev/etc/changelog.txt ]; then
 	EVOLUXVERSION=`cat $TUFSBOXDIR/release_with_dev/etc/changelog.txt | grep -m1 Version | cut -d = -f2`
 	cp -RP $TUFSBOXDIR/release-neutrino-hd_with_dev/etc/changelog.txt $TUFSBOXDIR/
@@ -76,22 +81,22 @@ echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
 if [ -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
 		echo "   1) Prepare Ntrino     jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_neutrino-hd_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
 		echo "   2) Prepare Ntrino-HD     jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
 		echo "   3) Prepare Enigma2      jffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
 		echo "   4) Prepare Enigma2-PLI  jffs2"
 	fi
 fi
@@ -103,6 +108,14 @@ if [ -d $TUFSBOXDIR/release_evolux_pli_with_dev ]; then
 fi
 if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
 	echo "   7) Prepare Evolux-NTRINO-HD-PLI   jffs2"
+fi
+if [ -d $TUFSBOXDIR/release_vdrdev2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
+		echo "   8) Prepare VDR2     jffs2"
+	fi
+fi
+if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev ]; then
+	echo "   9) Prepare Evolux-NTRINO-HD-VDR2   jffs2"
 fi
 echo "----------------------------"
 
@@ -170,6 +183,24 @@ case "$REPLY" in
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	8)  echo "Preparing VDR2 jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_vdrdev2_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating VDR2 jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf VDR2-JFFS2.tar.gz e2jffs2.img uImage
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	9)  echo "Preparing Evolux-NTRINO-HD-VDR2 jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Evolux-NTRINO-HD-VDR2 jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux-VDR2_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	*)  echo "Skipping...";;
