@@ -103,7 +103,7 @@ else
 	sleep 30
 fi
 if [ -e $PATCHDIR/custom/myPatches_release_vdrdev2.diff ]; then
-	cd $CHANGEDIR/release_with_dev && patch -p1 < "../../custom/myPatches_release_vdrdev2.diff"
+	cd $CHANGEDIR/release_vdrdev2_with_dev && patch -p1 < "../../custom/myPatches_release_vdrdev2.diff"
 fi
 	#$USERS chown root:root $CHANGEDIR/release_vdrdev2_with_dev/bin/lcd4linux
 	#$USERS chmod 700 $CHANGEDIR/release_vdrdev2_with_dev/etc/lcd4linux.conf

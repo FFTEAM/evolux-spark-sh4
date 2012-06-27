@@ -65,7 +65,15 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -dp $(targetprefix)/etc/shells $(prefix)/release_vdrdev2/etc/ && \
 	cp -dp $(targetprefix)/etc/shells.conf $(prefix)/release_vdrdev2/etc/ && \
 	cp -dp $(buildprefix)/root/etc/timezone.xml $(prefix)/release_vdrdev2/etc/ && \
+	echo "127.0.0.1       localhost.localdomain   localhost" > $(prefix)/release_vdrdev2/etc/hosts && \
+	touch $(prefix)/release_vdrdev2/etc/nsswitch.conf && \
+	echo "hosts: files dns" > $(prefix)/release_vdrdev2/etc/nsswitch.conf && \
 	cp -dp $(targetprefix)/etc/vsftpd.conf $(prefix)/release_vdrdev2/etc/ && \
+	sed "s@listen=YES@listen=NO@g" -i $(prefix)/release_vdrdev2/etc/vsftpd.conf && \
+	echo "8001 stream tcp nowait root /bin/streamproxy streamproxy" > $(prefix)/release_vdrdev2/etc/inetd.conf && \
+	echo "ftp stream tcp nowait root /usr/bin/vsftpd vsftpd" >> $(prefix)/release_vdrdev2/etc/inetd.conf && \
+	echo "telnet stream tcp nowait root /usr/sbin/telnetd telnetd -i -l /bin/login" >> $(prefix)/release_vdrdev2/etc/inetd.conf && \
+	echo "ssh stream tcp nowait root /bin/dropbear dropbear -i" >> $(prefix)/release_vdrdev2/etc/inetd.conf && \
 	cp -dp $(targetprefix)/etc/vdstandby.cfg $(prefix)/release_vdrdev2/etc/ && \
 	cp -dp $(targetprefix)/etc/network/interfaces $(prefix)/release_vdrdev2/etc/network/ && \
 	cp -dp $(targetprefix)/etc/network/options $(prefix)/release_vdrdev2/etc/network/ && \
@@ -250,7 +258,9 @@ $(DEPDIR)/%release_vdrdev2:
 	$(INSTALL_DIR) $(prefix)/release_vdrdev2/usr/local/bin
 	cp -rd $(targetprefix)/usr/local/bin/vdr $(prefix)/release_vdrdev2/usr/local/bin/
 	find $(prefix)/release_vdrdev2/usr/local/bin/ -name  vdr -exec sh4-linux-strip --strip-unneeded {} \;
-
+	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release_vdrdev2/bin/
+	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release_vdrdev2/bin/
+	mkdir -p $(prefix)/release_vdrdev2/etc/dropbear
 #######################################################################################
 
 #	$(INSTALL_DIR) $(prefix)/release_vdrdev2/usr/local/share

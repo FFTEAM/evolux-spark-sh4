@@ -32,7 +32,6 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/inetd.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/localtime $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/rc.d/
-	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/init.d/
