@@ -29,6 +29,9 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	if [ -e $(prefix)/release_vdrdev2_with_dev/etc/graphlcd.conf ]; then \
 		cp -RP $(prefix)/release_vdrdev2_with_dev/etc/graphlcd.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/; \
 	fi;
+	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/fonts $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/
+	rm -rf $(prefix)/release_vdrdev2_with_dev/etc/fonts
+	( cd $(prefix)/release_vdrdev2_with_dev/etc/ && ln -sf ../usr/local/share/vdr/fonts fonts
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/inetd.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/localtime $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/rc.d/

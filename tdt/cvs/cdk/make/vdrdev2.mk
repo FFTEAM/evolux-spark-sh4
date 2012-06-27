@@ -23,10 +23,6 @@ $(DEPDIR)/vdrdev2: vdrdev2.do_compile
 	( cd $(targetprefix)/etc/vdr/plugins && ln -sf streamdev streamdev-server )
 	touch $@
 
-vdrdev2-clean:
-	-rm .deps/vdrdev2
-	-rm .deps/vdrdev2.do_compile
-
-vdrdev2-distclean:
+vdrdev2-clean vdrdev2-distclean:
 	$(MAKE) -C $(appsdir)/vdr/vdr-1.7.28 clean clean-plugins
 	-rm .deps/vdrdev2*

@@ -426,6 +426,13 @@ AC_ARG_ENABLE(hs7810a,
 AM_CONDITIONAL(ENABLE_HS7810A,test "$enable_hs7810a" = "yes")
 AC_SUBST(HS7810A)
 
+AC_ARG_ENABLE(whitebox,
+	AS_HELP_STRING(--enable-whitebox,    enable fortis whitebox stuff),
+	[case "${enableval}" in
+		yes) WHITEBOX=whitebox ;;
+	esac],[enable_WHITEBOX=no])
+AM_CONDITIONAL(ENABLE_WHITEBOX,test "$enable_whitebox" = "yes")
+AC_SUBST(WHITEBOX)
 AC_ARG_ENABLE(hs7110,
 	AS_HELP_STRING(--enable-hs7110,    enable fortis hs7110 stuff),
 	[case "${enableval}" in
