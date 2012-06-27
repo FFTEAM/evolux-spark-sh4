@@ -127,7 +127,7 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/etc/fonts/vdr.ttf
 	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/etc/fonts/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_vdrdev2/sbin/
-	cp -RP $(buildprefix)/root/etc/init.d/ntpupdate.sh $(prefix)/release_vdrdev2/sbin/
+	cp -RP $(buildprefix)/root/etc/init.d/ntpupdate.sh $(prefix)/release_vdrdev2/etc/init.d/
 	touch $(prefix)/release_vdrdev2/etc/changelog.txt
 	rm -rf $(prefix)/release_vdrdev2/etc/vdr
 	echo "EVO_VDR2" > $(prefix)/release_vdrdev2/etc/hostname
