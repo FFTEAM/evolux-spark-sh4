@@ -92,12 +92,8 @@ neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean neutrino-hd-plugins-cl
 		$(MAKE) distclean && \
 		find $(appsdir)/neutrino-hd -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/neutrino-hd/autom4te.cache
-	cd $(appsdir)/neutrino-hd/data/locale && \
-		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq > /tmp/log && \
-		cut -d' ' -f1 deutsch.locale | uniq  | diff - /tmp/log && \
-		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | tr [:lower:] [:upper:] | tr \. \_  | tr \- \_ | tr -d \? | ./create.locals.h && \
-		cut -d' ' -f1 deutsch.locale | LC_ALL=C sort | uniq | ./create.locals_intern.h && \
-		cp locals.h locals_intern.h ../../src/system
+
+
 #
 # neutrino-hd-plugins
 #
