@@ -179,7 +179,7 @@ endif
 
 evolux-neutrino-hd-vdr2: yaud-neutrino-hd \
 		yaud-vdr2 \
-		release_evolux_neutrino-vdr2
+		release_evolux_neutrino-hd_vdr2
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
 if ENABLE_MULTI_YAFFS2
