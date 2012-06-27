@@ -424,13 +424,13 @@ extramenu.boot.bootargs.head Änderung der Boot-Parameter
 extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.boot.changed wird bei Neustart aktiv. Bitte rebooten!
 extramenu.boot.enigma2 E2
-extramenu.boot.vdr VDR
 extramenu.boot.head Boot-Einstellungen
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.spark Spark
 extramenu.boot.this Kein Wechsel auf Spark oder E2 bei Reboot.
 extramenu.boot.unchanged Unverändert
 extramenu.boot.unsupported E2 wird auf diesem System nicht unterstützt!
+extramenu.boot.vdr VDR
 extramenu.disabled wurde deaktiviert.
 extramenu.emu Cam-Einstellungen
 extramenu.emu.disable CAM deaktivieren

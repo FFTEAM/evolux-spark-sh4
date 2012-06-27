@@ -424,13 +424,13 @@ extramenu.boot.bootargs.head Boot parameter change
 extramenu.boot.bootargs.text Do not switch off your set-top box!
 extramenu.boot.changed will be active after boot. Please reboot now.
 extramenu.boot.enigma2 E2
-extramenu.boot.vdr VDR
 extramenu.boot.head Boot Settings
 extramenu.boot.select System to start on reboot
 extramenu.boot.spark Spark
 extramenu.boot.this No change to Spark or E2 at reboot
 extramenu.boot.unchanged Unchanged
 extramenu.boot.unsupported E2 is not supported on this system!
+extramenu.boot.vdr VDR
 extramenu.disabled is disabled.
 extramenu.emu Cam Setup
 extramenu.emu.disable Disable CAM
