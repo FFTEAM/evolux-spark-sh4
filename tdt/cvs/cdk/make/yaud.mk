@@ -177,7 +177,7 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
-evolux-neutrino-vdr2: yaud-neutrino-hd \
+evolux-neutrino-hd-vdr2: yaud-neutrino-hd \
 		yaud-vdr2 \
 		release_evolux_neutrino-vdr2
 	@TUXBOX_YAUD_CUSTOMIZE@
@@ -188,7 +188,7 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
-evolux-neutrino-vdr2-full: yaud-none lirc stslave \
+evolux-neutrino-hd-vdr2-full: yaud-none lirc stslave \
 		yaud-neutrino-hd \
 		yaud-vdr2 \
 		release_evolux_neutrino-vdr2

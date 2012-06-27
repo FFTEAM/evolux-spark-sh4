@@ -128,7 +128,7 @@ include make/release_evolux_pli.mk
 
 include make/release_evolux_neutrino-hd_pli.mk
 
-include make/release_evolux_neutrino-vdr2.mk
+include make/release_evolux_neutrino-hd_vdr2.mk
 
 # Give the user rope to hang himself :-).  (Note: read from the
 # generated Makefile during make run, automake or configure does not
