@@ -306,7 +306,14 @@ int CScanTs::exec(CMenuTarget* /*parent*/, const std::string & actionKey)
 				}
 			}
 			else
+#ifdef EVOLUX
+			{
+#endif
 				msg = handleMsg(msg, data);
+#ifdef EVOLUX
+				frameBuffer->blit();
+			}
+#endif
 		}
 		while (!(msg == CRCInput::RC_timeout));
 		showSNR(); // FIXME commented until scan slowdown will be solved
