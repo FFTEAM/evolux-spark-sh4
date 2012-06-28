@@ -43,18 +43,18 @@
 -   </menus>
 -  </setup>
 -->
-<setup sysconfigFile="/etc/vdr/sysconfig" bootLinux="/sbin/reboot" VDRlibDir="/usr/lib/vdr" ReturnValue="1/0">
+<setup sysconfigFile="/usr/local/share/vdr/sysconfig" bootLinux="/sbin/reboot" VDRlibDir="/usr/lib/vdr" ReturnValue="1/0">
     <plugins sysconfig="PLUGINLIST">
         <plugin name="femon" info="Anzeige Signalstärke/Qualität" active="no" />
-        <plugin name="remote" param="-i /dev/input/event0" info="DVB Karten Fernbedienung" active="yes" protected="1" />
+        <plugin name="remote" param="-i /dev/input/event1" info="DVB Karten Fernbedienung" active="yes" protected="1" />
         <plugin name="epgsearch" info="EPG zeigt Wiederholungen" active="no" />
-        <plugin name="radio" param="-d /var/cache/radio" info="Hintergrundbild für Radiosender" active="no" />
+        <plugin name="radio" param="-d /tmp/cache/radio" info="Hintergrundbild für Radiosender" active="no" />
         <plugin name="setup" info="Minivdr-Setup" active="yes" protected="1" />
         <plugin name="status" info="Osd-Status" active="no" />
         <plugin name="text2skin" info="Skin-Plugin für VDR" active="yes" />
         <plugin name="streamdev-client" info="Streaming Client" active="no" />
         <plugin name="streamdev-server" info="Streaming Server" active="no" />
-        <plugin name="osdteletext" param="-d /var/cache/vtx --max-cache=1" info="Teletext Dekoder für das OSD" active="yes" />
+        <plugin name="osdteletext" param="-d /tmp/cache/vtx --max-cache=1" info="Teletext Dekoder für das OSD" active="yes" />
         <plugin name="extrecmenu" info="extrecmenu" active="no" />
         <plugin name="conflictcheckonly" info="conflictcheckonly" active="no" />
         <plugin name="epgsearchonly" info="epgsearchonly" active="no" />

@@ -11,4 +11,4 @@
 # Attribut sysconfig im minivdr-setup.xml angegeben wird.
 #
 
-PLUGINLIST=" \"-Psetup\" "
+PLUGINLIST=" \"-Psetup\" \"-Ptext2skin\" \"-Premote -i /dev/input/event1\" \"-Pvfd\" \"-Posdteletext -d /tmp/cache/vtx --max-cache=1\" \"-Preelchannelscan\"  "
