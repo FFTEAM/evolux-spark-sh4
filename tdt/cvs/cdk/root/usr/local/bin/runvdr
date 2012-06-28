@@ -1,5 +1,6 @@
-#!/bin/sh
-
+#!/bin/bash
+#export VDR_CHARSET_OVERRIDE="ISO-8859-15"
+export LANG="de_DE.UTF-8"
 # runvdr: executes vdr
 # this is a special runscript to execute vdr on kathrein UFS910
 # for the original runvdr see vdr source code package
