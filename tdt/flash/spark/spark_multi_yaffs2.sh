@@ -177,7 +177,7 @@ case "$REPLY" in
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	9)  echo "Creating Evolux-NTRINO-HD-VDR2  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux-VDR2_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
