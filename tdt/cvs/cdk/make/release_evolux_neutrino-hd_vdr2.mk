@@ -39,6 +39,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/lib/libcap* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/lib/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/lib/libuci* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/lib/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/lib/locale $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/lib/
+	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/lib/gconv $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/lib/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/sbin/uci $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/sbin/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/bin/setup-* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/bin/
 	cp -RP $(prefix)/release_vdrdev2_with_dev/usr/bin/sync-* $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/bin/
