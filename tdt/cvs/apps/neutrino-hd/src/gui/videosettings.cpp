@@ -10,6 +10,8 @@
 	Copyright (C) 2009 T. Graf 'dbt'
 	Homepage: http://www.dbox2-tuning.net/
 
+	Copyright (C) 2010-2012 Stefan Seyfried
+
 	License: GPL
 
 	This program is free software; you can redistribute it and/or modify
@@ -180,7 +182,7 @@ CMenuOptionChooser::keyval_ext VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_O
 };
 #endif
 
-#if HAVE_SPARK_HARDWARE
+#if HAVE_SPARK_HARDWARE || HAVE_AZBOX_HARDWARE
 CMenuOptionChooser::keyval_ext VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
 {
 	{ VIDEO_STD_PAL,     NONEXISTANT_LOCALE, "PAL"		},
@@ -293,6 +295,7 @@ int CVideoSettings::showVideoSetup()
 		videosetup->addItem(vs_dbdropt_ch);	  //dbdr options
 		videosetup->addItem(vs_videomodes_fw);	  //video modes submenue
 	}
+
 #ifdef EVOLUX
 	videosetup->addItem(GenericMenuSeparatorLine);
 	videosetup->addItem(new CMenuForwarder(LOCALE_VIDEOMENU_PSI, true, NULL, CNeutrinoApp::getInstance()->chPSISetup, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));;

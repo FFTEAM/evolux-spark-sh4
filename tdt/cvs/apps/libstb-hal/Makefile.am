@@ -5,7 +5,8 @@ bin_PROGRAMS = libstb-hal-test
 
 libstb_hal_a_LIBADD = \
 	common/ca.o \
-	common/lt_debug.o
+	common/lt_debug.o \
+	common/proc_tools.o
 
 libstb_hal_test_SOURCES = libtest.cpp
 libstb_hal_test_LDADD = \
@@ -29,6 +30,17 @@ libstb_hal_a_LIBADD += \
 	libtriple/pwrmngr.o \
 	libtriple/record_td.o \
 	libtriple/video_td.o
+endif
+if BOXTYPE_AZBOX
+SUBDIRS += azbox
+libstb_hal_a_LIBADD += \
+	azbox/audio.o \
+	azbox/dmx.o \
+	azbox/init.o \
+	azbox/playback.o \
+	azbox/pwrmngr.o \
+	azbox/record.o \
+	azbox/video.o
 endif
 if BOXTYPE_SPARK
 SUBDIRS += libspark libeplayer3
