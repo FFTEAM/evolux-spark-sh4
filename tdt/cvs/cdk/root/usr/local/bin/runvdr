@@ -1,6 +1,16 @@
 #!/bin/bash
+# set timezone = Europe/Berlin
+#export TZ=$( cat /tmp/TZ )
+
 #export VDR_CHARSET_OVERRIDE="ISO-8859-15"
 export LANG="de_DE.UTF-8"
+export LC_ALL=de_DE.UTF-8
+
+#VIDEO=720p50
+VIDEO=1080i50
+echo $VIDEO >/proc/stb/video/videomode
+echo "bestfit" > /proc/stb/video/policy
+
 # runvdr: executes vdr
 # this is a special runscript to execute vdr on kathrein UFS910
 # for the original runvdr see vdr source code package
@@ -10,7 +20,7 @@ export LANG="de_DE.UTF-8"
 #
 # version: 2010-01-18 @expected
 
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
+PATH=/sbin:/bin:/usr/sbin:/usr/bin::/usr/local/bin
 
 # vdr config dir
 VDRCONFDIR="/usr/local/share/vdr"
@@ -21,43 +31,69 @@ VDRBINDIR="/usr/local/bin"
 # vdr binary
 VDRPRG="$VDRBINDIR/vdr"
 # vdr standard params
-VDRCMD="$VDRPRG -w 60 -s $VDRBINDIR/vdrshutdown"
+#VDRCMD="$VDRPRG -w 60 -s $VDRBINDIR/vdrshutdown"
+VDRCMD="$VDRPRG -s $VDRBINDIR/vdrshutdown -E /tmp/cache/epg/epg.data $*"
+VIDEODIR="/media/hdd/movie"
 # vdr killcommand
 KILLCMD="killall -q -TERM vdr"
 
 # plugin load file contains optional plugins
-PLUGINCFG="$VDRCONFDIR/plugins.load"
+#PLUGINCFG="$VDRCONFDIR/plugins.load"
 
 # build plugin load configuration
-PLUGINS=""
+#PLUGINS=""
 # read optional plugins from config file
-if [ -e $PLUGINCFG ]; then
-   while read PLUGINENTRY; do
+#if [ -e $PLUGINCFG ]; then
+#   while read PLUGINENTRY; do
 	  # ignore comment lines and remove <CR> characters if any
-      PLUGINENTRY=`echo $PLUGINENTRY | tr -d '\r' | grep -v "[\#]"`
-      if [ -n "$PLUGINENTRY" ]; then
-         PLUGINS="$PLUGINS -P \"$PLUGINENTRY\""
-	  fi
-   done < $PLUGINCFG
-fi
+#      PLUGINENTRY=`echo $PLUGINENTRY | tr -d '\r' | grep -v "[\#]"`
+#      if [ -n "$PLUGINENTRY" ]; then
+#         PLUGINS="$PLUGINS -P \"$PLUGINENTRY\""
+#	  fi
+#   done < $PLUGINCFG
+#fi
 
 #echo "Plugins:" $PLUGINS
 #sleep 3
 
 # vdr main loop
+#while (true) do
+#   echo "vdr cmd line: $VDRCMD $PLUGINS"
+#   eval $VDRCMD $PLUGINS
+#   case "$?" in
+#   0) echo "VDR shutdown..." > /dev/vfd
+#      break ;;
+#   2) echo "VDR conf err!" > /dev/vfd
+#      break ;;
+#   esac
+#   $KILLCMD
+#   sleep 10
+#   echo "restarting VDR" > /dev/vfd
+#   echo "`date` restarting VDR"
+#done
+
+[ ! -d /tmp/cache/vtx ] && mkdir -p /tmp/cache/vtx || rm -rf /tmp/cache/vtx/*
+[ ! -d /tmp/cache/radio ] && mkdir -p /tmp/cache/radio || rm -rf /tmp/cache/radio/*
+[ ! -d /tmp/cache/epg ] && mkdir -p /tmp/cache/epg || rm -rf /tmp/cache/epg/*
+
+/usr/bin/sys-sysconfig.sh
+echo -n "Starting VDR: "
 while (true) do
-   echo "vdr cmd line: $VDRCMD $PLUGINS"
-   eval $VDRCMD $PLUGINS
-   case "$?" in
-   0) echo "VDR shutdown..." > /dev/vfd
-      break ;;
-   2) echo "VDR conf err!" > /dev/vfd
-      break ;;
-   esac
-   $KILLCMD
-   sleep 10
-   echo "restarting VDR" > /dev/vfd
-   echo "`date` restarting VDR"
+    if [ -f $VDRCONFDIR/sysconfig ]; then
+	. $VDRCONFDIR/sysconfig 2>/dev/null
+    else
+	PLUGINLIST="\"-Premote -i /dev/input/event1\" \"-Pvfd \" \"-Pdvbdevice \" \"-Ptext2skin \""
+    fi
+
+    # Remove timers.conf if $timers_remove_enabled equals 1
+    [ "${timers_remove_enabled}" = "1" ] && rm -f $VDRDIR/timers.conf
+
+    echo "$VDRCMD $PLUGINLIST -v $VIDEODIR"
+    eval "$VDRCMD $PLUGINLIST -v $VIDEODIR"
+    if test $? -eq 0 -o $? -eq 2; then exit; fi
+    $KILL $VDRPRG
+    sleep 3
+    echo -n "Restarting VDR: "
 done
 
 echo "VDR loop ended"
