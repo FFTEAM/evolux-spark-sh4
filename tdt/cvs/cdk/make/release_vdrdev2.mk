@@ -123,7 +123,12 @@ $(DEPDIR)/%release_vdrdev2:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_vdrdev2/lib/modules/
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr
+	mkdir -p $(prefix)/release_vdrdev2/etc/config
 	cp -RP $(targetprefix)/etc/vdr/* $(prefix)/release_vdrdev2/usr/local/share/vdr/
+	cp -RP $(buildprefix)/root/usr/lib/libuci* $(prefix)/release_vdrdev2/usr/lib/
+	cp -RP $(buildprefix)/root/usr/sbin/uci $(prefix)/release_vdrdev2/sbin/
+	cp -RP $(buildprefix)/root/usr/bin/setup-* $(prefix)/release_vdrdev2/usr/bin/
+	cp -RP $(buildprefix)/root/usr/bin/sync-* $(prefix)/release_vdrdev2/usr/bin/
 	cp -RP $(buildprefix)/root/usr/share/fonts/seg.ttf $(prefix)/release_vdrdev2/etc/fonts/vdr.ttf
 	cp -RP $(targetprefix)/etc/fonts/fonts.conf $(prefix)/release_vdrdev2/etc/fonts/
 	cp -RP $(buildprefix)/root/sbin/ntpdate $(prefix)/release_vdrdev2/sbin/
