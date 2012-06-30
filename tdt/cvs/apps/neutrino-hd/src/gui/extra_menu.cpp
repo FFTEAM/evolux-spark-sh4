@@ -70,8 +70,8 @@ const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 #define BOOT_E2       1
 #define BOOT_SPARK    2
 #define BOOT_VDR      3
-	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 	{ BOOT_E2, LOCALE_EXTRAMENU_BOOT_ENIGMA2 },
+	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
 	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR }
 };
@@ -97,29 +97,6 @@ static int touch(const char *filename) {
 	}
 	return 0;
 }
-
-#if 0
-static int safe_system(const char *command) {
-	pid_t child = fork();
-	switch(child){
-		case -1:
-			return -1;
-		case 0:
-			for(int i = 3; i < 256 /* arbitrary, but high enough */; i++)
-				close(i);
-			signal(SIGTERM, SIG_DFL);
-			signal(SIGINT, SIG_DFL);
-			signal(SIGHUP, SIG_DFL);
-			execl("/bin/sh", "sh", "-c", command, NULL);
-			exit(-1);
-		default:
-			int status;
-			waitpid(child, &status, 0);
-			return status;
-	}
-}
-#endif
-
 
 CExtraMenuSetup::CExtraMenuSetup(void)
 {
@@ -239,30 +216,29 @@ int CExtraMenuSetup::showExtraMenuSetup()
 		CRCInput::convertDigitToKey(shortcut++)));
 // << Swap support, part 1 of 2
 
-#if 0
-	// this is now handled by Service > Software Update
-	CEvoluxSoftwareUpdate_Menu *evoUpdateMenu = new CEvoluxSoftwareUpdate_Menu();
-
-	if (!access("/etc/enigma2/settings", R_OK))
-		m->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL,
-			evoUpdateMenu, NULL, CRCInput::convertDigitToKey(shortcut++)));
-#endif
-
 // >> Boot Selection, part 1 of 2
-#define DOTFILE_BOOTE2 "/etc/.start_enigma2"
-#define DOTFILE_BOOTSPARK "/etc/.start_spark"
-#define DOTFILE_BOOTVDR "/etc/.start_vdr"
+#define DOTFILE_BOOT_E2 "/etc/.start_enigma2"
+#define DOTFILE_BOOT_SPARK "/etc/.start_spark"
+#define DOTFILE_BOOT_VDR "/etc/.start_vdr"
+#define DOTFILE_BOOT_NHD "/etc/.nhd"
 	int boot = BOOT_NEUTRINO;
-	if (!access(DOTFILE_BOOTSPARK, F_OK))
+	if (!access(DOTFILE_BOOT_SPARK, F_OK))
 		boot = BOOT_SPARK;
-	else if (!access(DOTFILE_BOOTE2, F_OK))
+	else if (!access(DOTFILE_BOOT_E2, F_OK))
 		boot = BOOT_E2;
-	else if (!access(DOTFILE_BOOTVDR, F_OK))
+	else if (!access(DOTFILE_BOOT_VDR, F_OK))
 		boot = BOOT_VDR;
 	int old_boot = boot;
 
+	int boot_options_start = 0;
+	int boot_option_count = BOOT_OPTION_COUNT;
+	if (access("/usr/local/bin/enigma2", X_OK))
+		boot_options_start++, boot_option_count--;;
+	if (access("/usr/local/bin/vdr", X_OK))
+		boot_option_count--;
+
 	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_HEAD, &boot,
-		BOOT_OPTIONS, BOOT_OPTION_COUNT, true, NULL,
+		&BOOT_OPTIONS[boot_options_start], boot_option_count, true, NULL,
 		CRCInput::convertDigitToKey(shortcut++)));
 // << Boot Selection, part 1 of 2
 
@@ -270,9 +246,6 @@ int CExtraMenuSetup::showExtraMenuSetup()
 	m->hide ();
 	m->setSelected(selected);
 	delete m;
-#if 0
-	delete evoUpdateMenu;
-#endif
 
 	std::string hintText = "";
 
@@ -390,54 +363,65 @@ int CExtraMenuSetup::showExtraMenuSetup()
 // >> Boot Selection, part 2 of 2
 	if (boot != old_boot)
 	{
-		CHintBox *b = NULL;
-		if(boot == BOOT_SPARK || old_boot == BOOT_SPARK) {
-			b = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
-			b->paint();
-		}
-		if (boot == BOOT_SPARK) {
-			touch(DOTFILE_BOOTSPARK);
-			system("fw_setenv -s /etc/bootargs_orig");
-			if (hintText.length())
-				hintText += "\n";
-			hintText += "Spark " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED));
-		}
-		if (old_boot == BOOT_SPARK) {
-			unlink(DOTFILE_BOOTSPARK);
+		char tmp[200];
+		CHintBox *hintBox;
+		switch (old_boot) {
+		case BOOT_SPARK:
+			unlink(DOTFILE_BOOT_SPARK);
+			hintBox = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
+			hintBox->paint();
 			system("fw_setenv -s /etc/bootargs_evolux");
+			hintBox->hide();
+			delete hintBox;
+			break;
+		case BOOT_E2:
+			unlink(DOTFILE_BOOT_E2);
+			break;
+		case BOOT_VDR:
+			unlink(DOTFILE_BOOT_VDR);
+			break;
+		case BOOT_NEUTRINO:
+			// This should be the actual default, and any actions here should be strictly unnecessary.
+			unlink(DOTFILE_BOOT_NHD);
+			break;
 		}
-		if(b) {
-			b->hide();
-			delete b;
-		}
-		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO) {
+		switch (boot) {
+		case BOOT_E2:
+			touch(DOTFILE_BOOT_E2);
 			if (hintText.length())
 				hintText += "\n";
-			if (access("/usr/local/bin/enigma2", X_OK)) {
-				hintText += "E2 " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_UNSUPPORTED));
-			} else {
-				touch(DOTFILE_BOOTE2);
-				hintText += "E2 " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED));
-			}
-		}
-		else if (boot == BOOT_VDR && old_boot == BOOT_NEUTRINO) {
+			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
+				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_ENIGMA2));
+			hintText += string(tmp);
+			break;
+		case BOOT_VDR:
+			touch(DOTFILE_BOOT_VDR);
 			if (hintText.length())
 				hintText += "\n";
-			if (access("/usr/local/bin/vdr", X_OK)) {
-				hintText += "VDR " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_UNSUPPORTED));
-			} else {
-				touch(DOTFILE_BOOTVDR);
-				hintText += "VDR " + string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED));
-			}
-		}
-		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
-			unlink(DOTFILE_BOOTE2);
-		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_VDR)
-			unlink(DOTFILE_BOOTVDR);
-		if (boot == BOOT_NEUTRINO) {
+			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
+				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_VDR));
+			hintText += string(tmp);
+			break;
+		case BOOT_NEUTRINO:
+			touch(DOTFILE_BOOT_NHD); // This is actually plain broken and only indicates that rcS is a mess.
 			if (hintText.length())
 				hintText += "\n";
 			hintText += string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_THIS));
+			break;
+		case BOOT_SPARK:
+			touch(DOTFILE_BOOT_SPARK);
+			hintBox = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
+			hintBox->paint();
+			system("fw_setenv -s /etc/bootargs_orig");
+			hintBox->hide();
+			delete hintBox;
+			if (hintText.length())
+				hintText += "\n";
+			char tmp[200];
+			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
+					g_Locale->getText(LOCALE_EXTRAMENU_BOOT_SPARK));
+			hintText += string(tmp);
+			break;
 		}
 	}
 // << Boot Selection, part 2 of 2
@@ -1653,14 +1637,14 @@ int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 			// FIXME, localizations are missing (but rather not worth adding)
 			if (modules[i].active) {
 				if (modules[i].installed)
-					text += " is enabled and loaded\n";
+					text += "is enabled and loaded\n";
 				else
-					text += " is enabled but not loaded\n";
+					text += "is enabled but not loaded\n";
 			} else {
 				if (modules[i].installed)
-					text += " is disabled but loaded\n";
+					text += "is disabled but loaded\n";
 				else
-					text += " is disabled and not loaded\n";
+					text += "is disabled and not loaded\n";
 			}
 		}
 
