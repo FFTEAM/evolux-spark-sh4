@@ -363,10 +363,9 @@ extramenu.boot.enigma2 E2
 extramenu.boot.spark Spark
 extramenu.boot.select Выбор системы:
 extramenu.boot.unchanged без изменений
-extramenu.boot.unsupported Режим E2 не поддерживается на этом STB!
 extramenu.boot.bootargs.head Параметры загрузки STB
 extramenu.boot.bootargs.text Не выключайте ваш STB!
-extramenu.boot.changed режим активирован. Перезагрузите STB!
+extramenu.boot.changed %s режим активирован. Перезагрузите STB!
 extramenu.boot.this Изменения в режим загрузки не произведены.
 extramenu.nfsserver NFS сервер
 extramenu.fritzcall Fritzcall монитор

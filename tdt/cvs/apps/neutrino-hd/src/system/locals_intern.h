@@ -456,7 +456,6 @@ const char * locale_real_names[] =
 	"extramenu.boot.spark",
 	"extramenu.boot.this",
 	"extramenu.boot.unchanged",
-	"extramenu.boot.unsupported",
 	"extramenu.boot.vdr",
 	"extramenu.disabled",
 	"extramenu.emu",
