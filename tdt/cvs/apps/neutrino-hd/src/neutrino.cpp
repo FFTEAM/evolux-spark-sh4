@@ -233,7 +233,7 @@ static void initGlobals(void)
 	g_Radiotext     = NULL;
 	g_volume	= NULL;
 
-#if HAVE_SPARK_HARDWARE
+#if HAVE_SPARK_HARDWARE || HAVE_AZBOX_HARDWARE
 	/* spark has revision == 1 like tripledragon for now */
 	can_deepstandby = true;
 #else
@@ -709,7 +709,11 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.screenshot_video = configfile.getInt32( "screenshot_video",  1);
 	g_settings.screenshot_scale = configfile.getInt32( "screenshot_scale",  0);
 
+#ifdef EVOLUX
 	g_settings.screenshot_dir = configfile.getString( "screenshot_dir", "/media/hdd/pictures" );
+#else
+	g_settings.screenshot_dir = configfile.getString( "screenshot_dir", "/media/sda1/movies" );
+#endif
 	g_settings.cacheTXT = configfile.getInt32( "cacheTXT",  0);
 	g_settings.minimode = configfile.getInt32( "minimode",  0);
 	g_settings.mode_clock = configfile.getInt32( "mode_clock",  0);
@@ -736,7 +740,7 @@ int CNeutrinoApp::loadSetup(const char * fname)
 #if HAVE_TRIPLEDRAGON
 	g_settings.screen_preset = 0; /* does not make sense to have two configurations for that... */
 #endif
-#if HAVE_SPARK_HARDWARE
+#if HAVE_SPARK_HARDWARE || HAVE_AZBOX_HARDWARE
 	g_settings.screen_preset = 1; /* spark is now always using 1280x720 framebuffer */
 #endif
 	g_settings.screen_StartX = g_settings.screen_preset ? g_settings.screen_StartX_lcd : g_settings.screen_StartX_crt;

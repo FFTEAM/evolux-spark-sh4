@@ -3,6 +3,7 @@
 
 	Copyright (C) 2001 Steffen Hehn 'McClean'
                       2003 thegoodguy
+	Copyright (C) 2007-2012 Stefan Seyfried
 
 	License: GPL
 
@@ -487,28 +488,52 @@ int CFrameBuffer::setMode(unsigned int /*nxRes*/, unsigned int /*nyRes*/, unsign
 	if (!available&&!active)
 		return -1;
 
-#if 0
+#if HAVE_AZBOX_HARDWARE
+#ifndef FBIO_BLIT
+#define FBIO_SET_MANUAL_BLIT _IOW('F', 0x21, __u8)
+#define FBIO_BLIT 0x22
+#endif
+	// set manual blit
+	unsigned char tmp = 1;
+	if (ioctl(fd, FBIO_SET_MANUAL_BLIT, &tmp)<0)
+		perror("FBIO_SET_MANUAL_BLIT");
+
+	const unsigned int nxRes = 1280;
+	const unsigned int nyRes = 720;
+	const unsigned int nbpp  = 32;
 	screeninfo.xres_virtual=screeninfo.xres=nxRes;
-	screeninfo.yres_virtual=screeninfo.yres=nyRes;
+	screeninfo.yres_virtual = (screeninfo.yres = nyRes) * 2;
 	screeninfo.height=0;
 	screeninfo.width=0;
 	screeninfo.xoffset=screeninfo.yoffset=0;
 	screeninfo.bits_per_pixel=nbpp;
 
-	if (ioctl(fd, FBIOPUT_VSCREENINFO, &screeninfo)<0) {
-		perror("FBIOPUT_VSCREENINFO");
-	}
+	screeninfo.transp.offset = 24;
+	screeninfo.transp.length = 8;
+	screeninfo.red.offset = 16;
+	screeninfo.red.length = 8;
+	screeninfo.green.offset = 8;
+	screeninfo.green.length = 8;
+	screeninfo.blue.offset = 0;
+	screeninfo.blue.length = 8;
 
-	if(1) {
-		printf("SetMode: %dbits, red %d:%d green %d:%d blue %d:%d transp %d:%d\n",
-		screeninfo.bits_per_pixel, screeninfo.red.length, screeninfo.red.offset, screeninfo.green.length, screeninfo.green.offset, screeninfo.blue.length, screeninfo.blue.offset, screeninfo.transp.length, screeninfo.transp.offset);
+	if (ioctl(fd, FBIOPUT_VSCREENINFO, &screeninfo)<0) {
+		// try single buffering
+		screeninfo.yres_virtual = screeninfo.yres = nyRes;
+		if (ioctl(fd, FBIOPUT_VSCREENINFO, &screeninfo) < 0)
+		perror("FBIOPUT_VSCREENINFO");
+		printf("FB: double buffering not available.\n");
 	}
+	else
+		printf("FB: double buffering available!\n");
+
+	ioctl(fd, FBIOGET_VSCREENINFO, &screeninfo);
+
 	if ((screeninfo.xres!=nxRes) && (screeninfo.yres!=nyRes) && (screeninfo.bits_per_pixel!=nbpp))
 	{
 		printf("SetMode failed: wanted: %dx%dx%d, got %dx%dx%d\n",
 		       nxRes, nyRes, nbpp,
 		       screeninfo.xres, screeninfo.yres, screeninfo.bits_per_pixel);
-		return -1;
 	}
 #endif
 
@@ -533,9 +558,11 @@ int CFrameBuffer::setMode(unsigned int /*nxRes*/, unsigned int /*nyRes*/, unsign
 
 	//memset(getFrameBufferPointer(), 0, stride * yRes);
 	paintBackground();
+#if HAVE_COOL_HARDWARE
         if (ioctl(fd, FBIOBLANK, FB_BLANK_UNBLANK) < 0) {
                 printf("screen unblanking failed\n");
         }
+#endif
 	return 0;
 }
 
@@ -1040,6 +1067,7 @@ bool CFrameBuffer::paintIcon8(const std::string & filename, const int x, const i
 		d += stride;
 	}
 	close(lfd);
+	blit();
 	return true;
 }
 
@@ -1643,6 +1671,7 @@ void CFrameBuffer::paintBackground()
 	{
 		paintBoxRel(0, 0, xRes, yRes, backgroundColor);
 	}
+	blit();
 }
 
 void CFrameBuffer::SaveScreen(int x, int y, int dx, int dy, fb_pixel_t * const memp)
@@ -1917,6 +1946,25 @@ void CFrameBuffer::displayRGB(unsigned char *rgbbuff, int x_size, int y_size, in
         cs_free_uncached(fbbuff);
 }
 
+#ifdef HAVE_AZBOX_HARDWARE
+#ifndef FBIO_WAITFORVSYNC
+#define FBIO_WAITFORVSYNC _IOW('F', 0x20, __u32)
+#endif
+
+void CFrameBuffer::blit()
+{
+	// blit
+	if (ioctl(fd, FBIO_BLIT) < 0)
+		perror("FBIO_BLIT");
+#if 0
+	// sync bliter
+	int c = 0;
+	if( ioctl(fd, FBIO_WAITFORVSYNC, &c) < 0 )
+		perror("FBIO_WAITFORVSYNC");
+#endif
+}
+#endif
+
 void CFrameBuffer::paintMuteIcon(bool paint, int ax, int ay, int dx, int dy, bool paintFrame)
 {
 	if(paint) {
@@ -1930,4 +1978,5 @@ void CFrameBuffer::paintMuteIcon(bool paint, int ax, int ay, int dx, int dy, boo
 	}
 	else
 		paintBackgroundBoxRel(ax, ay, dx, dy);
+	blit();
 }
