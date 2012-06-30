@@ -220,7 +220,6 @@ int CExtraMenuSetup::showExtraMenuSetup()
 #define DOTFILE_BOOT_E2 "/etc/.start_enigma2"
 #define DOTFILE_BOOT_SPARK "/etc/.start_spark"
 #define DOTFILE_BOOT_VDR "/etc/.start_vdr"
-#define DOTFILE_BOOT_NHD "/etc/.nhd"
 	int boot = BOOT_NEUTRINO;
 	if (!access(DOTFILE_BOOT_SPARK, F_OK))
 		boot = BOOT_SPARK;
@@ -381,8 +380,6 @@ int CExtraMenuSetup::showExtraMenuSetup()
 			unlink(DOTFILE_BOOT_VDR);
 			break;
 		case BOOT_NEUTRINO:
-			// This should be the actual default, and any actions here should be strictly unnecessary.
-			unlink(DOTFILE_BOOT_NHD);
 			break;
 		}
 		switch (boot) {
@@ -403,7 +400,6 @@ int CExtraMenuSetup::showExtraMenuSetup()
 			hintText += string(tmp);
 			break;
 		case BOOT_NEUTRINO:
-			touch(DOTFILE_BOOT_NHD); // This is actually plain broken and only indicates that rcS is a mess.
 			if (hintText.length())
 				hintText += "\n";
 			hintText += string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_THIS));
