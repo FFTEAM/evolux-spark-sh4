@@ -51,6 +51,12 @@
 #include <neutrino.h>
 
 #include <zapit/client/zapittools.h>
+#ifdef EVOLUX
+#include "widget/textbox.h"
+#include <poll.h>
+#include <fcntl.h>
+#include <vector>
+#endif
 
 /* for alexW images with old drivers:
  * #define USE_VBI_INTERFACE 1
@@ -330,12 +336,76 @@ void CPlugins::startScriptPlugin(int number)
 	FILE *f = popen(script,"r");
 	if (f != NULL)
 	{
+#ifdef EVOLUX
+		Font *font = g_Font[SNeutrinoSettings::FONT_TYPE_GAMELIST_ITEMSMALL];
+		int lines_max = frameBuffer->getScreenHeight() / font->getHeight();
+		int h = lines_max * font->getHeight();
+		vector<std::string> lines(lines_max);
+		int lines_index = 0;
+		CBox textBoxPosition(frameBuffer->getScreenX(), frameBuffer->getScreenY(), frameBuffer->getScreenWidth(), h);
+		CTextBox textBox(script, font, 0, &textBoxPosition);
+		struct pollfd fds;
+		fds.fd = fileno(f);
+		fds.events = POLLIN | POLLHUP | POLLERR;
+		fcntl(fds.fd, F_SETFL, fcntl(fds.fd, F_GETFL, 0) | O_NONBLOCK);
+		bool ok = true;
+		std::string txt = "";
+
+		uint64_t lastPaint = 0;
+
+		do {
+			struct timeval tv;
+
+			fds.revents = 0;
+			int r = poll(&fds, 1, 300);
+
+			gettimeofday(&tv,NULL);
+			uint64_t now = (uint64_t) tv.tv_usec + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+
+			if (r > 0) {
+				if ((fds.revents & POLLIN)) {
+					int lines_read = 0;
+					char output[1024];
+					while (fgets(output, sizeof(output), f)) {
+						lines_read++;
+						lines_index++;
+						lines_index %= lines_max;
+						lines[lines_index] = std::string(output);
+						txt = "";
+						for (int i = lines_index + 1; i < lines_max; i++)
+							txt += lines[i];
+						for (int i = 0; i < lines_index; i++)
+							txt += lines[i];
+						if (lines_read == lines_max) {
+							lines_read = 0;
+							textBox.setText(&txt);
+							textBox.paint();
+							lastPaint = now;
+						}
+					}
+				} else
+					ok = false;
+			} else if (r < 0)
+				ok = false;
+
+			if (r < 1 || lastPaint + 250000 < now) {
+				textBox.setText(&txt);
+				textBox.paint();
+				lastPaint = now;
+			}
+		} while(ok);
+		pclose(f);
+		textBox.hide();
+		scriptOutput = lines[lines_index]; // FIXME -- could just return an empty string ...
+		sleep (3);
+#else
 		char output[1024];
 		while (fgets(output,1024,f))
 		{
 			scriptOutput += output;
 		}
 		pclose(f);
+#endif
 	}
 	else
 	{
