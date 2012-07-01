@@ -345,10 +345,7 @@ $(DEPDIR)/%release_vdrdev2:
 
 #	cp -rd $(targetprefix)/usr/local/share/locale/* $(prefix)/release_vdrdev2/usr/local/share/locale
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/share/vdr/locale
-	cp -RP $(targetprefix)/usr/local/share/locale/de_DE $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
-	cp -RP $(targetprefix)/usr/local/share/locale/ru_RU $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
-	cp -RP $(targetprefix)/usr/local/share/locale/nn_NO $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
-	cp -RP $(targetprefix)/usr/local/share/locale/uk_UA $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
+	cp -RP $(targetprefix)/usr/local/share/vdr/locale/de_DE $(prefix)/release_vdrdev2/usr/local/share/vdr/locale/
 	( cd $(prefix)/release_vdrdev2/usr/local/share && ln -sf ./vdr/locale locale )
 #######################################################################################
 #######################################################################################
