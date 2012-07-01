@@ -242,7 +242,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		if [ ! -e /media/hdd2 ]; then
 			mkdir -p /media/hdd2
 		fi
-		mount -o bind /autofs/sda1 /media/hdd2
+		mount -o bind /autofs/sda2 /media/hdd2
 		stdFolders="movie music picture swap epg timeshift"
 		for i in $stdFolders
 		do
