@@ -740,6 +740,20 @@ void cDvbHdDevice::SetDigitalAudioDevice(bool On)
 #ifdef PLATFORM_STB71XX
   dsyslog("cDvbHdDevice::%s:%d \n", __func__, __LINE__);
 #endif
+  if(On == 1)
+  {
+    dsyslog("SetDigitalAudioDevice = ON\n");
+    digitalAudio = 1;
+    int fd = open("/proc/stb/audio/ac3", O_WRONLY);
+    if (fd > -1) {
+       char *val = "passthrough\n";
+       write(fd, val, strlen(val));
+       close(fd);
+    }
+    int atype = 6;  // AC3
+    audioTrackType = atype;
+    CHECK(ioctl(fd_audio, AUDIO_SET_ENCODING, audioTrackType));
+  }
   if (digitalAudio != On) {
      if (digitalAudio)
         cCondWait::SleepMs(1000); // Wait until any leftover digital data has been flushed
