@@ -8,7 +8,8 @@ INTERNAL=2
 SNAPSHOT=$RELEASE
 TIMESTAMP=`date +%Y%m%d%H%M`
 #BUILDREV=`git describe | cut -f2 -d'-'`
-MyChangelog="cvs/cdk/own_build/enigma2/etc/changelog.txt"
+#MyChangelog="cvs/cdk/own_build/enigma2/etc/changelog.txt"
+MyChangelog="cvs/cdk/own_build/vdr/etc/changelog.txt"
 version1=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f1`
 version2=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f2`
 version3=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d . -f3`
