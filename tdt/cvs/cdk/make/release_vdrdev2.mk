@@ -309,7 +309,7 @@ $(DEPDIR)/%release_vdrdev2:
 	cp -rd $(targetprefix)/usr/lib/gconv/UTF-32.so $(prefix)/release_vdrdev2/usr/lib/gconv/
 	mkdir -p $(prefix)/release_vdrdev2/usr/script
 	mkdir -p $(prefix)/release_vdrdev2/usr/keys
-	( cd $(prefix)/release_vdrdev2/var && ln -s ../usr/keys keys )
+	( cd $(prefix)/release_vdrdev2/var && ln -s /usr/keys keys )
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/libxslt-plugins
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/pkgconfig
 	rm -rf $(prefix)/release_vdrdev2/usr/lib/sigc++-1.2
@@ -352,13 +352,13 @@ $(DEPDIR)/%release_vdrdev2:
 
 	$(INSTALL_DIR) $(prefix)/release_vdrdev2/usr/share/locale
 
-	mkdir -p $(prefix)/release_vdrdev2/var/vdr
+	( cd $(prefix)/release_vdrdev2/var && ln -sf /usr/local/share/vdr vdr )
 #	cp -rd $(targetprefix)/var/vdr/remote.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr/sources.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr/channels.conf $(prefix)/release_vdrdev2/var/vdr/
 #	cp -rd $(targetprefix)/var/vdr $(prefix)/release_vdrdev2/var/vdr/
 	cp -RP $(buildprefix)/root/usr/local/share/vdr $(prefix)/release_vdrdev2/usr/local/share/
-	( cd $(prefix)/release_vdrdev2/etc && ln -sf ../usr/local/share/vdr vdr )
+	( cd $(prefix)/release_vdrdev2/etc && ln -sf /usr/local/share/vdr vdr )
 #######################################################################################
 #######################################################################################
 #######################################################################################

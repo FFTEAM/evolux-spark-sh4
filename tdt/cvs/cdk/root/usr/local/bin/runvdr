@@ -8,8 +8,8 @@ export LC_ALL=de_DE.UTF-8
 
 #VIDEO=720p50
 VIDEO=1080i50
-echo $VIDEO >/proc/stb/video/videomode
-echo "bestfit" > /proc/stb/video/policy
+#echo $VIDEO >/proc/stb/video/videomode
+(sleep 7;echo bestfit > /proc/stb/video/policy) &
 
 # runvdr: executes vdr
 # this is a special runscript to execute vdr on kathrein UFS910

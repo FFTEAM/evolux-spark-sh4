@@ -47,6 +47,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 	cp -RP $(prefix)/release_vdrdev2_with_dev/etc/vdr $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/etc/
 	cp -RP $(appsdir)/vdr/vdr-1.7.28/diseqc.conf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/diseqc.conf.example
 #	cp -RP $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/boot/uImage $(prefix)/
+	( cd $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/var && ln -sf ../usr/local/share/vdr vdr )
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/plugins/text2skin/anthra*
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/plugins/text2skin/Egal*
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/plugins/text2skin/Narrow*
