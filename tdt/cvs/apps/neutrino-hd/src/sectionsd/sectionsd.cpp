@@ -5376,9 +5376,6 @@ static s_cmd_table connectionCommands[sectionsd::numberOfCommands] = {
 //static void *connectionThread(void *conn)
 bool sectionsd_parse_command(CBasicMessage::Header &rmsg, int connfd)
 {
-#ifdef EVOLUX
-	set_threadname(__func__);
-#endif
 	/*
 	  pthread_t threadConnection;
 	  rc = pthread_create(&threadConnection, &conn_attrs, connectionThread, client);
