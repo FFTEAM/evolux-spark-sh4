@@ -1,8 +1,9 @@
 #!/bin/sh
 CURDIR=`pwd`
 PINGUDIR=${CURDIR%/cvs/cdk}
-whichE2=`ls $PINGUDIR/tufsbox | grep release-enigma2-pli-nightly_with_dev` 
-if [ ! -z "$whichE2" ]; then
+whichE2=`ls $PINGUDIR/tufsbox | grep release-enigma2-pli-nightly_with_dev`
+whichE3=`ls $PINGUDIR/tufsbox | grep release_neutrino-hd2_with_dev` 
+if [ ! -z "$whichE2" ] && [ -z "$whichE3" ]; then
 	E2DIR=$PINGUDIR/tufsbox/release-enigma2-pli-nightly_with_dev
 	EVOLUXDIR=$PINGUDIR/tufsbox/release_evolux_pli_with_dev
 else
@@ -10,7 +11,14 @@ else
 	E2DIR=$PINGUDIR/tufsbox/release_with_dev
 	EVOLUXDIR=$PINGUDIR/tufsbox/release_EVOLUX_with_dev
 fi
-NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino_with_dev
+
+VDRDIR=$PINGUDIR/tufsbox/release_vdrdev2_with_dev
+if [ ! -z "$whichE3" ] && [ -z "$whichE2" ]; then
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd2_with_dev
+else
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino_with_dev
+fi
+
 DESTINATION="/devel/E2"
 DATE=`date +%Y%m%d`
 # originally created by schischu and konfetti
@@ -38,8 +46,65 @@ if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
 	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="su -c";
 	fi
 fi
+doOptimizeNtrino() {
+	SOURCE="$NEUTRINODIR"
+	# optimze png+jpg #
+	list=`find $SOURCE -name "*.png" -print`
+	list2=`find $SOURCE -name "*.jpg" -print`
+	for i in $list
+	do
+	if [ ! -L $i ]
+	then
+	advpng -z -4 $i
+	fi
+	done
+	for i in $list2
+	do
+	if [ ! -L $i ]
+	then
+	jpegoptim -o -f -m90 --strip-all $i
+	fi
+	done
+}
+doOptimizeVdr() {
+	SOURCE="$VDRDIR"
+	# optimze png+jpg #
+	list=`find $SOURCE -name "*.png" -print`
+	list2=`find $SOURCE -name "*.jpg" -print`
+	for i in $list
+	do
+	if [ ! -L $i ]
+	then
+	advpng -z -4 $i
+	fi
+	done
+	for i in $list2
+	do
+	if [ ! -L $i ]
+	then
+	jpegoptim -o -f -m90 --strip-all $i
+	fi
+	done
+}
 doOptimizeE2() {
 	SOURCE="$E2DIR"
+	# optimze png+jpg #
+	list=`find $SOURCE -name "*.png" -print`
+	list2=`find $SOURCE -name "*.jpg" -print`
+	for i in $list
+	do
+	if [ ! -L $i ]
+	then
+	advpng -z -4 $i
+	fi
+	done
+	for i in $list2
+	do
+	if [ ! -L $i ]
+	then
+	jpegoptim -o -f -m90 --strip-all $i
+	fi
+	done
 	cd /usr/bin
 	$USERS ln -sf python2.6 python
 	cd $CURDIR
@@ -98,15 +163,15 @@ doOptimizeE2() {
 	echo "config.usage.show_infobar_on_event_change=false" >> $SOURCE/etc/enigma2/settings
 	echo "config.usage.show_event_progress_in_servicelist=true" >> $SOURCE/etc/enigma2/settings
 	#echo "config.audio.volume=25" >> $SOURCE/etc/enigma2/settings
-
-	mkdir -p $SOURCE/usr/local/share/enigma2/PP-MD-Skin; rm $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin.xml; mv $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin_pingu.xml $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin.xml;for i in $(ls $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin); do ln -s "/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/$i" "$SOURCE/usr/local/share/enigma2/PP-MD-Skin/$i"; done
-
-	rm $SOURCE/usr/lib/enigma2/python/Screens/InfoBarGenerics.py
-	rm $SOURCE/usr/lib/enigma2/python/Screens/InfoBar.py
-	rm $SOURCE/usr/lib/enigma2/python/Components/PPInfoBar.py
-	rm $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/*.py
-	rm $SOURCE/usr/lib/enigma2/python/Components/Renderer/chNumber.py
-
+	if [ ! -e $SOURCE/usr/local/share/enigma2/PP-MD-Skin }; then
+		mkdir -p $SOURCE/usr/local/share/enigma2/PP-MD-Skin; rm $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin.xml; mv $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin_pingu.xml $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/skin.xml;for i in $(ls $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin); do ln -s "/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/Skin/PP-MD-Skin/$i" "$SOURCE/usr/local/share/enigma2/PP-MD-Skin/$i"; done
+	fi
+#	rm $SOURCE/usr/lib/enigma2/python/Screens/InfoBarGenerics.py
+#	rm $SOURCE/usr/lib/enigma2/python/Screens/InfoBar.py
+#	rm $SOURCE/usr/lib/enigma2/python/Components/PPInfoBar.py
+#	rm $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel/*.py
+#	rm $SOURCE/usr/lib/enigma2/python/Components/Renderer/chNumber.py
+	rm -rf $SOURCE/usr/lib/enigma2/python/Plugins/Extensions/WebInterface
 
 	for i in cs ar et fr hr is lt nl sl sv uk ca da el es fi fy hu it lv pt sk sr tr
 	do
@@ -131,7 +196,18 @@ doOptimizeE2() {
 	fi
 #	cp -RP $SOURCE/etc/changelog.txt $PINGUDIR/tufsbox/
 }
-doOptimizeE2
+if [ -e $E2DIR ]; then
+	doOptimizeE2
+fi
+if [ -e $NEUTRINODIR ]; then
+	doOptimizeNtrino
+fi
+if [ -e $VDRDIR ]; then
+	doOptimizeVdr
+fi
+find $VDRDIR -name "find.txt" -exec rm {} \;
+find $NEUTRINODIR -name "find.txt" -exec rm {} \;
+find $E2DIR -name "find.txt" -exec rm {} \;
 cd $CURDIR
 exit
 
