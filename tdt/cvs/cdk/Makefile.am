@@ -131,6 +131,8 @@ include make/release_evolux.mk
 
 include make/release_evolux_pli.mk
 
+include make/release_evolux_neutrino-hd2.mk
+
 include make/release_evolux_neutrino-hd_pli.mk
 
 include make/release_evolux_neutrino-hd_vdr2.mk

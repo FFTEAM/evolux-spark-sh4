@@ -86,27 +86,27 @@ echo "Checking targets..."
 echo "Found targets:"
 echo "   0) Skipping..."
 if [ -d $TUFSBOXDIR/release_neutrino_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
 		echo "   1) Prepare Ntrino     yaffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_neutrino-hd_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
 		echo "   2) Prepare Ntrino-HD     yaffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev ]; then
 		echo "   3) Prepare Ntrino-HD2     yaffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
 		echo "   4) Prepare Enigma2      yaffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
 		echo "   5) Prepare Enigma2-PLI  yaffs2"
 	fi
 fi
@@ -119,13 +119,16 @@ fi
 if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ]; then
 	echo "   8) Prepare Evolux-NTRINO-HD-PLI   yaffs2"
 fi
+if [ -d $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev ]; then
+	echo "   9) Prepare Evolux-NTRINO-HD2   yaffs2"
+fi
 if [ -d $TUFSBOXDIR/release_vdrdev2_with_dev ]; then
 	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_with_dev ] && [ ! -d $TUFSBOXDIR/release ] && [ ! -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino-hd2_with_dev ]  && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_neutrino_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
-		echo "   9) Prepare VDR2     yaffs2"
+		echo "   10) Prepare VDR2     yaffs2"
 	fi
 fi
 if [ -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
-	echo "   10) Prepare Evolux-NTRINO-HD-VDR2   yaffs2"
+	echo "   11) Prepare Evolux-NTRINO-HD-VDR2   yaffs2"
 fi
 
 read -t 10 -p "Select target (autoskip in 10s)? "
@@ -187,14 +190,21 @@ case "$REPLY" in
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	9)  echo "Creating VDR2  yaffs2 and uImage..."
+	9)  echo "Creating Evolux-NTRINO-HD2  yaffs2 and uImage..."
+		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev $CURDIR/out/e2yaffs2.img
+		cp $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev/boot/uImage $CURDIR/out/uImage
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux_HD2_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	10)  echo "Creating VDR2  yaffs2 and uImage..."
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_vdrdev2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_vdrdev2_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf VDR2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
-	10)  echo "Creating Evolux-NTRINO-HD-VDR2  yaffs2 and uImage..."
+	11)  echo "Creating Evolux-NTRINO-HD-VDR2  yaffs2 and uImage..."
 		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/release_evolux_neutrino-hd_vdr2_with_dev/boot/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/

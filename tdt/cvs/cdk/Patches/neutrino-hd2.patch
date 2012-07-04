@@ -114,3 +114,16 @@
  #else
  			RC_info		= KEY_INFO,		/* 0x166 */
 
+--- neutrino-hd2/src/neutrino.cpp	2012-07-03 18:23:25.010445110 +0200
++++ neutrino-hd2/src/neutrino.cpp	2012-07-05 00:10:27.361909124 +0200
+@@ -47,7 +47,8 @@
+ #include <sys/wait.h>
+ #include <sys/statvfs.h>
+ #include <sys/vfs.h>
+-
++#include <sys/statvfs.h>
++#include <sys/vfs.h>
+ #include <sys/socket.h>
+ 
+ #include <iostream>
+

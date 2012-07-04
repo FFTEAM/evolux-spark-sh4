@@ -375,10 +375,9 @@ endif
 	cp -aR $(targetprefix)/usr/local/share/iso-codes $(prefix)/release_neutrino-hd2/usr/local/share/
 #	TODO: Channellist ....
 	$(INSTALL_DIR) $(prefix)/release_neutrino-hd2/usr/local/share/config
-	cp -aR $(buildprefix)/root/usr/local/share/config/* $(prefix)/release_neutrino-hd2/usr/local/share/config/
+	cp -aR $(buildprefix)/root/usr/local/share/config-hd2/* $(prefix)/release_neutrino-hd2/usr/local/share/config/
 	cp -aR $(targetprefix)/usr/local/share/neutrino $(prefix)/release_neutrino-hd2/usr/local/share/
 #	( cd $(prefix)/release_neutrino-hd2/usr/local/share/config/tuxtxt/ && ln -sf tuxtxt2_720.conf tuxtxt2.conf )
-	rm $(prefix)/release_neutrino-hd2/usr/local/share/config/tuxtxt/tuxtxt2_*
 #	TODO: HACK
 	cp -aR $(targetprefix)/usr/local/share/neutrino/* $(prefix)/release_neutrino-hd2/usr/local/share/neutrino
 #######################################################################################
@@ -434,6 +433,8 @@ endif
 	( cd $(prefix)/release_neutrino-hd2/var && ln -s /usr/local/share/neutrino/httpd httpd )
 	find $(prefix)/release_neutrino-hd2/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino-hd2/etc/.fsck
+	touch $(prefix)/release_neutrino-hd2/etc/.nhd2
+	mkdir -p $(prefix)/release_neutrino-hd2/usr/script
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino-hd2/etc/init.d/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_neutrino-hd2/etc/ )
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release_neutrino-hd2/bin/
@@ -448,9 +449,11 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino-hd2/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd2/
-
+	cp -RP $(buildprefix)/libvorbisidec-1.0.2+svn16259/.libs/lib*.so* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd2/boot/
-
+	cp -RP $(appsdir)/neutrino-hd2/data/locale/deu*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2/data/locale/eng*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2/data/locale/russ*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino-hd2/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd2/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot.bin $(prefix)/release_neutrino-hd2/bin/fbshot

@@ -135,7 +135,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			insmod $MODDIR/stmcore-display-sti7111.ko STi7111Device_scart_output=1
 			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		else
-			if [ -e /etc/.nhd ]; then
+			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
 				MEMSIZE=12m
 			else
 				MEMSIZE=8m
@@ -398,12 +398,19 @@ if [ ! -e /var/etc/.firstboot ]; then
 		/usr/local/bin/runvdr
 
 	else
+		if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
+			mount -o bind /usr/local/share_nhd /usr/local/share
+			mount -o bind /usr/local/bin_nhd /usr/local/bin
+		elif [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
+			mount -o bind /usr/local/share_nhd2 /usr/local/share
+			mount -o bind /usr/local/bin_nhd2 /usr/local/bin
+		fi
 		echo "LOADING neutrino"
 
 		until false
 		do
 			echo "starting neutrino ->"
-			if [ -e /etc/.nhd ]; then
+			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
 				/usr/local/bin/neutrino
 			else
 				/usr/local/bin/neutrino -f -u
