@@ -14,6 +14,12 @@ $(targetprefix)/var/etc/.version:
 #
 
 $(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev
+	if [ ! -d $(appsdir)/neutrino-hd2 ]; then \
+		svn co http://neutrinohd2.googlecode.com/svn/trunk/ $(appsdir)/neutrino-hd22; \
+		mv $(appsdir)/neutrino-hd22/neutrino-hd $(appsdir)/neutrino-hd2; \
+		rm -rf $(appsdir)/neutrino-hd22; \
+		( cd $(appsdir)/neutrino-hd2 && patch -p1 < ../../cdk/Patches/neutrino-hd2.patch ); \
+	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd2 && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -42,7 +48,7 @@ $(DEPDIR)/neutrino-hd2: curl libogg libboost libvorbis libvorbisidec libungif fr
 	$(MAKE) -C $(appsdir)/neutrino-hd2 install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
-neutrino-hd2-clean neutrino-hd2-distclean:
+neutrino-hd2-clean:
 	rm -f $(DEPDIR)/neutrino-hd2
 	rm -f $(DEPDIR)/neutrino-hd2.do_compile
 	rm -f $(DEPDIR)/neutrino-hd2.do_prepare
@@ -61,4 +67,9 @@ neutrino-hd2-clean neutrino-hd2-distclean:
 		rm -rf $(appsdir)/neutrino-hd2/ltmain.sh && \
 		rm -rf $(appsdir)/neutrino-hd2/missing
 
+neutrino-hd2-distclean:
+	rm -f $(DEPDIR)/neutrino-hd2
+	rm -f $(DEPDIR)/neutrino-hd2.do_compile
+	rm -f $(DEPDIR)/neutrino-hd2.do_prepare
+	rm -rf $(appsdir)/neutrino-hd2
 
