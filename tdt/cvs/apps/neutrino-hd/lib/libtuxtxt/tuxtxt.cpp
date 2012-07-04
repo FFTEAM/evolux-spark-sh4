@@ -22,6 +22,7 @@
 #include <video.h>
 #ifdef EVOLUX
 #include <sys/time.h>
+#include <system/set_threadname.h>
 #endif
 
 /* same as in rcinput.h... */
@@ -1580,6 +1581,9 @@ static void cleanup_fb_pan()
 static void* reader_thread(void * /*arg*/)
 {
 	printf("TuxTxt subtitle thread started\n");
+#ifdef EVOLUX
+	set_threadname("ttx_reader_thread");
+#endif
 	reader_running = 1;
 	//ttx_paused = 0;
 	while(reader_running) {

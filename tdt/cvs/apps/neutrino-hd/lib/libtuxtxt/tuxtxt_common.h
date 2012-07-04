@@ -10,6 +10,9 @@
 #if TUXTXT_COMPRESS == 1
 #include <zlib.h>
 #endif
+#ifdef EVOLUX
+#include <system/set_threadname.h>
+#endif
 
 #include <zapit/include/dmx.h>
 
@@ -588,6 +591,9 @@ void *tuxtxt_CacheThread(void * /*arg*/)
 	tstPageinfo *pageinfo_thread;
 
 	printf("TuxTxt running thread...(%04x)\n",tuxtxt_cache.vtxtpid);
+#ifdef EVOLUX
+	set_threadname("tuxtxt_CacheThread");
+#endif
 	tuxtxt_cache.receiving = 1;
 	nice(3);
 	while (!stop_cache)

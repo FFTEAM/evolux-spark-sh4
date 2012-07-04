@@ -715,6 +715,9 @@ int CNeutrinoApp::loadSetup(const char * fname)
 	g_settings.screenshot_dir = configfile.getString( "screenshot_dir", "/media/sda1/movies" );
 #endif
 	g_settings.cacheTXT = configfile.getInt32( "cacheTXT",  0);
+#ifdef EVOLUX
+	g_settings.cacheTXT = 0;
+#endif
 	g_settings.minimode = configfile.getInt32( "minimode",  0);
 	g_settings.mode_clock = configfile.getInt32( "mode_clock",  0);
 	g_settings.zapto_pre_time = configfile.getInt32( "zapto_pre_time",  0);
