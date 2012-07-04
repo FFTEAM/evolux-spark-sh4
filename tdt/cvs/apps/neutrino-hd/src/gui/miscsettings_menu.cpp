@@ -276,7 +276,9 @@ void CMiscMenue::showMiscSettingsMenuGeneral(CMenuWidget *ms_general)
 	
 	//standby after boot
 	ms_general->addItem(new CMenuOptionChooser(LOCALE_EXTRA_START_TOSTANDBY, &g_settings.power_standby, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+#ifndef EVOLUX
 	ms_general->addItem(new CMenuOptionChooser(LOCALE_EXTRA_CACHE_TXT,  (int *)&g_settings.cacheTXT, OPTIONS_OFF0_ON1_OPTIONS, OPTIONS_OFF0_ON1_OPTION_COUNT, true));
+#endif
 
 	//fan speed
 	if (g_info.has_fan)
