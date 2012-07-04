@@ -280,13 +280,13 @@ $(DEPDIR)/libgif.do_compile: $(DEPDIR)/libgif.do_prepare
 $(eval $(call Cdkroot,libgif))
 
 #
-# LIBCURL
+# libcurl
 #
-$(DEPDIR)/curl.do_prepare: @DEPENDS_curl@
+$(DEPDIR)/curl.do_prepare: bootstrap openssl rtmpdump libz @DEPENDS_curl@
 	@PREPARE_curl@
 	touch $@
 
-$(DEPDIR)/curl.do_compile: bootstrap libz $(DEPDIR)/curl.do_prepare
+$(DEPDIR)/curl.do_compile: $(DEPDIR)/curl.do_prepare
 	cd @DIR_curl@ && \
 		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -Os" \
@@ -294,24 +294,25 @@ $(DEPDIR)/curl.do_compile: bootstrap libz $(DEPDIR)/curl.do_prepare
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--with-ssl \
+			--disable-debug \
+			--disable-verbose \
+			--disable-manual \
 			--mandir=/usr/share/man \
 			--with-random && \
 		$(MAKE) all
 	touch $@
 
-define curl/install/post
+$(DEPDIR)/min-curl $(DEPDIR)/std-curl $(DEPDIR)/max-curl \
+$(DEPDIR)/curl: \
+$(DEPDIR)/%curl: $(DEPDIR)/curl.do_compile
 	cd @DIR_curl@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(crossprefix)/bin/curl-config && \
-		chmod 755 $(crossprefix)/bin/curl-config
-endef
-
-# Evaluate yaud and temporary package install
-$(eval $(call Cdkroot,curl,libz))
-
-# Evaluate packages
-$(eval $(call Package,curl,libcurl))
-$(eval $(call Package,curl,curl))
-
+		chmod 755 $(crossprefix)/bin/curl-config && \
+		@INSTALL_curl@
+		rm -f $(targetprefix)/usr/bin/curl-config
+#	@DISTCLEANUP_curl@
+	[ "x$*" = "x" ] && touch $@ || true
 #
 # LIBFRIBIDI
 #
@@ -1667,8 +1668,10 @@ $(DEPDIR)/%libogg: $(DEPDIR)/libogg.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+#
 # libflac
-$(DEPDIR)/libflac.do_prepare: bootstrap  @DEPENDS_libflac@
+#
+$(DEPDIR)/libflac.do_prepare: bootstrap @DEPENDS_libflac@
 	@PREPARE_libflac@
 	touch $@
 
@@ -1698,8 +1701,8 @@ $(DEPDIR)/libflac: \
 $(DEPDIR)/%libflac: $(DEPDIR)/libflac.do_compile
 	cd @DIR_libflac@ && \
 		@INSTALL_libflac@
-	@[ "x$*" = "x" ] && touch $@ || true
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_libflac@
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GSTREAMER + PLUGINS  This will become the "libeplayer4"

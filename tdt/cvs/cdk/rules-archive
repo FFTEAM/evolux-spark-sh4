@@ -73,7 +73,8 @@ nano-2.0.6.tar.gz;http://www.nano-editor.org/dist/v2.0
 rsync-2.6.9.tar.gz;http://samba.anu.edu.au/ftp/rsync
 lm_sensors-2.9.2.tar.gz;http://dl.lm-sensors.org/lm-sensors/releases
 fuse-2.7.2.tar.gz;http://dfn.dl.sourceforge.net/sourceforge/fuse
-curlftpfs-0.9.1.tar.gz;http://kent.dl.sourceforge.net/sourceforge/curlftpfs
+#curlftpfs-0.9.1.tar.gz;http://kent.dl.sourceforge.net/sourceforge/curlftpfs
+curlftpfs-0.9.2.tar.gz;http://sourceforge.net/projects/curlftpfs/files/latest/download
 fbset_2.1.orig.tar.gz;http://ftp.de.debian.org/debian/pool/main/f/fbset
 # fbset_2.1-6.diff.gz;http://archive.debian.org/debian-archive/pool/main/f/fbset
 # fbset_2.1-6.diff.gz;http://ftp.kaist.ac.kr/debian-archive/pool/main/f/fbset/
@@ -93,6 +94,7 @@ ImageMagick-6.6.7-3.tar.bz2;http://ftp.sunet.se/pub/multimedia/graphics/ImageMag
 ncurses-5.5.tar.gz;http://ftp.gnu.org/pub/gnu/ncurses
 zlib-1.2.3.tar.bz2;http://kent.dl.sourceforge.net/sourceforge/libpng
 readline-5.2.tar.gz;ftp://ftp.cwru.edu/pub/bash
+freetype-2.1.4.tar.bz2;http://download.savannah.gnu.org/releases/freetype
 freetype-2.3.5.tar.bz2;http://download.savannah.gnu.org/releases/freetype
 #freetype-2.4.8.tar.bz2;http://download.savannah.gnu.org/releases/freetype
 #lirc-0.8.2.tar.gz;http://prdownloads.sourceforge.net/lirc
@@ -103,7 +105,8 @@ libpng-1.5.8.tar.bz2;http://ignum.dl.sourceforge.net/project/libpng/libpng15/1.5
 libungif-4.1.4.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib
 giflib-4.1.6.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib
 #curl-7.19.7.tar.gz;http://curl.haxx.se/download
-curl-7.23.1.tar.gz;http://curl.haxx.se/download
+#curl-7.23.1.tar.gz;http://curl.haxx.se/download
+curl-7.26.0.tar.gz;http://curl.haxx.se/download
 libvorbisidec_1.0.2+svn16259.orig.tar.gz;http://ftp.debian.org/debian/pool/main/libv/libvorbisidec
 fribidi-0.10.4.tar.bz2
 libsigc++-1.2.5.tar.gz;http://ftp.gnome.org/pub/GNOME/sources/libsigc++/1.2/

@@ -74,6 +74,9 @@ include make/neutrino.mk
 # Include neutrino-hd gui targets
 include make/neutrino-hd.mk
 
+# Include neutrino-hd gui targets
+include make/neutrino-hd2.mk
+
 # A small, but absolutely essential library
 include make/libtuxbox.mk
 
@@ -121,6 +124,8 @@ include make/release-enigma2-pli-nightly.mk
 include make/release_neutrino.mk
 
 include make/release_neutrino-hd.mk
+
+include make/release_neutrino-hd2.mk
 
 include make/release_evolux.mk
 
