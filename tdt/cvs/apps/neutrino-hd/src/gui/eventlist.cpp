@@ -307,7 +307,9 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 	}
 	paint(channel_id);
 	showFunctionBar(true, channel_id);
+#ifndef EVOLUX
 	frameBuffer->blit();
+#endif
 
 	int oldselected = selected;
 
@@ -316,6 +318,9 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 	bool loop = true;
 	while (loop)
 	{
+#ifdef EVOLUX
+		frameBuffer->blit();
+#endif
 		g_RCInput->getMsgAbsoluteTimeout(&msg, &data, &timeoutEnd);
 
 		if ( msg <= CRCInput::RC_MaxRC )
@@ -656,7 +661,9 @@ int EventList::exec(const t_channel_id channel_id, const std::string& channelnam
 				res = menu_return::RETURN_EXIT_ALL;
 			}
 		}
+#ifndef EVOLUX
 		frameBuffer->blit();
+#endif
 	}
 
 	hide();
@@ -795,7 +802,9 @@ void EventList::paintItem(unsigned int pos, t_channel_id channel_idI)
 		
 		
 	}
+#ifndef EVOLUX
 	frameBuffer->blit();
+#endif
 }
 void EventList::paintHead(std::string _channelname, std::string _channelname_prev, std::string _channelname_next)
 {
