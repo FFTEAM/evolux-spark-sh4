@@ -28,6 +28,13 @@ $(DEPDIR)/%release_evolux_neutrino-hd2:
 		cp -RP $(prefix)/release_neutrino-hd2_with_dev/etc/changelog.txt $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/; \
 	fi
 	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/neutrino/httpd $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd2/neutrino/
+	if [ -e $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share ]; then \
+		rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share; \
+	fi
+	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/fonts/* $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/
+	rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/fonts
+	( cd $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
+	( cd $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
 	echo "EvoHD2" > $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/hostname
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_neutrino-hd2_with_dev/lib/

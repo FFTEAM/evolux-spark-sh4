@@ -226,10 +226,10 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 #	/usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb
 	/etc/init.d/autofs start
-	if [ -e /usr/local/bin/enigma ]; then
+	if [ -e /usr/local/bin/enigma2 ]; then
 		rm -rf /media/hdd >/dev/null 2>&1
 		rm -rf /media/hdd2 >/dev/null 2>&1
-		(sleep 10
+		(sleep 8
 		if [ -e /autofs/sda1 ]; then
 			if [ ! -e /media/hdd ]; then
 				mkdir -p /media/hdd
@@ -420,6 +420,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		elif [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
 			mount -o bind /usr/local/share_nhd2 /usr/local/share
 			mount -o bind /usr/local/bin_nhd2 /usr/local/bin
+			/etc/init.d/DisplayTime.sh &
 		fi
 		echo "LOADING neutrino"
 
