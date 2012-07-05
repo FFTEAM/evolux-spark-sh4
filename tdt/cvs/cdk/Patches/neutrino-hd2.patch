@@ -113,7 +113,16 @@
 +			RC_info		= KEY_INFO,
  #else
  			RC_info		= KEY_INFO,		/* 0x166 */
-
+ #endif			
+@@ -363,7 +357,7 @@
+ #if HAVE_DVB_API_VERSION == 1
+ 			return fd_gamerc;
+ #else
+-			return fd_rc[0];
++			return fd_rc[1];
+ #endif
+ 		}
+ 		
 --- neutrino-hd2/src/neutrino.cpp	2012-07-03 18:23:25.010445110 +0200
 +++ neutrino-hd2/src/neutrino.cpp	2012-07-05 00:10:27.361909124 +0200
 @@ -47,7 +47,8 @@
