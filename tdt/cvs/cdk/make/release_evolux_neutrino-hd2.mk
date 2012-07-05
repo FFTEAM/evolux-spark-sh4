@@ -31,6 +31,14 @@ $(DEPDIR)/%release_evolux_neutrino-hd2:
 	if [ -e $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share ]; then \
 		rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share; \
 	fi
+	if [ -e $(prefix)/release_evolux_neutrino-hd2_with_dev/media/hdd ]; then \
+		rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/media/hdd; \
+	fi
+	( cd $(prefix)/release_evolux_neutrino-hd2_with_dev/media && ln -sf /autofs/sda1 hdd )
+	if [ -e $(prefix)/release_evolux_neutrino-hd2_with_dev/media/hdd2 ]; then \
+		rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/media/hdd2; \
+	fi
+	( cd $(prefix)/release_evolux_neutrino-hd2_with_dev/media && ln -sf /autofs/sda2 hdd2 )
 	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/fonts/* $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/
 	rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/fonts
 	( cd $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
