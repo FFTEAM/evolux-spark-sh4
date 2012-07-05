@@ -425,7 +425,7 @@ extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 extramenu.boot.changed %s wird bei Neustart aktiv. Bitte rebooten!
 extramenu.boot.enigma2 E2
 extramenu.boot.head Boot-Einstellungen
-extramenu.boot.neutrinohd2 NEUTRINO-HD2
+extramenu.boot.nhdtwo NTRINO-HD2
 extramenu.boot.select Startsystem bei Neustart
 extramenu.boot.spark Spark
 extramenu.boot.this Kein Wechsel bei Reboot.
