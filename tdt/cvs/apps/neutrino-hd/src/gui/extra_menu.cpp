@@ -63,17 +63,19 @@ const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
 	{ 1, LOCALE_OPTIONS_ON }
 };
 
-#define BOOT_OPTION_COUNT 4
+#define BOOT_OPTION_COUNT 5
 const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 {
 #define BOOT_NEUTRINO 0
 #define BOOT_E2       1
 #define BOOT_SPARK    2
 #define BOOT_VDR      3
+#define BOOT_NEUTRINOHD2 4
 	{ BOOT_E2, LOCALE_EXTRAMENU_BOOT_ENIGMA2 },
 	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
-	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR }
+	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR },
+	{ BOOT_NEUTRINOHD2, LOCALE_EXTRAMENU_BOOT_NEUTRINOHD2 }
 };
 
 #define SWAP_OPTION_COUNT 4
@@ -220,6 +222,7 @@ int CExtraMenuSetup::showExtraMenuSetup()
 #define DOTFILE_BOOT_E2 "/etc/.start_enigma2"
 #define DOTFILE_BOOT_SPARK "/etc/.start_spark"
 #define DOTFILE_BOOT_VDR "/etc/.start_vdr"
+#define DOTFILE_BOOT_NEUTRINOHD2 "/etc/.nhd2"
 	int boot = BOOT_NEUTRINO;
 	if (!access(DOTFILE_BOOT_SPARK, F_OK))
 		boot = BOOT_SPARK;
@@ -227,6 +230,8 @@ int CExtraMenuSetup::showExtraMenuSetup()
 		boot = BOOT_E2;
 	else if (!access(DOTFILE_BOOT_VDR, F_OK))
 		boot = BOOT_VDR;
+	else if (!access(DOTFILE_BOOT_NEUTRINOHD2, F_OK))
+		boot = BOOT_NEUTRINOHD2;
 	int old_boot = boot;
 
 	int boot_options_start = 0;
@@ -234,6 +239,8 @@ int CExtraMenuSetup::showExtraMenuSetup()
 	if (access("/usr/local/bin/enigma2", X_OK))
 		boot_options_start++, boot_option_count--;;
 	if (access("/usr/local/bin/vdr", X_OK))
+		boot_option_count--;
+	if (access("/usr/local/bin_nhd2/neutrino", X_OK))
 		boot_option_count--;
 
 	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_HEAD, &boot,
@@ -379,6 +386,9 @@ int CExtraMenuSetup::showExtraMenuSetup()
 		case BOOT_VDR:
 			unlink(DOTFILE_BOOT_VDR);
 			break;
+		case BOOT_NEUTRINOHD2:
+			unlink(DOTFILE_BOOT_NEUTRINOHD2);
+			break;
 		case BOOT_NEUTRINO:
 			break;
 		}
@@ -397,6 +407,14 @@ int CExtraMenuSetup::showExtraMenuSetup()
 				hintText += "\n";
 			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
 				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_VDR));
+			hintText += string(tmp);
+			break;
+		case BOOT_NEUTRINOHD2:
+			touch(DOTFILE_BOOT_NEUTRINOHD2);
+			if (hintText.length())
+				hintText += "\n";
+			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
+				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_NEUTRINOHD2));
 			hintText += string(tmp);
 			break;
 		case BOOT_NEUTRINO:

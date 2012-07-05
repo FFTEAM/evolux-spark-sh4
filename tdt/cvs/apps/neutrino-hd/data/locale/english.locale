@@ -425,6 +425,7 @@ extramenu.boot.bootargs.text Do not switch off your set-top box!
 extramenu.boot.changed %s will be active after boot. Please reboot now.
 extramenu.boot.enigma2 E2
 extramenu.boot.head Boot Settings
+extramenu.boot.neutrinohd2 NEUTRINO-HD2
 extramenu.boot.select System to start on reboot
 extramenu.boot.spark Spark
 extramenu.boot.this No change to Spark or E2 at reboot
