@@ -45,6 +45,9 @@ $(DEPDIR)/%release_evolux_neutrino-hd_pli:
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_neutrino-hd_pli_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_neutrino-hd_pli_with_dev/lib/
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/script/
+	if [ -e $(targetprefix)/usr/share/alsa ]; then \
+		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/share/; \
+	fi
 #	cp -RP $(prefix)/release_evolux_neutrino-hd_pli_with_dev/boot/uImage $(prefix)/
 	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_neutrino-hd_pli_with_dev/etc/ )

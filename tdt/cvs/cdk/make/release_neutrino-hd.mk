@@ -424,8 +424,8 @@ endif
 	( cd $(prefix)/release_neutrino-hd/usr/lib/tuxbox && rm -rf $(prefix)/release_neutrino-hd/usr/lib/tuxbox/plugins && ln -sf /var/plugins plugins )
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/libnfsidmap
 #	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino-hd/usr/lib/
-	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsa-lib
-	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsaplayer
+#	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsa-lib
+#	rm -rf $(prefix)/release_neutrino-hd/usr/lib/alsaplayer
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/engines
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/enigma2
 	rm -rf $(prefix)/release_neutrino-hd/usr/lib/gconv
@@ -490,6 +490,9 @@ endif
 	( cd $(prefix)/release_neutrino-hd/etc && ln -sf /usr/share/zoneinfo/CET localtime )
 	touch $(prefix)/release_neutrino-hd/etc/.EVOfirstboot
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino-hd/etc/
+	if [ -e $(targetprefix)/usr/share/alsa ]; then \
+		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_neutrino-hd/usr/share/; \
+	fi
 if ENABLE_MULTI_YAFFS2
 	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release_neutrino-hd/sbin/
 	cp -RP $(buildprefix)/root/sbin/unspare2 $(prefix)/release_neutrino-hd/sbin/

@@ -292,7 +292,9 @@ $(DEPDIR)/%release_vdrdev2:
 	mkdir -p $(prefix)/release_vdrdev2/usr/local/lib
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_vdrdev2/usr/lib/
 	cp -rd $(targetprefix)/usr/lib/libfontconfi* $(prefix)/release_vdrdev2/usr/lib/
-	cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_vdrdev2/usr/share/
+	if [ -e $(targetprefix)/usr/share/alsa ]; then \
+		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_vdrdev2/usr/share/; \
+	fi
 	mkdir -p $(prefix)/release_vdrdev2/usr/lib/vdr/
 	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/
 	cp -rd $(targetprefix)/usr/lib/vdr/lib*.1.7.2* $(prefix)/release_vdrdev2/usr/lib/vdr/

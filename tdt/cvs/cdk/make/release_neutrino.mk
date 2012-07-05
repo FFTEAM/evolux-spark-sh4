@@ -416,8 +416,8 @@ endif
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release_neutrino/usr/lib/
 	rm -rf $(prefix)/release_neutrino/usr/lib/libnfsidmap
 	cp -R $(targetprefix)/usr/local/lib/* $(prefix)/release_neutrino/usr/lib/
-	rm -rf $(prefix)/release_neutrino/usr/lib/alsa-lib
-	rm -rf $(prefix)/release_neutrino/usr/lib/alsaplayer
+#	rm -rf $(prefix)/release_neutrino/usr/lib/alsa-lib
+#	rm -rf $(prefix)/release_neutrino/usr/lib/alsaplayer
 	rm -rf $(prefix)/release_neutrino/usr/lib/engines
 	rm -rf $(prefix)/release_neutrino/usr/lib/enigma2
 	rm -rf $(prefix)/release_neutrino/usr/lib/gconv
@@ -475,6 +475,9 @@ endif
 	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino/usr/local/share/config/zapit/
 	touch $(prefix)/release_neutrino/etc/.EVOfirstboot
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino/etc/
+	if [ -e $(targetprefix)/usr/share/alsa ]; then \
+		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_neutrino/usr/share/; \
+	fi
 if ENABLE_MULTI_YAFFS2
 	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release_neutrino/sbin/
 	cp -RP $(buildprefix)/root/sbin/unspare2 $(prefix)/release_neutrino/sbin/
