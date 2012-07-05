@@ -31,6 +31,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd2:
 	echo "EvoHD2" > $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/hostname
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_neutrino-hd2_with_dev/lib/
+	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/script/
 #	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/boot/uImage $(prefix)/
 	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/ )

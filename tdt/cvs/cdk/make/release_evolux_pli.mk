@@ -59,6 +59,8 @@ $(DEPDIR)/%release_evolux_pli:
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
+	rm -rf $(prefix)/release_evolux_pli_with_dev/sbin/fsck.nfs
+	rm -rf $(prefix)/release_evolux_pli_with_dev/usr/local/share/neutrino/icons/mbox_white.raw
 #if ENABLE_MULTI_YAFFS2
 #	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
 #else

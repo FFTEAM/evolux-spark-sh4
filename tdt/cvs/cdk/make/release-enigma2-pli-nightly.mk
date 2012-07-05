@@ -623,7 +623,7 @@ endif
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release-enigma2-pli-nightly/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release-enigma2-pli-nightly/bin/
-
+	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release-enigma2-pli-nightly/usr/script/
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release-enigma2-pli-nightly/boot/
 
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ath.ko || true
