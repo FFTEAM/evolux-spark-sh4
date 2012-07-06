@@ -18,20 +18,7 @@ myconfpath="/usr/myconfigfolder"
 mysleep="10"
 ### config section end ####
 
-
-# exmaple for ntrino-hd
-if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ]; then
-	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
-fi
-
-# example for ntrino-hd2
-if [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ]; then
-	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
-fi
-
-# example for vdr
-if [ -e /etc/.nhd ] && [ -e /etc/.start_vdr; then
-	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
-fi
+### let's doit now... ####
+(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
 exit
 
