@@ -350,7 +350,7 @@ void CNeutrinoApp::InitMenuService()
 	
 	//firmware update
 #ifdef EVOLUX
-	if (!access("/etc/enigma2/settings", R_OK))
+//	if (!access("/etc/enigma2/settings", R_OK))
 		personalize.addItem(MENU_SERVICE, new CMenuForwarder(LOCALE_SERVICEMENU_UPDATE, true, NULL, new CEvoluxSoftwareUpdate()) , &g_settings.personalize[SNeutrinoSettings::P_MSER_SOFTUPDATE]);
 #else
 	personalize.addItem(MENU_SERVICE, new CMenuForwarder(LOCALE_SERVICEMENU_UPDATE, true, NULL, new CSoftwareUpdate()) , &g_settings.personalize[SNeutrinoSettings::P_MSER_SOFTUPDATE]);
