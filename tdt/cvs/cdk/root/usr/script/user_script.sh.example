@@ -1,21 +1,37 @@
 #!/bin/sh
-mysleep="11"
+##################################################################################
+### here's an example-script for startup own plugs/apps whatever you need more   #
+### take care you do "chmod 755 "/usr/script/user_script.sh"!                    #
+### only edit config-section, rest leave untouched!!!                            #
+##################################################################################
+
+### config-setcion start ###
+# path to myapp #
+mypath="/usr/bin"
+# name from binary dedicated on $mypath #
+myappname="myname"
+# special options, some apps need -c o.s.e. for config-destination, if not needed leave them empty! #
+myoptions="-c"
+# myconfigfolder, some apps need configfolder-destination, if unneeded leave them empty! #
+myconfpath="/usr/myconfigfolder"
+# time how long script wait till startup app #
+mysleep="10"
+### config section end ####
+
+
 # exmaple for ntrino-hd
-if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2; then
-	myapp="/path/to/app -c /path/to/configapp"
-	(sleep $mysleep; "$myapp") &
+if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ]; then
+	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
 fi
 
 # example for ntrino-hd2
-if [ -e /etc/.nhd ] && [ -e /etc/.nhd2; then
-	myapp="/path/to/app -c /path/to/configapp"
-	(sleep $mysleep; "$myapp") &
+if [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ]; then
+	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
 fi
 
 # example for vdr
 if [ -e /etc/.nhd ] && [ -e /etc/.start_vdr; then
-	myapp="/path/to/app -c /path/to/configapp"
-	(sleep $mysleep; "$myapp") &
+	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
 fi
 exit
 
