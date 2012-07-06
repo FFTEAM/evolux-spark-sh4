@@ -19,6 +19,8 @@ mysleep="10"
 ### config section end ####
 
 ### let's doit now... ####
-(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
+if [ -e /etc/.nhd2] || [ -e /etc/.start_vdr ]; then
+	(sleep $mysleep; $mypath/$myappname $myoptions $myconfpath &) &
+fi
 exit
 
