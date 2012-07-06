@@ -619,7 +619,7 @@ EMU_Menu::EMU_Menu()
 					scrambled = true;
 		zc.close();
 
-		string cmd = "( sleep 2;" + string(EMU_list[selected].start_command)
+		string cmd = "( sleep 4;" + string(EMU_list[selected].start_command)
 			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
 			+ " >/dev/null 2>&1) &";
 		safe_system(cmd.c_str());
