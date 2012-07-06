@@ -271,10 +271,21 @@ static int led_thread(void *arg)
 	return 0;
 }
 
+static struct vfd_ioctl_data last_draw_data;
+
 int run_draw_thread(struct vfd_ioctl_data *draw_data)
 {
     if(down_interruptible (&draw_thread_sem))
 	return -ERESTARTSYS;
+
+    // return if there's already a draw task running for the same text
+    if(!draw_thread_stop && draw_task && (last_draw_data.length == draw_data->length)
+	&& !memcmp(&last_draw_data.data, draw_data->data, draw_data->length)) {
+    	up(&draw_thread_sem);
+	return 0;
+    }
+
+    memcpy(&last_draw_data, draw_data, sizeof(struct vfd_ioctl_data));
 
     // stop existing thread, if any
     if(!draw_thread_stop && draw_task) {
@@ -645,6 +656,8 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		{
 		   if (copy_from_user(&vfd_data, (void *) arg, sizeof(vfd_data)))
 			return -EFAULT;
+		   if (vfd_data.length > sizeof(vfd_data.data))
+			vfd_data.length = sizeof(vfd_data.data);
 		   while ((vfd_data.length > 0) && (vfd_data.data[vfd_data.length - 1 ] == '\n'))
 			  vfd_data.length--;
 	     	   res = run_draw_thread(&vfd_data);
@@ -665,7 +678,7 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 	case 0x5401:
 		res = 0;
 		break;
-	case VFDGETSTARTUPSTATE: // --martii, 20120301
+	case VFDGETSTARTUPSTATE:
 	{
 		YWPANEL_STARTUPSTATE_t State;
 		if (YWPANEL_FP_GetStartUpState(&State))
