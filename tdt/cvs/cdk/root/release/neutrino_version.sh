@@ -7,7 +7,13 @@ BETA=1
 SNAPSHOT=$RELEASE
 TIMESTAMP=`date +%Y%m%d%H%M`
 #BUILDREV=`git describe | cut -f2 -d'-'`
-if [ -e $KATIDIR/tufsbox/release_neutrino-hd2_with_dev ] || [ -e $KATIDIR/tufsbox/release_neutrino-hd_with_dev ] || [ -e $KATIDIR/tufsbox/release_neutrino_with_dev ] && [ ! -e $KATIDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -e $KATIDIR/release-enigma2_with_dev ]; then
+if [ -e $KATIDIR/tufsbox/release_neutrino-hd2 ] || [ -e $KATIDIR/tufsbox/release_neutrino-hd ] || [ -e $KATIDIR/tufsbox/release_neutrino ] && [ ! -e $KATIDIR/release-enigma2-pli-nightly ] && [ ! -e $KATIDIR/release-enigma2 ]; then
+	INTERNAL=3
+	MyChangelog="cvs/cdk/own_build/neutrino/etc/changelog.txt"
+elif [ ! -e $KATIDIR/tufsbox/release_neutrino-hd2 ] && [ -e $KATIDIR/release-enigma2-pli-nightly ] || [ -e $KATIDIR/release-enigma2 ]; then
+	INTERNAL=1
+	MyChangelog="cvs/cdk/own_build/enigma2/etc/changelog.txt"
+elif [ -e $KATIDIR/tufsbox/release_neutrino-hd2_with_dev ] || [ -e $KATIDIR/tufsbox/release_neutrino-hd_with_dev ] || [ -e $KATIDIR/tufsbox/release_neutrino_with_dev ] && [ ! -e $KATIDIR/release-enigma2-pli-nightly_with_dev ] && [ ! -e $KATIDIR/release-enigma2_with_dev ]; then
 	INTERNAL=3
 	MyChangelog="cvs/cdk/own_build/neutrino/etc/changelog.txt"
 elif [ ! -e $KATIDIR/tufsbox/release_neutrino-hd2_with_dev ] && [ -e $KATIDIR/release-enigma2-pli-nightly_with_dev ] || [ -e $KATIDIR/release-enigma2_with_dev ]; then
