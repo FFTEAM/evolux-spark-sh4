@@ -1,5 +1,5 @@
 #!/bin/sh
-rm /etc/.nhd2
-reboot -f &
+wget -q -O /dev/null "http://127.0.0.1/control/message?popup=NHD activated!%20Rebooting now.."
+(sleep 6;rm /etc/.nhd2;reboot -f &) &
 exit
 
