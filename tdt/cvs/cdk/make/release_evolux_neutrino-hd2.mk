@@ -28,6 +28,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd2:
 		cp -RP $(prefix)/release_neutrino-hd2_with_dev/etc/changelog.txt $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/; \
 	fi
 	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd/neutrino/httpd $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd2/neutrino/
+	chmod 755 -R $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/local/share_nhd2/neutrino/httpd/scripts
 	if [ -e $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share ]; then \
 		rm -rf $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/share/fonts/share; \
 	fi

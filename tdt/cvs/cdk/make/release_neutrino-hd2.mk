@@ -433,6 +433,7 @@ endif
 	( cd $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd && ln -s /usr/local/share/neutrino/icons/logo logos )
 	( cd $(prefix)/release_neutrino-hd2/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd httpd-y )
 	( cd $(prefix)/release_neutrino-hd2/var && ln -s /usr/local/share/neutrino/httpd httpd )
+	chmod 755 -R $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd/scripts
 	find $(prefix)/release_neutrino-hd2/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino-hd2/etc/.fsck
 	touch $(prefix)/release_neutrino-hd2/etc/.nhd2
