@@ -235,7 +235,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 				mkdir -p /media/hdd
 			fi
 			mount -o bind /autofs/sda1 /media/hdd
-			stdFolders="movie music picture swap epg timeshift"
+			stdFolders="movies music pictures swap epg timeshift"
 			for i in $stdFolders
 			do
 			mkdir -p /media/hdd/$i
@@ -246,7 +246,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 				mkdir -p /media/hdd2
 			fi
 			mount -o bind /autofs/sda2 /media/hdd2
-			stdFolders="movie music picture swap epg timeshift"
+			stdFolders="movies music pictures swap epg timeshift"
 			for i in $stdFolders
 			do
 			mkdir -p /media/hdd2/$i
@@ -266,6 +266,11 @@ if [ ! -e /var/etc/.firstboot ]; then
 			rm -rf /media/hdd2 >/dev/null 2>&1
 			ln -sf /autofs/sda2 /media/hdd2
 		fi
+		stdFolders="movies music pictures swap epg timeshift"
+		for i in $stdFolders
+		do
+		mkdir -p /media/hdd/$i
+		done
 		[ -e /autofs/sda1/logo ] && mount -o bind /autofs/sda1/logo  /usr/local/share/neutrino/icons/logo &
 		if [ -e /autofs/sda1/picon ] && [ -e /usr/local/share/enigma2/picon ]; then
 			mount -o bind /autofs/sda1/picon  /usr/local/share/enigma2/picon &
