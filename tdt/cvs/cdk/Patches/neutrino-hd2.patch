@@ -114,25 +114,60 @@
  #else
  			RC_info		= KEY_INFO,		/* 0x166 */
  #endif			
-@@ -363,7 +357,7 @@
- #if HAVE_DVB_API_VERSION == 1
+@@ -370,14 +364,15 @@
+ 
+ 		inline int getFileHandle(void) /* used for plugins (i.e. games) only */
+ 		{
+-#if HAVE_DVB_API_VERSION == 1
++/*#if HAVE_DVB_API_VERSION == 1
  			return fd_gamerc;
  #else
--			return fd_rc[0];
+ 			for (int i = 0; i < NUMBER_OF_EVENT_DEVICES; i++)
+ 			{
+ 				return fd_rc[i];
+ 			}
+-#endif
++#endif */
 +			return fd_rc[1];
- #endif
  		}
  		
---- neutrino-hd2/src/neutrino.cpp	2012-07-03 18:23:25.010445110 +0200
-+++ neutrino-hd2/src/neutrino.cpp	2012-07-05 00:10:27.361909124 +0200
-@@ -47,7 +47,8 @@
- #include <sys/wait.h>
- #include <sys/statvfs.h>
- #include <sys/vfs.h>
--
-+#include <sys/statvfs.h>
-+#include <sys/vfs.h>
- #include <sys/socket.h>
+ 		void stopInput();		
+ 	
+--- neutrino-hd2/src/Makefile.am	2012-07-09 11:16:57.341527920 +0200
++++ neutrino-hd2/src/Makefile.am	2012-07-09 12:54:20.102500604 +0200
+@@ -76,8 +76,8 @@
+ endif
  
- #include <iostream>
+ # LCD display
+-neutrino_LDADD += \
+-	$(top_builddir)/lib/liblcddisplay/liblcddisplay.a
++#neutrino_LDADD += \
++#	$(top_builddir)/lib/liblcddisplay/liblcddisplay.a
+ 
+ 
+ 
+ 
+--- neutrino-hd2/lib/Makefile.am	2012-07-09 11:16:56.377523130 +0200
++++ neutrino-hd2/lib/Makefile.am	2012-07-09 12:39:48.706179582 +0200
+@@ -10,7 +10,6 @@
+ 	libtuxtxt \
+ 	libdvbsub \
+ 	libupnpclient \
+-	liblcddisplay \
+ 	libcoolstream
+ 
+ # libeplayer3
+
+--- neutrino-hd2/data/icons/Makefile.am	2012-07-09 13:15:35.344824187 +0200
++++ neutrino-hd2/data/icons/Makefile.am	2012-07-09 14:07:16.688202912 +0200
+@@ -74,7 +74,7 @@
+ # MenuItemsIcons
+ install_DATA += \
+ 	tv.png radio.png games_item.png mediaplayer.png mainsettings.png service.png sleeptimer.png reboot.png shutdown.png boxinfo.png \
+-	videosettings.png audiosettings.png parentallock.png networksettings.png recordingsettings.png osdsettings.png vfdsettings.png keyssettings.png \
++	videosettings.png audiosettings.png parentallock.png networksettings.png recordsettings.png osdsettings.png vfdsettings.png keyssettings.png \
+ 	movieplayersettings.png audioplayersettings.png pictureviewersettings.png miscsettings.png hddsettings.png \
+ 	movieplayer.png internetradio.png upnpbrowser.png pictureviewer.png audioplayer.png \
+ 	miscsettingsgeneral.png miscsettingschannellist.png miscsettingsepg.png miscsettingsfilebrowser.png imageinfo.png cam.png scart.png \
+
 
