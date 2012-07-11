@@ -227,5 +227,7 @@ echo "make evolux-neutrino-hd2"
 echo "make evolux-neutrino-hd2-full"
 echo "make evolux-neutrino-hd-vdr2"
 echo "make evolux-neutrino-hd-vdr2-full"
+echo "make evolux-triple"
+echo "make evolux-triple-full"
 echo "-----------------------"
 
