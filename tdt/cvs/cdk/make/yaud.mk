@@ -221,6 +221,7 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
+
 evolux-neutrino-hd-vdr2-full: yaud-none lirc stslave \
 		yaud-neutrino-hd \
 		yaud-vdr2 \
@@ -233,7 +234,32 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
-yaud-enigma2-nightly: yaud-none host-python lirc stslave\
+evolux-triple: 	yaud-neutrino-hd \
+		yaud-enigma2-pli-nightly \
+		yaud-neutrino-hd2 \
+		release_evolux_triple
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-triple-full: yaud-none host-python lirc stslave \
+		yaud-neutrino-hd \
+		yaud-enigma2-pli-nightly \
+		yaud-neutrino-hd2 \
+		release_evolux_triple
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+yaud-enigma2-nightly: yaud-none host-python lirc stslave \
 		boot-elf remote firstboot enigma2-nightly enigma2-nightly-misc release
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img

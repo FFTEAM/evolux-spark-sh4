@@ -549,6 +549,9 @@ release_base:
 	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -RP $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/
+	if [ ! -e $(prefix)/release/usr/script ]; then \
+		mkdir -p $(prefix)/release/usr/script; \
+	fi
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release/usr/script/
 	rm -rf $(prefix)/release/usr/lib/enigma2/python/Plugins/Extensions/FlashBackup
 #### displaytime plugin not longer needed so we remove it #####

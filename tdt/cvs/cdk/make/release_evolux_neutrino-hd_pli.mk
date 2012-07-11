@@ -44,6 +44,9 @@ $(DEPDIR)/%release_evolux_neutrino-hd_pli:
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_neutrino-hd_pli_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_neutrino-hd_pli_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_neutrino-hd_pli_with_dev/lib/
+	if [ ! -e $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/script ]; then \
+		mkdir -p $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/script; \
+	fi
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/script/
 	if [ -e $(targetprefix)/usr/share/alsa ]; then \
 		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_evolux_neutrino-hd_pli_with_dev/usr/share/; \
