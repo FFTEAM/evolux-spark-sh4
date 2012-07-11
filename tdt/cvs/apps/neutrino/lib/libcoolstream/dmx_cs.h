@@ -10,6 +10,7 @@
 #define __DEMUX_CS_H
 
 #include <string>
+#include <linux/dvb/dmx.h>
 
 // #define DEMUX_POLL_TIMEOUT 5000  // timeout in ms
 #define DEMUX_POLL_TIMEOUT 0  // timeout in ms
