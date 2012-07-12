@@ -275,8 +275,6 @@ static int info_model_read(char *page, char **start, off_t off, int count,
   int len = sprintf(page, "hs7810a\n");
 #elif defined(HS7110)
   int len = sprintf(page, "hs7110\n");
-#elif defined(WHITEBOX)
-  int len = sprintf(page, "whitebox\n");
 #elif defined(IPBOX9900)
   int len = sprintf(page, "ipbox9900\n");
 #elif defined(IPBOX99)
@@ -440,7 +438,7 @@ int proc_misc_12V_output_write(struct file *file, const char __user *buf,
 
 	    kfree(myString);
 
-        ret = count;
+		ret = count;
 out:
 		free_page((unsigned long)page);
 	}
@@ -537,7 +535,7 @@ struct ProcStructure_s e2Proc[] =
 	{cProcDir  , "stb/fb"                                                           , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/fb/3dmode"                                                    , NULL, three_d_mode_read, three_d_mode_write, NULL, ""},
 	{cProcEntry, "stb/fb/znorm"                                                     , NULL, NULL, default_write_proc, NULL, ""},
-	
+
 	{cProcDir  , "stb/fp"                                                           , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/fp/lnb_sense1"                                                , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/fp/lnb_sense2"                                                , NULL, NULL, NULL, NULL, ""},
@@ -587,9 +585,9 @@ struct ProcStructure_s e2Proc[] =
 
 	{cProcDir  , "stb/hdmi"                                                         , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/hdmi/bypass_edid_checking"                                    , NULL, NULL, NULL, NULL, ""},
-	{cProcEntry, "stb/hdmi/enable_hdmi_resets"                                      , NULL, NULL, NULL, NULL, ""},
-	{cProcEntry, "stb/hdmi/output"                                                  , NULL, NULL, NULL, NULL, ""},
-	{cProcEntry, "stb/hdmi/output_choices"                                          , NULL, NULL, NULL, NULL, ""},
+	{cProcEntry, "stb/hdmi/enable_hdmi_resets"					, NULL, NULL, NULL, NULL, ""},
+	{cProcEntry, "stb/hdmi/output"							, NULL, NULL, NULL, NULL, ""},
+	{cProcEntry, "stb/hdmi/output_choices"						, NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/hdmi/audio_source"                                            , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/hdmi/audio_source_choices"                                    , NULL, NULL, NULL, NULL, ""},
 
@@ -1007,4 +1005,5 @@ module_exit(e2_proc_cleanup_module);
 MODULE_DESCRIPTION("procfs module with enigma2 support");
 MODULE_AUTHOR("Team Ducktales");
 MODULE_LICENSE("GPL");
+
 // vim:ts=4
