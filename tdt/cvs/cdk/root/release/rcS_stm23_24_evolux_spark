@@ -21,7 +21,9 @@ if [ ! -e /dev/.udev ]; then
 fi
 
 rm -f /etc/.start_spark >/dev/null 2>&1
-
+if [ ! -e /etc/enigma2 ] && [ -e /usr/local/bin/enigma2 ]; then
+	rm /usr/local/bin/enigma2
+fi
 if [ -f /etc/.start_vdr ] && [ -e /usr/local/bin/vdr ]
 then
 	rm -f /etc/.start_enigma2 >/dev/null 2>&1
