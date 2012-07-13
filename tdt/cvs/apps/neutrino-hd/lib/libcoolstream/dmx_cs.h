@@ -12,15 +12,15 @@
 
 #include <string>
 #include "cs_types.h"
+#include <linux/dvb/dmx.h>
+#include <linux/dvb/version.h>
 
 #define DEMUX_POLL_TIMEOUT		0  // timeout in ms
-#define MAX_FILTER_LENGTH		12    // maximum number of filters
+#define MAX_FILTER_LENGTH		16    // maximum number of filters
 
-#ifdef DMX_FILTER_SIZE
-#error
-#endif
+#ifndef DMX_FILTER_SIZE
 #define DMX_FILTER_SIZE			MAX_FILTER_LENGTH
-
+#endif
 #define MAX_DMX_UNITS			4
 
 typedef enum {
@@ -49,7 +49,7 @@ public:
 	cDemux(int num = 0);
 	~cDemux();
 	//
-	bool		Open(DMX_CHANNEL_TYPE pes_type, void * hVideoBuffer = NULL, int uBufferSize = 8192);
+	bool		Open(DMX_CHANNEL_TYPE pes_type, void * hVideoBuffer = NULL, int uBufferSize = 65536);
 	void		Close(void);
 	bool		Start(bool record = false);
 	bool		Stop(void);

@@ -11,6 +11,7 @@
 
 #include <string>
 #include <linux/dvb/dmx.h>
+#include <linux/dvb/version.h>
 
 // #define DEMUX_POLL_TIMEOUT 5000  // timeout in ms
 #define DEMUX_POLL_TIMEOUT 0  // timeout in ms
