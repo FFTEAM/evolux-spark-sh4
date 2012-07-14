@@ -54,7 +54,7 @@ tArgs vArgs[] =
 {
    { "-e", "--setTimer       ",
 "Args: No arguments or [time date] Format: HH:MM:SS dd-mm-YYYY \
-\n\tSet the most recent timer from e2 or neutrino to the frontcontroller and standby \
+\n\tSet the most recent timer from E2 or Neutrino to the frontcontroller and standby \
 \n\tSet the current frontcontroller wake-up time" },
    { "-d", "--shutdown       ",
 "Args: [time date] Format: HH:MM:SS dd-mm-YYYY\n\tMimics shutdown command. Shutdown receiver via fc at given time." },
@@ -232,10 +232,8 @@ void processCommand (Context_t * context, int argc, char* argv[])
 
 	            if (argc == 2) // no arguments, assume current time
 					theGMTTime = time(NULL);
-		    else if (argc == 4)
-				{
+				else if (argc == 4)
 			   		getTimeFromArg(argv[i + 1], argv[i + 2], &theGMTTime);
-				}
 				else
 					usage(context, argv[0], argv[1]);
 
@@ -529,6 +527,7 @@ void processCommand (Context_t * context, int argc, char* argv[])
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 int getModel()
 {
     int         vFd             = -1;
@@ -547,7 +546,10 @@ int getModel()
 
         printf("Model: %s\n", vName);
 
-        vBoxType = Spark;
+        if(!strncasecmp(vName,"spark", 6))
+            vBoxType = Spark;
+        else
+            vBoxType = Unknown;
     }
 
     printf("vBoxType: %d\n", vBoxType);

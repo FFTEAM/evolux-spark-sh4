@@ -68,14 +68,14 @@ const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 {
 #define BOOT_NEUTRINO 0
 #define BOOT_E2       1
-#define BOOT_SPARK    2
-#define BOOT_NHDTWO   3
+#define BOOT_NHDTWO   2
+#define BOOT_SPARK    3
 #define BOOT_VDR      4
 
 	{ BOOT_E2, LOCALE_EXTRAMENU_BOOT_ENIGMA2 },
 	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
-	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
 	{ BOOT_NHDTWO, LOCALE_EXTRAMENU_BOOT_NHDTWO },
+	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
 	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR }
 };
 
@@ -239,8 +239,6 @@ int CExtraMenuSetup::showExtraMenuSetup()
 	int boot_option_count = BOOT_OPTION_COUNT;
 	if (access("/usr/local/bin/enigma2", X_OK))
 		boot_options_start++, boot_option_count--;;
-	if (access("/usr/local/bin_nhd2/neutrino", X_OK))
-		boot_option_count--;
 	if (access("/usr/local/bin/vdr", X_OK))
 		boot_option_count--;
 
@@ -393,14 +391,18 @@ int CExtraMenuSetup::showExtraMenuSetup()
 		case BOOT_NEUTRINO:
 			break;
 		}
+		FILE *f = fopen("/etc/enigma2/settings", "r");
 		switch (boot) {
 		case BOOT_E2:
-			touch(DOTFILE_BOOT_E2);
-			if (hintText.length())
-				hintText += "\n";
-			snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
-				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_ENIGMA2));
-			hintText += string(tmp);
+			if (f) {
+				touch(DOTFILE_BOOT_E2);
+				if (hintText.length())
+					hintText += "\n";
+				snprintf(tmp, sizeof(tmp), g_Locale->getText(LOCALE_EXTRAMENU_BOOT_CHANGED),
+					g_Locale->getText(LOCALE_EXTRAMENU_BOOT_ENIGMA2));
+				hintText += string(tmp);
+				fclose(f);
+			}
 			break;
 		case BOOT_NHDTWO:
 			touch(DOTFILE_BOOT_NHDTWO);

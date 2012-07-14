@@ -351,10 +351,10 @@
 +			}
 +		}
 +
-+		/* martii: for evolux, remove the "rootfstype=..." argument, too */
++		/* martii: removing "rootfstype=jffs2" allows us to boot from yaffs2 without changing u-boot bootargs */
 +		command_line_len = strlen(command_line);
-+		for(i = 0; i < (command_line_len-11); i++)
-+			if(!strncmp(command_line + i + 1, "rootfstype=", 11))
++		for(i = 0; i < (command_line_len-16); i++)
++			if(!strncmp(command_line + i + 1, "rootfstype=jffs2", 16))
 +			{
 +				// search for next pos
 +				int k;
