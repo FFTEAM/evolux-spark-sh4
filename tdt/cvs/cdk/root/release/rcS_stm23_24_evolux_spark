@@ -391,13 +391,25 @@ if [ ! -e /var/etc/.firstboot ]; then
 				echo "SHUTDOWN"
 				sync
 				[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
-				HDDON=`mount | grep sda1 | cut -d " " -f5 | cut -d " " -f1`
+				HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
 				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
 					echo "hdd-check"
 					echo "FSCK" > /dev/vfd
-					umount /media/hdd
-					umount /dev/sda1
-					fsck.$HDDON -p /dev/sda1
+					umount /media/hdd >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda1 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda1
+				fi
+				HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check2"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd2 >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda2 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda2
 				fi
 				init 0;;
 			2)	echo "$rtv"
@@ -421,11 +433,25 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	else
 		if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
-			mount -o bind /usr/local/share_nhd /usr/local/share
-			mount -o bind /usr/local/bin_nhd /usr/local/bin
+			ln -sf /usr/local/share_nhd/config /usr/local/share/config
+			ln -sf /usr/local/share_nhd/fonts /usr/local/share/fonts
+			ln -sf /usr/local/share_nhd/iso-codes /usr/local/share/iso-codes
+			ln -sf /usr/local/share_nhd/neutrino /usr/local/share/neutrino
+			ln -sf /usr/local/bin_nhd/neutrino /usr/local/bin/neutrino
+			ln -sf /usr/local/bin_nhd/pzapit /usr/local/bin/pzapit
+			ln -sf /usr/local/bin_nhd/sectionsdcontrol /usr/local/bin/sectionsdcontrol
+			ln -sf /bin/mhwepg /usr/local/bin/mhwepg
+#			mount -o bind /usr/local/share_nhd /usr/local/share
+#			mount -o bind /usr/local/bin_nhd /usr/local/bin
 		elif [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
-			mount -o bind /usr/local/share_nhd2 /usr/local/share
-			mount -o bind /usr/local/bin_nhd2 /usr/local/bin
+			ln -sf /usr/local/share_nhd2/config /usr/local/share/config
+			ln -sf /usr/local/share_nhd2/fonts /usr/local/share/fonts
+			ln -sf /usr/local/share_nhd2/iso-codes /usr/local/share/iso-codes
+			ln -sf /usr/local/share_nhd2/neutrino /usr/local/share/neutrino
+			ln -sf /usr/local/bin_nhd2/neutrino /usr/local/bin/neutrino
+			ln -sf /usr/local/bin_nhd2/pzapit /usr/local/bin/pzapit
+			ln -sf /usr/local/bin_nhd2/sectionsdcontrol /usr/local/bin/sectionsdcontrol
+			ln -sf /bin/mhwepg /usr/local/bin/mhwepg
 			/etc/init.d/DisplayTime.sh &
 		fi
 		echo "LOADING neutrino"
@@ -444,13 +470,25 @@ if [ ! -e /var/etc/.firstboot ]; then
 			0|1)	echo "$rtv"
 				sync
 				[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
-				HDDON=`mount | grep sda1 | cut -d " " -f5 | cut -d " " -f1`
+				HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
 				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
 					echo "hdd-check"
 					echo "FSCK" > /dev/vfd
-					umount /media/hdd
-					umount /dev/sda1
-					fsck.$HDDON -p /dev/sda1
+					umount /media/hdd >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda1 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda1
+				fi
+				HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check2"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd2 >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda2 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda2
 				fi
 				if [ -e /etc/.nhd ]; then
 					if [ -e /tmp/.reboot ]; then # gets created by neutrino
