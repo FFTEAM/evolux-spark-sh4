@@ -433,6 +433,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	else
 		if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
+			rm /usr/local/share/config >/dev/null 2>&1
+			rm /usr/local/share/fonts >/dev/null 2>&1
+			rm /usr/local/share/iso-codes >/dev/null 2>&1
+			rm /usr/local/share/neutrino >/dev/null 2>&1
+			rm /usr/local/bin/neutrino >/dev/null 2>&1
+			rm /usr/local/bin/pzapit >/dev/null 2>&1
+			rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
 			ln -sf /usr/local/share_nhd/config /usr/local/share/config
 			ln -sf /usr/local/share_nhd/fonts /usr/local/share/fonts
 			ln -sf /usr/local/share_nhd/iso-codes /usr/local/share/iso-codes
@@ -443,7 +450,14 @@ if [ ! -e /var/etc/.firstboot ]; then
 			ln -sf /bin/mhwepg /usr/local/bin/mhwepg
 #			mount -o bind /usr/local/share_nhd /usr/local/share
 #			mount -o bind /usr/local/bin_nhd /usr/local/bin
-		elif [ -e /etc/.nhd ] && [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
+		elif [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
+			rm /usr/local/share/config >/dev/null 2>&1
+			rm /usr/local/share/fonts >/dev/null 2>&1
+			rm /usr/local/share/iso-codes >/dev/null 2>&1
+			rm /usr/local/share/neutrino >/dev/null 2>&1
+			rm /usr/local/bin/neutrino >/dev/null 2>&1
+			rm /usr/local/bin/pzapit >/dev/null 2>&1
+			rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
 			ln -sf /usr/local/share_nhd2/config /usr/local/share/config
 			ln -sf /usr/local/share_nhd2/fonts /usr/local/share/fonts
 			ln -sf /usr/local/share_nhd2/iso-codes /usr/local/share/iso-codes
