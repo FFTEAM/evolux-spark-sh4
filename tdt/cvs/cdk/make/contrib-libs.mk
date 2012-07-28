@@ -1850,9 +1850,10 @@ $(DEPDIR)/%gst_plugins_ugly: $(DEPDIR)/gst_plugins_ugly.do_compile
 # GST-PLUGIN-SUBSINK
 #
 $(DEPDIR)/gst_plugin_subsink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugin_subsink@
-	git clone git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink gst-plugin-subsink
-	cd gst-plugin-subsink && \
-		git checkout 8182abe751364f6eb1ed45377b0625102aeb68d5
+	if [ ! -d $(buildprefix)/gst-plugin-subsink ]; then \
+		git clone git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink gst-plugin-subsink; \
+		cd gst-plugin-subsink && git checkout 8182abe751364f6eb1ed45377b0625102aeb68d5; \
+	fi;
 	@PREPARE_gst_plugin_subsink@
 	touch $@
 
