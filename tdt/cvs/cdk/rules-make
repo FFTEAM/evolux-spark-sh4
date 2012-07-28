@@ -172,6 +172,7 @@ gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffm
 gst_plugins_fluendo_mpegdemux;0.10.69;gst-fluendo-mpegdemux-0.10.69;gst-fluendo-mpegdemux-0.10.69.tar.gz:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.diff;extract:gst-fluendo-mpegdemux-0.10.69.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.diff
 gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/misc/tools/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
 #gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;gst-plugins-dvbmediasink-0.10.1;link:../apps/misc/tools/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
+gst_plugin_subsink;1.0;gst-plugin-subsink;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
 evebrowser;0.0.1;evebrowser-0.0.1
 dvbdata;0.6;dvbdata-0.6;dvbdata-0.6.tar.gz;extract:dvbdata-0.6.tar.gz
 brofs;1.2;BroFS1.2;BroFS1.2.tgz;extract:BroFS1.2.tgz
@@ -214,7 +215,8 @@ netio;1.26;netio126;netio126.zip;extract:netio126.zip:netio126
 lighttpd;1.4.15;lighttpd-1.4.15;lighttpd-1.4.15.tar.gz;extract:lighttpd-1.4.15.tar.gz
 zd1211;2_15_0_0;ZD1211LnxDrv_2_15_0_0;zd1211lnxdrv_2_15_0_0.tar.gz:zd1211.diff;extract:zd1211lnxdrv_2_15_0_0.tar.gz;patch:zd1211.diff
 wireless_tools;29;wireless_tools.29;wireless_tools.29.tar.gz;extract:wireless_tools.29.tar.gz
-wpa_supplicant;0.5.9.;wpa_supplicant-0.5.9;wpa_supplicant-0.5.9.tar.gz;extract:wpa_supplicant-0.5.9.tar.gz
+#wpa_supplicant;0.5.9.;wpa_supplicant-0.5.9;wpa_supplicant-0.5.9.tar.gz;extract:wpa_supplicant-0.5.9.tar.gz
+wpa_supplicant;1.0;wpa_supplicant-1.0;wpa_supplicant-1.0.tar.gz;extract:wpa_supplicant-1.0.tar.gz
 ethtool;6;ethtool-6;ethtool-6.tar.gz;extract:ethtool-6.tar.gz
 ath9k;2012-04-25;compat-wireless-2012-04-25;compat-wireless-2012-04-25.tar.bz2;extract:compat-wireless-2012-04-25.tar.bz2
 

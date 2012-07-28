@@ -706,6 +706,9 @@ endif
 			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstffmpegscale.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
 			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstpostproc.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
 		fi; \
+		if [ -e $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/libgstsubsink.so ]; then \
+			cp -a $(targetprefix)/usr/lib/gstreamer-0.10/libgstsubsink.so $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/; \
+		fi; \
 		sh4-linux-strip --strip-unneeded $(prefix)/release-enigma2-pli-nightly/usr/lib/gstreamer-0.10/*; \
 	fi
 

@@ -82,6 +82,14 @@ sub process_make_depends (@)
     {
       $output .= "Archive/". $_ . " ";
     }
+    elsif ( $_ =~ m#\.svn# )
+    {
+      $output .= "\\\$(archivedir)/". $_ . " ";
+    }
+    elsif ($_ =~ m#\.git# )
+    {
+      $output .= "\\\$(archivedir)/". $_ . " ";
+    }
     else
     {
       die "can't recognize type of archive " . $_;
@@ -166,6 +174,41 @@ sub process_make_prepare (@)
       elsif ( $_[1] =~ m#\.exe$# )
       {
 	$output .= "cabextract ../Archive/" . $_[1];
+      }
+      elsif ( $_[1] =~ m#\.zip$# )
+      {
+        $output .= "unzip $_[2] \\\$(archivedir)/" . $_[1];
+      }
+      elsif ( $_[1] =~ m#\.src\.rpm$# )
+      {
+        $output .= "rpm \${DRPM} -Uhv  \\\$(archivedir)/" . $_[1];
+      }
+      elsif ( $_[1] =~ m#\.cvs# )
+      {
+        my $target = $dir;
+        if ( @_ > 2 )
+        {
+          $target = $_[2] 
+        }
+        $output .= "cp -a \\\$(archivedir)/" . $_[1] . " " . $target;
+      }
+      elsif ( $_[1] =~ m#\.svn# )
+      {
+        my $target = $dir;
+        if ( @_ > 2 )
+        {
+          $target = $_[2] 
+        }
+        $output .= "cp -a \\\$(archivedir)/" . $_[1] . " " . $target;
+      }
+      elsif ( $_[1] =~ m#\.git# )
+      {
+        my $target = $dir;
+        if ( @_ > 2 )
+        {
+          $target = $_[2] 
+        }
+        $output .= "(rm -rf " . $target . "; cp -a \\\$(archivedir)/" . $_[1] . " " . $target . ")";
       }
       else
       {

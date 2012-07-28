@@ -1064,6 +1064,7 @@ TUXBOX_RULES_MAKE(gst_plugins_ugly)
 TUXBOX_RULES_MAKE(gst_ffmpeg)
 TUXBOX_RULES_MAKE(gst_plugins_fluendo_mpegdemux)
 TUXBOX_RULES_MAKE(gst_plugins_dvbmediasink)
+TUXBOX_RULES_MAKE(gst_plugin_subsink)
 
 #
 # external lcd

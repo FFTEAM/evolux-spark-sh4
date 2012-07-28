@@ -1763,7 +1763,7 @@ $(DEPDIR)/%gst_plugins_base: $(DEPDIR)/gst_plugins_base.do_compile
 	cd @DIR_gst_plugins_base@ && \
 		@INSTALL_gst_plugins_base@
 #	@DISTCLEANUP_gst_plugins_base@
-	@[ "x$*" = "x" ] && touch $@ || true
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-PLUGINS-GOOD
@@ -1845,6 +1845,38 @@ $(DEPDIR)/%gst_plugins_ugly: $(DEPDIR)/gst_plugins_ugly.do_compile
 		@INSTALL_gst_plugins_ugly@
 #	@DISTCLEANUP_gst_plugins_ugly@
 	@[ "x$*" = "x" ] && touch $@ || true
+
+#
+# GST-PLUGIN-SUBSINK
+#
+$(DEPDIR)/gst_plugin_subsink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugin_subsink@
+	git clone git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink gst-plugin-subsink
+	cd gst-plugin-subsink && \
+		git checkout 8182abe751364f6eb1ed45377b0625102aeb68d5
+	@PREPARE_gst_plugin_subsink@
+	touch $@
+
+$(DEPDIR)/gst_plugin_subsink.do_compile: $(DEPDIR)/gst_plugin_subsink.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd gst-plugin-subsink && \
+	aclocal -I $(hostprefix)/share/aclocal -I m4 && \
+	autoheader && \
+	autoconf && \
+	automake --foreign && \
+	libtoolize --force && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr
+	touch $@
+
+$(DEPDIR)/min-gst_plugin_subsink $(DEPDIR)/std-gst_plugin_subsink $(DEPDIR)/max-gst_plugin_subsink \
+$(DEPDIR)/gst_plugin_subsink: \
+$(DEPDIR)/%gst_plugin_subsink: $(DEPDIR)/gst_plugin_subsink.do_compile
+	cd gst-plugin-subsink && \
+		@INSTALL_gst_plugin_subsink@
+#	@DISTCLEANUP_gst_plugin_subsink@
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-FFMPEG
@@ -1935,7 +1967,7 @@ $(DEPDIR)/%gst_plugins_fluendo_mpegdemux: $(DEPDIR)/gst_plugins_fluendo_mpegdemu
 #
 # GST-PLUGINS-DVBMEDIASINK
 #
-$(DEPDIR)/gst_plugins_dvbmediasink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugins_dvbmediasink@
+$(DEPDIR)/gst_plugins_dvbmediasink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_plugin_subsink @DEPENDS_gst_plugins_dvbmediasink@
 	@PREPARE_gst_plugins_dvbmediasink@
 	touch $@
 

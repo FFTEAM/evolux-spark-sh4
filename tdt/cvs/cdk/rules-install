@@ -129,6 +129,7 @@ gst_plugins_ugly;rewrite-pkgconfig:pkgconfig/gstreamer-plugins-ugly-0.10-uninsta
 gst_ffmpeg;make:install:DESTDIR=TARGETS
 gst_plugins_fluendo_mpegdemux;make:install:DESTDIR=TARGETS
 gst_plugins_dvbmediasink;make:install:DESTDIR=TARGETS
+gst_plugin_subsink;make:install:DESTDIR=TARGETS
 
 #
 # net apps
