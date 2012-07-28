@@ -89,9 +89,9 @@ class EVOMC_VideoPlayer(Screen, InfoBarBase, InfoBarSeek, InfoBarNotifications, 
 			currDir = "/"
 		self["currentfolder"].setText(str(currDir))
 		if pathExists("/usr/lib/enigma2/python/Plugins/Extensions/DVDPlayer") is True:
-			self.filelist = FileList(currDir, useServiceRef = True, showDirectories = True, showFiles = True, matchingPattern = "(?i)^.*\.(mp4|ts|trp|wmv|mpg|vob|avi|mkv|dat|flac|m2ts|trp)")
+			self.filelist = FileList(currDir, useServiceRef = True, showDirectories = True, showFiles = True, matchingPattern = "(?i)^.*\.(mp4|ts|trp|wmv|mpg|vob|avi|mkv|dat|flac|m2ts|trp|flv)")
 		else:
-			self.filelist = FileList(currDir, useServiceRef = True, showDirectories = True, showFiles = True, matchingPattern = "(?i)^.*\.(mp4|ts|trp|wmv|mpg|vob|avi|mkv|dat|flac|m2ts|trp)")
+			self.filelist = FileList(currDir, useServiceRef = True, showDirectories = True, showFiles = True, matchingPattern = "(?i)^.*\.(mp4|ts|trp|wmv|mpg|vob|avi|mkv|dat|flac|m2ts|trp|flv)")
 		self["filelist"] = self.filelist
 		self["thumbnail"] = Pixmap()
 		evfd.getInstance().vfd_write_string("EVO-VIDEOPLAYER")
