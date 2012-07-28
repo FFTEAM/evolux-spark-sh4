@@ -521,6 +521,8 @@ release-enigma2-pli-nightly_base:
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Screens $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/AutomaticVolumeAdjustment $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/EVOMediaCenter $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/JobManager $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/chartsplayer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinguExplorer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
