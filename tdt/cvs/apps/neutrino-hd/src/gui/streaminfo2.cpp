@@ -757,6 +757,18 @@ void CStreamInfo2::paintCASystem(int xpos, int ypos)
 		array[i] = g_Font[font_info]->getRenderWidth( casys[i].c_str() );
 	}
 
+	int acaid = 0;
+	FILE *f = fopen("/tmp/ecm.info", "rt");
+	if (f) {
+		char buf[80];
+		if (fgets(buf, sizeof(buf), f) != NULL) {
+			while (buf[i] != '0')
+				i++;
+			sscanf(&buf[i], "%X", &acaid);
+		}
+		fclose(f);
+	}
+
 	for(j=0;j<4;j++){
 		for(i=0;i<11;i++){
 			if(pmt_caids[j][i] > 1 && i == 0){
@@ -918,7 +930,7 @@ void CStreamInfo2::paintCASystem(int xpos, int ypos)
 		if(caids[ca_id] == true){
 			if(cryptsysteme){
 				ypos += iheight;
-				g_Font[font_info]->RenderString(xpos , ypos, box_width, "Cryptsysteme:" , COL_INFOBAR, 0, false);
+				g_Font[font_info]->RenderString(xpos , ypos, box_width, g_Locale->getText(LOCALE_STREAMINFO_CASYSTEMS) , COL_INFOBAR, 0, false);
 				cryptsysteme = false;
 			}
 			ypos += sheight;
@@ -927,7 +939,13 @@ void CStreamInfo2::paintCASystem(int xpos, int ypos)
 			std::string::size_type last_pos = casys[ca_id].find_first_not_of(tok, 0);
 			std::string::size_type pos = casys[ca_id].find_first_of(tok, last_pos);
 			while (std::string::npos != pos || std::string::npos != last_pos){
-				g_Font[font_small]->RenderString(xpos + width_txt, ypos, box_width, casys[ca_id].substr(last_pos, pos - last_pos).c_str() , COL_INFOBAR, 0, false);
+				int col = COL_INFOBAR;
+				if (index > 0) {
+					int id;
+					if (1 == sscanf(casys[ca_id].substr(last_pos, pos - last_pos).c_str(), "%X", &id) && acaid == id)
+						col = COL_MENUHEAD;
+				}
+				g_Font[font_small]->RenderString(xpos + width_txt, ypos, box_width, casys[ca_id].substr(last_pos, pos - last_pos).c_str() , col, 0, false);
 				if(index == 0)
 					width_txt = spaceoffset;
 				else

@@ -1356,6 +1356,7 @@ streaminfo.aratio_unknown unbekannt
 streaminfo.audiotype Audiotyp
 streaminfo.average_bitrate Durchschnitt
 streaminfo.bitrate Bitrate
+streaminfo.casystems Cryptsysteme
 streaminfo.framerate Bildrate
 streaminfo.framerate_unknown unbekannt
 streaminfo.head Tech. Information
