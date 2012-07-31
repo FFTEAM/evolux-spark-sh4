@@ -43,6 +43,10 @@
 #ifdef SCREENSHOT
 #include <driver/screenshot.h>
 #endif
+#ifdef EVOLUX
+#include <audio.h>
+#include <driver/volume.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,6 +67,10 @@ extern cVideo * videoDecoder;
 extern CRemoteControl *g_RemoteControl;	/* neutrino.cpp */
 extern CInfoClock *InfoClock;
 extern bool has_hdd;
+#ifdef EVOLUX
+extern CAudioSetupNotifierVolPercent	* audioSetupNotifierVolPercent;
+extern cAudio * audioDecoder;
+#endif
 
 #define TIMESHIFT_SECONDS 3
 
@@ -426,6 +434,12 @@ void CMoviePlayerGui::PlayFile(void)
 		duration = p_movie_info->length * 60 * 1000;
 
 	file_prozent = 0;
+#ifdef EVOLUX
+	CFrameBuffer::Mode3D old3dmode = frameBuffer->get3DMode();
+	if (p_movie_info  && p_movie_info->epgId)
+		g_Zapit->getVolumePercent((unsigned int *) &g_settings.current_volume_percent, p_movie_info->epgId, currentapid, currentac3 == 1);
+	audioDecoder->setPercent(g_settings.current_volume_percent);
+#endif
 	if(!playback->Start((char *) full_name.c_str(), vpid, vtype, currentapid, currentac3, duration)) {
 		playback->Close();
 	} else {
@@ -511,8 +525,12 @@ void CMoviePlayerGui::PlayFile(void)
 			//g_PluginList->start_plugin_by_name (g_settings.movieplayer_plugin.c_str (), pidt);
 		} else if (msg == (neutrino_msg_t) g_settings.mpkey_stop) {
 			playstate = CMoviePlayerGui::STOPPED;
+#ifdef EVOLUX
 		} else if (msg == (neutrino_msg_t) CRCInput::RC_home) {
 			playstate = CMoviePlayerGui::STOPPED;
+		} else if (msg == (neutrino_msg_t) g_settings.mpkey_next3dmode) {
+			frameBuffer->set3DMode((CFrameBuffer::Mode3D)(((frameBuffer->get3DMode()) + 1) % CFrameBuffer::Mode3D_SIZE));
+#endif
 		} else if (msg == (neutrino_msg_t) g_settings.mpkey_play) {
 			if (playstate > CMoviePlayerGui::PLAY) {
 				update_lcd = true;
@@ -595,7 +613,7 @@ void CMoviePlayerGui::PlayFile(void)
 		} else if (msg == CRCInput::RC_0) {	// cancel bookmark jump
 			handleMovieBrowser(CRCInput::RC_0, position);
 #ifdef EVOLUX
-		} else if (msg == g_settings.key_help || msg == CRCInput::RC_info) {
+		} else if (msg == (uint32_t)g_settings.key_help || msg == CRCInput::RC_info) {
 #else
 		} else if (msg == CRCInput::RC_help || msg == CRCInput::RC_info) {
 #endif
@@ -679,6 +697,9 @@ void CMoviePlayerGui::PlayFile(void)
 			handleMovieBrowser((neutrino_msg_t) g_settings.mpkey_stop, position);
 		}
 	}
+#ifdef EVOLUX
+	frameBuffer->set3DMode(old3dmode);
+#endif
 
 	FileTime.hide();
 
@@ -741,6 +762,9 @@ void CMoviePlayerGui::selectAudioPid(bool file_player)
 		if(numpida)
 			currentapid = apids[0];
 	}
+#ifdef EVOLUX
+	std::string apidtitles[numpida];
+#endif
 	for (unsigned int count = 0; count < numpida; count++) {
 		bool name_ok = false;
 		bool enabled = true;
@@ -754,11 +778,20 @@ void CMoviePlayerGui::selectAudioPid(bool file_player)
 			apidtitle = language[count];
 			name_ok = true;
 		}
+#ifdef EVOLUX
+		char apidnumber[20];
+#endif
 		if (!name_ok) {
+#ifndef EVOLUX
 			char apidnumber[20];
+#endif
 			sprintf(apidnumber, "Stream %d %X", count + 1, apids[count]);
 			apidtitle = apidnumber;
 		}
+#ifdef EVOLUX
+		if (p_movie_info && p_movie_info->epgId)
+			apidtitles[count] = std::string(apidtitle);
+#endif
 
 		switch(ac3flags[count])
 		{
@@ -797,11 +830,32 @@ void CMoviePlayerGui::selectAudioPid(bool file_player)
 		APIDSelector.addItem(item, defpid);
 	}
 
+#ifdef EVOLUX
+	if (p_movie_info && p_movie_info->epgId) {
+		APIDSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUSTMENT));
+
+		int percent[numpida];
+		audioSetupNotifierVolPercent->setAPid(currentapid);
+		audioSetupNotifierVolPercent->setChannelId(p_movie_info->epgId);
+		for(unsigned int count = 0; count < numpida; count++ ) {
+			g_Zapit->getVolumePercent((unsigned int *) &percent[count], p_movie_info->epgId, apids[count], ac3flags[count] == 1);
+			int is_active = currentapid == apids[count];
+			APIDSelector.addItem(new CMenuOptionNumberChooser(NONEXISTANT_LOCALE, &percent[count],
+				is_active, 0, 999, audioSetupNotifierVolPercent, 0, 0, NONEXISTANT_LOCALE, apidtitles[count].c_str()));
+			if (is_active)
+				g_settings.current_volume_percent = percent[count];
+		}
+	}
+#endif
 	APIDSelector.exec(NULL, "");
 	delete selector;
 	printf("CMoviePlayerGui::selectAudioPid: selected %d (%x) current %x\n", select, (select >= 0) ? apids[select] : -1, currentapid);
 	if((select >= 0) && (currentapid != apids[select])) {
 		currentapid = apids[select];
+#ifdef EVOLUX
+		if (p_movie_info && p_movie_info->epgId)
+			audioSetupNotifierVolPercent->setAPid(currentapid);
+#endif
 		currentac3 = ac3flags[select];
 		playback->SetAPid(currentapid, currentac3);
 		printf("[movieplayer] apid changed to %d type %d\n", currentapid, currentac3);

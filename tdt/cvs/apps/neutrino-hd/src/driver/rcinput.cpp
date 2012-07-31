@@ -1253,19 +1253,9 @@ printf("[neutrino] CSectionsdClient::EVT_GOT_CN_EPG\n");
 #endif
 #ifdef EVOLUX
 					if (firstKey) {
-						char c = '0';
-						firstKey = false;
-						int wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_RDONLY);
-						if (wtw > -1) {
-							::read(wtw, &c, 1);
-							::close(wtw);
-						}
-						wtw = ::open ("/proc/stb/fp/was_timer_wakeup", O_WRONLY);
-						if (wtw > -1) {
-							::write(wtw, "0\n", 2);
-							::close(wtw);
-						}
-						if (c != '0') {
+						bool was_timer_wakeup = !access("/tmp/.wakeup", F_OK);
+						if (was_timer_wakeup) {
+							unlink("/tmp/.wakeup");
 							CCECSetup cecsetup;
 							cecsetup.setCECSettings(true);
 						}

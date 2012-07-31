@@ -175,6 +175,8 @@ class CZapitMessages
 #ifdef EVOLUX
 	struct commandVolumePercent
 	{
+		bool is_ac3;
+		t_channel_id channel_id;
 		unsigned int apid;
 		unsigned int percent;
 	};

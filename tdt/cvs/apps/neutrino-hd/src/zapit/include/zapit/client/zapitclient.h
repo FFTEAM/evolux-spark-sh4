@@ -365,10 +365,9 @@ class CZapitClient:public CBasicClient
 
 #ifdef EVOLUX
 	/* set audio adjustement in percent */
-	void setVolumePercent(const unsigned int percent, const unsigned int apid = 0);
-	void getVolumePercent(unsigned int *percent, const unsigned int apid = 0);
+	void setVolumePercent(const unsigned int percent, t_channel_id channel_id = 0, const unsigned int apid = 0);
+	void getVolumePercent(unsigned int *percent, t_channel_id channel_id = 0, const unsigned int apid = 0, const bool is_ac3 = false);
 #endif
-
 	/* get dvb transmission type */
 	delivery_system_t getDeliverySystem(void);
 
@@ -487,10 +486,10 @@ class CZapitClient:public CBasicClient
 	/****************************************/
 
 	void setStandby(const bool enable);
-	void startPlayBack();
-	void stopPlayBack();
-	void lockPlayBack();
-	void unlockPlayBack();
+	void startPlayBack(const bool sendpmt = false);
+	void stopPlayBack(const bool sendpmt = false);
+	void lockPlayBack(const bool sendpmt = true);
+	void unlockPlayBack(const bool sendpmt = true);
 	bool tune_TP(TP_params TP);
 	bool isPlayBackActive();
 	void setDisplayFormat(const video_display_format_t mode);

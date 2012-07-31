@@ -290,7 +290,7 @@ bool CMiscNotifier::changeNotify(const neutrino_locale_t, void *)
 }
 
 #ifdef EVOLUX
-bool CLcdNotifier::changeNotify(const neutrino_locale_t OptionName, void *arg)
+bool CLcdNotifier::changeNotify(const neutrino_locale_t OptionName, void *arg __attribute__((unused)))
 {
 	if (ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_DISPLAYMODE_RUNNING) ||
 	    ARE_LOCALES_EQUAL(OptionName, LOCALE_LCDMENU_DISPLAYMODE_STANDBY)) {
@@ -485,7 +485,7 @@ bool CAudioSetupNotifier::changeNotify(const neutrino_locale_t OptionName, void 
 }
 
 #ifdef EVOLUX
-bool CAudioSetupNotifierVolPercent::changeNotify(const neutrino_locale_t OptionName, void *data)
+bool CAudioSetupNotifierVolPercent::changeNotify(const neutrino_locale_t OptionName __attribute__((unused)), void *data)
 {
 	// audio_select.cpp, set channel specific volume
 	g_settings.current_volume_percent = *((int *) (data));
@@ -493,13 +493,13 @@ bool CAudioSetupNotifierVolPercent::changeNotify(const neutrino_locale_t OptionN
 	// assume steps of 5.
 	if ((g_settings.current_volume_percent % 5) == 1)
 		g_settings.current_volume_percent += 4;
+	else if (g_settings.current_volume_percent < 4)
+		g_settings.current_volume_percent = 0;
 	else
 		g_settings.current_volume_percent -= 4;
 
 	int v = audioDecoder->getVolume();
-	if (g_settings.current_volume_percent < 0)
-		g_settings.current_volume_percent = 0;
-	else if (v * g_settings.current_volume_percent > 10000)
+	if (v * g_settings.current_volume_percent > 10000)
 		g_settings.current_volume_percent = 10000 / v;
 	else {
 		g_settings.current_volume_percent /= 5;
@@ -507,7 +507,7 @@ bool CAudioSetupNotifierVolPercent::changeNotify(const neutrino_locale_t OptionN
 	}
 	*((int *) (data)) = g_settings.current_volume_percent;
 
-	g_Zapit->setVolumePercent(g_settings.current_volume_percent);
+	g_Zapit->setVolumePercent(g_settings.current_volume_percent, channel_id, apid);
 	audioDecoder->setPercent(g_settings.current_volume_percent);
 	return true;
 }
@@ -1136,7 +1136,11 @@ int check_dir(const char * newdir)
 			case 0x858458f6: 	/*ramfs*/
 				return 0;//ok
 			default:
+#ifdef EVOLUX
+				fprintf(stderr, "%s(%s): Unknown File system type: 0x%x\n",
+#else
 				fprintf(stderr, "%s(%s): Unknown File system type: 0x%lx\n",
+#endif
 						__func__, newdir, s.f_type);
 				break;
 		}

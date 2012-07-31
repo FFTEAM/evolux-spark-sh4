@@ -74,7 +74,7 @@ bool CBatchEPG_Menu::AbortableSystem(const char *command) {
 				signal(SIGTERM, SIG_DFL);
 				signal(SIGINT, SIG_DFL);
 				signal(SIGHUP, SIG_DFL);
-				execl("/bin/sh", "sh", "-c", command, NULL);
+				execl("/bin/sh", "sh", "-c", command, (char *) NULL);
 				exit(-1);
 		}
 
@@ -143,7 +143,7 @@ bool CBatchEPG_Menu::Run(int i)
 				break;
 			}
 
-			std::string cmd = "exec /usr/local/bin/mhwepg -" + mhwVersion
+			std::string cmd = "exec /bin/mhwepg -" + mhwVersion
 				+ " -n " + string(tmpdir) + " >" + string(tmpfile) + " 2>&1";
 			fprintf(stderr, "executing %s\n", cmd.c_str());
 			if (!AbortableSystem(cmd.c_str())){
@@ -180,8 +180,6 @@ bool CBatchEPG_Menu::Run(int i)
 
 int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 {
-	int res = menu_return::RETURN_REPAINT;
-
 	if (actionKey == "save") {
 		Save();
 		CNeutrinoApp::getInstance()->exec(NULL, "savesettings");
@@ -196,7 +194,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		if (CNeutrinoApp::getInstance()->recordingstatus)
 			return menu_return::RETURN_REPAINT;
 		
-		for (int i = 0; i < epgChannels.size(); i++)
+		for (unsigned int i = 0; i < epgChannels.size(); i++)
 			if (epgChannels[i].channel_id == channel_id) {
 				if (epgChannels[i].type != BATCHEPG_OFF) {
 					if (channel_id != live_channel_id)
@@ -217,15 +215,10 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 		if (CNeutrinoApp::getInstance()->recordingstatus)
 			return menu_return::RETURN_REPAINT;
 
-		int wakeup = 1;
-		if (actionKey == "timer") {
-			FILE *f = fopen ("/proc/stb/fp/was_timer_wakeup", "r");
-			if (f) {
-				fscanf(f, "%d", &wakeup);
-				fclose(f);
-			}
-		}
-
+		bool wakeup = true;
+		if (actionKey == "timer")
+			wakeup = !access("/tmp/.wakeup", F_OK);
+			
 		bool muted = false;
 
 		if (!wakeup)
@@ -241,7 +234,7 @@ int CBatchEPG_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 
 		channel_id = live_channel_id;
 		// read EPG from all channels
-		for (int i = 0; i < epgChannels.size(); i++) {
+		for (unsigned int i = 0; i < epgChannels.size(); i++) {
 			channel_id = epgChannels[i].channel_id;
 			if (epgChannels[i].type != BATCHEPG_OFF) {
 				if (channel_id != live_channel_id)
@@ -282,7 +275,6 @@ void CBatchEPG_Menu::Load()
 
        FILE *cfg = fopen(BATCHEPGCONFIG, "r");
         if (cfg) {
-          t_channel_id chan;
           char s[1000];
           while (fgets(s, 1000, cfg)) {
                 t_channel_id chan;
@@ -304,7 +296,7 @@ void CBatchEPG_Menu::AddCurrentChannel()
 {
 	t_channel_id live_channel_id = CZapit::getInstance()->GetCurrentChannelID();
 	t_channel_id channel_id = live_channel_id;
-	for (int i = 0; i < epgChannels.size(); i++)
+	for (unsigned int i = 0; i < epgChannels.size(); i++)
 		if (epgChannels[i].channel_id == channel_id)
 			return;
 	epgChannel e;
@@ -316,7 +308,7 @@ void CBatchEPG_Menu::AddCurrentChannel()
 }
 
 bool CBatchEPG_Menu::Changed() {
-	for (int i = 0; i < epgChannels.size(); i++)
+	for (unsigned int i = 0; i < epgChannels.size(); i++)
 		if (epgChannels[i].type != epgChannels[i].type_old)
 			return true;
 	return false;
@@ -327,7 +319,7 @@ void CBatchEPG_Menu::Save()
 	if (Changed()) {
 		FILE *cfg = fopen(BATCHEPGCONFIG, "w");
 		if (cfg) {
-			for (int i = 0; i < epgChannels.size(); i++) {
+			for (unsigned int i = 0; i < epgChannels.size(); i++) {
 				if (epgChannels[i].type != BATCHEPG_OFF)
 					fprintf(cfg, "%llx %d\n", epgChannels[i].channel_id, epgChannels[i].type);
 				epgChannels[i].type_old = epgChannels[i].type;
@@ -365,7 +357,7 @@ void CBatchEPG_Menu::Settings()
 	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE |
 					 				 CMenuSeparator::STRING, LOCALE_BATCHEPG_SETTINGS));
 
-	for (int i = 0; i < epgChannels.size(); i++) {
+	for (unsigned int i = 0; i < epgChannels.size(); i++) {
 		menu->addItem(new CMenuOptionChooser(epgChannels[i].name.c_str(),
 			     		(int*)&(epgChannels[i].type),
 					EPG_BATCH_TYPES, EPG_BATCH_TYPES_COUNT, true));
@@ -375,7 +367,7 @@ void CBatchEPG_Menu::Settings()
 					 				 CMenuSeparator::STRING, LOCALE_BATCHEPG_REFRESH));
 	t_channel_id live_channel_id = CZapit::getInstance()->GetCurrentChannelID();
 	int shortcut = 0;
-	for (int i = 0; i < epgChannels.size(); i++) {
+	for (unsigned int i = 0; i < epgChannels.size(); i++) {
 		char actionKey[80];
 		snprintf(actionKey, sizeof(actionKey), "%llx", epgChannels[i].channel_id);
 		menu->addItem(new CMenuForwarderNonLocalized(epgChannels[i].name.c_str(),

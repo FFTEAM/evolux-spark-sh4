@@ -2780,11 +2780,11 @@ _repeat:
 		g_videoSettings->nextMode();
 		return messages_return::handled;
 	}
-	else if( msg == CRCInput::RC_next ) {
+	else if( msg == (neutrino_msg_t) g_settings.key_next43mode) {
 		g_videoSettings->next43Mode();
 		return messages_return::handled;
 	}
-	else if( msg == CRCInput::RC_prev ) {
+	else if( msg == (neutrino_msg_t) g_settings.key_switchformat) {
 		g_videoSettings->SwitchFormat();
 		return messages_return::handled;
 	}
@@ -4037,6 +4037,8 @@ void CNeutrinoApp::loadKeys(const char * fname)
 	//rc-key configuration
 
 #ifdef EVOLUX
+	g_settings.key_switchformat = configfile.getInt32("key_switchformat", CRCInput::RC_prev);
+	g_settings.key_next43mode = configfile.getInt32("key_next43mode", CRCInput::RC_next);
 	g_settings.key_tvradio_mode = tconfig.getInt32( "key_tvradio_mode", CRCInput::RC_tv );
 #else
 	g_settings.key_tvradio_mode = tconfig.getInt32( "key_tvradio_mode", CRCInput::RC_nokey );
@@ -4082,6 +4084,9 @@ void CNeutrinoApp::loadKeys(const char * fname)
 	g_settings.mpkey_time = tconfig.getInt32( "mpkey.time", CRCInput::RC_setup );
 	g_settings.mpkey_bookmark = tconfig.getInt32( "mpkey.bookmark", CRCInput::RC_blue );
 	g_settings.mpkey_plugin = tconfig.getInt32( "mpkey.plugin", CRCInput::RC_red );
+#ifdef EVOLUX
+	g_settings.mpkey_next3dmode = tconfig.getInt32( "mpkey.next3dmode", CRCInput::RC_nokey );
+#endif
 
 	/* options */
 	g_settings.menu_left_exit = tconfig.getInt32( "menu_left_exit", 0 );
@@ -4108,6 +4113,8 @@ void CNeutrinoApp::saveKeys(const char * fname)
 		tconfig = newconfig;
 	}
 	//rc-key configuration
+	tconfig.setInt32( "key_switchformat", g_settings.key_switchformat );
+	tconfig.setInt32( "key_next43mode", g_settings.key_next43mode );
 	tconfig.setInt32( "key_tvradio_mode", g_settings.key_tvradio_mode );
 	tconfig.setInt32( "key_power_off", g_settings.key_power_off );
 
@@ -4150,7 +4157,9 @@ void CNeutrinoApp::saveKeys(const char * fname)
 	tconfig.setInt32( "mpkey.time", g_settings.mpkey_time );
 	tconfig.setInt32( "mpkey.bookmark", g_settings.mpkey_bookmark );
 	tconfig.setInt32( "mpkey.plugin", g_settings.mpkey_plugin );
-
+#ifdef EVOLUX
+	tconfig.setInt32( "mpkey.next3dmode", g_settings.mpkey_next3dmode );
+#endif
 	tconfig.setInt32( "menu_left_exit", g_settings.menu_left_exit );
 	tconfig.setInt32( "audio_run_player", g_settings.audio_run_player );
 	tconfig.setInt32( "key_click", g_settings.key_click );

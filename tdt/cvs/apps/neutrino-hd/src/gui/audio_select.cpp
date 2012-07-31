@@ -208,8 +208,10 @@ int CAudioSelectMenuHandler::doMenu ()
 	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUSTMENT));
 
 	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
-	for(int count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) {
-		g_Zapit->getVolumePercent((unsigned int *) &percent[count], g_RemoteControl->current_PIDs.APIDs[count].pid);
+	audioSetupNotifierVolPercent->setChannelId(0);
+	audioSetupNotifierVolPercent->setAPid(0);
+	for(unsigned int count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) {
+		g_Zapit->getVolumePercent((unsigned int *) &percent[count], 0, g_RemoteControl->current_PIDs.APIDs[count].pid);
 		int is_active = count == g_RemoteControl->current_PIDs.PIDs.selected_apid;
 		AudioSelector.addItem(new CMenuOptionNumberChooser(NONEXISTANT_LOCALE, &percent[count],
 			is_active,

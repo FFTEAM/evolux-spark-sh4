@@ -362,9 +362,11 @@ extra.key_current_transponder Aktuelle Transponder Taste
 extra.key_help Hilfe-Taste
 extra.key_list_end Listenende
 extra.key_list_start Listenanfang
+extra.key_next43mode Nächstes Seitenformat
 extra.key_plugin One-touch-Plugin
 extra.key_screenshot Screenshot Taste
 extra.key_showclock Zeitanzeige
+extra.key_switchformat Nächste Auflösung
 extra.key_timerlist Timer-Liste
 extra.key_timeshift Timeshift
 extra.key_unlock Entsperrtaste
@@ -1022,6 +1024,7 @@ movieplayer.tsplayback TS Abspielen
 mpkey.audio Audiotrack
 mpkey.bookmark Speichere Lesezeichen
 mpkey.forward Vorlauf
+mpkey.next3dmode Nächster 3D-Modus
 mpkey.pause Pause
 mpkey.play Play
 mpkey.plugin Starte Plugin

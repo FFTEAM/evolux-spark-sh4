@@ -71,6 +71,9 @@ class CKeybindSetup : public CMenuTarget
 			MPKEY_AUDIO,
 			MPKEY_TIME,
 			MPKEY_BOOKMARK,
+#ifdef EVOLUX
+			MPKEY_NEXT3DMODE,
+#endif
 			KEY_TIMESHIFT,
 			MPKEY_PLUGIN,
 			KEY_PLUGIN,
@@ -79,6 +82,8 @@ class CKeybindSetup : public CMenuTarget
 			KEY_TIMERLIST,
 			KEY_SHOWCLOCK,
 			KEY_Help,
+			KEY_NEXT43MODE,
+			KEY_SWITCHFORMAT,
 #endif
 			KEY_SCREENSHOT,
 			

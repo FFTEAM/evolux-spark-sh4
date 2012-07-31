@@ -766,13 +766,7 @@ void CTimerManager::shutdownOnWakeup(int currEventID)
 {
 	time_t nextAnnounceTime=0;
 #ifdef EVOLUX
-	FILE *f = fopen ("/proc/stb/fp/was_timer_wakeup", "r");
-	if (f) {
-		fscanf(f, "%d", &wakeup);
-		fclose(f);
-	}
-
-	fprintf(stderr, "[timerd] wakeup from standby: %s\n", wakeup ? "yes" : "no");
+	wakeup = access("/tmp/.wakeup", F_OK) ? 0 : 1;
 #endif
 	if(wakeup == 0)
 		return;

@@ -266,7 +266,7 @@ class CFrameBuffer
 #if HAVE_SPARK_HARDWARE
 		bool OSDShot(const std::string &name);
 
-		enum Mode3D { Mode3D_off = 0, Mode3D_SideBySide, Mode3D_TopAndBottom, Mode3D_Tile };
+		enum Mode3D { Mode3D_off = 0, Mode3D_SideBySide, Mode3D_TopAndBottom, Mode3D_Tile, Mode3D_SIZE };
 		void set3DMode(Mode3D);
 		Mode3D get3DMode(void);
 	private:

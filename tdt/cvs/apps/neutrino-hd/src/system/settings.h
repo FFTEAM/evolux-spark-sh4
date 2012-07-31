@@ -418,6 +418,8 @@ struct SNeutrinoSettings
 	int key_timerlist;
 	int key_showclock;
 	int key_help;
+	int key_next43mode;
+	int key_switchformat;
 #endif
 
 	int mpkey_rewind;
@@ -431,7 +433,9 @@ struct SNeutrinoSettings
 	int mpkey_plugin;
 	int key_timeshift;
 	int key_plugin;
-
+#ifdef EVOLUX
+	int mpkey_next3dmode;
+#endif
 	int key_unlock;
 
 	int key_screenshot;

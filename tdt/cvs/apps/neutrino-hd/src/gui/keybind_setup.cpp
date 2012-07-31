@@ -184,6 +184,9 @@ const key_settings_struct_t key_settings[CKeybindSetup::KEYBINDS_COUNT] =
 	{LOCALE_MPKEY_AUDIO,			&g_settings.mpkey_audio, 		},
 	{LOCALE_MPKEY_TIME,			&g_settings.mpkey_time,			},
 	{LOCALE_MPKEY_BOOKMARK,			&g_settings.mpkey_bookmark, 		},
+#ifdef EVOLUX
+	{LOCALE_MPKEY_NEXT3DMODE,		&g_settings.mpkey_next3dmode,		},
+#endif
 	{LOCALE_EXTRA_KEY_TIMESHIFT,		&g_settings.key_timeshift,  		},
 	{LOCALE_MPKEY_PLUGIN,			&g_settings.mpkey_plugin,		},
 	{LOCALE_EXTRA_KEY_PLUGIN,		&g_settings.key_plugin,			},
@@ -192,6 +195,8 @@ const key_settings_struct_t key_settings[CKeybindSetup::KEYBINDS_COUNT] =
 	{LOCALE_EXTRA_KEY_TIMERLIST,		&g_settings.key_timerlist,		},
 	{LOCALE_EXTRA_KEY_SHOWCLOCK,		&g_settings.key_showclock,		},
 	{LOCALE_EXTRA_KEY_HELP,			&g_settings.key_help,			},
+	{LOCALE_EXTRA_KEY_NEXT43MODE,		&g_settings.key_next43mode,		},
+	{LOCALE_EXTRA_KEY_SWITCHFORMAT,		&g_settings.key_switchformat,		},
 #endif
 	{LOCALE_EXTRA_KEY_SCREENSHOT,		&g_settings.key_screenshot,		}
 };
@@ -294,6 +299,8 @@ void CKeybindSetup::showKeyBindSetup(CMenuWidget *bindSettings)
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_TIMERLIST].keydescription, true, keychooser[KEY_TIMERLIST]->getKeyName(), keychooser[KEY_TIMERLIST]));
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SHOWCLOCK].keydescription, true, keychooser[KEY_SHOWCLOCK]->getKeyName(), keychooser[KEY_SHOWCLOCK]));
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_Help].keydescription, true, keychooser[KEY_Help]->getKeyName(), keychooser[KEY_Help]));
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_NEXT43MODE].keydescription, true, keychooser[KEY_NEXT43MODE]->getKeyName(), keychooser[KEY_NEXT43MODE]));
+	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SWITCHFORMAT].keydescription, true, keychooser[KEY_SWITCHFORMAT]->getKeyName(), keychooser[KEY_SWITCHFORMAT]));
 #endif
 #ifdef SCREENSHOT
 	bindSettings->addItem(new CMenuForwarder(key_settings[KEY_SCREENSHOT].keydescription, true, keychooser[KEY_SCREENSHOT]->getKeyName(), keychooser[KEY_SCREENSHOT]));
