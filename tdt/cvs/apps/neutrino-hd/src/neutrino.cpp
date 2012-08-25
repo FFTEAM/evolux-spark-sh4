@@ -2410,7 +2410,7 @@ void CNeutrinoApp::RealRun(CMenuWidget &mainMenu)
 				nGLCD::lockChannel("MoviePlayer");
 #endif
 #ifdef EVOLUX
-				int old_percent = audioDecoder->setPercent(100);
+				int old_percent = audioDecoder->getPercent();
 #endif
 				CMediaPlayerMenu::getInstance()->exec(NULL,"movieplayer");
 #ifdef EVOLUX
