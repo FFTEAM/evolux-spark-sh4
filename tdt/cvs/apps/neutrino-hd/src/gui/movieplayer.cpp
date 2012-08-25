@@ -698,6 +698,7 @@ void CMoviePlayerGui::PlayFile(void)
 		}
 	}
 #ifdef EVOLUX
+	audioDecoder->setPercent(oldpercent);
 	frameBuffer->set3DMode(old3dmode);
 #endif
 
