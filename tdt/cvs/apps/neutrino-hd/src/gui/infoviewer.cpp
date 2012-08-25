@@ -608,7 +608,11 @@ void CInfoViewer::showMovieTitle(const int playState, const std::string &Channel
 		CMoviePlayerGui::getInstance().file_prozent = 100;
 
 	char runningRest[32]; // %d can be 10 digits max...
+#ifdef EVOLUX
+	snprintf(runningRest, sizeof(runningRest), "%d / %d min", (curr_pos + 30000) / 60000, (duration - curr_pos + 30000) / 60000);
+#else
 	sprintf(runningRest, "%d / %d min", (curr_pos + 30000) / 60000, (duration + 30000) / 60000);
+#endif
 	display_Info(g_file_epg.c_str(), g_file_epg1.c_str(), true, false, CMoviePlayerGui::getInstance().file_prozent, NULL, runningRest);
 
 	const char *playicon = NULL;
