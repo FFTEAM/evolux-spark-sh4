@@ -1796,7 +1796,11 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 
 	int loadSettingsErg = loadSetup(NEUTRINO_SETTINGS_FILE);
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
-
+#ifdef EVOLUX
+	cpuFreq = new cCpuFreqManager();
+	cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
+fprintf(stderr, "[neutrino start] %d -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
+#endif
 	initialize_iso639_map();
 
 	bool show_startwizard = false;
@@ -1899,11 +1903,11 @@ fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms
 			printf("opening powermanager failed\n");
 	}
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
-
+#ifndef EVOLUX
 	cpuFreq = new cCpuFreqManager();
 	cpuFreq->SetCpuFreq(g_settings.cpufreq * 1000 * 1000);
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
-
+#endif
 
 	dvbsub_init();
 fprintf(stderr, "[neutrino start] %d  -> %5ld ms\n", __LINE__, time_monotonic_ms() - starttime);
