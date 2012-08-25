@@ -438,7 +438,7 @@ void CMoviePlayerGui::PlayFile(void)
 	CFrameBuffer::Mode3D old3dmode = frameBuffer->get3DMode();
 	if (p_movie_info  && p_movie_info->epgId)
 		g_Zapit->getVolumePercent((unsigned int *) &g_settings.current_volume_percent, p_movie_info->epgId, currentapid, currentac3 == 1);
-	audioDecoder->setPercent(g_settings.current_volume_percent);
+	int oldpercent = audioDecoder->setPercent(g_settings.current_volume_percent);
 #endif
 	if(!playback->Start((char *) full_name.c_str(), vpid, vtype, currentapid, currentac3, duration)) {
 		playback->Close();
