@@ -396,6 +396,8 @@ int CTimerList::exec(CMenuTarget* parent, const std::string & actionKey)
 		parent->hide();
 	}
 
+	saved_dispmode = (int)CVFD::getInstance()->getMode();
+
 	int ret = show();
 	CVFD::getInstance()->setMode((CVFD::MODES)saved_dispmode);
 
