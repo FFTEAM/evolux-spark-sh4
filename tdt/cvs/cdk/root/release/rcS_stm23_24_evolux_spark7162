@@ -5,8 +5,8 @@ PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
 echo "init frontpanel"
 #insmod $MODDIR/vfd.ko
 mknod /dev/vfd c 147 0 2>/dev/null
-mknod /dev/rc c 147 1 2>/dev/null
-mknod /dev/sci0 c 169 0 2>/dev/null
+#mknod /dev/rc c 147 1 2>/dev/null
+#mknod /dev/sci0 c 169 0 2>/dev/null
 mknod /dev/sci1 c 169 1 2>/dev/null
 mknod /dev/dvb/adapter0/frontend1 c 212 19 2>/dev/null
 mknod /dev/dvb/adapter0/frontend2 c 212 35 2>/dev/null
@@ -156,7 +156,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/stmvout.ko
 	insmod $MODDIR/stmvbi.ko
 	insmod $MODDIR/pseudocard.ko
-	insmod $MODDIR/stv090x.ko
+#	insmod $MODDIR/stv090x.ko
 	insmod $MODDIR/pti.ko #waitMS=20 videoMem=4096
 	insmod $MODDIR/stm_monitor.ko
 	insmod $MODDIR/stmsysfs.ko
