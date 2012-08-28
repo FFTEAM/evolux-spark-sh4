@@ -55,7 +55,12 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 
 ##############################################
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
-TARGET="--enable-spark"
+read -p "Build for TRIPLEX(7162) (y/N)? "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
+	TARGET="--enable-spark7162"
+else
+	TARGET="--enable-spark"
+fi
 CONFIGPARAM="$CONFIGPARAM $TARGET"
 
 ##############################################
