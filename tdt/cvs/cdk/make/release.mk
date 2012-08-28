@@ -105,7 +105,11 @@ endif
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release/sbin
 
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release/etc/
+if !ENABLE_SPARK7162
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release/etc/lircd.conf
+else
+	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release/etc/lircd.conf
+endif
 #	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release/etc/lircd.conf.amiko
 #	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release/bin/
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release/usr/bin/
@@ -303,7 +307,11 @@ release_base:
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release/etc/tuxbox/ && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
+if !ENABLE_SPARK7162
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release/etc/init.d/rcS && \
+else
+	cp $(buildprefix)/root/release/rcS_stm23_24_spark7162 $(prefix)/release/etc/init.d/rcS && \
+endif
 	chmod 755 $(prefix)/release/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release/etc/init.d/ && \
@@ -369,7 +377,12 @@ release_base:
 
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/release/lib/modules/
+if !ENABLE_SPARK7162
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
+else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
+endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release/lib/modules/
 	find $(prefix)/release/lib/modules/ -name '*.ko' -exec sh4-linux-strip --strip-unneeded {} \;
 
