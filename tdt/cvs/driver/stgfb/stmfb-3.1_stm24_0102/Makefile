@@ -226,9 +226,8 @@ STI7111SRCS += $(addprefix $(SRC_TOPDIR)/soc/sti7111/,                         \
 			sti7111mainoutput.cpp                                  \
 			sti7111auxoutput.cpp                                   \
 			sti7111dvo.cpp                                         \
-			sti7111hdmi.cpp                                        \
-			sti7111device.cpp)
-
+			sti7111hdmi.cpp)
+# 			sti7111device.cpp)
 STI7105SRCS = $(STI7111SRCS)
 STI7105SRCS += $(addprefix $(SRC_TOPDIR)/soc/sti7105/,                         \
 			sti7105device.cpp                                      \
