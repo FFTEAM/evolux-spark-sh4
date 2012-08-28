@@ -182,7 +182,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/stmvbi.ko
 	insmod $MODDIR/pseudocard.ko
 	insmod $MODDIR/stv090x.ko
-	insmod $MODDIR/pti.ko waitMS=20 videoMem=4096
+	insmod $MODDIR/pti.ko #waitMS=20 videoMem=4096
 	insmod $MODDIR/stm_monitor.ko
 	insmod $MODDIR/stmsysfs.ko
 	#   whichSTM=`uname -a | grep stm23`
