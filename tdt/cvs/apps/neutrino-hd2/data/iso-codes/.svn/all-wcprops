@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/6/trunk/neutrino-hd/data/iso-codes
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/neutrino-hd/data/iso-codes/Makefile.am
+END
+iso-639.tab
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/neutrino-hd/data/iso-codes/iso-639.tab
+END

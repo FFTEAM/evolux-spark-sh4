@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons
+END
+power.png
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/power.png
+END
+setup.png
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/setup.png
+END
+rclock.raw
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/rclock.raw
+END
+lcd.png
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/lcd.png
+END
+lcd2.png
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/lcd2.png
+END
+lcd3.png
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/lcd3.png
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/neutrino-hd/data/lcd/icons/Makefile.am
+END

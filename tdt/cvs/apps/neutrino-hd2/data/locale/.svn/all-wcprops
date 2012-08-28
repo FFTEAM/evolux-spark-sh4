@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/119/trunk/neutrino-hd/data/locale
+END
+create.locals_intern.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/create.locals_intern.h
+END
+francais.locale
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/francais.locale
+END
+english.locale
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/105/trunk/neutrino-hd/data/locale/english.locale
+END
+russkij.locale
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/russkij.locale
+END
+suomi.locale
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/suomi.locale
+END
+portugues.locale
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/portugues.locale
+END
+ch-berndeutsch.locale
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/ch-berndeutsch.locale
+END
+deutsch.locale
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/119/trunk/neutrino-hd/data/locale/deutsch.locale
+END
+italiano.locale
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/italiano.locale
+END
+polski.locale
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/polski.locale
+END
+bayrisch.locale
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/bayrisch.locale
+END
+create.locals.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/create.locals.h
+END
+dutch.locale
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/dutch.locale
+END
+bosanski.locale
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/bosanski.locale
+END
+svenska.locale
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/svenska.locale
+END
+create-locals-update.pl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/create-locals-update.pl
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/Makefile.am
+END
+hungarian.locale
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/hungarian.locale
+END
+_readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/_readme.txt
+END
+check.locale.files
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/check.locale.files
+END
+nederlands.locale
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/nederlands.locale
+END
+ch-baslerdeutsch.locale
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/6/trunk/neutrino-hd/data/locale/ch-baslerdeutsch.locale
+END

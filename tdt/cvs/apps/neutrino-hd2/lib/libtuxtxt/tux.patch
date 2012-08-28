@@ -1,0 +1,869 @@
+--- tuxtxt.h	2012-04-30 21:27:52.000000000 +0200
++++ tuxtxt.h.test.h	2012-04-30 21:25:59.000000000 +0200
+@@ -12,6 +12,7 @@
+  *              ported 2006 to Dreambox 7025 / 32Bit framebuffer              *
+  *                   by Seddi <seddi@i-have-a-dreambox.com>                   *
+  *                                                                            *
++ *									      *
+  ******************************************************************************/
+ 
+ #define TUXTXT_CFG_STANDALONE 0  // 1:plugin only 0:use library
+@@ -53,7 +54,7 @@
+ extern tuxtxt_cache_struct tuxtxt_cache;
+ extern int tuxtxt_init();
+ extern void tuxtxt_close();
+-extern void tuxtxt_start(int tpid, int source );  // Start caching
++extern void tuxtxt_start(int tpid);  // Start caching
+ extern int  tuxtxt_stop(); // Stop caching
+ extern void tuxtxt_next_dec(int *i); /* skip to next decimal */
+ extern void tuxtxt_prev_dec(int *i); /* counting down */
+@@ -68,6 +69,7 @@
+ #endif
+ #endif
+ 
++
+ #define TUXTXTCONF CONFIGDIR "/tuxtxt/tuxtxt2.conf"
+ 
+ /* fonts */
+@@ -81,15 +83,14 @@
+ int fontheight, fontwidth, fontwidth_normal, fontwidth_small, fontwidth_topmenumain, fontwidth_topmenusmall, ascender;
+ int ymosaic[4];
+ int displaywidth;
+-
+ #define fontwidth_small_lcd 8
+ 
+-#define TV43STARTX (ex - 146) 		//(StartX + 2 + (40-nofirst)*fontwidth_topmenumain + (40*fontwidth_topmenumain/abx))
+-#define TV169FULLSTARTX /*(sx+ 8*40)*/ 	(sx +(ex +1 - sx)/2)
++#define TV43STARTX (ex - 146) //(StartX + 2 + (40-nofirst)*fontwidth_topmenumain + (40*fontwidth_topmenumain/abx))
++#define TV169FULLSTARTX (sx+ 8*40) //(sx +(ex +1 - sx)/2)
+ #define TVENDX ex
+ #define TVENDY (StartY + 25*fontheight)
+-#define TV43WIDTH 144 			/* 120 */
+-#define TV43HEIGHT 116 			/* 96 */
++#define TV43WIDTH 144 /* 120 */
++#define TV43HEIGHT 116 /* 96 */
+ #define TV43STARTY (TVENDY - TV43HEIGHT)
+ #define TV169FULLSTARTY sy
+ #define TV169FULLWIDTH  (ex - sx)/2
+@@ -154,12 +155,10 @@
+ #define RC_7        0x07
+ #define RC_8        0x08
+ #define RC_9        0x09
+-
+ #define RC_RIGHT    0x0A
+ #define RC_LEFT     0x0B
+ #define RC_UP       0x0C
+ #define RC_DOWN     0x0D
+-
+ #define RC_OK       0x0E
+ #define RC_MUTE     0x0F
+ #define RC_STANDBY  0x10
+@@ -188,7 +187,6 @@
+ 	"POP",
+ 	"GPOP"
+ };
+-
+ const char *ObjectType[] =
+ {
+ 	"Passive",
+@@ -205,6 +203,8 @@
+ 
+ /* framebuffer stuff */
+ static unsigned char *lfb = 0;
++struct fb_var_screeninfo var_screeninfo;
++struct fb_fix_screeninfo fix_screeninfo;
+ 
+ /* freetype stuff */
+ FT_Library      library;
+@@ -217,6 +217,7 @@
+ FT_Face			face;
+ FONTTYPE typettf;
+ 
++
+ // G2 Charset (0 = Latin, 1 = Cyrillic, 2 = Greek)
+ const unsigned short int G2table[3][6*16] =
+ {
+@@ -226,14 +227,12 @@
+ 	  '�' ,'�' ,'�' ,'�' ,8482,9834,8364,8240,945 ,' ' ,' ' ,' ' ,8539,8540,8541,8542,
+ 	  937 ,'�' ,272 ,'�' ,294 ,' ' ,306 ,319 ,321 ,'�' ,338 ,'�' ,'�' ,358 ,330 ,329 ,
+ 	  1082,'�' ,273 ,'�' ,295 ,305 ,307 ,320 ,322 ,'�' ,339 ,'�' ,'�' ,359 ,951 ,0x7F},
+-	  
+ 	{ ' ' ,'�' ,'�' ,'�' ,'$' ,'�' ,' ' ,'�' ,' ' ,'\'','\"','�' ,8592,8594,8595,8593,
+ 	  '�' ,'�' ,'�' ,'�' ,'x' ,'�' ,'�' ,'�' ,'�' ,'\'','\"','�' ,'�' ,'�' ,'�' ,'�' ,
+ 	  ' ' ,'`' ,'�' ,710 ,732 ,'�' ,728 ,729 ,733 ,716 ,730 ,719 ,'_' ,698 ,718 ,711 ,
+ 	  '�' ,'�' ,'�' ,'�' ,8482,9834,8364,8240,945 ,321 ,322 ,'�' ,8539,8540,8541,8542,
+ 	  'D' ,'E' ,'F' ,'G' ,'I' ,'J' ,'K' ,'L' ,'N' ,'Q' ,'R' ,'S' ,'U' ,'V' ,'W' ,'Z' ,
+ 	  'd' ,'e' ,'f' ,'g' ,'i' ,'j' ,'k' ,'l' ,'n' ,'q' ,'r' ,'s' ,'u' ,'v' ,'w' ,'z' },
+-	  
+ 	{ ' ' ,'a' ,'b' ,'�' ,'e' ,'h' ,'i' ,'�' ,':' ,'\'','\"','k' ,8592,8594,8595,8593,
+ 	  '�' ,'�' ,'�' ,'�' ,'x' ,'m' ,'n' ,'p' ,'�' ,'\'','\"','t' ,'�' ,'�' ,'�' ,'x' ,
+ 	  ' ' ,'`' ,'�' ,710 ,732 ,'�' ,728 ,729 ,733 ,716 ,730 ,719 ,'_' ,698 ,718 ,711 ,
+@@ -241,7 +240,6 @@
+ 	  'C' ,'D' ,'F' ,'G' ,'J' ,'L' ,'Q' ,'R' ,'S' ,'U' ,'V' ,'W' ,'Y' ,'Z' ,902 ,905 ,
+ 	  'c' ,'d' ,'f' ,'g' ,'j' ,'l' ,'q' ,'r' ,'s' ,'u' ,'v' ,'w' ,'y' ,'z' ,904 ,0x7F}
+ };
+-
+ // cyrillic G0 Charset
+ // TODO: different maps for serbian/russian/ukrainian
+ const unsigned short int G0tablecyrillic[6*16] =
+@@ -271,7 +269,6 @@
+ 	{ '#', '�' }, /* C SV/FI/HU */
+ 	{ '�', 287 }, /* D    TR   ? */
+ };
+-
+ const unsigned short int nationaltable40[14] =
+ {
+ 	'@', /* 0          */
+@@ -289,7 +286,6 @@
+ 	'�', /* C SV/FI/HU */
+ 	304, /* D    TR    */
+ };
+-
+ const unsigned short int nationaltable5b[14][6] =
+ {
+ 	{ '[','\\', ']', '^', '_', '`' }, /* 0          */
+@@ -307,7 +303,6 @@
+ 	{ '�', '�', '�', '�', '_', '�' }, /* C SV/FI/HU */
+ 	{ 350, '�', '�', '�', 486, 305 }, /* D    TR    */
+ };
+-
+ const unsigned short int nationaltable7b[14][4] =
+ {
+ 	{ '{', '|', '}', '~' }, /* 0          */
+@@ -350,7 +345,6 @@
+ " RU/BUL/SER/CRO/UKR (cyr) "   /* 14 cyrillic */
+ "    EK                    "   /* 15 greek */
+ ;
+-
+ #define COUNTRYSTRING_WIDTH 26
+ #define MAX_NATIONAL_SUBSET (sizeof(countrystring) / COUNTRYSTRING_WIDTH - 1)
+ 
+@@ -377,6 +371,7 @@
+ 
+ const unsigned char countryconversiontable[] = { NAT_UK, NAT_DE, NAT_SW, NAT_IT, NAT_FR, NAT_SP, NAT_CZ, NAT_RO};
+ 
++
+ /* some data */
+ char versioninfo[16];
+ int hotlist[10];
+@@ -413,6 +408,7 @@
+ int  subtitledelay, delaystarted;
+ FILE *conf;
+ 
++
+ unsigned short RCCode;
+ 
+ struct _pid_table
+@@ -429,7 +425,7 @@
+ /* typ_vcr/dvb: 	v1 a1 v2 a2 v3 a3 (vcr_only: fblk) */
+ 
+ /* language dependent texts */
+-#define MAXMENULANGUAGE 8 /* 0 deutsch, 1 englisch, 2 franz?sisch, 3 niederl?ndisch, 4 griechisch, 5 italienisch, 6 polnisch, 7 schwedisch, 8 suomi */
++#define MAXMENULANGUAGE 8 /* 0 deutsch, 1 englisch, 2 franz�sisch, 3 niederl�ndisch, 4 griechisch, 5 italienisch, 6 polnisch, 7 schwedisch, 8 suomi */
+ const int menusubset[] =   { NAT_DE   , NAT_UK    , NAT_FR       , NAT_UK          , NAT_GR      , NAT_IT       , NAT_PL    , NAT_SW, NAT_SW };
+ 
+ 
+@@ -478,7 +474,7 @@
+ 	{ "agg. elim." },
+ 	{ "dodajkasuj" },
+ 	{ "ny   bort " },
+-	{ "lis{{pois " }
++	{ "lis{{pois " },
+ };
+ 
+ const char configonoff[][2*4] =
+@@ -491,9 +487,8 @@
+ 	{ "offon " },
+ 	{ "wy}w} " },
+ 	{ "p} av " },
+-	{ "EI ON " }
++	{ "EI ON " },
+ };
+-
+ const char menuatr[Menu_Height*(Menu_Width+1)] =
+ {
+ 	"0000000000000000000000000000002"
+@@ -521,328 +516,323 @@
+ 	"3334444444444444444444444443332"
+ 	"2222222222222222222222222222222"
+ };
+-
+-const char configmenu[][Menu_Height*(Menu_Width + 1)] =
++const char configmenu[][Menu_Height*(Menu_Width+1)] =
+ {
+ 	{
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
+-		"???????????????????????????????"
+-		"?     Konfigurationsmen}     ??"
+-		"???????????????????????????????"
+-		"?1 Favoriten: Seite 111 dazu ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2     Teletext-Auswahl      ??"
+-		"??          suchen          ???"
+-		"?                            ??"
+-		"?      Bildschirmformat      ??"
+-		"?3  Standard-Modus 16:9      ??"
+-		"?4  TextBild-Modus 16:9      ??"
+-		"?                            ??"
+-		"?5        Helligkeit         ??"
+-		"??                          ???"
+-		"?6       Transparenz         ??"
+-		"??                          ???"
+-		"?7  nationaler Zeichensatz   ??"
+-		"?automatische Erkennung      ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Sprache/Language deutsch ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
++		"�������������������������������"
++		"�     Konfigurationsmen}     ��"
++		"�������������������������������"
++		"�1 Favoriten: Seite 111 dazu ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2     Teletext-Auswahl      ��"
++		"��          suchen          ���"
++		"�                            ��"
++		"�      Bildschirmformat      ��"
++		"�3  Standard-Modus 16:9      ��"
++		"�4  TextBild-Modus 16:9      ��"
++		"�                            ��"
++		"�5        Helligkeit         ��"
++		"��                          ���"
++		"�6       Transparenz         ��"
++		"��                          ���"
++		"�7  nationaler Zeichensatz   ��"
++		"�automatische Erkennung      ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Sprache/Language deutsch ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?     Configuration menu     ??"
+-		"???????????????????????????????"
+-		"?1 Favorites:  add page 111  ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2     Teletext selection    ??"
+-		"??          search          ???"
+-		"?                            ??"
+-		"?        Screen format       ??"
+-		"?3 Standard mode 16:9        ??"
+-		"?4 Text/TV mode  16:9        ??"
+-		"?                            ??"
+-		"?5        Brightness         ??"
+-		"??                          ???"
+-		"?6       Transparency        ??"
+-		"??                          ???"
+-		"?7   national characterset   ??"
+-		"? automatic recognition      ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Sprache/language english ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�     Configuration menu     ��"
++		"�������������������������������"
++		"�1 Favorites:  add page 111  ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2     Teletext selection    ��"
++		"��          search          ���"
++		"�                            ��"
++		"�        Screen format       ��"
++		"�3 Standard mode 16:9        ��"
++		"�4 Text/TV mode  16:9        ��"
++		"�                            ��"
++		"�5        Brightness         ��"
++		"��                          ���"
++		"�6       Transparency        ��"
++		"��                          ���"
++		"�7   national characterset   ��"
++		"� automatic recognition      ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Sprache/language english ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?    Menu de configuration   ??"
+-		"???????????????????????????????"
+-		"?1 Favorites: ajout. page 111??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2  Selection de teletext    ??"
+-		"??        recherche         ???"
+-		"?                            ??"
+-		"?      Format de l'#cran     ??"
+-		"?3 Mode standard 16:9        ??"
+-		"?4 Texte/TV      16:9        ??"
+-		"?                            ??"
+-		"?5          Clarte           ??"
+-		"??                          ???"
+-		"?6       Transparence        ??"
+-		"??                          ???"
+-		"?7     police nationale      ??"
+-		"?reconn. automatique         ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Sprache/language francais???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�    Menu de configuration   ��"
++		"�������������������������������"
++		"�1 Favorites: ajout. page 111��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2  Selection de teletext    ��"
++		"��        recherche         ���"
++		"�                            ��"
++		"�      Format de l'#cran     ��"
++		"�3 Mode standard 16:9        ��"
++		"�4 Texte/TV      16:9        ��"
++		"�                            ��"
++		"�5          Clarte           ��"
++		"��                          ���"
++		"�6       Transparence        ��"
++		"��                          ���"
++		"�7     police nationale      ��"
++		"�reconn. automatique         ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Sprache/language francais���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?      Configuratiemenu      ??"
+-		"???????????????????????????????"
+-		"?1 Favorieten: toev. pag 111 ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2     Teletekst-selectie    ??"
+-		"??          zoeken          ???"
+-		"?                            ??"
+-		"?     Beeldschermformaat     ??"
+-		"?3   Standaardmode 16:9      ??"
+-		"?4   Tekst/TV mode 16:9      ??"
+-		"?                            ??"
+-		"?5        Helderheid         ??"
+-		"??                          ???"
+-		"?6       Transparantie       ??"
+-		"??                          ???"
+-		"?7    nationale tekenset     ??"
+-		"?automatische herkenning     ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Sprache/Language nederl. ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�      Configuratiemenu      ��"
++		"�������������������������������"
++		"�1 Favorieten: toev. pag 111 ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2     Teletekst-selectie    ��"
++		"��          zoeken          ���"
++		"�                            ��"
++		"�     Beeldschermformaat     ��"
++		"�3   Standaardmode 16:9      ��"
++		"�4   Tekst/TV mode 16:9      ��"
++		"�                            ��"
++		"�5        Helderheid         ��"
++		"��                          ���"
++		"�6       Transparantie       ��"
++		"��                          ���"
++		"�7    nationale tekenset     ��"
++		"�automatische herkenning     ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Sprache/Language nederl. ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?      Lemo} quhl_seym       ??"
+-		"???????????????????????????????"
+-		"?1 Vaboq_:    pqo_h. sek. 111??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2     Epikoc^ Teket]nt      ??"
+-		"??        Amaf^tgsg         ???"
+-		"?                            ??"
+-		"?       Loqv^ oh|mgr         ??"
+-		"?3 Tq|por pq|tupor   16:9    ??"
+-		"?4 Tq|por eij. jeil. 16:9    ??"
+-		"?                            ??"
+-		"?5       Kalpq|tgta          ??"
+-		"??                          ???"
+-		"?6       Diav\\meia          ??"
+-		"??                          ???"
+-		"?7    Ehmij^ tuposeiq\\      ??"
+-		"?aut|latg amacm~qisg         ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Ck~ssa/Language ekkgmij\\???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�      Lemo} quhl_seym       ��"
++		"�������������������������������"
++		"�1 Vaboq_:    pqo_h. sek. 111��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2     Epikoc^ Teket]nt      ��"
++		"��        Amaf^tgsg         ���"
++		"�                            ��"
++		"�       Loqv^ oh|mgr         ��"
++		"�3 Tq|por pq|tupor   16:9    ��"
++		"�4 Tq|por eij. jeil. 16:9    ��"
++		"�                            ��"
++		"�5       Kalpq|tgta          ��"
++		"��                          ���"
++		"�6       Diav\\meia           ��"
++		"��                          ���"
++		"�7    Ehmij^ tuposeiq\\       ��"
++		"�aut|latg amacm~qisg         ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Ck~ssa/Language ekkgmij\\ ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?   Menu di configurazione   ??"
+-		"???????????????????????????????"
+-		"?1  Preferiti:  agg. pag.111 ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2   Selezione televideo     ??"
+-		"??         ricerca          ???"
+-		"?                            ??"
+-		"?      Formato schermo       ??"
+-		"?3  Modo standard 16:9       ??"
+-		"?4  Text/Mod.TV 16:9         ??"
+-		"?                            ??"
+-		"?5        Luminosit{         ??"
+-		"??                          ???"
+-		"?6        Trasparenza        ??"
+-		"??                          ???"
+-		"?7   nazionalita'caratteri   ??"
+-		"? riconoscimento automatico  ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Lingua/Language Italiana ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�   Menu di configurazione   ��"
++		"�������������������������������"
++		"�1  Preferiti:  agg. pag.111 ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2   Selezione televideo     ��"
++		"��         ricerca          ���"
++		"�                            ��"
++		"�      Formato schermo       ��"
++		"�3  Modo standard 16:9       ��"
++		"�4  Text/Mod.TV 16:9         ��"
++		"�                            ��"
++		"�5        Luminosit{         ��"
++		"��                          ���"
++		"�6        Trasparenza        ��"
++		"��                          ���"
++		"�7   nazionalita'caratteri   ��"
++		"� riconoscimento automatico  ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Lingua/Language Italiana ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?        Konfiguracja        ??"
+-		"???????????????????????????????"
+-		"?1 Ulubione : kasuj  str. 111??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2     Wyb_r telegazety      ??"
+-		"??          szukaj          ???"
+-		"?                            ??"
+-		"?       Format obrazu        ??"
+-		"?3 Tryb standard 16:9        ??"
+-		"?4 Telegazeta/TV 16:9        ??"
+-		"?                            ??"
+-		"?5          Jasno|^          ??"
+-		"??                          ???"
+-		"?6      Prze~roczysto|^      ??"
+-		"??                          ???"
+-		"?7 Znaki charakterystyczne   ??"
+-		"? automatyczne rozpozn.      ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"??  J`zyk/Language   polski ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�        Konfiguracja        ��"
++		"�������������������������������"
++		"�1 Ulubione : kasuj  str. 111��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2     Wyb_r telegazety      ��"
++		"��          szukaj          ���"
++		"�                            ��"
++		"�       Format obrazu        ��"
++		"�3 Tryb standard 16:9        ��"
++		"�4 Telegazeta/TV 16:9        ��"
++		"�                            ��"
++		"�5          Jasno|^          ��"
++		"��                          ���"
++		"�6      Prze~roczysto|^      ��"
++		"��                          ���"
++		"�7 Znaki charakterystyczne   ��"
++		"� automatyczne rozpozn.      ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"��  J`zyk/Language   polski ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?     Konfigurationsmeny     ??"
+-		"???????????????????????????????"
+-		"?1 Favoriter: sida 111 ny    ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2      TextTV v{ljaren      ??"
+-		"??            s|k           ???"
+-		"?                            ??"
+-		"?        TV- format          ??"
+-		"?3 Standard l{ge 16:9        ??"
+-		"?4 Text/Bild l{ge  16:9      ??"
+-		"?                            ??"
+-		"?5        Ljusstyrka         ??"
+-		"??                          ???"
+-		"?6     Genomskinlighet       ??"
+-		"??                          ???"
+-		"?7nationell teckenupps{ttning??"
+-		"? automatisk igenk{nning     ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Sprache/language svenska ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
++		"�������������������������������"
++		"�     Konfigurationsmeny     ��"
++		"�������������������������������"
++		"�1 Favoriter: sida 111 ny    ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2      TextTV v{ljaren      ��"
++		"��            s|k           ���"
++		"�                            ��"
++		"�        TV- format          ��"
++		"�3 Standard l{ge 16:9        ��"
++		"�4 Text/Bild l{ge  16:9      ��"
++		"�                            ��"
++		"�5        Ljusstyrka         ��"
++		"��                          ���"
++		"�6     Genomskinlighet       ��"
++		"��                          ���"
++		"�7nationell teckenupps{ttning��"
++		"� automatisk igenk{nning     ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Sprache/language svenska ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
+ 	},
+-	  /*     0000000000111111111122222222223 */
+-	  /*     0123456789012345678901234567890 */
++/*     0000000000111111111122222222223 */
++/*     0123456789012345678901234567890 */
+ 	{
+-		"???????????????????????????????"
+-		"?        Asetusvalikko       ??"
+-		"???????????????????????????????"
+-		"?1 Suosikit: sivu 111 lis{{  ??"
+-		"?????                        ??"
+-		"?+-?                         ??"
+-		"?                            ??"
+-		"?2   Tekstikanavan valinta   ??"
+-		"??          search          ???"
+-		"?                            ??"
+-		"?         N{ytt|tila         ??"
+-		"?3 Vakiotila     16:9        ??"
+-		"?4 Teksti/TV     16:9        ??"
+-		"?                            ??"
+-		"?5         Kirkkaus          ??"
+-		"??                          ???"
+-		"?6       L{pin{kyvyys        ??"
+-		"??                          ???"
+-		"?7   kansallinen merkist|    ??"
+-		"? automaattinen tunnistus    ??"
+-		"??    DE    (#$@[\\]^_`{|}~)???"
+-		"?? Kieli            suomi   ???"
+-		"??   www.tuxtxt.net  x.xx   ???"
+-		"???????????????????????????????"
+-	}
++		"�������������������������������"
++		"�        Asetusvalikko       ��"
++		"�������������������������������"
++		"�1 Suosikit: sivu 111 lis{{  ��"
++		"�����                        ��"
++		"�+-?                         ��"
++		"�                            ��"
++		"�2   Tekstikanavan valinta   ��"
++		"��          search          ���"
++		"�                            ��"
++		"�         N{ytt|tila         ��"
++		"�3 Vakiotila     16:9        ��"
++		"�4 Teksti/TV     16:9        ��"
++		"�                            ��"
++		"�5         Kirkkaus          ��"
++		"��                          ���"
++		"�6       L{pin{kyvyys        ��"
++		"��                          ���"
++		"�7   kansallinen merkist|    ��"
++		"� automaattinen tunnistus    ��"
++		"��    DE    (#$@[\\]^_`{|}~) ���"
++		"�� Kieli            suomi   ���"
++		"��   www.tuxtxt.net  x.xx   ���"
++		"�������������������������������"
++	},
+ };
+ 
+ const char catchmenutext[][81] =
+ {
+-	{ "        ???? w{hlen   ?? anzeigen       "
++	{ "        ���� w{hlen   �� anzeigen       "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "        ???? select   ?? show           "
++	{ "        ���� select   �� show           "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "  ???? selectionner   ?? montrer        "
++	{ "  ���� selectionner   �� montrer        "
+ 	  "0011110000000000000000110000000000000000" },
+-	{ "        ???? kiezen   ?? tonen          "
++	{ "        ���� kiezen   �� tonen          "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "        ???? epikoc^  ?? pqobok^        "
++	{ "        ���� epikoc^  �� pqobok^        "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "        ????seleziona ?? mostra         "
++	{ "        ����seleziona �� mostra         "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "        ???? wybiez   ?? wyswietl       "
++	{ "        ���� wybiez   �� wyswietl       "
+ 	  "0000000011110000000000110000000000000000" },
+-	{ "        ???? v{lj     ?? visa           "
++	{ "        ���� v{lj     �� visa           "
+      "0000000011110000000000110000000000000000" },
+-	{ "        ???? valitse  ?? n{yt{          "
+-	  "0000000011110000000000110000000000000000" }
++	{ "        ���� valitse  �� n{yt{          "
++	  "0000000011110000000000110000000000000000" },
+ };
+ 
+ const char message_3[][39] =
+ {
+-	{ "?   suche nach Teletext-Anbietern   ??" },
+-	{ "?  searching for teletext Services  ??" },
+-	{ "?  recherche des services teletext  ??" },
+-	{ "? zoeken naar teletekst aanbieders  ??" },
+-	{ "?     amaf^tgsg voq]ym Teket]nt     ??" },
+-	{ "?     attesa opzioni televideo      ??" },
+-	{ "?  poszukiwanie sygna}u telegazety  ??" },
+-	{ "?    s|ker efter TextTV tj{nster    ??" },
+-	{ "?   etsit{{n Teksti-TV -palvelua    ??" }
++	{ "�   suche nach Teletext-Anbietern   ��" },
++	{ "�  searching for teletext Services  ��" },
++	{ "�  recherche des services teletext  ��" },
++	{ "� zoeken naar teletekst aanbieders  ��" },
++	{ "�     amaf^tgsg voq]ym Teket]nt     ��" },
++	{ "�     attesa opzioni televideo      ��" },
++	{ "�  poszukiwanie sygna}u telegazety  ��" },
++	{ "�    s|ker efter TextTV tj{nster    ��" },
++	{ "�   etsit{{n Teksti-TV -palvelua    ��" },
+ };
+-
+-const char message_3_blank[] = "?                                   ??";
+-
++const char message_3_blank[] = "�                                   ��";
+ const char message_7[][39] =
+ {
+-	{ "? kein Teletext auf dem Transponder ??" },
+-	{ "?   no teletext on the transponder  ??" },
+-	{ "? pas de teletext sur le transponder??" },
+-	{ "? geen teletekst op de transponder  ??" },
+-	{ "? jal]la Teket]nt ston amaletadot^  ??" },
+-	{ "? nessun televideo sul trasponder   ??" },
+-	{ "?   brak sygna}u na transponderze   ??" },
+-	{ "? ingen TextTV p} denna transponder ??" },
+-	{ "?    Ei Teksti-TV:t{ l{hettimell{   ??" }
++	{ "� kein Teletext auf dem Transponder ��" },
++	{ "�   no teletext on the transponder  ��" },
++	{ "� pas de teletext sur le transponder��" },
++	{ "� geen teletekst op de transponder  ��" },
++	{ "� jal]la Teket]nt ston amaletadot^  ��" },
++	{ "� nessun televideo sul trasponder   ��" },
++	{ "�   brak sygna}u na transponderze   ��" },
++	{ "� ingen TextTV p} denna transponder ��" },
++	{ "�    Ei Teksti-TV:t{ l{hettimell{   ��" },
+ };
+-
+ const char message_8[][39] =
+ {
+-     /*    00000000001111111111222222222233333333334 */
+-     /*    01234567890123456789012345678901234567890 */
+-	{ "?  warte auf Empfang von Seite 100  ??" },
+-	{ "? waiting for reception of page 100 ??" },
+-	{ "? attentre la r?ception de page 100 ??" },
+-	{ "?wachten op ontvangst van pagina 100??" },
+-	{ "?     amal]my k^xg sek_dar 100      ??" },
+-	{ "?   attesa ricezione pagina 100     ??" },
+-	{ "?     oczekiwanie na stron` 100     ??" },
+-	{ "?  v{ntar p} mottagning av sida 100 ??" },
+-	{ "?        Odotetaan sivua 100        ??" }
++/*    00000000001111111111222222222233333333334 */
++/*    01234567890123456789012345678901234567890 */
++	{ "�  warte auf Empfang von Seite 100  ��" },
++	{ "� waiting for reception of page 100 ��" },
++	{ "� attentre la r�ception de page 100 ��" },
++	{ "�wachten op ontvangst van pagina 100��" },
++	{ "�     amal]my k^xg sek_dar 100      ��" },
++	{ "�   attesa ricezione pagina 100     ��" },
++	{ "�     oczekiwanie na stron` 100     ��" },
++	{ "�  v{ntar p} mottagning av sida 100 ��" },
++	{ "�        Odotetaan sivua 100        ��" },
+ };
+-
+ const char message8pagecolumn[] = /* last(!) column of page to show in each language */
+ {
+ 	33, 34, 34, 35, 29, 30, 30, 34, 34
+@@ -959,16 +949,16 @@
+ 	{ white  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MSGDRM3 */
+ 	{ menu1  , blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL0 5a Z */
+ 	{ white  , blue  , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL1 58 X */
+-	{ menu2  , transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b ? */
+-	{ menu2  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab ? */
+-	{ yellow , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 ? */
+-	{ menu2  , transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b ? */
+-	{ menu2  , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb ? */
+-	{ cyan   , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 ? */
+-	{ white  , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 ? */
+-	{ white  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 ? */
+-	{ yellow , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 ? */
+-	{ white  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 ? */
++	{ menu2  , transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENUHIL2 9b � */
++	{ menu2  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU0 ab � */
++	{ yellow , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU1 a4 � */
++	{ menu2  , transp, C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU2 9b � */
++	{ menu2  , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU3 cb � */
++	{ cyan   , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU4 c7 � */
++	{ white  , menu3 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU5 c8 � */
++	{ white  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_MENU6 a8 � */
++	{ yellow , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}, /* ATR_CATCHMENU0 a4 � */
++	{ white  , menu1 , C_G0P, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0x3f}  /* ATR_CATCHMENU1 a8 � */
+ };
+ /* buffers */
+ unsigned char  lcd_backbuffer[120*64 / 8];
+@@ -977,6 +967,7 @@
+ 
+ //unsigned short page_atrb[40 * 25]; /*  ?????:h:cc:bbbb:ffff -> ?=reserved, h=double height, c=charset (0:G0 / 1:G1c / 2:G1s), b=background, f=foreground */
+ 
++
+ /* colormap */
+ const unsigned short defaultcolors[] =	/* 0x0bgr */
+ {
+@@ -1005,7 +996,6 @@
+ unsigned short gn0[] = {0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0x20<<8, 0x10<<8, 0x20<<8, 0,      0      };
+ unsigned short bl0[] = {0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0x40<<8, 0x20<<8, 0x40<<8, 0,      0      };
+ unsigned short tr0[] = {0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0x0000 , 0x0000 , 0x0A00 , 0xFFFF, 0x3000 };
+-
+ struct fb_cmap colormap_0 = {0, SIZECOLTABLE, rd0, gn0, bl0, tr0};
+ 
+ /* tables for color table remapping, first entry (no remapping) skipped, offsets for color index */
+@@ -1240,7 +1230,7 @@
+ 	_X__ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i __X_,
+ 	__X_ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i _X__,
+ 	___X i X___,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,____ i ____,___X i X___,
+-	____ i _XXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXX_ i ____
++	____ i _XXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXXX i XXXX,XXX_ i ____,
+ 
+ #undef i
+ };
+@@ -1474,11 +1464,11 @@
+ 	0,0,0,0,0,0,0,0,0,0,
+ 	0,0,0,0,0,0,0,0,0,0,
+ 	0,0,0,0,0,0,0,0,0,0,
+-	0,0,0,0,0,0,0,0,0,0
++	0,0,0,0,0,0,0,0,0,0,
+ };
+ 
+ /* functions */
+-void ConfigMenu(int Init, int source);
++void ConfigMenu(int Init);
+ void CleanUp();
+ void PageInput(int Number);
+ void ColorKey(int);
+@@ -1500,9 +1490,9 @@
+ void RenderPage();
+ void DecodePage();
+ void UpdateLCD();
+-int  Init(int source);
+-int  GetNationalSubset(const char *country_code);
+-int  GetTeletextPIDs(int source);
++int  Init();
++int  GetNationalSubset(char *country_code);
++int  GetTeletextPIDs();
+ int  GetRCCode();
+ int  eval_triplet(int iOData, tstCachedPage *pstCachedPage,
+ 						unsigned char *pAPx, unsigned char *pAPy,
