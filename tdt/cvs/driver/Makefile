@@ -60,4 +60,10 @@ obj-y	+= cpu_frequ/
 obj-y	+= wireless/
 obj-y	+= cec/
 endif
+ifdef SPARK7162
+obj-y	+= smartcard/
+obj-y	+= cpu_frequ/
+obj-y	+= wireless/
+obj-y	+= cec/
+endif
 endif
