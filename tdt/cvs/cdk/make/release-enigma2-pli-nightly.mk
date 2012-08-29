@@ -318,7 +318,7 @@ release-enigma2-pli-nightly_base:
 	cp -RP $(appsdir)/enigma2-pli-nightly/data/extensions $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/ && \
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml && \
 	echo "576i50" > $(prefix)/release-enigma2-pli-nightly/etc/videomode && \
-	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/ && \
+	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/
 if !ENABLE_SPARK7162
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
 else
