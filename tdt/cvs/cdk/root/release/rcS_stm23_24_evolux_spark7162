@@ -66,10 +66,65 @@ startVideoTuneEnhanced() {
 	echo $config_psi_hue > /proc/stb/video/plane/psi_tint
 }
 
+check_nfs_mount() {
+nfstype0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_0 | cut -d = -f2`
+nfstype1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_1 | cut -d = -f2`
+nfstype2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_2 | cut -d = -f2`
+amount0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_0 | cut -d = -f2`
+amount1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_1 | cut -d = -f2`
+amount2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_2 | cut -d = -f2`
+ip0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_0 | cut -d = -f2`
+ip1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_1 | cut -d = -f2`
+ip2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_2 | cut -d = -f2`
+nfs_dir0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_0 | cut -d = -f2`
+nfs_dir1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_1 | cut -d = -f2`
+nfs_dir2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_2 | cut -d = -f2`
+nfs_local_dir0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_0 | cut -d = -f2`
+nfs_local_dir1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_1 | cut -d = -f2`
+nfs_local_dir2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_2 | cut -d = -f2`
+options1_0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_0 | cut -d = -f2`
+options1_1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_1 | cut -d = -f2`
+options1_2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_2 | cut -d = -f2`
+rsize0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_0 | cut -d = -f3`
+wsize0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_0 | cut -d = -f4`
+rsize1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_1 | cut -d = -f3`
+wsize1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_1 | cut -d = -f4`
+rsize2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_2 | cut -d = -f3`
+wsize2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_2 | cut -d = -f4`
+if [ "$nfstype0" == "0" ]; then
+	nfstype0="nfs"
+else
+	nfstype0="cifs"
+fi
+if [ "$nfstype1" == "0" ]; then
+	nfstype1="nfs"
+else
+	nfstype1="cifs"
+fi
+if [ "$nfstype2" == "0" ]; then
+	nfstype2="nfs"
+else
+	nfstype2="cifs"
+fi
+if [ "$amount0" == "1" ]; then
+	mount -t "$nfstype0" "$ip0":"$nfs_dir0" "$nfs_local_dir0" -o "$options1_0",nolock,rsize="$rsize0"="$wsize0" &
+fi
+if [ "$amount1" == "1" ]; then
+	mount -t "$nfstype1" "$ip1":"$nfs_dir1" "$nfs_local_dir1" -o "$options1_1",nolock,rsize="$rsize1"="$wsize1" &
+fi
+if [ "$amount2" == "1" ]; then
+	mount -t "$nfstype2" "$ip2":"$nfs_dir2" "$nfs_local_dir2" -o "$options1_2",nolock,rsize="$rsize2"="$wsize2" &
+fi
+}
 /etc/init.d/mountvirtfs start
 /etc/init.d/portmap start
 
-(cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
+#(cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
+#(cd /dev/dvb/adapter0 && ln -sf ca0 ca2) &
+#(cd /dev/dvb/adapter0 && ln -sf ca0 ca3) &
+rm /dev/dvb/adapter0/ca1 && mknod -m 660 /dev/dvb/adapter0/ca1 c 212 6 2>/dev/null
+mknod -m 660 /dev/dvb/adapter0/ca2 c 212 22 2>/dev/null
+mknod -m 660 /dev/dvb/adapter0/ca3 c 212 38 2>/dev/null
 (if [ -e /media/net ]; then rm -rf /media/net;fi;ln -sf /mnt/nfs /media/net) &
 #awk -f /etc/init.d/getfb.awk /dev/input/event1 &
 
@@ -92,11 +147,11 @@ if [ ! -e /var/etc/.firstboot ]; then
 		if [ "$isactive1" = HDMI ] || [ -e /etc/.hdmi ]; then
 			MEMSIZE=12m
 			[ -e /etc/.15m ] && MEMSIZE=15m
-			insmod $MODDIR/spark7162.ko UnionTunerType=t #t=terrestical, c=cable
+			insmod $MODDIR/stmcore-display-sti7105.ko
 			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 		else
 			MEMSIZE=12m
-			insmod $MODDIR/spark7162.ko UnionTunerType=t STi7105Device_scart_output=1
+			insmod $MODDIR/stmcore-display-sti7105.ko #STi7105Device_scart_output=1
 	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		fi
 	elif [ -e /etc/.start_vdr ]; then
@@ -112,7 +167,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 				MEMSIZE=4m
 			fi
 #		        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
-			insmod $MODDIR/stmcore-display-sti7105.ko STi7111Device_scart_output=1
+			insmod $MODDIR/stmcore-display-sti7105.ko
 			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		else
 			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
@@ -156,6 +211,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/stmvout.ko
 	insmod $MODDIR/stmvbi.ko
 	insmod $MODDIR/pseudocard.ko
+	insmod $MODDIR/spark7162.ko UnionTunerType=t #t=terrestical, c=cable
 #	insmod $MODDIR/stv090x.ko
 	insmod $MODDIR/pti.ko #waitMS=20 videoMem=4096
 	insmod $MODDIR/stm_monitor.ko
@@ -315,7 +371,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	echo "run" > /dev/vfd
 	if [ -n "$START_E2" ]; then
 		echo "LOADING E2"
-
+		(sleep 40;newtime=`date +'%H:%M:%S %d-%m-%Y'`;fp_control -s $newtime) &
 		until false
 		do
 			echo "starting e2->"
@@ -372,38 +428,13 @@ if [ ! -e /var/etc/.firstboot ]; then
 
 	else
 		if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
-			rm /usr/local/share/config >/dev/null 2>&1
-			rm /usr/local/share/fonts >/dev/null 2>&1
-			rm /usr/local/share/iso-codes >/dev/null 2>&1
-			rm /usr/local/share/neutrino >/dev/null 2>&1
-			rm /usr/local/bin/neutrino >/dev/null 2>&1
-			rm /usr/local/bin/pzapit >/dev/null 2>&1
-			rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
-			ln -sf /usr/local/share_nhd/config /usr/local/share/config
-			ln -sf /usr/local/share_nhd/fonts /usr/local/share/fonts
-			ln -sf /usr/local/share_nhd/iso-codes /usr/local/share/iso-codes
-			ln -sf /usr/local/share_nhd/neutrino /usr/local/share/neutrino
-			ln -sf /usr/local/bin_nhd/neutrino /usr/local/bin/neutrino
-			ln -sf /usr/local/bin_nhd/pzapit /usr/local/bin/pzapit
-			ln -sf /usr/local/bin_nhd/sectionsdcontrol /usr/local/bin/sectionsdcontrol
-			ln -sf /bin/mhwepg /usr/local/bin/mhwepg
-		elif [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
-			rm /usr/local/share/config >/dev/null 2>&1
-			rm /usr/local/share/fonts >/dev/null 2>&1
-			rm /usr/local/share/iso-codes >/dev/null 2>&1
-			rm /usr/local/share/neutrino >/dev/null 2>&1
-			rm /usr/local/bin/neutrino >/dev/null 2>&1
-			rm /usr/local/bin/pzapit >/dev/null 2>&1
-			rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
-			ln -sf /usr/local/share_nhd2/config /usr/local/share/config
-			ln -sf /usr/local/share_nhd2/fonts /usr/local/share/fonts
-			ln -sf /usr/local/share_nhd2/iso-codes /usr/local/share/iso-codes
-			ln -sf /usr/local/share_nhd2/neutrino /usr/local/share/neutrino
-			ln -sf /usr/local/bin_nhd2/neutrino /usr/local/bin/neutrino
-			ln -sf /usr/local/bin_nhd2/pzapit /usr/local/bin/pzapit
-			ln -sf /usr/local/bin_nhd2/sectionsdcontrol /usr/local/bin/sectionsdcontrol
-			ln -sf /bin/mhwepg /usr/local/bin/mhwepg
 			/etc/init.d/DisplayTime.sh &
+		fi
+		if [ -e /etc/.nhd2 ]; then
+			check_nfs_mount
+			if [ -e /etc/.fritzcall ]; then
+				(sleep 12;/var/plugins/fritzcall/fb.sh START) &
+			fi
 		fi
 		echo "LOADING neutrino"
 
@@ -441,7 +472,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 					umount /dev/sda2 >/dev/null 2>&1
 					fsck."$HDDON" -p /dev/sda2
 				fi
-				if [ -e /etc/.nhd ]; then
+				if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
 					if [ -e /tmp/.reboot ]; then # gets created by neutrino
 						echo "rebooting..."
 						init 6
