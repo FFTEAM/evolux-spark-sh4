@@ -47,14 +47,20 @@ $(DEPDIR)/%release_neutrino-hd:
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd/sbin/ && \
 	cp -dp $(targetprefix)/etc/init.d/portmap $(prefix)/release_neutrino-hd/etc/init.d/ && \
 	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release_neutrino-hd/etc/init.d/ && \
-	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino-hd/sbin/ && \
-	\
+	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino-hd/sbin/
+if !ENABLE_SPARK7162
 	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	\
 	cp $(targetprefix)/boot/audio.elf $(prefix)/release_neutrino-hd/boot/audio.elf && \
-	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino-hd/boot/audio.elf && \
+	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino-hd/boot/audio.elf
+else
+	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
+	cp $(targetprefix)/boot/video_7105.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	\
+	cp $(targetprefix)/boot/audio.elf $(prefix)/release_neutrino-hd/boot/audio.elf && \
+	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release_neutrino-hd/boot/audio.elf
+endif
 	cp -a $(targetprefix)/dev/* $(prefix)/release_neutrino-hd/dev/ && \
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release_neutrino-hd/etc/fstab && \
 	cp -dp $(buildprefix)/root/etc/tuxbox/timezone.xml $(prefix)/release_neutrino-hd/etc/ && \
@@ -137,14 +143,19 @@ $(DEPDIR)/%release_neutrino-hd:
 	ln -fs init $(prefix)/release_neutrino-hd/sbin/telinit
 
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_neutrino-hd/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_neutrino-hd/lib/modules/
-
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-avl2108.fw
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-stv6306.fw
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-cx24116.fw
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-cx21143.fw
+if !ENABLE_SPARK7162
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_neutrino-hd/lib/modules/
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/component_7105_pdk7105.fw
 	mv $(prefix)/release_neutrino-hd/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino-hd/lib/firmware/component.fw
+else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release_neutrino-hd/lib/modules/
+	rm -f $(prefix)/release_neutrino-hd/lib/firmware/component_7111_mb618.fw
+	mv $(prefix)/release_neutrino-hd/lib/firmware/component_7105_pdk7105.fw $(prefix)/release_neutrino-hd/lib/firmware/component.fw
+endif
 	rm -f $(prefix)/release_neutrino-hd/bin/evremote
 	rm -f $(prefix)/release_neutrino-hd/bin/gotosleep
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release_neutrino-hd/usr/bin/

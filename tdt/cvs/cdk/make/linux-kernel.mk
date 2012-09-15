@@ -486,6 +486,7 @@ COMMONPATCHES_24 = \
 		$(if $(P0207),linux-sh4-ehci_stm24$(PATCH_STR).patch) \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
+		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
 		linux-tune_stm24.patch
 
 TF7700PATCHES_24 = $(COMMONPATCHES_24) \
@@ -572,7 +573,11 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
-		linux-sh4-spark7162_setup_stm24$(PATCH_STR).patch
+		linux-sh4-spark7162_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
+		$(if $(P0209),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch) \
+		$(if $(P0210),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch) \
+		$(if $(P0209),linux-sh4-lirc_stm.patch) \
+		$(if $(P0210),linux-sh4-lirc_stm24$(PATCH_STR).patch)
 
 FORTISPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-fortis_hdbox_setup_stm24$(PATCH_STR).patch \
