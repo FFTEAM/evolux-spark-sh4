@@ -54,12 +54,18 @@ host_alias=`echo ${host_alias} | sed -e "s/suse/${VENDOR}/"`
 CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 
 ##############################################
+if [ -e "$GMDIR/cvs/driver/player2_191" ]; then
+	rm "$GMDIR/cvs/driver/player2_191"
+fi
+if [ -e "$GMDIR/cvs/driverplayer2_191" ]; then
+	rm "$GMDIR/cvs/driverplayer2_191"
+fi
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
 read -p "Build for TRIPLEX(7162) (JFFS2 ONLY) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
-	cd "$GMDIR/cvs/driver/frontcontroller" && rm aotom && ln -sf aotom_spark7162 aotom
-	cd "$GMDIR/cvs/driver" && rm player2_191 && ln -sf player2_191_spark7162 player2_191
+	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark7162 aotom
+	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
 	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
