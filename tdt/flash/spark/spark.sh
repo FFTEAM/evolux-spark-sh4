@@ -117,6 +117,9 @@ fi
 if [ -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ]; then
 	echo "   9) Prepare Evolux-NTRINO-HD-VDR2   jffs2"
 fi
+if [ -d $TUFSBOXDIR/release_evolux_triple_with_dev ]; then
+	echo "   10) Prepare Evolux-TRIPLE   jffs2"
+fi
 echo "----------------------------"
 
 read -t 10 -p "Select target (autoskip in 10s)? "
@@ -201,6 +204,15 @@ case "$REPLY" in
 		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux-VDR2_on_Pingulux_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		cd $CURDIR
+		echo "-----------------------------------------------------------------------";;
+	10)  echo "Preparing Evolux-TRIPLE jffs2..."
+		$SCRIPTDIR/prepare_root.sh $CURDIR $TUFSBOXDIR/release_evolux_triple_with_dev $TMPROOTDIR $TMPKERNELDIR
+		echo "-----------------------------------------------------------------------"
+		echo "Creating Evolux-TRIPLE jffs2 and uImage..."
+		$SCRIPTDIR/flash_part_w_fw.sh $CURDIR $TUFSBOXDIR $OUTDIR $TMPKERNELDIR $TMPROOTDIR
+		cp -RP $OUTDIR/* $TUFSBOXDIR/
+		cd $TUFSBOXDIR && tar -czvf EvoLux_TRIPLE_v$EVOLUXVERSION-JFFS2.tar.gz e2jffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	*)  echo "Skipping...";;
