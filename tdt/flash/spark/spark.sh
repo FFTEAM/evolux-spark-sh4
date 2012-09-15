@@ -1,4 +1,5 @@
 #!/bin/sh
+#
 CURDIR=`pwd`
 BASEDIR=$CURDIR/../..
 TUFSBOXDIR=$BASEDIR/tufsbox
