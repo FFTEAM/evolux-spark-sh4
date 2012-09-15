@@ -410,7 +410,7 @@ endif
 #	rm $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd-y/{Y_Baselib.js.gz,Y_VLC.js.gz}
 #######################################################################################
 	echo "pingulux-rev#: " > $(prefix)/release_neutrino-hd2/etc/imageinfo
-	git describe >> $(prefix)/release_neutrino-hd2/etc/imageinfo
+	git describe --always >> $(prefix)/release_neutrino-hd2/etc/imageinfo
 	$(buildprefix)/root/release/neutrino_version.sh
 	rm -rf $(prefix)/release_neutrino-hd2/var/etc
 

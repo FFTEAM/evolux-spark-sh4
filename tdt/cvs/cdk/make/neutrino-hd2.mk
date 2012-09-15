@@ -40,7 +40,7 @@ else
 			--enable-libeplayer3 \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DFB_BLIT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_DUCKBOX -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DFB_BLIT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_DUCKBOX -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 endif
 $(DEPDIR)/neutrino-hd2.do_prepare: $(appsdir)/neutrino-hd2/config.status
 	touch $@
