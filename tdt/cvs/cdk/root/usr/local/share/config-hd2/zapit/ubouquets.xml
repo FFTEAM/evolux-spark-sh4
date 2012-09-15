@@ -47,8 +47,10 @@
 		<S i="dd" n="Sky Sport 1" t="4" on="85" s="192" frq="12031"/>
 		<S i="de" n="Sky Sport 2" t="4" on="85" s="192" frq="12031"/>
 		<S i="6a" n="Sky Action HD" t="c" on="85" s="192" frq="12304"/>
+		<S i="6e" n="Sky Atlantic HD" t="d" on="85" s="192" frq="11992"/>
 		<S i="6b" n="Sky Hits HD" t="c" on="85" s="192" frq="12304"/>
 		<S i="7c" n="Fox HD" t="e" on="85" s="192" frq="11875"/>
+		<S i="2f1d" n="RTLNITRO" t="441" on="1" s="192" frq="12187"/>
 		<S i="a" n="Sky Cinema" t="2" on="85" s="192" frq="11797"/>
 		<S i="b" n="Sky Cinema +1" t="2" on="85" s="192" frq="11797"/>
 		<S i="2b" n="Sky Cinema +24" t="2" on="85" s="192" frq="11797"/>
@@ -87,8 +89,8 @@
 		<S i="6f" n="Disney Cinemagic HD" t="d" on="85" s="192" frq="11992"/>
 	</Bouquet>
 	<Bouquet name="Erotik" hidden="0" locked="0">
-		<S i="43b3" n="Daring!TV" t="2cec" on="13e" s="130" frq="10815"/>
-		<S i="128f" n="XTSY" t="3458" on="13e" s="130" frq="11200"/>
+		<S i="129a" n="French Lover" t="3458" on="13e" s="130" frq="11200"/>
+		<S i="1299" n="FREE XTV" t="3458" on="13e" s="130" frq="11200"/>
 		<S i="7fa" n="Hustler TV" t="449" on="35" s="192" frq="12343"/>
 		<S i="35c0" n="Redlight" t="1388" on="13e" s="130" frq="11727"/>
 		<S i="35c1" n="D-XTV2" t="1388" on="13e" s="130" frq="11727"/>
@@ -121,6 +123,7 @@
 		<S i="83" n="Sky Cinema HD" t="6" on="85" s="192" frq="11914"/>
 		<S i="6b" n="Sky Hits HD" t="c" on="85" s="192" frq="12304"/>
 		<S i="6a" n="Sky Action HD" t="c" on="85" s="192" frq="12304"/>
+		<S i="6e" n="Sky Atlantic HD" t="d" on="85" s="192" frq="11992"/>
 		<S i="77" n="ESPN America HD" t="b" on="85" s="192" frq="12382"/>
 		<S i="ef10" n="RTL HD" t="421" on="1" s="192" frq="10832"/>
 		<S i="ef75" n="ProSieben HD" t="3f9" on="1" s="192" frq="11464"/>
@@ -222,5 +225,7 @@
 		<S i="3174" n="HIT RADIO FFH" t="459" on="1" s="192" frq="12633"/>
 	</Bouquet>
 	<Bouquet name="favorites" hidden="0" locked="0">
+	</Bouquet>
+	<Bouquet name="Favorites" hidden="0" locked="0">
 	</Bouquet>
 </zapit>
