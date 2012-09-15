@@ -1256,39 +1256,17 @@ $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL: \
 #
 $(DEPDIR)/ffmpeg.do_prepare: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
-if STM23
-	cd @DIR_ffmpeg@ && \
-	patch -p1 < ../Patches/ffmpeg.patch;
-endif
 	touch $@
 
-#$(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
-#	export PATH=$(hostprefix)/bin:$(PATH) && \
-#	cd @DIR_ffmpeg@ && \
-#	$(BUILDENV) \
-#	./configure \
-#		--enable-parsers --disable-decoders --disable-encoders --enable-demuxers \
-#		--disable-muxers --disable-ffplay --disable-ffmpeg --disable-ffserver \
-#		--disable-devices \
-#		--disable-protocols --enable-protocol=file --enable-bsfs \
-#		--disable-mpegaudio-hp --disable-zlib --enable-bzlib \
-#		--disable-static --enable-shared \
-#		--enable-cross-compile \
-#		--cross-prefix=$(target)- \
-#		--target-os=linux \
-#		--arch=sh4 \
-#		--extra-cflags=-fno-strict-aliasing \
-#		--enable-stripping \
-#		--prefix=/usr
-#	touch $@
-
-$(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepare
+$(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 	cd @DIR_ffmpeg@ && \
 	$(BUILDENV) \
 	./configure \
-		--disable-static --enable-shared \
+		--disable-static \
+		--enable-shared \
 		--enable-cross-compile \
 		--disable-ffserver \
+		--disable-ffplay \
 		--disable-altivec \
 		--disable-debug \
 		--disable-asm \
@@ -1302,7 +1280,6 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepa
 		--disable-armv6 \
 		--disable-armv6t2 \
 		--disable-armvfp \
-		--disable-iwmmxt \
 		--disable-mmi \
 		--disable-neon \
 		--disable-vis \
@@ -1318,6 +1295,7 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepa
 		--enable-muxer=h263 \
 		--enable-muxer=h264 \
 		--enable-muxer=mpeg1video \
+		--enable-muxer=mpeg2video \
 		--enable-muxer=image2 \
 		--disable-encoders \
 		--enable-encoder=aac \
@@ -1330,6 +1308,7 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepa
 		--enable-encoder=mjpeg \
 		--enable-encoder=png \
 		--enable-encoder=mpeg1video \
+		--enable-encoder=mpeg2video \
 		--disable-decoders \
 		--enable-decoder=aac \
 		--enable-decoder=mp3 \
@@ -1338,15 +1317,21 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepa
 		--enable-decoder=h263 \
 		--enable-decoder=h263i \
 		--enable-decoder=h264 \
+		--enable-decoder=mpeg1video \
 		--enable-decoder=mpeg2video \
 		--enable-decoder=png \
 		--enable-decoder=ljpeg \
 		--enable-decoder=mjpeg \
 		--enable-decoder=vorbis \
 		--enable-decoder=flac \
-		--enable-small \
+		--enable-protocol=file \
+		--enable-encoder=mpeg2video \
+		--enable-muxer=mpeg2video \
+		--enable-parser=mjpeg \
+		--enable-demuxer=mjpeg \
 		--enable-decoder=dvbsub \
 		--enable-decoder=iff_byterun1 \
+		--enable-small \
 		--enable-pthreads \
 		--enable-bzlib \
 		--enable-librtmp \
@@ -1356,7 +1341,8 @@ $(DEPDIR)/ffmpeg.do_compile: bootstrap libass rtmpdump $(DEPDIR)/ffmpeg.do_prepa
 		--arch=sh4 \
 		--extra-cflags=-fno-strict-aliasing \
 		--enable-stripping \
-		--prefix=/usr
+		--prefix=/usr && \
+	$(MAKE)
 	touch $@
 
 $(DEPDIR)/min-ffmpeg $(DEPDIR)/std-ffmpeg $(DEPDIR)/max-ffmpeg \
@@ -1364,8 +1350,8 @@ $(DEPDIR)/ffmpeg: \
 $(DEPDIR)/%ffmpeg: $(DEPDIR)/ffmpeg.do_compile
 	cd @DIR_ffmpeg@ && \
 		@INSTALL_ffmpeg@
-	@[ "x$*" = "x" ] && touch $@ || true
-	@TUXBOX_YAUD_CUSTOMIZE@
+#	@DISTCLEANUP_ffmpeg@
+	[ "x$*" = "x" ] && touch $@ || true
 
 
 #

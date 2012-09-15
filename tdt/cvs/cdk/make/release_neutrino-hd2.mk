@@ -46,15 +46,17 @@ $(DEPDIR)/%release_neutrino-hd2:
 	cp -dp $(targetprefix)/sbin/tune2fs $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/etc/init.d/portmap $(prefix)/release_neutrino-hd2/etc/init.d/ && \
-	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release_neutrino-hd2/etc/init.d/ && \
-	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino-hd2/sbin/ && \
-	\
-	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino-hd2/boot/video.elf && \
+	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release_neutrino-hd2/etc/init.d
+	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino-hd2/sbin/
+if ENABLE_SPARK
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release_neutrino-hd2/boot/video.elf && \
 	\
-	cp $(targetprefix)/boot/audio.elf $(prefix)/release_neutrino-hd2/boot/audio.elf && \
-	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino-hd2/boot/audio.elf && \
+	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino-hd2/boot/audio.elf
+else
+	cp $(targetprefix)/boot/video_7105.elf $(prefix)/release_neutrino-hd2/boot/video.elf && \
 	\
+	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release_neutrino-hd2/boot/audio.elf
+endif
 	cp -a $(targetprefix)/dev/* $(prefix)/release_neutrino-hd2/dev/ && \
 	cp -f $(buildprefix)/root/release/fstab_spark $(prefix)/release_neutrino-hd2/etc/fstab && \
 	cp -dp $(buildprefix)/root/etc/tuxbox/timezone.xml $(prefix)/release_neutrino-hd2/etc/ && \
@@ -137,14 +139,23 @@ $(DEPDIR)/%release_neutrino-hd2:
 	ln -fs init $(prefix)/release_neutrino-hd2/sbin/telinit
 
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release_neutrino-hd2/lib/modules/
+if ENABLE_SPARK
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_neutrino-hd2/lib/modules/
+else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release_neutrino-hd2/lib/modules/
+endif
 
 	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/dvb-fe-avl2108.fw
 	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/dvb-fe-stv6306.fw
 	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/dvb-fe-cx24116.fw
 	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/dvb-fe-cx21143.fw
+if ENABLE_SPARK
 	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/component_7105_pdk7105.fw
 	mv $(prefix)/release_neutrino-hd2/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino-hd2/lib/firmware/component.fw
+else
+	rm -f $(prefix)/release_neutrino-hd2/lib/firmware/component_7111_mb618.fw
+	mv $(prefix)/release_neutrino-hd2/lib/firmware/component_7105_pdk7105.fw $(prefix)/release_neutrino-hd2/lib/firmware/component.fw
+endif
 	rm -f $(prefix)/release_neutrino-hd2/bin/evremote
 	rm -f $(prefix)/release_neutrino-hd2/bin/gotosleep
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release_neutrino-hd2/usr/bin/
@@ -215,7 +226,9 @@ endif
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release_neutrino-hd2/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release_neutrino-hd2/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release_neutrino-hd2/lib/modules/
+if ENABLE_P0210
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release_neutrino-hd2/lib/modules/
+endif
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release_neutrino-hd2/lib/modules/
 
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino-hd2/sbin
@@ -325,7 +338,7 @@ endif
 	( cd $(prefix)/release_neutrino-hd2/var/tuxbox && ln -s /var/plugins )
 	( cd $(prefix)/release_neutrino-hd2/usr/lib/tuxbox && ln -s /var/plugins )
 	rm -rf $(prefix)/release_neutrino-hd2/media/sda*
-	cp -RP $(appsdir)/neutrino-hd2/data/icons/* $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/icons/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/icons/* $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/icons/
 	rm $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/icons/Makefile*
 
 #######################################################################################
@@ -393,7 +406,7 @@ endif
 	rm -rf $(prefix)/release_neutrino-hd2/usr/local/share/fonts
 	( cd $(prefix)/release_neutrino-hd2/usr/local/share && ln -sf $(prefix)/release_neutrino-hd2/usr/share/fonts fonts )
 
-	cp $(appsdir)/neutrino-hd2/src/nhttpd/web/{Y_Baselib.js,Y_VLC.js} $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd/
+	cp $(appsdir)/neutrino-hd2-exp/src/nhttpd/web/{Y_Baselib.js,Y_VLC.js} $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd/
 #	rm $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd-y/{Y_Baselib.js.gz,Y_VLC.js.gz}
 #######################################################################################
 	echo "pingulux-rev#: " > $(prefix)/release_neutrino-hd2/etc/imageinfo
@@ -454,9 +467,9 @@ endif
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd2/
 	cp -RP $(buildprefix)/libvorbisidec-1.0.2+svn16259/.libs/lib*.so* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd2/boot/
-	cp -RP $(appsdir)/neutrino-hd2/data/locale/deu*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
-	cp -RP $(appsdir)/neutrino-hd2/data/locale/eng*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
-	cp -RP $(appsdir)/neutrino-hd2/data/locale/russ*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/deu*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/eng*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/russ*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino-hd2/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd2/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot.bin $(prefix)/release_neutrino-hd2/bin/fbshot
