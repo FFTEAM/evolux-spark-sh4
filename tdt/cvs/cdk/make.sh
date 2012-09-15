@@ -11,14 +11,14 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
 fi
 
 CURDIR=`pwd`
-KATIDIR=${CURDIR%/cvs/cdk}
+GMDIR=${CURDIR%/cvs/cdk}
 export PATH=/usr/sbin:/sbin:$PATH
 
 CONFIGPARAM=" \
  --enable-maintainer-mode \
- --prefix=$KATIDIR/tufsbox \
- --with-cvsdir=$KATIDIR/cvs \
- --with-customizationsdir=$KATIDIR/custom \
+ --prefix=$GMDIR/tufsbox \
+ --with-cvsdir=$GMDIR/cvs \
+ --with-customizationsdir=$GMDIR/custom \
  --enable-nfsserver \
  --enable-ccache"
 
@@ -55,48 +55,18 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 
 ##############################################
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
-read -p "Build for TRIPLEX(7162) (y/N)? "
+read -p "Build for TRIPLEX(7162) (JFFS2 ONLY) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
+	cd "$GMDIR/cvs/driver/frontcontroller" && rm aotom && ln -sf aotom_spark7162 aotom
+	cd "$GMDIR/cvs/driver" && rm player2_191 && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
+	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
+	cd "$GMDIR/cvs/driver" && rm player2_191 && ln -sf player2_191_spark player2_191
 fi
+cd $CURDIR
 CONFIGPARAM="$CONFIGPARAM $TARGET"
-
-##############################################
-
-read -p "Activate debug (y/N)? "
-if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-	CONFIGPARAM="$CONFIGPARAM --enable-debug"
-else
-	CONFIGPARAM="$CONFIGPARAM"
-fi
-
-##############################################
-echo ""
-echo -e "\nSTB :"
-echo "   1) STM24-209 (standard)"
-echo "   2) STM24-210 (EXPERIMENTAL)"
-read -p "Select STB (1-2)? "
-case "$REPLY" in
-	1) echo -e "\nSelected STB: $REPLY\n"
-	   KERNEL="--enable-stm24 --enable-p0209";;
-	2) echo -e "\nSelected Filesystem: $REPLY\n"
-	   KERNEL="--enable-stm24 --enable-p0210";;
-	*) echo -e "\nSelected Filesystem: $REPLY\n"
-	   KERNEL="--enable-stm24 --enable-p0209";;
-esac
-#KERNEL="--enable-stm24 --enable-p0209"
-CONFIGPARAM="$CONFIGPARAM $KERNEL"
-
-##############################################
-
-cd ../driver/
-echo "# Automatically generated config: don't edit" > .config
-echo "#" >> .config
-echo "export CONFIG_ZD1211REV_B=y" >> .config
-echo "export CONFIG_ZD1211=n"		>> .config
-cd - >/dev/null 2>&1
 
 ##############################################
 
@@ -130,6 +100,41 @@ PLAYER="--enable-player191"
 
 ##############################################
 
+##############################################
+
+read -p "Activate debug (SPARK ONLY) (y/N)? "
+if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
+	CONFIGPARAM="$CONFIGPARAM --enable-debug"
+else
+	CONFIGPARAM="$CONFIGPARAM"
+fi
+
+##############################################
+echo ""
+echo -e "\nSTB :"
+echo "   1) STM24-209 (old)"
+echo "   2) STM24-210 (standard)"
+read -p "Select STB (1-2)? "
+case "$REPLY" in
+	1) echo -e "\nSelected STB: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0209";;
+	2) echo -e "\nSelected Filesystem: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0210";;
+	*) echo -e "\nSelected Filesystem: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0210";;
+esac
+#KERNEL="--enable-stm24 --enable-p0209"
+CONFIGPARAM="$CONFIGPARAM $KERNEL"
+
+##############################################
+
+cd ../driver/
+echo "# Automatically generated config: don't edit" > .config
+echo "#" >> .config
+echo "export CONFIG_ZD1211REV_B=y" >> .config
+echo "export CONFIG_ZD1211=n"		>> .config
+cd - >/dev/null 2>&1
+
 MULTICOM="--enable-multicom324"
 cd ../driver/include/
 if [ -L multicom ]; then
@@ -148,8 +153,8 @@ cd - >/dev/null 2>&1
 ##############################################
 
 echo -e "\nMedia Framework:"
-echo "   1) eplayer3  (for old-E2)"
-echo "   2) gstreamer (for E2-PLI ONLY!)"
+echo "   1) eplayer3  (for NHD/NHD2)"
+echo "   2) gstreamer (for E2-PLI)"
 read -p "Select media framwork (1-2)? "
 
 case "$REPLY" in
@@ -173,7 +178,7 @@ fi
 echo ""
 echo -e "\nFilesystemtype:"
 echo "   1) JFFS2 (standard)"
-echo "   2) YAFFS2 (not needed changing bootargs)"
+echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
 read -p "Select Filesystem (1-2)? "
 case "$REPLY" in
 	1) echo -e "\nSelected Filesystem: $REPLY\n"
