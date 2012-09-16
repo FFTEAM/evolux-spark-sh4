@@ -57,19 +57,23 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 if [ -e "$GMDIR/cvs/driver/player2_191" ]; then
 	rm "$GMDIR/cvs/driver/player2_191"
 fi
-if [ -e "$GMDIR/cvs/driverplayer2_191" ]; then
-	rm "$GMDIR/cvs/driverplayer2_191"
+if [ -e "$GMDIR/cvs/driver/frontcontroller/aotom" ]; then
+	rm "$GMDIR/cvs/driver/frontcontroller/aotom"
+fi
+if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+	rm "$GMDIR/cvs/cdk/.spark7162"
 fi
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
-read -p "Build for TRIPLEX(7162) (JFFS2 ONLY) (y/N)? "
+read -p "Build for TRIPLEX(SPARK7162) (JFFS2 ONLY) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
+	touch "$GMDIR/cvs/cdk/.spark7162"
 	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark7162 aotom
 	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
 	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
-	cd "$GMDIR/cvs/driver" && rm player2_191 && ln -sf player2_191_spark player2_191
+	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark player2_191
 fi
 cd $CURDIR
 CONFIGPARAM="$CONFIGPARAM $TARGET"
@@ -107,14 +111,16 @@ PLAYER="--enable-player191"
 ##############################################
 
 ##############################################
-
-read -p "Activate debug (SPARK ONLY) (y/N)? "
-if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-	CONFIGPARAM="$CONFIGPARAM --enable-debug"
+if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+	read -p "Activate debug (SPARK ONLY) (y/N)? "
+	if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
+		CONFIGPARAM="$CONFIGPARAM --enable-debug"
+	else
+		CONFIGPARAM="$CONFIGPARAM"
+	fi
 else
 	CONFIGPARAM="$CONFIGPARAM"
 fi
-
 ##############################################
 echo ""
 echo -e "\nSTB :"
@@ -181,20 +187,25 @@ else
 	EXTERNAL_LCD=""
 fi
 ##############################################
-echo ""
-echo -e "\nFilesystemtype:"
-echo "   1) JFFS2 (standard)"
-echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
-read -p "Select Filesystem (1-2)? "
-case "$REPLY" in
-	1) echo -e "\nSelected Filesystem: $REPLY\n"
-	   MULTIYAFFS2="";;
-	2) echo -e "\nSelected Filesystem: $REPLY\n"
-	   MULTIYAFFS2="--enable-multi-yaffs2";;
-	*) echo -e "\nSelected Filesystem: $REPLY\n"
-	   MULTIYAFFS2="";;
-esac
-
+if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+	echo ""
+	echo -e "\nFilesystemtype:"
+	echo "   1) JFFS2 (standard)"
+	echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
+	read -p "Select Filesystem (1-2)? "
+	case "$REPLY" in
+		1) echo -e "\nSelected Filesystem: $REPLY\n"
+		   MULTIYAFFS2="";;
+		2) echo -e "\nSelected Filesystem: $REPLY\n"
+		   MULTIYAFFS2="--enable-multi-yaffs2";;
+		*) echo -e "\nSelected Filesystem: $REPLY\n"
+		   MULTIYAFFS2="";;
+	esac
+else
+	echo -e "\nFilesystem"
+	echo "JFFS2 (standard)"
+	MULTIYAFFS2=""
+fi
 ##############################################
 
 CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $EXTERNAL_LCD $MULTIYAFFS2"
