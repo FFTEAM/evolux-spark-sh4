@@ -63,6 +63,9 @@ fi
 if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	rm "$GMDIR/cvs/cdk/.spark7162"
 fi
+if [ -e "$GMDIR/cvs/cdk/.p0211" ]; then
+	rm "$GMDIR/cvs/cdk/.p0211"
+fi
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
 read -p "Build for TRIPLEX(SPARK7162) (JFFS2 ONLY) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
@@ -127,12 +130,16 @@ echo ""
 echo -e "\nSTB :"
 echo "   1) STM24-209 (old)"
 echo "   2) STM24-210 (standard)"
-read -p "Select STB (1-2)? "
+echo "   3) STM24-211 (experimental, jffs2 only!)"
+read -p "Select STB (1-3)? "
 case "$REPLY" in
 	1) echo -e "\nSelected STB: $REPLY\n"
 	   KERNEL="--enable-stm24 --enable-p0209";;
 	2) echo -e "\nSelected Filesystem: $REPLY\n"
 	   KERNEL="--enable-stm24 --enable-p0210";;
+	3) echo -e "\nSelected Filesystem: $REPLY\n"
+	   KERNEL="--enable-stm24 --enable-p0211"
+	   touch "$GMDIR/cvs/cdk/.p0211";;
 	*) echo -e "\nSelected Filesystem: $REPLY\n"
 	   KERNEL="--enable-stm24 --enable-p0210";;
 esac
@@ -192,7 +199,9 @@ if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	echo ""
 	echo -e "\nFilesystemtype:"
 	echo "   1) JFFS2 (standard)"
-	echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
+	if [ ! -e "$GMDIR/cvs/cdk/.p0211" ]; then
+		echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
+	fi
 	read -p "Select Filesystem (1-2)? "
 	case "$REPLY" in
 		1) echo -e "\nSelected Filesystem: $REPLY\n"
