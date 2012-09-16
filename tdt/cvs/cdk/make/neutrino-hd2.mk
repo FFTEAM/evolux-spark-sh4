@@ -54,11 +54,9 @@ $(DEPDIR)/neutrino-hd2: curl libogg libboost libvorbis libvorbisidec libungif fr
 	touch $@
 
 neutrino-hd2-clean:
-	rm -f $(DEPDIR)/neutrino-hd2
-	rm -f $(DEPDIR)/neutrino-hd2.do_compile
-	rm -f $(DEPDIR)/neutrino-hd2.do_prepare
+	rm -f $(DEPDIR)/*neutrino*
 	cd $(appsdir)/neutrino-hd2-exp && \
-		$(MAKE) distclean && \
+		$(MAKE) clean && \
 		find $(appsdir)/neutrino-hd2-exp -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/neutrino-hd2-exp/autom4te.cache && \
 		rm -rf $(appsdir)/neutrino-hd2-exp/aclocal.m4 && \
@@ -73,8 +71,23 @@ neutrino-hd2-clean:
 		rm -rf $(appsdir)/neutrino-hd2-exp/missing
 
 neutrino-hd2-distclean:
-	rm -f $(DEPDIR)/neutrino-hd2
-	rm -f $(DEPDIR)/neutrino-hd2.do_compile
-	rm -f $(DEPDIR)/neutrino-hd2.do_prepare
+	rm -f $(DEPDIR)/*neutrino*
 	rm -rf $(appsdir)/neutrino-hd2-exp
 
+neutrino-hd2-update:
+	rm -f $(DEPDIR)/*neutrino*
+	cd $(appsdir)/neutrino-hd2-exp && \
+		$(MAKE) clean && \
+		find $(appsdir)/neutrino-hd2-exp -name "Makefile.in" -exec rm -rf {} \; && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/autom4te.cache && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/aclocal.m4 && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/Configure && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/config.guess && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/config.sub && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/COPYING && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/depcomp && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/INSTALL && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/install-sh && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/ltmain.sh && \
+		rm -rf $(appsdir)/neutrino-hd2-exp/missing && \
+		svn up
