@@ -119,6 +119,7 @@ if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 		CONFIGPARAM="$CONFIGPARAM"
 	fi
 else
+	echo "debug disabled"
 	CONFIGPARAM="$CONFIGPARAM"
 fi
 ##############################################
