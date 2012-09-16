@@ -174,7 +174,7 @@ cd - >/dev/null 2>&1
 
 echo -e "\nMedia Framework:"
 echo "   1) eplayer3  (for NHD/NHD2)"
-echo "   2) gstreamer (for E2-PLI)"
+echo "   2) gstreamer (for E2-PLI + EVOLUX)"
 read -p "Select media framwork (1-2)? "
 
 case "$REPLY" in
