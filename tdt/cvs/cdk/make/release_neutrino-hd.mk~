@@ -413,7 +413,7 @@ endif
 	cp $(appsdir)/neutrino/src/nhttpd/web/{Y_Baselib.js,Y_VLC.js} $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/
 #	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd-y/{Y_Baselib.js.gz,Y_VLC.js.gz}
 #######################################################################################
-	echo "evolux-sh4-rev#: " > $(prefix)/release_neutrino-hd2/etc/imageinfo
+	echo "pingulux-rev#: " > $(prefix)/release_neutrino-hd/etc/imageinfo
 	git describe --always >> $(prefix)/release_neutrino-hd/etc/imageinfo
 	$(buildprefix)/root/release/neutrino_version.sh
 	rm -rf $(prefix)/release_neutrino-hd/var/etc
