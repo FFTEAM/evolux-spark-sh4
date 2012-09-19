@@ -41,7 +41,7 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/fonts
 	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
-	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
+#	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
 	cp -RP $(appsdir)/neutrino-hd2/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
@@ -69,7 +69,7 @@ $(DEPDIR)/%release_evolux_triple:
 #	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/mumudvb $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/inetd.conf $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/localtime $(prefix)/release_evolux_triple_with_dev/etc/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
+#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
 if !ENABLE_SPARK7162
 	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname

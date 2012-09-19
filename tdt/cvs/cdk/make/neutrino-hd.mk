@@ -1,7 +1,7 @@
 # tuxbox/neutrino
 
 $(targetprefix)/var/etc/.version:
-	echo "imagename=Ntrino" > $@
+	echo "imagename=Ntrino-HD" > $@
 	echo "homepage=http://gitorious.org/open-duckbox-project-sh4" >> $@
 	echo "creator=`id -un`" >> $@
 	echo "docs=http://gitorious.org/open-duckbox-project-sh4/pages/Home" >> $@
@@ -14,6 +14,9 @@ $(targetprefix)/var/etc/.version:
 #
 
 $(appsdir)/libstb-hal/config.status: bootstrap
+	if [ ! -d $(appsdir)/libstb-hal ]; then \
+		git clone git://gitorious.org/~martii/neutrino-hd/martiis-libstb-hal.git $(appsdir)/libstb-hal; \
+	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/libstb-hal && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -25,7 +28,7 @@ $(appsdir)/libstb-hal/config.status: bootstrap
 			--with-boxtype=spark \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
 
 $(DEPDIR)/libstb-hal.do_prepare: $(appsdir)/libstb-hal/config.status
 	touch $@
@@ -52,6 +55,10 @@ libstb-hal-clean libstb-hal-distclean:
 #
 
 $(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
+	if [ ! -d $(appsdir)/neutrino-hd ]; then \
+		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
+		cd $(appsdir)/neutrino-hd && patch -p1 < "$(buildprefix)/Patches/neutrino-hd.diff"; \
+	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -71,7 +78,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
 			"--with-stb-hal-build=$(appsdir)/libstb-hal" \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DSCREENSHOT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
 
 $(DEPDIR)/neutrino-hd.do_prepare: $(appsdir)/neutrino-hd/config.status
 	touch $@
@@ -80,7 +87,7 @@ $(DEPDIR)/neutrino-hd.do_compile: $(appsdir)/neutrino-hd/config.status
 	cd $(appsdir)/neutrino-hd && $(MAKE)
 	touch $@
 
-$(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins neutrino-hd.do_prepare neutrino-hd.do_compile
+$(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins neutrino-hd.do_prepare neutrino-hd.do_compile
 	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
@@ -110,7 +117,7 @@ $(appsdir)/neutrino-hd-plugins/config.status: bootstrap
 			--with-boxtype=spark \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
+			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
 
 $(DEPDIR)/neutrino-hd-plugins.do_prepare: $(appsdir)/neutrino-hd-plugins/config.status
 	touch $@

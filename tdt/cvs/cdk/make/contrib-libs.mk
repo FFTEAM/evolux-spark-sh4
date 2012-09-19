@@ -402,13 +402,13 @@ $(DEPDIR)/%libmad: $(DEPDIR)/libmad.do_compile
 	@[ "x$*" = "x" ] && touch $@ || true
 
 #
-# LIBID3TAG
+# libid3tag
 #
-$(DEPDIR)/libid3tag.do_prepare: bootstrap @DEPENDS_libid3tag@
+$(DEPDIR)/libid3tag.do_prepare: bootstrap libz @DEPENDS_libid3tag@
 	@PREPARE_libid3tag@
 	touch $@
 
-$(DEPDIR)/libid3tag.do_compile: libz $(DEPDIR)/libid3tag.do_prepare
+$(DEPDIR)/libid3tag.do_compile: $(DEPDIR)/libid3tag.do_prepare
 	cd @DIR_libid3tag@ && \
 		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -Os" \
@@ -426,7 +426,7 @@ $(DEPDIR)/%libid3tag: %libz $(DEPDIR)/libid3tag.do_compile
 	cd @DIR_libid3tag@ && \
 		@INSTALL_libid3tag@
 #	@DISTCLEANUP_libid3tag@
-	@[ "x$*" = "x" ] && touch $@ || true
+	[ "x$*" = "x" ] && touch $@ || true
 
 #
 # LIBXML2

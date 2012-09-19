@@ -57,9 +57,9 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 if [ -e "$GMDIR/cvs/driver/player2_191" ]; then
 	rm "$GMDIR/cvs/driver/player2_191"
 fi
-if [ -e "$GMDIR/cvs/driver/frontcontroller/aotom" ]; then
-	rm "$GMDIR/cvs/driver/frontcontroller/aotom"
-fi
+#if [ -e "$GMDIR/cvs/driver/frontcontroller/aotom" ]; then
+#	rm "$GMDIR/cvs/driver/frontcontroller/aotom"
+#fi
 if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	rm "$GMDIR/cvs/cdk/.spark7162"
 fi
@@ -71,11 +71,11 @@ read -p "Build for TRIPLEX(SPARK7162) (JFFS2 ONLY) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
 	touch "$GMDIR/cvs/cdk/.spark7162"
-	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark7162 aotom
+#	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark7162 aotom
 	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
-	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
+#	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
 	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark player2_191
 fi
 cd $CURDIR
