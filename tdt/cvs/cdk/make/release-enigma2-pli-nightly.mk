@@ -22,7 +22,7 @@ release-enigma2-pli-nightly_common_utils:
 	ln -s ../init.d/umountfs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S40umountfs
 	ln -s ../init.d/reboot $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S90reboot
 
-release-enigma2-pli-nightly_spark:
+release-enigma2-pli-nightly:
 	echo "EvoPLI" > $(prefix)/release-enigma2-pli-nightly/etc/hostname
 
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
