@@ -71,21 +71,18 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/localtime $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc3.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
-if !ENABLE_SPARK7162
-	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
-#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/dropbear $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/Wireless $(prefix)/release_evolux_triple_with_dev/etc/
-	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
+#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
+	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
+if !ENABLE_SPARK7162
+	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 else
 	echo "EvoTRIPLEX" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark7162 $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
-	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 endif
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_triple_with_dev/usr/script/
