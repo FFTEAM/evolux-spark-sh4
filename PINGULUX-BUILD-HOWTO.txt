@@ -1,61 +1,39 @@
-32-bit linux recommended, best is ubuntu(<11.04), suse debian for build!
-64bit works too but you must modify maybe manual some stuff!
+howto build:
 
-how to build enigma2, neutrino or evolux for your edision argus pingulux:
-cd /tdt/cvs/cdk
-./make.sh
-18 (spark)
-10 (stm24-209)
-n  (debug: n)
-3  (player2 191)
-2  (multicom 3.2.4)
-1  (eplayer3)
+checkout git by:
+– git clone git://gitorious.org/evolux-spark-sh4/evolux-spark-sh4.git
 
-after that you have 3 options for build:
-1. only neutrino build:
-   make yaud-neutrino
-2. only enigma2-nightly build:
-   make yaud-enigma-nightly
-   (if asked for option 0-6 build please select option #5 !)
-3. build evolux (neutrino+e2 in 1 image):
-   1st time if not before 1+2:
-      make evolux-full
-      (if asked for option 0-6 build please select option #5 !)
-   if 1+2 done before:
-      make evolux
-      (if asked for option 0-6 build please select option #5 !)
+    cd /evolux-spark-sh4/tdt/cvs/cdk
 
-TAKE CARE THAT YOU HAVE PLACED IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /BOOT YOUR AUDIO/VIDEO.ELF (NP) OTHERWAY IT WON'T BOOT AFTER FLASHING!
-ALSO GIT INCL. ONLY FTA PTI!!
-FOR CRYPT PTI PLEASE PLACE YOUR STM24-209 pti.ko (NP) IN CDK/OWN_BUILD/ENIGMA2 OR NEUTRINO /LIB/MODULES
+    ./tdtsetup.sh
+    (that will install all needed packages, take care for newer linux-distris like ubuntu12.04 you must downgrade gcc to 4.5.3, script will ask you to do that)
 
--if all true you can find e2jffs2.img + uImage in /tdt/tufsbox
--create a folder "enigma2" on your usb-stick with fat/fat32 formatted
--put both files in folder
--turn off Pingulux-AC
--put stick in
--turn AC on and hold "ok"-button( on pingulux,not RC!) till display showing "force"
--press arrow down, "eng16" will shown on display
--press arrow right, "fact" will shown on display and start flashing
--display show blinking "U LD"
--if not "U LD" f.e. "77" shown, stick wasn't recognized, check fat/fat32 and folder/img-parts
--wait 3mins
--"succ" comming on display and neutrino/enigma2 should bootup.
+    ./make.sh
+    select if you want to build for “gm990(spark)” or “gmTriplex(spark7162)” , y/N
+    select “with debug” or not, y/N (with debug only on spark)
+    select stm, 209 or 210 or 211, y/N (stm24-210 recommended)
+    select filesystem, jffs2 or yaffs2, (yaffs2 only for spark!), y/n
+    do “make yaud…” or do “make evo…” showing aboth
+    (if 1st checkout you must select for “evo” the “full” version, later the normal option is enough. the yaud-versions build only your selected gui, the evolux-versions build the flash evo-complete)
 
-if you want boot orig-spark-soft again:
--turn off AC
--turn AC on and hold "ok"-button on pingulux (not RC!)
--"force" showing on display
--press arrow up
--press "ok"
--orig should boot
+own_build folder:
+– you must place your own “audio.elf + video.elf” to"/cvs/cdk/own_build/your_gui/boot" otherway it won’t boot!
+– for non-fta you must also place your own “pti.ko” to “/cvs/cdk/own_build/your_gui/lib/modules”
 
-if you want back again from orig-soft and have allways flashed neutrino/enigma2/evolux:
--turn AC off
--turn AC on and hold "ok"-button on pingulux (not RC!)
--"force" showing on display
--press arrow down
--press "ok"
--neutrino/enigma2/evolux will boot
+notes:
+git update with:
+– git pull
 
-till you dont change by AC off on last choice will allways boot after shutdown and boot.
+    you can’t mix build for yaffs2 and jffs2 or stm24-209/210.
+    if you want to change filesystem or kernel-version you have to do:
+    make clean
+    rm .deps/star-kernel-star (wiki dont allow showing “stars” so we wrote them out)
+    ./make.sh
+
+update nhd2-exp folder:
+– make neutrino-hd2-update
+
+recommended linux dsitris for build:
+– ubuntu11.04 (32+64bit)
+– ubuntu12.04 (32+64bit with gcc downgrade to 4.5.3)
+
