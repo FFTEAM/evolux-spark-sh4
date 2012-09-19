@@ -637,6 +637,15 @@ endif
 #	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release-enigma2-pli-nightly/
+if !ENABLE_SPARK7162
+	if [ -e $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
+		rm -rf $(prefix)/release-enigma2-pli-nightly/boot/spark7162; \
+	fi
+else
+	if [ -e $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
+		rm $(prefix)/release-enigma2-pli-nightly/boot/*.elf && cp $(prefix)/release-enigma2-pli-nightly/boot/spark7162/*.elf $(prefix)/release-enigma2-pli-nightly/boot/ && rm -rf $(prefix)/release-enigma2-pli-nightly/boot/spark7162; \
+	fi
+endif
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release-enigma2-pli-nightly/bin/
 	if [ ! -e $(prefix)/release-enigma2-pli-nightly/usr/script ]; then \
 		mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/script; \

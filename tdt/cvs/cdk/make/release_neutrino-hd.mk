@@ -467,6 +467,15 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino-hd/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd/
+if !ENABLE_SPARK7162
+	if [ -e $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
+		rm -rf $(prefix)/release_neutrino-hd/boot/spark7162; \
+	fi
+else
+	if [ -e $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
+		rm $(prefix)/release_neutrino-hd/boot/*.elf && cp $(prefix)/release_neutrino-hd/boot/spark7162/*.elf $(prefix)/release_neutrino-hd/boot/ && rm -rf $(prefix)/release_neutrino-hd/boot/spark7162; \
+	fi
+endif
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix

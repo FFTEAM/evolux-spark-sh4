@@ -465,6 +465,15 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino-hd2/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd2/
+if !ENABLE_SPARK7162
+	if [ -e $(prefix)/release_neutrino-hd2/boot/spark7162 ]; then \
+		rm -rf $(prefix)/release_neutrino-hd2/boot/spark7162; \
+	fi
+else
+	if [ -e $(prefix)/release_neutrino-hd2/boot/spark7162 ]; then \
+		rm $(prefix)/release_neutrino-hd2/boot/*.elf && cp $(prefix)/release_neutrino-hd2/boot/spark7162/*.elf $(prefix)/release_neutrino-hd2/boot/ && rm -rf $(prefix)/release_neutrino-hd2/boot/spark7162; \
+	fi
+endif
 	cp -RP $(buildprefix)/libvorbisidec-1.0.2+svn16259/.libs/lib*.so* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd2/boot/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/deu*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/

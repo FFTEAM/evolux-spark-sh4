@@ -73,8 +73,8 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/init.d/ntpupdate.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
 if !ENABLE_SPARK7162
 	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/dropbear $(prefix)/release_evolux_triple_with_dev/etc/
+#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
+#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/dropbear $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/Wireless $(prefix)/release_evolux_triple_with_dev/etc/
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/

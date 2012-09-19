@@ -139,9 +139,13 @@ endif
 	rm -f $(prefix)/release/bin/evremote
 	rm -f $(prefix)/release/bin/gotosleep
 	rm -f $(prefix)/release/bin/vdstandby
-
+if !ENABLE_SPARK7162
 	mv $(prefix)/release/lib/firmware/component_7111_mb618.fw $(prefix)/release/lib/firmware/component.fw
 	rm $(prefix)/release/lib/firmware/component_7105_pdk7105.fw
+else
+	mv $(prefix)/release/lib/firmware/component_7105_pdk7105.fw $(prefix)/release/lib/firmware/component.fw
+	rm $(prefix)/release/lib/firmware/component_7111_mb618.fw
+endif
 	cp -RP $(buildprefix)/root/lib/firmware/* $(prefix)/release/lib/firmware/
 
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
@@ -581,8 +585,16 @@ endif
 	rm $(prefix)/release/bin/showiframe
 	rm $(prefix)/release/usr/local/share/enigma2/radio.mvi
 	rm $(prefix)/release/bin/stslave
-
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release/
+if !ENABLE_SPARK7162
+	if [ -e $(prefix)/release/boot/spark7162 ]; then \
+		rm -rf $(prefix)/release/boot/spark7162; \
+	fi
+else
+	if [ -e $(prefix)/release/boot/spark7162 ]; then \
+		rm $(prefix)/release/boot/*.elf && cp $(prefix)/release/boot/spark7162/*.elf $(prefix)/release/boot/ && rm -rf $(prefix)/release/boot/spark7162; \
+	fi
+endif
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release/bin/
 
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release/boot/
