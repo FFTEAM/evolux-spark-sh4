@@ -21,8 +21,18 @@ release-enigma2-pli-nightly_common_utils:
 	ln -s ../init.d/sendsigs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S20sendsigs
 	ln -s ../init.d/umountfs $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S40umountfs
 	ln -s ../init.d/reboot $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc6.d/S90reboot
+	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d
+	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
+	cp -f $(buildprefix)/root/etc/init.d/ntpupdate.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
+	ln -sf ../init.d/Swap.sh $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d/S51swap
+	ln -sf ../init.d/ntpupdate.sh $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d/S52ntpupdate
+	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release-enigma2-pli-nightly/bin/
+	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release-enigma2-pli-nightly/bin/
+	cp -RP $(buildprefix)/root/etc/init.d/dropbear $(prefix)/release-enigma2-pli-nightly/etc/init.d/
+	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/dropbear
+	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release-enigma2-pli-nightly/etc/
 
-release-enigma2-pli-nightly:
+release-enigma2-pli-nightly: release-enigma2-pli-nightly_common_utils
 	echo "EvoPLI" > $(prefix)/release-enigma2-pli-nightly/etc/hostname
 
 	cp $(buildprefix)/root/release/umountfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/
@@ -62,7 +72,6 @@ release-enigma2-pli-nightly:
 	( cd $(prefix)/release-enigma2-pli-nightly/usr/bin && ln -sf /bin/grab grab )
 	mkdir -p $(prefix)/release-enigma2-pli-nightly/var
 	cp -RP $(targetprefix)/var/lib $(prefix)/release-enigma2-pli-nightly/var/
-	cp -RP $(buildprefix)/root/etc/Wireless $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -RP $(buildprefix)/root/etc/exports $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -f $(buildprefix)/root/usr/lib/libiw.so.29 $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -f $(buildprefix)/root/usr/lib/libgnu* $(prefix)/release-enigma2-pli-nightly/usr/lib/
@@ -90,7 +99,14 @@ if ENABLE_P0210
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 endif
-
+if ENABLE_P0211
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8712u.ko
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+endif
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
@@ -163,23 +179,12 @@ endif
 	touch $(prefix)/release-enigma2-pli-nightly/etc/opkg/opkg.conf
 	echo "src/gz graugans http://packages.evolux.yourweb.de" > $(prefix)/release-enigma2-pli-nightly/etc/opkg/opkg.conf
 	cp -RP $(buildprefix)/root/bin/ps $(prefix)/release-enigma2-pli-nightly/bin/
-	cp -RP $(buildprefix)/root/bin/dropbear $(prefix)/release-enigma2-pli-nightly/bin/
-	cp -RP $(buildprefix)/root/bin/dropbearkey $(prefix)/release-enigma2-pli-nightly/bin/
-	cp -RP $(buildprefix)/root/etc/init.d/dropbear $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/dropbear
 	cp -RP $(buildprefix)/root/usr/lib/python2.6/site-packages/* $(prefix)/release-enigma2-pli-nightly/usr/lib/python2.6/site-packages/
 	cp -f $(buildprefix)/root/usr/bin/backup_pingulux_image.sh $(prefix)/release-enigma2-pli-nightly/usr/bin/
-	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
-	cp -f $(buildprefix)/root/etc/init.d/ntpupdate.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release-enigma2-pli-nightly/etc/ )
 	cp -f $(buildprefix)/root/bin/fw_printenv $(prefix)/release-enigma2-pli-nightly/bin/
 	cp -f $(buildprefix)/root/bin/fw_setenv $(prefix)/release-enigma2-pli-nightly/bin/
 	touch $(prefix)/release-enigma2-pli-nightly/etc/.fsck
-	if [ ! -e $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d ]; then \
-		mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d; \
-	fi; 
-	ln -sf ../init.d/Swap.sh $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d/S51swap
-	ln -sf ../init.d/ntpupdate.sh $(prefix)/release-enigma2-pli-nightly/etc/rc.d/rc3.d/S52ntpupdate
 	cp -RP $(buildprefix)/root/etc/mumudvb $(prefix)/release-enigma2-pli-nightly/etc/
 	cp -RP $(buildprefix)/root/bin/mumudvb $(prefix)/release-enigma2-pli-nightly/bin/
 ### del libcoolstream+libeplayer2 stuff as not needed for evolux-E2 ###
