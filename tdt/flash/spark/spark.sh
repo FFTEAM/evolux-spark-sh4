@@ -7,7 +7,7 @@ CDKDIR=$BASEDIR/cvs/cdk
 SCRIPTDIR=$CURDIR/scripts
 TMPDIR=$CURDIR/tmp
 TMPROOTDIR=$TMPDIR/ROOT
-TMPKERNELDIR=$TMPDIR/KERNEL
+TMPKERNELDIR=$TUFSBOXDIR
 OUTDIR=$CURDIR/out
 
 mkdir -p $OUTDIR >/dev/null 2>&1
@@ -236,4 +236,4 @@ esac
 echo "-----------------------------------------------------------------------"
 echo "Flashimage created:"
 echo `ls $OUTDIR`
-
+echo `ls $TUFSBOXDIR | grep uImage`

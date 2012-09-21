@@ -36,7 +36,7 @@ $USERS tar -czvf $RELEASEDIR.tar.gz ./
 cd ../$RELEASEDIR
 $USERS tar -xzvf $RELEASEDIR.tar.gz -C $TMPROOTDIR
 # --- BOOT ---
-mv $TMPROOTDIR/boot/uImage $TMPKERNELDIR/uImage
+#mv $TMPROOTDIR/boot/uImage $TMPKERNELDIR/uImage
 
 
 # --- ROOT ---

@@ -32,9 +32,19 @@ fi
 
 # --- KERNEL ---
 # Size 8MB !
-cp $TMPKERNELDIR/uImage $CURDIR/uImage
-$PAD 0x800000 $CURDIR/uImage $CURDIR/mtd_kernel.pad.bin
-
+read -t 10 -p "Kernel optimize/expand to 8mb (autoskip in 10s)? (y/N) "
+if [ $REPLY == "y" ] || [ $REPLY == "Y" ]; then
+#	cp $TMPKERNELDIR/uImage $CURDIR/uImage
+	$PAD 0x800000 $TUFSBOXDIR/uImage $TUFSBOXDIR/mtd_kernel.pad.bin
+	rm -f $TUFSBOXDIR/uImage
+	SIZE=`stat $TUFSBOXDIR/mtd_kernel.pad.bin -t --format %s`
+	SIZE=`printf "0x%x" $SIZE`
+	if [[ $SIZE > "0x800000" ]]; then
+	  echo "KERNEL TO BIG. $SIZE instead of 0x800000" > /dev/stderr
+	fi
+	mv $TUFSBOXDIR/mtd_kernel.pad.bin $TUFSBOXDIR/uImage
+	rm -f $TUFSBOXDIR/mtd_kernel.pad.bin
+fi
 # --- ROOT ---
 # Size 64MB !
 echo "MKFSJFFS2 --qUfv -p0x4000000 -e0x20000 -r $TMPROOTDIR -o $CURDIR/mtd_root.bin"
@@ -49,15 +59,8 @@ $PAD 0x4000000 $CURDIR/mtd_root.sum.bin $CURDIR/mtd_root.sum.pad.bin
 #echo "SUMTOOL -v -p -e 0x20000 -i $CURDIR/mtd_root.bin -o $CURDIR/mtd_root.sum.pad.bin"
 #$SUMTOOL -v -p -e 0x20000 -i $CURDIR/mtd_root.bin -o $CURDIR/mtd_root.sum.pad.bin
 
-rm -f $CURDIR/uImage
 rm -f $CURDIR/mtd_root.bin
 rm -f $CURDIR/mtd_root.sum.bin
-
-SIZE=`stat mtd_kernel.pad.bin -t --format %s`
-SIZE=`printf "0x%x" $SIZE`
-if [[ $SIZE > "0x800000" ]]; then
-  echo "KERNEL TO BIG. $SIZE instead of 0x800000" > /dev/stderr
-fi
 
 SIZE=`stat mtd_root.sum.pad.bin -t --format %s`
 SIZE=`printf "0x%x" $SIZE`
@@ -65,9 +68,6 @@ if [[ $SIZE > "0x4000000" ]]; then
   echo "ROOT TO BIG. $SIZE instead of 0x4000000" > /dev/stderr
 fi
 
-mv $CURDIR/mtd_kernel.pad.bin $OUTDIR/uImage
 mv $CURDIR/mtd_root.sum.pad.bin $OUTDIR/e2jffs2.img
-
-rm -f $CURDIR/mtd_kernel.pad.bin
 rm -f $CURDIR/mtd_root.sum.pad.bin
 
