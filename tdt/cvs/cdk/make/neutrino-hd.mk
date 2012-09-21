@@ -42,14 +42,16 @@ $(DEPDIR)/libstb-hal: libstb-hal.do_prepare libstb-hal.do_compile
 	touch $@
 
 libstb-hal-clean libstb-hal-distclean:
-	rm -f $(DEPDIR)/libstb-hal
-	rm -f $(DEPDIR)/libstb-hal.do_compile
-	rm -f $(DEPDIR)/libstb-hal.do_prepare
+	rm -f $(DEPDIR)/libstb-hal*
 	cd $(appsdir)/libstb-hal && \
 		$(MAKE) distclean && \
 		find $(appsdir)/libstb-hal -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/libstb-hal/autom4te.cache
 
+libstb-hal-update:
+	rm -f $(DEPDIR)/libstb-hal*
+	rm -rf $(appsdir)/libstb-hal && \
+	git clone git://gitorious.org/~martii/neutrino-hd/martiis-libstb-hal.git $(appsdir)/libstb-hal
 #
 # neutrino-hd
 #
