@@ -54,7 +54,7 @@ $(DEPDIR)/%release_evolux:
 		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_evolux_with_dev/usr/share/; \
 	fi
 #	cp -RP $(prefix)/release_evolux_with_dev/boot/uImage $(prefix)/
-	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
+	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_with_dev/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/release_evolux_with_dev/bin/
