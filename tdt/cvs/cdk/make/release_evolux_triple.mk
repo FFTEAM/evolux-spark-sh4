@@ -17,7 +17,7 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/sbin $(prefix)/release_evolux_triple_with_dev/usr/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/script $(prefix)/release_evolux_triple_with_dev/usr/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/share $(prefix)/release_evolux_triple_with_dev/usr/
-	cp -RP $(appsdir)/neutrino-hd2/data/fonts/*.otb $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/fonts/*.otb $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/lib/*.so* $(prefix)/release_evolux_triple_with_dev/usr/lib/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2
 	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/share/fonts
@@ -42,7 +42,7 @@ $(DEPDIR)/%release_evolux_triple:
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/fonts
 	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
 #	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
-	cp -RP $(appsdir)/neutrino-hd2/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
+	cp -RP $(appsdir)/neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
@@ -99,7 +99,7 @@ endif
 		$(buildprefix)/doEVOLUX.sh; \
 	fi;
 #	cp -RP $(prefix)/release_evolux_triple_with_dev/boot/uImage $(prefix)/
-	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
+	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_triple_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_triple_with_dev/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/release_evolux_triple_with_dev/bin/

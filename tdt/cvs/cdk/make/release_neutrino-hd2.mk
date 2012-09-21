@@ -476,6 +476,7 @@ else
 endif
 	cp -RP $(buildprefix)/libvorbisidec-1.0.2+svn16259/.libs/lib*.so* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd2/boot/
+	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/deu*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/eng*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/russ*.locale $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/locale/

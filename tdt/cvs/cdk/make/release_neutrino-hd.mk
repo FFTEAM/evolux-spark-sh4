@@ -480,7 +480,7 @@ endif
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd/boot/
-
+	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino-hd/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino-hd/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release_neutrino-hd/bin/
