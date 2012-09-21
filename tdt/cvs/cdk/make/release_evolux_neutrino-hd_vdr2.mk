@@ -54,6 +54,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd_vdr2:
 		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/share/; \
 	fi
 #	cp -RP $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/boot/uImage $(prefix)/
+	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	( cd $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/var && ln -sf ../usr/local/share/vdr vdr )
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/plugins/text2skin/anthra*
 	rm -rf $(prefix)/release_evolux-neutrino-hd_vdr2_with_dev/usr/local/share/vdr/plugins/text2skin/Egal*

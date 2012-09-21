@@ -598,7 +598,7 @@ endif
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release/bin/
 
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release/boot/
-
+	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko $(prefix)/release/lib/modules/ath.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko $(prefix)/release/lib/modules/zd1201.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi_sio.ko || true

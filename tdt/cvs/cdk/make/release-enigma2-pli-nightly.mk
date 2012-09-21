@@ -657,7 +657,7 @@ endif
 	fi
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release-enigma2-pli-nightly/usr/script/
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release-enigma2-pli-nightly/boot/
-	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
+	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ath.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/zd1201.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/zd1201.ko || true
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ftdi_sio.ko || true

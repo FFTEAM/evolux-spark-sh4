@@ -450,7 +450,7 @@ endif
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino/
 
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino/boot/
-	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
+	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	cp -dp $(buildprefix)/root/usr/sbin/blkid $(prefix)/release_neutrino/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/rdate $(prefix)/release_neutrino/usr/bin/
 	cp -RP $(buildprefix)/root/bin/fbshot.bin $(prefix)/release_neutrino/bin/fbshot

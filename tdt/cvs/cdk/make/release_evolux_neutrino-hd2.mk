@@ -52,7 +52,7 @@ $(DEPDIR)/%release_evolux_neutrino-hd2:
 	fi
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_neutrino-hd2_with_dev/usr/script/
 #	cp -RP $(prefix)/release_evolux_neutrino-hd2_with_dev/boot/uImage $(prefix)/
-	cp -RP $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/
+	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_neutrino-hd2_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_neutrino-hd2_with_dev/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/release_evolux_neutrino-hd2_with_dev/bin/
