@@ -100,6 +100,23 @@ neutrino-hd-clean neutrino-hd-distclean: libstb-hal-clean neutrino-hd-plugins-cl
 		find $(appsdir)/neutrino-hd -name "Makefile.in" -exec rm -rf {} \; && \
 		rm -rf $(appsdir)/neutrino-hd/autom4te.cache
 
+neutrino-hd-update:
+	rm -f $(DEPDIR)/*neutrino*
+	cd $(appsdir)/neutrino-hd && \
+		$(MAKE) clean && \
+		find $(appsdir)/neutrino-hd -name "Makefile.in" -exec rm -rf {} \; && \
+		rm -rf $(appsdir)/neutrino-hd/autom4te.cache && \
+		rm -rf $(appsdir)/neutrino-hd/aclocal.m4 && \
+		rm -rf $(appsdir)/neutrino-hd/Configure && \
+		rm -rf $(appsdir)/neutrino-hd/config.guess && \
+		rm -rf $(appsdir)/neutrino-hd/config.sub && \
+		rm -rf $(appsdir)/neutrino-hd/COPYING && \
+		rm -rf $(appsdir)/neutrino-hd/depcomp && \
+		rm -rf $(appsdir)/neutrino-hd/INSTALL && \
+		rm -rf $(appsdir)/neutrino-hd/install-sh && \
+		rm -rf $(appsdir)/neutrino-hd/ltmain.sh && \
+		rm -rf $(appsdir)/neutrino-hd/missing && \
+		git pull
 
 #
 # neutrino-hd-plugins
