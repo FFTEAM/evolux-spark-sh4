@@ -35,11 +35,11 @@ fi
 read -t 10 -p "Kernel optimize/expand to 8mb (autoskip in 10s)? (y/N) "
 if [ $REPLY == "y" ] || [ $REPLY == "Y" ]; then
 #	cp $TMPKERNELDIR/uImage $CURDIR/uImage
-	$PAD 0x800000 $TUFSBOXDIR/uImage $TUFSBOXDIR/mtd_kernel.pad.bin
+	$PAD 0x799999 $TUFSBOXDIR/uImage $TUFSBOXDIR/mtd_kernel.pad.bin
 	rm -f $TUFSBOXDIR/uImage
 	SIZE=`stat $TUFSBOXDIR/mtd_kernel.pad.bin -t --format %s`
 	SIZE=`printf "0x%x" $SIZE`
-	if [[ $SIZE > "0x800000" ]]; then
+	if [[ $SIZE > "0x799999" ]]; then
 	  echo "KERNEL TO BIG. $SIZE instead of 0x800000" > /dev/stderr
 	fi
 	mv $TUFSBOXDIR/mtd_kernel.pad.bin $TUFSBOXDIR/uImage
