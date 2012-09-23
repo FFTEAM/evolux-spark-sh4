@@ -90,8 +90,14 @@ if [ -e $CHANGEDIR/release-enigma2-pli-nightly_with_dev ]; then
 	$USERS rm -rf $CHANGEDIR/release-enigma2-pli-nightly_with_dev
 fi
 mv $CHANGEDIR/release-enigma2-pli-nightly $CHANGEDIR/release-enigma2-pli-nightly_with_dev
-if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ]; then
-	cp -RP $BUILDDIR/own_build/enigma2/* $CHANGEDIR/release-enigma2-pli-nightly_with_dev/
+if [ ! -e $BUILDDIR/.spark7162 ]; then
+	if [ -e $BUILDDIR/own_build/enigma2/boot/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/video.elf ]; then
+		cp -RP $BUILDDIR/own_build/enigma2/boot/*.elf $CHANGEDIR/release-enigma2-pli-nightly_with_dev/boot/
+	fi
+elif [ -e $BUILDDIR/.spark7162 ]; then
+	if [ -e $BUILDDIR/own_build/enigma2/boot/spark7162/audio.elf ] || [ -e $BUILDDIR/own_build/enigma2/boot/spark7162/video.elf ]; then
+		cp -RP $BUILDDIR/own_build/enigma2/boot/spark7162/*.elf $CHANGEDIR/release-enigma2-pli-nightly_with_dev/boot/
+	fi
 else
 	echo "#############################"
 	echo "#############################"

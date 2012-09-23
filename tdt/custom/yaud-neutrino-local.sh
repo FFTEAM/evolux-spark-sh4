@@ -92,9 +92,11 @@ mv $CHANGEDIR/release_neutrino $CHANGEDIR/release_neutrino_with_dev
 if [ ! -e $BUILDDIR/.spark7162 ]; then
 	if [ -e $BUILDDIR/own_build/neutrino/boot/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/video.elf ]; then
 		cp -RP $BUILDDIR/own_build/neutrino/boot/*.elf $CHANGEDIR/release_neutrino_with_dev/boot/
+	fi
 elif [ -e $BUILDDIR/.spark7162 ]; then
 	if [ -e $BUILDDIR/own_build/neutrino/boot/spark7162/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/spark7162/video.elf ]; then
 		cp -RP $BUILDDIR/own_build/neutrino/boot/spark7162/*.elf $CHANGEDIR/release_neutrino_with_dev/boot/
+	fi
 else
 	echo "#############################"
 	echo "#############################"
