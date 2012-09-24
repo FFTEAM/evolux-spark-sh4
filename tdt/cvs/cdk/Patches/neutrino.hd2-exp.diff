@@ -29,24 +29,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-09-15 11:56:48.587543661 +0200
 +++ neutrino-hd2-exp/src/neutrino.cpp	2012-09-15 12:19:28.134285299 +0200
-@@ -3126,7 +3126,7 @@
- 				nGLCD::unlockChannel();
- #endif				
- 			}
--//#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)			
-+#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)			
- 			else if(msg == CRCInput::RC_picture) 	// picture viewer
- 			{
- 				StopSubtitles();
-@@ -3136,7 +3136,7 @@
- 				
- 				StartSubtitles();
- 			}
--//#endif			
-+#endif			
- 			else if (CRCInput::isNumeric(msg) && g_RemoteControl->director_mode ) 
- 			{
- 				StopSubtitles();
 @@ -4364,15 +4364,15 @@
  		{
  			if ( msg == CRCInput::RC_plus ) 
@@ -83,8 +65,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	{ VIDEO_STD_1080I60, NONEXISTANT_LOCALE, "1080i 60Hz"	},
  	{ VIDEO_STD_720P60, NONEXISTANT_LOCALE, "720p 60Hz"	},
  	{ VIDEO_STD_1080P24, NONEXISTANT_LOCALE, "1080p 24Hz"	},
--	{ VIDEO_STD_1080P25, NONEXISTANT_LOCALE, "1080p 24Hz"	},
-+	{ VIDEO_STD_1080P25, NONEXISTANT_LOCALE, "1080p 25Hz"	},
+	{ VIDEO_STD_1080P25, NONEXISTANT_LOCALE, "1080p 25Hz"	},
  	{ VIDEO_STD_1080P30, NONEXISTANT_LOCALE, "1080p 30Hz"	},
 +	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz"	},
  	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
