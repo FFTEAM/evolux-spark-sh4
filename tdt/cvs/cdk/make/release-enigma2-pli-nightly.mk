@@ -118,6 +118,8 @@ endif
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release-enigma2-pli-nightly/etc/
 if !ENABLE_SPARK7162
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
+	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release-enigma2-pli-nightly/etc/
+	( cd $(prefix)/release-enigma2-pli-nightly/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
 else
 	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
