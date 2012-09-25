@@ -43,7 +43,6 @@ $(DEPDIR)/%release_evolux_triple:
 	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
 #	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
 	cp -RP $(appsdir)/neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
-	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
@@ -77,12 +76,11 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 #	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
-if !ENABLE_SPARK7162
-	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
+if ENABLE_SPARK
+	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
 else
 	echo "EvoTRIPLEX" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
-	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark7162 $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 endif
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_triple_with_dev/usr/script/

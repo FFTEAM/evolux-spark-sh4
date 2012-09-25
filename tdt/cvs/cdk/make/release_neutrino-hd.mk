@@ -48,17 +48,13 @@ $(DEPDIR)/%release_neutrino-hd:
 	cp -dp $(targetprefix)/etc/init.d/portmap $(prefix)/release_neutrino-hd/etc/init.d/ && \
 	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release_neutrino-hd/etc/init.d/ && \
 	cp -dp $(targetprefix)/usr/bin/ffmpeg $(prefix)/release_neutrino-hd/sbin/
-if !ENABLE_SPARK7162
-	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
+if ENABLE_SPARK
 	cp $(targetprefix)/boot/video_7111.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	\
-	cp $(targetprefix)/boot/audio.elf $(prefix)/release_neutrino-hd/boot/audio.elf && \
 	cp $(targetprefix)/boot/audio_7111.elf $(prefix)/release_neutrino-hd/boot/audio.elf
 else
-	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	cp $(targetprefix)/boot/video_7105.elf $(prefix)/release_neutrino-hd/boot/video.elf && \
 	\
-	cp $(targetprefix)/boot/audio.elf $(prefix)/release_neutrino-hd/boot/audio.elf && \
 	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release_neutrino-hd/boot/audio.elf
 endif
 	cp -a $(targetprefix)/dev/* $(prefix)/release_neutrino-hd/dev/ && \
@@ -147,7 +143,7 @@ endif
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-stv6306.fw
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-cx24116.fw
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/dvb-fe-cx21143.fw
-if !ENABLE_SPARK7162
+if ENABLE_SPARK
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_neutrino-hd/lib/modules/
 	rm -f $(prefix)/release_neutrino-hd/lib/firmware/component_7105_pdk7105.fw
 	mv $(prefix)/release_neutrino-hd/lib/firmware/component_7111_mb618.fw $(prefix)/release_neutrino-hd/lib/firmware/component.fw
@@ -467,14 +463,17 @@ endif
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/neutrino #############
 #	rm $(prefix)/release_neutrino-hd/bin/mount
 	cp -RP $(buildprefix)/own_build/neutrino/* $(prefix)/release_neutrino-hd/
-if !ENABLE_SPARK7162
-	if [ -e $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
+if ENABLE_SPARK
+	if [ -d $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
 		rm -rf $(prefix)/release_neutrino-hd/boot/spark7162; \
 	fi
 else
-	if [ -e $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
-		rm $(prefix)/release_neutrino-hd/boot/*.elf && cp $(prefix)/release_neutrino-hd/boot/spark7162/*.elf $(prefix)/release_neutrino-hd/boot/ && rm -rf $(prefix)/release_neutrino-hd/boot/spark7162; \
+	if [ -d $(prefix)/release_neutrino-hd/boot/spark7162 ]; then \
+		rm $(prefix)/release_neutrino-hd/boot/*.elf; \
+		cp $(prefix)/release_neutrino-hd/boot/spark7162/*.elf $(prefix)/release_neutrino-hd/boot/; \
+		rm -rf $(prefix)/release_neutrino-hd/boot/spark7162; \
 	fi
+	touch $(prefix)/release_neutrino-hd/etc/.spark7162
 endif
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm

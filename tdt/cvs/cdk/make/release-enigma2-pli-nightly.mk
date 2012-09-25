@@ -116,7 +116,7 @@ endif
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release-enigma2-pli-nightly/sbin
 
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release-enigma2-pli-nightly/etc/
-if !ENABLE_SPARK7162
+if ENABLE_SPARK
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
 	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release-enigma2-pli-nightly/etc/
 	( cd $(prefix)/release-enigma2-pli-nightly/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
@@ -124,7 +124,7 @@ if !ENABLE_SPARK7162
 else
 	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
 endif
-	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release-enigma2-pli-nightly/bin/
+	cp -dp $(targetprefix)/bin/evremote2.amiko $(prefix)/release-enigma2-pli-nightly/bin/
 	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release-enigma2-pli-nightly/usr/bin/
@@ -153,7 +153,7 @@ endif
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/evremote
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/gotosleep
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/vdstandby
-if !ENABLE_SPARK7162
+if ENABLE_SPARK
 	mv $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7111_mb618.fw $(prefix)/release-enigma2-pli-nightly/lib/firmware/component.fw
 	rm $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7105_pdk7105.fw
 else
@@ -326,11 +326,9 @@ release-enigma2-pli-nightly_base:
 	cp -RP $(buildprefix)/root/usr/local/share/enigma2/keymap_spark.xml $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/keymap.xml && \
 	echo "576i50" > $(prefix)/release-enigma2-pli-nightly/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release-enigma2-pli-nightly/etc/fonts/
-if !ENABLE_SPARK7162
+
 	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
-else
-	cp $(buildprefix)/root/release/rcS_stm23_24_spark7162 $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS
-endif
+
 	chmod 755 $(prefix)/release-enigma2-pli-nightly/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release-enigma2-pli-nightly/etc/init.d/ && \
@@ -401,7 +399,7 @@ endif
 
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-if !ENABLE_SPARK7162
+if ENABLE_SPARK
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 else
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
@@ -644,14 +642,17 @@ endif
 #	rm $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/radio.mvi
 
 	cp -RP $(buildprefix)/own_build/enigma2/* $(prefix)/release-enigma2-pli-nightly/
-if !ENABLE_SPARK7162
-	if [ -e $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
+if ENABLE_SPARK
+	if [ -d $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
 		rm -rf $(prefix)/release-enigma2-pli-nightly/boot/spark7162; \
 	fi
 else
-	if [ -e $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
-		rm $(prefix)/release-enigma2-pli-nightly/boot/*.elf && cp $(prefix)/release-enigma2-pli-nightly/boot/spark7162/*.elf $(prefix)/release-enigma2-pli-nightly/boot/ && rm -rf $(prefix)/release-enigma2-pli-nightly/boot/spark7162; \
+	if [ -d $(prefix)/release-enigma2-pli-nightly/boot/spark7162 ]; then \
+		rm $(prefix)/release-enigma2-pli-nightly/boot/*.elf; \
+		cp $(prefix)/release-enigma2-pli-nightly/boot/spark7162/*.elf $(prefix)/release-enigma2-pli-nightly/boot/; \
+		rm -rf $(prefix)/release-enigma2-pli-nightly/boot/spark7162; \
 	fi
+	touch $(prefix)/release-enigma2-pli-nightly/etc/.spark7162
 endif
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release-enigma2-pli-nightly/bin/
 	if [ ! -e $(prefix)/release-enigma2-pli-nightly/usr/script ]; then \
