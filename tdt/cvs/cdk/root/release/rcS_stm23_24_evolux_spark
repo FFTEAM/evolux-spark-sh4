@@ -1,0 +1,635 @@
+#!/bin/sh
+if [ -e /etc/.spark7162 ]; then
+	TRIPLEX=1
+	DISPLAY=7105
+	SCARTOUT=""
+else
+	DISPLAY=7111
+	SCARTOUT="STi7111Device_scart_output=1"
+fi
+
+MODDIR=/lib/modules
+PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
+echo "init frontpanel"
+#insmod $MODDIR/vfd.ko
+mknod /dev/vfd c 147 0 2>/dev/null
+mknod /dev/rc c 147 1 2>/dev/null
+mknod /dev/sci0 c 169 0 2>/dev/null
+if [ -n "$TRIPLEX" ]; then
+	mknod /dev/sci1 c 169 1 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend1 c 212 19 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend2 c 212 35 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend3 c 212 51 2>/dev/null
+fi
+insmod $MODDIR/aotom.ko
+if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
+	insmod $MODDIR/simu_button.ko
+fi
+[ -e $MODDIR/encrypt.ko ] && insmod $MODDIR/encrypt.ko
+
+if [ ! -e /dev/.devfsd ]; then
+	touch /dev/.devfsd
+fi
+if [ ! -e /dev/.udev ]; then
+	touch /dev/.udev
+fi
+
+rm -f /etc/.start_spark >/dev/null 2>&1
+if [ ! -e /etc/enigma2 ] && [ -e /usr/local/bin/enigma2 ]; then
+	rm /usr/local/bin/enigma2
+fi
+if [ ! -e /etc/enigma2 ] && [ -e /var/plugins/starte2.sh ]; then
+	rm -f /var/plugins/*e2* >/dev/null 2>&1
+fi
+if [ -f /etc/.start_vdr ] && [ -e /usr/local/bin/vdr ]
+then
+	rm -f /etc/.start_enigma2 >/dev/null 2>&1
+	#(sleep 20;echo bestfit > /proc/stb/video/policy) &
+	START_VDR=1
+elif [ -f /etc/.start_enigma2 ] && [ -e /usr/local/bin/enigma2 ]
+then
+	START_E2=1
+elif [ -e /usr/local/bin/neutrino ] || [ -e /usr/local/bin_nhd/neutrino ]
+then
+	START_NEUTRINO=1
+elif [ -e /usr/local/bin/enigma2 ]
+then
+	START_E2=1
+fi
+
+if [ -n "$START_E2" ]; then
+	eval `egrep '^config\.(psi|plugins\.PinkPanel)\.' /etc/enigma2/settings | tr . _ `
+fi
+
+check_nfs_mount() {
+nfstype0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_0 | cut -d = -f2`
+nfstype1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_1 | cut -d = -f2`
+nfstype2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_type_2 | cut -d = -f2`
+amount0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_0 | cut -d = -f2`
+amount1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_1 | cut -d = -f2`
+amount2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_automount_2 | cut -d = -f2`
+ip0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_0 | cut -d = -f2`
+ip1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_1 | cut -d = -f2`
+ip2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_ip_2 | cut -d = -f2`
+nfs_dir0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_0 | cut -d = -f2`
+nfs_dir1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_1 | cut -d = -f2`
+nfs_dir2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_dir_2 | cut -d = -f2`
+nfs_local_dir0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_0 | cut -d = -f2`
+nfs_local_dir1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_1 | cut -d = -f2`
+nfs_local_dir2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_local_dir_2 | cut -d = -f2`
+options1_0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_0 | cut -d = -f2`
+options1_1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_1 | cut -d = -f2`
+options1_2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options1_2 | cut -d = -f2`
+rsize0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_0 | cut -d = -f3`
+wsize0=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_0 | cut -d = -f4`
+rsize1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_1 | cut -d = -f3`
+wsize1=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_1 | cut -d = -f4`
+rsize2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_2 | cut -d = -f3`
+wsize2=`cat /usr/local/share/config/neutrino.conf | grep network_nfs_mount_options2_2 | cut -d = -f4`
+if [ "$nfstype0" == "0" ]; then
+	nfstype0="nfs"
+else
+	nfstype0="cifs"
+fi
+if [ "$nfstype1" == "0" ]; then
+	nfstype1="nfs"
+else
+	nfstype1="cifs"
+fi
+if [ "$nfstype2" == "0" ]; then
+	nfstype2="nfs"
+else
+	nfstype2="cifs"
+fi
+if [ "$amount0" == "1" ]; then
+	mount -t "$nfstype0" "$ip0":"$nfs_dir0" "$nfs_local_dir0" -o "$options1_0",nolock,rsize="$rsize0"="$wsize0" &
+fi
+if [ "$amount1" == "1" ]; then
+	mount -t "$nfstype1" "$ip1":"$nfs_dir1" "$nfs_local_dir1" -o "$options1_1",nolock,rsize="$rsize1"="$wsize1" &
+fi
+if [ "$amount2" == "1" ]; then
+	mount -t "$nfstype2" "$ip2":"$nfs_dir2" "$nfs_local_dir2" -o "$options1_2",nolock,rsize="$rsize2"="$wsize2" &
+fi
+}
+
+startVideoTuneEnhanced() {
+	until [ -e /proc/stb/video/plane/psi_contrast ] ; do sleep 1 ; done
+
+	[ -z "$config_psi_contrast" ] && config_psi_contrast=128
+	[ -z "$config_psi_saturation" ] && config_psi_saturation=128
+	[ -z "$config_psi_brightness" ] && config_psi_brightness=128
+	[ -z "$config_psi_hue" ] && config_psi_hue=128
+	
+	echo $config_psi_contrast > /proc/stb/video/plane/psi_contrast
+	echo $config_psi_saturation > /proc/stb/video/plane/psi_saturation
+	echo $config_psi_brightness > /proc/stb/video/plane/psi_brightness
+	echo $config_psi_hue > /proc/stb/video/plane/psi_tint
+}
+
+dualTuner() {
+if [ ! -e /dev/dvb/adapter1 ]; then
+	mkdir /dev/dvb/adapter1
+	mknod /dev/dvb/adapter1/video0 c 212 64
+	mknod /dev/dvb/adapter1/audio0 c 212 65
+	mknod /dev/dvb/adapter1/frontend0 c 212 67
+	mknod /dev/dvb/adapter1/demux0 c 212 68
+	mknod /dev/dvb/adapter1/dvr0 c 212 69
+	mknod /dev/dvb/adapter1/ca0 c 212 70
+	ln -s /dev/dvb/adapter1/ca0 /dev/dvb/adapter1/ca1
+	mknod /dev/dvb/adapter1/net0 c 212 71
+	mknod /dev/dvb/adapter1/osd0 c 212 72
+fi
+if [ ! -e /var/run/mumudvb ]; then
+	mkdir -p /var/run/mumudvb
+fi
+insmod $MODDIR/dvb-usb.ko
+insmod $MODDIR/dvb-pll.ko
+insmod $MODDIR/mt2060.ko
+insmod $MODDIR/mxl5005s.ko
+insmod $MODDIR/qt1010.ko
+insmod $MODDIR/tda18218.ko
+insmod $MODDIR/tda18271.ko
+insmod $MODDIR/af9013.ko
+insmod $MODDIR/dvb-usb-af9015.ko
+}
+
+/etc/init.d/mountvirtfs start
+/etc/init.d/portmap start
+if [ ! -e /etc/.dualTuner ] && [ -e /dev/dvb/adapter1 ]; then
+	rm -rf /dev/dvb/adapter1 >/dev/null 2>&1
+fi
+
+if [ -n "$TRIPLEX" ]; then
+	rm /dev/dvb/adapter0/ca1 && mknod -m 660 /dev/dvb/adapter0/ca1 c 212 6 2>/dev/null
+	mknod -m 660 /dev/dvb/adapter0/ca2 c 212 22 2>/dev/null
+	mknod -m 660 /dev/dvb/adapter0/ca3 c 212 38 2>/dev/null
+else
+	(cd /dev/dvb/adapter0 && ln -sf ca0 ca1) &
+fi
+(if [ -e /media/net ]; then rm -rf /media/net;fi;ln -sf /mnt/nfs /media/net) &
+#awk -f /etc/init.d/getfb.awk /dev/input/event1 &
+
+insmod $MODDIR/e2_proc.ko
+#insmod $MODDIR/autofs4.ko
+
+if [ ! -e /var/etc/.firstboot ]; then
+
+	echo "Starting DEBUG Interface"
+	/etc/init.d/mountall start
+	/etc/init.d/hostname start
+	# echo "starting telnetd vsftpd inetd mountall"
+#	/usr/sbin/telnetd -l /bin/login
+#	/etc/init.d/vsftpd start
+	/usr/sbin/inetd
+	echo "init stmfb"
+
+	if [ -e /etc/.start_enigma2 ]; then
+		isactive1=`cat /etc/enigma2/settings | grep config.av.videoport= | cut -d = -f2`
+		if [ "$isactive1" = HDMI ] || [ -e /etc/.hdmi ]; then
+			MEMSIZE=12m
+			[ -e /etc/.15m ] && MEMSIZE=15m
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko
+			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
+		else
+			MEMSIZE=12m
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko "$SCARTOUT"
+	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
+		fi
+	elif [ -e /etc/.start_vdr ]; then
+			MEMSIZE=12m
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko
+			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
+	else	
+		isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+		if [ "$isactive1" = 2 ]; then
+			if [ -e /etc/.nhd ]; then
+				MEMSIZE=12m
+			else
+				MEMSIZE=4m
+			fi
+#		        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko "$SCARTOUT"
+			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
+		else
+			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
+				MEMSIZE=12m
+			else
+				MEMSIZE=8m
+			fi
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko
+			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
+		fi
+	fi
+	echo "LOADING MODULES"   
+	echo "LOAD" > /dev/vfd
+
+	if [ -e /boot/audio.elf ] && [ -e /boot/video.elf ]; then
+		echo "load a firmware"
+		/bin/ustslave /dev/st231-1 /boot/audio.elf
+		echo "load v firmware"
+		/bin/ustslave /dev/st231-0 /boot/video.elf
+	else
+		echo "FIRMWARE MISSING (*.elf) !!!"
+	fi
+
+	[ -e $MODDIR/cpu_frequ.ko ] && insmod $MODDIR/cpu_frequ.ko
+
+	echo "init embx"
+	insmod $MODDIR/embxshell.ko
+	insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
+	insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
+	insmod $MODDIR/mme_host.ko transport0=shm
+	echo "init AVS"
+	# insmod $MODDIR/avs.ko type=spark_avs
+	insmod $MODDIR/avs.ko type=avs_pio
+	player=`cat /proc/stb/player/version`
+	echo "init player $player"
+
+	insmod $MODDIR/mmelog.ko
+	insmod $MODDIR/ksound.ko
+	insmod $MODDIR/p2div64.ko
+	insmod $MODDIR/stm_v4l2.ko
+	insmod $MODDIR/stmvout.ko
+	insmod $MODDIR/stmvbi.ko
+	insmod $MODDIR/pseudocard.ko
+	if [ -n "$TRIPLEX" ]; then
+		insmod $MODDIR/spark7162.ko UnionTunerType=t #t=terrestical, c=cable
+	else
+		insmod $MODDIR/stv090x.ko
+	fi
+	insmod $MODDIR/pti.ko #waitMS=20 videoMem=4096
+	insmod $MODDIR/stm_monitor.ko
+	insmod $MODDIR/stmsysfs.ko
+	#   whichSTM=`uname -a | grep stm23`
+	#   if [ -z "$whichSTM" ]; then
+	#      insmod $MODDIR/stmdvb.ko TSsource0=0
+	#   else
+	insmod $MODDIR/stmdvb.ko
+	#   fi
+	#   insmod $MODDIR/player2.ko
+	insmod $MODDIR/player2.ko discardlateframe=0
+	insmod $MODDIR/sth264pp.ko
+	insmod $MODDIR/stmalloc.ko
+	insmod $MODDIR/platform.ko
+	insmod $MODDIR/silencegen.ko
+	insmod $MODDIR/bpamem.ko
+	mknod /dev/bpamem c 153 0 
+	insmod $MODDIR/smartcard.ko
+	insmod $MODDIR/tun.ko
+	[ -e $MODDIR/cpu_frequ.ko ] && insmod $MODDIR/uinput.ko
+# leave dotfilecode in for E2 as pinkpanel will touch dotfile for it. ntrino use other code so no prob
+	[ -n "$START_E2" -a -e /etc/.cec ] && insmod $MODDIR/cec.ko activemode=1
+	if [ ! -e /dev/input/uinput ]; then
+		mknod -m 644 /dev/input/uinput c 10 223
+	fi
+	[ -n "$START_E2" ] && eplayer3 /boot/startup.mp4 &
+
+	stfbcontrol a 0
+#	whichbox=`cat /proc/cmdline | grep "hwaddr:" | awk -F "hwaddr:" '{print $2}' | cut -f1 -d " " | cut -f3 -d ":"`
+#	case $whichbox in
+#		07|08)
+#			echo "RC-default"
+#			;;
+#		*) [ -e /bin/evremote2.amiko ] && rm /bin/evremote2 && mv /bin/evremote2.amiko /bin/evremote2
+#		   [ -e /etc/lircd.conf.amiko ] && rm /etc/lircd.conf && mv /etc/lircd.conf.amiko /etc/lircd.conf;;
+#	esac
+
+	major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
+	[ -n "$major" ] && {
+		rm -f /dev/sparkid
+		mknod /dev/sparkid c $major 0 
+	}
+
+	echo 1 > /proc/sys/kernel/panic
+	echo 2 > /proc/cpu/alignment
+
+
+#	/usr/sbin/automount --timeout=30 /autofs file /etc/auto.usb
+	/etc/init.d/autofs start
+#	if [ -e /usr/local/bin/enigma2 ]; then
+		rm -rf /media/hdd >/dev/null 2>&1
+		rm -rf /media/hdd2 >/dev/null 2>&1
+		mkdir -p /media/hdd >/dev/null 2>&1
+		mkdir -p /media/hdd2 >/dev/null 2>&1
+		(sleep 8
+		if [ -e /autofs/sda1 ]; then
+			mount -o bind /autofs/sda1 /media/hdd
+			stdFolders="movies music pictures swap epg timeshift"
+			for i in $stdFolders
+			do
+			mkdir -p /media/hdd/$i
+			done
+		fi
+		if [ -e /autofs/sda2 ]; then
+			mount -o bind /autofs/sda2 /media/hdd2
+			stdFolders="movies music pictures swap epg timeshift"
+			for i in $stdFolders
+			do
+			mkdir -p /media/hdd2/$i
+			done
+		fi
+		[ -e /autofs/sda1/logo ] && mount -o bind /autofs/sda1/logo  /usr/local/share/neutrino/icons/logo &
+		if [ -e /autofs/sda1/picon ] && [ -e /usr/local/share/enigma2/picon ]; then
+			mount -o bind /autofs/sda1/picon  /usr/local/share/enigma2/picon &
+		fi
+		) &
+#	else
+#		if [ -e /autofs/sda1 ]; then
+#			rm -rf /media/hdd >/dev/null 2>&1
+#			ln -sf /autofs/sda1 /media/hdd
+#		fi
+#		if [ -e /autofs/sda2 ]; then
+#			rm -rf /media/hdd2 >/dev/null 2>&1
+#			ln -sf /autofs/sda2 /media/hdd2
+#		fi
+#		stdFolders="movies music pictures swap epg timeshift"
+#		for i in $stdFolders
+#		do
+#		mkdir -p /media/hdd/$i
+#		done
+#		[ -e /autofs/sda1/logo ] && mount -o bind /autofs/sda1/logo  /usr/local/share/neutrino/icons/logo &
+#		if [ -e /autofs/sda1/picon ] && [ -e /usr/local/share/enigma2/picon ]; then
+#			mount -o bind /autofs/sda1/picon  /usr/local/share/enigma2/picon &
+#		fi
+#	fi
+	[ -e /etc/.dualTuner ] && [ -e /etc/.start_enigma2 ] && dualTuner &
+	[ -e /etc/.fritzcall ] && (sleep 20; /var/plugins/fritzcall/fb.sh start) &
+	[ -e /etc/.extdisplay ] && [ ! -e /etc/.start_enigma2 ] && (sleep 20; /etc/init.d/extDisplay.sh) &
+	# green led off
+
+	/bin/fp_control -w >/dev/null
+	(sleep 10;/bin/fp_control -l 1 0) &
+
+	if [ -n "$START_E2" ]
+	then
+		PLL0=/proc/cpu_frequ/pll0_ndiv_mdiv
+		[ -e $PLL0 ] && [ -n "$config_plugins_PinkPanel_oclock" ] && echo $(($config_plugins_PinkPanel_oclock/10 * 256 + 3)) > $PLL0
+	fi
+
+	stfbcontrol a 255
+
+	[ -f /etc/modules.extra ] && eval `awk '{ if ($1) print "insmod /lib/modules/" $1 ".ko " $2,$3,$4,$5,$6,$7,$8,$9 "; "}' < /etc/modules.extra`
+
+	### eth start ###
+	NFS=`grep -c nfs /proc/cmdline`
+	if [ "$NFS" -eq "1" ]; then
+	      echo "Booting from nfs, don't set network"
+	else
+		ifconfig eth0 down
+		/etc/init.d/networking restart
+	fi
+
+	echo "init lircd"
+	if [ -n "$TRIPLEX" ]; then
+		if [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.start_vdr ] && [ -e /etc/.nhd ]; then
+			/usr/bin/lircd -u /etc/lircd.conf
+		else
+			/usr/bin/lircd /etc/lircd.conf
+
+		fi
+	else
+		if [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.start_vdr ] && [ -e /etc/.nhd ]; then
+			LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
+			[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
+			/usr/bin/lircd -u $LIRCD_CONF
+		else
+			LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
+			[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
+			/usr/bin/lircd $LIRCD_CONF
+
+		fi
+	fi
+	/usr/bin/irexec -d /etc/lircrc
+	# /bin/evremote2 05 30 &
+
+	if [ -n "$START_E2" ] || [ -n "$START_VDR" ]; then
+#		[ -z "$config_plugins_PinkPanel_RCid" ] && config_plugins_PinkPanel_RCid=10
+#		[ -z "$config_plugins_PinkPanel_RCrd" ] && config_plugins_PinkPanel_RCrd=120
+		/bin/evremote2 5 200 & # $config_plugins_PinkPanel_RCid $config_plugins_PinkPanel_RCrd &
+		rm -f /etc/.extdisplay >/dev/null 2>&1
+	else
+		if [ ! -e /etc/.nhd ]; then
+			/bin/evremote2 5 200 &
+		fi
+	fi
+
+	if [ -n "$START_NEUTRINO" ]; then
+		if [ -e /etc/.EVOfirstboot ]; then
+			if [ `cat /sys/class/stmcoredisplay/display0/hdmi0.0/hotplug` == "y" ]; then
+				if [ -e /usr/local/share/config/neutrino.conf.hdmi ]; then
+					rm /usr/local/share/config/neutrino.conf >/dev/null 2>&1
+					mv /usr/local/share/config/neutrino.conf.hdmi /usr/local/share/config/neutrino.conf
+				fi
+				touch /etc/.hdmi
+			        echo "HDMI" > /dev/vfd
+			else
+				if [ -e /usr/local/share/config/neutrino.conf.scart ]; then
+					mv /usr/local/share/config/neutrino.conf /usr/local/share/config/neutrino.conf.hdmi
+					mv /usr/local/share/config/neutrino.conf.scart /usr/local/share/config/neutrino.conf
+				fi
+				rm -f /etc/.hdmi >/dev/null 2>&1
+				echo "SCART" > /dev/vfd
+			fi
+			sleep 3
+			rm /etc/.EVOfirstboot
+		fi
+		isactive2=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+		if [ "$isactive2" = 2 ]; then #2=pal by osd!
+			stfbcontrol rf cc cy cs #hd=hdmi-off, rf=full-rgb, fa=adaptive flicker on, cc=cvbs-out on, cr=component-out on
+			pzapit --pal
+		fi
+	fi
+
+	[ -e /usr/script/user_script.sh ] && /usr/script/user_script.sh &
+
+	[ -n "$START_E2" ] && (sleep 29;startVideoTuneEnhanced) &
+	
+	#neutrinoTuxtxt=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+	#if [ $neutrinoTuxtxt == "7" ]; then
+	#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_720.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+	#else
+	#   ln -sf /usr/local/share/config/tuxtxt/tuxtxt2_1080.conf /usr/local/share/config/tuxtxt/tuxtxt2.conf
+	#fi
+	/etc/init.d/Swap.sh &
+	[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common start;/etc/init.d/nfs-kernel-server start) &
+# correct volume output level as orig
+	/usr/bin/amixer -c 1 set Analog playback '75%' unmute
+	/usr/bin/amixer -c 1 set SPDIF playback '75%' unmute
+	/usr/bin/amixer -c 1 set HDMI playback '75%' unmute
+
+	echo "run" > /dev/vfd
+	if [ -n "$START_E2" ]; then
+		echo "LOADING E2"
+
+		until false
+		do
+			echo "starting e2->"
+			/usr/local/bin/enigma2
+			rtv=$?
+			echo "e2 ended <- RTV: " $rtv
+			case "$rtv" in
+			0)	echo "$rtv"
+			   echo "E2 ERROR"
+			   killall -9 enigma2;;
+			1)	echo "$rtv"
+				echo "SHUTDOWN"
+				sync
+				[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
+				HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda1 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda1
+				fi
+				HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check2"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd2 >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda2 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda2
+				fi
+				init 0;;
+			2)	echo "$rtv"
+				echo "REBOOT"
+				init 6;;
+			3)	echo "$rtv"
+				echo "E2 RESTART"
+				killstuff='enigma2 oscam CCcam Scam gbox spcs camd3 incubusCamd mbox mgcamd';for i in $killstuff;do if pidof $i > /dev/null;then kill `pidof $i`;fi;done;for i in $killstuff;do if pidof $i > /dev/null;then kill -9 `pidof $i`;fi;done
+				;;
+			*)	echo "*"
+				echo "ERROR"
+				killstuff='enigma2 oscam CCcam Scam gbox spcs camd3 incubusCamd mbox mgcamd';for i in $killstuff;do if pidof $i > /dev/null;then kill `pidof $i`;fi;done;for i in $killstuff;do if pidof $i > /dev/null;then kill -9 `pidof $i`;fi;done
+				;;
+			esac
+		done 
+
+	elif [ -n "$START_VDR" ]; then
+		/etc/init.d/DisplayTime.sh &
+		/etc/init.d/ntpupdate.sh &
+		/usr/local/bin/runvdr
+
+	else
+		if [ -n "$TRIPLEX" ]; then
+			if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
+				/etc/init.d/DisplayTime.sh &
+			fi
+			if [ -e /etc/.nhd2 ]; then
+				check_nfs_mount
+				if [ -e /etc/.fritzcall ]; then
+					(sleep 12;/var/plugins/fritzcall/fb.sh START) &
+				fi
+			fi
+		else
+			if [ -e /etc/.nhd ] && [ ! -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd ]; then
+				rm /usr/local/share/config >/dev/null 2>&1
+				rm /usr/local/share/fonts >/dev/null 2>&1
+				rm /usr/local/share/iso-codes >/dev/null 2>&1
+				rm /usr/local/share/neutrino >/dev/null 2>&1
+				rm /usr/local/bin/neutrino >/dev/null 2>&1
+				rm /usr/local/bin/pzapit >/dev/null 2>&1
+				rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
+				ln -sf /usr/local/share_nhd/config /usr/local/share/config
+				ln -sf /usr/local/share_nhd/fonts /usr/local/share/fonts
+				ln -sf /usr/local/share_nhd/iso-codes /usr/local/share/iso-codes
+				ln -sf /usr/local/share_nhd/neutrino /usr/local/share/neutrino
+				ln -sf /usr/local/bin_nhd/neutrino /usr/local/bin/neutrino
+				ln -sf /usr/local/bin_nhd/pzapit /usr/local/bin/pzapit
+				ln -sf /usr/local/bin_nhd/sectionsdcontrol /usr/local/bin/sectionsdcontrol
+				ln -sf /bin/mhwepg /usr/local/bin/mhwepg
+	#			mount -o bind /usr/local/share_nhd /usr/local/share
+	#			mount -o bind /usr/local/bin_nhd /usr/local/bin
+			elif [ -e /etc/.nhd2 ] && [ -d /usr/local/share_nhd2 ]; then
+				rm /usr/local/share/config >/dev/null 2>&1
+				rm /usr/local/share/fonts >/dev/null 2>&1
+				rm /usr/local/share/iso-codes >/dev/null 2>&1
+				rm /usr/local/share/neutrino >/dev/null 2>&1
+				rm /usr/local/bin/neutrino >/dev/null 2>&1
+				rm /usr/local/bin/pzapit >/dev/null 2>&1
+				rm /usr/local/bin/sectionsdcontrol >/dev/null 2>&1
+				ln -sf /usr/local/share_nhd2/config /usr/local/share/config
+				ln -sf /usr/local/share_nhd2/fonts /usr/local/share/fonts
+				ln -sf /usr/local/share_nhd2/iso-codes /usr/local/share/iso-codes
+				ln -sf /usr/local/share_nhd2/neutrino /usr/local/share/neutrino
+				ln -sf /usr/local/bin_nhd2/neutrino /usr/local/bin/neutrino
+				ln -sf /usr/local/bin_nhd2/pzapit /usr/local/bin/pzapit
+				ln -sf /usr/local/bin_nhd2/sectionsdcontrol /usr/local/bin/sectionsdcontrol
+				ln -sf /bin/mhwepg /usr/local/bin/mhwepg
+				/etc/init.d/DisplayTime.sh &
+			fi
+		fi
+		echo "LOADING neutrino"
+
+		until false
+		do
+			echo "starting neutrino ->"
+			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
+				/usr/local/bin/neutrino
+			else
+				/usr/local/bin/neutrino -f -u
+			fi
+			rtv=$?
+			echo "neutrino ended <- RTV: " $rtv
+			case "$rtv" in
+			0|1)	echo "$rtv"
+				sync
+				[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
+				HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda1 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda1
+				fi
+				HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+				if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+					echo "hdd-check2"
+					echo "FSCK" > /dev/vfd
+					umount /media/hdd2 >/dev/null 2>&1
+					umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+					umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+					umount /dev/sda2 >/dev/null 2>&1
+					fsck."$HDDON" -p /dev/sda2
+				fi
+				if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
+					if [ -e /tmp/.reboot ]; then # gets created by neutrino
+						echo "rebooting..."
+						init 6
+					else
+						echo "shutting down..."
+						if [ -e /etc/.corrvol ]; then
+							cat /proc/stb/avs/0/volume > /etc/.lastVol
+						fi
+						init 0
+					fi
+				else
+					echo "SHUTDOWN"
+					init 0
+				fi;;
+			2)	echo "$rtv"
+				echo "REBOOT"
+				sync
+				init 6;;
+			*) echo "$rtv"
+				echo "ERROR"
+				#echo "0" > /proc/progress;;
+				init 6;;
+			esac
+		done 
+	fi
+fi
+
+#never reached
+#echo "REBOOT PINGULUX" > /dev/vfd
+#echo "REBOOT PINGULUX"
+#reboot -f
+
