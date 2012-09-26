@@ -50,7 +50,7 @@ $(DEPDIR)/neutrino-hd2.do_compile: $(appsdir)/neutrino-hd2/config.status
 	cd $(appsdir)/neutrino-hd2-exp && $(MAKE)
 	touch $@
 
-$(DEPDIR)/neutrino-hd2: curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd2.do_prepare neutrino-hd2.do_compile
+$(DEPDIR)/neutrino-hd2: curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 neutrino-hd2.do_prepare neutrino-hd2.do_compile
 	$(MAKE) -C $(appsdir)/neutrino-hd2-exp install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
