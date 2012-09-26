@@ -188,7 +188,7 @@ else
 endif
 
 evolux-neutrino-hd2-pli: yaud-neutrino-hd2 \
-		yaud-enigma2-pli-nightly \
+		enigma2-pli-nightly enigma2-pli-nightly-misc  enigma2-pli-plugins release-enigma2-pli-nightly \
 		release_evolux_neutrino-hd2_pli
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img
@@ -198,9 +198,9 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
-evolux-neutrino-hd2-pli-full: yaud-none host-python lirc stslave \
-		yaud-neutrino-hd2 \
-		yaud-enigma2-pli-nightly \
+evolux-neutrino-hd2-pli-full: yaud-neutrino-hd2 \
+		yaud-none host-python lirc stslave \
+		boot-elf remote firstboot enigma2-pli-nightly enigma2-pli-nightly-misc  enigma2-pli-plugins release-enigma2-pli-nightly \
 		release_evolux_neutrino-hd2_pli
 	@TUXBOX_YAUD_CUSTOMIZE@
 #make flash img

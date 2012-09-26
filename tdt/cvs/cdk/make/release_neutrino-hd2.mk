@@ -206,30 +206,12 @@ endif
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino-hd2/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release_neutrino-hd2/etc/init.d/
 
-if ENABLE_P0209
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8192cu.ko
-	cp -f $(buildprefix)/root/lib/modules/rt8712u_stm24-209.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8712u.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-endif
-if ENABLE_P0210
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8192cu.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8712u.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
-endif
-
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release_neutrino-hd2/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release_neutrino-hd2/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release_neutrino-hd2/lib/modules/
-if ENABLE_P0210
-	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release_neutrino-hd2/lib/modules/
-endif
-	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release_neutrino-hd2/lib/modules/
 
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino-hd2/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino-hd2/sbin
@@ -521,7 +503,13 @@ endif
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/usbserial.ko $(prefix)/release_neutrino-hd2/lib/modules || true
 #	[ -e $(kernelprefix)/$(kernelpath)/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/$(kernelpath)/fs/ntfs/ntfs.ko $(prefix)/release_neutrino-hd2/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release_neutrino-hd2/lib/modules || true
-	[ -e cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino-hd2/lib/modules/ || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release_neutrino-hd2/lib/modules/ || true
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8192cu.ko
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release_neutrino-hd2/lib/modules/rt8712u.ko
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release_neutrino-hd2/lib/modules/
 
 	find $(prefix)/release_neutrino-hd2/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release_neutrino-hd2/ -name '*.o' -exec rm -f {} \;
