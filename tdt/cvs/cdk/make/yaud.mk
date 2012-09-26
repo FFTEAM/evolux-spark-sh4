@@ -187,6 +187,29 @@ else
 	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 endif
 
+evolux-neutrino-hd2-pli: yaud-neutrino-hd2 \
+		yaud-enigma2-pli-nightly \
+		release_evolux_neutrino-hd2_pli
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
+evolux-neutrino-hd2-pli-full: yaud-none host-python lirc stslave \
+		yaud-neutrino-hd2 \
+		yaud-enigma2-pli-nightly \
+		release_evolux_neutrino-hd2_pli
+	@TUXBOX_YAUD_CUSTOMIZE@
+#make flash img
+if ENABLE_MULTI_YAFFS2
+	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
+else
+	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
+endif
+
 evolux-neutrino-hd2: yaud-neutrino-hd \
 		yaud-neutrino-hd2 \
 		release_evolux_neutrino-hd2
