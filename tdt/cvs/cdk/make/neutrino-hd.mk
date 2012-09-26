@@ -59,7 +59,9 @@ libstb-hal-update:
 $(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
 	if [ ! -d $(appsdir)/neutrino-hd ]; then \
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
-		cd $(appsdir)/neutrino-hd && patch -p1 < "$(buildprefix)/Patches/neutrino-hd.diff"; \
+		cd $(appsdir)/neutrino-hd; \
+		patch -p1 < $(buildprefix)/Patches/neutrino-hd-framebuffer.h.diff; \
+		patch -p1 < $(buildprefix)/Patches/neutrino-hd-tuxtxt.cpp.diff; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd && \
