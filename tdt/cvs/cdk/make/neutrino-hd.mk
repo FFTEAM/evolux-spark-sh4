@@ -30,7 +30,7 @@ $(appsdir)/libstb-hal/config.status: bootstrap
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
 
-$(DEPDIR)/libstb-hal.do_prepare: $(appsdir)/libstb-hal/config.status
+$(DEPDIR)/libstb-hal.do_prepare:
 	touch $@
 
 $(DEPDIR)/libstb-hal.do_compile: $(appsdir)/libstb-hal/config.status
@@ -55,8 +55,8 @@ libstb-hal-update:
 #
 # neutrino-hd
 #
-
-$(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
+ 
+$(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins graphlcd
 	if [ ! -d $(appsdir)/neutrino-hd ]; then \
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
 		cd $(appsdir)/neutrino-hd; \
@@ -84,14 +84,14 @@ $(appsdir)/neutrino-hd/config.status: bootstrap graphlcd
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
 
-$(DEPDIR)/neutrino-hd.do_prepare: $(appsdir)/neutrino-hd/config.status
+$(DEPDIR)/neutrino-hd.do_prepare:
 	touch $@
 
 $(DEPDIR)/neutrino-hd.do_compile: $(appsdir)/neutrino-hd/config.status
 	cd $(appsdir)/neutrino-hd && $(MAKE)
 	touch $@
 
-$(DEPDIR)/neutrino-hd: curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins neutrino-hd.do_prepare neutrino-hd.do_compile
+$(DEPDIR)/neutrino-hd: neutrino-hd.do_prepare neutrino-hd.do_compile
 	$(MAKE) -C $(appsdir)/neutrino-hd install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
@@ -140,7 +140,7 @@ $(appsdir)/neutrino-hd-plugins/config.status: bootstrap
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -fno-rtti -fexceptions -rdynamic -ggdb -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
 
-$(DEPDIR)/neutrino-hd-plugins.do_prepare: $(appsdir)/neutrino-hd-plugins/config.status
+$(DEPDIR)/neutrino-hd-plugins.do_prepare:
 	touch $@
 
 $(DEPDIR)/neutrino-hd-plugins.do_compile: $(appsdir)/neutrino-hd-plugins/config.status

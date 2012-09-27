@@ -12,8 +12,8 @@ $(targetprefix)/var/etc/.version:
 #
 # neutrino-hd2
 #
-
-$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev graphlcd
+ 
+$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 graphlcd
 	if [ ! -d $(appsdir)/neutrino-hd2-exp ]; then \
 		svn co http://neutrinohd2.googlecode.com/svn/branches/nhd2-exp $(appsdir)/neutrino-hd2-exp; \
 		cd $(appsdir)/neutrino-hd2-exp && patch -p1 < "$(buildprefix)/Patches/neutrino.hd2-exp.diff"; \
@@ -43,14 +43,14 @@ else
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DFB_BLIT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_DUCKBOX -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 endif
-$(DEPDIR)/neutrino-hd2.do_prepare: $(appsdir)/neutrino-hd2/config.status
+$(DEPDIR)/neutrino-hd2.do_prepare:
 	touch $@
 
 $(DEPDIR)/neutrino-hd2.do_compile: $(appsdir)/neutrino-hd2/config.status
 	cd $(appsdir)/neutrino-hd2-exp && $(MAKE)
 	touch $@
 
-$(DEPDIR)/neutrino-hd2: curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 neutrino-hd2.do_prepare neutrino-hd2.do_compile
+$(DEPDIR)/neutrino-hd2: neutrino-hd2.do_prepare neutrino-hd2.do_compile
 	$(MAKE) -C $(appsdir)/neutrino-hd2-exp install DESTDIR=$(targetprefix) DATADIR=/usr/local/share/
 	touch $@
 
