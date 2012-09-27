@@ -83,30 +83,13 @@ release-enigma2-pli-nightly: release-enigma2-pli-nightly_common_utils
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release-enigma2-pli-nightly/etc/init.d/
 
-if ENABLE_P0209
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
-	cp -f $(buildprefix)/root/lib/modules/rt8712u_stm24-209.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8712u.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-endif
-if ENABLE_P0210
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8712u.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-endif
-if ENABLE_P0211
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8712u.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
-endif
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8712u.ko
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/rt8192cu.ko
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/* $(prefix)/release-enigma2-pli-nightly/lib/modules/
