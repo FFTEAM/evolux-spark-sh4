@@ -668,7 +668,10 @@ endif
 	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
-	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/ || true
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/input/misc/uinput.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 
 	find $(prefix)/release-enigma2-pli-nightly/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/ -name '*.o' -exec rm -f {} \;
