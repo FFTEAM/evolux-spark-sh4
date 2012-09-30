@@ -168,3 +168,24 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	dmx->Open(DMX_TP_CHANNEL, 3 * 3008 * 62, fe_num );
  	dmx->pesFilter(vpid);
+
+--- neutrino-hd2-exp/src/gui/channellist.cpp	2012-09-30 18:44:44.000000000 +0200
++++ neutrino-hd2-exp/src/gui/channellist.cpp	2012-09-30 20:06:56.000000000 +0200
+@@ -1758,7 +1758,7 @@
+ 		CZapitChannel * live_chan = getChannel(live_channel_id);
+ 		CZapitChannel * rec_chan = getChannel(rec_channel_id);
+ 			
+-		if(FrontendCount > 1)
++		/*if(FrontendCount > 1)
+ 		{
+ 			// twin
+ 			if( getFE(rec_chan->getFeIndex())->mode == FE_LOOP)
+@@ -1766,7 +1766,7 @@
+ 			else if( (rec_chan->getFeIndex() != live_chan->getFeIndex()) && getFE(rec_chan->getFeIndex())->mode != FE_LOOP)
+ 				iscurrent = true;
+ 		}
+-		else
++		else*/
+ 			iscurrent = SAME_TRANSPONDER(chanlist[curr]->channel_id, rec_channel_id);
+ 	
+ 		dprintf(DEBUG_INFO, "CChannelList::paintItem: recording %llx current %llx current = %s\n", rec_channel_id, chanlist[liststart + pos]->channel_id, iscurrent? "yes" : "no");
