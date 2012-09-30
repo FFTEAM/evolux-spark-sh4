@@ -93,3 +93,78 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		{"VIDEO_STD_PC", "PC"},
  	};
  #else
+
+--- neutrino-hd2-exp/src/zapit/src/pmt.cpp	2012-09-30 18:31:30.000000000 +0200
++++ neutrino-hd2-exp/src/zapit/src/pmt.cpp	2012-09-30 18:29:20.000000000 +0200
+@@ -442,7 +442,7 @@
+ 		return -1;
+ 	}
+ 	
+-	cDemux * dmx = new cDemux( channel->getDemuxIndex() ); 
++	cDemux * dmx = new cDemux( /*channel->getDemuxIndex()*/ ); 
+ 	
+ 	// open
+ 	dmx->Open(DMX_PSI_CHANNEL, PMT_SIZE, channel->getFeIndex());
+@@ -624,7 +624,7 @@
+ 
+ 	if(pmtDemux == NULL) 
+ 	{
+-		pmtDemux = new cDemux( channel->getDemuxIndex() );
++		pmtDemux = new cDemux( /*channel->getDemuxIndex()*/ );
+ 		
+ 		// open 
+ 		pmtDemux->Open(DMX_PSI_CHANNEL, PMT_SIZE, channel->getFeIndex() ); // this indicate fe num
+
+--- neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-09-30 18:31:24.000000000 +0200
++++ neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-09-30 18:29:12.000000000 +0200
+@@ -2674,7 +2674,7 @@
+ 	if (have_pcr) 
+ 	{
+ 		if(!pcrDemux)
+-			pcrDemux = new cDemux( thisChannel->getDemuxIndex() );
++			pcrDemux = new cDemux( /*thisChannel->getDemuxIndex()*/ );
+ 		
+ 		// open pcr demux
+ 		if( pcrDemux->Open(DMX_PCR_ONLY_CHANNEL, VIDEO_STREAM_BUFFER_SIZE, thisChannel->getFeIndex() ) < 0 )
+@@ -2692,7 +2692,7 @@
+ 	if (have_audio) 
+ 	{
+ 		if( !audioDemux )
+-			audioDemux = new cDemux( thisChannel->getDemuxIndex() );
++			audioDemux = new cDemux( /*thisChannel->getDemuxIndex()*/ );
+ 		
+ 		// open audio demux
+ 		if( audioDemux->Open(DMX_AUDIO_CHANNEL, AUDIO_STREAM_BUFFER_SIZE, thisChannel->getFeIndex() ) < 0 )
+@@ -2710,7 +2710,7 @@
+ 	if (have_video) 
+ 	{
+ 		if( !videoDemux )
+-			videoDemux = new cDemux( thisChannel->getDemuxIndex() ); 
++			videoDemux = new cDemux( /*thisChannel->getDemuxIndex()*/ );
+ 		
+ 		// open Video Demux
+ 		if( videoDemux->Open(DMX_VIDEO_CHANNEL, VIDEO_STREAM_BUFFER_SIZE, thisChannel->getFeIndex() ) < 0 )
+
+--- neutrino-hd2-exp/src/zapit/src/pat.cpp	2012-09-30 18:31:38.000000000 +0200
++++ neutrino-hd2-exp/src/zapit/src/pat.cpp	2012-09-30 18:29:28.000000000 +0200
+@@ -32,7 +32,7 @@
+ 	if (!channel)
+ 		return -1;
+ 
+-	cDemux * dmx = new cDemux( channel->getDemuxIndex() );
++	cDemux * dmx = new cDemux( /*channel->getDemuxIndex()*/ );
+ 	
+ 	//open
+ 	dmx->Open(DMX_PSI_CHANNEL, PAT_SIZE, channel->getFeIndex() );
+
+--- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-09-30 18:58:28.000000000 +0200
++++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-09-30 18:53:59.000000000 +0200
+@@ -72,7 +72,7 @@
+ 	int i;
+ 
+ 	if (!dmx)
+-		dmx = new cDemux( demux_num );
++		dmx = new cDemux( /*demux_num*/ );
+ 
+ 	dmx->Open(DMX_TP_CHANNEL, 3 * 3008 * 62, fe_num );
+ 	dmx->pesFilter(vpid);
