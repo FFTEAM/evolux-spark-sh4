@@ -49,6 +49,49 @@ extern int snd_pseudo_integer_put(struct snd_kcontrol *kcontrol,
                                   struct snd_ctl_elem_value *ucontrol);
 int avs_command_kernel(unsigned int cmd, void *arg);
 
+#if defined(ADB_BOX)
+int proc_audio_delay_pcm_write(struct file *file, const char __user *buf,
+                           unsigned long count, void *data)
+{
+	char 		*page;
+	char		*myString;
+	ssize_t 	ret = -ENOMEM;
+
+	printk("%s %d - ", __FUNCTION__, (int) count);
+
+	page = (char *)__get_free_page(GFP_KERNEL);
+	if (page)
+	{
+		ret = -EFAULT;
+		if (copy_from_user(page, buf, count))
+			goto out;
+
+		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
+		strncpy(myString, page, count);
+		myString[count] = '\0';
+
+		printk("%s\n", myString);
+		kfree(myString);
+		//result = sscanf(page, "%3s %3s %3s %3s %3s", s1, s2, s3, s4, s5);
+	}
+
+	ret = count;
+out:
+
+	free_page((unsigned long)page);
+	return ret;
+}
+
+int proc_audio_delay_pcm_read (char *page, char **start, off_t off, int count,
+			  int *eof, void *data_unused)
+{
+	int len = 0;
+	printk("%s %d\n", __FUNCTION__, count);
+
+        return len;
+}
+#endif
+
 int proc_audio_delay_bitstream_write(struct file *file, const char __user *buf,
                                      unsigned long count, void *data)
 {
@@ -162,7 +205,7 @@ static void WriteRegister(volatile unsigned long *reg,unsigned long val)
     writel(val, (unsigned long)reg);
 }
 
-#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX)
+#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX) || defined(UFS913)
 #define SPDIF_EN            (1L<<3)
 #define PCM_EN              (1L<<5)
 #define SPDIF_PCM_DIS       0xFFFFFFD7
@@ -184,13 +227,13 @@ void spdif_out_mute(int mute)
     unsigned long  val;
     unsigned long *RegMap;
 
-#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX)
+#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX) || defined(UFS913)
     RegMap = (unsigned long*)ioremap(STb7105_AUDIO_BASE,0x10);
 #else
     RegMap = (unsigned long*)ioremap(STb7100_REGISTER_BASE,STb7100_REG_ADDR_SIZE);
 #endif
     if (mute == AVS_MUTE) {
-#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX)
+#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX)|| defined(UFS913)
         val = ReadRegister( RegMap );
         WriteRegister(RegMap, val & SPDIF_DIS);
 #else
@@ -199,7 +242,7 @@ void spdif_out_mute(int mute)
 #endif
     }
     else {
-#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX)
+#if defined(UFS912) || defined(SPARK) || defined (SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX) || defined(UFS913)
         val = ReadRegister( RegMap );
         WriteRegister(RegMap ,val | SPDIF_EN);
 #else

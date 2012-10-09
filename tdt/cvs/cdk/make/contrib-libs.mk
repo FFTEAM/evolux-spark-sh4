@@ -1273,7 +1273,7 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--disable-amd3dnow \
 		--disable-amd3dnowext \
 		--disable-mmx \
-		--disable-mmx2 \
+		--disable-mmxext \
 		--disable-sse \
 		--disable-ssse3 \
 		--disable-armv5te \
