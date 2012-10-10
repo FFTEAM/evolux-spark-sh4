@@ -18,6 +18,7 @@ $(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis 
 		svn co http://neutrinohd2.googlecode.com/svn/branches/nhd2-exp $(appsdir)/neutrino-hd2-exp; \
 		cd $(appsdir)/neutrino-hd2-exp && patch -p1 < "$(buildprefix)/Patches/neutrino.hd2-exp.diff"; \
 	fi
+if ENABLE_SPARK
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd2-exp && \
 		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
@@ -33,16 +34,32 @@ $(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis 
 			--with-boxtype=duckbox \
 			--enable-libeplayer3 \
 			--enable-graphlcd \
-			--enable-libass
-if ENABLE_SPARK
+			--enable-libass \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 else
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd $(appsdir)/neutrino-hd2-exp && \
+		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--with-datadir=/usr/local/share \
+			--with-libdir=/usr/lib \
+			--with-plugindir=/usr/lib/tuxbox/plugins \
+			--with-fontdir=/usr/local/share/fonts \
+			--with-configdir=/usr/local/share/config \
+			--with-gamesdir=/usr/local/share/games \
+			--with-boxtype=duckbox \
+			--enable-libeplayer3 \
+			--enable-graphlcd \
+			--enable-libass \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DFB_BLIT -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_DUCKBOX -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 endif
+
 $(DEPDIR)/neutrino-hd2.do_prepare:
 	touch $@
 
