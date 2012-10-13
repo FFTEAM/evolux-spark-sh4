@@ -1988,23 +1988,26 @@ do
 			makedev dvb/adapter$i/audio0    c 212 `math 64 \* $i + 1` $video
 			makedev dvb/adapter$i/frontend0 c 212 `math 64 \* $i + 3` $video
 			makedev dvb/adapter$i/demux0    c 212 `math 64 \* $i + 4` $video
-			makedev dvb/adapter$i/demux1    c 212 `math 64 \* $i + 20` $video
+			makedev dvb/adapter$i/demux1    c 212 `math 64 \* $i + 4` $video
+#			makedev dvb/adapter$i/demux1    c 212 `math 64 \* $i + 20` $video
 			makedev dvb/adapter$i/dvr0      c 212 `math 64 \* $i + 5` $video
 			makedev dvb/adapter$i/dvr1      c 212 `math 64 \* $i + 21` $video
-			makedev dvb/adapter$i/ca0       c 212 `math 64 \* $i + 6` $video
-			ln -s ca0 dvb/adapter$i/ca1
-#			makedev dvb/adapter$i/ca1       c 212 `math 64 \* $i + 6` $video
+			makedev dvb/adapter$i/ca0       c 212 `math 64 \* $i + 70` $video
+#			ln -s ca0 dvb/adapter$i/ca1
+			makedev dvb/adapter$i/ca1       c 212 `math 64 \* $i + 70` $video
 			makedev dvb/adapter$i/net0      c 212 `math 64 \* $i + 7` $video
 			makedev dvb/adapter$i/osd0      c 212 `math 64 \* $i + 8` $video
 #			makedev dvb/adapter$i/ci0      c 212 `math 64 \* $i + 9` $video
 #			makedev dvb/adapter$i/ci1      c 212 `math 64 \* $i + 25` $video
 			makedev dvb/adapter$i/video1	c 212 `math 64 \* $i + 16` $video
 			makedev dvb/adapter$i/frontend1 c 212 `math 64 \* $i + 19` $video
-			makedev dvb/adapter$i/demux2    c 212 `math 64 \* $i + 36` $video
+			makedev dvb/adapter$i/demux2    c 212 `math 64 \* $i + 4` $video
+#			makedev dvb/adapter$i/demux2    c 212 `math 64 \* $i + 36` $video
 			makedev dvb/adapter$i/dvr2      c 212 `math 64 \* $i + 37` $video
 			makedev dvb/adapter$i/video2 c 212 `math 64 \* $i + 32` $video
 			makedev dvb/adapter$i/frontend2 c 212 `math 64 \* $i + 35` $video
-			makedev dvb/adapter$i/demux3 c 212 `math 64 \* $i + 52` $video
+			makedev dvb/adapter$i/demux3 c 212 `math 64 \* $i + 4` $video
+#			makedev dvb/adapter$i/demux3 c 212 `math 64 \* $i + 52` $video
 			makedev dvb/adapter$i/dvr3 c 212 `math 64 \* $i + 53` $video
 		done
 		;;

@@ -30,16 +30,17 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:51.357580061 +0200
 +++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:34.977498845 +0200
-@@ -78,8 +78,11 @@
+@@ -72,7 +72,11 @@
  	int i;
  
  	if (!dmx)
-+#ifdef EVOLUX
++#if defined (PLATFORM_SPARK7162)
 +		dmx = new cDemux( /*demux_num*/ );
 +#else
  		dmx = new cDemux( demux_num );
--
 +#endif
- 	dmx->Open(DMX_TP_CHANNEL, 3 * 3008 * 62, fe_num );
- 	dmx->pesFilter(vpid);
  
+ 	dmx->Open(DMX_TP_CHANNEL, /*3 * 3008 * 62*/RECORD_STREAM_BUFFER_SIZE, fe_num );
+ 	dmx->pesFilter(vpid);
+
+
