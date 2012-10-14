@@ -223,6 +223,7 @@ endif
 	cp -f $(buildprefix)/root/sbin/flash* $(prefix)/release_neutrino-hd/sbin
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release_neutrino-hd/sbin
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release_neutrino-hd/lib/modules
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko $(prefix)/release_neutrino-hd/lib/modules || true
 
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmfb.ko $(prefix)/release_neutrino-hd/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko $(prefix)/release_neutrino-hd/lib/modules/

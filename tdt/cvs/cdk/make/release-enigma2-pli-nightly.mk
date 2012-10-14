@@ -120,6 +120,8 @@ endif
 	cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release-enigma2-pli-nightly/lib/modules
 
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cpu_frequ/cpu_frequ.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko $(prefix)/release-enigma2-pli-nightly/lib/modules || true
+
 	[ -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/cec/cec.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 	[ -f $(driverdir)/cec/enigma2-plugin/plugin.py ] && mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/cec && cp -RP $(driverdir)/cec/enigma2-plugin/* $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/cec/
 
