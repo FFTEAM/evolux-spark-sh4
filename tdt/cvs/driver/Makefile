@@ -65,5 +65,6 @@ obj-y	+= smartcard/
 obj-y	+= cpu_frequ/
 obj-y	+= wireless/
 obj-y	+= cec/
+obj-y	+= i2c_spi/
 endif
 endif
