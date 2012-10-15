@@ -4,7 +4,7 @@ PINGUDIR=${CURDIR%/cvs/cdk}
 whichE2=`ls $PINGUDIR/tufsbox | grep release-enigma2-pli-nightly`
 whichE3=`ls $PINGUDIR/tufsbox | grep release_neutrino-hd2` 
 whichE4=`ls $PINGUDIR/tufsbox | grep release_evolux_triple` 
-if [ ! -z "$whichE2" ] && [ -z "$whichE3" ]; then
+if [ ! -z "$whichE2" ]; then
 	E2DIR=$PINGUDIR/tufsbox/release-enigma2-pli-nightly
 	EVOLUXDIR=$PINGUDIR/tufsbox/release_evolux_pli
 else
@@ -14,15 +14,15 @@ else
 fi
 
 VDRDIR=$PINGUDIR/tufsbox/release_vdrdev2
-if [ ! -z "$whichE3" ] && [ -z "$whichE2" ]; then
+if [ ! -z "$whichE3" ]; then
 	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd2
 else
 	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd
 fi
 
-if [ -e $PINGUDIR/tufsbox/release_evolux_triple ]; then
-	E2DIR=$PINGUDIR/tufsbox/release_evolux_triple
-	NEUTRINODIR=$PINGUDIR/tufsbox/release_evolux_triple
+if [ -e $PINGUDIR/tufsbox/release_evolux_triple_with_dev ]; then
+	E2DIR=$PINGUDIR/tufsbox/release_evolux_triple_with_dev
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_evolux_triple_with_dev
 fi
 DESTINATION="/devel/E2"
 DATE=`date +%Y%m%d`
@@ -51,6 +51,12 @@ if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
 	elif [ -f /etc/debian_version ]; then UBUNTU=1; USERS="su -c";
 	fi
 fi
+
+doFind() {
+#	find $VDRDIR -name "find.txt" -exec rm {} \;
+	find $NEUTRINODIR -name "find.txt" -exec rm {} \;
+	find $E2DIR -name "find.txt" -exec rm {} \;
+}
 doOptimizeNtrino() {
 	SOURCE="$NEUTRINODIR"
 	# optimze png+jpg #
@@ -203,16 +209,17 @@ doOptimizeE2() {
 }
 if [ -e $E2DIR ]; then
 	doOptimizeE2
+	doFind
 fi
 if [ -e $NEUTRINODIR ]; then
 	doOptimizeNtrino
+	doFind
 fi
 if [ -e $VDRDIR ]; then
 	doOptimizeVdr
+	doFind
 fi
-find $VDRDIR -name "find.txt" -exec rm {} \;
-find $NEUTRINODIR -name "find.txt" -exec rm {} \;
-find $E2DIR -name "find.txt" -exec rm {} \;
+
 cd $CURDIR
 exit
 
