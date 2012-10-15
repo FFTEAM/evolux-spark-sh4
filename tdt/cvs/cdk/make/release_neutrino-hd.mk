@@ -329,8 +329,9 @@ endif
 	rm -rf $(prefix)/release_neutrino-hd/media/sda*
 	cp -RP $(appsdir)/neutrino/data/icons/* $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/
 	rm $(prefix)/release_neutrino-hd/usr/local/share/neutrino/icons/Makefile*
+if ENABLE_SPARK
 	touch $(prefix)/release_neutrino-hd/etc/.nhd
-
+endif
 #######################################################################################
 #######################################################################################
 #######################################################################################
@@ -438,6 +439,7 @@ endif
 	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd && ln -s /usr/local/share/neutrino/icons/logo logos )
 	( cd $(prefix)/release_neutrino-hd/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd httpd )
 	( cd $(prefix)/release_neutrino-hd/var && ln -s /usr/local/share/neutrino/httpd httpd )
+	$(USERS) chmod 755 -R $(prefix)/release_neutrino-hd/usr/lib/
 	find $(prefix)/release_neutrino-hd/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino-hd/etc/.fsck
 	cp -f $(buildprefix)/root/etc/init.d/Swap.sh $(prefix)/release_neutrino-hd/etc/init.d/
@@ -522,6 +524,9 @@ endif
 
 	[ -e $(prefix)/release_neutrino-hd/lib/udev ] && rm -rf $(prefix)/release_neutrino-hd/lib/udev || true
 
+	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
+		$(buildprefix)/doEVOLUX.sh; \
+	fi;
 #
 # AUTOFS
 #

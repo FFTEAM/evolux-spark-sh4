@@ -661,6 +661,10 @@ endif
 	find $(prefix)/release-enigma2-pli-nightly/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/ -name '*.o' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/ -name '*.la' -exec rm -f {} \;
+
+	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
+		$(buildprefix)/doEVOLUX.sh; \
+	fi;
 #
 # AUTOFS
 #

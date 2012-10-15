@@ -1,24 +1,29 @@
 #!/bin/sh
 CURDIR=`pwd`
 PINGUDIR=${CURDIR%/cvs/cdk}
-whichE2=`ls $PINGUDIR/tufsbox | grep release-enigma2-pli-nightly_with_dev`
-whichE3=`ls $PINGUDIR/tufsbox | grep release_neutrino-hd2_with_dev` 
+whichE2=`ls $PINGUDIR/tufsbox | grep release-enigma2-pli-nightly`
+whichE3=`ls $PINGUDIR/tufsbox | grep release_neutrino-hd2` 
+whichE4=`ls $PINGUDIR/tufsbox | grep release_evolux_triple` 
 if [ ! -z "$whichE2" ] && [ -z "$whichE3" ]; then
-	E2DIR=$PINGUDIR/tufsbox/release-enigma2-pli-nightly_with_dev
-	EVOLUXDIR=$PINGUDIR/tufsbox/release_evolux_pli_with_dev
+	E2DIR=$PINGUDIR/tufsbox/release-enigma2-pli-nightly
+	EVOLUXDIR=$PINGUDIR/tufsbox/release_evolux_pli
 else
 
-	E2DIR=$PINGUDIR/tufsbox/release_with_dev
-	EVOLUXDIR=$PINGUDIR/tufsbox/release_EVOLUX_with_dev
+	E2DIR=$PINGUDIR/tufsbox/release
+	EVOLUXDIR=$PINGUDIR/tufsbox/release_EVOLUX
 fi
 
-VDRDIR=$PINGUDIR/tufsbox/release_vdrdev2_with_dev
+VDRDIR=$PINGUDIR/tufsbox/release_vdrdev2
 if [ ! -z "$whichE3" ] && [ -z "$whichE2" ]; then
-	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd2_with_dev
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd2
 else
-	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino_with_dev
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_neutrino-hd
 fi
 
+if [ -e $PINGUDIR/tufsbox/release_evolux_triple ]; then
+	E2DIR=$PINGUDIR/tufsbox/release_evolux_triple
+	NEUTRINODIR=$PINGUDIR/tufsbox/release_evolux_triple
+fi
 DESTINATION="/devel/E2"
 DATE=`date +%Y%m%d`
 # originally created by schischu and konfetti

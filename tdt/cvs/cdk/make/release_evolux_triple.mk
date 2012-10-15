@@ -7,9 +7,11 @@ $(DEPDIR)/%release_evolux_triple:
 	mkdir -p $(prefix)/release_evolux_triple_with_dev
 	$(USERS) cp -RP $(prefix)/release_neutrino-hd_with_dev/* $(prefix)/release_evolux_triple_with_dev/
 	$(USERS) chmod 777 -R $(prefix)/release_evolux_triple_with_dev
+if ENABLE_SPARK
 	mv $(prefix)/release_evolux_triple_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd
 	mkdir -p $(prefix)/release_evolux_triple_with_dev/usr/local/share
 	mv $(prefix)/release_evolux_triple_with_dev/usr/local/bin $(prefix)/release_evolux_triple_with_dev/usr/local/bin_nhd
+endif
 	mkdir -p $(prefix)/release_evolux_triple_with_dev/usr/local/bin
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/var $(prefix)/release_evolux_triple_with_dev/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/sbin $(prefix)/release_evolux_triple_with_dev/
@@ -19,14 +21,26 @@ $(DEPDIR)/%release_evolux_triple:
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/share $(prefix)/release_evolux_triple_with_dev/usr/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/fonts/*.otb $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/lib/*.so* $(prefix)/release_evolux_triple_with_dev/usr/lib/
+if ENABLE_SPARK
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2
-	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/share/fonts
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/bin $(prefix)/release_evolux_triple_with_dev/usr/local/bin_nhd2
+	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/share/fonts
+else
+	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share/fonts $(prefix)/release_evolux_triple_with_dev/usr/share/fonts
+	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share/fonts
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/share/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/bin $(prefix)/release_evolux_triple_with_dev/usr/local/
+endif
 	if [ -e $(prefix)/release_neutrino-hd2_with_dev/etc/changelog.txt ]; then \
 		cp -RP $(prefix)/release_neutrino-hd2_with_dev/etc/changelog.txt $(prefix)/release_evolux_triple_with_dev/etc/; \
 	fi
+if ENABLE_SPARK
 	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/neutrino/httpd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/
-	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/httpd/scripts
+#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/httpd/scripts
+#else
+#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/httpd/scripts
+endif
 	if [ -e $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share ]; then \
 		rm -rf $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share; \
 	fi
@@ -38,11 +52,19 @@ $(DEPDIR)/%release_evolux_triple:
 		rm -rf $(prefix)/release_evolux_triple_with_dev/media/hdd2; \
 	fi
 	( cd $(prefix)/release_evolux_triple_with_dev/media && ln -sf /autofs/sda2 hdd2 )
+if ENABLE_SPARK
 	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/fonts
 	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd && ln -sf /usr/share/fonts fonts )
 #	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
 	cp -RP $(appsdir)/neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
+else
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/
+#	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share/fonts
+#	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share && ln -sf /usr/share/fonts fonts )
+	cp -RP $(appsdir)/neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share/config/tuxtxt/
+endif
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
@@ -81,13 +103,13 @@ if ENABLE_SPARK
 	echo "EvoTRIPLE" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
 else
 	echo "EvoTRIPLEX" > $(prefix)/release_evolux_triple_with_dev/etc/hostname
+	[ ! -e $(prefix)/release_evolux_triple_with_dev/etc/.nhd2 ] && touch $(prefix)/release_evolux_triple_with_dev/etc/.nhd2 || true
 endif
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release_evolux_triple_with_dev/usr/script/
 	if [ -e $(targetprefix)/usr/share/alsa ]; then \
 		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_evolux_triple_with_dev/usr/share/; \
 	fi
-
 	( cd $(prefix)/release_evolux_triple_with_dev/bin && rm $(prefix)/release_evolux_triple_with_dev/bin/sh && ln -sf bash sh )
 	rm $(prefix)/release_evolux_triple_with_dev/sbin/fsck.jfs
 	rm $(prefix)/release_evolux_triple_with_dev/sbin/*ext4*
@@ -113,12 +135,14 @@ endif
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
 	rm -rf $(prefix)/release_evolux_triple_with_dev/sbin/fsck.nfs
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/icons/mbox_white.raw
-		
 #if ENABLE_MULTI_YAFFS2
 #	( cd $(prefix) && cd ../flash/spark && ./spark_multi_yaffs2.sh )
 #else
 #	( cd $(prefix) && cd ../flash/spark && ./spark.sh )
 #endif
+	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
+		$(buildprefix)/doEVOLUX.sh; \
+	fi;
 	if [ -e $(buildprefix)/makeUpdatePack.sh ] ; then \
 		$(buildprefix)/makeUpdatePack.sh; \
 	fi;

@@ -430,7 +430,8 @@ endif
 	( cd $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd && ln -s /usr/local/share/neutrino/icons/logo logos )
 	( cd $(prefix)/release_neutrino-hd2/usr/local/share/neutrino && ln -s /usr/local/share/neutrino/httpd httpd-y )
 	( cd $(prefix)/release_neutrino-hd2/var && ln -s /usr/local/share/neutrino/httpd httpd )
-	chmod 755 -R $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd/scripts
+	$(USERS) chmod 755 -R $(prefix)/release_neutrino-hd2/usr/local/share/neutrino/httpd/scripts
+	$(USERS) chmod 755 -R $(prefix)/release_neutrino-hd2/usr/lib/
 	find $(prefix)/release_neutrino-hd2/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	touch $(prefix)/release_neutrino-hd2/etc/.fsck
 	touch $(prefix)/release_neutrino-hd2/etc/.nhd2
@@ -516,6 +517,11 @@ endif
 	find $(prefix)/release_neutrino-hd2/ -name '*.a' -exec rm -f {} \;
 	find $(prefix)/release_neutrino-hd2/ -name '*.o' -exec rm -f {} \;
 	find $(prefix)/release_neutrino-hd2/ -name '*.la' -exec rm -f {} \;
+
+	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
+		( cd $(buildprefix) && ./doEVOLUX.sh ); \
+	fi;
+
 #
 # AUTOFS
 #
