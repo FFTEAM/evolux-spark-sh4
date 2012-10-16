@@ -16,7 +16,12 @@ $(targetprefix)/var/etc/.version:
 $(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 graphlcd libdvbsipp
 	if [ ! -d $(appsdir)/neutrino-hd2-exp ]; then \
 		svn co http://neutrinohd2.googlecode.com/svn/branches/nhd2-exp $(appsdir)/neutrino-hd2-exp; \
-		cd $(appsdir)/neutrino-hd2-exp && patch -p1 < "$(buildprefix)/Patches/neutrino.hd2-exp.diff"; \
+		cd $(appsdir)/neutrino-hd2-exp; \
+		patch -p1 < "$(buildprefix)/Patches/neutrino.hd2-exp.diff"; \
+		fgrep -r SPARK_7162 * | grep -v Binärdatei | cut -d : -f1 > find.txt && wrongSetup=`cat ./find.txt`; \
+		for i in "$wrongSetup"; do \
+		sed "@SPARK_7162@SPARK7162@" -i "$i"; \
+		done; \
 	fi
 if ENABLE_SPARK
 	export PATH=$(hostprefix)/bin:$(PATH) && \
