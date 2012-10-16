@@ -10,7 +10,7 @@ $(DEPDIR)/%release_evolux_pli:
 	if [ -e /usr/bin/python2.6 ] && [ -e $(buildprefix)/doEVOLUX.sh ] ; then \
 		$(buildprefix)/doEVOLUX.sh; \
 	fi;
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_pli_with_dev/lib/firmware/
+#	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_pli_with_dev/lib/firmware/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/var $(prefix)/release_evolux_pli_with_dev/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/sbin $(prefix)/release_evolux_pli_with_dev/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/usr/bin $(prefix)/release_evolux_pli_with_dev/usr/
