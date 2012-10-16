@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 
   int c;
 //  while ((c = getopt_long(argc, argv, "a:c:dD:e:E:g:hi:l:L:mp:P:r:s:t:u:v:Vw:", long_options, NULL)) != -1) {
-  while((c = getopt_long(argc, argv,"a:c:d:D:e:E:g:hi:l:L:m:p:P:r:s:t:u:v:V:w:", long_options, NULL))!=-1)
+  while((c = getopt_long(argc, argv,"a:c:d:D:e:E:g:hi:l:L:m:p:P:r:s:t:u:v:V:w:", long_options, NULL))!=-1) {
         switch (c) {
           case 'a': AudioCommand = optarg;
                     break;
