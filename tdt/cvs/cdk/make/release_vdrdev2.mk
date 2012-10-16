@@ -158,18 +158,26 @@ $(DEPDIR)/%release_vdrdev2:
 	ln -s ../init.d/sendsigs $(prefix)/release_vdrdev2/etc/rc.d/rc6.d/S20sendsigs
 	ln -s ../init.d/umountfs $(prefix)/release_vdrdev2/etc/rc.d/rc6.d/S40umountfs
 	ln -s ../init.d/reboot $(prefix)/release_vdrdev2/etc/rc.d/rc6.d/S90reboot
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp -f $(targetprefix)/usr/sbin/automount $(prefix)/release_vdrdev2/usr/sbin/
 	cp -f $(buildprefix)/root/release/auto.usb $(prefix)/release_vdrdev2/etc/
+if ENABLE_SPARK
 	mv $(prefix)/release_vdrdev2/lib/firmware/component_7111_mb618.fw $(prefix)/release_vdrdev2/lib/firmware/component.fw
 	rm $(prefix)/release_vdrdev2/lib/firmware/component_7105_pdk7105.fw
+else
+	mv $(prefix)/release_vdrdev2/lib/firmware/component_7105_pdk7105.fw $(prefix)/release_vdrdev2/lib/firmware/component.fw
+	rm $(prefix)/release_vdrdev2/lib/firmware/component_7111_mb618.fw
+endif
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-avl2108.fw
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-stv6306.fw
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx24116.fw
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
 	rm -f $(prefix)/release_vdrdev2/bin/evremote
 	rm -f $(prefix)/release_vdrdev2/bin/gotosleep
+if ENABLE_SPARK
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release_vdrdev2/lib/modules/
+else
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release_vdrdev2/lib/modules/
+endif
 	rm -f $(prefix)/release_vdrdev2/lib/firmware/dvb-fe-cx21143.fw
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmfb.ko $(prefix)/release_vdrdev2/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko $(prefix)/release_vdrdev2/lib/modules/
@@ -284,7 +292,7 @@ $(DEPDIR)/%release_vdrdev2:
 
 #######################################################################################
 	echo "duckbox-rev#: " > $(prefix)/release_vdrdev2/etc/imageinfo
-	git describe >> $(prefix)/release_vdrdev2/etc/imageinfo
+	git describe --always >> $(prefix)/release_vdrdev2/etc/imageinfo
 #######################################################################################
 
 	$(INSTALL_DIR) $(prefix)/release_vdrdev2/usr/lib
