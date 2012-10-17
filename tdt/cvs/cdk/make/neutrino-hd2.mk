@@ -20,7 +20,7 @@ $(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis 
 		patch -p1 < "$(buildprefix)/Patches/neutrino.hd2-exp.diff"; \
 		fgrep -r SPARK_7162 * | grep -v Binärdatei | cut -d : -f1 > find.txt && wrongSetup=`cat ./find.txt`; \
 		for i in "$wrongSetup"; do \
-		sed "@SPARK_7162@SPARK7162@" -i "$i"; \
+		sed "s@SPARK_7162@SPARK7162@" -i "$i"; \
 		done; \
 	fi
 if ENABLE_SPARK
