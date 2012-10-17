@@ -42,7 +42,7 @@ if ENABLE_SPARK
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
-			--with-boxtype=duckbox \
+			--with-boxtype=spark \
 			--enable-libeplayer3 \
 			--enable-graphlcd \
 			--enable-libass \
