@@ -44,3 +44,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	dmx->pesFilter(vpid);
 
 
+--- neutrino-hd2-exp/src/sectionsd/sectionsd.cpp	2012-10-17 11:55:37.031347691 +0200
++++ neutrino-hd2-exp/src/sectionsd/sectionsd.cpp	2012-10-17 11:56:30.003610365 +0200
+@@ -177,7 +177,7 @@
+ //NTP-Config
+ #define CONF_FILE CONFIGDIR "/neutrino.conf"
+ 
+-const std::string ntp_system_cmd_prefix = "/sbin/rdate ";
++const std::string ntp_system_cmd_prefix = "/sbin/ntpdate ";
+ 
+ std::string ntp_system_cmd;
+ CConfigFile ntp_config(',');
+
+
