@@ -9,7 +9,25 @@ TMPDIR=$CURDIR/tmp
 TMPROOTDIR=$TMPDIR/ROOT
 TMPKERNELDIR=$TMPDIR/KERNEL
 OUTDIR=$CURDIR/out
+cd $CDKDIR
+WHICHBOX=`cat ./lastChoice | grep spark7162`
+cd $CURDIR
 
+if [ -z "$WHICHBOX" ]; then
+	OOBIMG="spark_oob"
+	echo ""
+	echo "================"
+	echo "oobimg for spark"
+	echo "================"
+	echo ""
+else
+	OOBIMG="spark7162_oob"
+	echo ""
+	echo "===================="
+	echo "oobimg for spark7162"
+	echo "===================="
+	echo ""
+fi
 mkdir -p $OUTDIR >/dev/null 2>&1
 
 if [ -e $TUFSBOXDIR/release_with_dev/etc/changelog.txt ]; then
@@ -144,84 +162,84 @@ read -t 10 -p "Select target (autoskip in 10s)? "
 case "$REPLY" in
 	0)  echo "Skipping...";;
 	1)  echo "Creating Ntrino  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_neutrino_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf Neutrino-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	2)  echo "Creating Ntrino-HD  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino-hd_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_neutrino-hd_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf Neutrino-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	3)  echo "Creating Ntrino-HD2  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_neutrino-hd2_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_neutrino-hd2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf NeutrinoHD2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	4)  echo "Creating E2 yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	5)  echo "Creating E2-PLI yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf E2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	6)  echo "Creating Evolux  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	7)  echo "Creating Evolux-PLI  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_pli_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_pli_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	8)  echo "Creating Evolux-NTRINO-HD-PLI  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	9)  echo "Creating Evolux-NTRINO-HD2  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_neutrino-hd2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux_HD2_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	10)  echo "Creating VDR2  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_vdrdev2_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_vdrdev2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf VDR2-YAFFS2.tar.gz e2yaffs2.img uImage
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	11)  echo "Creating Evolux-NTRINO-HD-VDR2  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux-VDR2_on_Pingulux_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	12)  echo "Creating Evolux-TRIPLE  yaffs2 and uImage..."
-		./mkyaffs2 -o ./spark_oob.img $TUFSBOXDIR/release_evolux_triple_with_dev $CURDIR/out/e2yaffs2.img
+		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_triple_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
 		cd $TUFSBOXDIR && tar -czvf EvoLux-TRIPLE_on_Spark_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
