@@ -303,7 +303,7 @@ begin remote
           KEY_POWER                    0x7887
           KEY_V                        0xD02F
           KEY_TIME                     0x9A65
-          KEY_Mute                     0x5AA5
+          KEY_MUTE                     0x5AA5 
           KEY_AUX                      0x6A95 # TV/SAT
           KEY_1                        0x58A7
           KEY_2                        0xF807
@@ -315,12 +315,12 @@ begin remote
           KEY_8                        0xE817
           KEY_9                        0x0AF5
           KEY_0                        0xC837
-          KEY_TV2                      0x32CD # TV/RADIO
-          KEY_BACK                     0x30CF
-          KEY_UP                       0x12ED
-          KEY_DOWN                     0x22DD
-          KEY_PAGEUP                   0xCA35
-          KEY_PAGEDOWN                 0x807F
+          KEY_TV                       0x32CD # TV/RADIO
+          KEY_BACK                     0x30CF # RECALL
+          KEY_UP                       0x12ED # 
+          KEY_DOWN                     0x22DD # 
+#         KEY_PAGEUP                   0xCA35 # 
+#         KEY_PAGEDOWN                 0x807F # 
           KEY_FIND                     0x3AC5	
           KEY_ARCHIVE                  0x9867 # Folder
           KEY_VOLUMEUP                 0x50AF
@@ -336,7 +336,7 @@ begin remote
           KEY_EPG                      0xBA45
           KEY_FAVORITES                0xC23D
 #          KEY_PORTAL                   0xDA25
-          KEY_SAT                      0xF20D
+          KEY_SAT                      0xF20D # Teletext
           KEY_RED                      0x926D	
           KEY_GREEN                    0x728D	
           KEY_YELLOW                   0x8877	
@@ -345,10 +345,12 @@ begin remote
           KEY_STOP                     0x44BB
           KEY_PAUSE                    0xB24D
           KEY_PLAY                     0xA857
-          KEY_PREVIOUS                 0x04FB	
-          KEY_NEXT                     0xC43B	
-          KEY_REWIND 	               0x847B
-          KEY_FASTFORWARD	       0x18E7
+          KEY_PREVIOUS                 0x04FB 
+          KEY_NEXT                     0xC43B 
+          KEY_REWIND 	               0x807F 
+          KEY_FASTFORWARD	       0xCA35
+#         ARROW_LEFT                   0x847B
+#         ARROW_RIGHT                  0x18E7		  
           KEY_P		               0x4AB5	# PLAYMODE
           KEY_CLOSE                    0x20DF	# USB
           KEY_T			       0xAA55	# Timeshift
