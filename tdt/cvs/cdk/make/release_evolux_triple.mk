@@ -72,7 +72,7 @@ endif
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
 if ENABLE_SPARK7162
 	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/startnhd*
-	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxbox*
+	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxcom*
 endif
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/usr/lib/lib*
