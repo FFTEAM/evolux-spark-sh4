@@ -195,7 +195,7 @@ else
 	EXTERNAL_LCD=""
 fi
 ##############################################
-if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+#if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	echo ""
 	echo -e "\nFilesystemtype:"
 	echo "   1) JFFS2 (standard)"
@@ -211,11 +211,11 @@ if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 		*) echo -e "\nSelected Filesystem: $REPLY\n"
 		   MULTIYAFFS2="";;
 	esac
-else
-	echo -e "\nFilesystem"
-	echo "JFFS2 (standard)"
-	MULTIYAFFS2=""
-fi
+#else
+#	echo -e "\nFilesystem"
+#	echo "JFFS2 (standard)"
+#	MULTIYAFFS2=""
+#fi
 ##############################################
 
 CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $EXTERNAL_LCD $MULTIYAFFS2"
