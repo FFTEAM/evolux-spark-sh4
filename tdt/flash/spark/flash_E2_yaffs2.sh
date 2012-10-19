@@ -27,6 +27,11 @@ echo ""
 if [ -e /storage/c/enigma2/e2yaffs2.img ] && [ -e /storage/c/enigma2/etc/fw_env.config ]; then
 read -p "are you sure? start flashing EVOLUX now (Y/n) ? "
 if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
+read -p "Would you check nand for errors first (Y/n) ? "
+if [ "$REPLY" == "Y" ] || [ "$REPLY" == "y" ]; then
+nandtest -m /dev/mtd5
+nandtest -m /dev/mtd6
+fi
 cp -RP /storage/c/enigma2/etc/fw_env.config /etc/
 chmod 755 /etc/fw_env.config
 flash_eraseall /dev/mtd5
