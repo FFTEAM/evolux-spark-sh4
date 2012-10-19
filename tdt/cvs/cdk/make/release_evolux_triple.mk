@@ -104,6 +104,9 @@ endif
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 #	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
+if ENABLE_SPARK7162
+	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
+endif
 	cp -RP $(buildprefix)/root/etc/init.d/DisplayTime.sh $(prefix)/release_evolux_triple_with_dev/etc/init.d/
 	cp -RP $(buildprefix)/root/release/rcS_stm23_24_evolux_spark $(prefix)/release_evolux_triple_with_dev/etc/init.d/rcS
 if ENABLE_SPARK
