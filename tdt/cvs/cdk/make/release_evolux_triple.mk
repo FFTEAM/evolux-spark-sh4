@@ -74,6 +74,7 @@ if ENABLE_SPARK7162
 	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/startnhd*
 	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxcom*
 endif
+	( cd $(prefix)/release_evolux_triple_with_dev/share && ln -sf /usr/local/share/iso-codes iso-codes )
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/usr/lib/lib*
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/var $(prefix)/release_evolux_triple_with_dev/
