@@ -44,6 +44,9 @@ endif
 	if [ -e $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share ]; then \
 		rm -rf $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share; \
 	fi
+	if [ -e $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/fonts ]; then \
+		rm -rf $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/fonts; \
+	fi
 	if [ -e $(prefix)/release_evolux_triple_with_dev/media/hdd ]; then \
 		rm -rf $(prefix)/release_evolux_triple_with_dev/media/hdd; \
 	fi
@@ -67,6 +70,10 @@ else
 endif
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/lib/modules $(prefix)/release_evolux_triple_with_dev/lib/
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
+if ENABLE_SPARK7162
+	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/startnhd*
+	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxbox*
+endif
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/usr/lib/lib*
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/var $(prefix)/release_evolux_triple_with_dev/
@@ -130,7 +137,11 @@ endif
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/setmtdmode $(prefix)/BootargsPack/bin/
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_triple_with_dev/sbin/ )
+if ENABLE_SPARK
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
+else
+	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2_triplex.sh $(prefix)/ )
+endif
 	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
 	rm -rf $(prefix)/release_evolux_triple_with_dev/sbin/fsck.nfs

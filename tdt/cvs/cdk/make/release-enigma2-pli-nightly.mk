@@ -150,7 +150,11 @@ endif
 	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
 	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release-enigma2-pli-nightly/usr/bin/
 	cp -f $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release-enigma2-pli-nightly/sbin/
+if ENABLE_SPARK
 	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
+else
+	( cd $(prefix) && cp -RP ../flash/spark/spark7162_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
+endif
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
