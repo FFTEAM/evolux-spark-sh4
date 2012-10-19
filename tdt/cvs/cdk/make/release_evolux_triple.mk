@@ -59,7 +59,7 @@ if ENABLE_SPARK
 #	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2 && ln -sf /usr/share/fonts fonts )
 	cp -RP $(appsdir)/neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/config/tuxtxt/
 else
-	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
+	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/share/fonts/* $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/
 	cp -RP $(prefix)/release_neutrino-hd2_with_dev/usr/local/share $(prefix)/release_evolux_triple_with_dev/usr/local/
 #	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share/fonts
 #	( cd $(prefix)/release_evolux_triple_with_dev/usr/local/share && ln -sf /usr/share/fonts fonts )
