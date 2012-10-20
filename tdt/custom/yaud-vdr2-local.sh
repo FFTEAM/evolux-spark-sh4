@@ -89,8 +89,8 @@ if [ -e $CHANGEDIR/release_vdrdev2_with_dev ]; then
 fi
 
 mv $CHANGEDIR/release_vdrdev2 $CHANGEDIR/release_vdrdev2_with_dev
-if [ -e $BUILDDIR/own_build/neutrino/boot/audio.elf ] || [ -e $BUILDDIR/own_build/neutrino/boot/video.elf ]; then
-	cp -RP $BUILDDIR/own_build/neutrino/boot/* $CHANGEDIR/release_vdrdev2_with_dev/boot/
+if [ -e $BUILDDIR/own_build/vdr/boot/audio.elf ] || [ -e $BUILDDIR/own_build/vdr/boot/video.elf ]; then
+	cp -RP $BUILDDIR/own_build/vdr/boot/* $CHANGEDIR/release_vdrdev2_with_dev/boot/
 else
 	echo "#############################"
 	echo "#############################"
@@ -109,6 +109,6 @@ fi
 	#$USERS chmod 700 $CHANGEDIR/release_vdrdev2_with_dev/etc/lcd4linux.conf
 #	cp -RP $CHANGEDIR/release_vdrdev2_with_dev/boot/uImage $CHANGEDIR/
 #	$CHANGEDIR/host/bin/mkfs.jffs2 -r $CHANGEDIR/release_vdrdev2_with_dev -o $CHANGEDIR/e2jffs2.img -e 0x20000 -n
-#	( cd $CHANGEDIR && tar -czvf neutrino-hd_on_Pingulux.tar.gz e2jffs2.img uImage )
+#	( cd $CHANGEDIR && tar -czvf vdr-hd_on_Pingulux.tar.gz e2jffs2.img uImage )
 echo "--- Erledigt ---"
 exit
