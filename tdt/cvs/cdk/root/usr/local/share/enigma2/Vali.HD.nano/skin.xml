@@ -592,6 +592,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/red.png" position="100,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/green.png" position="390,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/yellow.png" position="680,643" size="30,30" />
@@ -626,6 +627,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/red.png" position="100,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/green.png" position="390,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/yellow.png" position="680,643" size="30,30" />
@@ -649,6 +651,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/red.png" position="100,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/green.png" position="390,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/yellow.png" position="680,643" size="30,30" />
@@ -669,6 +672,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget name="DescriptionBorder" position="0,0" size="0,0" />
     <widget name="waitingtext" position="0,0" size="0,0" />
     <widget name="list" position="520,225" scrollbarMode="showOnDemand" size="700,375" />
@@ -712,6 +716,7 @@
   <screen flags="wfNoBorder" name="EPGSelectionMulti" position="0,0" size="1280,720" title="EPG Selection Multi">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,25" render="Label" size="270,33" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
@@ -770,6 +775,7 @@
   <screen flags="wfNoBorder" name="Merlin_PGd" position="0,0" size="1280,720" title="Merlin Program Guide">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -824,6 +830,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/red.png" position="100,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/green.png" position="390,643" size="30,30" />
     <ePixmap alphatest="on" pixmap="Vali.HD.nano/yellow.png" position="680,643" size="30,30" />
@@ -844,6 +851,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -861,6 +869,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -878,6 +887,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -895,6 +905,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -912,6 +923,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -929,6 +941,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -946,6 +959,7 @@
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget enableWrapAround="1" position="570,112" render="Listbox" scrollbarMode="showOnDemand" size="600,495" source="menu" transparent="1">
       <convert type="TemplatedMultiContent">
 				{"template": [ MultiContentEntryText(pos = (45, 9), size = (535, 30), flags = RT_HALIGN_LEFT, text = 0) ],
@@ -1047,6 +1061,7 @@
   <screen flags="wfNoBorder" name="About" position="0,0" size="1280,720" title="About">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1066,6 +1081,7 @@
   <screen flags="wfNoBorder" name="Menu" position="0,0" size="1280,720" title="Main menu">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1084,6 +1100,7 @@
   <screen flags="wfNoBorder" name="BouquetSelector" position="0,0" size="1280,720" title="Choose bouquet">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1097,7 +1114,7 @@
   <screen flags="wfNoBorder" name="ChannelContextMenu" position="0,0" size="1280,720" title="Channellist menu">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1111,7 +1128,7 @@
   <screen flags="wfNoBorder" name="MovieContextMenu" position="0,0" size="1280,720" title="Movielist menu">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1135,7 +1152,7 @@
   <screen flags="wfNoBorder" name="MessageBox" position="0,0" size="1280,720" title="Message">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1149,7 +1166,7 @@
   <screen flags="wfNoBorder" name="ChoiceBox" position="0,0" size="1280,720" title="Input">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1176,7 +1193,7 @@
   <screen flags="wfNoBorder" name="LocationBox" position="0,0" size="1280,720">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" name="text" position="70,35" size="850,50" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1197,7 +1214,7 @@
   <screen flags="wfNoBorder" name="VirtualKeyBoard" position="0,0" size="1280,720" title="Virtual KeyBoard" zPosition="20">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1217,7 +1234,7 @@
   <screen flags="wfNoBorder" name="Subtitles" position="0,0" size="1280,720" title="Subtitle selection">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1231,7 +1248,7 @@
   <screen flags="wfNoBorder" name="Setup" position="0,0" size="1280,720" title="Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1247,7 +1264,7 @@
   <screen flags="wfNoBorder" name="PluginBrowser" position="0,0" size="1280,720" title="Plugin browser">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1263,7 +1280,7 @@
   <screen flags="wfNoBorder" name="DirectoryBrowser" position="0,0" size="1280,720" title="Directory browser">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1279,7 +1296,7 @@
   <screen flags="wfNoBorder" name="FileBrowser" position="0,0" size="1280,720" title="DVD File Browser">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1295,7 +1312,7 @@
   <screen flags="wfNoBorder" name="ServiceInfo" position="0,0" size="1280,720" title="Serviceinfo">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1312,7 +1329,7 @@
   </screen>
   <screen flags="wfNoBorder" name="VideoFinetune" position="0,0" size="1280,720" title="Video finetune">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1322,7 +1339,7 @@
   <screen flags="wfNoBorder" name="NetworkSetup" position="0,0" size="1280,720" title="Network Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1336,7 +1353,7 @@
   <screen flags="wfNoBorder" name="AdapterSetupConfiguration" position="0,0" size="1280,720" title="Network Configuration...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1353,7 +1370,7 @@
   <screen flags="wfNoBorder" name="MerlinDownloadBrowser" position="0,0" size="1280,720" title="Addon Manager">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1366,7 +1383,7 @@
   <screen flags="wfNoBorder" name="Shooter_II" position="0,0" size="1280,720" title="Shooter">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1381,7 +1398,7 @@
   <screen flags="wfNoBorder" name="Scripts" position="0,0" size="1280,720" title="Scripts from /usr/script/tools/...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1392,7 +1409,7 @@
   <screen flags="wfNoBorder" name="DreamCC" position="0,0" size="1280,720" title="Dream Cam Center">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1408,7 +1425,7 @@
   <screen flags="wfNoBorder" name="VirtualZapConfig" position="0,0" size="1280,720" title="Virtual Zap Config">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1424,7 +1441,7 @@
   <screen flags="wfNoBorder" name="MerlinPGsetup" position="0,0" size="1280,720" title="Merlin Programm Guide">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1435,7 +1452,7 @@
   <screen flags="wfNoBorder" name="NetworkAdapterSelection" position="0,0" size="1280,720" title="Select Network Adapter">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1466,7 +1483,7 @@
   <screen flags="wfNoBorder" name="AdapterSetup" position="0,0" size="1280,720" title="Network Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1496,7 +1513,7 @@
   <screen flags="wfNoBorder" name="NameserverSetup" position="0,0" size="1280,720" title="Nameserver Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1514,7 +1531,7 @@
   <screen flags="wfNoBorder" name="NetworkAdapterTest" position="0,0" size="1280,720" title="Network test...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1553,7 +1570,7 @@
   <screen flags="wfNoBorder" name="NetworkBrowser" position="0,0" size="1280,720" title="Network Neighbourhood">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1586,7 +1603,7 @@
   <screen flags="wfNoBorder" name="AutoMountManager" position="0,0" size="1280,720" title="AutoMountManager">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1613,7 +1630,7 @@
   <screen flags="wfNoBorder" name="AutoMountView" position="0,0" size="1280,720" title="MountView">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1647,7 +1664,7 @@
   <screen flags="wfNoBorder" name="SleepTimerEdit" position="0,0" size="1280,720" title="Sleep Timer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1669,7 +1686,7 @@
   <screen flags="wfNoBorder" name="CDInfo" position="0,0" size="1280,720" title="CDInfo">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1706,7 +1723,7 @@
   <screen flags="wfNoBorder" name="FilebrowserConfigScreen" position="0,0" size="1280,720" title="">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1722,7 +1739,7 @@
   <screen flags="wfNoBorder" name="UpdatePluginMenu" position="0,0" size="1280,720" title="Softwaremanager...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1756,7 +1773,7 @@
   <screen flags="wfNoBorder" name="PacketManager" position="0,0" size="1280,720" title="Packet Manager">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1784,7 +1801,7 @@
   <screen flags="wfNoBorder" name="PluginManager" position="0,0" size="1280,720" title="Plugin manager">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1820,7 +1837,7 @@
   <screen flags="wfNoBorder" name="PluginManagerInfo" position="0,0" size="1280,720" title="Plugin manager activity">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1848,7 +1865,7 @@
   <screen flags="wfNoBorder" name="PluginDetails" position="0,0" size="1280,720" title="Plugin details">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1868,7 +1885,7 @@
   <screen flags="wfNoBorder" name="UpdatePlugin" position="0,0" size="1280,720" title="Software update">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1903,7 +1920,7 @@
   <screen flags="wfNoBorder" name="WebIfConfigScreen" position="0,0" size="1280,720" title="Main Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1919,7 +1936,7 @@
   <screen flags="wfNoBorder" position="0,0" size="1280,720" name="LanguageSelection" title="Language selection">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1940,7 +1957,7 @@
   <screen flags="wfNoBorder" name="NimSelection" position="0,0" size="1280,720" title="Choose Tuner">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1961,7 +1978,7 @@
   <screen flags="wfNoBorder" name="NimSetup" position="0,0" size="1280,720" title="Reception Settings">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1972,7 +1989,7 @@
   <screen flags="wfNoBorder" name="PluginDownloadBrowser" position="0,0" size="1280,720" title="Downloadable plugins">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -1984,7 +2001,7 @@
   <screen flags="wfNoBorder" name="HarddiskWait" position="0,0" size="1280,720">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2056,7 +2073,7 @@
   <screen flags="wfNoBorder" name="CrashlogAutoSubmitConfiguration" position="0,0" size="1280,720" title="CrashlogAutoSubmit settings">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2074,7 +2091,7 @@
   <screen flags="wfNoBorder" name="CiSelection" position="0,0" size="1280,720" title="Common Interface">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2086,7 +2103,7 @@
   <screen flags="wfNoBorder" name="MMIDialog" position="0,0" size="1280,720" title="Common Interface">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2099,7 +2116,7 @@
   <screen flags="wfNoBorder" name="CIselectMainMenu" position="0,0" size="1280,720" title="CI Assignment">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2115,7 +2132,7 @@
   <screen flags="wfNoBorder" name="CIconfigMenu" position="0,0" size="1280,720" title="CI Assignment">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2137,7 +2154,7 @@
   <screen flags="wfNoBorder" name="easyCIconfigMenu" position="0,0" size="1280,720" title="CI Assignment">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2156,7 +2173,7 @@
   <screen flags="wfNoBorder" name="CAidSelect" position="0,0" size="1280,720" title="select CAId's">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2173,7 +2190,7 @@
   <screen flags="wfNoBorder" name="myProviderSelection" position="0,0" size="1280,720" title="Select provider to add...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2192,7 +2209,7 @@
   <screen flags="wfNoBorder" name="myChannelSelection" position="0,0" size="1280,720" title="Select service to add...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2211,7 +2228,7 @@
   <screen flags="wfNoBorder" name="genuineDreambox" position="0,0" size="1280,720" title="Genuine Dreambox">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2229,7 +2246,7 @@
   <screen flags="wfNoBorder" name="ParentalControlChangePin" position="0,0" size="1280,720" title="Change pin code">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2240,7 +2257,7 @@
   <screen flags="wfNoBorder" name="ParentalControlEditor" position="0,0" size="1280,720" title="Parental control services Editor">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2251,7 +2268,7 @@
   <screen flags="wfNoBorder" name="ParentalControlSetup" position="0,0" size="1280,720" title="Parental control setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2262,7 +2279,7 @@
   <screen flags="wfNoBorder" name="ScanSetup" position="0,0" size="1280,720" title="Service scan">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2274,7 +2291,7 @@
   <screen flags="wfNoBorder" name="ScanSimple" position="0,0" size="1280,720" title="Service scan">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2303,7 +2320,7 @@
   <screen flags="wfNoBorder" name="SkinSelector" position="0,0" size="1280,720" title="Skin Selector">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2320,7 +2337,7 @@
   <screen flags="wfNoBorder" name="TimeDateInput" position="0,0" size="1280,720" title="Time/Date Input">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2338,7 +2355,7 @@
   <screen flags="wfNoBorder" name="WlanScan" position="0,0" size="1280,720" title="Choose a Wireless Network">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2370,7 +2387,7 @@
   <screen flags="wfNoBorder" name="WlanStatus" position="0,0" size="1280,720" title="Wireless Network State">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2400,7 +2417,7 @@
   <screen flags="wfNoBorder" name="VideoEnhancementPreview" position="0,0" size="1280,720" title="VideoEnhancementPreview">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2418,7 +2435,7 @@
   <screen flags="wfNoBorder" name="VideoEnhancementSetup" position="0,0" size="1280,720" title="VideoEnhancementSetup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2487,7 +2504,7 @@
   <screen flags="wfNoBorder" name="TimerEntry" position="0,0" size="1280,720" title="Timer entry">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2503,7 +2520,7 @@
   <screen flags="wfNoBorder" name="TimerSelection" position="0,0" size="1280,720" title="Timer selection">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2517,7 +2534,7 @@
   <screen flags="wfNoBorder" name="TimerEdit" position="0,0" size="1280,720" title="Timer Edit">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2536,7 +2553,7 @@
   <screen flags="wfNoBorder" name="TimerEditList" position="0,0" size="1280,720" title="Timer Editor">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2554,7 +2571,7 @@
   <screen flags="wfNoBorder" name="TimerLog" position="0,0" size="1280,720" title="Timer log">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2573,7 +2590,7 @@
   <screen flags="wfNoBorder" name="TimerSanityConflict" position="0,0" size="1280,720" title="Timer sanity error">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2596,7 +2613,7 @@
   <screen flags="wfNoBorder" name="DreamExplorerII" position="0,0" size="1280,720" title="Dream-Explorer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2614,7 +2631,7 @@
   <screen flags="wfNoBorder" name="vEditor" position="0,0" size="1280,720" title="File-Explorer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2628,7 +2645,7 @@
   <screen flags="wfNoBorder" name="vInputBox" position="0,0" size="1280,720" title="Input">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="625,195" render="Label" size="587,97" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2643,7 +2660,7 @@
   <screen flags="wfNoBorder" name="CPmaniger" position="0,0" size="1280,720" title="Select Copy/Move location...">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2663,7 +2680,7 @@
   <screen flags="wfNoBorder" name="MovieSelectionSP" position="0,0" size="1280,720" title="Suomipoeka">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2709,7 +2726,7 @@
   <screen flags="wfNoBorder" name="SuomipoekaMenu" position="0,0" size="1280,720" title="Suomipoeka settings">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2727,7 +2744,7 @@
   <screen flags="wfNoBorder" name="SimpleRename" position="0,0" size="1280,720" title="Simple Rename Input">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2774,7 +2791,7 @@
   <screen flags="wfNoBorder" name="RemoteTimer" position="0,0" size="1280,720" title="RemoteTimer Timerlist">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2793,7 +2810,7 @@
   <screen flags="wfNoBorder" name="RemoteTimerEPGList" position="0,0" size="1280,720" title="EPG Selection">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2812,7 +2829,7 @@
   <screen flags="wfNoBorder" name="RemoteTimerChannelList" position="0,0" size="1280,720" title="Bouquet List">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2831,7 +2848,7 @@
   <screen flags="wfNoBorder" name="RemoteTimerEventView" position="0,0" size="1280,720" title="Eventview">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2852,7 +2869,7 @@
   <screen flags="wfNoBorder" name="RemoteTimerEntry" position="0,0" size="1280,720" title="Timer entry">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -2871,7 +2888,7 @@
   <screen flags="wfNoBorder" name="picshow" position="0,0" size="1280,720" title="PicturePlayer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
     </widget>
@@ -2893,7 +2910,7 @@
   <screen flags="wfNoBorder" name="EPGRefreshConfiguration" position="0,0" size="1280,720" title="Configure EPGRefresh">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3046,7 +3063,7 @@
   <screen flags="wfNoBorder" name="VlcServerConfigScreen" position="0,0" size="1280,720" title="Edit VLC Server">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3064,7 +3081,7 @@
   <screen flags="wfNoBorder" name="VlcServerListScreen" position="0,0" size="1280,720" title="VLC Video Player V2.5 - Select a VLC-Server Profile">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3083,7 +3100,7 @@
   <screen flags="wfNoBorder" name="VlcMediaListScreen" position="0,0" size="1280,720" title="VLC Video Player V2.5 - Select a VLC-Server Profile">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3248,7 +3265,7 @@
   <screen flags="wfNoBorder" name="WeatherPlugin" position="0,0" size="1280,720" title="Weather Plugin">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3275,7 +3292,7 @@
   <screen flags="wfNoBorder" name="WeatherPluginEntriesListConfigScreen" position="0,0" size="1280,720" title="WeatherPlugin: List of Entries">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3294,7 +3311,7 @@
   <screen flags="wfNoBorder" name="WeatherPluginEntryConfigScreen" position="0,0" size="1280,720" title="WeatherPlugin: Edit Entry">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3314,7 +3331,7 @@
   <screen flags="wfNoBorder" name="RSSSetup" position="0,0" size="1280,720" title="Simple RSS Reader Setup">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3332,7 +3349,7 @@
   <screen flags="wfNoBorder" name="RSSEntryView" position="0,0" size="1280,720" title="Simple RSS Reader">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3343,7 +3360,7 @@
   <screen flags="wfNoBorder" name="RSSFeedView" position="0,0" size="1280,720" title="Simple RSS Reader">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3364,7 +3381,7 @@
   <screen flags="wfNoBorder" name="RSSOverview" position="0,0" size="1280,720" title="Simple RSS Reader">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3379,7 +3396,7 @@
   <screen flags="wfNoBorder" name="AutoTimerSettings" position="0,0" size="1280,720" title="AutoTimer Settings">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3397,7 +3414,7 @@
   <screen flags="wfNoBorder" name="AutoTimerEditor" position="0,0" size="1280,720" title="Edit AutoTimer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3417,7 +3434,7 @@
   <screen flags="wfNoBorder" name="AutoTimerFilterEditor" position="0,0" size="1280,720" title="Edit AutoTimer Filters">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3435,7 +3452,7 @@
   <screen flags="wfNoBorder" name="AutoTimerServiceEditor" position="0,0" size="1280,720" title="Edit AutoTimer Services">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3453,7 +3470,7 @@
   <screen flags="wfNoBorder" name="AutoTimerImporter" position="0,0" size="1280,720" title="Import AutoTimer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3471,7 +3488,7 @@
   <screen flags="wfNoBorder" name="AutoTimerOverview" position="0,0" size="1280,720" title="AutoTimer Overview">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
@@ -3488,7 +3505,7 @@
   <screen flags="wfNoBorder" name="AutoTimerPreview" position="0,0" size="1280,720" title="Preview AutoTimer">
     <eLabel backgroundColor="secondBG" position="0,0" size="1280,90" zPosition="-1" />
     <eLabel backgroundColor="secondBG" position="0,630" size="1280,90" zPosition="-1" />
- 
+    <widget backgroundColor="transparent" position="0,90" render="Pig" size="497,280" source="session.VideoPicture" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;24" position="70,35" render="Label" size="850,50" source="Title" transparent="1" valign="center" zPosition="1" />
     <widget backgroundColor="secondBG" font="Regular;20" halign="right" position="940,35" render="Label" size="270,50" source="global.CurrentTime" transparent="1" valign="center" zPosition="1">
       <convert type="ClockToText">Format:%a %d. %b   %H:%M</convert>
