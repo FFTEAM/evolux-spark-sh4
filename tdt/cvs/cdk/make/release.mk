@@ -596,7 +596,7 @@ else
 	fi
 endif
 	cp -RP $(buildprefix)/root/bin/fbshot $(prefix)/release/bin/
-
+	[ -e $(prefix)/release/for_your_own_changes ] && rm $(prefix)/release/for_your_own_changes
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release/boot/
 	cp -RP $(targetprefix)/boot/uImage $(prefix)/
 	[ -e $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/wireless/ath/ath.ko $(prefix)/release/lib/modules/ath.ko || true

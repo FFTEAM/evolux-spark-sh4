@@ -468,6 +468,7 @@ else
 	fi
 	touch $(prefix)/release_neutrino-hd/etc/.spark7162
 endif
+	[ -e $(prefix)/release_neutrino-hd/for_your_own_changes ] && rm $(prefix)/release_neutrino-hd/for_your_own_changes
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Boxcontrol_Menue.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/Y_Tools_fbshot.yhtm
 #	[ -e $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix ] && cp -RP $(buildprefix)/root/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix $(prefix)/release_neutrino-hd/usr/local/share/neutrino/httpd/scripts/Y_Tools.sh.dirty-fix

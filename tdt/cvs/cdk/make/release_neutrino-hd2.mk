@@ -462,6 +462,7 @@ else
 	fi
 	touch $(prefix)/release_neutrino-hd2/etc/.spark7162
 endif
+	[ -e $(prefix)/release_neutrino-hd2/for_your_own_changes ] && rm $(prefix)/release_neutrino-hd2/for_your_own_changes
 	cp -RP $(buildprefix)/libvorbisidec-1.0.2+svn16259/.libs/lib*.so* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp $(kernelprefix)/$(kernelpath)/arch/sh/boot/uImage $(prefix)/release_neutrino-hd2/boot/
 	cp -RP $(targetprefix)/boot/uImage $(prefix)/

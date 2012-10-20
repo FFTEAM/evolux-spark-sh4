@@ -482,6 +482,7 @@ if ENABLE_MULTI_YAFFS2
 	cp -RP $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release_neutrino/sbin/
 	cp -RP $(buildprefix)/root/sbin/unspare2 $(prefix)/release_neutrino/sbin/
 endif
+	[ -e $(prefix)/release_neutrino/for_your_own_changes ] && rm $(prefix)/release_neutrino/for_your_own_changes
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/net/wireless/ath/ath.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/net/wireless/ath/ath.ko $(prefix)/release_neutrino/lib/modules/ath.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/net/wireless/zd1201.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/net/wireless/zd1201.ko $(prefix)/release_neutrino/lib/modules/zd1201.ko || true
 	[ -e $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/$(kernelpath)/drivers/usb/serial/ftdi_sio.ko $(prefix)/release_neutrino/lib/modules/ftdi_sio.ko || true

@@ -647,6 +647,7 @@ endif
 	if [ ! -e $(prefix)/release-enigma2-pli-nightly/usr/script ]; then \
 		mkdir -p $(prefix)/release-enigma2-pli-nightly/usr/script; \
 	fi
+	[ -e $(prefix)/release-enigma2-pli-nightly/for_your_own_changes ] && rm $(prefix)/release-enigma2-pli-nightly/for_your_own_changes
 	cp -RP $(buildprefix)/root/usr/script/user_script.sh.example $(prefix)/release-enigma2-pli-nightly/usr/script/
 #	cp $(kernelprefix)/linux-sh4/arch/sh/boot/uImage $(prefix)/release-enigma2-pli-nightly/boot/
 	cp -RP $(targetprefix)/boot/uImage $(prefix)/

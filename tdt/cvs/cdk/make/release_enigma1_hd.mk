@@ -712,7 +712,7 @@ endif
 
 ######## FOR YOUR OWN CHANGES use these folder in cdk/own_build/enigma1_hd #############
 	cp -RP $(buildprefix)/own_build/enigma1_hd/* $(prefix)/release_enigma1_hd/
-
+	[ -e $(prefix)/release_enigma1_hd/for_your_own_changes ] && rm $(prefix)/release_enigma1_hd/for_your_own_changes
 #######################################################################################
 #######################################################################################
 
