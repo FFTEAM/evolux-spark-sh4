@@ -216,6 +216,19 @@ endif
 			touch $(prefix)/release_vdrdev2/lib/modules/`basename $$mod`; \
 		fi;\
 	done
+	cp -RP $(prefix)/cdkroot/boot/uImage $(prefix)/
+if ENABLE_SPARK
+	if [ -d $(prefix)/release_vdrdev2/boot/spark7162 ]; then \
+		rm -rf $(prefix)/release_vdrdev2/boot/spark7162; \
+	fi
+else
+	if [ -d $(prefix)/release_vdrdev2/boot/spark7162 ]; then \
+		rm $(prefix)/release_vdrdev2/boot/*.elf; \
+		cp $(prefix)/release_vdrdev2/boot/spark7162/*.elf $(prefix)/release_vdrdev2/boot/; \
+		rm -rf $(prefix)/release_vdrdev2/boot/spark7162; \
+	fi
+	touch $(prefix)/release_vdrdev2/etc/.spark7162
+endif
 	find $(prefix)/release_vdrdev2/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 	rm -rf $(prefix)/release_vdrdev2/lib/autofs
 	rm -rf $(prefix)/release_vdrdev2/lib/modules/$(KERNELVERSION)
