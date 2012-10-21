@@ -72,7 +72,11 @@ endif
 	cp -RP $(targetprefix)/usr/local/lib/tuxbox/plugins/* $(prefix)/release_evolux_triple_with_dev/var/plugins/
 if ENABLE_SPARK7162
 	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/startnhd*
+	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/starte2*
 	rm $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxcom*
+	rm $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/*
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/deutsch.locale $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/
+	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/english.locale $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/
 endif
 	( cd $(prefix)/release_evolux_triple_with_dev/share && ln -sf /usr/local/share/iso-codes iso-codes )
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
