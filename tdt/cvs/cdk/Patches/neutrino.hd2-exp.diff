@@ -44,16 +44,4312 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	dmx->pesFilter(vpid);
 
 
---- neutrino-hd2-exp/src/sectionsd/sectionsd.cpp	2012-10-17 11:55:37.031347691 +0200
-+++ neutrino-hd2-exp/src/sectionsd/sectionsd.cpp	2012-10-17 11:56:30.003610365 +0200
-@@ -177,7 +177,7 @@
- //NTP-Config
- #define CONF_FILE CONFIGDIR "/neutrino.conf"
+--- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-10-21 11:01:20.865347864 +0200
++++ neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-10-21 12:43:45.000000000 +0200
+@@ -37,7 +37,7 @@
  
--const std::string ntp_system_cmd_prefix = "/sbin/rdate ";
-+const std::string ntp_system_cmd_prefix = "/sbin/ntpdate ";
  
- std::string ntp_system_cmd;
- CConfigFile ntp_config(',');
+ extern cVideo *videoDecoder;
+-extern CFrontend * live_fe;
++extern CFrontend * getFE(int index);
+ 
+ static const char * FILENAME = "[dmx_cs.cpp]";
+ 
+@@ -90,8 +90,33 @@
+ 	if (type != DMX_PSI_CHANNEL)
+ 		flags |= O_NONBLOCK;
+ 	
+-	#if 1
++#if defined (PLATFORM_SPARK7162)	
++	switch(feindex)
++	{
++		case 0:
++			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE )
++				demux_num = 0;
++			else
++				demux_num = 2;
++			break;
++		
++		case 1:
++			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE ))
++				demux_num = 0;
++			else
++				demux_num = 1;
++			break;
++			
++		case 2:
++			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE ))
++				demux_num = 0;
++			else
++				demux_num = 1;
++			break;
++	}
++#else
+ 	demux_num = feindex;
++#endif
+ 	
+ 	if (last_source == feindex) 
+ 	{
+@@ -99,7 +124,6 @@
+ 		if (demux_fd > -1)
+ 			return true;
+ 	}
+-	#endif
+ 	
+ 	if (demux_fd > -1) 
+ 	{
+
+
+--- neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-10-21 11:01:27.273379637 +0200
++++ neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-10-21 12:43:43.000000000 +0200
+@@ -638,11 +638,61 @@
+ 	}
+ 	#endif
+ 	
++#if defined (PLATFORM_SPARK7162)	
++	switch(fe->fenumber)
++	{
++		case 0:
++			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE ) {
++				// socket
++				live_cam->setCaSocket( 0 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 0 );
++			}
++			else {
++				// socket
++				live_cam->setCaSocket( 2 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 2 );
++			}
++			break;
++			
++		case 1:
++			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE )) {
++				// socket
++				live_cam->setCaSocket( 0 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 0 );
++			}
++			else {
++				// socket
++				live_cam->setCaSocket( 1 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 1 );
++			}
++			break;
++			
++		case 2:
++			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE )) {
++				// socket
++				live_cam->setCaSocket( 0 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 0 );
++			}
++			else {
++				// socket
++				live_cam->setCaSocket( 1 );
++				// cam
++				live_cam->setCaPmt(thischannel->getCaPmt(), 1 );
++			}
++			break;
++	}
++#else
+ 	// socket
+ 	live_cam->setCaSocket( fe->fenumber );
+ 	
+ 	// cam
+ 	live_cam->setCaPmt(thischannel->getCaPmt(), fe->fenumber );
++#endif
+ 	
+ 	// ci cam
+ //#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_GIGABLUE) || defined (PLATFORM_DUCKBOX) || defined (PLATFORM_DREAMBOX)
+
+
+////////////////////////
+// extramenu patches ///
+////////////////////////
+--- neutrino-hd2-exp/src/gui/widget/menue.cpp	2012-10-21 16:09:01.871337465 +0200
++++ neutrino-hd2-exp/src/gui/widget/menue.cpp	2012-10-21 15:56:08.875504381 +0200
+@@ -2123,3 +2123,14 @@
+         return menu_return::RETURN_EXIT;
+ }
+ 
++void CMenuForwarder::setOptionValue(const char * const Option)
++{
++	option = Option;
++	option_string = NULL;
++}
++
++void CMenuForwarder::setOptionValue(const std::string &Option)
++{
++	option = NULL;
++	option_string = &Option;
++}
+
+--- neutrino-hd2-exp/src/gui/widget/menue.h	2012-10-21 16:13:02.680531577 +0200
++++ neutrino-hd2-exp/src/gui/widget/menue.h	2012-10-21 15:03:50.299941019 +0200
+@@ -195,6 +195,8 @@
+ 		{
+ 			return active;
+ 		}
++		void setOptionValue(const char * const Option);
++		void setOptionValue(const std::string &Option);
+ };
+ 
+ class CMenuForwarderItemMenuIcon : public CMenuItem
+
+--- neutrino-hd2-exp/src/system/settings.h	2012-10-21 16:15:22.581225295 +0200
++++ neutrino-hd2-exp/src/system/settings.h	2012-10-21 15:31:04.140042794 +0200
+@@ -356,8 +356,11 @@
+                 ITEM_VTXT = 15,
+                 ITEM_GAME = 16,
+                 ITEM_OPKG = 17,
++                ITEM_ADZAP = 18,
++                ITEM_EMU_RESTART = 19,
++                ITEM_TUNER_RESTART = 20,
+ #if ENABLE_GRAPHLCD                
+-                ITEM_GLCD = 18,
++                ITEM_GLCD = 21,
+ #endif 
+                 ITEM_MAX   // MUST be always the last in the list
+         }USER_ITEM;
+@@ -458,6 +461,9 @@
+ 	char softupdate_proxypassword[31];
+ 	// END UPDATE
+ 
++	// adzap
++	int	adzap_zapBackPeriod;
++
+ 	// VFD
+ #define LCD_SETTING_COUNT 8
+ 	enum LCD_SETTINGS {
+
+--- neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 16:17:29.633855316 +0200
++++ neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 15:40:23.854818280 +0200
+@@ -547,6 +547,7 @@
+ 	"messagebox.no",
+ 	"messagebox.ok",
+ 	"messagebox.yes",
++	"messagebox.accept",
+ 	"miscsettings.bootinfo",
+ 	"miscsettings.bootmenu",
+ 	"miscsettings.channellist",
+@@ -1182,6 +1183,7 @@
+ 	"usermenu.item_none",
+ 	"usermenu.item_vtxt",
+ 	"usermenu.item_plugins",
++	"usermenu.item_adzap",
+ 	"usermenu.name",
+ 	"videomenu.csync",
+ 	"videomenu.head",
+@@ -1551,6 +1553,113 @@
+ 	"keybinding.key_picture",
+ 	"keybinding.key_timelist",
+ 	"keybinding.key_net",
++
++	"mainmenu.extramenu",
++	"extramenu.tunerreset",
++	"extramenu.tunerreset.select",
++	"extramenu.tunerreset.on",
++	"extramenu.tunerreset.off",
++	"extramenu.tunerreset.restart",
++	"extramenu.correctvolume",
++	"extramenu.correctvolume.select",
++	"extramenu.correctvolume.on",
++	"extramenu.correctvolume.off",
++	"extramenu.amount",
++	"extramenu.amount.select",
++	"extramenu.amount.on",
++	"extramenu.amount.off",
++	"extramenu.displaytime",
++	"extramenu.displaytime.select",
++	"extramenu.displaytime.on",
++	"extramenu.displaytime.off",
++	"extramenu.wwwdate",
++	"extramenu.wwwdate.select",
++	"extramenu.wwwdate.on",
++	"extramenu.wwwdate.off",
++	"extramenu.checkfs",
++	"extramenu.checkfs.select",
++	"extramenu.checkfs.on",
++	"extramenu.checkfs.off",
++	"extramenu.emu",
++	"extramenu.emu.none",
++	"extramenu.emu.mgcamd",
++	"extramenu.emu.incubus",
++	"extramenu.emu.camd3",
++	"extramenu.emu.mbox",
++	"extramenu.emu.oscam",
++	"extramenu.emu.spcs",
++	"extramenu.emu.select",
++	"extramenu.emu.restart",
++	"extramenu.emu.disable",
++	"extramenu.swap",
++	"extramenu.swap.swapram",
++	"extramenu.swap.swappart",
++	"extramenu.swap.swapfile",
++	"extramenu.swap.select",
++	"extramenu.swap.onoff",
++	"extramenu.boot.head",
++	"extramenu.boot.select",
++	"extramenu.boot.unchanged",
++	"extramenu.boot.bootargs.head",
++	"extramenu.boot.bootargs.text",
++	"extramenu.fsck",
++	"extramenu.fsck.select",
++	"extramenu.fsck.on",
++	"extramenu.fsck.off",
++	"extramenu.nfsserver",
++	"extramenu.nfsserver.select",
++	"extramenu.nfsserver.on",
++	"extramenu.nfsserver.off",
++	"extramenu.stmfb",
++	"extramenu.stmfb.select",
++	"extramenu.stmfb.on",
++	"extramenu.stmfb.off",
++	"extramenu.fritzcall",
++	"extramenu.fritzcall.select",
++	"extramenu.fritzcall.on",
++	"extramenu.fritzcall.off",
++	"extramenu.glcd",
++	"extramenu.glcd.volume",
++	"extramenu.glcd.color.black",
++	"extramenu.glcd.color.white",
++	"extramenu.glcd.color.red",
++	"extramenu.glcd.color.green",
++	"extramenu.glcd.color.blue",
++	"extramenu.glcd.color.magenta",
++	"extramenu.glcd.color.cyan",
++	"extramenu.glcd.color.yellow",
++	"extramenu.glcd.select.fg",
++	"extramenu.glcd.select.bg",
++	"extramenu.glcd.select.bar",
++	"extramenu.glcd.size_channel",
++	"extramenu.glcd.size_epg",
++	"extramenu.glcd.size_bar",
++	"extramenu.glcd.size_time",
++	"extramenu.glcd.restart",
++	"extramenu.glcd.mirror_osd",
++	"extramenu.glcd.time_in_standby",
++	"extramenu.evoluxupdate",
++	"extramenu.evoluxupdate.select",
++	"extramenu.evoluxupdate.on",
++	"extramenu.evoluxupdate.off",
++	"extramenu.evoluxupdate.update",
++	"extramenu.kerneloptions",
++	"extramenu.kerneloptions.apply",
++	"extramenu.kerneloptions.lsmod",
++	"extramenu.kerneloptions.modules",
++	"extramenu.kerneloptions.reset",
++	"onoff.on",
++	"onoff.off",
++	"adzap",
++	"adzap.announce",
++	"adzap.cancel",
++	"adzap.enable",
++	"adzap.disable",
++	"adzap.monitor",
++	"adzap.minute",
++	"adzap.minutes",
++	"adzap.switchback",
++	"adzap.commit",
+ 	
+ 	"audiomenu.volumebar_audiosteps",
+ };
+
+--- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
++++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
+@@ -547,6 +547,7 @@
+ 	LOCALE_MESSAGEBOX_NO,
+ 	LOCALE_MESSAGEBOX_OK,
+ 	LOCALE_MESSAGEBOX_YES,
++	LOCALE_MESSAGEBOX_ACCEPT,
+ 	LOCALE_MISCSETTINGS_BOOTINFO,
+ 	LOCALE_MISCSETTINGS_BOOTMENU,
+ 	LOCALE_MISCSETTINGS_CHANNELLIST,
+@@ -1182,6 +1183,7 @@
+ 	LOCALE_USERMENU_ITEM_NONE,
+ 	LOCALE_USERMENU_ITEM_VTXT,
+ 	LOCALE_USERMENU_ITEM_PLUGINS,
++	LOCALE_USERMENU_ITEM_ADZAP,
+ 	LOCALE_USERMENU_NAME,
+ 	LOCALE_VIDEOMENU_CSYNC,
+ 	LOCALE_VIDEOMENU_HEAD,
+@@ -1551,6 +1553,112 @@
+ 	LOCALE_KEYBINDINGMENU_PICTURE,
+ 	LOCALE_KEYBINDINGMENU_TIMELIST,
+ 	LOCALE_KEYBINDINGMENU_NET,
++	LOCALE_MAINMENU_EXTRAMENU ,
++	LOCALE_EXTRAMENU_TUNERRESET ,
++	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
++	LOCALE_EXTRAMENU_TUNERRESET_ON ,
++	LOCALE_EXTRAMENU_TUNERRESET_OFF ,
++	LOCALE_EXTRAMENU_TUNERRESET_RESTART,
++	LOCALE_EXTRAMENU_CORRECTVOLUME,
++	LOCALE_EXTRAMENU_CORRECTVOLUME_SELECT,
++	LOCALE_EXTRAMENU_CORRECTVOLUME_ON,
++	LOCALE_EXTRAMENU_CORRECTVOLUME_OFF,
++	LOCALE_EXTRAMENU_AMOUNT,
++	LOCALE_EXTRAMENU_AMOUNT_SELECT,
++	LOCALE_EXTRAMENU_AMOUNT_ON,
++	LOCALE_EXTRAMENU_AMOUNT_OFF,
++	LOCALE_EXTRAMENU_DISPLAYTIME,
++	LOCALE_EXTRAMENU_DISPLAYTIME_SELECT,
++	LOCALE_EXTRAMENU_DISPLAYTIME_ON,
++	LOCALE_EXTRAMENU_DISPLAYTIME_OFF,
++	LOCALE_EXTRAMENU_WWWDATE,
++	LOCALE_EXTRAMENU_WWWDATE_SELECT,
++	LOCALE_EXTRAMENU_WWWDATE_ON,
++	LOCALE_EXTRAMENU_WWWDATE_OFF,
++	LOCALE_EXTRAMENU_CHECKFS,
++	LOCALE_EXTRAMENU_CHECKFS_SELECT,
++	LOCALE_EXTRAMENU_CHECKFS_ON,
++	LOCALE_EXTRAMENU_CHECKFS_OFF,
++	LOCALE_EXTRAMENU_EMU,
++	LOCALE_EXTRAMENU_EMU_NONE,
++	LOCALE_EXTRAMENU_EMU_MGCAMD,
++	LOCALE_EXTRAMENU_EMU_INCUBUS,
++	LOCALE_EXTRAMENU_EMU_CAMD3,
++	LOCALE_EXTRAMENU_EMU_MBOX,
++	LOCALE_EXTRAMENU_EMU_OSCAM ,
++	LOCALE_EXTRAMENU_EMU_SPCS ,
++	LOCALE_EXTRAMENU_EMU_SELECT,
++	LOCALE_EXTRAMENU_EMU_RESTART,
++	LOCALE_EXTRAMENU_EMU_DISABLE,
++	LOCALE_EXTRAMENU_SWAP,
++	LOCALE_EXTRAMENU_SWAP_SWAPRAM,
++	LOCALE_EXTRAMENU_SWAP_SWAPPART,
++	LOCALE_EXTRAMENU_SWAP_SWAPFILE,
++	LOCALE_EXTRAMENU_SWAP_SELECT,
++	LOCALE_EXTRAMENU_SWAP_ONOFF,
++	LOCALE_EXTRAMENU_BOOT_HEAD,
++	LOCALE_EXTRAMENU_BOOT_SELECT,
++	LOCALE_EXTRAMENU_BOOT_UNCHANGED,
++	LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD,
++	LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT,
++	LOCALE_EXTRAMENU_FSCK,
++	LOCALE_EXTRAMENU_FSCK_SELECT,
++	LOCALE_EXTRAMENU_FSCK_ON,
++	LOCALE_EXTRAMENU_FSCK_OFF,
++	LOCALE_EXTRAMENU_NFSSERVER,
++	LOCALE_EXTRAMENU_NFSSERVER_SELECT,
++	LOCALE_EXTRAMENU_NFSSERVER_ON,
++	LOCALE_EXTRAMENU_NFSSERVER_OFF,
++	LOCALE_EXTRAMENU_STMFB,
++	LOCALE_EXTRAMENU_STMFB_SELECT,
++	LOCALE_EXTRAMENU_STMFB_ON,
++	LOCALE_EXTRAMENU_STMFB_OFF,
++	LOCALE_EXTRAMENU_FRITZCALL,
++	LOCALE_EXTRAMENU_FRITZCALL_SELECT,
++	LOCALE_EXTRAMENU_FRITZCALL_ON,
++	LOCALE_EXTRAMENU_FRITZCALL_OFF,
++	LOCALE_EXTRAMENU_GLCD,
++	LOCALE_EXTRAMENU_GLCD_VOLUME,
++	LOCALE_EXTRAMENU_GLCD_COLOR_BLACK,
++	LOCALE_EXTRAMENU_GLCD_COLOR_WHITE,
++	LOCALE_EXTRAMENU_GLCD_COLOR_RED,
++	LOCALE_EXTRAMENU_GLCD_COLOR_GREEN,
++	LOCALE_EXTRAMENU_GLCD_COLOR_BLUE,
++	LOCALE_EXTRAMENU_GLCD_COLOR_MAGENTA,
++	LOCALE_EXTRAMENU_GLCD_COLOR_CYAN,
++	LOCALE_EXTRAMENU_GLCD_COLOR_YELLOW,
++	LOCALE_EXTRAMENU_GLCD_SELECT_FG,
++	LOCALE_EXTRAMENU_GLCD_SELECT_BG,
++	LOCALE_EXTRAMENU_GLCD_SELECT_BAR,
++	LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
++	LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
++	LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
++	LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
++	LOCALE_EXTRAMENU_GLCD_RESTART,
++	LOCALE_EXTRAMENU_GLCD_MIRROR_OSD,
++	LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY,
++	LOCALE_EXTRAMENU_EVOLUXUPDATE,
++	LOCALE_EXTRAMENU_EVOLUXUPDATE_SELECT,
++	LOCALE_EXTRAMENU_EVOLUXUPDATE_ON,
++	LOCALE_EXTRAMENU_EVOLUXUPDATE_OFF,
++	LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE,
++	LOCALE_EXTRAMENU_KERNELOPTIONS,
++	LOCALE_EXTRAMENU_KERNELOPTIONS_APPLY,
++	LOCALE_EXTRAMENU_KERNELOPTIONS_LSMOD,
++	LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES,
++	LOCALE_EXTRAMENU_KERNELOPTIONS_RESET,
++	LOCALE_ONOFF_ON,
++	LOCALE_ONOFF_OFF,
++	LOCALE_ADZAP,
++	LOCALE_ADZAP_ANNOUNCE,
++	LOCALE_ADZAP_CANCEL,
++	LOCALE_ADZAP_ENABLE,
++	LOCALE_ADZAP_DISABLE,
++	LOCALE_ADZAP_MONITOR,
++	LOCALE_ADZAP_MINUTE,
++	LOCALE_ADZAP_MINUTES,
++	LOCALE_ADZAP_SWITCHBACK,
++	LOCALE_ADZAP_COMMIT,
+ 	
+ 	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
+ } neutrino_locale_t;
+
+--- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
++++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
+@@ -705,6 +705,7 @@
+ messagebox.no Nein
+ messagebox.ok OK
+ messagebox.yes Ja
++messagebox.accept Wollen Sie die Änderungen beibehalten?
+ miscsettings.bootinfo Infos beim Booten anzeigen
+ miscsettings.bootmenu Bootmenü anzeigen
+ miscsettings.channellist Kanalliste
+@@ -1369,6 +1370,7 @@
+ usermenu.item_none  
+ usermenu.item_vtxt Videotext
+ usermenu.item_plugins Plugins
++usermenu.item_adzap Werbezapper
+ usermenu.name Name
+ video_mode_ok Video-Einstellungen ok ?
+ videomenu.analog_hd_rgb_cinch RGB auf Cinch (HD)
+@@ -1544,4 +1546,110 @@
+ 
+ audiomenu.volumebar_audiosteps Lautstärke Schrittweite
+ 
++mainmenu.extramenu Extras
++extramenu.tunerreset Tuner Menue
++extramenu.tunerreset.select Tuner Reset
++extramenu.tunerreset.on Ein
++extramenu.tunerreset.off Aus
++extramenu.tunerreset.restart Tuner neu starten
++extramenu.correctvolume Volume Menue Ext.
++extramenu.correctvolume.select Correct Volume
++extramenu.correctvolume.on Ein
++extramenu.correctvolume.off Aus
++extramenu.amount Amount Menue
++extramenu.amount.select Amount
++extramenu.amount.on Ein
++extramenu.amount.off Aus
++extramenu.displaytime DisplayTime Menue
++extramenu.displaytime.select DisplayTime
++extramenu.displaytime.on Ein
++extramenu.displaytime.off Aus
++extramenu.wwwdate wwwDate Menue
++extramenu.wwwdate.select wwwDate
++extramenu.wwwdate.on Ein
++extramenu.wwwdate.off Aus
++extramenu.checkfs CheckFS Menue
++extramenu.checkfs.select CheckFS
++extramenu.checkfs.on Ein
++extramenu.checkfs.off Aus
++extramenu.emu Cam Menue
++extramenu.emu.none Nicht aktiv
++extramenu.emu.mgcamd MGCamd
++extramenu.emu.incubus IncubusCamd
++extramenu.emu.camd3 Camd3
++extramenu.emu.mbox Mbox
++extramenu.emu.oscam Oscam
++extramenu.emu.spcs Spcs
++extramenu.emu.select Cam Auswahl
++extramenu.emu.restart Cam neu starten
++extramenu.emu.disable Cam deaktivieren
++extramenu.swap Swap Menue
++extramenu.swap.swapram SWAPRAM
++extramenu.swap.swappart SWAPPART
++extramenu.swap.swapfile SWAPFILE
++extramenu.swap.select Swap Auswahl
++extramenu.swap.onoff SWAP
++extramenu.boot.head Boot-Einstellungen
++extramenu.boot.select Startsystem bei Neustart
++extramenu.boot.unchanged Unverändert
++extramenu.boot.bootargs.head Änderung der Boot-Parameter
++extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
++extramenu.fsck FSCK Menue
++extramenu.fsck.select FSCK
++extramenu.fsck.on Ein
++extramenu.fsck.off Aus
++extramenu.nfsserver NFSSERVER Menue
++extramenu.nfsserver.select NFSSERVER
++extramenu.nfsserver.on Ein
++extramenu.nfsserver.off Aus
++extramenu.stmfb STMFB Menue
++extramenu.stmfb.select STMFB 15m
++extramenu.stmfb.on Ein
++extramenu.stmfb.off Aus
++extramenu.fritzcall Fritzcall Menue
++extramenu.fritzcall.select Fritzcallmonitor
++extramenu.fritzcall.on Ein
++extramenu.fritzcall.off Aus
++extramenu.evoluxupdate Evolux OnlineUpdate
++extramenu.evoluxupdate.select OnlineUpdate
++extramenu.evoluxupdate.on On
++extramenu.evoluxupdate.off Off
++extramenu.evoluxupdate.update OnlineUpdate ausführen
++extramenu.kerneloptions Kernel-Optionen
++extramenu.kerneloptions.apply Einstellungen anwenden
++extramenu.kerneloptions.lsmod Status
++extramenu.kerneloptions.modules Kernel-Module
++extramenu.kerneloptions.reset Einstellungen zurücksetzen
++extramenu.glcd.volume Lautstärke
++extramenu.glcd.color.black Schwarz
++extramenu.glcd.color.white Weiss
++extramenu.glcd.color.red Rot
++extramenu.glcd.color.green Grün
++extramenu.glcd.color.blue Blau
++extramenu.glcd.color.magenta Magenta
++extramenu.glcd.color.cyan Blaugrün
++extramenu.glcd.color.yellow Gelb
++extramenu.glcd GraphLCD
++extramenu.glcd.select.fg Vordergrund-Farbe
++extramenu.glcd.select.bg Hintergrund-Farbe
++extramenu.glcd.select.bar Fortschrittsbalken-Farbe
++extramenu.glcd.size_channel Sender-Größe
++extramenu.glcd.size_epg EPG-Größe
++extramenu.glcd.size_bar Fortschrittsbalken-Größe
++extramenu.glcd.size_time Uhrzeit-Größe
++extramenu.glcd.restart Neu erkennen
++extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
++extramenu.glcd.time_in_standby Zeitanzeige in Standby
++onoff.on Ein
++onoff.off Aus
++adzap Werbezapper
++adzap.announce In 15 Sekunden wird umgeschaltet auf
++adzap.cancel Deaktiviert
++adzap.enable Einmalig aktivieren
++adzap.disable Deaktivieren
++adzap.monitor Daueraktiv bei aktueller Sendung
++adzap.minute Minute
++adzap.minutes Minuten
++adzap.switchback Zurückschalten nach
++adzap.commit (Nach Zeitänderung (OK) drücken)
+ 
+
+--- neutrino-hd2-exp/src/gui/Makefile.am	2012-10-21 16:23:08.683536677 +0200
++++ neutrino-hd2-exp/src/gui/Makefile.am	2012-10-21 15:21:56.569327570 +0200
+@@ -43,13 +43,13 @@
+ 	filebrowser.cpp audioplayer.cpp nfs.cpp pictureviewer.cpp \
+ 	movieplayer.cpp rc_lock.cpp \
+ 	timeosd.cpp epgplus.cpp epg_menu.cpp \
+-	streaminfo2.cpp dboxinfo.cpp \
++	streaminfo2.cpp dboxinfo.cpp extra_menu.cpp \
+ 	plugins.cpp imageinfo.cpp audio_select.cpp moviebrowser.cpp movieinfo.cpp \
+ 	scan_setup.cpp zapit_setup.cpp proxyserver_setup.cpp
+ 
+ libneutrino_gui2_a_SOURCES = \
+ 	color.cpp motorcontrol.cpp hdd_menu.cpp \
+-	alphasetup.cpp dvbsub_select.cpp psisetup.cpp opkg_manager.cpp
++	alphasetup.cpp dvbsub_select.cpp psisetup.cpp opkg_manager.cpp adzap.cpp
+ 
+ if ENABLE_UPNP
+ libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
+
+--- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
++++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:04:13.171757316 +0200
+@@ -0,0 +1,2558 @@
++#define __USE_FILE_OFFSET64 1
++#include <gui/filebrowser.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/sysinfo.h>
++#include <sys/vfs.h>
++#include "libnet.h"
++#include <sys/wait.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <sstream>
++#include <iostream>
++#include <fstream>
++#include <map>
++#include <string>
++
++#include <unistd.h>
++
++#include <system/debug.h>
++#include <system/safe_system.h>
++#include <system/set_threadname.h>
++
++#include <global.h>
++#include <neutrino.h>
++
++#include "zapit/channel.h"
++
++#include <driver/fontrenderer.h>
++#include <driver/rcinput.h>
++#include <daemonc/remotecontrol.h>
++
++#include "widget/menue.h"
++#include "widget/messagebox.h"
++#include "widget/hintbox.h"
++#include "widget/colorchooser.h"
++#include "widget/lcdcontroler.h"
++#include "widget/keychooser.h"
++
++#include "widget/stringinput.h"
++#include "widget/stringinput_ext.h"
++
++#include "bouquetlist.h"
++#include "color.h"
++#include "eventlist.h"
++#include "infoviewer.h"
++
++#include "extra_menu.h"
++
++#define ONOFF_OPTION_COUNT 2
++
++const CMenuOptionChooser::keyval ONOFF_OPTIONS[ONOFF_OPTION_COUNT] = {
++	{ 0, LOCALE_ONOFF_OFF },
++	{ 1, LOCALE_ONOFF_ON },
++};
++
++static int touch(const char *filename) {
++	int fn = open(filename, O_RDWR | O_CREAT, 0644);
++	if (fn > -1) {
++		close(fn);
++		return -1;
++	}
++	return 0;
++}
++
++#if 0
++static int safe_system(const char *command) {
++	pid_t child = fork();
++	switch(child){
++		case -1:
++			return -1;
++		case 0:
++			for(int i = 3; i < 256 /* arbitrary, but high enough */; i++)
++				close(i);
++			signal(SIGTERM, SIG_DFL);
++			signal(SIGINT, SIG_DFL);
++			signal(SIGHUP, SIG_DFL);
++			execl("/bin/sh", "sh", "-c", command, NULL);
++			exit(-1);
++		default:
++			int status;
++			waitpid(child, &status, 0);
++			return status;
++	}
++}
++#endif
++
++
++static struct {
++#define EXTRA_CAM_SELECTED "cam_selected"
++        std::string	cam_selected;
++#ifdef WITH_GRAPHLCD_OFF
++#define GLCD_ENABLE "glcd_enable"
++        int	glcd_enable;
++#define GLCD_COLOR_FG "glcd_color_fg"
++        uint32_t	glcd_color_fg;
++#define GLCD_COLOR_BG "glcd_color_bg"
++        uint32_t	glcd_color_bg;
++#define GLCD_COLOR_BAR "glcd_color_bar"
++        uint32_t	glcd_color_bar;
++#define GLCD_FONT "glcd_font"
++        string		glcd_font;
++#define GLCD_SIZE_CHANNEL "glcd_percent_channel"
++        int		glcd_percent_channel;
++#define GLCD_SIZE_EPG "glcd_percent_epg"
++        int		glcd_percent_epg;
++#define GLCD_SIZE_BAR "glcd_percent_bar"
++        int		glcd_percent_bar;
++#define GLCD_SIZE_TIME "glcd_percent_time"
++        int		glcd_percent_time;
++#define GLCD_MIRROR_OSD "glcd_mirror_osd"
++        int		glcd_mirror_osd;
++#define GLCD_TIME_IN_STANDBY "glcd_time_in_standby"
++        int		glcd_time_in_standby;
++#endif
++} settings;
++
++CConfigFile *configfile = NULL;
++
++static bool saveSettings() {
++	if (configfile) {
++		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
++#ifdef WITH_GRAPHLCD_OFF
++		configfile->setInt32(GLCD_ENABLE, settings.glcd_enable);
++		configfile->setInt32(GLCD_COLOR_FG, settings.glcd_color_fg);
++		configfile->setInt32(GLCD_COLOR_BG, settings.glcd_color_bg);
++		configfile->setInt32(GLCD_COLOR_BAR, settings.glcd_color_bar);
++		configfile->setInt32(GLCD_SIZE_CHANNEL, settings.glcd_percent_channel);
++		configfile->setInt32(GLCD_SIZE_EPG, settings.glcd_percent_epg);
++		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
++		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
++		configfile->setInt32(GLCD_MIRROR_OSD, settings.glcd_mirror_osd);
++		configfile->setInt32(GLCD_TIME_IN_STANDBY, settings.glcd_time_in_standby);
++		configfile->setString(GLCD_FONT, settings.glcd_font);
++#endif
++		configfile->saveConfig(EXTRA_SETTINGS_FILE);
++		return true;
++	}
++	return false;
++}
++
++static bool initSettings() {
++	settings.cam_selected = "disabled";
++#ifdef WITH_GRAPHLCD_OFF
++	settings.glcd_enable = 0;
++	settings.glcd_color_fg = GLCD::cColor::White;
++	settings.glcd_color_bg = GLCD::cColor::Blue;
++	settings.glcd_color_bar = GLCD::cColor::Red;
++	settings.glcd_percent_channel = 18;
++	settings.glcd_percent_epg = 8;
++	settings.glcd_percent_bar = 6;
++	settings.glcd_percent_time = 22;
++	settings.glcd_mirror_osd = 0;
++	settings.glcd_time_in_standby = 0;
++	settings.glcd_font = FONTDIR "/neutrino.ttf";
++#endif
++}
++
++static bool loadSettings() {
++	if (!configfile) {
++		initSettings();
++		configfile = new CConfigFile('=');
++		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
++			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
++#ifdef WITH_GRAPHLCD_OFF
++			settings.glcd_enable = configfile->getInt32(GLCD_ENABLE, 0);
++			settings.glcd_color_fg = configfile->getInt32(GLCD_COLOR_FG, GLCD::cColor::White);
++			settings.glcd_color_bg = configfile->getInt32(GLCD_COLOR_BG, GLCD::cColor::Blue);
++			settings.glcd_color_bar = configfile->getInt32(GLCD_COLOR_BAR, GLCD::cColor::Red);
++			settings.glcd_percent_channel = configfile->getInt32(GLCD_SIZE_CHANNEL, 18);
++			settings.glcd_percent_epg = configfile->getInt32(GLCD_SIZE_EPG, 8);
++			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
++			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
++			settings.glcd_mirror_osd = configfile->getInt32(GLCD_MIRROR_OSD, 0);
++			settings.glcd_time_in_standby = configfile->getInt32(GLCD_TIME_IN_STANDBY, 0);
++			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
++#endif
++			return true;
++		}
++	}
++	return false;
++}
++
++# if 0 /* unused code */
++////////////////////////////// CORRECTVOLUME Menu ANFANG ////////////////////////////////////
++#define CORRECTVOLUME_OPTION_COUNT 2
++const CMenuOptionChooser::keyval CORRECTVOLUME_OPTIONS[CORRECTVOLUME_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_CORRECTVOLUME_OFF },
++	{ 1, LOCALE_EXTRAMENU_CORRECTVOLUME_ON },
++};
++
++CORRECTVOLUME_Menu::CORRECTVOLUME_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++int CORRECTVOLUME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++	{
++	parent->hide();
++	}
++
++	CORRECTVOLUMESettings();
++
++	return res;
++}
++
++void CORRECTVOLUME_Menu::hide()
++{
++frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void CORRECTVOLUME_Menu::CORRECTVOLUMESettings()
++{
++	int corrVol=0;
++	int save_value=0;
++	//UEBERPRUEFEN OB CORRECTVOLUME SCHON LAEUFT
++	FILE* fd1 = fopen("/etc/.corrVol", "r");
++	if(fd1)
++	{
++	corrVol=1;
++	fclose(fd1);
++	}
++	int old_corrVol=corrVol;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CORRECTVOLUME, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_CORRECTVOLUME_SELECT, &corrVol, CORRECTVOLUME_OPTIONS, CORRECTVOLUME_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_corrVol!=corrVol)
++	{
++	save_value=1;
++	}
++	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++
++	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
++	if (save_value==1)
++	{
++	if (corrVol==1)
++	{
++	//CORRECTVOLUME STARTEN
++	safe_system("touch /etc/.corrVol");
++	safe_system("/etc/init.d/corrVol.sh &");
++	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CORRECTVOLUME Activated!", 450, 2); // UTF-8("")
++	}
++	if (corrVol==0)
++	{
++	//CORRECTVOLUME BEENDEN
++	safe_system("rm /etc/.corrVol");
++	safe_system("killall -9 corrVol.sh");
++	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CORRECTVOLUME Deactivated!", 450, 2); // UTF-8("")
++	}
++}
++//ENDE CORRECTVOLUME
++}
++////////////////////////////// CORRECTVOLUME Menu ENDE //////////////////////////////////////
++#endif
++
++////////////////////////////// TUNERRESET Menu ANFANG ////////////////////////////////////
++#define TUNERRESET_OPTION_COUNT 2
++const CMenuOptionChooser::keyval TUNERRESET_OPTIONS[TUNERRESET_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_TUNERRESET_OFF },
++	{ 1, LOCALE_EXTRAMENU_TUNERRESET_ON },
++};
++
++TUNERRESET_Menu::TUNERRESET_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int TUNERRESET_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++	if(actionKey == "reset-usermenu") 
++	{
++		this->TunerReset();
++		return menu_return::RETURN_EXIT_ALL;
++	}
++	if(actionKey == "reset") 
++	{
++		this->TunerReset();
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	TUNERRESETSettings();
++
++	return res;
++}
++
++void TUNERRESET_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void TUNERRESET_Menu::TUNERRESETSettings()
++{
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_TUNERRESET, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, "", this, "reset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++}
++bool TUNERRESET_Menu::TunerReset()
++{
++	//TUNERRESET STARTEN
++	CHintBox * TunerResetBox = new CHintBox(LOCALE_EXTRAMENU_TUNERRESET_RESTART, "bitte warten, Tuner wird resettet");
++	TunerResetBox->paint();
++
++	safe_system("/usr/local/bin/pzapit -esb ; sleep 2 ; /usr/local/bin/pzapit -lsb");
++	TunerResetBox->hide();
++	delete TunerResetBox;
++}
++//ENDE TUNERRESET
++
++////////////////////////////// TUNERRESET Menu ENDE //////////////////////////////////////
++
++# if 0 /* unused code */
++////////////////////////////// AMOUNT Menu ANFANG ////////////////////////////////////
++#define AMOUNT_OPTION_COUNT 2
++const CMenuOptionChooser::keyval AMOUNT_OPTIONS[AMOUNT_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_AMOUNT_OFF },
++	{ 1, LOCALE_EXTRAMENU_AMOUNT_ON },
++};
++
++AMOUNT_Menu::AMOUNT_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++int AMOUNT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++	{
++		parent->hide();
++	}
++
++	AMOUNTSettings();
++
++	return res;
++}
++
++void AMOUNT_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void AMOUNT_Menu::AMOUNTSettings()
++{
++	int amount=0;
++	int save_value=0;
++	//UEBERPRUEFEN OB AMOUNT SCHON LAEUFT
++	FILE* fd1 = fopen("/etc/.byLabel", "r");
++	FILE* fd2 = fopen("/etc/.byDev", "r");
++	if(fd1)
++	{
++	amount=1;
++	fclose(fd1);
++	}
++	if(fd2)
++	{
++	amount=1;
++	fclose(fd2);
++	}
++	int old_amount=amount;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_AMOUNT, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_AMOUNT_SELECT, &amount, AMOUNT_OPTIONS, AMOUNT_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_amount!=amount)
++	{
++	save_value=1;
++	}
++	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++
++	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
++	if (save_value==1)
++	{
++	if (amount==1)
++	{
++	//AMOUNT STARTEN
++	safe_system("touch /etc/.byLabel");
++	safe_system("/etc/init.d/amount.sh &");
++	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "AMOUNT byLabel Activated!", 450, 2); // UTF-8("")
++	}
++	if (amount==0)
++	{
++	//AMOUNT BEENDEN
++	safe_system("rm /etc/.byLabel");
++	safe_system("rm /etc/.byDev");
++//	safe_system("killall -9 amount.sh");
++	ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "AMOUNT byLabel Deactivated!\nPlease REBOOT", 450, 2); // UTF-8("")
++	}
++}
++//ENDE AMOUNT
++}
++////////////////////////////// AMOUNT Menu ENDE //////////////////////////////////////
++#endif
++
++#if 0
++////////////////////////////// CheckFS Menu ANFANG ////////////////////////////////////
++#define CHECKFS_OPTION_COUNT 2
++const CMenuOptionChooser::keyval CHECKFS_OPTIONS[CHECKFS_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_CHECKFS_OFF },
++	{ 1, LOCALE_EXTRAMENU_CHECKFS_ON },
++};
++
++CHECKFS_Menu::CHECKFS_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int CHECKFS_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	CHECKFSSettings();
++
++	return res;
++}
++
++void CHECKFS_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void CHECKFS_Menu::CHECKFSSettings()
++{
++#define DOTFILE_CHECKFS "/etc/.checkfs"
++	int checkfs = access(DOTFILE_CHECKFS, F_OK) ? 0 : 1;
++	int old_checkfs=checkfs;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_CHECKFS, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_CHECKFS_SELECT, &checkfs, CHECKFS_OPTIONS, CHECKFS_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_checkfs!=checkfs)
++	{
++		if (checkfs==1)
++		{
++			//CHECKFS STARTEN
++			touch(DOTFILE_CHECKFS);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Activated!", 450, 2); // UTF-8("")
++		} else {
++			//CHECKFS BEENDEN
++			unlink(DOTFILE_CHECKFS);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "CHECKFS Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// CheckFS Menu ENDE //////////////////////////////////////
++#endif
++
++////////////////////////////// EMU choose Menu ANFANG ////////////////////////////////////
++
++#define EMU_OPTION_COUNT 8
++static EMU_Menu::emu_list EMU_list[EMU_OPTION_COUNT] =
++{
++	  { "disabled" }
++	, { "mgcamd", "rm -f /tmp/camd.socket >/dev/null; /usr/bin/mgcamd /var/keys/mg_cfg >/dev/null 2>&1 &", "kill -9 $(pidof mgcamd)", false }
++	, { "incubusCamd", "rm -f /tmp/camd.socket 2>/dev/null ; /usr/bin/incubusCamd >/dev/null 2>&1 &", "kill -9 $(pidof incubusCamd)", false }
++	, { "camd3", "/usr/bin/camd3 /var/keys/camd3.config >/dev/null 2>&1 &", "kill -9 $(pidof camd3)", false }
++	, { "mbox", "/usr/bin/mbox /var/keys/mbox.cfg >/dev/null 2>&1 &", "kill -9 $(pidof mbox) ; rm -f /tmp/share.* /tmp/mbox.ver /tmp/*.info 2>/dev/null", false }
++	, { "oscam", "/usr/bin/oscam -b -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof oscam)", false }
++	, { "spcs", "/usr/bin/spcs -c /var/keys >/dev/null 2>&1 &", "kill -9 $(pidof spcs)", false }
++	, { "gbox", "/usr/bin/gbox >/dev/null 2>&1 &", "touch /tmp/gbox.kill", false }
++};
++
++int EMU_Menu::get_installed_count() {
++	return installed_count;
++}
++
++int EMU_Menu::update_installed()
++{
++	installed_count = 0;
++
++	for (int i = 1; i < EMU_OPTION_COUNT; i++) {
++		string e = "/usr/bin/" + string(EMU_list[i].procname);
++		if (!access(e.c_str(), X_OK)) {
++			EMU_list[i].installed = true;
++			installed_count++;
++		}
++	}
++
++	return installed_count;
++}
++
++int EMU_Menu::update_selected()
++{
++	for (int i = 1; i < EMU_OPTION_COUNT && !selected; i++)
++		if (!settings.cam_selected.compare(EMU_list[i].procname) && EMU_list[i].installed)
++			selected = i;
++	return selected;
++}
++
++static bool is_scrambled(void){
++	bool res = true;
++	CChannelList *channelList = CNeutrinoApp::getInstance()->channelList;
++	if (!channelList)
++		return res;
++	int curnum = channelList->getActiveChannelNumber();
++	if (curnum < -1)
++		return res;
++	CZapitChannel *channel = channelList->getChannel(curnum);
++	if (!channel)
++		return res;
++	return channel->scrambled ? true : false;
++}
++
++EMU_Menu::EMU_Menu()
++{
++	suspended = false;
++	selected = 0;
++
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++
++	loadSettings();
++	update_installed();
++	update_selected();
++
++	if (selected > 0){
++		bool scrambled = false;
++		ifstream zc (CONFIGDIR "/zapit/zapit.conf");
++		string line;
++		while (zc.good() && !scrambled)
++			if (getline(zc, line) && !line.compare((line, "lastChannelTVScrambled=true")))
++					scrambled = true;
++		zc.close();
++
++		string cmd = "(" + string(EMU_list[selected].start_command)
++			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
++			+ " >/dev/null 2>&1) &";
++		safe_system(cmd.c_str());
++	}
++	for (int i = 1; i < EMU_OPTION_COUNT; i++)
++		EMU_list[i].cmf = NULL;
++}
++
++int EMU_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	bool doReset = false;
++	int emu = selected;
++
++	if(actionKey == "disable")
++		emu = 0;
++	else if (actionKey == "reset") {
++		doReset = true;
++		emu = selected;
++	} else if (actionKey == "reset-usermenu") {
++		doReset = true;
++		emu = selected;
++		res = menu_return::RETURN_EXIT_ALL;
++	} else
++		for (emu = 1; emu < EMU_OPTION_COUNT; emu++)
++			if (!strcmp(EMU_list[emu].procname, actionKey.c_str()))
++				break;
++
++	if (emu < EMU_OPTION_COUNT) {
++		int emu_old = selected;
++		if ((emu_old != emu) || doReset) {
++			if (emu_old) {
++				safe_system(EMU_list[emu_old].stop_command);
++				string m = " " + string(EMU_list[emu_old].procname) + " is now inactive ";
++				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
++				if (EMU_list[emu_old].cmf)
++					EMU_list[emu_old].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_OFF));
++			}
++			if (emu) {
++				safe_system(EMU_list[emu].start_command);
++
++				string cmd = "(" + string(EMU_list[emu].start_command);
++				if (is_scrambled())
++					safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
++				string m = " " + string(EMU_list[emu].procname) + " is now active ";
++				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, m.c_str(), 450, 2); // UTF-8("")
++				if (EMU_list[emu].cmf)
++					EMU_list[emu].cmf->setOptionValue(g_Locale->getText(LOCALE_ONOFF_ON));
++			}
++			settings.cam_selected = string(EMU_list[emu].procname);
++			selected = emu;
++		}
++
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	EMU_Menu_Settings();
++
++	return res;
++}
++
++void EMU_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void EMU_Menu::EMU_Menu_Settings()
++{
++	int emu = selected;
++	int emu_old = emu;
++
++	update_installed();
++
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EMU, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++
++	int shortcut = 1;
++	for (int i = 1; i < EMU_OPTION_COUNT; i++)
++		if (EMU_list[i].installed) {
++			EMU_list[i].cmf = new CMenuForwarderNonLocalized(EMU_list[i].procname, true,
++				(i == selected) ? g_Locale->getText(LOCALE_ONOFF_ON)
++						: g_Locale->getText(LOCALE_ONOFF_OFF),
++				this, EMU_list[i].procname, CRCInput::convertDigitToKey(shortcut++));
++			menu->addItem(EMU_list[i].cmf, (i == selected));
++		}
++
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, "", this, "reset",
++			CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU_DISABLE, true, "", this, "disable",
++			CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE));
++
++	menu->exec(NULL, "");
++        menu->hide();
++        delete menu;
++	saveSettings();
++}
++
++void EMU_Menu::suspend()
++{
++	if (selected && !suspended) {
++		safe_system(EMU_list[selected].stop_command);
++		suspended = true;
++	}
++}
++
++void EMU_Menu::resume()
++{
++	if (selected && suspended) {
++		safe_system(EMU_list[selected].start_command);
++		if (is_scrambled())
++			safe_system("sleep 2; /usr/local/bin/pzapit -rz >/dev/null 2>&1");
++		suspended = false;
++	}
++}
++
++////////////////////////////// EMU Menu ENDE //////////////////////////////////////
++
++#if 0
++////////////////////////////// DISPLAYTIME Menu ANFANG ////////////////////////////////////
++#define DISPLAYTIME_OPTION_COUNT 2
++const CMenuOptionChooser::keyval DISPLAYTIME_OPTIONS[DISPLAYTIME_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_DISPLAYTIME_OFF },
++	{ 1, LOCALE_EXTRAMENU_DISPLAYTIME_ON },
++};
++
++DISPLAYTIME_Menu::DISPLAYTIME_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++int DISPLAYTIME_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	DISPLAYTIMESettings();
++
++	return res;
++}
++
++void DISPLAYTIME_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void DISPLAYTIME_Menu::DISPLAYTIMESettings()
++{
++#define DOTFILE_DISPLAYTIME "/etc/.time"
++	int displaytime = access(DOTFILE_DISPLAYTIME, F_OK) ? 0 : 1;
++	int old_displaytime=displaytime;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DISPLAYTIME, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_DISPLAYTIME_SELECT, &displaytime, DISPLAYTIME_OPTIONS, DISPLAYTIME_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_displaytime!=displaytime)
++	{
++		if (displaytime==1)
++		{
++			//DisplayTime STARTEN
++			touch("/etc/.time");
++			safe_system("/etc/init.d/DisplayTime.sh >/dev/null 2>&1 &");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Activated!", 450, 2); // UTF-8("")
++		} else {
++			//DisplayTime BEENDEN
++			unlink("/etc/.time");
++			safe_system("killall -9 DisplayTime.sh");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DISPLAYTIME Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// DisplayTime Menu ENDE //////////////////////////////////////
++#endif
++
++#if 0 /* unused code */
++////////////////////////////// WWWDATE Menu ANFANG ////////////////////////////////////
++#define WWWDATE_OPTION_COUNT 2
++const CMenuOptionChooser::keyval WWWDATE_OPTIONS[WWWDATE_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_WWWDATE_OFF },
++	{ 1, LOCALE_EXTRAMENU_WWWDATE_ON },
++};
++
++WWWDATE_Menu::WWWDATE_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++int WWWDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	WWWDATESettings();
++
++	return res;
++}
++
++void WWWDATE_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void WWWDATE_Menu::WWWDATESettings()
++{
++	int wwwdate=0;
++	int save_value=0;
++	//UEBERPRUEFEN OB WWWDATE SCHON LAEUFT
++	FILE* fd1 = fopen("/etc/.wwwdate", "r");
++	if(fd1)
++	{
++		wwwdate=1;
++		fclose(fd1);
++	}
++	int old_wwwdate=wwwdate;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_WWWDATE, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_WWWDATE_SELECT, &wwwdate, WWWDATE_OPTIONS, WWWDATE_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_wwwdate!=wwwdate)
++	{
++		save_value=1;
++	}
++	// ENDE UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++
++	// AUSFUEHREN NUR WENN SICH WAS GEAENDERT HAT
++	if (save_value==1)
++	{
++		if (wwwdate==1)
++		{
++			//WWWDATE STARTEN
++			safe_system("touch /etc/.wwwdate");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WWWDATE Activated!", 450, 2); // UTF-8("")
++		}
++		if (wwwdate==0)
++		{
++			//WWWDATE BEENDEN
++			safe_system("rm /etc/.wwwdate");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "WWWDATE Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++	//ENDE WWWDATE
++}
++////////////////////////////// WWWDATE Menu ENDE //////////////////////////////////////
++#endif
++
++////////////////////////////// SWAP choose Menu ANFANG ////////////////////////////////////
++
++#define SWAP_OPTION_COUNT 3
++const CMenuOptionChooser::keyval SWAP_OPTIONS[SWAP_OPTION_COUNT] =
++{
++#define KEY_SWAP_SWAPRAM 0
++#define KEY_SWAP_SWAPPART 1
++#define KEY_SWAP_SWAPFILE 2
++	{ KEY_SWAP_SWAPRAM, LOCALE_EXTRAMENU_SWAP_SWAPRAM },
++	{ KEY_SWAP_SWAPPART, LOCALE_EXTRAMENU_SWAP_SWAPPART },
++	{ KEY_SWAP_SWAPFILE, LOCALE_EXTRAMENU_SWAP_SWAPFILE }
++};
++
++SWAP_Menu::SWAP_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int SWAP_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	SWAP_Menu_Settings();
++
++	return res;
++}
++
++void SWAP_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++string SWAP_Menu::start_swap(int swaptype) {
++	switch(swaptype) {
++		case KEY_SWAP_SWAPRAM:
++			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
++			return "SWAP-RAM activated";
++		case KEY_SWAP_SWAPPART:
++			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
++			return "SWAP partition activated";
++		case KEY_SWAP_SWAPFILE:
++			safe_system("/etc/init.d/Swap.sh >/dev/null 2>&1 &");
++			return "SWAP file activated";
++		default:
++			return "Internal error.";
++	}
++}
++
++string SWAP_Menu::stop_swap(int swaptype) {
++	switch(swaptype) {
++		case KEY_SWAP_SWAPRAM:
++			safe_system("swapoff -a");
++			return "SWAPRAM deactivated";
++		case KEY_SWAP_SWAPPART:
++			safe_system("swapoff -a");
++			return "SWAP partition deactivated";
++		case KEY_SWAP_SWAPFILE:
++			safe_system("swapoff /dev/loop0 ; losetup -d /dev/loop0 ; swapoff -a");
++			return "SWAP file deactivated";
++		default:
++			return "Internal error.";
++	}
++}
++
++#define DOTFILE_SWAPON  "/etc/.swapon"
++#define DOTFILE_SWAPRAM "/etc/.swapram"
++#define DOTFILE_SWAPPART "/etc/.swappart"
++#define DOTFILE_SWAPFILE "/etc/.swapfile"
++
++void SWAP_Menu::unlink_dotfile(int swaptype) {
++	switch(swaptype) {
++		case KEY_SWAP_SWAPRAM:
++			unlink(DOTFILE_SWAPRAM);
++			return;
++		case KEY_SWAP_SWAPPART:
++			unlink(DOTFILE_SWAPPART);
++			return;
++		case KEY_SWAP_SWAPFILE:
++			unlink(DOTFILE_SWAPFILE);
++		default:
++			return;
++	}
++}
++
++void SWAP_Menu::touch_dotfile(int swaptype) {
++	switch(swaptype) {
++		case KEY_SWAP_SWAPRAM:
++			touch(DOTFILE_SWAPRAM);
++			return;
++		case KEY_SWAP_SWAPPART:
++			touch(DOTFILE_SWAPPART);
++			return;
++		case KEY_SWAP_SWAPFILE:
++			touch(DOTFILE_SWAPFILE);
++		default:
++			return;
++	}
++}
++
++void SWAP_Menu::SWAP_Menu_Settings()
++{
++	int swap_onoff = access(DOTFILE_SWAPON, F_OK) ? 0 : 1;
++	int swap=0;
++
++	if (!access(DOTFILE_SWAPRAM, F_OK))
++		swap = KEY_SWAP_SWAPRAM;
++	else if (!access(DOTFILE_SWAPPART, F_OK))
++		swap = KEY_SWAP_SWAPPART;
++	else if (!access(DOTFILE_SWAPFILE, F_OK))
++		swap = KEY_SWAP_SWAPFILE;
++
++	int old_swap=swap;
++	int old_swap_onoff=swap_onoff;
++
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_SWAP, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_ONOFF, &swap_onoff, ONOFF_OPTIONS, ONOFF_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj2 = new CMenuOptionChooser(LOCALE_EXTRAMENU_SWAP_SELECT, &swap, SWAP_OPTIONS, SWAP_OPTION_COUNT,true);
++	menu->addItem( oj2 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if ((old_swap != swap) && (swap_onoff == 1)) {
++		if (old_swap_onoff == 0)
++			stop_swap(old_swap);
++		else
++			unlink_dotfile(old_swap);
++		touch_dotfile(swap);
++		touch(DOTFILE_SWAPON);
++		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, start_swap(swap).c_str(), 450, 2); // UTF-8("")
++	} else if ((old_swap!=swap) && (swap_onoff == 0)) {
++		if (old_swap_onoff == 1) {
++			unlink(DOTFILE_SWAPON);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, stop_swap(old_swap).c_str(), 450, 2); // UTF-8("")
++		}
++		unlink_dotfile(old_swap);
++		touch_dotfile(swap);
++	} else if ((old_swap == swap) && (swap_onoff == 1)) {
++		if (old_swap_onoff == 0) {
++			touch_dotfile(swap); // might be the default value
++			touch(DOTFILE_SWAPON);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, start_swap(swap).c_str(), 450, 2); // UTF-8("")
++		}
++	} else if ((old_swap == swap) && (swap_onoff == 0)) {
++		if (old_swap_onoff == 1) {
++			unlink(DOTFILE_SWAPON);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, stop_swap(swap).c_str(), 450, 2); // UTF-8("")
++		}
++	}
++}
++
++////////////////////////////// SWAP Menu ENDE //////////////////////////////////////
++
++////////////////////////////// BOOT Menu ANFANG ////////////////////////////////////
++#define BOOT_OPTION_COUNT 2
++const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
++{
++#define BOOT_NEUTRINO 0
++#define BOOT_E2       1
++//#define BOOT_SPARK    2
++#if 0
++	{ BOOT_NEUTRINO, NONEXISTANT_LOCALE, "Neutrino" },
++#else
++	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
++#endif
++	{ BOOT_E2, NONEXISTANT_LOCALE, "E2PLI" }
++//	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" }
++};
++
++BOOT_Menu::BOOT_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 500;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int BOOT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++	if(actionKey == "reboot") {
++                FILE *f = fopen("/tmp/.reboot", "w");
++                fclose(f);
++		CNeutrinoApp::getInstance()->ExitRun(true, 2);
++		// not reached, hopefully...
++                unlink("/tmp/.reboot");
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	BOOTSettings();
++
++	return res;
++}
++
++void BOOT_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void BOOT_Menu::BOOTSettings()
++{
++#define DOTFILE_BOOTE2 "/etc/.start_enigma2"
++/*
++#define DOTFILE_BOOTSPARK "/etc/.start_spark"
++	int boot = BOOT_NEUTRINO;
++	if (!access(DOTFILE_BOOTSPARK, F_OK))
++		boot = BOOT_SPARK;
++	else if (!access(DOTFILE_BOOTE2, F_OK))
++		boot = BOOT_E2;
++	int old_boot = boot;
++*/
++	int boot = BOOT_NEUTRINO;
++	if (!access(DOTFILE_BOOTE2, F_OK))
++		boot = BOOT_E2;
++	int old_boot = boot;
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings", width);
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_SELECT, &boot, BOOT_OPTIONS, BOOT_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++#if 0
++	menu->addItem(new CMenuForwarder(LOCALE_MAINMENU_REBOOT, true, "", this, "reboot", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->addItem(GenericMenuSeparatorLine);
++#endif
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++
++	if ((boot != old_boot)
++         && (ShowLocalizedMessage (LOCALE_EXTRAMENU_BOOT_HEAD, LOCALE_MESSAGEBOX_ACCEPT, CMessageBox::mbrYes, CMessageBox::mbYes | CMessageBox::mbCancel) != CMessageBox::mbrCancel))
++	{
++		CHintBox *b = NULL;
++/*		if(boot == BOOT_SPARK || old_boot == BOOT_SPARK) {
++			b = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
++			b->paint();
++		}
++		if (boot == BOOT_SPARK) {
++			touch(DOTFILE_BOOTSPARK);
++			safe_system("fw_setenv -s /etc/bootargs_orig");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "Spark activated, please reboot now..!", 450, 2);
++		}
++		if (old_boot == BOOT_SPARK) {
++			unlink(DOTFILE_BOOTSPARK);
++			safe_system("fw_setenv -s /etc/bootargs_evolux");
++		}
++		if(b) {
++			b->hide();
++			delete b;
++		}
++*/
++		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
++			touch(DOTFILE_BOOTE2);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
++		}
++		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
++			unlink(DOTFILE_BOOTE2);
++
++	}
++}
++////////////////////////////// BOOT Menu ENDE //////////////////////////////////////
++
++////////////////////////////// FSCK Menu ANFANG ////////////////////////////////////
++#define FSCK_OPTION_COUNT 2
++const CMenuOptionChooser::keyval FSCK_OPTIONS[FSCK_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_FSCK_OFF },
++	{ 1, LOCALE_EXTRAMENU_FSCK_ON }
++};
++
++FSCK_Menu::FSCK_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int FSCK_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	FSCKSettings();
++
++	return res;
++}
++
++void FSCK_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void FSCK_Menu::FSCKSettings()
++{
++#define DOTFILE_FSCK "/etc/.fsck"
++	int fsck = access(DOTFILE_FSCK, F_OK) ? 0 : 1;
++	int old_fsck=fsck;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FSCK, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FSCK_SELECT, &fsck, FSCK_OPTIONS, FSCK_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_fsck!=fsck)
++	{
++		if (fsck == 1) {
++			touch(DOTFILE_FSCK);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Activated, please reboot!", 450, 2); // UTF-8("")
++		} else {
++			unlink(DOTFILE_FSCK);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FSCK Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// FSCK Menu ENDE //////////////////////////////////////
++
++////////////////////////////// STMFB Menu ANFANG ////////////////////////////////////
++#define STMFB_OPTION_COUNT 2
++const CMenuOptionChooser::keyval STMFB_OPTIONS[STMFB_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_STMFB_OFF },
++	{ 1, LOCALE_EXTRAMENU_STMFB_ON }
++};
++
++STMFB_Menu::STMFB_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++int STMFB_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	STMFBSettings();
++
++	return res;
++}
++
++void STMFB_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void STMFB_Menu::STMFBSettings()
++{
++#define DOTFILE_STMFB "/etc/.15m"
++	int stmfb = access(DOTFILE_STMFB, F_OK) ? 0 : 1;
++	int old_stmfb=stmfb;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_STMFB, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_STMFB_SELECT, &stmfb, STMFB_OPTIONS, STMFB_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_stmfb!=stmfb)
++	{
++		if (stmfb==1)
++		{
++			//STMFB STARTEN
++			touch(DOTFILE_STMFB);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Activated, please reboot!", 450, 2); // UTF-8("")
++		} else {
++			//STMFB BEENDEN
++			unlink(DOTFILE_STMFB);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "STMFB 15m Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// STMFB Menu ENDE //////////////////////////////////////
++
++////////////////////////////// FRITZCALL Menu ANFANG ////////////////////////////////////
++#define FRITZCALL_OPTION_COUNT 2
++const CMenuOptionChooser::keyval FRITZCALL_OPTIONS[FRITZCALL_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_FRITZCALL_OFF },
++	{ 1, LOCALE_EXTRAMENU_FRITZCALL_ON }
++};
++
++FRITZCALL_Menu::FRITZCALL_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int FRITZCALL_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	FRITZCALLSettings();
++
++	return res;
++}
++
++void FRITZCALL_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++#define DOTFILE_FRITZCALL "/etc/.fritzcall"
++void FRITZCALL_Menu::FRITZCALLSettings()
++{
++	int fritzcall = access(DOTFILE_FRITZCALL, F_OK) ? 0 : 1;
++	int old_fritzcall=fritzcall;
++
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_FRITZCALL, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_FRITZCALL_SELECT, &fritzcall, FRITZCALL_OPTIONS, FRITZCALL_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_fritzcall!=fritzcall)
++	{
++		if (fritzcall == 1)
++		{
++			//FRITZCALL STARTEN
++			touch(DOTFILE_FRITZCALL);
++			safe_system("/var/plugins/fritzcall/fb.sh start >/dev/null 2>&1 &");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR activated!", 450, 2); // UTF-8("")
++		} else {
++			//FRITZCALL BEENDEN
++			unlink(DOTFILE_FRITZCALL);
++			safe_system("/var/plugins/fritzcall/fb.sh stop >/dev/null 2>&1 &");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "FRITZCALLMONITOR deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++	//ENDE FRITZCALL
++}
++////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////
++
++/*
++	Neutrino graphlcd daemon thread
++
++	(/) 2012 by martii, with portions shamelessly copied from infoviewer.cpp
++
++
++	License: GPL
++
++	This program is free software; you can redistribute it and/or modify
++	it under the terms of the GNU General Public License as published by
++	the Free Software Foundation; either version 2 of the License, or
++	(at your option) any later version.
++
++	This program is distributed in the hope that it will be useful,
++	but WITHOUT ANY WARRANTY; without even the implied warranty of
++	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++	GNU General Public License for more details.
++
++	You should have received a copy of the GNU General Public License
++	along with this program; if not, write to the Free Software
++	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++*/
++
++#ifdef WITH_GRAPHLCD_OFF
++
++void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey, CChannelEventList &eList, char search = 0, std::string search_text = "");
++void sectionsd_getCurrentNextServiceKey(t_channel_id uniqueServiceKey, CSectionsdClient::responseGetCurrentNextInfoChannelID& current_next );
++
++#include <string>
++#include <algorithm>
++
++static nGLCD *nglcd = NULL;
++
++nGLCD::nGLCD() {
++	lcd = NULL;
++	Channel = "EvoLux";
++	Epg = "Neutrino";
++	scrollChannel = "EvoLux";
++	scrollEpg = "Neutrino";
++
++	sem_init(&sem, 0, 1);
++
++	pthread_mutexattr_t attr;
++	pthread_mutexattr_init(&attr);
++	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
++	pthread_mutex_init(&mutex, &attr);
++
++	stagingChannel = "";
++	stagingEpg = "";
++	channelLocked = false;
++	doRescan = false;
++	doStandby = false;
++	doStandbyTime = false;
++	doShowVolume = false;
++	doSuspend = false;
++	doExit = false;
++	doMirrorOSD = false;
++	fontsize_channel = 0;
++	fontsize_epg = 0;
++	fontsize_time = 0;
++	doScrollChannel = false;
++	doScrollEpg = false;
++	percent_channel = 0;
++	percent_time = 0;
++	percent_epg = 0;
++	percent_bar = 0;
++	percent_time = 0;
++	percent_space = 0;
++	Scale = 0;
++	bitmap = NULL;
++	loadSettings();
++
++	nglcd = this;
++
++	if (!settings.glcd_enable)
++		doSuspend = true;
++
++	if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
++		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
++}
++
++void nGLCD::Lock(void)
++{
++	if (nglcd)
++		pthread_mutex_lock(&nglcd->mutex);
++}
++
++void nGLCD::Unlock(void)
++{
++	if (nglcd)
++		pthread_mutex_unlock(&nglcd->mutex);
++}
++
++nGLCD::~nGLCD() {
++	Suspend();
++	nglcd = NULL;
++	if (lcd) {
++		lcd->DeInit();
++		delete lcd;
++	}
++}
++
++void nGLCD::Exec() {
++	if (!lcd)
++		return;
++
++	bitmap->Clear(settings.glcd_color_bg);
++
++	if (CNeutrinoApp::getInstance()->recordingstatus) {
++		bitmap->DrawRectangle(0, 0, bitmap->Width() - 1, bitmap->Height() - 1, settings.glcd_color_bar, false);
++		bitmap->DrawRectangle(1, 1, bitmap->Width() - 2, bitmap->Height() - 2, settings.glcd_color_bar, false);
++	}
++
++	int off = 0;
++
++	if (percent_channel) {
++		off += percent_space;
++		int fw = font_channel.Width(scrollChannel);
++		if (fw && !doStandbyTime)
++			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
++				off * bitmap->Height()/100, bitmap->Width() - 4, scrollChannel,
++				&font_channel, settings.glcd_color_fg, GLCD::cColor::Transparent);
++		off += percent_channel;
++		off += percent_space;
++		if (scrollChannel.length() > Channel.length())
++			scrollChannel = scrollChannel.substr(1);
++		else
++			doScrollChannel = false;
++	}
++
++	if (percent_epg) {
++		off += percent_space;
++		int fw = font_epg.Width(scrollEpg);
++		if (fw && !doStandbyTime)
++			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
++				off * bitmap->Height()/100, bitmap->Width() - 4, scrollEpg,
++				&font_epg, settings.glcd_color_fg, GLCD::cColor::Transparent);
++		off += percent_epg;
++		off += percent_space;
++		if (scrollEpg.length() > Epg.length())
++			scrollEpg = scrollEpg.substr(1);
++		else
++			doScrollEpg = false;
++	}
++
++	if (percent_bar) {
++		off += percent_space;
++		int bar_top = off * bitmap->Height()/100;
++		off += percent_bar;
++		int bar_bottom = off * bitmap->Height()/100;
++		if (!doStandbyTime) {
++			bitmap->DrawHLine(0, bar_top, bitmap->Width(), settings.glcd_color_fg);
++			bitmap->DrawHLine(0, bar_bottom, bitmap->Width(), settings.glcd_color_fg);
++			if (Scale)
++				bitmap->DrawRectangle(0, bar_top + 1, Scale * (bitmap->Width() - 1)/100,
++					bar_bottom - 1, settings.glcd_color_bar, true);
++		}
++		off += percent_space;
++	}
++
++	if (percent_time) {
++		off += percent_space;
++		char timebuf[10];
++		strftime(timebuf, sizeof(timebuf), "%H:%M", tm);
++
++		std::string Time = std::string(timebuf);
++
++		bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - font_time.Width(Time))/2),
++			off * bitmap->Height()/100, bitmap->Width() - 1, Time,
++			&font_time, settings.glcd_color_fg, GLCD::cColor::Transparent);
++	}
++
++	lcd->SetScreen(bitmap->Data(), bitmap->Width(), bitmap->Height());
++	lcd->Refresh(true);
++}
++
++static bool sortByDateTime (const CChannelEvent& a, const CChannelEvent& b)
++{
++	return a.startTime < b.startTime;
++}
++
++void nGLCD::updateFonts() {
++	bool changed = false;
++	int percent = settings.glcd_percent_channel + settings.glcd_percent_epg + settings.glcd_percent_bar + settings.glcd_percent_time;
++
++	if (percent < 100)
++		percent = 100;
++
++	// normalize values
++	percent_channel = settings.glcd_percent_channel * 100 / percent;
++	percent_epg = settings.glcd_percent_epg * 100 / percent;
++	percent_bar = settings.glcd_percent_bar * 100 / percent;
++	percent_time = settings.glcd_percent_time * 100 / percent;
++
++	// calculate height
++	int fontsize_channel_new = percent_channel * nglcd->lcd->Height() / 100;
++	int fontsize_epg_new = percent_epg * nglcd->lcd->Height() / 100;
++	int fontsize_time_new = percent_time * nglcd->lcd->Height() / 100;
++
++	if (!fonts_initialized || (fontsize_channel_new != fontsize_channel)) {
++		fontsize_channel = fontsize_channel_new;
++		if (!font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel)) {
++			settings.glcd_font = FONTDIR "/neutrino.ttf";
++			font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel);
++		}
++		changed = true;
++	}
++	if (!fonts_initialized || (fontsize_epg_new != fontsize_epg)) {
++		fontsize_epg = fontsize_epg_new;
++		if (!font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg)) {
++			settings.glcd_font = FONTDIR "/neutrino.ttf";
++			font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg);
++		}
++		changed = true;
++	}
++	if (!fonts_initialized || (fontsize_time_new != fontsize_time)) {
++		fontsize_time = fontsize_time_new;
++		if (!font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time)) {
++			settings.glcd_font = FONTDIR "/neutrino.ttf";
++			font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time);
++		}
++		changed = true;
++	}
++
++	if (!changed)
++		return;
++
++	int div = 0;
++	if (percent_channel)
++		div += 2;
++	if (percent_epg)
++		div += 2;
++	if (percent_bar)
++		div += 2;
++	if (percent_time)
++		div += 2;
++	percent_space = (100 - percent_channel - percent_time - percent_epg - percent_bar) / div;
++
++	fonts_initialized = true;
++}
++
++void* nGLCD::Run(void *)
++{
++	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
++		fprintf(stderr, "Error loading config file!\n");
++		return NULL;
++	}
++	if ((GLCD::Config.driverConfigs.size() < 1)) {
++		fprintf(stderr, "No driver config found!\n");
++		return NULL;
++	}
++
++	struct timespec ts;
++	CChannelEventList evtlist;
++	t_channel_id channel_id = -1;
++	nglcd->fonts_initialized = false;
++	bool broken = false;
++
++	do {
++		if (broken) {
++#ifdef GLCD_DEBUG
++			fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
++#endif
++			clock_gettime(CLOCK_REALTIME, &ts);
++			ts.tv_sec += 30;
++			sem_timedwait(&nglcd->sem, &ts);
++			broken = false;
++			if (nglcd->doExit)
++				break;
++			if (!settings.glcd_enable)
++				continue;
++		} else
++				while ((nglcd->doSuspend || nglcd->doStandby || !settings.glcd_enable) && !nglcd->doExit)
++					sem_wait(&nglcd->sem);
++
++		if (nglcd->doExit)
++			break;
++
++		int warmUp = 5;
++		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
++		if (!nglcd->lcd) {
++#ifdef GLCD_DEBUG
++			fprintf(stderr, "CreateDriver failed.\n");
++#endif
++			broken = true;
++			continue;
++		}
++#ifdef GLCD_DEBUG
++		fprintf(stderr, "CreateDriver succeeded.\n");
++#endif
++		if (nglcd->lcd->Init()) {
++			delete nglcd->lcd;
++			nglcd->lcd = NULL;
++#ifdef GLCD_DEBUG
++			fprintf(stderr, "LCD init failed.\n");
++#endif
++			broken = true;
++			continue;
++		}
++#ifdef GLCD_DEBUG
++		fprintf(stderr, "LCD init succeeded.\n");
++#endif
++
++		if (!nglcd->bitmap)
++			nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
++
++		nglcd->Update();
++
++		nglcd->doMirrorOSD = false;
++
++		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
++			if (nglcd->doMirrorOSD) {
++				nglcd->bitmap->Clear(GLCD::cColor::Black);
++				ts.tv_sec = 0; // don't wait
++				static CFrameBuffer* fb = CFrameBuffer::getInstance();
++				int fb_width = fb->scaleX(fb->getScreenWidth(true));
++				int fb_height = fb->scaleX(fb->getScreenHeight(true));
++				int lcd_width = nglcd->bitmap->Width();
++				int lcd_height = nglcd->bitmap->Height();
++				uint32_t *fbp = fb->getFrameBufferPointer();
++
++				// determine OSD frame geometry
++
++				int y_min = 0;
++				for (int y = 0; y < fb_height && !y_min; y++) {
++					for (int x = 0; x < fb_width; x++) {
++						if (*(fbp + fb_width * y + x)) {
++							y_min = y;
++							break;
++						}
++					}
++				}
++				int y_max = 0;
++				for (int y = fb_height - 1; y_min < y && !y_max; y--) {
++					for (int x = 0; x < fb_width; x++) {
++						if (*(fbp + fb_width * y + x)) { 
++							y_max = y;
++							break;
++						}
++					}
++				}
++				int x_min = fb_width - 1;
++				for (int y = y_min; y < y_max; y++) {
++					for (int x = 0; x < fb_width; x++) {
++						if (*(fbp + fb_width * y + x) && x < x_min) {
++							x_min = x;
++							break;
++						}
++					}
++				}
++				int x_max = x_min;
++				for (int y = y_min; y < y_max; y++) {
++					for (int x = fb_width - 1; x > x_min; x--) {
++						if (*(fbp + fb_width * y + x) && x > x_max) {
++							x_max= x;
++							break;
++						}
++					}
++				}
++
++				int fb_w = x_max - x_min;
++				int fb_h = y_max - y_min;
++
++				if (!fb_w || !fb_w) {
++					usleep(500000);
++					continue;
++				}
++
++				// Keep aspect by using the smallest up-scaling factor
++				if (fb_width * fb_h > fb_height * fb_w) {
++					int fb_w2 = fb_width * fb_h/fb_height;
++					x_min += (fb_w - fb_w2)/2;
++					fb_w = fb_w2;
++				} else {
++					int fb_h2 = fb_height * fb_w/fb_width;
++					y_min += (fb_h - fb_h2)/2;
++					fb_h = fb_h2;
++				}
++				// Compensate for rounding errors
++				if (x_min < 0)
++					x_min = 0;
++				if (y_min < 0)
++					y_min = 0;
++
++				for (int y = 0; y < lcd_height; y++) {
++					int ystride = y_min * fb_width;
++					for (int x = 0; x < lcd_width; x++) {
++						// FIXME: There might be some oscure bug somewhere that invalidate the address of bitmap->DrawPixel()
++						nglcd->bitmap->DrawPixel(x, y, *(fbp + ystride + (y * fb_h / lcd_height) * fb_width
++										 + x_min + (x * fb_w / lcd_width)));
++					}
++				}
++
++				nglcd->lcd->SetScreen(nglcd->bitmap->Data(), lcd_width, lcd_height);
++				nglcd->lcd->Refresh(true);
++				continue;
++			} // end of fb mirroring
++
++			clock_gettime(CLOCK_REALTIME, &ts);
++			nglcd->tm = localtime(&ts.tv_sec);
++			nglcd->updateFonts();
++			nglcd->Exec();
++			clock_gettime(CLOCK_REALTIME, &ts);
++			nglcd->tm = localtime(&ts.tv_sec);
++			if (warmUp > 0) {
++				ts.tv_sec += 4;
++				warmUp--;
++			} else {
++				ts.tv_sec += 60 - nglcd->tm->tm_sec;
++				ts.tv_nsec = 0;
++			}
++
++			if (!nglcd->doScrollChannel && !nglcd->doScrollEpg)
++				sem_timedwait(&nglcd->sem, &ts);
++
++			while(!sem_trywait(&nglcd->sem));
++
++			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit)
++				break;
++
++			if (nglcd->doShowVolume) {
++				nglcd->Epg = "";
++				if (nglcd->Channel.compare(g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME))) {
++					nglcd->Channel = g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME);
++					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
++						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
++					else
++						nglcd->scrollChannel = nglcd->Channel;
++				}
++				nglcd->scrollEpg = nglcd->Epg;
++				nglcd->Scale = g_settings.current_volume;
++				channel_id = -1;
++			} else if (nglcd->channelLocked) {
++				nglcd->Lock();
++				if (nglcd->Epg.compare(nglcd->stagingEpg)) {
++					nglcd->Epg = nglcd->stagingEpg;
++					if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4)
++						nglcd->scrollEpg = nglcd->Epg + "      " + nglcd->Epg + "      " + nglcd->Epg;
++					else
++						nglcd->scrollEpg = nglcd->Epg;
++				}
++				if (nglcd->Channel.compare(nglcd->stagingChannel)) {
++					nglcd->Channel = nglcd->stagingChannel;
++					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
++						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
++					else
++						nglcd->scrollChannel = nglcd->Channel;
++				}
++				nglcd->Scale = 0;
++				channel_id = -1;
++				nglcd->Unlock();
++			} else {
++				CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
++				if (!channelList)
++					continue;
++				t_channel_id new_channel_id = channelList->getActiveChannel_ChannelID ();
++				if (new_channel_id < 0)
++					continue;
++
++				if ((new_channel_id != channel_id)) {
++					nglcd->Channel = channelList->getActiveChannelName ();
++					nglcd->Epg = "";
++					nglcd->Scale = 0;
++					nglcd->scrollEpg = nglcd->Epg;
++					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4) {
++						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
++						nglcd->doScrollChannel = true;
++					} else {
++						nglcd->scrollChannel = nglcd->Channel;
++						nglcd->doScrollChannel = false;
++					}
++					warmUp = 1;
++				}
++
++				if ((channel_id != new_channel_id) || (evtlist.empty())) {
++					evtlist.clear();
++					sectionsd_getEventsServiceKey(new_channel_id & 0xFFFFFFFFFFFFULL, evtlist);
++					if (!evtlist.empty())
++						sort(evtlist.begin(),evtlist.end(), sortByDateTime);
++				}
++				channel_id = new_channel_id;
++
++				if (!evtlist.empty()) {
++					CChannelEventList::iterator eli;
++					for (eli=evtlist.begin(); eli!=evtlist.end(); ++eli) {
++						if ((uint)eli->startTime + eli->duration > ts.tv_sec)
++							break;
++					}
++					if (eli == evtlist.end()) {
++						nglcd->Epg = nglcd->scrollEpg = "";
++						nglcd->Scale = 0;
++					} else {
++						if (eli->description.compare(nglcd->Epg)) {
++							nglcd->Epg = eli->description;
++							if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4) {
++								nglcd->scrollEpg = nglcd->Epg + "    " + nglcd->Epg + "    " + nglcd->Epg;
++								nglcd->doScrollEpg = true;
++							} else {
++								nglcd->scrollEpg = nglcd->Epg;
++								nglcd->doScrollEpg = false;
++							}
++						}
++
++						if (eli->duration > 0)
++						nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
++						if (nglcd->Scale > 100)
++							nglcd->Scale = 100;
++						else if (nglcd->Scale < 0)
++							nglcd->Scale = 0;
++					}
++				}
++			}
++		}
++
++		if(!settings.glcd_enable || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit) {
++			// for restart, don't blacken screen
++			nglcd->bitmap->Clear(GLCD::cColor::Black);
++			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
++			nglcd->lcd->Refresh(true);
++		}
++		if (nglcd->doRescan) {
++		    nglcd->doRescan = false;
++			nglcd->Update();
++	    }
++		nglcd->lcd->DeInit();
++		delete nglcd->lcd;
++		nglcd->lcd = NULL;
++	} while(!nglcd->doExit);
++
++	return NULL;
++}
++
++void nGLCD::Update() {
++	if (nglcd)
++		sem_post(&nglcd->sem);
++}
++
++void nGLCD::StandbyMode(bool b) {
++	if (nglcd) {
++		if (settings.glcd_time_in_standby)
++			nglcd->doStandbyTime = b;
++		else
++		    nglcd->doStandby = b;
++		nglcd->doMirrorOSD = false;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::ShowVolume(bool b) {
++	if (nglcd) {
++		nglcd->doShowVolume = b;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::MirrorOSD(bool b) {
++	if (nglcd && settings.glcd_mirror_osd) {
++		nglcd->doMirrorOSD = b;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::Exit() {
++	if (nglcd) {
++		nglcd->doMirrorOSD = false;
++		nglcd->doSuspend = false;
++		nglcd->doExit = true;
++		nglcd->Update();
++		void *res;
++		pthread_join(nglcd->thrGLCD, &res);
++		delete nglcd;
++	}
++}
++
++void nglcd_update() {
++	if (nglcd) {
++		nglcd->Update();
++	}
++}
++
++void nGLCD::Rescan() {
++	if (nglcd) {
++		doRescan = true;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::Suspend() {
++	if (nglcd) {
++		nglcd->doSuspend = true;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::Resume() {
++	if (nglcd) {
++		nglcd->doSuspend = false;
++		nglcd->Update();
++	}
++}
++
++void nGLCD::lockChannel(string c)
++{
++	if(nglcd) {
++		nglcd->Lock();
++		nglcd->channelLocked = true;
++		nglcd->stagingChannel = c;
++		nglcd->stagingEpg = "";
++		nglcd->Unlock();
++		nglcd->Update();
++	}
++}
++
++void nGLCD::unlockChannel(void)
++{
++	if(nglcd) {
++		nglcd->channelLocked = false;
++		nglcd->Update();
++	}
++}
++
++#define KEY_GLCD_BLACK			0
++#define KEY_GLCD_WHITE			1
++#define KEY_GLCD_RED			2
++#define KEY_GLCD_GREEN			3
++#define KEY_GLCD_BLUE			4
++#define KEY_GLCD_MAGENTA		5
++#define KEY_GLCD_CYAN			6
++#define KEY_GLCD_YELLOW			7
++#define GLCD_COLOR_OPTION_COUNT 	8
++static const CMenuOptionChooser::keyval GLCD_COLOR_OPTIONS[GLCD_COLOR_OPTION_COUNT] =
++{
++	  { KEY_GLCD_BLACK,	LOCALE_EXTRAMENU_GLCD_COLOR_BLACK }
++	, { KEY_GLCD_WHITE,	LOCALE_EXTRAMENU_GLCD_COLOR_WHITE }
++	, { KEY_GLCD_RED,	LOCALE_EXTRAMENU_GLCD_COLOR_RED }
++	, { KEY_GLCD_GREEN,	LOCALE_EXTRAMENU_GLCD_COLOR_GREEN }
++	, { KEY_GLCD_BLUE,	LOCALE_EXTRAMENU_GLCD_COLOR_BLUE }
++	, { KEY_GLCD_MAGENTA,	LOCALE_EXTRAMENU_GLCD_COLOR_MAGENTA }
++	, { KEY_GLCD_CYAN,	LOCALE_EXTRAMENU_GLCD_COLOR_CYAN }
++	, { KEY_GLCD_YELLOW,	LOCALE_EXTRAMENU_GLCD_COLOR_YELLOW }
++};
++
++int GLCD_Menu::color2index(uint32_t color) {
++	if (color == GLCD::cColor::Black)
++		return KEY_GLCD_BLACK;
++	if (color == GLCD::cColor::White)
++		return KEY_GLCD_WHITE;
++	if (color == GLCD::cColor::Red)
++		return KEY_GLCD_RED;
++	if (color == GLCD::cColor::Green)
++		return KEY_GLCD_GREEN;
++	if (color == GLCD::cColor::Blue)
++		return KEY_GLCD_BLUE;
++	if (color == GLCD::cColor::Magenta)
++		return KEY_GLCD_MAGENTA;
++	if (color == GLCD::cColor::Cyan)
++		return KEY_GLCD_CYAN;
++	if (color == GLCD::cColor::Yellow)
++		return KEY_GLCD_YELLOW;
++	return KEY_GLCD_BLACK;
++}
++
++uint32_t GLCD_Menu::index2color(int i) {
++	switch(i) {
++	case KEY_GLCD_BLACK:
++		return GLCD::cColor::Black;
++	case KEY_GLCD_WHITE:
++		return GLCD::cColor::White;
++	case KEY_GLCD_RED:
++		return GLCD::cColor::Red;
++	case KEY_GLCD_GREEN:
++		return GLCD::cColor::Green;
++	case KEY_GLCD_BLUE:
++		return GLCD::cColor::Blue;
++	case KEY_GLCD_MAGENTA:
++		return GLCD::cColor::Magenta;
++	case KEY_GLCD_CYAN:
++		return GLCD::cColor::Cyan;
++	case KEY_GLCD_YELLOW:
++		return GLCD::cColor::Yellow;
++	}
++	return GLCD::cColor::ERRCOL;
++}
++
++
++GLCD_Menu::GLCD_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX - g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY - g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++
++	notifier = new GLCD_Menu_Notifier();
++
++	if (!nglcd)
++		new nGLCD;
++}
++
++
++int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++	if(actionKey == "rescan") {
++		if (nglcd)
++		    nglcd->Rescan();
++		return res;
++	}
++	if(actionKey == "select_font") {
++		if(parent)
++			parent->hide();
++		CFileBrowser fileBrowser;
++		CFileFilter fileFilter;
++		fileFilter.addFilter("ttf");
++		fileBrowser.Filter = &fileFilter;
++		if (fileBrowser.exec(FONTDIR) == true) {
++			settings.glcd_font = fileBrowser.getSelectedFile()->Name;
++			if (nglcd) {
++				nglcd->fonts_initialized = false;
++				nglcd->Rescan();
++			}
++		}
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	GLCD_Menu_Settings();
++	saveSettings();
++
++	return res;
++}
++
++void GLCD_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++GLCD_Menu_Notifier::GLCD_Menu_Notifier ()
++{
++}
++
++bool
++GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
++{
++	if (!Data)
++		return false;
++	switch(OptionName) {
++	case LOCALE_EXTRAMENU_GLCD_SELECT_FG:
++		settings.glcd_color_fg = GLCD_Menu::index2color(*((int *) Data));
++		break;
++	case LOCALE_EXTRAMENU_GLCD_SELECT_BG:
++		settings.glcd_color_bg = GLCD_Menu::index2color(*((int *) Data));
++		break;
++	case LOCALE_EXTRAMENU_GLCD_SELECT_BAR:
++		settings.glcd_color_bar = GLCD_Menu::index2color(*((int *) Data));
++		break;
++	case LOCALE_EXTRAMENU_GLCD:
++		if (nglcd) {
++			if (settings.glcd_enable)
++				nglcd->Resume();
++			else
++				nglcd->Suspend();
++			return true;
++		}
++		break;
++	case LOCALE_EXTRAMENU_GLCD_MIRROR_OSD:
++		if (nglcd)
++				nglcd->doMirrorOSD = settings.glcd_mirror_osd;
++		break;
++	case LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY:
++	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
++	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
++	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
++	case LOCALE_EXTRAMENU_GLCD_SIZE_TIME:
++		break;
++	default:
++		return false;
++	}
++
++	if (nglcd)
++		nglcd->Update();
++	return true;
++}
++
++void GLCD_Menu::GLCD_Menu_Settings()
++{
++	int color_bg = color2index(settings.glcd_color_bg);
++	int color_fg = color2index(settings.glcd_color_fg);
++	int color_bar = color2index(settings.glcd_color_bar);
++
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD, &settings.glcd_enable,
++				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
++	int shortcut = 1;
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_FG, &color_fg,
++				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
++				CRCInput::convertDigitToKey(shortcut++)));
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BG, &color_bg,
++				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
++				CRCInput::convertDigitToKey(shortcut++)));
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BAR, &color_bar,
++				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
++				CRCInput::convertDigitToKey(shortcut++)));
++	menu->addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font",
++				CRCInput::convertDigitToKey(shortcut++)));
++	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
++				&settings.glcd_percent_channel, true, 0, 100, notifier));
++	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
++				&settings.glcd_percent_epg, true, 0, 100, notifier));
++	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
++				&settings.glcd_percent_bar, true, 0, 100, notifier));
++	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
++				&settings.glcd_percent_time, true, 0, 100, notifier));
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY, &settings.glcd_time_in_standby,
++				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
++	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
++				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
++				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "rescan",
++				CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->exec(NULL, "");
++	menu->hide();
++	delete menu;
++
++	saveSettings();
++}
++#endif
++
++KernelOptions_Menu::KernelOptions_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int KernelOptions_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (actionKey == "reset") {
++		for (int i = 0; i < modules.size(); i++)
++			modules[i].active = modules[i].active_orig;
++		return res;
++	}
++
++	if (actionKey == "apply") {
++		for (int i = 0; i < modules.size(); i++)
++			if (modules[i].active != modules[i].active_orig) {
++				FILE *f = fopen("/etc/modules.extra", "w");
++					if (f) {
++						chmod("/etc/modules.extra", 0644);
++						for (int i = 0; i < modules.size(); i++) {
++							if (modules[i].active) {
++								for (int j = 0; j < modules[i].moduleList.size(); j++)
++									fprintf(f, "%s\n", modules[i].moduleList[j].c_str());
++							}
++						}
++					fclose(f);
++				}
++				for (int i = 0; i < modules.size(); i++) {
++					char buf[80];
++					if (modules[i].active)
++						for (int j = 0; j < modules[i].moduleList.size(); j++) {
++							snprintf(buf, sizeof(buf), "insmod /lib/modules/%s.ko", modules[i].moduleList[j].c_str());
++							safe_system(buf);
++						}
++					else
++						for (int j = 0; j < modules[i].moduleList.size(); j++) {
++							snprintf(buf, sizeof(buf), "rmmod %s", modules[i].moduleList[j].c_str());
++							safe_system(buf);
++						}
++					modules[i].active_orig = modules[i].active;
++				}
++				break;
++			}
++	}
++
++	if (actionKey == "apply" || actionKey == "lsmod") {
++		for (int i = 0; i < modules.size(); i++)
++			modules[i].installed = false;
++		FILE *f = fopen("/proc/modules", "r");
++		if (f) {
++			char buf[200];
++			while (fgets(buf, sizeof(buf), f)) {
++				char name[200];
++				if (1 == sscanf(buf, "%s", name))
++					for (int i = 0; i < modules.size(); i++) {
++						if (name == modules[i].moduleList.back()) {
++							modules[i].installed = true;
++							break;
++						}
++				}
++			}
++			fclose(f);
++		}
++
++		string text = "";
++		for (int i = 0; i < modules.size(); i++) {
++			text += modules[i].comment + " (" + modules[i].moduleList.back() + ") ";
++			// FIXME, localizations are missing (but rather not worth adding)
++			if (modules[i].active) {
++				if (modules[i].installed)
++					text += " is enabled and loaded\n";
++				else
++					text += " is enabled but not loaded\n";
++			} else {
++				if (modules[i].installed)
++					text += " is disabled but loaded\n";
++				else
++					text += " is disabled and not loaded\n";
++			}
++		}
++
++		ShowHintUTF(LOCALE_EXTRAMENU_KERNELOPTIONS_LSMOD, text.c_str());
++
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	Settings();
++
++	return res;
++}
++
++void KernelOptions_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void KernelOptions_Menu::Settings()
++{
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_KERNELOPTIONS, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_EXTRAMENU_KERNELOPTIONS_MODULES));
++
++	modules.clear();
++
++	FILE *f = fopen("/etc/modules.available", "r");
++	if (f) {
++		char buf[200];
++		while (fgets(buf, sizeof(buf), f)) {
++			if (buf[0] == '#')
++				continue;
++			char *comment = strchr(buf, '#');
++			if (!comment)
++				continue;
++			*comment++ = 0;
++			while (*comment == ' ' || *comment == '\t')
++				comment++;
++			if (strlen(comment) < 1)
++				continue;
++			module m;
++			m.active = m.active_orig = 0;
++			m.installed = false;
++			m.comment = string(comment);
++			std::istringstream in(buf);
++			std::string s;
++			while (in >> s)
++				m.moduleList.push_back(s);
++			if (m.moduleList.size() > 0)
++				modules.push_back(m);
++		}
++		fclose(f);
++	}
++
++	f = fopen("/etc/modules.extra", "r");
++	if (f) {
++		char buf[200];
++		while (fgets(buf, sizeof(buf), f)) {
++			char *t = strchr(buf, '#');
++			if (t)
++				*t = 0;
++			char name[200];
++			if (1 == sscanf(buf, "%s", name)) {
++				int i;
++				for (i = 0; i < modules.size(); i++)
++					if (modules[i].moduleList.back() == name) {
++						modules[i].active = modules[i].active_orig = 1;
++						break;
++					}
++			}
++		}
++		fclose(f);
++	}
++
++	int shortcut = 0;
++
++	for (int i = 0; i < modules.size(); i++) {
++		menu->addItem(new CMenuOptionChooser(modules[i].comment.c_str(), &modules[i].active,
++				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true));
++	}
++
++	menu->addItem(GenericMenuSeparatorLine);
++
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_RESET, true, "", this,
++		"reset", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_APPLY, true, "", this,
++		"apply", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS_LSMOD, true, "", this,
++		"lsmod", CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW));
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++}
++
++////////////////////////////// EVOLUXUPDATE Menu ANFANG ////////////////////////////////////
++#define EVOLUXUPDATE_OPTION_COUNT 2
++const CMenuOptionChooser::keyval EVOLUXUPDATE_OPTIONS[EVOLUXUPDATE_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_EVOLUXUPDATE_OFF },
++	{ 1, LOCALE_EXTRAMENU_EVOLUXUPDATE_ON },
++};
++
++EVOLUXUPDATE_Menu::EVOLUXUPDATE_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int EVOLUXUPDATE_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++	if(actionKey == "checkupdate") 
++	{
++		this->CheckUpdate();
++		return res;
++	}
++
++	if (parent)
++		parent->hide();
++
++	EVOLUXUPDATESettings();
++
++	return res;
++}
++
++void EVOLUXUPDATE_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void EVOLUXUPDATE_Menu::EVOLUXUPDATESettings()
++{
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_EVOLUXUPDATE, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, true, "", this, "checkupdate", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++}
++
++bool EVOLUXUPDATE_Menu::CheckUpdate()
++{
++	//EVOLUXUPDATE STARTEN
++	unlink("/tmp/EvoluxUpdatevailable");
++	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
++		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
++		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
++	if(!access("/tmp/EvoluxUpdatevailable", F_OK)) {
++		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
++		CheckUpdateBox->paint();
++		safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++		unlink("/tmp/EvoluxUpdatevailable");
++		unlink("/tmp/update.tar.gz");
++		CheckUpdateBox->hide();
++		delete CheckUpdateBox;
++		CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
++		CheckUpdateBox->paint();
++		sleep(3);
++		CheckUpdateBox->hide();
++		delete CheckUpdateBox;
++	}
++	else {
++		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
++		CheckUpdateBox->paint();
++		sleep(3);
++		CheckUpdateBox->hide();
++		delete CheckUpdateBox;
++	}
++}
++//ENDE EVOLUXUPDATE
++
++////////////////////////////// NFSSERVER Menu ANFANG ////////////////////////////////////
++#define NFSSERVER_OPTION_COUNT 2
++const CMenuOptionChooser::keyval NFSSERVER_OPTIONS[NFSSERVER_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_NFSSERVER_OFF },
++	{ 1, LOCALE_EXTRAMENU_NFSSERVER_ON }
++};
++
++NFSSERVER_Menu::NFSSERVER_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int NFSSERVER_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	NFSSERVERSettings();
++
++	return res;
++}
++
++void NFSSERVER_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void NFSSERVER_Menu::NFSSERVERSettings()
++{
++#define DOTFILE_NFSSERVER "/etc/.nfsserver"
++	int nfsserver = access(DOTFILE_NFSSERVER, F_OK) ? 0 : 1;
++	int old_nfsserver=nfsserver;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_NFSSERVER, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_NFSSERVER_SELECT, &nfsserver, NFSSERVER_OPTIONS, NFSSERVER_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_nfsserver!=nfsserver)
++	{
++		if (nfsserver == 1) {
++			touch(DOTFILE_NFSSERVER);
++			safe_system("myRange=`ifconfig | grep -m1 'Bcast' | cut -d : -f3 | cut -d ' ' -f1 | cut -b1-11`;sed 's@/media/hdd.*@/media/hdd '$myRange'.0/255.255.255.0(rw,async,no_root_squash)@g' -i /etc/exports;/etc/init.d/nfs-common start;/etc/init.d/nfs-kernel-server start");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Activated!", 450, 2); // UTF-8("")
++		} else {
++			unlink(DOTFILE_NFSSERVER);
++			system("/etc/init.d/nfs-kernel-server stop;/etc/init.d/nfs-common stop");
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NFSSERVER Deactivated!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// NFSSERVER Menu ENDE //////////////////////////////////////
++
++////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
++// vim:ts=4
+
+
+--- neutrino-hd2-exp/src/gui/extra_menu.h	1970-01-01 01:00:00.000000000 +0100
++++ neutrino-hd2-exp/src/gui/extra_menu.h	2012-10-06 17:54:32.000000000 +0200
+@@ -0,0 +1,498 @@
++/*
++Neutrino-GUI - DBoxII-Project
++
++Copyright (C) 2001 Steffen Hehn 'McClean'
++Homepage: http://dbox.cyberphoria.org/
++
++Kommentar:
++
++Diese GUI wurde von Grund auf neu programmiert und sollte nun vom
++Aufbau und auch den Ausbaumoeglichkeiten gut aussehen. Neutrino basiert
++auf der Client-Server Idee, diese GUI ist also von der direkten DBox-
++Steuerung getrennt. Diese wird dann von Daemons uebernommen.
++
++
++License: GPL
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++*/
++
++#ifndef __extramenu__
++#define __extramenu__
++
++#include <string>
++#include <vector>
++
++#include <driver/framebuffer.h>
++#include <system/lastchannel.h>
++#include <system/setting_helpers.h>
++#include <configfile.h>
++
++#define EXTRA_SETTINGS_FILE CONFIGDIR "/extra.conf"
++
++using namespace std;
++
++class CORRECTVOLUME_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	CORRECTVOLUME_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void CORRECTVOLUMESettings();
++
++};
++
++class TUNERRESET_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	TUNERRESET_Menu();
++	bool TunerReset();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void TUNERRESETSettings();
++
++};
++
++class EMU_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	int installed_count;
++	int update_installed();
++	int update_selected();
++	int suspended;
++	int selected;
++
++	public:
++
++	struct emu_list
++	{
++		const char *procname;
++		const char *start_command;
++		const char *stop_command;
++		bool installed;
++		CMenuForwarderNonLocalized *cmf;
++	};
++
++	int get_installed_count();
++
++	EMU_Menu();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void EMU_Menu_Settings();
++	void suspend();
++	void resume();
++
++};
++
++class AMOUNT_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	AMOUNT_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void AMOUNTSettings();
++
++};
++
++class CHECKFS_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	CHECKFS_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void CHECKFSSettings();
++
++};
++
++class DISPLAYTIME_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	DISPLAYTIME_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void DISPLAYTIMESettings();
++
++};
++
++class WWWDATE_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	WWWDATE_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void WWWDATESettings();
++
++};
++
++class SWAP_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	string start_swap(int);
++	string stop_swap(int);
++	void touch_dotfile(int);
++	void unlink_dotfile(int);
++
++	public:
++
++	SWAP_Menu();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void SWAP_Menu_Settings();
++
++};
++
++class BOOT_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	BOOT_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void BOOTSettings();
++};
++
++class FSCK_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	FSCK_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void FSCKSettings();
++
++};
++
++class NFSSERVER_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	NFSSERVER_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void NFSSERVERSettings();
++
++};
++
++class STMFB_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	STMFB_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void STMFBSettings();
++
++};
++
++class FRITZCALL_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	FRITZCALL_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void FRITZCALLSettings();
++
++};
++
++
++#ifdef WITH_GRAPHLCD
++#include <time.h>
++#include <string>
++#include <semaphore.h>
++
++#include <glcdgraphics/bitmap.h>
++#include <glcdgraphics/font.h>
++#include <glcddrivers/config.h>
++#include <glcddrivers/driver.h>
++#include <glcddrivers/drivers.h>
++
++static const char * kDefaultConfigFile = "/etc/graphlcd.conf";
++
++#ifndef MAX
++#define MAX(a,b)(((a)<(b)) ? (b) : (a))
++#endif
++
++class nGLCD
++{
++	GLCD::cDriver * lcd;
++	GLCD::cFont font_channel;
++	GLCD::cFont font_epg;
++	GLCD::cFont font_time;
++	int fontsize_channel;
++	int fontsize_epg;
++	int fontsize_time;
++	int percent_channel;
++	int percent_time;
++	int percent_epg;
++	int percent_bar;
++	int percent_space;
++	GLCD::cBitmap * bitmap;
++	std::string Channel;
++	std::string Epg;
++	std::string stagingChannel;
++	std::string stagingEpg;
++	int Scale;
++        time_t now;
++        struct tm *tm;
++	bool channelLocked;
++	bool doRescan;
++	bool doSuspend;
++	bool doStandby;
++	bool doStandbyTime;
++	bool doExit;
++	bool doScrollChannel;
++	bool doScrollEpg;
++	bool doShowVolume;
++	pthread_t thrGLCD;
++	pthread_mutex_t mutex;
++	void updateFonts();
++	void Exec();
++	std::string scrollChannel;
++	std::string scrollEpg;
++    public:
++	bool fonts_initialized;
++	bool doMirrorOSD;
++	nGLCD();
++	~nGLCD();
++	void DeInit();
++	static void Lock();
++	static void Unlock();
++	void mainLock();
++	void mainUnlock();
++	static void lockChannel(string txt);
++	static void unlockChannel();
++	static void* Run(void *);
++	static void MirrorOSD(bool);
++	static void Update();
++	static void Suspend();
++	static void StandbyMode(bool);
++	static void ShowVolume(bool);
++	static void Resume();
++	static void Exit();
++	void Rescan();
++	sem_t sem;
++};
++
++class GLCD_Menu;
++
++class GLCD_Menu_Notifier : public CChangeObserver
++{
++    private:
++	GLCD_Menu* parent;
++    public:
++	GLCD_Menu_Notifier();
++	bool changeNotify(const neutrino_locale_t, void *);
++};
++
++
++class GLCD_Menu : public CMenuTarget
++{
++    private:
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++	static int color2index(uint32_t color);
++	GLCD_Menu_Notifier *notifier;
++    public:
++	static uint32_t index2color(int i);
++	GLCD_Menu();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void GLCD_Menu_Settings();
++};
++
++#endif // WITH_GRAPHLCD
++
++class KernelOptions_Menu : public CMenuTarget
++{
++    private:
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++	struct module {
++		string comment;
++		std::vector<string> moduleList;
++		int active_orig;
++		int active;
++		bool installed;
++	};
++	std::vector<module> modules;
++    public:
++	KernelOptions_Menu();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void Settings();
++};
++
++class EVOLUXUPDATE_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	EVOLUXUPDATE_Menu();
++	bool CheckUpdate();
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void EVOLUXUPDATESettings();
++
++};
++
++#endif //__extramenu__
+
+
+--- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
++++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
+@@ -202,7 +202,7 @@
+ };
+ 
+ // Init Main Menu
+-void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &languageSettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer)
++void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &languageSettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer, CMenuWidget &ExtraMenu)
+ {
+ 	int shortcut = 1;
+ 
+@@ -269,6 +269,45 @@
+ 	//Service
+ 	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
+ 
++//***************************************** Extra Menue 
++	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_EXTRAMENU, true, NULL, &ExtraMenu, NULL, CRCInput::convertDigitToKey(shortcut++)));
++	ExtraMenu.addItem(GenericMenuSeparator);
++	ExtraMenu.addItem(GenericMenuBack);
++	ExtraMenu.addItem(GenericMenuSeparatorLine);
++
++	EmuMenu = new EMU_Menu();
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, EmuMenu, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
++
++	TunerMenu = new TUNERRESET_Menu();
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, TunerMenu, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // SWAP Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
++	int extrashortcut = 1;
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
++#ifdef WITH_GRAPHLCD
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
++#endif
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, NULL, new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, NULL, new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
++	if (!access("/etc/enigma2/settings", R_OK))
++		ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL, new EVOLUXUPDATE_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Evolux Oupdate Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOT_HEAD, true, NULL, new BOOT_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
++
++	/*}
++	else
++	{
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // CheckFS Menu
++	} */
++//*****************************************************************************************************************	
++//*****************************************************************************************************************
++
++
+ 	//sleep timer
+ 	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
+ 
+@@ -2618,7 +2657,33 @@
+ 					menu->addItem(menu_item, false);
+                                 }
+                                 break;
+-				
++
++			case SNeutrinoSettings::ITEM_ADZAP:
++				menu_items++;
++				menu_prev = SNeutrinoSettings::ITEM_ADZAP;
++                                keyhelper.get(&key,&icon,CRCInput::RC_blue);
++				//keyhelper.get(&key,&icon);
++				menu_item = new CMenuForwarder(LOCALE_USERMENU_ITEM_ADZAP, true, NULL, AdZapChanger, "adzap", key, icon);
++				menu->addItem(menu_item, 0);
++
++                                break;
++			case SNeutrinoSettings::ITEM_EMU_RESTART:
++				menu_items++;
++				menu_prev = SNeutrinoSettings::ITEM_EMU_RESTART;
++                                keyhelper.get(&key,&icon);
++				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, NULL, EmuMenu, "reset-usermenu", key, icon);
++				menu->addItem(menu_item, 0);
++
++                                break;
++			case SNeutrinoSettings::ITEM_TUNER_RESTART:
++				menu_items++;
++				menu_prev = SNeutrinoSettings::ITEM_TUNER_RESTART;
++                                keyhelper.get(&key,&icon);
++				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, NULL, TunerMenu, "reset-usermenu", key, icon);
++				menu->addItem(menu_item, 0);
++
++                                break;
++
+ 			// games
+ 			case SNeutrinoSettings::ITEM_GAME:
+ 				{
+
+--- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
++++ neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 14:37:46.604187070 +0200
+@@ -2553,6 +2553,7 @@
+ 	CMenuWidget    TunerSetup( LOCALE_SERVICEMENU_SCANTS, NEUTRINO_ICON_SETTINGS);
+ 	CMenuWidget    bindSettings(LOCALE_KEYBINDINGMENU_HEAD, NEUTRINO_ICON_KEYBINDING );
+ 	CMenuWidget    MediaPlayer(LOCALE_MAINMENU_MEDIAPLAYER, NEUTRINO_ICON_MOVIE);
++	CMenuWidget    ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings" );
+ 
+ 	// main menu
+ 	InitMainMenu(mainMenu, mainSettings, 
+@@ -2569,7 +2570,8 @@
+ 		     service, 
+ 		     audioplayerSettings, 
+ 		     PicViewerSettings, 
+-		     streamingSettings, 
++		     streamingSettings,
++		     ExtraMenu, 
+ 		     MediaPlayer);
+ 
+ 	// service
+
+--- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
++++ neutrino-hd2-exp/src/neutrino.h	2012-10-21 15:20:26.180879315 +0200
+@@ -44,10 +44,10 @@
+ #include <gui/channellist.h>          		/* CChannelList */
+ #include <gui/rc_lock.h>
+ #include <daemonc/remotecontrol.h>    		/* st_rmsg      */
+-
++#include <gui/extra_menu.h>
+ #include <zapit/client/zapitclient.h>
+ #include <gui/scan_setup.h>
+-
++#include <gui/adzap.h>
+ #include <string>
+ 
+ #define widest_number "2"
+@@ -78,6 +78,24 @@
+         const char * const                          actionkey;
+ } font_sizes_groups_struct;
+ 
++class WLAN_Menu : public CMenuTarget
++{
++    private:
++        CFrameBuffer *frameBuffer;
++        int x;
++        int y;
++        int width;
++        int height;
++        int hheight, mheight;
++	char tmp_essid[41];
++	char tmp_key[41];
++	int wlan_mode;
++    public:
++        WLAN_Menu();
++        void WLAN_Settings();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++};
++
+ class CNeutrinoApp : public CMenuTarget, CChangeObserver
+ {
+  	public:
+@@ -124,6 +142,9 @@
+ 		// font
+ 		neutrino_font_descr_struct      font;
+ 
++		CAdZapMenu			*AdZapChanger;
++		TUNERRESET_Menu *TunerMenu;
++
+ 		// modes
+ 		int				mode;
+ 		int				lastMode;
+@@ -180,7 +201,7 @@
+ 		
+ 		void saveEpg();
+ 		
+-		void ExitRun(const bool write_si = true, int retcode = 0);
++
+ 		void RealRun(CMenuWidget &mainSettings);
+ 		void InitZapper();
+ 		
+@@ -223,7 +244,8 @@
+ 				  CMenuWidget &service,
+                         	  CMenuWidget &audioplayerSettings, 
+ 				  CMenuWidget &PicViewerSettings, 
+-				  CMenuWidget &streamingSettings, 
++				  CMenuWidget &streamingSettings,
++				  CMenuWidget &ExtraMenu, 
+ 				  CMenuWidget &MediaPlayer);
+ 
+ 		void SetupFrameBuffer();
+@@ -239,7 +261,7 @@
+ 
+ 	public:
+ 		CMenuItem * wlanEnable[3];
+-		
++		void ExitRun(const bool write_si = true, int retcode = 0);
+ 		void saveSetup(const char * fname);
+ 		int loadSetup(const char * fname);
+ 		void loadColors(const char * fname);
+@@ -253,7 +275,9 @@
+ 		CChannelList			*TVchannelList;
+ 		CChannelList			*RADIOchannelList;
+ 		CChannelList			* channelList;
+-		
++
++		EMU_Menu *EmuMenu;
++
+ 		/* network config */
+ 		CNetworkConfig                 networkConfig;
+ 
+
+--- neutrino-hd2-exp/src/gui/adzap.h	1970-01-01 01:00:00.000000000 +0100
++++ neutrino-hd2-exp/src/gui/adzap.h	2012-10-06 17:54:32.000000000 +0200
+@@ -0,0 +1,57 @@
++/*
++ * adzap.h
++ * 
++ * (C)2012 by martii
++ * 
++ * License: GPL
++ * 
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ */
++
++
++#ifndef __adzap__
++#define __adzap__
++
++#include "widget/menue.h"
++#include <zapit/channel.h>
++#include <system/localize.h>
++#include <string>
++#include <semaphore.h>
++
++class CAdZapMenu:public CMenuTarget {
++  private:
++    CFrameBuffer * frameBuffer;
++    int x;
++    int y;
++    int width;
++    int height;
++    int hheight, mheight;	// head/menu font height
++    bool running;
++    bool armed;
++    bool alerted;
++    struct timespec zapBackTime;
++    std::string channelName;
++  public:
++    bool monitor;
++    struct timespec monitorLifeTime;
++    t_channel_id channelId;
++    CAdZapMenu();
++    int exec(CMenuTarget * parent, const std::string & actionKey);
++    void Settings();
++    void Update();
++    static void *Run(void *);
++    sem_t sem;
++};
++#endif				// __adzap__
+
+
+--- neutrino-hd2-exp/src/gui/adzap.cpp	1970-01-01 01:00:00.000000000 +0100
++++ neutrino-hd2-exp/src/gui/adzap.cpp	2012-10-06 17:54:32.000000000 +0200
+@@ -0,0 +1,297 @@
++/*
++ * adzap.cpp
++ * 
++ * (C)2012 by martii
++ * 
++ * License: GPL
++ * 
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ */
++
++/*
++ * AS SOME FOLKS DON'T SEEM TO UNDERSTAND THE GPL: YOU ARE FREE TO USE
++ * THIS CODE FOR YOUR OWN LITTLE STB IMAGE. BUT IF YOU ARE DISTRIBUTING
++ * THAT IMAGE, YOU ARE BOUND TO THE GPL, AND YOU HAVE TO DISTRIBUTE THE
++ * SOURCE CODE, TOO. IF YOU DON'T: A) YOU ACKNOWLEDGE THAT YOU'RE AN
++ * ABSOLUTE JERK, AND B) YOU'RE NOT PERMITTED TO USE THIS CODE. AT ALL.
++ */
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#include <gui/adzap.h>
++#include <widget/hintbox.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include <global.h>
++#include <neutrino.h>
++#include <algorithm>
++
++#define ZAPBACK_ALERT_PERIOD 15	// seconds. Keep this in sync with the locales.
++
++static CAdZapMenu *azm = NULL;
++static pthread_t thrAdZap;
++
++CAdZapMenu::CAdZapMenu()
++{
++    if (azm)
++	return;
++
++    azm = this;
++    frameBuffer = CFrameBuffer::getInstance();
++    width = 400;
++    hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++    mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++    height = hheight + 13 * mheight + 10;
++
++    x = (((g_settings.screen_EndX - g_settings.screen_StartX) -
++	  width) / 2) + g_settings.screen_StartX;
++    y = (((g_settings.screen_EndY - g_settings.screen_StartY) -
++	  height) / 2) + g_settings.screen_StartY;
++
++    sem_init(&sem, 0, 0);
++    if (pthread_create(&thrAdZap, 0, CAdZapMenu::Run, NULL) != 0) {
++	fprintf(stderr, "ERROR: pthread_create(CAdZapMenu::CAdZapMenu)\n");
++	running = false;
++    } else
++	running = true;
++    channelId = -1;
++    armed = false;
++    monitor = false;
++    alerted = false;
++}
++
++void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey,
++				   CChannelEventList & eList, char search =
++				   0, std::string search_text = "");
++
++static bool
++sortByDateTime(const CChannelEvent & a, const CChannelEvent & b)
++{
++    return a.startTime < b.startTime;
++}
++
++void
++ CAdZapMenu::Update()
++{
++    if (channelId < 0)
++	return;
++
++    struct timespec ts;
++    clock_gettime(CLOCK_REALTIME, &ts);
++
++    memcpy(&zapBackTime, &ts, sizeof(ts));
++    zapBackTime.tv_sec +=
++	g_settings.adzap_zapBackPeriod - ZAPBACK_ALERT_PERIOD;
++
++    sem_post(&azm->sem);
++}
++
++void *CAdZapMenu::Run(void *)
++{
++    while (azm->running) {
++	CChannelList *channelList = NULL;
++	t_channel_id curChannelId;
++
++	if (azm->monitor) {
++	    struct timespec ts;
++	    clock_gettime(CLOCK_REALTIME, &ts);
++	    ts.tv_sec += 1;
++
++	    sem_timedwait(&azm->sem, &ts);
++
++	    if (azm->monitor && (azm->monitorLifeTime.tv_sec > ts.tv_sec)) {
++		channelList = CNeutrinoApp::getInstance()->channelList;
++		curChannelId =
++		    channelList ? channelList->getActiveChannel_ChannelID()
++		    : -1;
++		if (!azm->armed && (azm->channelId != curChannelId)) {
++		    azm->armed = true;
++		    clock_gettime(CLOCK_REALTIME, &azm->zapBackTime);
++		    azm->zapBackTime.tv_sec +=
++			g_settings.adzap_zapBackPeriod -
++			ZAPBACK_ALERT_PERIOD;
++		    azm->alerted = false;
++		} else if (azm->channelId == curChannelId) {
++		    azm->armed = false;
++		    azm->alerted = false;
++		}
++	    } else {
++		azm->monitor = false;
++		azm->armed = false;
++		azm->alerted = false;
++	    }
++	} else if (azm->armed)
++	    sem_timedwait(&azm->sem, &azm->zapBackTime);
++	else
++	    sem_wait(&azm->sem);
++
++	if (azm->armed) {
++	    struct timespec ts;
++	    clock_gettime(CLOCK_REALTIME, &ts);
++	    if (ts.tv_sec >= azm->zapBackTime.tv_sec) {
++		if (!channelList) {
++		    channelList = CNeutrinoApp::getInstance()->channelList;
++		    curChannelId =
++			channelList ?
++			channelList->getActiveChannel_ChannelID() : -1;
++		}
++		if (!azm->alerted) {
++		    if (azm->channelId != curChannelId) {
++			std::string name =
++			    g_Locale->getText(LOCALE_ADZAP_ANNOUNCE);
++			name += "\n" + azm->channelName;
++			ShowHintUTF(LOCALE_ADZAP, name.c_str());
++		    }
++		    azm->alerted = true;
++		    azm->zapBackTime.tv_sec += ZAPBACK_ALERT_PERIOD;
++		} else {
++		    azm->alerted = false;
++		    if (channelList)
++			channelList->zapTo_ChannelID(azm->channelId);
++		    azm->armed = false;
++		}
++	    }
++	}
++    }
++    return NULL;
++}
++
++int CAdZapMenu::exec(CMenuTarget * parent, const std::string & actionKey)
++{
++    int res = menu_return::RETURN_EXIT_ALL;
++
++    if (parent)
++	parent->hide();
++
++    if (actionKey == "enable") {
++	if (!monitor)
++	    armed = true;
++	alerted = false;
++	Update();
++	return res;
++    }
++    if (actionKey == "disable") {
++	armed = false;
++	monitor = false;
++	alerted = false;
++	Update();
++	return res;
++    }
++    if (actionKey == "monitor") {
++	azm->armed = false;
++	azm->monitor = true;
++	alerted = false;
++	Update();
++	return res;
++    }
++
++    if (actionKey == "adzap") {
++	if (armed || monitor) {
++	    armed = false;
++	    monitor = false;
++	    alerted = false;
++	    Update();
++	    ShowLocalizedHint(LOCALE_ADZAP, LOCALE_ADZAP_CANCEL, 450, 1);
++	    return res;
++	}
++    }
++    if (actionKey.length() == 1) {
++	g_settings.adzap_zapBackPeriod = actionKey[0] - '0';
++	g_settings.adzap_zapBackPeriod *= 60;
++	if (!monitor)
++	    armed = true;
++	return menu_return::RETURN_REPAINT;
++    }
++
++    Settings();
++
++    return res;
++}
++
++void CAdZapMenu::Settings()
++{
++    CChannelList *channelList = CNeutrinoApp::getInstance()->channelList;
++    channelId =
++	channelList ? channelList->getActiveChannel_ChannelID() : -1;
++    if (channelId < 0)
++	return;
++    channelName = channelList->getActiveChannelName();
++
++    CMenuWidget *menu =
++	new CMenuWidget(LOCALE_ADZAP, "settings", width);
++    menu->addItem(new
++		  CMenuSeparator(CMenuSeparator::LINE |
++				 CMenuSeparator::STRING,
++				 LOCALE_ADZAP_SWITCHBACK));
++    neutrino_locale_t minute = LOCALE_ADZAP_MINUTE;
++    for (int shortcut = 1; shortcut < 10; shortcut++) {
++	char actionKey[2];
++	actionKey[0] = '0' + shortcut;
++	actionKey[1] = 0;
++	bool selected = g_settings.adzap_zapBackPeriod == 60 * shortcut;
++	menu->addItem(new
++		      CMenuForwarder(minute, true, "", this, actionKey,
++				     CRCInput::convertDigitToKey
++				     (shortcut)), selected);
++	minute = LOCALE_ADZAP_MINUTES;
++    }
++
++    menu->addItem(new
++		  CMenuSeparator(CMenuSeparator::LINE |
++				 CMenuSeparator::STRING,
++				 LOCALE_ADZAP_COMMIT));
++    menu->addItem(new
++		  CMenuForwarder(LOCALE_ADZAP_ENABLE, true, "", this,
++				 "enable", CRCInput::RC_green,
++				 NEUTRINO_ICON_BUTTON_GREEN));
++    menu->addItem(new
++		  CMenuForwarder(LOCALE_ADZAP_DISABLE, true, "", this,
++				 "disable", CRCInput::RC_red,
++				 NEUTRINO_ICON_BUTTON_RED));
++
++    CChannelEventList evtlist;
++    sectionsd_getEventsServiceKey(azm->channelId & 0xFFFFFFFFFFFFULL,
++				  evtlist);
++    azm->monitorLifeTime.tv_sec = 0;
++    if (!evtlist.empty()) {
++	sort(evtlist.begin(), evtlist.end(), sortByDateTime);
++	CChannelEventList::iterator eli;
++	struct timespec ts;
++	clock_gettime(CLOCK_REALTIME, &ts);
++	for (eli = evtlist.begin(); eli != evtlist.end(); ++eli) {
++	    if ((uint) eli->startTime + eli->duration > ts.tv_sec) {
++		azm->monitorLifeTime.tv_sec =
++		    (uint) eli->startTime + eli->duration;
++		azm->Update();
++		break;
++	    }
++	}
++    }
++
++    menu->addItem(new
++		  CMenuForwarder(LOCALE_ADZAP_MONITOR,
++				 azm->monitorLifeTime.tv_sec, "", this,
++				 "monitor", CRCInput::RC_blue,
++				 NEUTRINO_ICON_BUTTON_BLUE));
++
++    monitor = false;
++    menu->exec(NULL, "");
++    menu->hide();
++    delete menu;
++    Update();
++}
+
+
+--- neutrino-hd2-exp/src/gui/widget/lcdcontroler.h	1970-01-01 01:00:00.000000000 +0100
++++ neutrino-hd2-exp/src/gui/widget/lcdcontroler.h	2012-10-06 17:54:32.000000000 +0200
+@@ -0,0 +1,75 @@
++/*
++	Neutrino-GUI  -   DBoxII-Project
++ 
++	Copyright (C) 2001 Steffen Hehn 'McClean'
++	Homepage: http://dbox.cyberphoria.org/
++ 
++	Kommentar:
++ 
++	Diese GUI wurde von Grund auf neu programmiert und sollte nun vom
++	Aufbau und auch den Ausbaumoeglichkeiten gut aussehen. Neutrino basiert
++	auf der Client-Server Idee, diese GUI ist also von der direkten DBox-
++	Steuerung getrennt. Diese wird dann von Daemons uebernommen.
++	
++ 
++	License: GPL
++ 
++	This program is free software; you can redistribute it and/or modify
++	it under the terms of the GNU General Public License as published by
++	the Free Software Foundation; either version 2 of the License, or
++	(at your option) any later version.
++ 
++	This program is distributed in the hope that it will be useful,
++	but WITHOUT ANY WARRANTY; without even the implied warranty of
++	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++	GNU General Public License for more details.
++ 
++	You should have received a copy of the GNU General Public License
++	along with this program; if not, write to the Free Software
++	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++*/
++
++
++#ifndef __lcdcontroler__
++#define __lcdcontroler__
++
++#include <driver/framebuffer.h>
++#include <system/localize.h>
++
++#include "menue.h"
++
++#include <string>
++
++class CLcdControler : public CMenuTarget
++{
++	private:
++		CFrameBuffer	*frameBuffer;
++		int x;
++		int y;
++		int width;
++		int height;
++		int hheight,mheight; // head/menu font height
++
++		unsigned char contrast;
++		unsigned char brightness;
++		unsigned char brightnessstandby;
++
++		neutrino_locale_t name;
++
++		CChangeObserver* observer;
++
++		void paint();
++		void setLcd();
++		void paintSlider(int x, int y, unsigned int spos, float factor, const neutrino_locale_t text, bool selected);
++
++	public:
++
++		CLcdControler(const neutrino_locale_t Name, CChangeObserver* Observer = NULL);
++
++		void hide();
++		int exec(CMenuTarget* parent, const std::string & actionKey);
++
++};
++
++
++#endif
 
 
