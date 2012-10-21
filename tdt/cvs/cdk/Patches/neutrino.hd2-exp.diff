@@ -490,6 +490,150 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
  } neutrino_locale_t;
 
+--- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
++++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
+@@ -1368,6 +1368,7 @@
+ usermenu.item_none 
+ usermenu.item_vtxt Videotext
+ usermenu.item_plugins Plugins
++usermenu.item_adzap Commercialzapper
+ usermenu.name Name
+ video_mode_ok Is this video mode working ok ?
+ videomenu.analog_hd_rgb_cinch RGB on cinch (HD)
+@@ -1542,4 +1543,132 @@
+ 
+ audiomenu.volumebar_audiosteps Volume Step Size
+ 
++mainmenu.extramenu Extras
++extramenu.tunerreset Tuner Menue
++extramenu.tunerreset.select Tuner Reset
++extramenu.tunerreset.on On
++extramenu.tunerreset.off Off
++extramenu.tunerreset.restart restart Tuner
++extramenu.correctvolume Volume Menue Ext.
++extramenu.correctvolume.select Correct Volume
++extramenu.correctvolume.on On
++extramenu.correctvolume.off Off
++extramenu.amount Amount Menue
++extramenu.amount.select Amount
++extramenu.amount.on On
++extramenu.amount.off Off
++extramenu.displaytime DisplayTime Menue
++extramenu.displaytime.select DisplayTime
++extramenu.displaytime.on On
++extramenu.displaytime.off Off
++extramenu.wwwdate wwwDate Menue
++extramenu.wwwdate.select wwwDate
++extramenu.wwwdate.on Ein
++extramenu.wwwdate.off Aus
++extramenu.checkfs CheckFS Menue
++extramenu.checkfs.select CheckFS
++extramenu.checkfs.on On
++extramenu.checkfs.off Off
++extramenu.emu Cam Menue
++extramenu.emu.none not aktiv
++extramenu.emu.mgcamd MGCamd
++extramenu.emu.incubus IncubusCamd
++extramenu.emu.camd3 Camd3
++extramenu.emu.mbox Mbox
++extramenu.emu.oscam Oscam
++extramenu.emu.spcs Spcs
++extramenu.emu.select Cam Select
++extramenu.emu.restart restart Cam
++extramenu.emu.disable deactivate Cam
++extramenu.swap Swap Menue
++extramenu.swap.swapram SWAPRAM
++extramenu.swap.swappart SWAPPART
++extramenu.swap.swapfile SWAPFILE
++extramenu.swap.select Swap Select
++extramenu.swap.onoff SWAP
++extramenu.boot.head Boot-Settings
++extramenu.boot.select Startsystem on Reboot
++extramenu.boot.unchanged Unchanged
++extramenu.boot.bootargs.head Change Boot-Parameter now
++extramenu.boot.bootargs.text Don't turn box off now... wait...!
++extramenu.fsck FSCK Menue
++extramenu.fsck.select FSCK
++extramenu.fsck.on On
++extramenu.fsck.off Off
++extramenu.nfsserver NFSSERVER Menue
++extramenu.nfsserver.select NFSSERVER
++extramenu.nfsserver.on On
++extramenu.nfsserver.off Off
++extramenu.stmfb STMFB Menue
++extramenu.stmfb.select STMFB 15m
++extramenu.stmfb.on On
++extramenu.stmfb.off Off
++extramenu.fritzcall Fritzcall Menue
++extramenu.fritzcall.select Fritzcallmonitor
++extramenu.fritzcall.on On
++extramenu.fritzcall.off Off
++extramenu.evoluxupdate Evolux OnlineUpdate
++extramenu.evoluxupdate.select OnlineUpdate
++extramenu.evoluxupdate.on On
++extramenu.evoluxupdate.off Off
++extramenu.evoluxupdate.update do OnlineUpdate
++extramenu.kerneloptions Kernel-Options
++extramenu.kerneloptions.apply apply Settings
++extramenu.kerneloptions.lsmod Status
++extramenu.kerneloptions.modules Kernel-Module
++extramenu.kerneloptions.reset reset Settings
++extramenu.glcd.volume Volume
++extramenu.glcd.color.black black
++extramenu.glcd.color.white white
++extramenu.glcd.color.red red
++extramenu.glcd.color.green green
++extramenu.glcd.color.blue blue
++extramenu.glcd.color.magenta magenta
++extramenu.glcd.color.cyan bluegreen
++extramenu.glcd.color.yellow yellow
++extramenu.glcd GraphLCD
++extramenu.glcd.select.fg Foreground-Colour
++extramenu.glcd.select.bg Background-Colour
++extramenu.glcd.select.bar Bar-Colour
++extramenu.glcd.size_channel Chan-Size
++extramenu.glcd.size_epg EPG-Size
++extramenu.glcd.size_bar Bar-Size
++extramenu.glcd.size_time Time-Size
++extramenu.glcd.restart Research
++extramenu.glcd.mirror_osd show Menue on GraphLCD
++extramenu.glcd.time_in_standby show Time on Standby
++onoff.on On
++onoff.off Off
++adzap Werbezapper
++adzap.announce Zap In 15 Seconds to
++adzap.cancel Disbaled
++adzap.enable do it 1time
++adzap.disable Disabled
++adzap.monitor do it allways
++adzap.minute Minute
++adzap.minutes Minutes
++adzap.switchback zap back after
++adzap.commit (after change time press (OK) again)
++glcd.color.black black
++glcd.color.blue blue
++glcd.color.cyan bluegreen
++glcd.color.green green
++glcd.color.magenta magenta
++glcd.color.red red
++glcd.color.white white
++glcd.color.yellow yellow
++glcd.enable GraphLCD aktive
++glcd.font Fonts
++glcd.head GraphLCD
++glcd.mirror_osd show OSD-Menü on GraphLCD
++glcd.restart Rescan
++glcd.select.bar Bar-Colour
++glcd.select.bg Background-Colour
++glcd.select.fg Foreground-Colour
++glcd.size_bar Bar-Size
++glcd.size_channel Chan-Size
++glcd.size_epg EPG-Size
++glcd.size_time Time-Size
++glcd.time_in_standby show time on standby
++glcd.volume Volume
+ 
+
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
 @@ -705,6 +705,7 @@
