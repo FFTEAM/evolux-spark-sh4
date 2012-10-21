@@ -135,6 +135,8 @@ endif
 	fi;
 #	cp -RP $(prefix)/release_evolux_triple_with_dev/boot/uImage $(prefix)/
 	cp -RP $(targetprefix)/boot/uImage $(prefix)/
+	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_triple_with_dev/sbin/ )
+if ENABLE_SPARK
 	( cd $(prefix) && cd ../flash/spark/orig-spark-plugin/root/plugin/var/etc && cp * $(prefix)/release_evolux_triple_with_dev/etc/ )
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/release_evolux_triple_with_dev/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/release_evolux_triple_with_dev/bin/
@@ -144,13 +146,12 @@ endif
 	cp -RP $(buildprefix)/root/bin/fw_printenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/fw_setenv $(prefix)/BootargsPack/bin/
 	cp -RP $(buildprefix)/root/bin/setmtdmode $(prefix)/BootargsPack/bin/
-	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release_evolux_triple_with_dev/sbin/ )
-if ENABLE_SPARK
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2.sh $(prefix)/ )
+	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 else
 	( cd $(prefix) && cp -RP ../flash/spark/flash_E2_yaffs2_triplex.sh $(prefix)/ )
+	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3_triplex.txt $(prefix)/ )
 endif
-	( cd $(prefix) && cp -RP ../flash/spark/howto_flash_yaffs2_new3.txt $(prefix)/ )
 	( cd $(prefix) && cp -RP ../flash/spark/orig-spark-plugin/Evolux-Orig-Spark-BootPlugin $(prefix)/ )
 	rm -rf $(prefix)/release_evolux_triple_with_dev/sbin/fsck.nfs
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/icons/mbox_white.raw
