@@ -1,0 +1,130 @@
+###############################################################
+### HOWTO #####################################################
+###############################################################
+
+Content:
+A. : flash Evolux-img
+
+-deutsche howto-übersetzung ab zeile 100-
+###############################################################
+###############################################################
+
+@your own risk!
+no warranty if you damage your box!!
+READ CAREFULL!!!
+
+YOU MUST HAVE ORIG-SPARK VERSION >=1.2.09 IN BOX!!
+
+###############################################################
+### FLASH EVOLUX ##############################################
+###############################################################
+FLASH EVOLUX:
+- format usb-stick with fat/fat32
+- copy "uImage" + "e2yaffs2.img + flash_E2_yaffs2_triplex.sh" into usb-stick-folder "enigma2"
+- connect usb-stick to box-usb-port backside
+- BOOT ORIG-SPARK
+
+###############################################################
+telnet pingulux-ip
+user: root
+pw: root
+
+check if stick correct mounted:
+ls /storage/c/enigma2
+
+(if you see uImage, e2yaffs2.img all fine)
+
+now we start flashing by:
+/storage/c/enigma2/flash_E2_yaffs2_triplex.sh
+
+
+are you sure? start flashing EVOLUX now (Y/n) ?
+
+select:
+	y
+
+###############################################################
+that takes around 1-2 minutes
+till finished you must turn of AC,
+turn on AC + hold "OK" on box till "FORC" in display,
+press "arrow-down" ("ENG" will displayed),
+press "ok" again and uboot will switch to boot Evolux!
+
+if you want back to orig do same aboth but than "arrow-up" against "arrow-down" and orig will bootup again!
+
+##############################################################
+EVOLUX-IMAGES CAN ONLY BE FLASHED BY:
+         BOOT ORIG-SPARK + flash_E2_yaffs2_triplex.sh!
+##############################################################
+
+##############################################################
+### END ######################################################
+##############################################################
+
+
+
+###############################################################
+### ANLEITUNG #################################################
+###############################################################
+Inhalt:
+1. : flash evolux-img
+
+###############################################################
+###############################################################
+
+@auf eigenes Risiko!!!
+keinerle Garantie wenn ihr eure Box killed!
+ALLES SEHR AUFMERKSAM LESEN!!!
+
+ORIG-SPARK VERSION >=1.2.09 MUSS SICH AUF EURER BOX BEFINDEN!!
+
+###############################################################
+### FLASH EVOLUX ##############################################
+###############################################################
+FLASH EVOLUX:
+- usb-stick mit fat/fat32 formatieren
+- "uImage" + "e2yaffs2.img + flash_E2_yaffs2_triplex.sh" auf Stick in Ordner "enigma2" kopieren
+- usb-stick an box stecken
+- ORIG-SPARK booten lassen
+
+###############################################################
+telnet pingulux-ip
+user: root
+pw: root
+
+überprüfen ob stick korrekt gemounted wurde:
+ls /storage/c/enigma2
+
+(wenn ihr "uImage", "e2yaffs2.img" seht is alles korrekt)
+
+flashvorgang starten mit:
+/storage/c/enigma2/flash_E2_yaffs2_triplex.sh
+
+are you sure? start flashing EVOLUX now (Y/n) ?
+
+Auswahl:
+	y
+
+###############################################################
+dauert ca. 1-2 minuten
+wenn fertig müsst ihr die box vom strom trennen (ac off)
+dann wieder mit strom verbinden und ok-button gedrückt halten an der box bis "FORC" im display steht
+dann "pfeil-unten" drücken und es steht "ENG" im display
+erneut "OK" drücken und ubnoot wird bootargs auf evolux setzen
+     und Evolux-Neutrino sollte booten...
+
+will man orig wieder booten gleiche vorgehensweise wobei man dann "Pfeil-oben" drückt statt "unten"!
+
+##############################################################
+EVOLUX-IMAGES LASSEN SICH AUSSCHLIESSLICH NUR FLASHEN VIA:
+         ORIG-SPARK booten + flash_E2_yaffs2.sh!
+
+Alle anderen "gherkömmlichen images können wie gehabt via:
+usb+frontpanel-tasten gefahrlos geflasht werden!
+##############################################################
+
+Eure ORIG BOOTARGS werden VOR änderung gesichert am stick als "myBootargs.txt"
+wenn also was nich passt könnt ihr dann darüber mit euren comcable+terraterm+bootargskenntnissen notfalls die bootargs wieder auf "standard" setzen
+##############################################################
+### DEUTSCH ENDE #############################################
+##############################################################
