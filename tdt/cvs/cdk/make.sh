@@ -66,7 +66,7 @@ fi
 if [ -e "$GMDIR/cvs/cdk/.p0211" ]; then
 	rm "$GMDIR/cvs/cdk/.p0211"
 fi
-echo -e "Build SPARK STM24-209/210 Player191 now...\n"
+echo -e "Build SPARK STM24-209/210/211 Player191 now...\n"
 read -p "Build for TRIPLEX(SPARK7162) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
