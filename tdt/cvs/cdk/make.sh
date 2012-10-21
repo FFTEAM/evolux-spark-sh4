@@ -67,7 +67,7 @@ if [ -e "$GMDIR/cvs/cdk/.p0211" ]; then
 	rm "$GMDIR/cvs/cdk/.p0211"
 fi
 echo -e "Build SPARK STM24-209/210 Player191 now...\n"
-read -p "Build for TRIPLEX(SPARK7162) (JFFS2 ONLY) (y/N)? "
+read -p "Build for TRIPLEX(SPARK7162) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
 	touch "$GMDIR/cvs/cdk/.spark7162"
@@ -200,7 +200,7 @@ fi
 	echo -e "\nFilesystemtype:"
 	echo "   1) JFFS2 (standard)"
 #	if [ ! -e "$GMDIR/cvs/cdk/.p0211" ]; then
-		echo "   2) YAFFS2 (SPARK ONLY, not needed changing bootargs)"
+		echo "   2) YAFFS2 (not needed changing bootargs)"
 #	fi
 	read -p "Select Filesystem (1-2)? "
 	case "$REPLY" in
