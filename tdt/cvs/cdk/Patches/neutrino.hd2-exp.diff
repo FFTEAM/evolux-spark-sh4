@@ -640,8 +640,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:04:13.171757316 +0200
-@@ -0,0 +1,2558 @@
++++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
+@@ -0,0 +1,2559 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -3102,7 +3102,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +bool EVOLUXUPDATE_Menu::CheckUpdate()
 +{
 +	//EVOLUXUPDATE STARTEN
-+	unlink("/tmp/EvoluxUpdatevailable");
++/*	unlink("/tmp/EvoluxUpdatevailable");
 +	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
 +		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
@@ -3120,13 +3120,14 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		CheckUpdateBox->hide();
 +		delete CheckUpdateBox;
 +	}
-+	else {
++*/
++//	else {
 +		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
 +		CheckUpdateBox->paint();
 +		sleep(3);
 +		CheckUpdateBox->hide();
 +		delete CheckUpdateBox;
-+	}
++//	}
 +}
 +//ENDE EVOLUXUPDATE
 +
@@ -3199,10 +3200,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +////////////////////////////// NFSSERVER Menu ENDE //////////////////////////////////////
 +
 +////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
-+// vim:ts=4
++// vim:ts=4--- neutrino-hd2-exp/src/gui/extra_menu.h	1970-01-01 01:00:00.000000000 +0100
 
 
---- neutrino-hd2-exp/src/gui/extra_menu.h	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.h	2012-10-06 17:54:32.000000000 +0200
 @@ -0,0 +1,498 @@
 +/*
@@ -3721,39 +3721,39 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
 +//***************************************** Extra Menue 
-+	mainMenu.addItem(new CMenuForwarder(LOCALE_MAINMENU_EXTRAMENU, true, NULL, &ExtraMenu, NULL, CRCInput::convertDigitToKey(shortcut++)));
++	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_EXTRAMENU, true, "", &ExtraMenu, NULL, CRCInput::convertDigitToKey(shortcut++), NULL, "mainsettings", LOCALE_HELPTEXT_SERVICE));
 +	ExtraMenu.addItem(GenericMenuSeparator);
 +	ExtraMenu.addItem(GenericMenuBack);
 +	ExtraMenu.addItem(GenericMenuSeparatorLine);
 +
 +	EmuMenu = new EMU_Menu();
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, NULL, EmuMenu, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EMU, true, "", EmuMenu, NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // Emu Menu
 +
 +	TunerMenu = new TUNERRESET_Menu();
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, NULL, TunerMenu, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET, true, "", TunerMenu, NULL, CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN)); // Tuner Menu
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CORRECTVOLUME, true, NULL, new CORRECTVOLUME_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CorrectVolume Menu
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_AMOUNT, true, NULL, new AMOUNT_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // Amount Menu
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // CheckFS Menu
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_WWWDATE, true, NULL, new WWWDATE_Menu(), NULL, CRCInput::RC_2)); // wwwDate Menu
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, NULL, new SWAP_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // SWAP Menu
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, NULL, new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_SWAP, true, "", new SWAP_Menu(), NULL, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW)); // SWAP Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, "", new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 +	int extrashortcut = 1;
-+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, NULL, new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
-+#ifdef WITH_GRAPHLCD
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, NULL, new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, "", new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
++#ifdef WITH_GRAPHLCD_OFF
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, "", new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 +#endif
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, NULL, new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, NULL, new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, NULL, new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, "", new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, "", new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, "", new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
 +	if (!access("/etc/enigma2/settings", R_OK))
-+		ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, NULL, new EVOLUXUPDATE_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Evolux Oupdate Menu
-+	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, NULL, new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOT_HEAD, true, NULL, new BOOT_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
++		ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_EVOLUXUPDATE, true, "", new EVOLUXUPDATE_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Evolux Oupdate Menu
++	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_STMFB, true, "", new STMFB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // STFMB Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_BOOT_HEAD, true, "", new BOOT_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // BOOTSPARK Menu
 +
 +	/*}
 +	else
 +	{
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, NULL, new CHECKFS_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // CheckFS Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_CHECKFS, true, "", new CHECKFS_Menu(), NULL, CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED)); // CheckFS Menu
 +	} */
 +//*****************************************************************************************************************	
 +//*****************************************************************************************************************
@@ -3797,6 +3797,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			// games
  			case SNeutrinoSettings::ITEM_GAME:
  				{
+
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
 +++ neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 14:37:46.604187070 +0200
