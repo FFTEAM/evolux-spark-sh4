@@ -93,7 +93,25 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-10-21 11:01:27.273379637 +0200
 +++ neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-10-21 12:43:43.000000000 +0200
-@@ -636,11 +636,61 @@
+@@ -61,7 +61,7 @@
+ #include <dmx_cs.h>
+ #include <audio_cs.h>
+ #include <video_cs.h>
+-#include <dvb-ci.h>
++//#include <dvb-ci.h>
+ 
+ 
+ /* globals */
+@@ -69,7 +69,7 @@
+ int abort_zapit;
+ 
+ /* ci */
+-cDvbCi * ci; //FIXME: boxes without ci cam
++//cDvbCi * ci; //FIXME: boxes without ci cam
+ 
+ /* audio conf */
+ #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
+@@ -636,15 +636,65 @@
  	}
  	#endif
  	
@@ -155,6 +173,20 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// ci cam
  //#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_GIGABLUE) || defined (PLATFORM_DUCKBOX) || defined (PLATFORM_DREAMBOX)
+-	ci->SendCaPMT(thischannel->getCaPmt());
++//	ci->SendCaPMT(thischannel->getCaPmt());
+ //#endif	
+ }
+ 
+@@ -3428,7 +3478,7 @@
+ 
+ 	//CI init
+ //#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_GIGABLUE) || defined (PLATFORM_DUCKBOX) || defined (PLATFORM_DREAMBOX)
+-	ci = cDvbCi::getInstance();
++//	ci = cDvbCi::getInstance();
+ //#endif
+ 
+ #if defined (PLATFORM_SPARK7162)
 
 
 ////////////////////////
@@ -776,7 +808,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,2559 @@
+@@ -0,0 +1,2561 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -1888,6 +1920,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +void BOOT_Menu::BOOTSettings()
 +{
 +#define DOTFILE_BOOTE2 "/etc/.start_enigma2"
++#define DOTFILE_BOOTNHD2 "/etc/.nhd2"
 +/*
 +#define DOTFILE_BOOTSPARK "/etc/.start_spark"
 +	int boot = BOOT_NEUTRINO;
@@ -1939,6 +1972,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +*/
 +		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
 +			touch(DOTFILE_BOOTE2);
++			unlink(DOTFILE_BOOTNHD2);
 +			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
 +		}
 +		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
