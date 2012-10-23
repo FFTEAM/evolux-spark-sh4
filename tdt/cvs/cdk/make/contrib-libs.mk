@@ -2366,8 +2366,10 @@ $(DEPDIR)/%libtuxtxt: $(DEPDIR)/libtuxtxt.do_compile
 # tuxtxt32bpp
 #
 $(DEPDIR)/tuxtxt32bpp.do_prepare: libtuxtxt @DEPENDS_tuxtxt32bpp@
-	cd @DIR_tuxtxt32bpp@ && \
-		patch -p1 < $(buildprefix)/Patches/tuxtxt32bpp-1.0-fix_dbox_headers.diff;
+	if [ ! -d $(buildprefix)/tuxtxt/tuxtxt ]; then \
+		cd @DIR_tuxtxt32bpp@; \
+		patch -p1 < $(buildprefix)/Patches/tuxtxt32bpp-1.0-fix_dbox_headers.diff; \
+	fi
 	touch $@
 
 $(DEPDIR)/tuxtxt32bpp.do_compile: $(DEPDIR)/tuxtxt32bpp.do_prepare
