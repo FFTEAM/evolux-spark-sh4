@@ -28,26 +28,30 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	chmod 0755 $(DESTDIR)$(DATADIR)/neutrino/httpd/scripts/Y_*.sh
 
 
---- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:51.357580061 +0200
-+++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:34.977498845 +0200
-@@ -72,7 +72,11 @@
- 	int i;
+//--- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:51.357580061 +0200
+//+++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:34.977498845 +0200
+//@@ -72,7 +72,11 @@
+// 	int i;
  
- 	if (!dmx)
-+#if defined (PLATFORM_SPARK7162)
-+		dmx = new cDemux( /*demux_num*/ );
-+#else
- 		dmx = new cDemux( demux_num );
-+#endif
+// 	if (!dmx)
+//+#if defined (PLATFORM_SPARK7162)
+//+		dmx = new cDemux(/*dmx_num*/);
+//+#else
+// 		dmx = new cDemux(dmx_num);
+//+#endif
  
- 	dmx->Open(DMX_TP_CHANNEL, /*3 * 3008 * 62*/RECORD_STREAM_BUFFER_SIZE, fe_num );
- 	dmx->pesFilter(vpid);
+// 	dmx->Open(DMX_TP_CHANNEL, /*3 * 3008 * 62*/RECORD_STREAM_BUFFER_SIZE, fe_num );
+// 	dmx->pesFilter(vpid);
 
 
 --- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-10-21 11:01:20.865347864 +0200
 +++ neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-10-21 12:43:45.000000000 +0200
-@@ -37,7 +37,7 @@
+@@ -34,10 +34,10 @@
+ #include "video_cs.h"
  
+ #include <system/debug.h>
+-
++#include <system/safe_system.h>
  
  extern cVideo *videoDecoder;
 -extern CFrontend * live_fe;
@@ -55,7 +59,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  static const char * FILENAME = "[dmx_cs.cpp]";
  
-@@ -85,7 +85,33 @@
+@@ -85,7 +85,42 @@
  	if (type != DMX_PSI_CHANNEL)
  		flags |= O_NONBLOCK;
  	
@@ -64,21 +68,30 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	{
 +		case 0:
 +			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE )
++			{
++			safe_system("rm /dev/dvb/adapter0/demux*;mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null;mknod /dev/dvb/adapter0/demux1 c 212 20 2>/dev/null;mknod /dev/dvb/adapter0/demux2 c 212 36 2>/dev/null");
 +				demux_num = 0;
++			}
 +			else
 +				demux_num = 2;
 +			break;
 +		
 +		case 1:
 +			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE ))
++			{
++			safe_system("rm /dev/dvb/adapter0/demux*;mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null;mknod /dev/dvb/adapter0/demux1 c 212 4 2>/dev/null;mknod /dev/dvb/adapter0/demux2 c 212 20 2>/dev/null");
 +				demux_num = 0;
++			}
 +			else
 +				demux_num = 1;
 +			break;
 +			
 +		case 2:
 +			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE ))
++			{
++			safe_system("rm /dev/dvb/adapter0/demux*;mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null;mknod /dev/dvb/adapter0/demux1 c 212 20 2>/dev/null;mknod /dev/dvb/adapter0/demux2 c 212 4 2>/dev/null");
 +				demux_num = 0;
++			}
 +			else
 +				demux_num = 1;
 +			break;
@@ -111,10 +124,12 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
-@@ -636,15 +636,65 @@
+@@ -635,15 +635,64 @@
+ 		live_cam->setCaPmt(thischannel->getCaPmt(), live_fe->fenumber, camask);
  	}
  	#endif
- 	
+-	
++
 +#if defined (PLATFORM_SPARK7162)	
 +	switch(fe->fenumber)
 +	{
@@ -163,30 +178,56 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +			}
 +			break;
 +	}
-+#else
++#else	
  	// socket
  	live_cam->setCaSocket( fe->fenumber );
  	
  	// cam
  	live_cam->setCaPmt(thischannel->getCaPmt(), fe->fenumber );
-+#endif
- 	
- 	// ci cam
- //#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_GIGABLUE) || defined (PLATFORM_DUCKBOX) || defined (PLATFORM_DREAMBOX)
--	ci->SendCaPMT(thischannel->getCaPmt());
-+//	ci->SendCaPMT(thischannel->getCaPmt());
- //#endif	
+-	
++#endif	
+ 	// ci cam //FIXME: boxes without ci cam
+-	ci->SendCaPMT(thischannel->getCaPmt());	
++//	ci->SendCaPMT(thischannel->getCaPmt());	
  }
  
-@@ -3428,7 +3478,7 @@
+ // save pids
+@@ -3017,13 +3066,13 @@
+ 	}
+ 	
+ 	// close frontend
+-	if(!(currentMode & RECORD_MODE)) 
++/*	if(!(currentMode & RECORD_MODE)) 
+ 	{
+ 		pmt_stop_update_filter(&pmt_update_fd);
+ 		
+ 		for(fe_map_iterator_t it = femap.begin(); it != femap.end(); it++)
+ 			it->second->Close();
+-	}
++	}*/
+ }
+ 
+ void leaveStandby(void)
+@@ -3034,8 +3083,8 @@
+ 		return;
+ 	
+ 	// open frontend
+-	for(fe_map_iterator_t it = femap.begin(); it != femap.end(); it++)
+-		it->second->Open();
++/*	for(fe_map_iterator_t it = femap.begin(); it != femap.end(); it++)
++		it->second->Open();*/
+ 
+ 	// live cam
+ 	if (!live_cam) 
+@@ -3485,7 +3534,7 @@
  
  	//CI init
- //#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_GIGABLUE) || defined (PLATFORM_DUCKBOX) || defined (PLATFORM_DREAMBOX)
+ 	//FIXME: platform without ci cam
 -	ci = cDvbCi::getInstance();
 +//	ci = cDvbCi::getInstance();
- //#endif
  
  #if defined (PLATFORM_SPARK7162)
+ 	//lib-stb-hal/libspark
 
 
 ////////////////////////
