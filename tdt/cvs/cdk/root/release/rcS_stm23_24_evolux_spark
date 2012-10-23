@@ -23,13 +23,10 @@ if [ -n "$TRIPLEX" ]; then
 	if [ -e /etc/.start_enigma2 ]; then
 		correctDemux=`ls -l /dev/dvb/adapter0 | grep demux2 | grep "36"`
 		if [ -z "$correctDemux" ]; then
-			rm /dev/dvb/adapter0/demux0
+			rm /dev/dvb/adapter0/demux*
 			mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null
-			rm /dev/dvb/adapter0/demux1
 			mknod /dev/dvb/adapter0/demux1 c 212 20 2>/dev/null
-			rm /dev/dvb/adapter0/demux2
 			mknod /dev/dvb/adapter0/demux2 c 212 36 2>/dev/null
-			rm /dev/dvb/adapter0/demux3
 			mknod /dev/dvb/adapter0/demux3 c 212 52 2>/dev/null
 		fi
 	fi
