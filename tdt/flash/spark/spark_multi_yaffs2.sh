@@ -242,7 +242,11 @@ case "$REPLY" in
 		./mkyaffs2 -o ./$OOBIMG.img $TUFSBOXDIR/release_evolux_triple_with_dev $CURDIR/out/e2yaffs2.img
 		cp $TUFSBOXDIR/uImage $CURDIR/out/uImage
 		cp -RP $OUTDIR/* $TUFSBOXDIR/
-		cd $TUFSBOXDIR && tar -czvf EvoLux-TRIPLE_on_Spark_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		if [ ! -e "$CDKDIR/.spark7162" ]; then
+			cd $TUFSBOXDIR && tar -czvf EvoLux-TRIPLE_on_Spark_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3.txt flash_E2_yaffs2.sh BootargsPack Evolux-Orig-Spark-BootPlugin
+		else
+			cd $TUFSBOXDIR && tar -czvf EvoLux-TRIPLE_on_Spark7162_v$EVOLUXVERSION-YAFFS2.tar.gz e2yaffs2.img uImage changelog.txt howto_flash_yaffs2_new3_triplex.txt flash_E2_yaffs2_triplex.sh
+		fi
 		cd $CURDIR
 		echo "-----------------------------------------------------------------------";;
 	*)  echo "Skipping...";;
