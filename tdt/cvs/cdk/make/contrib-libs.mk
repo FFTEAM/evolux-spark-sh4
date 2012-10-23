@@ -2328,10 +2328,11 @@ $(DEPDIR)/%libdvbsipp: $(DEPDIR)/libdvbsipp.do_compile
 # libtuxtxt
 #
 $(DEPDIR)/libtuxtxt.do_prepare: @DEPENDS_libtuxtxt@
-	rm -rf $(buildprefix)/tuxtxt && \
-	git clone git://openpli.git.sourceforge.net/gitroot/openpli/tuxtxt;
-	cd @DIR_libtuxtxt@ && \
-	patch -p1 < $(buildprefix)/Patches/libtuxtxt-1.0-fix_dbox_headers.diff
+	if [ ! -d $(buildprefix)/tuxtxt ]; then \
+		git clone git://openpli.git.sourceforge.net/gitroot/openpli/tuxtxt; \
+		cd @DIR_libtuxtxt@; \
+		patch -p1 < $(buildprefix)/Patches/libtuxtxt-1.0-fix_dbox_headers.diff; \
+	fi
 	touch $@
 
 $(DEPDIR)/libtuxtxt.do_compile: $(DEPDIR)/libtuxtxt.do_prepare
