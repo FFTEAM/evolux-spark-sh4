@@ -193,6 +193,19 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // save pids
+@@ -959,10 +1011,10 @@
+ 	
+ 	// cam
+ 	cam1->setCaPmt(rec_channel->getCaPmt(), frontend->fenumber );
+-	
++#if !defined (PLATFORM_SPARK7162)		
+ 	// ci cam //FIXME: boxes without ci cam
+ 	ci->SendCaPMT(rec_channel->getCaPmt());	
+-		
++#endif		
+ 
+ 	return 0;
+ }
 @@ -3393,11 +3445,11 @@
  	// open audiodecoder
  	if( audioDecoder->Open() < 0)
@@ -4543,3 +4556,33 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#endif
 
 
+--- neutrino-hd2-exp/src/zapit/src/ci.cpp	2012-10-24 21:18:06.806576466 +0200
++++ neutrino-hd2-exp/src/zapit/src/ci.cpp	2012-10-23 20:43:18.000000000 +0200
+@@ -129,17 +129,7 @@
+ 	buffer[1] = ((reserved1 << 5) | (elementary_PID >> 8)) & 0xff;
+ 	buffer[2] = elementary_PID & 0xff;
+ 	
+-	//return 3 + CCaTable::writeToBuffer(&(buffer[4]));
+-	
+-	int len = 0;
+-	len = CCaTable::writeToBuffer(&(buffer[4]));
+-	if(len) {
+-		buffer[3] = 0x1; // ca_pmt_cmd_id: ok_descrambling= 1;
+-		len++;
+-	}
+-	//buffer[3] = ((len & 0xf00)>>8);
+-	//buffer[4] = (len & 0xff);
+-	return len + 3;
++	return 3 + CCaTable::writeToBuffer(&(buffer[4]));	
+ }
+ 
+ /*
+@@ -224,7 +214,7 @@
+ 
+ 	for (i = 0; i < es_info.size(); i++) 
+ 	{
+-		wp += es_info[i]->CamwriteToBuffer(&(buffer[wp]));
++		wp += es_info[i]->writeToBuffer(&(buffer[wp]));
+ 	}
+ 	
+ 	buffer[3] = (wp-4) & 0xff;
