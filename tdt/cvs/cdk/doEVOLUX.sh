@@ -149,8 +149,10 @@ doOptimizeE2() {
 	rm $SOURCE/etc/enigma2/*_tv_.tv
 	rm $SOURCE/etc/enigma2/skin_user.xml
 	rm $SOURCE/etc/enigma2/extended_satellites.xml
+if [ ! -e $CURDIR/.spark7162 ]; then
 	rm $SOURCE/etc/tuxbox/cables.xml
 	rm $SOURCE/etc/tuxbox/terrestrial.xml
+fi
 	mkdir -p $SOURCE/usr/keys
 
 	isOLDE2=`cat $CURDIR/lastChoice | grep mediafwgstreamer`
