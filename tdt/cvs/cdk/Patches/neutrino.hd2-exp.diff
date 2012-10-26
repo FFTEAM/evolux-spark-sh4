@@ -137,51 +137,51 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		case 0:
 +			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE ) {
 +				// socket
-+				cam0->setCaSocket( 0 );
++				//cam0->setCaSocket( 0 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 0 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 0 );
 +			}
 +			else {
 +				// socket
-+				cam0->setCaSocket( 2 );
++				//cam0->setCaSocket( 2 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 2 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 2 );
 +			}
 +			break;
 +			
 +		case 1:
 +			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE )) {
 +				// socket
-+				cam0->setCaSocket( 0 );
++				//cam0->setCaSocket( 0 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 0 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 0 );
 +			}
 +			else {
 +				// socket
-+				cam0->setCaSocket( 1 );
++				//cam0->setCaSocket( 1 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 1 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 1 );
 +			}
 +			break;
 +			
 +		case 2:
 +			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE )) {
 +				// socket
-+				cam0->setCaSocket( 0 );
++				//cam0->setCaSocket( 0 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 0 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 0 );
 +			}
 +			else {
 +				// socket
 +				cam0->setCaSocket( 1 );
 +				// cam
-+				cam0->setCaPmt(thischannel->getCaPmt(), 1 );
++				cam0->setCaPmt(thischannel, thischannel->getCaPmt(), 1 );
 +			}
 +			break;
 +	}
 +#else
  	// socket
- 	cam0->setCaSocket( fe->fenumber );
+ 	//cam0->setCaSocket( fe->fenumber );
  	
 @@ -613,7 +664,8 @@
  	cam0->setCaPmt(thischannel->getCaPmt(), fe->fenumber );
@@ -196,7 +196,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 @@ -959,10 +1011,10 @@
  	
  	// cam
- 	cam1->setCaPmt(rec_channel->getCaPmt(), frontend->fenumber );
+ 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), frontend->fenumber );
 -	
 +#if !defined (PLATFORM_SPARK7162)		
  	// ci cam //FIXME: boxes without ci cam
@@ -3909,7 +3909,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
-@@ -202,7 +202,7 @@
+@@ -195,7 +195,7 @@
  };
  
  // Init Main Menu
@@ -3918,7 +3918,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
  	int shortcut = 1;
  
-@@ -269,6 +269,45 @@
+@@ -262,6 +262,45 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
@@ -3964,7 +3964,21 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -2618,7 +2657,33 @@
+@@ -1924,10 +1963,12 @@
+ 
+ 	// vfd time
+ #ifdef __sh__	
++#if !defined (PLATFORM_SPARK7162)
+ 	lcdSettings.addItem(GenericMenuSeparatorLine);
+ 
+ 	lcdSettings.addItem( new CMenuForwarder(LOCALE_LCDMENU_SETFPTIME, true, "", this, "setfptime", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
+-#endif	
++#endif
++#endif
+ }
+ 
+ // Init Keys Settings
+@@ -2610,7 +2651,33 @@
  					menu->addItem(menu_item, false);
                                  }
                                  break;
@@ -4555,34 +4569,84 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +
 +#endif
 
+//turn "show infoviewer" off by epg-now-next
+--- neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:56.109748885 +0200
++++ neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:37.733657761 +0200
+@@ -248,7 +248,9 @@
+ 					// APID Bearbeitung neu anstossen
+ 					has_unresolved_ctags = true;
+ 					// infobar indicate on epg change
++#if !defined (PLATFORM_SPARK7162)
+ 					g_InfoViewer->showEpgInfo();
++#endif
+ 				}
+ 
+ 				current_EPGid = info_CN.current_uniqueKey;
 
---- neutrino-hd2-exp/src/zapit/src/ci.cpp	2012-10-24 21:18:06.806576466 +0200
-+++ neutrino-hd2-exp/src/zapit/src/ci.cpp	2012-10-23 20:43:18.000000000 +0200
-@@ -129,17 +129,7 @@
- 	buffer[1] = ((reserved1 << 5) | (elementary_PID >> 8)) & 0xff;
- 	buffer[2] = elementary_PID & 0xff;
+
+--- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
++++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
+@@ -572,6 +572,7 @@
+ #if defined (PLATFORM_GIGABLUE)
+ 	ShowText("    "); // 4 empty digits
+ #elif defined __sh__  //(PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162)
+         //struct vfd_ioctl_data data;
+ 	//data.start = 0x01;
+ 	//data.length = 0x0;
+@@ -587,6 +588,7 @@
  	
--	//return 3 + CCaTable::writeToBuffer(&(buffer[4]));
--	
--	int len = 0;
--	len = CCaTable::writeToBuffer(&(buffer[4]));
--	if(len) {
--		buffer[3] = 0x1; // ca_pmt_cmd_id: ok_descrambling= 1;
--		len++;
--	}
--	//buffer[3] = ((len & 0xf00)>>8);
--	//buffer[4] = (len & 0xff);
--	return len + 3;
-+	return 3 + CCaTable::writeToBuffer(&(buffer[4]));	
+ 	closeDevice();
+ #endif
++#endif
  }
  
- /*
-@@ -224,7 +214,7 @@
+ void CVFD::ShowIcon(vfd_icon icon, bool show)
+@@ -595,6 +597,7 @@
  
- 	for (i = 0; i < es_info.size(); i++) 
- 	{
--		wp += es_info[i]->CamwriteToBuffer(&(buffer[wp]));
-+		wp += es_info[i]->writeToBuffer(&(buffer[wp]));
- 	}
+ //#if defined (PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
+ #ifdef __sh__
++#if !defined (PLATFORM_SPARK7162)
+ 	openDevice();
+ 
+ 	struct vfd_ioctl_data data;
+@@ -607,6 +610,7 @@
  	
- 	buffer[3] = (wp-4) & 0xff;
+ 	closeDevice();
+ #endif
++#endif
+ }
+ 
+ void* CVFD::ThreadScrollText(void * arg)
+
+--- neutrino-hd2-exp/src/zapit/src/cam.cpp	2012-10-26 17:31:29.166261586 +0200
++++ neutrino-hd2-exp/src/zapit/src/cam.cpp	2012-10-26 17:31:17.446203484 +0200
+@@ -45,8 +45,10 @@
+ 	{
+ 		if(!send_data(data, length)) 
+ 		{
++#if !defined (PLATFORM_SPARK7162)
+ 			if (!open_connection())
+ 				return false;
++#endif
+ 			return send_data(data, length);
+ 		}
+ 		
+@@ -54,13 +56,13 @@
+ 	}
+ 
+ 	close_connection();
+-
++#if !defined (PLATFORM_SPARK7162)	
+ 	if(!length) 
+ 		return false;
+-	
++
+ 	if (!open_connection())
+ 		return false;
+-
++#endif
+ 	return send_data(data, length);
+ }
+ 
+
