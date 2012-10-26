@@ -110,7 +110,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #include <dmx_cs.h>
  #include <audio_cs.h>
  #include <video_cs.h>
-+#if !defined (PLATFORM_SPARK7162)	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
  #include <dvb-ci.h>
 -
 +#endif
@@ -119,7 +119,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  int zapit_ready;
  int abort_zapit;
  
-+#if !defined (PLATFORM_SPARK7162)	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
  /* ci */
  cDvbCi * ci; //FIXME: boxes without ci cam
 -
@@ -198,7 +198,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// cam
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), frontend->fenumber );
 -	
-+#if !defined (PLATFORM_SPARK7162)		
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)		
  	// ci cam //FIXME: boxes without ci cam
  	ci->SendCaPMT(rec_channel->getCaPmt());	
 -		
@@ -211,7 +211,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	if( audioDecoder->Open() < 0)
  		return -1;
 -
-+#if !defined (PLATFORM_SPARK7162)	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
  	//CI init
  	//FIXME: platform without ci cam
  	ci = cDvbCi::getInstance();
@@ -3968,7 +3968,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// vfd time
  #ifdef __sh__	
-+#if !defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
  	lcdSettings.addItem(GenericMenuSeparatorLine);
  
  	lcdSettings.addItem( new CMenuForwarder(LOCALE_LCDMENU_SETFPTIME, true, "", this, "setfptime", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
@@ -4576,7 +4576,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					// APID Bearbeitung neu anstossen
  					has_unresolved_ctags = true;
  					// infobar indicate on epg change
-+#if !defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
  					g_InfoViewer->showEpgInfo();
 +#endif
  				}
@@ -4590,7 +4590,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #if defined (PLATFORM_GIGABLUE)
  	ShowText("    "); // 4 empty digits
  #elif defined __sh__  //(PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
-+#if !defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
          //struct vfd_ioctl_data data;
  	//data.start = 0x01;
  	//data.length = 0x0;
@@ -4606,7 +4606,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  //#if defined (PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
  #ifdef __sh__
-+#if !defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
  	openDevice();
  
  	struct vfd_ioctl_data data;
@@ -4625,7 +4625,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	{
  		if(!send_data(data, length)) 
  		{
-+#if !defined (PLATFORM_SPARK7162)
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
  			if (!open_connection())
  				return false;
 +#endif
@@ -4637,7 +4637,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	close_connection();
 -
-+#if !defined (PLATFORM_SPARK7162)	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
  	if(!length) 
  		return false;
 -	
