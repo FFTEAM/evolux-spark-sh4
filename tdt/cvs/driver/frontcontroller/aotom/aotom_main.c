@@ -689,8 +689,8 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		{
 		   if (copy_from_user(&vfd_data, (void *) arg, sizeof(vfd_data)))
 			return -EFAULT;
-		   if (vfd_data.length > sizeof(vfd_data.data))
-			vfd_data.length = sizeof(vfd_data.data);
+//		   if (vfd_data.length > sizeof(vfd_data.data))
+//			vfd_data.length = sizeof(vfd_data.data);
 		   while ((vfd_data.length > 0) && (vfd_data.data[vfd_data.length - 1 ] == '\n'))
 			  vfd_data.length--;
 	     	   res = run_draw_thread(&vfd_data);
