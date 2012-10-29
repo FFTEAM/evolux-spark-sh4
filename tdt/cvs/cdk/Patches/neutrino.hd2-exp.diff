@@ -79,7 +79,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/system/settings.h	2012-10-21 16:15:22.581225295 +0200
 +++ neutrino-hd2-exp/src/system/settings.h	2012-10-21 15:31:04.140042794 +0200
-@@ -356,8 +356,11 @@
+@@ -357,8 +357,11 @@
                  ITEM_VTXT = 15,
                  ITEM_GAME = 16,
                  ITEM_OPKG = 17,
@@ -92,7 +92,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #endif 
                  ITEM_MAX   // MUST be always the last in the list
          }USER_ITEM;
-@@ -458,6 +461,9 @@
+@@ -459,6 +462,9 @@
  	char softupdate_proxypassword[31];
  	// END UPDATE
  
@@ -121,10 +121,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	"usermenu.name",
  	"videomenu.csync",
  	"videomenu.head",
-@@ -1551,6 +1553,113 @@
- 	"keybinding.key_picture",
+@@ -1552,6 +1554,113 @@
  	"keybinding.key_timelist",
  	"keybinding.key_net",
+	"keybinding.key_video_player",
 +
 +	"mainmenu.extramenu",
 +	"extramenu.tunerreset",
@@ -254,10 +254,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	LOCALE_USERMENU_NAME,
  	LOCALE_VIDEOMENU_CSYNC,
  	LOCALE_VIDEOMENU_HEAD,
-@@ -1551,6 +1553,112 @@
- 	LOCALE_KEYBINDINGMENU_PICTURE,
+@@ -1552,6 +1554,112 @@
  	LOCALE_KEYBINDINGMENU_TIMELIST,
  	LOCALE_KEYBINDINGMENU_NET,
+	LOCALE_KEYBINDINGMENU_VIDEO_PLAYER,
 +	LOCALE_MAINMENU_EXTRAMENU ,
 +	LOCALE_EXTRAMENU_TUNERRESET ,
 +	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
