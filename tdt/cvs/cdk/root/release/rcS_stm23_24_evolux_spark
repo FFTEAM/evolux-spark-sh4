@@ -20,16 +20,16 @@ if [ -n "$TRIPLEX" ]; then
 	mknod /dev/dvb/adapter0/frontend1 c 212 19 2>/dev/null
 	mknod /dev/dvb/adapter0/frontend2 c 212 35 2>/dev/null
 	mknod /dev/dvb/adapter0/frontend3 c 212 51 2>/dev/null
-	if [ -e /etc/.start_enigma2 ]; then
-		correctDemux=`ls -l /dev/dvb/adapter0 | grep demux2 | grep "36"`
-		if [ -z "$correctDemux" ]; then
+#	if [ -e /etc/.start_enigma2 ]; then
+#		correctDemux=`ls -l /dev/dvb/adapter0 | grep demux2 | grep "36"`
+#		if [ -z "$correctDemux" ]; then
 			rm /dev/dvb/adapter0/demux*
 			mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null
 			mknod /dev/dvb/adapter0/demux1 c 212 20 2>/dev/null
 			mknod /dev/dvb/adapter0/demux2 c 212 36 2>/dev/null
 			mknod /dev/dvb/adapter0/demux3 c 212 52 2>/dev/null
-		fi
-	fi
+#		fi
+#	fi
 fi
 insmod $MODDIR/aotom.ko
 if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
@@ -581,7 +581,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 		do
 			echo "starting neutrino ->"
 			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
-				/usr/local/bin/neutrino
+				/usr/local/bin/neutrino -v 2
 			else
 				/usr/local/bin/neutrino -f -u
 			fi
@@ -632,15 +632,43 @@ if [ ! -e /var/etc/.firstboot ]; then
 				init 6;;
 			*) echo "$rtv"
 				echo "ERROR"
-				#echo "0" > /proc/progress;;
-				init 6;;
+				# dirty hack to fix shutdown on nhd2 with errors/segfault
+				if [ -e /etc/.nhd2 ]; then
+					echo "SHUTDOWN WITH ERROR"
+					#echo "ERROR" > /dev/vfd
+					sync
+					[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
+					HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
+					if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+						echo "hdd-check"
+						echo "FSCK" > /dev/vfd
+						umount /media/hdd >/dev/null 2>&1
+						umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+						umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+						umount /dev/sda1 >/dev/null 2>&1
+						fsck."$HDDON" -p /dev/sda1
+					fi
+					HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+					if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+						echo "hdd-check2"
+						echo "FSCK" > /dev/vfd
+						umount /media/hdd2 >/dev/null 2>&1
+						umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+						umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+						umount /dev/sda2 >/dev/null 2>&1
+						fsck."$HDDON" -p /dev/sda2
+					fi
+					init 0
+				else
+					init 6
+				fi;;
 			esac
 		done 
 	fi
 fi
 
 #never reached
-#echo "REBOOT PINGULUX" > /dev/vfd
-#echo "REBOOT PINGULUX"
+#echo "REBOOT SPARK" > /dev/vfd
+#echo "REBOOT SPARK"
 #reboot -f
 
