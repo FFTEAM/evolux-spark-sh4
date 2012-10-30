@@ -106,7 +106,8 @@ libungif;4.1.4;libungif-4.1.4;libungif-4.1.4.tar.bz2;extract:libungif-4.1.4.tar.
 libgif;4.1.6;giflib-4.1.6;giflib-4.1.6.tar.bz2;extract:giflib-4.1.6.tar.bz2
 #curl;7.19.7;curl-7.19.7;curl-7.19.7.tar.gz:libcurl.diff;extract:curl-7.19.7.tar.gz;patch:libcurl.diff
 #curl;7.23.1;curl-7.23.1;curl-7.23.1.tar.gz:libcurl.diff;extract:curl-7.23.1.tar.gz;patch:libcurl.diff
-curl;7.26.0;curl-7.26.0;curl-7.26.0.tar.gz:libcurl.diff;extract:curl-7.26.0.tar.gz;patch:libcurl.diff
+#curl;7.26.0;curl-7.26.0;curl-7.26.0.tar.gz:libcurl.diff;extract:curl-7.26.0.tar.gz;patch:libcurl.diff
+curl;7.28.0;curl-7.28.0;curl-7.28.0.tar.gz:libcurl.diff;extract:curl-7.28.0.tar.gz;patch:libcurl.diff
 libfribidi;0.10.4;fribidi-0.10.4;fribidi-0.10.4.tar.bz2;extract:fribidi-0.10.4.tar.bz2
 libsigc;1.2.5;libsigc++-1.2.5;libsigc++-1.2.5.tar.gz;extract:libsigc++-1.2.5.tar.gz
 libmad;0.15.1b;libmad-0.15.1b;libmad-0.15.1b.tar.gz:libmad.diff;extract:libmad-0.15.1b.tar.gz;patch:libmad.diff

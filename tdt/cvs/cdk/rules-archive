@@ -107,7 +107,8 @@ libungif-4.1.4.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib
 giflib-4.1.6.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib
 #curl-7.19.7.tar.gz;http://curl.haxx.se/download
 #curl-7.23.1.tar.gz;http://curl.haxx.se/download
-curl-7.26.0.tar.gz;http://curl.haxx.se/download
+#curl-7.26.0.tar.gz;http://curl.haxx.se/download
+curl-7.28.0.tar.gz;http://curl.haxx.se/download
 libvorbisidec_1.0.2+svn16259.orig.tar.gz;http://ftp.debian.org/debian/pool/main/libv/libvorbisidec
 fribidi-0.10.4.tar.bz2
 libsigc++-1.2.5.tar.gz;http://ftp.gnome.org/pub/GNOME/sources/libsigc++/1.2/
