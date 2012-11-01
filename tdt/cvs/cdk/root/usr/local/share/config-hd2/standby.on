@@ -3,5 +3,8 @@
 #	killall -15 DisplayTime.sh
 #	mv /etc/.time /etc/.time.off
 #fi
+/bin/stfbcontrol hd
+#/bin/fp_control -c
+/bin/fp_control -l 0 1
 exit
 

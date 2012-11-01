@@ -3,5 +3,7 @@
 #	/etc/init.d/DisplayTime.sh &
 #	mv /etc/.time.off /etc/.time
 #fi
+/bin/stfbcontrol he
+/bin/fp_control -l 0 0
 exit
 
