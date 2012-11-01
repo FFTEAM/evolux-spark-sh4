@@ -79,29 +79,18 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/system/settings.h	2012-10-21 16:15:22.581225295 +0200
 +++ neutrino-hd2-exp/src/system/settings.h	2012-10-21 15:31:04.140042794 +0200
-@@ -357,8 +357,11 @@
+@@ -357,8 +357,10 @@
                  ITEM_VTXT = 15,
                  ITEM_GAME = 16,
                  ITEM_OPKG = 17,
-+                ITEM_ADZAP = 18,
-+                ITEM_EMU_RESTART = 19,
-+                ITEM_TUNER_RESTART = 20,
++                ITEM_EMU_RESTART = 18,
++                ITEM_TUNER_RESTART = 19,
  #if ENABLE_GRAPHLCD                
 -                ITEM_GLCD = 18,
-+                ITEM_GLCD = 21,
++                ITEM_GLCD = 20,
  #endif 
                  ITEM_MAX   // MUST be always the last in the list
          }USER_ITEM;
-@@ -459,6 +462,9 @@
- 	char softupdate_proxypassword[31];
- 	// END UPDATE
- 
-+	// adzap
-+	int	adzap_zapBackPeriod;
-+
- 	// VFD
- #define LCD_SETTING_COUNT 8
- 	enum LCD_SETTINGS {
 
 --- neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 16:17:29.633855316 +0200
 +++ neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 15:40:23.854818280 +0200
@@ -113,18 +102,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	"miscsettings.bootinfo",
  	"miscsettings.bootmenu",
  	"miscsettings.channellist",
-@@ -1182,6 +1183,7 @@
- 	"usermenu.item_none",
- 	"usermenu.item_vtxt",
- 	"usermenu.item_plugins",
-+	"usermenu.item_adzap",
- 	"usermenu.name",
- 	"videomenu.csync",
- 	"videomenu.head",
-@@ -1552,6 +1554,113 @@
+@@ -1552,6 +1553,83 @@
  	"keybinding.key_timelist",
  	"keybinding.key_net",
-	"keybinding.key_video_player",
+ 	"keybinding.key_video_player",
 +
 +	"mainmenu.extramenu",
 +	"extramenu.tunerreset",
@@ -190,26 +171,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	"extramenu.fritzcall.select",
 +	"extramenu.fritzcall.on",
 +	"extramenu.fritzcall.off",
-+	"extramenu.glcd",
-+	"extramenu.glcd.volume",
-+	"extramenu.glcd.color.black",
-+	"extramenu.glcd.color.white",
-+	"extramenu.glcd.color.red",
-+	"extramenu.glcd.color.green",
-+	"extramenu.glcd.color.blue",
-+	"extramenu.glcd.color.magenta",
-+	"extramenu.glcd.color.cyan",
-+	"extramenu.glcd.color.yellow",
-+	"extramenu.glcd.select.fg",
-+	"extramenu.glcd.select.bg",
-+	"extramenu.glcd.select.bar",
-+	"extramenu.glcd.size_channel",
-+	"extramenu.glcd.size_epg",
-+	"extramenu.glcd.size_bar",
-+	"extramenu.glcd.size_time",
-+	"extramenu.glcd.restart",
-+	"extramenu.glcd.mirror_osd",
-+	"extramenu.glcd.time_in_standby",
 +	"extramenu.evoluxupdate",
 +	"extramenu.evoluxupdate.select",
 +	"extramenu.evoluxupdate.on",
@@ -222,19 +183,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	"extramenu.kerneloptions.reset",
 +	"onoff.on",
 +	"onoff.off",
-+	"adzap",
-+	"adzap.announce",
-+	"adzap.cancel",
-+	"adzap.enable",
-+	"adzap.disable",
-+	"adzap.monitor",
-+	"adzap.minute",
-+	"adzap.minutes",
-+	"adzap.switchback",
-+	"adzap.commit",
  	
  	"audiomenu.volumebar_audiosteps",
  };
+
 
 --- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
 +++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
@@ -246,18 +198,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	LOCALE_MISCSETTINGS_BOOTINFO,
  	LOCALE_MISCSETTINGS_BOOTMENU,
  	LOCALE_MISCSETTINGS_CHANNELLIST,
-@@ -1182,6 +1183,7 @@
- 	LOCALE_USERMENU_ITEM_NONE,
- 	LOCALE_USERMENU_ITEM_VTXT,
- 	LOCALE_USERMENU_ITEM_PLUGINS,
-+	LOCALE_USERMENU_ITEM_ADZAP,
- 	LOCALE_USERMENU_NAME,
- 	LOCALE_VIDEOMENU_CSYNC,
- 	LOCALE_VIDEOMENU_HEAD,
-@@ -1552,6 +1554,112 @@
+@@ -1552,6 +1553,82 @@
  	LOCALE_KEYBINDINGMENU_TIMELIST,
  	LOCALE_KEYBINDINGMENU_NET,
-	LOCALE_KEYBINDINGMENU_VIDEO_PLAYER,
+ 	LOCALE_KEYBINDINGMENU_VIDEO_PLAYER,
 +	LOCALE_MAINMENU_EXTRAMENU ,
 +	LOCALE_EXTRAMENU_TUNERRESET ,
 +	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
@@ -322,26 +266,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	LOCALE_EXTRAMENU_FRITZCALL_SELECT,
 +	LOCALE_EXTRAMENU_FRITZCALL_ON,
 +	LOCALE_EXTRAMENU_FRITZCALL_OFF,
-+	LOCALE_EXTRAMENU_GLCD,
-+	LOCALE_EXTRAMENU_GLCD_VOLUME,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_BLACK,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_WHITE,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_RED,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_GREEN,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_BLUE,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_MAGENTA,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_CYAN,
-+	LOCALE_EXTRAMENU_GLCD_COLOR_YELLOW,
-+	LOCALE_EXTRAMENU_GLCD_SELECT_FG,
-+	LOCALE_EXTRAMENU_GLCD_SELECT_BG,
-+	LOCALE_EXTRAMENU_GLCD_SELECT_BAR,
-+	LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
-+	LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
-+	LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
-+	LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
-+	LOCALE_EXTRAMENU_GLCD_RESTART,
-+	LOCALE_EXTRAMENU_GLCD_MIRROR_OSD,
-+	LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY,
 +	LOCALE_EXTRAMENU_EVOLUXUPDATE,
 +	LOCALE_EXTRAMENU_EVOLUXUPDATE_SELECT,
 +	LOCALE_EXTRAMENU_EVOLUXUPDATE_ON,
@@ -354,31 +278,13 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	LOCALE_EXTRAMENU_KERNELOPTIONS_RESET,
 +	LOCALE_ONOFF_ON,
 +	LOCALE_ONOFF_OFF,
-+	LOCALE_ADZAP,
-+	LOCALE_ADZAP_ANNOUNCE,
-+	LOCALE_ADZAP_CANCEL,
-+	LOCALE_ADZAP_ENABLE,
-+	LOCALE_ADZAP_DISABLE,
-+	LOCALE_ADZAP_MONITOR,
-+	LOCALE_ADZAP_MINUTE,
-+	LOCALE_ADZAP_MINUTES,
-+	LOCALE_ADZAP_SWITCHBACK,
-+	LOCALE_ADZAP_COMMIT,
  	
  	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
  } neutrino_locale_t;
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
-@@ -1368,6 +1368,7 @@
- usermenu.item_none 
- usermenu.item_vtxt Videotext
- usermenu.item_plugins Plugins
-+usermenu.item_adzap Commercialzapper
- usermenu.name Name
- video_mode_ok Is this video mode working ok ?
- videomenu.analog_hd_rgb_cinch RGB on cinch (HD)
-@@ -1542,4 +1543,132 @@
+@@ -1542,4 +1543,122 @@
  
  audiomenu.volumebar_audiosteps Volume Step Size
  
@@ -478,16 +384,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +extramenu.glcd.time_in_standby show Time on Standby
 +onoff.on On
 +onoff.off Off
-+adzap Werbezapper
-+adzap.announce Zap In 15 Seconds to
-+adzap.cancel Disbaled
-+adzap.enable do it 1time
-+adzap.disable Disabled
-+adzap.monitor do it allways
-+adzap.minute Minute
-+adzap.minutes Minutes
-+adzap.switchback zap back after
-+adzap.commit (after change time press (OK) again)
 +glcd.color.black black
 +glcd.color.blue blue
 +glcd.color.cyan bluegreen
@@ -522,15 +418,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  miscsettings.bootinfo Infos beim Booten anzeigen
  miscsettings.bootmenu Bootmenü anzeigen
  miscsettings.channellist Kanalliste
-@@ -1369,6 +1370,7 @@
- usermenu.item_none  
- usermenu.item_vtxt Videotext
- usermenu.item_plugins Plugins
-+usermenu.item_adzap Werbezapper
- usermenu.name Name
- video_mode_ok Video-Einstellungen ok ?
- videomenu.analog_hd_rgb_cinch RGB auf Cinch (HD)
-@@ -1544,4 +1546,110 @@
+@@ -1544,4 +1546,100 @@
  
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
@@ -630,21 +518,11 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +extramenu.glcd.time_in_standby Zeitanzeige in Standby
 +onoff.on Ein
 +onoff.off Aus
-+adzap Werbezapper
-+adzap.announce In 15 Sekunden wird umgeschaltet auf
-+adzap.cancel Deaktiviert
-+adzap.enable Einmalig aktivieren
-+adzap.disable Deaktivieren
-+adzap.monitor Daueraktiv bei aktueller Sendung
-+adzap.minute Minute
-+adzap.minutes Minuten
-+adzap.switchback Zurückschalten nach
-+adzap.commit (Nach Zeitänderung (OK) drücken)
  
 
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-10-21 16:23:08.683536677 +0200
 +++ neutrino-hd2-exp/src/gui/Makefile.am	2012-10-21 15:21:56.569327570 +0200
-@@ -43,13 +43,13 @@
+@@ -43,7 +43,7 @@
  	filebrowser.cpp audioplayer.cpp nfs.cpp pictureviewer.cpp \
  	movieplayer.cpp rc_lock.cpp \
  	timeosd.cpp epgplus.cpp epg_menu.cpp \
@@ -653,17 +531,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	plugins.cpp imageinfo.cpp audio_select.cpp moviebrowser.cpp movieinfo.cpp \
  	scan_setup.cpp zapit_setup.cpp proxyserver_setup.cpp
  
- libneutrino_gui2_a_SOURCES = \
- 	color.cpp motorcontrol.cpp hdd_menu.cpp \
--	alphasetup.cpp dvbsub_select.cpp psisetup.cpp opkg_manager.cpp
-+	alphasetup.cpp dvbsub_select.cpp psisetup.cpp opkg_manager.cpp adzap.cpp
- 
- if ENABLE_UPNP
- libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,2561 @@
+@@ -0,0 +1,1667 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -702,7 +573,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#include "widget/messagebox.h"
 +#include "widget/hintbox.h"
 +#include "widget/colorchooser.h"
-+#include "widget/lcdcontroler.h"
 +#include "widget/keychooser.h"
 +
 +#include "widget/stringinput.h"
@@ -757,30 +627,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +static struct {
 +#define EXTRA_CAM_SELECTED "cam_selected"
 +        std::string	cam_selected;
-+#ifdef WITH_GRAPHLCD_OFF
-+#define GLCD_ENABLE "glcd_enable"
-+        int	glcd_enable;
-+#define GLCD_COLOR_FG "glcd_color_fg"
-+        uint32_t	glcd_color_fg;
-+#define GLCD_COLOR_BG "glcd_color_bg"
-+        uint32_t	glcd_color_bg;
-+#define GLCD_COLOR_BAR "glcd_color_bar"
-+        uint32_t	glcd_color_bar;
-+#define GLCD_FONT "glcd_font"
-+        string		glcd_font;
-+#define GLCD_SIZE_CHANNEL "glcd_percent_channel"
-+        int		glcd_percent_channel;
-+#define GLCD_SIZE_EPG "glcd_percent_epg"
-+        int		glcd_percent_epg;
-+#define GLCD_SIZE_BAR "glcd_percent_bar"
-+        int		glcd_percent_bar;
-+#define GLCD_SIZE_TIME "glcd_percent_time"
-+        int		glcd_percent_time;
-+#define GLCD_MIRROR_OSD "glcd_mirror_osd"
-+        int		glcd_mirror_osd;
-+#define GLCD_TIME_IN_STANDBY "glcd_time_in_standby"
-+        int		glcd_time_in_standby;
-+#endif
 +} settings;
 +
 +CConfigFile *configfile = NULL;
@@ -788,19 +634,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +static bool saveSettings() {
 +	if (configfile) {
 +		configfile->setString(EXTRA_CAM_SELECTED, settings.cam_selected);
-+#ifdef WITH_GRAPHLCD_OFF
-+		configfile->setInt32(GLCD_ENABLE, settings.glcd_enable);
-+		configfile->setInt32(GLCD_COLOR_FG, settings.glcd_color_fg);
-+		configfile->setInt32(GLCD_COLOR_BG, settings.glcd_color_bg);
-+		configfile->setInt32(GLCD_COLOR_BAR, settings.glcd_color_bar);
-+		configfile->setInt32(GLCD_SIZE_CHANNEL, settings.glcd_percent_channel);
-+		configfile->setInt32(GLCD_SIZE_EPG, settings.glcd_percent_epg);
-+		configfile->setInt32(GLCD_SIZE_BAR, settings.glcd_percent_bar);
-+		configfile->setInt32(GLCD_SIZE_TIME, settings.glcd_percent_time);
-+		configfile->setInt32(GLCD_MIRROR_OSD, settings.glcd_mirror_osd);
-+		configfile->setInt32(GLCD_TIME_IN_STANDBY, settings.glcd_time_in_standby);
-+		configfile->setString(GLCD_FONT, settings.glcd_font);
-+#endif
 +		configfile->saveConfig(EXTRA_SETTINGS_FILE);
 +		return true;
 +	}
@@ -809,19 +642,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +
 +static bool initSettings() {
 +	settings.cam_selected = "disabled";
-+#ifdef WITH_GRAPHLCD_OFF
-+	settings.glcd_enable = 0;
-+	settings.glcd_color_fg = GLCD::cColor::White;
-+	settings.glcd_color_bg = GLCD::cColor::Blue;
-+	settings.glcd_color_bar = GLCD::cColor::Red;
-+	settings.glcd_percent_channel = 18;
-+	settings.glcd_percent_epg = 8;
-+	settings.glcd_percent_bar = 6;
-+	settings.glcd_percent_time = 22;
-+	settings.glcd_mirror_osd = 0;
-+	settings.glcd_time_in_standby = 0;
-+	settings.glcd_font = FONTDIR "/neutrino.ttf";
-+#endif
 +}
 +
 +static bool loadSettings() {
@@ -830,19 +650,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		configfile = new CConfigFile('=');
 +		if (configfile->loadConfig(EXTRA_SETTINGS_FILE)) {
 +			settings.cam_selected = configfile->getString(EXTRA_CAM_SELECTED, "disabled");
-+#ifdef WITH_GRAPHLCD_OFF
-+			settings.glcd_enable = configfile->getInt32(GLCD_ENABLE, 0);
-+			settings.glcd_color_fg = configfile->getInt32(GLCD_COLOR_FG, GLCD::cColor::White);
-+			settings.glcd_color_bg = configfile->getInt32(GLCD_COLOR_BG, GLCD::cColor::Blue);
-+			settings.glcd_color_bar = configfile->getInt32(GLCD_COLOR_BAR, GLCD::cColor::Red);
-+			settings.glcd_percent_channel = configfile->getInt32(GLCD_SIZE_CHANNEL, 18);
-+			settings.glcd_percent_epg = configfile->getInt32(GLCD_SIZE_EPG, 8);
-+			settings.glcd_percent_bar = configfile->getInt32(GLCD_SIZE_BAR, 6);
-+			settings.glcd_percent_time = configfile->getInt32(GLCD_SIZE_TIME, 22);
-+			settings.glcd_mirror_osd = configfile->getInt32(GLCD_MIRROR_OSD, 0);
-+			settings.glcd_time_in_standby = configfile->getInt32(GLCD_TIME_IN_STANDBY, 0);
-+			settings.glcd_font = configfile->getString(GLCD_FONT, FONTDIR "/neutrino.ttf");
-+#endif
 +			return true;
 +		}
 +	}
@@ -1750,14 +1557,14 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +int BOOT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 +{
 +	int res = menu_return::RETURN_REPAINT;
-+	if(actionKey == "reboot") {
++/*	if(actionKey == "reboot") {
 +                FILE *f = fopen("/tmp/.reboot", "w");
 +                fclose(f);
 +		CNeutrinoApp::getInstance()->ExitRun(true, 2);
 +		// not reached, hopefully...
 +                unlink("/tmp/.reboot");
 +		return res;
-+	}
++	}*/
 +
 +	if (parent)
 +		parent->hide();
@@ -2044,845 +1851,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +}
 +////////////////////////////// FRITZCALL Menu ENDE //////////////////////////////////////
 +
-+/*
-+	Neutrino graphlcd daemon thread
-+
-+	(/) 2012 by martii, with portions shamelessly copied from infoviewer.cpp
-+
-+
-+	License: GPL
-+
-+	This program is free software; you can redistribute it and/or modify
-+	it under the terms of the GNU General Public License as published by
-+	the Free Software Foundation; either version 2 of the License, or
-+	(at your option) any later version.
-+
-+	This program is distributed in the hope that it will be useful,
-+	but WITHOUT ANY WARRANTY; without even the implied warranty of
-+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+	GNU General Public License for more details.
-+
-+	You should have received a copy of the GNU General Public License
-+	along with this program; if not, write to the Free Software
-+	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-+*/
-+
-+#ifdef WITH_GRAPHLCD_OFF
-+
-+void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey, CChannelEventList &eList, char search = 0, std::string search_text = "");
-+void sectionsd_getCurrentNextServiceKey(t_channel_id uniqueServiceKey, CSectionsdClient::responseGetCurrentNextInfoChannelID& current_next );
-+
-+#include <string>
-+#include <algorithm>
-+
-+static nGLCD *nglcd = NULL;
-+
-+nGLCD::nGLCD() {
-+	lcd = NULL;
-+	Channel = "EvoLux";
-+	Epg = "Neutrino";
-+	scrollChannel = "EvoLux";
-+	scrollEpg = "Neutrino";
-+
-+	sem_init(&sem, 0, 1);
-+
-+	pthread_mutexattr_t attr;
-+	pthread_mutexattr_init(&attr);
-+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
-+	pthread_mutex_init(&mutex, &attr);
-+
-+	stagingChannel = "";
-+	stagingEpg = "";
-+	channelLocked = false;
-+	doRescan = false;
-+	doStandby = false;
-+	doStandbyTime = false;
-+	doShowVolume = false;
-+	doSuspend = false;
-+	doExit = false;
-+	doMirrorOSD = false;
-+	fontsize_channel = 0;
-+	fontsize_epg = 0;
-+	fontsize_time = 0;
-+	doScrollChannel = false;
-+	doScrollEpg = false;
-+	percent_channel = 0;
-+	percent_time = 0;
-+	percent_epg = 0;
-+	percent_bar = 0;
-+	percent_time = 0;
-+	percent_space = 0;
-+	Scale = 0;
-+	bitmap = NULL;
-+	loadSettings();
-+
-+	nglcd = this;
-+
-+	if (!settings.glcd_enable)
-+		doSuspend = true;
-+
-+	if (pthread_create (&thrGLCD, 0, nGLCD::Run, NULL) != 0 )
-+		fprintf(stderr, "ERROR: pthread_create(nGLCD::Init)\n");
-+}
-+
-+void nGLCD::Lock(void)
-+{
-+	if (nglcd)
-+		pthread_mutex_lock(&nglcd->mutex);
-+}
-+
-+void nGLCD::Unlock(void)
-+{
-+	if (nglcd)
-+		pthread_mutex_unlock(&nglcd->mutex);
-+}
-+
-+nGLCD::~nGLCD() {
-+	Suspend();
-+	nglcd = NULL;
-+	if (lcd) {
-+		lcd->DeInit();
-+		delete lcd;
-+	}
-+}
-+
-+void nGLCD::Exec() {
-+	if (!lcd)
-+		return;
-+
-+	bitmap->Clear(settings.glcd_color_bg);
-+
-+	if (CNeutrinoApp::getInstance()->recordingstatus) {
-+		bitmap->DrawRectangle(0, 0, bitmap->Width() - 1, bitmap->Height() - 1, settings.glcd_color_bar, false);
-+		bitmap->DrawRectangle(1, 1, bitmap->Width() - 2, bitmap->Height() - 2, settings.glcd_color_bar, false);
-+	}
-+
-+	int off = 0;
-+
-+	if (percent_channel) {
-+		off += percent_space;
-+		int fw = font_channel.Width(scrollChannel);
-+		if (fw && !doStandbyTime)
-+			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
-+				off * bitmap->Height()/100, bitmap->Width() - 4, scrollChannel,
-+				&font_channel, settings.glcd_color_fg, GLCD::cColor::Transparent);
-+		off += percent_channel;
-+		off += percent_space;
-+		if (scrollChannel.length() > Channel.length())
-+			scrollChannel = scrollChannel.substr(1);
-+		else
-+			doScrollChannel = false;
-+	}
-+
-+	if (percent_epg) {
-+		off += percent_space;
-+		int fw = font_epg.Width(scrollEpg);
-+		if (fw && !doStandbyTime)
-+			bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - fw)/2),
-+				off * bitmap->Height()/100, bitmap->Width() - 4, scrollEpg,
-+				&font_epg, settings.glcd_color_fg, GLCD::cColor::Transparent);
-+		off += percent_epg;
-+		off += percent_space;
-+		if (scrollEpg.length() > Epg.length())
-+			scrollEpg = scrollEpg.substr(1);
-+		else
-+			doScrollEpg = false;
-+	}
-+
-+	if (percent_bar) {
-+		off += percent_space;
-+		int bar_top = off * bitmap->Height()/100;
-+		off += percent_bar;
-+		int bar_bottom = off * bitmap->Height()/100;
-+		if (!doStandbyTime) {
-+			bitmap->DrawHLine(0, bar_top, bitmap->Width(), settings.glcd_color_fg);
-+			bitmap->DrawHLine(0, bar_bottom, bitmap->Width(), settings.glcd_color_fg);
-+			if (Scale)
-+				bitmap->DrawRectangle(0, bar_top + 1, Scale * (bitmap->Width() - 1)/100,
-+					bar_bottom - 1, settings.glcd_color_bar, true);
-+		}
-+		off += percent_space;
-+	}
-+
-+	if (percent_time) {
-+		off += percent_space;
-+		char timebuf[10];
-+		strftime(timebuf, sizeof(timebuf), "%H:%M", tm);
-+
-+		std::string Time = std::string(timebuf);
-+
-+		bitmap->DrawText(MAX(0,(bitmap->Width() - 4 - font_time.Width(Time))/2),
-+			off * bitmap->Height()/100, bitmap->Width() - 1, Time,
-+			&font_time, settings.glcd_color_fg, GLCD::cColor::Transparent);
-+	}
-+
-+	lcd->SetScreen(bitmap->Data(), bitmap->Width(), bitmap->Height());
-+	lcd->Refresh(true);
-+}
-+
-+static bool sortByDateTime (const CChannelEvent& a, const CChannelEvent& b)
-+{
-+	return a.startTime < b.startTime;
-+}
-+
-+void nGLCD::updateFonts() {
-+	bool changed = false;
-+	int percent = settings.glcd_percent_channel + settings.glcd_percent_epg + settings.glcd_percent_bar + settings.glcd_percent_time;
-+
-+	if (percent < 100)
-+		percent = 100;
-+
-+	// normalize values
-+	percent_channel = settings.glcd_percent_channel * 100 / percent;
-+	percent_epg = settings.glcd_percent_epg * 100 / percent;
-+	percent_bar = settings.glcd_percent_bar * 100 / percent;
-+	percent_time = settings.glcd_percent_time * 100 / percent;
-+
-+	// calculate height
-+	int fontsize_channel_new = percent_channel * nglcd->lcd->Height() / 100;
-+	int fontsize_epg_new = percent_epg * nglcd->lcd->Height() / 100;
-+	int fontsize_time_new = percent_time * nglcd->lcd->Height() / 100;
-+
-+	if (!fonts_initialized || (fontsize_channel_new != fontsize_channel)) {
-+		fontsize_channel = fontsize_channel_new;
-+		if (!font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel)) {
-+			settings.glcd_font = FONTDIR "/neutrino.ttf";
-+			font_channel.LoadFT2(settings.glcd_font, "UTF-8", fontsize_channel);
-+		}
-+		changed = true;
-+	}
-+	if (!fonts_initialized || (fontsize_epg_new != fontsize_epg)) {
-+		fontsize_epg = fontsize_epg_new;
-+		if (!font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg)) {
-+			settings.glcd_font = FONTDIR "/neutrino.ttf";
-+			font_epg.LoadFT2(settings.glcd_font, "UTF-8", fontsize_epg);
-+		}
-+		changed = true;
-+	}
-+	if (!fonts_initialized || (fontsize_time_new != fontsize_time)) {
-+		fontsize_time = fontsize_time_new;
-+		if (!font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time)) {
-+			settings.glcd_font = FONTDIR "/neutrino.ttf";
-+			font_time.LoadFT2(settings.glcd_font, "UTF-8", fontsize_time);
-+		}
-+		changed = true;
-+	}
-+
-+	if (!changed)
-+		return;
-+
-+	int div = 0;
-+	if (percent_channel)
-+		div += 2;
-+	if (percent_epg)
-+		div += 2;
-+	if (percent_bar)
-+		div += 2;
-+	if (percent_time)
-+		div += 2;
-+	percent_space = (100 - percent_channel - percent_time - percent_epg - percent_bar) / div;
-+
-+	fonts_initialized = true;
-+}
-+
-+void* nGLCD::Run(void *)
-+{
-+	if (GLCD::Config.Load(kDefaultConfigFile) == false) {
-+		fprintf(stderr, "Error loading config file!\n");
-+		return NULL;
-+	}
-+	if ((GLCD::Config.driverConfigs.size() < 1)) {
-+		fprintf(stderr, "No driver config found!\n");
-+		return NULL;
-+	}
-+
-+	struct timespec ts;
-+	CChannelEventList evtlist;
-+	t_channel_id channel_id = -1;
-+	nglcd->fonts_initialized = false;
-+	bool broken = false;
-+
-+	do {
-+		if (broken) {
-+#ifdef GLCD_DEBUG
-+			fprintf(stderr, "No graphlcd display found ... sleeping for 30 seconds\n");
-+#endif
-+			clock_gettime(CLOCK_REALTIME, &ts);
-+			ts.tv_sec += 30;
-+			sem_timedwait(&nglcd->sem, &ts);
-+			broken = false;
-+			if (nglcd->doExit)
-+				break;
-+			if (!settings.glcd_enable)
-+				continue;
-+		} else
-+				while ((nglcd->doSuspend || nglcd->doStandby || !settings.glcd_enable) && !nglcd->doExit)
-+					sem_wait(&nglcd->sem);
-+
-+		if (nglcd->doExit)
-+			break;
-+
-+		int warmUp = 5;
-+		nglcd->lcd = GLCD::CreateDriver(GLCD::Config.driverConfigs[0].id, &GLCD::Config.driverConfigs[0]);
-+		if (!nglcd->lcd) {
-+#ifdef GLCD_DEBUG
-+			fprintf(stderr, "CreateDriver failed.\n");
-+#endif
-+			broken = true;
-+			continue;
-+		}
-+#ifdef GLCD_DEBUG
-+		fprintf(stderr, "CreateDriver succeeded.\n");
-+#endif
-+		if (nglcd->lcd->Init()) {
-+			delete nglcd->lcd;
-+			nglcd->lcd = NULL;
-+#ifdef GLCD_DEBUG
-+			fprintf(stderr, "LCD init failed.\n");
-+#endif
-+			broken = true;
-+			continue;
-+		}
-+#ifdef GLCD_DEBUG
-+		fprintf(stderr, "LCD init succeeded.\n");
-+#endif
-+
-+		if (!nglcd->bitmap)
-+			nglcd->bitmap = new GLCD::cBitmap(nglcd->lcd->Width(), nglcd->lcd->Height(), settings.glcd_color_bg);
-+
-+		nglcd->Update();
-+
-+		nglcd->doMirrorOSD = false;
-+
-+		while ((!nglcd->doSuspend && !nglcd->doStandby) && !nglcd->doExit && settings.glcd_enable) {
-+			if (nglcd->doMirrorOSD) {
-+				nglcd->bitmap->Clear(GLCD::cColor::Black);
-+				ts.tv_sec = 0; // don't wait
-+				static CFrameBuffer* fb = CFrameBuffer::getInstance();
-+				int fb_width = fb->scaleX(fb->getScreenWidth(true));
-+				int fb_height = fb->scaleX(fb->getScreenHeight(true));
-+				int lcd_width = nglcd->bitmap->Width();
-+				int lcd_height = nglcd->bitmap->Height();
-+				uint32_t *fbp = fb->getFrameBufferPointer();
-+
-+				// determine OSD frame geometry
-+
-+				int y_min = 0;
-+				for (int y = 0; y < fb_height && !y_min; y++) {
-+					for (int x = 0; x < fb_width; x++) {
-+						if (*(fbp + fb_width * y + x)) {
-+							y_min = y;
-+							break;
-+						}
-+					}
-+				}
-+				int y_max = 0;
-+				for (int y = fb_height - 1; y_min < y && !y_max; y--) {
-+					for (int x = 0; x < fb_width; x++) {
-+						if (*(fbp + fb_width * y + x)) { 
-+							y_max = y;
-+							break;
-+						}
-+					}
-+				}
-+				int x_min = fb_width - 1;
-+				for (int y = y_min; y < y_max; y++) {
-+					for (int x = 0; x < fb_width; x++) {
-+						if (*(fbp + fb_width * y + x) && x < x_min) {
-+							x_min = x;
-+							break;
-+						}
-+					}
-+				}
-+				int x_max = x_min;
-+				for (int y = y_min; y < y_max; y++) {
-+					for (int x = fb_width - 1; x > x_min; x--) {
-+						if (*(fbp + fb_width * y + x) && x > x_max) {
-+							x_max= x;
-+							break;
-+						}
-+					}
-+				}
-+
-+				int fb_w = x_max - x_min;
-+				int fb_h = y_max - y_min;
-+
-+				if (!fb_w || !fb_w) {
-+					usleep(500000);
-+					continue;
-+				}
-+
-+				// Keep aspect by using the smallest up-scaling factor
-+				if (fb_width * fb_h > fb_height * fb_w) {
-+					int fb_w2 = fb_width * fb_h/fb_height;
-+					x_min += (fb_w - fb_w2)/2;
-+					fb_w = fb_w2;
-+				} else {
-+					int fb_h2 = fb_height * fb_w/fb_width;
-+					y_min += (fb_h - fb_h2)/2;
-+					fb_h = fb_h2;
-+				}
-+				// Compensate for rounding errors
-+				if (x_min < 0)
-+					x_min = 0;
-+				if (y_min < 0)
-+					y_min = 0;
-+
-+				for (int y = 0; y < lcd_height; y++) {
-+					int ystride = y_min * fb_width;
-+					for (int x = 0; x < lcd_width; x++) {
-+						// FIXME: There might be some oscure bug somewhere that invalidate the address of bitmap->DrawPixel()
-+						nglcd->bitmap->DrawPixel(x, y, *(fbp + ystride + (y * fb_h / lcd_height) * fb_width
-+										 + x_min + (x * fb_w / lcd_width)));
-+					}
-+				}
-+
-+				nglcd->lcd->SetScreen(nglcd->bitmap->Data(), lcd_width, lcd_height);
-+				nglcd->lcd->Refresh(true);
-+				continue;
-+			} // end of fb mirroring
-+
-+			clock_gettime(CLOCK_REALTIME, &ts);
-+			nglcd->tm = localtime(&ts.tv_sec);
-+			nglcd->updateFonts();
-+			nglcd->Exec();
-+			clock_gettime(CLOCK_REALTIME, &ts);
-+			nglcd->tm = localtime(&ts.tv_sec);
-+			if (warmUp > 0) {
-+				ts.tv_sec += 4;
-+				warmUp--;
-+			} else {
-+				ts.tv_sec += 60 - nglcd->tm->tm_sec;
-+				ts.tv_nsec = 0;
-+			}
-+
-+			if (!nglcd->doScrollChannel && !nglcd->doScrollEpg)
-+				sem_timedwait(&nglcd->sem, &ts);
-+
-+			while(!sem_trywait(&nglcd->sem));
-+
-+			if(nglcd->doRescan || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit)
-+				break;
-+
-+			if (nglcd->doShowVolume) {
-+				nglcd->Epg = "";
-+				if (nglcd->Channel.compare(g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME))) {
-+					nglcd->Channel = g_Locale->getText(LOCALE_EXTRAMENU_GLCD_VOLUME);
-+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
-+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
-+					else
-+						nglcd->scrollChannel = nglcd->Channel;
-+				}
-+				nglcd->scrollEpg = nglcd->Epg;
-+				nglcd->Scale = g_settings.current_volume;
-+				channel_id = -1;
-+			} else if (nglcd->channelLocked) {
-+				nglcd->Lock();
-+				if (nglcd->Epg.compare(nglcd->stagingEpg)) {
-+					nglcd->Epg = nglcd->stagingEpg;
-+					if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4)
-+						nglcd->scrollEpg = nglcd->Epg + "      " + nglcd->Epg + "      " + nglcd->Epg;
-+					else
-+						nglcd->scrollEpg = nglcd->Epg;
-+				}
-+				if (nglcd->Channel.compare(nglcd->stagingChannel)) {
-+					nglcd->Channel = nglcd->stagingChannel;
-+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4)
-+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
-+					else
-+						nglcd->scrollChannel = nglcd->Channel;
-+				}
-+				nglcd->Scale = 0;
-+				channel_id = -1;
-+				nglcd->Unlock();
-+			} else {
-+				CChannelList *channelList = CNeutrinoApp::getInstance ()->channelList;
-+				if (!channelList)
-+					continue;
-+				t_channel_id new_channel_id = channelList->getActiveChannel_ChannelID ();
-+				if (new_channel_id < 0)
-+					continue;
-+
-+				if ((new_channel_id != channel_id)) {
-+					nglcd->Channel = channelList->getActiveChannelName ();
-+					nglcd->Epg = "";
-+					nglcd->Scale = 0;
-+					nglcd->scrollEpg = nglcd->Epg;
-+					if (nglcd->font_channel.Width(nglcd->Channel) > nglcd->bitmap->Width() - 4) {
-+						nglcd->scrollChannel = nglcd->Channel + "      " + nglcd->Channel + "      " + nglcd->Channel;
-+						nglcd->doScrollChannel = true;
-+					} else {
-+						nglcd->scrollChannel = nglcd->Channel;
-+						nglcd->doScrollChannel = false;
-+					}
-+					warmUp = 1;
-+				}
-+
-+				if ((channel_id != new_channel_id) || (evtlist.empty())) {
-+					evtlist.clear();
-+					sectionsd_getEventsServiceKey(new_channel_id & 0xFFFFFFFFFFFFULL, evtlist);
-+					if (!evtlist.empty())
-+						sort(evtlist.begin(),evtlist.end(), sortByDateTime);
-+				}
-+				channel_id = new_channel_id;
-+
-+				if (!evtlist.empty()) {
-+					CChannelEventList::iterator eli;
-+					for (eli=evtlist.begin(); eli!=evtlist.end(); ++eli) {
-+						if ((uint)eli->startTime + eli->duration > ts.tv_sec)
-+							break;
-+					}
-+					if (eli == evtlist.end()) {
-+						nglcd->Epg = nglcd->scrollEpg = "";
-+						nglcd->Scale = 0;
-+					} else {
-+						if (eli->description.compare(nglcd->Epg)) {
-+							nglcd->Epg = eli->description;
-+							if (nglcd->font_epg.Width(nglcd->Epg) > nglcd->bitmap->Width() - 4) {
-+								nglcd->scrollEpg = nglcd->Epg + "    " + nglcd->Epg + "    " + nglcd->Epg;
-+								nglcd->doScrollEpg = true;
-+							} else {
-+								nglcd->scrollEpg = nglcd->Epg;
-+								nglcd->doScrollEpg = false;
-+							}
-+						}
-+
-+						if (eli->duration > 0)
-+						nglcd->Scale = (ts.tv_sec - eli->startTime) * 100 / eli->duration;
-+						if (nglcd->Scale > 100)
-+							nglcd->Scale = 100;
-+						else if (nglcd->Scale < 0)
-+							nglcd->Scale = 0;
-+					}
-+				}
-+			}
-+		}
-+
-+		if(!settings.glcd_enable || nglcd->doSuspend || nglcd->doStandby || nglcd->doExit) {
-+			// for restart, don't blacken screen
-+			nglcd->bitmap->Clear(GLCD::cColor::Black);
-+			nglcd->lcd->SetScreen(nglcd->bitmap->Data(), nglcd->bitmap->Width(), nglcd->bitmap->Height());
-+			nglcd->lcd->Refresh(true);
-+		}
-+		if (nglcd->doRescan) {
-+		    nglcd->doRescan = false;
-+			nglcd->Update();
-+	    }
-+		nglcd->lcd->DeInit();
-+		delete nglcd->lcd;
-+		nglcd->lcd = NULL;
-+	} while(!nglcd->doExit);
-+
-+	return NULL;
-+}
-+
-+void nGLCD::Update() {
-+	if (nglcd)
-+		sem_post(&nglcd->sem);
-+}
-+
-+void nGLCD::StandbyMode(bool b) {
-+	if (nglcd) {
-+		if (settings.glcd_time_in_standby)
-+			nglcd->doStandbyTime = b;
-+		else
-+		    nglcd->doStandby = b;
-+		nglcd->doMirrorOSD = false;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::ShowVolume(bool b) {
-+	if (nglcd) {
-+		nglcd->doShowVolume = b;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::MirrorOSD(bool b) {
-+	if (nglcd && settings.glcd_mirror_osd) {
-+		nglcd->doMirrorOSD = b;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::Exit() {
-+	if (nglcd) {
-+		nglcd->doMirrorOSD = false;
-+		nglcd->doSuspend = false;
-+		nglcd->doExit = true;
-+		nglcd->Update();
-+		void *res;
-+		pthread_join(nglcd->thrGLCD, &res);
-+		delete nglcd;
-+	}
-+}
-+
-+void nglcd_update() {
-+	if (nglcd) {
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::Rescan() {
-+	if (nglcd) {
-+		doRescan = true;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::Suspend() {
-+	if (nglcd) {
-+		nglcd->doSuspend = true;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::Resume() {
-+	if (nglcd) {
-+		nglcd->doSuspend = false;
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::lockChannel(string c)
-+{
-+	if(nglcd) {
-+		nglcd->Lock();
-+		nglcd->channelLocked = true;
-+		nglcd->stagingChannel = c;
-+		nglcd->stagingEpg = "";
-+		nglcd->Unlock();
-+		nglcd->Update();
-+	}
-+}
-+
-+void nGLCD::unlockChannel(void)
-+{
-+	if(nglcd) {
-+		nglcd->channelLocked = false;
-+		nglcd->Update();
-+	}
-+}
-+
-+#define KEY_GLCD_BLACK			0
-+#define KEY_GLCD_WHITE			1
-+#define KEY_GLCD_RED			2
-+#define KEY_GLCD_GREEN			3
-+#define KEY_GLCD_BLUE			4
-+#define KEY_GLCD_MAGENTA		5
-+#define KEY_GLCD_CYAN			6
-+#define KEY_GLCD_YELLOW			7
-+#define GLCD_COLOR_OPTION_COUNT 	8
-+static const CMenuOptionChooser::keyval GLCD_COLOR_OPTIONS[GLCD_COLOR_OPTION_COUNT] =
-+{
-+	  { KEY_GLCD_BLACK,	LOCALE_EXTRAMENU_GLCD_COLOR_BLACK }
-+	, { KEY_GLCD_WHITE,	LOCALE_EXTRAMENU_GLCD_COLOR_WHITE }
-+	, { KEY_GLCD_RED,	LOCALE_EXTRAMENU_GLCD_COLOR_RED }
-+	, { KEY_GLCD_GREEN,	LOCALE_EXTRAMENU_GLCD_COLOR_GREEN }
-+	, { KEY_GLCD_BLUE,	LOCALE_EXTRAMENU_GLCD_COLOR_BLUE }
-+	, { KEY_GLCD_MAGENTA,	LOCALE_EXTRAMENU_GLCD_COLOR_MAGENTA }
-+	, { KEY_GLCD_CYAN,	LOCALE_EXTRAMENU_GLCD_COLOR_CYAN }
-+	, { KEY_GLCD_YELLOW,	LOCALE_EXTRAMENU_GLCD_COLOR_YELLOW }
-+};
-+
-+int GLCD_Menu::color2index(uint32_t color) {
-+	if (color == GLCD::cColor::Black)
-+		return KEY_GLCD_BLACK;
-+	if (color == GLCD::cColor::White)
-+		return KEY_GLCD_WHITE;
-+	if (color == GLCD::cColor::Red)
-+		return KEY_GLCD_RED;
-+	if (color == GLCD::cColor::Green)
-+		return KEY_GLCD_GREEN;
-+	if (color == GLCD::cColor::Blue)
-+		return KEY_GLCD_BLUE;
-+	if (color == GLCD::cColor::Magenta)
-+		return KEY_GLCD_MAGENTA;
-+	if (color == GLCD::cColor::Cyan)
-+		return KEY_GLCD_CYAN;
-+	if (color == GLCD::cColor::Yellow)
-+		return KEY_GLCD_YELLOW;
-+	return KEY_GLCD_BLACK;
-+}
-+
-+uint32_t GLCD_Menu::index2color(int i) {
-+	switch(i) {
-+	case KEY_GLCD_BLACK:
-+		return GLCD::cColor::Black;
-+	case KEY_GLCD_WHITE:
-+		return GLCD::cColor::White;
-+	case KEY_GLCD_RED:
-+		return GLCD::cColor::Red;
-+	case KEY_GLCD_GREEN:
-+		return GLCD::cColor::Green;
-+	case KEY_GLCD_BLUE:
-+		return GLCD::cColor::Blue;
-+	case KEY_GLCD_MAGENTA:
-+		return GLCD::cColor::Magenta;
-+	case KEY_GLCD_CYAN:
-+		return GLCD::cColor::Cyan;
-+	case KEY_GLCD_YELLOW:
-+		return GLCD::cColor::Yellow;
-+	}
-+	return GLCD::cColor::ERRCOL;
-+}
-+
-+
-+GLCD_Menu::GLCD_Menu()
-+{
-+	frameBuffer = CFrameBuffer::getInstance();
-+	width = 600;
-+	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
-+	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-+	height = hheight+13*mheight+ 10;
-+
-+	x=(((g_settings.screen_EndX - g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
-+	y=(((g_settings.screen_EndY - g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
-+
-+	notifier = new GLCD_Menu_Notifier();
-+
-+	if (!nglcd)
-+		new nGLCD;
-+}
-+
-+
-+int GLCD_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
-+{
-+	int res = menu_return::RETURN_REPAINT;
-+	if(actionKey == "rescan") {
-+		if (nglcd)
-+		    nglcd->Rescan();
-+		return res;
-+	}
-+	if(actionKey == "select_font") {
-+		if(parent)
-+			parent->hide();
-+		CFileBrowser fileBrowser;
-+		CFileFilter fileFilter;
-+		fileFilter.addFilter("ttf");
-+		fileBrowser.Filter = &fileFilter;
-+		if (fileBrowser.exec(FONTDIR) == true) {
-+			settings.glcd_font = fileBrowser.getSelectedFile()->Name;
-+			if (nglcd) {
-+				nglcd->fonts_initialized = false;
-+				nglcd->Rescan();
-+			}
-+		}
-+		return res;
-+	}
-+
-+	if (parent)
-+		parent->hide();
-+
-+	GLCD_Menu_Settings();
-+	saveSettings();
-+
-+	return res;
-+}
-+
-+void GLCD_Menu::hide()
-+{
-+	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
-+}
-+
-+GLCD_Menu_Notifier::GLCD_Menu_Notifier ()
-+{
-+}
-+
-+bool
-+GLCD_Menu_Notifier::changeNotify (const neutrino_locale_t OptionName, void *Data)
-+{
-+	if (!Data)
-+		return false;
-+	switch(OptionName) {
-+	case LOCALE_EXTRAMENU_GLCD_SELECT_FG:
-+		settings.glcd_color_fg = GLCD_Menu::index2color(*((int *) Data));
-+		break;
-+	case LOCALE_EXTRAMENU_GLCD_SELECT_BG:
-+		settings.glcd_color_bg = GLCD_Menu::index2color(*((int *) Data));
-+		break;
-+	case LOCALE_EXTRAMENU_GLCD_SELECT_BAR:
-+		settings.glcd_color_bar = GLCD_Menu::index2color(*((int *) Data));
-+		break;
-+	case LOCALE_EXTRAMENU_GLCD:
-+		if (nglcd) {
-+			if (settings.glcd_enable)
-+				nglcd->Resume();
-+			else
-+				nglcd->Suspend();
-+			return true;
-+		}
-+		break;
-+	case LOCALE_EXTRAMENU_GLCD_MIRROR_OSD:
-+		if (nglcd)
-+				nglcd->doMirrorOSD = settings.glcd_mirror_osd;
-+		break;
-+	case LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY:
-+	case LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL:
-+	case LOCALE_EXTRAMENU_GLCD_SIZE_EPG:
-+	case LOCALE_EXTRAMENU_GLCD_SIZE_BAR:
-+	case LOCALE_EXTRAMENU_GLCD_SIZE_TIME:
-+		break;
-+	default:
-+		return false;
-+	}
-+
-+	if (nglcd)
-+		nglcd->Update();
-+	return true;
-+}
-+
-+void GLCD_Menu::GLCD_Menu_Settings()
-+{
-+	int color_bg = color2index(settings.glcd_color_bg);
-+	int color_fg = color2index(settings.glcd_color_fg);
-+	int color_bar = color2index(settings.glcd_color_bar);
-+
-+	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_GLCD, "settings");
-+	menu->addItem(GenericMenuSeparator);
-+	menu->addItem(GenericMenuBack);
-+	menu->addItem(GenericMenuSeparatorLine);
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD, &settings.glcd_enable,
-+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
-+	int shortcut = 1;
-+	menu->addItem(GenericMenuSeparatorLine);
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_FG, &color_fg,
-+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
-+				CRCInput::convertDigitToKey(shortcut++)));
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BG, &color_bg,
-+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
-+				CRCInput::convertDigitToKey(shortcut++)));
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_SELECT_BAR, &color_bar,
-+				GLCD_COLOR_OPTIONS, GLCD_COLOR_OPTION_COUNT, true, notifier,
-+				CRCInput::convertDigitToKey(shortcut++)));
-+	menu->addItem( new CMenuForwarder(LOCALE_EPGPLUS_SELECT_FONT_NAME, true, NULL, this, "select_font",
-+				CRCInput::convertDigitToKey(shortcut++)));
-+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_CHANNEL,
-+				&settings.glcd_percent_channel, true, 0, 100, notifier));
-+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_EPG,
-+				&settings.glcd_percent_epg, true, 0, 100, notifier));
-+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_BAR,
-+				&settings.glcd_percent_bar, true, 0, 100, notifier));
-+	menu->addItem(new CMenuOptionNumberChooser(LOCALE_EXTRAMENU_GLCD_SIZE_TIME,
-+				&settings.glcd_percent_time, true, 0, 100, notifier));
-+	menu->addItem(GenericMenuSeparatorLine);
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_TIME_IN_STANDBY, &settings.glcd_time_in_standby,
-+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier));
-+	menu->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_GLCD_MIRROR_OSD, &settings.glcd_mirror_osd,
-+				ONOFF_OPTIONS, ONOFF_OPTION_COUNT, true, notifier,
-+				CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
-+	menu->addItem(GenericMenuSeparatorLine);
-+	menu->addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD_RESTART, true, "", this, "rescan",
-+				CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED));
-+	menu->exec(NULL, "");
-+	menu->hide();
-+	delete menu;
-+
-+	saveSettings();
-+}
-+#endif
-+
 +KernelOptions_Menu::KernelOptions_Menu()
 +{
 +	frameBuffer = CFrameBuffer::getInstance();
@@ -3126,14 +2094,24 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +bool EVOLUXUPDATE_Menu::CheckUpdate()
 +{
 +	//EVOLUXUPDATE STARTEN
-+/*	unlink("/tmp/EvoluxUpdatevailable");
++	unlink("/tmp/EvoluxUpdatevailable");
++#if defined (PLATFORM_SPARK)
 +	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
 +		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
++#else
++	safe_system("oVersion=`wget -q -O - http://is.gd/reTrI0 | grep version | cut -d = -f2`;"
++		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
++		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
++#endif
 +	if(!access("/tmp/EvoluxUpdatevailable", F_OK)) {
 +		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
 +		CheckUpdateBox->paint();
++#if defined (PLATFORM_SPARK)
 +		safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++#else
++		safe_system("wget -O - -q http://is.gd/DL3IrU | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++#endif
 +		unlink("/tmp/EvoluxUpdatevailable");
 +		unlink("/tmp/update.tar.gz");
 +		CheckUpdateBox->hide();
@@ -3144,14 +2122,13 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		CheckUpdateBox->hide();
 +		delete CheckUpdateBox;
 +	}
-+*/
-+//	else {
++	else {
 +		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
 +		CheckUpdateBox->paint();
 +		sleep(3);
 +		CheckUpdateBox->hide();
 +		delete CheckUpdateBox;
-+//	}
++	}
 +}
 +//ENDE EVOLUXUPDATE
 +
@@ -3228,7 +2205,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 
 +++ neutrino-hd2-exp/src/gui/extra_menu.h	2012-10-06 17:54:32.000000000 +0200
-@@ -0,0 +1,498 @@
+@@ -0,0 +1,387 @@
 +/*
 +Neutrino-GUI - DBoxII-Project
 +
@@ -3570,117 +2547,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +};
 +
 +
-+#ifdef WITH_GRAPHLCD
-+#include <time.h>
-+#include <string>
-+#include <semaphore.h>
-+
-+#include <glcdgraphics/bitmap.h>
-+#include <glcdgraphics/font.h>
-+#include <glcddrivers/config.h>
-+#include <glcddrivers/driver.h>
-+#include <glcddrivers/drivers.h>
-+
-+static const char * kDefaultConfigFile = "/etc/graphlcd.conf";
-+
-+#ifndef MAX
-+#define MAX(a,b)(((a)<(b)) ? (b) : (a))
-+#endif
-+
-+class nGLCD
-+{
-+	GLCD::cDriver * lcd;
-+	GLCD::cFont font_channel;
-+	GLCD::cFont font_epg;
-+	GLCD::cFont font_time;
-+	int fontsize_channel;
-+	int fontsize_epg;
-+	int fontsize_time;
-+	int percent_channel;
-+	int percent_time;
-+	int percent_epg;
-+	int percent_bar;
-+	int percent_space;
-+	GLCD::cBitmap * bitmap;
-+	std::string Channel;
-+	std::string Epg;
-+	std::string stagingChannel;
-+	std::string stagingEpg;
-+	int Scale;
-+        time_t now;
-+        struct tm *tm;
-+	bool channelLocked;
-+	bool doRescan;
-+	bool doSuspend;
-+	bool doStandby;
-+	bool doStandbyTime;
-+	bool doExit;
-+	bool doScrollChannel;
-+	bool doScrollEpg;
-+	bool doShowVolume;
-+	pthread_t thrGLCD;
-+	pthread_mutex_t mutex;
-+	void updateFonts();
-+	void Exec();
-+	std::string scrollChannel;
-+	std::string scrollEpg;
-+    public:
-+	bool fonts_initialized;
-+	bool doMirrorOSD;
-+	nGLCD();
-+	~nGLCD();
-+	void DeInit();
-+	static void Lock();
-+	static void Unlock();
-+	void mainLock();
-+	void mainUnlock();
-+	static void lockChannel(string txt);
-+	static void unlockChannel();
-+	static void* Run(void *);
-+	static void MirrorOSD(bool);
-+	static void Update();
-+	static void Suspend();
-+	static void StandbyMode(bool);
-+	static void ShowVolume(bool);
-+	static void Resume();
-+	static void Exit();
-+	void Rescan();
-+	sem_t sem;
-+};
-+
-+class GLCD_Menu;
-+
-+class GLCD_Menu_Notifier : public CChangeObserver
-+{
-+    private:
-+	GLCD_Menu* parent;
-+    public:
-+	GLCD_Menu_Notifier();
-+	bool changeNotify(const neutrino_locale_t, void *);
-+};
-+
-+
-+class GLCD_Menu : public CMenuTarget
-+{
-+    private:
-+	CFrameBuffer *frameBuffer;
-+	int x;
-+	int y;
-+	int width;
-+	int height;
-+	int hheight,mheight; // head/menu font height
-+	static int color2index(uint32_t color);
-+	GLCD_Menu_Notifier *notifier;
-+    public:
-+	static uint32_t index2color(int i);
-+	GLCD_Menu();
-+	void hide();
-+	int exec(CMenuTarget* parent, const std::string & actionKey);
-+	void GLCD_Menu_Settings();
-+};
-+
-+#endif // WITH_GRAPHLCD
-+
 +class KernelOptions_Menu : public CMenuTarget
 +{
 +    private:
@@ -3740,7 +2606,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
  	int shortcut = 1;
  
-@@ -262,6 +262,45 @@
+@@ -262,6 +262,42 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
@@ -3763,9 +2629,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, "", new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 +	int extrashortcut = 1;
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, "", new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
-+#ifdef WITH_GRAPHLCD_OFF
-+	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_GLCD, true, "", new GLCD_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
-+#endif
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, "", new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, "", new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, "", new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
@@ -3786,7 +2649,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -1924,10 +1963,12 @@
+@@ -1924,10 +1960,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -3800,21 +2663,12 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
-@@ -2610,7 +2651,33 @@
+@@ -2614,7 +2652,24 @@
  					menu->addItem(menu_item, false);
                                  }
                                  break;
 -				
 +
-+			case SNeutrinoSettings::ITEM_ADZAP:
-+				menu_items++;
-+				menu_prev = SNeutrinoSettings::ITEM_ADZAP;
-+                                keyhelper.get(&key,&icon,CRCInput::RC_blue);
-+				//keyhelper.get(&key,&icon);
-+				menu_item = new CMenuForwarder(LOCALE_USERMENU_ITEM_ADZAP, true, NULL, AdZapChanger, "adzap", key, icon);
-+				menu->addItem(menu_item, 0);
-+
-+                                break;
 +			case SNeutrinoSettings::ITEM_EMU_RESTART:
 +				menu_items++;
 +				menu_prev = SNeutrinoSettings::ITEM_EMU_RESTART;
@@ -3839,7 +2693,43 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
 +++ neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 14:37:46.604187070 +0200
-@@ -2553,6 +2553,7 @@
+@@ -260,8 +260,9 @@
+ SMSKeyInput 		* c_SMSKeyInput;	//defined in filebrowser and used in ChanneList
+ CMoviePlayerGui		* moviePlayerGui;
+ CPictureViewer 		* g_PicViewer;
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ CCAMMenuHandler 	* g_CamHandler;
+-
++#endif
+ bool parentallocked = false;
+ static char **global_argv;
+ 
+@@ -299,8 +300,9 @@
+ 	g_EventList     = NULL;
+ 	g_Locale        = new CLocaleManager;
+ 	g_PluginList    = NULL;
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	g_CamHandler 	= NULL;
+-
++#endif
+ #if ENABLE_RADIOTEXT
+ 	g_Radiotext     = NULL;
+ #endif	
+@@ -2471,11 +2473,11 @@
+ 	
+ 	// volume bar
+ 	g_volscale = new CProgressBar(200, 15, 50, 100, 80, true);
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	// Ci Cam handler
+ 	g_CamHandler = new CCAMMenuHandler();
+ 	g_CamHandler->init();	
+-
++#endif
+ 	// plugins
+ 	g_PluginList = new CPlugins;
+ 	g_PluginList->setPluginDir(PLUGINDIR);
+@@ -2535,6 +2537,7 @@
  	CMenuWidget    TunerSetup( LOCALE_SERVICEMENU_SCANTS, NEUTRINO_ICON_SETTINGS);
  	CMenuWidget    bindSettings(LOCALE_KEYBINDINGMENU_HEAD, NEUTRINO_ICON_KEYBINDING );
  	CMenuWidget    MediaPlayer(LOCALE_MAINMENU_MEDIAPLAYER, NEUTRINO_ICON_MOVIE);
@@ -3847,7 +2737,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// main menu
  	InitMainMenu(mainMenu, mainSettings, 
-@@ -2569,7 +2570,8 @@
+@@ -2551,7 +2554,8 @@
  		     service, 
  		     audioplayerSettings, 
  		     PicViewerSettings, 
@@ -3857,10 +2747,107 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		     MediaPlayer);
  
  	// service
+@@ -2754,15 +2758,15 @@
+ 
+ 	// init shutdown count
+ 	SHTDCNT::getInstance()->init();
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	// Cam-Ci
+ 	cDvbCi::getInstance()->SetHook(CISendMessage);	
+-
++#endif
+ 	// real run ;-)
+ 	RealRun(mainMenu);
+ 
+ 	// exitRun
+-	ExitRun();
++	ExitRun(0);
+ 
+ 	// never reached
+ 	return 0;
+@@ -3369,14 +3373,14 @@
+ 
+ 		return( res & ( 0xFFFFFFFF - messages_return::unhandled ) );
+ 	}
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	// we assume g_CamHandler free/delete data if needed
+ 	res = g_CamHandler->handleMsg(msg, data);
+ 	if( res != messages_return::unhandled ) 
+ 	{
+ 		return(res & (0xFFFFFFFF - messages_return::unhandled));
+ 	}	
+-
++#endif
+ 	// handle Keys
+ 	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
+ 	{
+@@ -4202,8 +4206,7 @@
+ 						delete frameBuffer;
+ 					
+ 					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+-					
+-					exit(retcode);
++					exit(1);
+ 				}
+ 			}
+ 		} 
+@@ -4219,7 +4222,7 @@
+ 
+ 			dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 
+-			exit(0);
++			exit(1);
+ 		}
+ 	}
+ }
+@@ -4908,7 +4911,7 @@
+ 		FILE *f = fopen("/tmp/.reboot", "w");
+ 		fclose(f);
+ 
+-		ExitRun();
++		ExitRun(2);
+ 
+ 		unlink("/tmp/.reboot");
+ 		returnval = menu_return::RETURN_NONE;
+@@ -5324,8 +5327,8 @@
+ 	dvbsub_close();
+ 
+ 	// stop txt
+-	tuxtxt_stop();
+-	tuxtxt_close();
++	//tuxtxt_stop();
++	//tuxtxt_close();
+ 	
+ #ifdef ENABLE_GRAPHLCD
+ 	nGLCD::Exit();
+@@ -5353,7 +5356,7 @@
+ 	pthread_join(sections_thread, NULL);
+ 	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
+ 
+-	tuxtx_stop_subtitle();
++	//tuxtx_stop_subtitle();
+ 
+ 	// zapit stop	
+ 	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
+@@ -5362,10 +5365,10 @@
+ 	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
+ 
+ 	// clear vfd
+-	CVFD::getInstance()->Clear();
++	//CVFD::getInstance()->Clear();
+ 
+ 	// movieplayerGui
+-	delete moviePlayerGui;
++	//delete moviePlayerGui;
+ }
+ 
+ // load color
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
 +++ neutrino-hd2-exp/src/neutrino.h	2012-10-21 15:20:26.180879315 +0200
-@@ -44,10 +44,10 @@
+@@ -44,10 +44,9 @@
  #include <gui/channellist.h>          		/* CChannelList */
  #include <gui/rc_lock.h>
  #include <daemonc/remotecontrol.h>    		/* st_rmsg      */
@@ -3869,11 +2856,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #include <zapit/client/zapitclient.h>
  #include <gui/scan_setup.h>
 -
-+#include <gui/adzap.h>
  #include <string>
  
  #define widest_number "2"
-@@ -78,6 +78,24 @@
+@@ -78,6 +77,24 @@
          const char * const                          actionkey;
  } font_sizes_groups_struct;
  
@@ -3898,26 +2884,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  class CNeutrinoApp : public CMenuTarget, CChangeObserver
  {
   	public:
-@@ -124,6 +142,9 @@
+@@ -123,6 +140,8 @@
+ 
  		// font
  		neutrino_font_descr_struct      font;
- 
-+		CAdZapMenu			*AdZapChanger;
++		// tunermenu
 +		TUNERRESET_Menu *TunerMenu;
-+
+ 
  		// modes
  		int				mode;
- 		int				lastMode;
-@@ -180,7 +201,7 @@
- 		
- 		void saveEpg();
- 		
--		void ExitRun(const bool write_si = true, int retcode = 0);
-+
- 		void RealRun(CMenuWidget &mainSettings);
- 		void InitZapper();
- 		
-@@ -223,7 +244,8 @@
+@@ -223,7 +242,8 @@
  				  CMenuWidget &service,
                          	  CMenuWidget &audioplayerSettings, 
  				  CMenuWidget &PicViewerSettings, 
@@ -3927,7 +2903,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  				  CMenuWidget &MediaPlayer);
  
  		void SetupFrameBuffer();
-@@ -239,7 +261,7 @@
+@@ -239,7 +259,7 @@
  
  	public:
  		CMenuItem * wlanEnable[3];
@@ -3936,7 +2912,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		void saveSetup(const char * fname);
  		int loadSetup(const char * fname);
  		void loadColors(const char * fname);
-@@ -253,7 +275,9 @@
+@@ -253,7 +273,9 @@
  		CChannelList			*TVchannelList;
  		CChannelList			*RADIOchannelList;
  		CChannelList			* channelList;
@@ -3948,467 +2924,57 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		CNetworkConfig                 networkConfig;
  
 
---- neutrino-hd2-exp/src/gui/adzap.h	1970-01-01 01:00:00.000000000 +0100
-+++ neutrino-hd2-exp/src/gui/adzap.h	2012-10-06 17:54:32.000000000 +0200
-@@ -0,0 +1,57 @@
-+/*
-+ * adzap.h
-+ * 
-+ * (C)2012 by martii
-+ * 
-+ * License: GPL
-+ * 
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ * 
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ * 
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program; if not, write to the Free Software
-+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-+ */
-+
-+
-+#ifndef __adzap__
-+#define __adzap__
-+
-+#include "widget/menue.h"
-+#include <zapit/channel.h>
-+#include <system/localize.h>
-+#include <string>
-+#include <semaphore.h>
-+
-+class CAdZapMenu:public CMenuTarget {
-+  private:
-+    CFrameBuffer * frameBuffer;
-+    int x;
-+    int y;
-+    int width;
-+    int height;
-+    int hheight, mheight;	// head/menu font height
-+    bool running;
-+    bool armed;
-+    bool alerted;
-+    struct timespec zapBackTime;
-+    std::string channelName;
-+  public:
-+    bool monitor;
-+    struct timespec monitorLifeTime;
-+    t_channel_id channelId;
-+    CAdZapMenu();
-+    int exec(CMenuTarget * parent, const std::string & actionKey);
-+    void Settings();
-+    void Update();
-+    static void *Run(void *);
-+    sem_t sem;
-+};
-+#endif				// __adzap__
-
-
---- neutrino-hd2-exp/src/gui/adzap.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ neutrino-hd2-exp/src/gui/adzap.cpp	2012-10-06 17:54:32.000000000 +0200
-@@ -0,0 +1,297 @@
-+/*
-+ * adzap.cpp
-+ * 
-+ * (C)2012 by martii
-+ * 
-+ * License: GPL
-+ * 
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ * 
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ * 
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program; if not, write to the Free Software
-+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-+ */
-+
-+/*
-+ * AS SOME FOLKS DON'T SEEM TO UNDERSTAND THE GPL: YOU ARE FREE TO USE
-+ * THIS CODE FOR YOUR OWN LITTLE STB IMAGE. BUT IF YOU ARE DISTRIBUTING
-+ * THAT IMAGE, YOU ARE BOUND TO THE GPL, AND YOU HAVE TO DISTRIBUTE THE
-+ * SOURCE CODE, TOO. IF YOU DON'T: A) YOU ACKNOWLEDGE THAT YOU'RE AN
-+ * ABSOLUTE JERK, AND B) YOU'RE NOT PERMITTED TO USE THIS CODE. AT ALL.
-+ */
-+
-+#ifdef HAVE_CONFIG_H
-+#include <config.h>
-+#endif
-+
-+#include <gui/adzap.h>
-+#include <widget/hintbox.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <global.h>
-+#include <neutrino.h>
-+#include <algorithm>
-+
-+#define ZAPBACK_ALERT_PERIOD 15	// seconds. Keep this in sync with the locales.
-+
-+static CAdZapMenu *azm = NULL;
-+static pthread_t thrAdZap;
-+
-+CAdZapMenu::CAdZapMenu()
-+{
-+    if (azm)
-+	return;
-+
-+    azm = this;
-+    frameBuffer = CFrameBuffer::getInstance();
-+    width = 400;
-+    hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
-+    mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
-+    height = hheight + 13 * mheight + 10;
-+
-+    x = (((g_settings.screen_EndX - g_settings.screen_StartX) -
-+	  width) / 2) + g_settings.screen_StartX;
-+    y = (((g_settings.screen_EndY - g_settings.screen_StartY) -
-+	  height) / 2) + g_settings.screen_StartY;
-+
-+    sem_init(&sem, 0, 0);
-+    if (pthread_create(&thrAdZap, 0, CAdZapMenu::Run, NULL) != 0) {
-+	fprintf(stderr, "ERROR: pthread_create(CAdZapMenu::CAdZapMenu)\n");
-+	running = false;
-+    } else
-+	running = true;
-+    channelId = -1;
-+    armed = false;
-+    monitor = false;
-+    alerted = false;
-+}
-+
-+void sectionsd_getEventsServiceKey(t_channel_id serviceUniqueKey,
-+				   CChannelEventList & eList, char search =
-+				   0, std::string search_text = "");
-+
-+static bool
-+sortByDateTime(const CChannelEvent & a, const CChannelEvent & b)
-+{
-+    return a.startTime < b.startTime;
-+}
-+
-+void
-+ CAdZapMenu::Update()
-+{
-+    if (channelId < 0)
-+	return;
-+
-+    struct timespec ts;
-+    clock_gettime(CLOCK_REALTIME, &ts);
-+
-+    memcpy(&zapBackTime, &ts, sizeof(ts));
-+    zapBackTime.tv_sec +=
-+	g_settings.adzap_zapBackPeriod - ZAPBACK_ALERT_PERIOD;
-+
-+    sem_post(&azm->sem);
-+}
-+
-+void *CAdZapMenu::Run(void *)
-+{
-+    while (azm->running) {
-+	CChannelList *channelList = NULL;
-+	t_channel_id curChannelId;
-+
-+	if (azm->monitor) {
-+	    struct timespec ts;
-+	    clock_gettime(CLOCK_REALTIME, &ts);
-+	    ts.tv_sec += 1;
-+
-+	    sem_timedwait(&azm->sem, &ts);
-+
-+	    if (azm->monitor && (azm->monitorLifeTime.tv_sec > ts.tv_sec)) {
-+		channelList = CNeutrinoApp::getInstance()->channelList;
-+		curChannelId =
-+		    channelList ? channelList->getActiveChannel_ChannelID()
-+		    : -1;
-+		if (!azm->armed && (azm->channelId != curChannelId)) {
-+		    azm->armed = true;
-+		    clock_gettime(CLOCK_REALTIME, &azm->zapBackTime);
-+		    azm->zapBackTime.tv_sec +=
-+			g_settings.adzap_zapBackPeriod -
-+			ZAPBACK_ALERT_PERIOD;
-+		    azm->alerted = false;
-+		} else if (azm->channelId == curChannelId) {
-+		    azm->armed = false;
-+		    azm->alerted = false;
-+		}
-+	    } else {
-+		azm->monitor = false;
-+		azm->armed = false;
-+		azm->alerted = false;
-+	    }
-+	} else if (azm->armed)
-+	    sem_timedwait(&azm->sem, &azm->zapBackTime);
-+	else
-+	    sem_wait(&azm->sem);
-+
-+	if (azm->armed) {
-+	    struct timespec ts;
-+	    clock_gettime(CLOCK_REALTIME, &ts);
-+	    if (ts.tv_sec >= azm->zapBackTime.tv_sec) {
-+		if (!channelList) {
-+		    channelList = CNeutrinoApp::getInstance()->channelList;
-+		    curChannelId =
-+			channelList ?
-+			channelList->getActiveChannel_ChannelID() : -1;
-+		}
-+		if (!azm->alerted) {
-+		    if (azm->channelId != curChannelId) {
-+			std::string name =
-+			    g_Locale->getText(LOCALE_ADZAP_ANNOUNCE);
-+			name += "\n" + azm->channelName;
-+			ShowHintUTF(LOCALE_ADZAP, name.c_str());
-+		    }
-+		    azm->alerted = true;
-+		    azm->zapBackTime.tv_sec += ZAPBACK_ALERT_PERIOD;
-+		} else {
-+		    azm->alerted = false;
-+		    if (channelList)
-+			channelList->zapTo_ChannelID(azm->channelId);
-+		    azm->armed = false;
-+		}
-+	    }
-+	}
-+    }
-+    return NULL;
-+}
-+
-+int CAdZapMenu::exec(CMenuTarget * parent, const std::string & actionKey)
-+{
-+    int res = menu_return::RETURN_EXIT_ALL;
-+
-+    if (parent)
-+	parent->hide();
-+
-+    if (actionKey == "enable") {
-+	if (!monitor)
-+	    armed = true;
-+	alerted = false;
-+	Update();
-+	return res;
-+    }
-+    if (actionKey == "disable") {
-+	armed = false;
-+	monitor = false;
-+	alerted = false;
-+	Update();
-+	return res;
-+    }
-+    if (actionKey == "monitor") {
-+	azm->armed = false;
-+	azm->monitor = true;
-+	alerted = false;
-+	Update();
-+	return res;
-+    }
-+
-+    if (actionKey == "adzap") {
-+	if (armed || monitor) {
-+	    armed = false;
-+	    monitor = false;
-+	    alerted = false;
-+	    Update();
-+	    ShowLocalizedHint(LOCALE_ADZAP, LOCALE_ADZAP_CANCEL, 450, 1);
-+	    return res;
-+	}
-+    }
-+    if (actionKey.length() == 1) {
-+	g_settings.adzap_zapBackPeriod = actionKey[0] - '0';
-+	g_settings.adzap_zapBackPeriod *= 60;
-+	if (!monitor)
-+	    armed = true;
-+	return menu_return::RETURN_REPAINT;
-+    }
-+
-+    Settings();
-+
-+    return res;
-+}
-+
-+void CAdZapMenu::Settings()
-+{
-+    CChannelList *channelList = CNeutrinoApp::getInstance()->channelList;
-+    channelId =
-+	channelList ? channelList->getActiveChannel_ChannelID() : -1;
-+    if (channelId < 0)
-+	return;
-+    channelName = channelList->getActiveChannelName();
-+
-+    CMenuWidget *menu =
-+	new CMenuWidget(LOCALE_ADZAP, "settings", width);
-+    menu->addItem(new
-+		  CMenuSeparator(CMenuSeparator::LINE |
-+				 CMenuSeparator::STRING,
-+				 LOCALE_ADZAP_SWITCHBACK));
-+    neutrino_locale_t minute = LOCALE_ADZAP_MINUTE;
-+    for (int shortcut = 1; shortcut < 10; shortcut++) {
-+	char actionKey[2];
-+	actionKey[0] = '0' + shortcut;
-+	actionKey[1] = 0;
-+	bool selected = g_settings.adzap_zapBackPeriod == 60 * shortcut;
-+	menu->addItem(new
-+		      CMenuForwarder(minute, true, "", this, actionKey,
-+				     CRCInput::convertDigitToKey
-+				     (shortcut)), selected);
-+	minute = LOCALE_ADZAP_MINUTES;
-+    }
-+
-+    menu->addItem(new
-+		  CMenuSeparator(CMenuSeparator::LINE |
-+				 CMenuSeparator::STRING,
-+				 LOCALE_ADZAP_COMMIT));
-+    menu->addItem(new
-+		  CMenuForwarder(LOCALE_ADZAP_ENABLE, true, "", this,
-+				 "enable", CRCInput::RC_green,
-+				 NEUTRINO_ICON_BUTTON_GREEN));
-+    menu->addItem(new
-+		  CMenuForwarder(LOCALE_ADZAP_DISABLE, true, "", this,
-+				 "disable", CRCInput::RC_red,
-+				 NEUTRINO_ICON_BUTTON_RED));
-+
-+    CChannelEventList evtlist;
-+    sectionsd_getEventsServiceKey(azm->channelId & 0xFFFFFFFFFFFFULL,
-+				  evtlist);
-+    azm->monitorLifeTime.tv_sec = 0;
-+    if (!evtlist.empty()) {
-+	sort(evtlist.begin(), evtlist.end(), sortByDateTime);
-+	CChannelEventList::iterator eli;
-+	struct timespec ts;
-+	clock_gettime(CLOCK_REALTIME, &ts);
-+	for (eli = evtlist.begin(); eli != evtlist.end(); ++eli) {
-+	    if ((uint) eli->startTime + eli->duration > ts.tv_sec) {
-+		azm->monitorLifeTime.tv_sec =
-+		    (uint) eli->startTime + eli->duration;
-+		azm->Update();
-+		break;
-+	    }
-+	}
-+    }
-+
-+    menu->addItem(new
-+		  CMenuForwarder(LOCALE_ADZAP_MONITOR,
-+				 azm->monitorLifeTime.tv_sec, "", this,
-+				 "monitor", CRCInput::RC_blue,
-+				 NEUTRINO_ICON_BUTTON_BLUE));
-+
-+    monitor = false;
-+    menu->exec(NULL, "");
-+    menu->hide();
-+    delete menu;
-+    Update();
-+}
-
-
---- neutrino-hd2-exp/src/gui/widget/lcdcontroler.h	1970-01-01 01:00:00.000000000 +0100
-+++ neutrino-hd2-exp/src/gui/widget/lcdcontroler.h	2012-10-06 17:54:32.000000000 +0200
-@@ -0,0 +1,75 @@
-+/*
-+	Neutrino-GUI  -   DBoxII-Project
-+ 
-+	Copyright (C) 2001 Steffen Hehn 'McClean'
-+	Homepage: http://dbox.cyberphoria.org/
-+ 
-+	Kommentar:
-+ 
-+	Diese GUI wurde von Grund auf neu programmiert und sollte nun vom
-+	Aufbau und auch den Ausbaumoeglichkeiten gut aussehen. Neutrino basiert
-+	auf der Client-Server Idee, diese GUI ist also von der direkten DBox-
-+	Steuerung getrennt. Diese wird dann von Daemons uebernommen.
-+	
-+ 
-+	License: GPL
-+ 
-+	This program is free software; you can redistribute it and/or modify
-+	it under the terms of the GNU General Public License as published by
-+	the Free Software Foundation; either version 2 of the License, or
-+	(at your option) any later version.
-+ 
-+	This program is distributed in the hope that it will be useful,
-+	but WITHOUT ANY WARRANTY; without even the implied warranty of
-+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+	GNU General Public License for more details.
-+ 
-+	You should have received a copy of the GNU General Public License
-+	along with this program; if not, write to the Free Software
-+	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-+*/
-+
-+
-+#ifndef __lcdcontroler__
-+#define __lcdcontroler__
-+
-+#include <driver/framebuffer.h>
-+#include <system/localize.h>
-+
-+#include "menue.h"
-+
-+#include <string>
-+
-+class CLcdControler : public CMenuTarget
-+{
-+	private:
-+		CFrameBuffer	*frameBuffer;
-+		int x;
-+		int y;
-+		int width;
-+		int height;
-+		int hheight,mheight; // head/menu font height
-+
-+		unsigned char contrast;
-+		unsigned char brightness;
-+		unsigned char brightnessstandby;
-+
-+		neutrino_locale_t name;
-+
-+		CChangeObserver* observer;
-+
-+		void paint();
-+		void setLcd();
-+		void paintSlider(int x, int y, unsigned int spos, float factor, const neutrino_locale_t text, bool selected);
-+
-+	public:
-+
-+		CLcdControler(const neutrino_locale_t Name, CChangeObserver* Observer = NULL);
-+
-+		void hide();
-+		int exec(CMenuTarget* parent, const std::string & actionKey);
-+
-+};
-+
-+
-+#endif
-
 //turn "show infoviewer" off by epg-now-next
---- neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:56.109748885 +0200
-+++ neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:37.733657761 +0200
-@@ -248,7 +248,9 @@
- 					// APID Bearbeitung neu anstossen
- 					has_unresolved_ctags = true;
- 					// infobar indicate on epg change
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 					g_InfoViewer->showEpgInfo();
-+#endif
- 				}
- 
- 				current_EPGid = info_CN.current_uniqueKey;
+//--- neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:56.109748885 +0200
+//+++ neutrino-hd2-exp/src/daemonc/remotecontrol.cpp	2012-10-26 12:54:37.733657761 +0200
+//@@ -248,7 +248,9 @@
+// 					// APID Bearbeitung neu anstossen
+// 					has_unresolved_ctags = true;
+// 					// infobar indicate on epg change
+//+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+// 					g_InfoViewer->showEpgInfo();
+//+#endif
+// 				}
+// 
+// 				current_EPGid = info_CN.current_uniqueKey;
 
 
 --- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
 +++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
-@@ -572,6 +572,7 @@
+@@ -42,7 +42,6 @@
+ #include <math.h>
+ #include <system/debug.h>
+ 
+-
+ //konfetti: let us share the device with evremote and fp_control
+ //it does currently not support more than one user (see e.g. micom)
+ #ifdef __sh__
+@@ -419,14 +418,22 @@
+ 			Clear();
+ 			showclock = false;
+ 			break;
+-
++#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
++		case MODE_STANDBY:
++			//ShowIcon(VFD_ICON_TV, false);			
++			showclock = false;
++			//showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
++						/* "showTime()" clears the whole lcd in MODE_STANDBY */
++			ShowText("STANDBY");
++			break;
++#else
+ 		case MODE_STANDBY:
+ 			ShowIcon(VFD_ICON_TV, false);			
+ 			showclock = true;
+ 			showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
+ 						/* "showTime()" clears the whole lcd in MODE_STANDBY */
+ 			break;
+-		
++#endif	
+ 		case MODE_PIC:	  
+ 			ShowIcon(VFD_ICON_TV, false);			
+ 			ShowIcon(VFD_ICON_HD, false);
+@@ -572,6 +579,7 @@
  #if defined (PLATFORM_GIGABLUE)
  	ShowText("    "); // 4 empty digits
  #elif defined __sh__  //(PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
@@ -4416,7 +2982,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
          //struct vfd_ioctl_data data;
  	//data.start = 0x01;
  	//data.length = 0x0;
-@@ -587,6 +588,7 @@
+@@ -587,6 +595,7 @@
  	
  	closeDevice();
  #endif
@@ -4424,7 +2990,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  void CVFD::ShowIcon(vfd_icon icon, bool show)
-@@ -595,6 +597,7 @@
+@@ -595,6 +604,7 @@
  
  //#if defined (PLATFORM_DUCKBOX) || defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD) || defined (PLATFORM_SPARK7162)
  #ifdef __sh__
@@ -4432,7 +2998,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	openDevice();
  
  	struct vfd_ioctl_data data;
-@@ -607,6 +610,7 @@
+@@ -607,6 +617,7 @@
  	
  	closeDevice();
  #endif
@@ -4441,36 +3007,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  void* CVFD::ThreadScrollText(void * arg)
 
---- neutrino-hd2-exp/src/zapit/src/cam.cpp	2012-10-26 17:31:29.166261586 +0200
-+++ neutrino-hd2-exp/src/zapit/src/cam.cpp	2012-10-26 17:31:17.446203484 +0200
-@@ -45,8 +45,10 @@
- 	{
- 		if(!send_data(data, length)) 
- 		{
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 			if (!open_connection())
- 				return false;
-+#endif
- 			return send_data(data, length);
- 		}
- 		
-@@ -54,13 +56,13 @@
- 	}
- 
- 	close_connection();
--
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 	if(!length) 
- 		return false;
--	
-+
- 	if (!open_connection())
- 		return false;
--
-+#endif
- 	return send_data(data, length);
- }
- 
 
 --- neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:49.610539471 +0100
 +++ neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:36.446474194 +0100
@@ -4506,179 +3042,23 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:14:12.164733979 +0100
 +++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:15:41.417176564 +0100
-@@ -34,418 +34,6 @@
- #define debugf(i, arg...) \
- 	if (i < log_level) \
- 		fprintf(stderr, arg);
--	
--#include <configfile.h>
--
--/* this values are token from cuberevo3000hd */
--#ifndef KEY_PIP	
--#define KEY_PIP		0x041
--#endif
--
--#ifndef KEY_PIPPOS	
--#define KEY_PIPPOS	0x0BE
--#endif
--
--#ifndef KEY_PIPSWAP 
--#define KEY_PIPSWAP	0x0BF
--#endif
--
--#ifndef __KEY_PIPSUBCH	
--#define KEY_PIPSUBCH	0x0C0
--#endif
--
--#ifndef KEY_BOOKMARK	
--#define	KEY_BOOKMARK	0x03f
--#endif
--
--#ifndef KEY_MUSIC	
--#define KEY_MUSIC	0x0c1
--#endif
--
--#ifndef KEY_PICTURE	
--#define KEY_PICTURE	0x03e
--#endif
--
--#ifndef KEY_REPEAT	
--#define	KEY_REPEAT	0x040
--#endif
--
--#ifndef KEY_SLOW	
--#define KEY_SLOW	0x199
--#endif
--
--#ifndef KEY_MULTFEED	
--#define KEY_MULTIFEED	0x0bd
--#endif
--
--#ifndef KEY_DVBSUB	
--#define KEY_DVBSUB	0x172
--#endif
--
--#ifndef KEY_NET
--#define KEY_NET		0x096
--#endif
--
--/* VFD */
--#define VFD_UP		0x042
--#define VFD_DOWN	0x043
--#define VFD_RIGHT	0x057
--#define VFD_LEFT	0x044
--#define VFD_POWER	0x0ba
--#define VFD_MENU	0x0b8
--#define VFD_EXIT	0x0b7
--#define VFD_OK		0x058
--
+@@ -96,7 +96,7 @@
+ #define VFD_EXIT	0x0b7
+ #define VFD_OK		0x058
+ 
 -CConfigFile configfile(',', false);
--
--unsigned short key_0;
--unsigned short key_1;
--unsigned short key_2;
--unsigned short key_3;
--unsigned short key_4;
--unsigned short key_5;
--unsigned short key_6;
--unsigned short key_7;
--unsigned short key_8;
--unsigned short key_9;
--			
--unsigned short key_up;
--unsigned short key_left;
--unsigned short key_right;
--unsigned short key_down;
--			
--unsigned short key_spkr;
--						
--unsigned short key_minus;
--unsigned short key_plus;			
--
--unsigned short key_standby;
--unsigned short key_home;
--unsigned short key_setup;				
--			
--unsigned short key_page_up;
--unsigned short key_page_down;			
--			
--unsigned short key_ok;
--			
--unsigned short key_red;
--unsigned short key_green;
--unsigned short key_yellow;
--unsigned short key_blue;
--
--unsigned short key_audio;
--unsigned short key_video;
--			
--unsigned short key_text;
--
--unsigned short key_info;				
--			
--unsigned short key_epg;
--			
--unsigned short key_recall;		
--
--unsigned short key_favorites;
--
--unsigned short key_sat;
--			
--unsigned short key_record;
--unsigned short key_play;
--unsigned short key_pause;
--unsigned short key_forward;
--unsigned short key_rewind;
--unsigned short key_stop;
--			
--unsigned short key_timeshift;
--						
--unsigned short key_mode;			
--
--unsigned short key_next;
--unsigned short key_prev;			
--
--/* added from cuberevo3000hd so fix it please */
--unsigned short key_music;
--unsigned short key_picture;	
--unsigned short key_repeat;
--unsigned short key_slow;
--			
--unsigned short key_dvbsub;
--
--unsigned short key_pip;
--unsigned short key_pippos;
--unsigned short key_pipswap;
--unsigned short key_pipsubch;
--
--unsigned short key_net;	
--unsigned short key_bookmark;
--unsigned short key_multifeed;
--					
--unsigned short key_f1;
--unsigned short key_f2;
--unsigned short key_f3;
--unsigned short key_f4;
--		
--//unsigned short key_aspect;
--			
--unsigned short key_vfdup;
--unsigned short key_vfddown;
--unsigned short key_vfdright;
--unsigned short key_vfdleft;
--unsigned short key_vfdpower;
--unsigned short key_vfdmenu;
--unsigned short key_vfdexit;
--unsigned short key_vfdok;
--		
--bool loadKeyMap(const char * const fileName)
--{
--	printf("CRCInput::loadKeymap:\n");
--	
--	/* if keymap.conf not exists load default */
++CConfigFile configfileTuxTxt(',', false);
+ 
+ unsigned short key_0;
+ unsigned short key_1;
+@@ -200,150 +200,150 @@
+ 	printf("CRCInput::loadKeymap:\n");
+ 	
+ 	/* if keymap.conf not exists load default */
 -	if(!configfile.loadConfig(fileName))
--		printf("CRCInput::loadKeyMap: %s not found, using default\n", fileName);
--	
++	if(!configfileTuxTxt.loadConfig(fileName))
+ 		printf("CRCInput::loadKeyMap: %s not found, using default\n", fileName);
+ 	
 -	key_0 = configfile.getInt32("key_0", KEY_0);
 -	key_1 = configfile.getInt32("key_1", KEY_1);
 -	key_2 = configfile.getInt32("key_2", KEY_2);
@@ -4694,37 +3074,67 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_left = configfile.getInt32("key_left", KEY_LEFT);
 -	key_right = configfile.getInt32("key_right", KEY_RIGHT);
 -	key_down = configfile.getInt32("key_down", KEY_DOWN);
--			
++	key_0 = configfileTuxTxt.getInt32("key_0", KEY_0);
++	key_1 = configfileTuxTxt.getInt32("key_1", KEY_1);
++	key_2 = configfileTuxTxt.getInt32("key_2", KEY_2);
++	key_3 = configfileTuxTxt.getInt32("key_3", KEY_3);
++	key_4 = configfileTuxTxt.getInt32("key_4", KEY_4);
++	key_5 = configfileTuxTxt.getInt32("key_5", KEY_5);
++	key_6 = configfileTuxTxt.getInt32("key_6", KEY_6);
++	key_7 = configfileTuxTxt.getInt32("key_7", KEY_7);
++	key_8 = configfileTuxTxt.getInt32("key_8", KEY_8);
++	key_9 = configfileTuxTxt.getInt32("key_9", KEY_9);
++			
++	key_up = configfileTuxTxt.getInt32("key_up", KEY_UP);
++	key_left = configfileTuxTxt.getInt32("key_left", KEY_LEFT);
++	key_right = configfileTuxTxt.getInt32("key_right", KEY_RIGHT);
++	key_down = configfileTuxTxt.getInt32("key_down", KEY_DOWN);
+ 			
 -	key_spkr = configfile.getInt32("key_spkr", KEY_MUTE);
--				
++	key_spkr = configfileTuxTxt.getInt32("key_spkr", KEY_MUTE);
+ 				
 -	key_minus = configfile.getInt32("key_minus", KEY_VOLUMEDOWN);
 -	key_plus = configfile.getInt32("key_plus", KEY_VOLUMEUP);	
--
++	key_minus = configfileTuxTxt.getInt32("key_minus", KEY_VOLUMEDOWN);
++	key_plus = configfileTuxTxt.getInt32("key_plus", KEY_VOLUMEUP);	
+ 
 -	key_standby = configfile.getInt32("key_standby", KEY_POWER);
--			
--#if defined (PLATFORM_GIGABLUE)
++	key_standby = configfileTuxTxt.getInt32("key_standby", KEY_POWER);
+ 			
+ #if defined (PLATFORM_GIGABLUE)
 -	key_home = configfile.getInt32("key_home", 0xAE);
--#else
++	key_home = configfileTuxTxt.getInt32("key_home", 0xAE);
+ #else
 -	key_home = configfile.getInt32("key_home", KEY_HOME);
--#endif			
--
--#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_home = configfileTuxTxt.getInt32("key_home", KEY_HOME);
+ #endif			
+ 
+ #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_setup = configfile.getInt32("key_setup", 0x8B);
--#else
++	key_setup = configfileTuxTxt.getInt32("key_setup", 0x8B);
+ #else
 -	key_setup = configfile.getInt32("key_setup", KEY_MENU);
--#endif				
--			
++	key_setup = configfileTuxTxt.getInt32("key_setup", KEY_MENU);
+ #endif				
+ 			
 -	key_page_up = configfile.getInt32("key_page_up", 0x192);
 -	key_page_down = configfile.getInt32("key_page_down", 0x193);	
--			
++	key_page_up = configfileTuxTxt.getInt32("key_page_up", 0x192);
++	key_page_down = configfileTuxTxt.getInt32("key_page_down", 0x193);	
+ 			
 -	key_ok = configfile.getInt32("key_ok", KEY_OK);
--			
++	key_ok = configfileTuxTxt.getInt32("key_ok", KEY_OK);
+ 			
 -	key_red = configfile.getInt32("key_red", KEY_RED);
 -	key_green = configfile.getInt32("key_green", KEY_GREEN);
 -	key_yellow = configfile.getInt32("key_yellow", KEY_YELLOW);
 -	key_blue	= configfile.getInt32("key_blue", KEY_BLUE);
--
--#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_red = configfileTuxTxt.getInt32("key_red", KEY_RED);
++	key_green = configfileTuxTxt.getInt32("key_green", KEY_GREEN);
++	key_yellow = configfileTuxTxt.getInt32("key_yellow", KEY_YELLOW);
++	key_blue	= configfileTuxTxt.getInt32("key_blue", KEY_BLUE);
+ 
+ #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_audio = configfile.getInt32("key_audio", /*0x3D*/0x188);
 -	key_video = configfile.getInt32("key_video", /*0x90*/0xE2);		
 -	key_text = configfile.getInt32("key_text", /*0x173*/0x184);
@@ -4732,31 +3142,47 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_audio = configfile.getInt32("key_audio", KEY_AUDIO);
 -	key_video = configfile.getInt32("key_video", KEY_VIDEO);		
 -	key_text = configfile.getInt32("key_text", KEY_TEXT);
--#endif
--
--#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_audio = configfileTuxTxt.getInt32("key_audio", /*0x3D*/0x188);
++	key_video = configfileTuxTxt.getInt32("key_video", /*0x90*/0xE2);		
++	key_text = configfileTuxTxt.getInt32("key_text", /*0x173*/0x184);
++#else
++	key_audio = configfileTuxTxt.getInt32("key_audio", KEY_AUDIO);
++	key_video = configfileTuxTxt.getInt32("key_video", KEY_VIDEO);		
++	key_text = configfileTuxTxt.getInt32("key_text", KEY_TEXT);
+ #endif
+ 
+ #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_info = configfile.getInt32("key_info", 0x166);
--//#elif defined (PLATFORM_DUCKBOX) || defined (PLATFORM_SPARK7162)
++	key_info = configfileTuxTxt.getInt32("key_info", 0x166);
+ //#elif defined (PLATFORM_DUCKBOX) || defined (PLATFORM_SPARK7162)
 -//	key_info = configfile.getInt32("key_info", 0x8A);
--#else
++//	key_info = configfileTuxTxt.getInt32("key_info", 0x8A);
+ #else
 -	key_info = configfile.getInt32("key_info", KEY_INFO);
--#endif			
--			
--#if defined (PLATFORM_GIGABLUE)			
++	key_info = configfileTuxTxt.getInt32("key_info", KEY_INFO);
+ #endif			
+ 			
+ #if defined (PLATFORM_GIGABLUE)			
 -	key_epg = configfile.getInt32("key_epg", 0x8A);
--#else			
++	key_epg = configfileTuxTxt.getInt32("key_epg", 0x8A);
+ #else			
 -	key_epg = configfile.getInt32("key_epg", KEY_EPG);
--#endif			
--
--#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_epg = configfileTuxTxt.getInt32("key_epg", KEY_EPG);
+ #endif			
+ 
+ #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_recall = configfile.getInt32("key_recall", /*0x3C*/0x19C);
--#else
++	key_recall = configfileTuxTxt.getInt32("key_recall", /*0x3C*/0x19C);
+ #else
 -	key_recall = configfile.getInt32("key_recall", KEY_BACK);
--#endif			
--
++	key_recall = configfileTuxTxt.getInt32("key_recall", KEY_BACK);
+ #endif			
+ 
 -	key_favorites = configfile.getInt32("key_favorites", KEY_FAVORITES);
 -	key_sat = configfile.getInt32("key_sat", KEY_SAT);
--			
++	key_favorites = configfileTuxTxt.getInt32("key_favorites", KEY_FAVORITES);
++	key_sat = configfileTuxTxt.getInt32("key_sat", KEY_SAT);
+ 			
 -	key_record = configfile.getInt32("key_record", KEY_RECORD);
 -	key_play = configfile.getInt32("key_play", KEY_PLAY);
 -	key_pause = configfile.getInt32("key_pause", KEY_PAUSE);
@@ -4764,54 +3190,86 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_rewind = configfile.getInt32("key_rewind", KEY_REWIND);
 -	key_stop = configfile.getInt32("key_stop", KEY_STOP);
 -	key_timeshift = configfile.getInt32("key_timeshift", KEY_TIME);
--			
--#if defined (PLATFORM_GIGABLUE)
++	key_record = configfileTuxTxt.getInt32("key_record", KEY_RECORD);
++	key_play = configfileTuxTxt.getInt32("key_play", KEY_PLAY);
++	key_pause = configfileTuxTxt.getInt32("key_pause", KEY_PAUSE);
++	key_forward = configfileTuxTxt.getInt32("key_forward", KEY_FASTFORWARD);
++	key_rewind = configfileTuxTxt.getInt32("key_rewind", KEY_REWIND);
++	key_stop = configfileTuxTxt.getInt32("key_stop", KEY_STOP);
++	key_timeshift = configfileTuxTxt.getInt32("key_timeshift", KEY_TIME);
+ 			
+ #if defined (PLATFORM_GIGABLUE)
 -	key_mode = configfile.getInt32("key_mode", 0x181);
--#elif defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_mode = configfileTuxTxt.getInt32("key_mode", 0x181);
+ #elif defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_mode = configfile.getInt32("key_mode", /*0x3B*/0x181);
--#else			
++	key_mode = configfileTuxTxt.getInt32("key_mode", /*0x3B*/0x181);
+ #else			
 -	key_mode = configfile.getInt32("key_mode", KEY_MODE);
--#endif			
--
--#if defined (PLATFORM_GIGABLUE)
++	key_mode = configfileTuxTxt.getInt32("key_mode", KEY_MODE);
+ #endif			
+ 
+ #if defined (PLATFORM_GIGABLUE)
 -	key_next = configfile.getInt32("key_next", 0x197);
 -	key_prev = configfile.getInt32("key_prev", 0x19C);
--#else
++	key_next = configfileTuxTxt.getInt32("key_next", 0x197);
++	key_prev = configfileTuxTxt.getInt32("key_prev", 0x19C);
+ #else
 -	key_next = configfile.getInt32("key_next", 0xFFFFFFF0);
 -	key_prev = configfile.getInt32("key_prev", 0xFFFFFFF1);
--#endif			
--
--	/* added from cuberevo3000hd so fix it please */
++	key_next = configfileTuxTxt.getInt32("key_next", 0xFFFFFFF0);
++	key_prev = configfileTuxTxt.getInt32("key_prev", 0xFFFFFFF1);
+ #endif			
+ 
+ 	/* added from cuberevo3000hd so fix it please */
 -	key_music = configfile.getInt32("key_music", /*KEY_MUSIC*/0x3F );
 -	key_picture = configfile.getInt32("key_picture", /*KEY_PICTURE*/ 0x169 );
--			
++	key_music = configfileTuxTxt.getInt32("key_music", /*KEY_MUSIC*/0x3F );
++	key_picture = configfileTuxTxt.getInt32("key_picture", /*KEY_PICTURE*/ 0x169 );
+ 			
 -	key_repeat = configfile.getInt32("key_repeat", /*KEY_REPEAT*/0x81);
 -	key_slow = configfile.getInt32("key_slow", /*KEY_SLOW*/0x199 );
--			
++	key_repeat = configfileTuxTxt.getInt32("key_repeat", /*KEY_REPEAT*/0x81);
++	key_slow = configfileTuxTxt.getInt32("key_slow", /*KEY_SLOW*/0x199 );
+ 			
 -	key_dvbsub = configfile.getInt32("key_dvbsub", KEY_DVBSUB);
--
++	key_dvbsub = configfileTuxTxt.getInt32("key_dvbsub", KEY_DVBSUB);
+ 
 -	key_pip = configfile.getInt32("key_pip", KEY_PIP);
 -	key_pippos = configfile.getInt32("key_pippos", /*KEY_PIPPOS*/0x175);
 -	key_pipswap = configfile.getInt32("key_pipswap", /*KEY_PIPSWAP*/0X9E);
 -	key_pipsubch = configfile.getInt32("key_pipsubch", /*KEY_PIPSUBCH*/0x188);
--
++	key_pip = configfileTuxTxt.getInt32("key_pip", KEY_PIP);
++	key_pippos = configfileTuxTxt.getInt32("key_pippos", /*KEY_PIPPOS*/0x175);
++	key_pipswap = configfileTuxTxt.getInt32("key_pipswap", /*KEY_PIPSWAP*/0X9E);
++	key_pipsubch = configfileTuxTxt.getInt32("key_pipsubch", /*KEY_PIPSUBCH*/0x188);
+ 
 -	key_net = configfile.getInt32("key_net", KEY_NET);
--			
++	key_net = configfileTuxTxt.getInt32("key_net", KEY_NET);
+ 			
 -	key_bookmark = configfile.getInt32("key_bookmark", /*KEY_BOOKMARK*/0x9C);
--
--#if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
++	key_bookmark = configfileTuxTxt.getInt32("key_bookmark", /*KEY_BOOKMARK*/0x9C);
+ 
+ #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_multifeed = configfile.getInt32("key_multifeed", /*KEY_MULTIFEED*/0x42);
--#else
++	key_multifeed = configfileTuxTxt.getInt32("key_multifeed", /*KEY_MULTIFEED*/0x42);
+ #else
 -	key_multifeed = configfile.getInt32("key_multifeed", 0x165);
--#endif
--				
++	key_multifeed = configfileTuxTxt.getInt32("key_multifeed", 0x165);
+ #endif
+ 				
 -	key_f1 = configfile.getInt32("key_f1", 0x3B);
 -	key_f2 = configfile.getInt32("key_f2", 0x3C);
 -	key_f3 = configfile.getInt32("key_f3", 0x3D);
 -	key_f4 = configfile.getInt32("key_f4", 0x3E);
--	
++	key_f1 = configfileTuxTxt.getInt32("key_f1", 0x3B);
++	key_f2 = configfileTuxTxt.getInt32("key_f2", 0x3C);
++	key_f3 = configfileTuxTxt.getInt32("key_f3", 0x3D);
++	key_f4 = configfileTuxTxt.getInt32("key_f4", 0x3E);
+ 	
 -	//key_aspect = configfile.getInt32("key_aspect", 0x40);	
--			
++	//key_aspect = configfileTuxTxt.getInt32("key_aspect", 0x40);	
+ 			
 -	key_vfdup = configfile.getInt32("key_vfdup", VFD_UP);
 -	key_vfddown = configfile.getInt32("key_vfddown", VFD_DOWN);
 -	key_vfdright = configfile.getInt32("key_vfdright", VFD_RIGHT);
@@ -4820,228 +3278,18 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_vfdmenu = configfile.getInt32("key_vfdmenu", VFD_MENU);
 -	key_vfdexit = configfile.getInt32("key_vfdexit", VFD_EXIT);
 -	key_vfdok = configfile.getInt32("key_vfdok", VFD_OK);
--	
--	return true;
--}
--
--unsigned short translate(int code)
--{
--	/* common */
--	if (code == key_standby) RCCode = RC_STANDBY;
--	else if (code == key_spkr) RCCode = RC_MUTE;
--			
--	//else if (code == key_mode) return RC_;
--	//else if (code == key_net) return RC_net;
--			
--			
--	//else if (code == key_page_up) return RC_page_up;
--	//else if (code == key_page_down) return RC_page_down;
--	else if (code == key_plus) RCCode = RC_PLUS;
--	else if (code == key_minus) RCCode = RC_MINUS;
--	
--	else if (code == key_setup) RCCode = RC_DBOX;
--	else if (code == key_left) RCCode = RC_LEFT;
--	else if (code == key_up) RCCode = RC_UP;
--	else if (code == key_ok) RCCode = RC_OK;
--	else if (code == key_down) RCCode = RC_DOWN;
--	else if (code == key_right) RCCode = RC_RIGHT;
--	else if (code == key_home) RCCode = RC_HOME;
--			
--	/* special */
--	//else if (code == key_recall) return RC_recall;
--	else if (code == key_info) RCCode = RC_HELP;
--	//else if (code == key_bookmark) return RC_bookmark;
--	
--	/* colored */
--	else if (code == key_red) RCCode = RC_RED;
--	else if (code == key_green) RCCode = RC_GREEN;
--	else if (code == key_yellow) RCCode = RC_YELLOW;
--	else if (code == key_blue) RCCode = RC_BLUE;
--	
--	/* alphanumeric */
--	else if (code == key_1) RCCode = RC_1;
--	else if (code == key_2) RCCode = RC_2;
--	else if (code == key_3) RCCode = RC_3;
--	else if (code == key_4) RCCode = RC_4;
--	else if (code == key_5) RCCode = RC_5;
--	else if (code == key_6) RCCode = RC_6;
--	else if (code == key_7) RCCode = RC_7;
--	else if (code == key_8) RCCode = RC_8;
--	else if (code == key_9) RCCode = RC_9;
--	else if (code == key_0) RCCode = RC_0;
--	
--	/* media */
--	//else if (code == key_video) return RC_video;
--	//else if (code == key_music) return RC_music;
--	//else if (code == key_picture) return RC_picture;		
--	//else if (code == key_record) return RC_record;
--	//else if (code == key_rewind) return RC_rewind;
--	//else if (code == key_play) return RC_play;
--	//else if (code == key_forward) return RC_forward;
--	//else if (code == key_repeat) return RC_repeat;
--	//else if (code == key_slow) return RC_slow;
--	//else if (code == key_stop) return RC_stop;
--	//else if (code == key_pause) return RC_pause;
--	//else if (code == key_audio) return RC_audio;
--	//else if (code == key_next) return RC_next;
--	//else if (code == key_prev) return RC_prev;
--	//else if (code == key_timeshift) return RC_timeshift;
--	
--	/* dvb */
--	//else if (code == key_sat) return RC_sat;
--	//else if (code == key_favorites) return RC_favorites;
--	//else if (code == key_multifeed) return RC_multifeed;
--	//else if (code == key_dvbsub) return RC_dvbsub;
--	else if (code == key_text) RCCode = RC_TEXT;
--	//else if (code == key_epg) return RC_epg;
--	//else if (code == key_pip) return RC_pip;
--	//else if (code == key_pippos) return RC_pippos;
--	//else if (code == key_pipswap) return RC_pipswap;
--	//else if (code == key_pipsubch) return RC_pipsubch;
--	
--	//else if (code == key_aspect) return RC_aspect;
--	
--	/* functions */
--	//else if (code == key_f1) return RC_f1;
--	//else if (code == key_f2) return RC_f2;
--	//else if (code == key_f3) return RC_f3;
--	//else if (code == key_f4) return RC_f4;
--	
--	/* frontpanel */
--	//else if (code == key_vfdpower) return RC_standby;
--	//else if (code == key_vfdmenu) return RC_setup;
--	//else if (code == key_vfdexit) return RC_home;
--	//else if (code == key_vfdok) return RC_ok;
--	//else if (code == key_vfdleft) return RC_left;
--	//else if (code == key_vfdright) return RC_right;
--	//else if (code == key_vfddown) return RC_down;
--	//else if (code == key_vfdup) return RC_up;	
--	else RCCode = KEY_RESERVED;
--	
--	return RCCode;
--}
--
--#define NEUTRINO_KEYMAP_FILE		CONFIGDIR "/keymap.conf"	
- 
- void getCurrentPIGSettings(int* left, int* top, int* width, int* height);
- void getCurrentASPECTSettings();
-@@ -2101,11 +1689,7 @@
- 	//main loop
- #ifdef FB_BLIT	
- 	CFrameBuffer::getInstance()->blit();
--#endif
--
--	//load keymap
--	if( !loadKeyMap(NEUTRINO_KEYMAP_FILE) )
--		printf("CRCInput::CRCInput: Loading of keymap file failed. Using defaults.\n");
-+#endif	
- 
- 	do {
- 		//update page or timestring and lcd
-@@ -6928,49 +6512,46 @@
- 			if (ev.code != rc_last_key)
- 			{
- 				rc_last_key = ev.code;
--				
--				/*
- 				switch (ev.code)
- 				{
--					case key_up:		RCCode = RC_UP;		break;
--					case key_down:		RCCode = RC_DOWN;	break;
--					case key_left:		RCCode = RC_LEFT;	break;
--					case key_right:		RCCode = RC_RIGHT;	break;
--					case key_ok:		RCCode = RC_OK;		break;
-+					case KEY_UP:		RCCode = RC_UP;		break;
-+					case KEY_DOWN:		RCCode = RC_DOWN;	break;
-+					case KEY_LEFT:		RCCode = RC_LEFT;	break;
-+					case KEY_RIGHT:		RCCode = RC_RIGHT;	break;
-+					case KEY_OK:		RCCode = RC_OK;		break;
- 
- 					// common
--					case key_0:		RCCode = RC_0; 		break;
--					case key_1:		RCCode = RC_1;		break;
--					case key_2:		RCCode = RC_2;		break;
--					case key_3:		RCCode = RC_3;		break;
--					case key_4:		RCCode = RC_4;		break;
--					case key_5:		RCCode = RC_5;		break;
--					case key_6:		RCCode = RC_6;		break;
--					case key_7:		RCCode = RC_7;		break;
--					case key_8:		RCCode = RC_8;		break;
--					case key_9:		RCCode = RC_9;		break;
-+					case KEY_0:		RCCode = RC_0; 		break;
-+					case KEY_1:		RCCode = RC_1;		break;
-+					case KEY_2:		RCCode = RC_2;		break;
-+					case KEY_3:		RCCode = RC_3;		break;
-+					case KEY_4:		RCCode = RC_4;		break;
-+					case KEY_5:		RCCode = RC_5;		break;
-+					case KEY_6:		RCCode = RC_6;		break;
-+					case KEY_7:		RCCode = RC_7;		break;
-+					case KEY_8:		RCCode = RC_8;		break;
-+					case KEY_9:		RCCode = RC_9;		break;
- 					
--					case key_red:		RCCode = RC_RED;	break;
--					case key_green:		RCCode = RC_GREEN;	break;
--					case key_yellow:	RCCode = RC_YELLOW;	break;
--					case key_blue:		RCCode = RC_BLUE;	break;
--
--					case key_plus:	RCCode = RC_PLUS;	break;
--					case key_minus:	RCCode = RC_MINUS;	break;
--					case key_spkr:		RCCode = RC_MUTE;	break;
--					case key_text:		RCCode = RC_TEXT;	break;
-+					case KEY_RED:		RCCode = RC_RED;	break;
-+					case KEY_GREEN:		RCCode = RC_GREEN;	break;
-+					case KEY_YELLOW:	RCCode = RC_YELLOW;	break;
-+					case KEY_BLUE:		RCCode = RC_BLUE;	break;
-+
-+					case KEY_VOLUMEUP:	RCCode = RC_PLUS;	break;
-+					case KEY_VOLUMEDOWN:	RCCode = RC_MINUS;	break;
-+					case KEY_MUTE:		RCCode = RC_MUTE;	break;
-+					case KEY_TEXT:		RCCode = RC_TEXT;	break;
- 				
--					case key_info:		RCCode = RC_HELP;	break;
--					case key_setup:		RCCode = RC_DBOX;	break;
--
--					case key_home:		RCCode = RC_HOME;	break;					
--					case key_standby:		RCCode = RC_STANDBY;	break;
-+					case KEY_INFO:		RCCode = RC_HELP;	break;
-+					case KEY_MENU:		RCCode = RC_DBOX;	break;
-+#if defined (PLATFORM_GIGABLUE)
-+					case 0xAE:		RCCode = RC_HOME;	break;
-+#else
-+					case KEY_HOME:		RCCode = RC_HOME;	break;
-+#endif					
-+					case KEY_POWER:		RCCode = RC_STANDBY;	break;
- 				}
--				*/
--				
--				translate(ev.code);
--				
--				printf("[tuxtxt] new key, code 0x%X\n", RCCode);
-+				printf("[tuxtxt] new key, code 0x%X (%d)\n", RCCode, KEY_HOME);
- 				return 1;
- 			}
- 		}
-
---- neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-10-31 15:14:11.740731878 +0100
-+++ neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-10-31 15:19:30.618313102 +0100
-@@ -618,7 +618,7 @@
- 	}
++	key_vfdup = configfileTuxTxt.getInt32("key_vfdup", VFD_UP);
++	key_vfddown = configfileTuxTxt.getInt32("key_vfddown", VFD_DOWN);
++	key_vfdright = configfileTuxTxt.getInt32("key_vfdright", VFD_RIGHT);
++	key_vfdleft = configfileTuxTxt.getInt32("key_vfdleft", VFD_LEFT);
++	key_vfdpower = configfileTuxTxt.getInt32("key_vfdpower", VFD_POWER);
++	key_vfdmenu = configfileTuxTxt.getInt32("key_vfdmenu", VFD_MENU);
++	key_vfdexit = configfileTuxTxt.getInt32("key_vfdexit", VFD_EXIT);
++	key_vfdok = configfileTuxTxt.getInt32("key_vfdok", VFD_OK);
  	
- 	// set hdmi out on/off
--#ifdef __sh__	
-+/*#ifdef __sh__	
- 	int fd_hdmi  = open("/dev/fb0",   O_RDWR);
- 
- 	struct stmfbio_output_configuration outputConfig = {0};
-@@ -646,7 +646,7 @@
- 		if(ioctl(fd_hdmi, STMFBIO_SET_OUTPUT_CONFIG, &outputConfig)<0)
- 			printf("setting output configuration failed\n");
- 	}
--#endif	
-+#endif	 */
+ 	return true;
  }
- 
- /* Pig */
+
 
 
 --- neutrino-hd2-exp/src/nhttpd/tuxboxapi/controlapi.cpp	2012-10-31 15:14:12.864737451 +0100
@@ -5072,3 +3320,100 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		return;
  	}
  	if (rc_send(evd, sendcode, KEY_PRESSED) < 0) {
+
+
+--- neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:12:51.852248642 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:10:38.555587666 +0100
+@@ -20,10 +20,15 @@
+ 
+ libcoolstream_a_SOURCES = audio_cs.cpp dmx_cs.cpp playback_cs.cpp record_cs.cpp \
+ 	video_cs.cpp
+-
++if BOXTYPE_SPARK
++# no dvb-ci
++else !BOXTYPE_SPARK
++if BOXTYPE_SPARK7162
++# no dvb-ci
++else !BOXTYPE_SPARK7162
+ # dvb-ci
+ libcoolstream_a_SOURCES += dvb-ci.cpp \
+ 	dvbci_session.cpp dvbci_mmi.cpp dvbci_camgr.cpp dvbci_appmgr.cpp dvbci_datetimemgr.cpp dvbci_resmgr.cpp
+-
+-
++endif
++endif
+
+
+--- neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:12:37.488177423 +0100
++++ neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:10:47.007629583 +0100
+@@ -55,7 +55,15 @@
+ libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
+ endif
+ 
++if BOXTYPE_SPARK
++# no dvb-ci
++else !BOXTYPE_SPARK
++if BOXTYPE_SPARK7162
++# no dvb-ci
++else !BOXTYPE_SPARK7162
+ libneutrino_gui2_a_SOURCES += cam_menu.cpp
++endif
++endif
+ 
+ libtimerlist_a_SOURCES = timerlist.cpp
+ 
+
+--- neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-11-01 19:17:23.861597478 +0100
++++ neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-11-01 19:16:17.329267563 +0100
+@@ -73,10 +73,10 @@
+ /* globals */
+ int zapit_ready;
+ int abort_zapit;
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ /* ci */
+ cDvbCi * ci; //FIXME: boxes without ci cam
+-
++#endif
+ /* audio conf */
+ #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
+ map<t_channel_id, audio_map_set_t> audio_map;
+@@ -624,9 +624,10 @@
+ 	
+ 	// cam
+ 	cam0->setCaPmt(thischannel, thischannel->getCaPmt());
+-	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
+ 	// ci cam //FIXME: boxes without ci cam
+ 	ci->SendCaPMT(thischannel->getCaPmt());	
++#endif
+ }
+ 
+ // save pids
+@@ -972,10 +973,10 @@
+ 	
+ 	// cam
+ 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), frontend->fenumber );
+-	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
+ 	// ci cam //FIXME: boxes without ci cam
+ 	ci->SendCaPMT(rec_channel->getCaPmt());	
+-		
++#endif		
+ 
+ 	return 0;
+ }
+@@ -3408,11 +3409,11 @@
+ 	// open audiodecoder
+ 	if( audioDecoder->Open() < 0)
+ 		return -1;
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	//CI init
+ 	//FIXME: platform without ci cam
+ 	ci = cDvbCi::getInstance();
+-
++#endif
+ 	//dvbsub
+ 	dvbsub_init();
+ 	
