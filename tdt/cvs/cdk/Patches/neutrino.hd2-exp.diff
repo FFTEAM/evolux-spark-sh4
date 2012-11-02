@@ -3417,3 +3417,21 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//dvbsub
  	dvbsub_init();
  	
+
+--- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-11-02 01:07:46.913817024 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-11-02 00:57:52.310868565 +0100
+@@ -92,10 +92,10 @@
+ 	dprintf(DEBUG_INFO, "%s last_source(%d) source(%d) last_index(%d) index(%d)\n", __FUNCTION__, last_source, feindex, last_index, demux_num);
+ 	
+ 	// close device
+-	//if (demux_fd > -1) 
+-	//{
+-	//	close(demux_fd);
+-	//}
++	if (demux_fd > -1) 
++	{
++		close(demux_fd);
++	}
+ 	
+ 	char devname[256];
+ 
