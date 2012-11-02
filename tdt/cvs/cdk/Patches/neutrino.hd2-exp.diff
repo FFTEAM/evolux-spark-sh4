@@ -77,20 +77,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  class CMenuForwarderItemMenuIcon : public CMenuItem
 
---- neutrino-hd2-exp/src/system/settings.h	2012-10-21 16:15:22.581225295 +0200
-+++ neutrino-hd2-exp/src/system/settings.h	2012-10-21 15:31:04.140042794 +0200
-@@ -357,8 +357,10 @@
-                 ITEM_VTXT = 15,
-                 ITEM_GAME = 16,
-                 ITEM_OPKG = 17,
-+                ITEM_EMU_RESTART = 18,
-+                ITEM_TUNER_RESTART = 19,
- #if ENABLE_GRAPHLCD                
--                ITEM_GLCD = 18,
-+                ITEM_GLCD = 20,
- #endif 
-                 ITEM_MAX   // MUST be always the last in the list
-         }USER_ITEM;
 
 --- neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 16:17:29.633855316 +0200
 +++ neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 15:40:23.854818280 +0200
@@ -2649,7 +2635,39 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -1924,10 +1960,12 @@
+@@ -455,6 +491,23 @@
+ 1080p50
+ PC
+ */
++#if defined (PLATFORM_SPARK7162)
++#define VIDEOMENU_VIDEOMODE_OPTION_COUNT 11
++const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
++{
++	{ VIDEO_STD_PAL, NONEXISTANT_LOCALE, "PAL"		},
++	{ VIDEO_STD_576P50, NONEXISTANT_LOCALE, "576p 50Hz"	},
++	{ VIDEO_STD_576I50, NONEXISTANT_LOCALE, "576i 50Hz"	},
++	{ VIDEO_STD_720P60, NONEXISTANT_LOCALE, "720p 60Hz"	},
++	{ VIDEO_STD_1080I50, NONEXISTANT_LOCALE, "1080i 50Hz"	},
++	{ VIDEO_STD_1080I60, NONEXISTANT_LOCALE, "1080i 60Hz"	},
++	{ VIDEO_STD_1080P24, NONEXISTANT_LOCALE, "1080p 24Hz"	},
++	{ VIDEO_STD_1080P25, NONEXISTANT_LOCALE, "1080p 25Hz"	},
++	{ VIDEO_STD_1080P30, NONEXISTANT_LOCALE, "1080p 30Hz"	},
++	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
++	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
++};
++#else
+ #define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
+ const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
+ {
+@@ -471,6 +524,7 @@
+ 	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
+ 	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
+ };
++#endif
+ #else
+ // giga
+ /*
+@@ -1924,10 +1978,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -2663,32 +2681,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
-@@ -2614,7 +2652,24 @@
- 					menu->addItem(menu_item, false);
-                                 }
-                                 break;
--				
-+
-+			case SNeutrinoSettings::ITEM_EMU_RESTART:
-+				menu_items++;
-+				menu_prev = SNeutrinoSettings::ITEM_EMU_RESTART;
-+                                keyhelper.get(&key,&icon);
-+				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_EMU_RESTART, true, NULL, EmuMenu, "reset-usermenu", key, icon);
-+				menu->addItem(menu_item, 0);
-+
-+                                break;
-+			case SNeutrinoSettings::ITEM_TUNER_RESTART:
-+				menu_items++;
-+				menu_prev = SNeutrinoSettings::ITEM_TUNER_RESTART;
-+                                keyhelper.get(&key,&icon);
-+				menu_item = new CMenuForwarder(LOCALE_EXTRAMENU_TUNERRESET_RESTART, true, NULL, TunerMenu, "reset-usermenu", key, icon);
-+				menu->addItem(menu_item, 0);
-+
-+                                break;
-+
- 			// games
- 			case SNeutrinoSettings::ITEM_GAME:
- 				{
 
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
@@ -2991,7 +2983,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:14:12.164733979 +0100
 +++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:15:41.417176564 +0100
-@@ -96,7 +96,7 @@
+@@ -91,7 +91,7 @@
  #define VFD_EXIT	0x0b7
  #define VFD_OK		0x058
  
@@ -3000,7 +2992,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  unsigned short key_0;
  unsigned short key_1;
-@@ -200,150 +200,150 @@
+@@ -195,148 +195,148 @@
  	printf("CRCInput::loadKeymap:\n");
  	
  	/* if keymap.conf not exists load default */
@@ -3103,9 +3095,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
 -	key_info = configfile.getInt32("key_info", 0x166);
 +	key_info = configfileTuxTxt.getInt32("key_info", 0x166);
- //#elif defined (PLATFORM_DUCKBOX) || defined (PLATFORM_SPARK7162)
--//	key_info = configfile.getInt32("key_info", 0x8A);
-+//	key_info = configfileTuxTxt.getInt32("key_info", 0x8A);
  #else
 -	key_info = configfile.getInt32("key_info", KEY_INFO);
 +	key_info = configfileTuxTxt.getInt32("key_info", KEY_INFO);
@@ -3366,6 +3355,134 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//dvbsub
  	dvbsub_init();
  	
+
+--- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
++++ neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:08.156751073 +0100
+@@ -273,21 +273,31 @@
+ 			}
+ 			continue;
+ 		}
+-                else if (!strncmp(argv[i], "--pal", 5))
+-                {
+-                        set_pal = true;
+-                        continue;
+-                }
+-        
+-                else if (!strncmp(argv[i], "--1080", 6))
+-                {
+-                        set_hd = VIDEO_STD_1080I50;
+-                        continue;
+-                }
+-                else if (!strncmp(argv[i], "--720", 5))
+-                {
+-                        set_hd = VIDEO_STD_720P50;
+-                        continue;
++		else if (!strncmp(argv[i], "--pal", 4))
++		{
++			set_pal = true;
++			continue;
++		}
++
++		else if (!strncmp(argv[i], "--1080", 6))
++		{
++			set_hd = 8;
++			continue;
++		}
++		else if (!strncmp(argv[i], "--1083", 6))
++		{
++			set_hd = 9;
++			continue;
++		}
++		else if (!strncmp(argv[i], "--1082", 6))
++		{
++			set_hd = 10;
++			continue;
++		}
++		else if (!strncmp(argv[i], "--720", 5))
++		{
++			set_hd = 7;
++			continue;
+ 		}
+ 		else if (!strncmp(argv[i], "-unmute", 7))
+ 		{
+
+
+--- neutrino-hd2-exp/lib/libcoolstream/video_cs.h	2012-11-02 15:23:34.230367978 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/video_cs.h	2012-11-02 15:23:05.550225757 +0100
+@@ -70,6 +70,21 @@
+ 1080p30 
+ PC
+ */
++#if defined (PLATFORM_SPARK7162)
++enum {
++	VIDEO_STD_PAL,
++	VIDEO_STD_576P50,
++	VIDEO_STD_576I50,
++	VIDEO_STD_720P60,
++	VIDEO_STD_1080I50,
++	VIDEO_STD_1080I60,
++	VIDEO_STD_1080P24,
++	VIDEO_STD_1080P25,
++	VIDEO_STD_1080P30,
++	VIDEO_STD_1080P50,
++	VIDEO_STD_PC
++};
++#else
+ enum {
+ 	VIDEO_STD_PAL,
+ 	VIDEO_STD_1080I50,
+@@ -84,6 +99,7 @@
+ 	VIDEO_STD_1080P50,
+ 	VIDEO_STD_PC
+ };
++#endif
+ #else
+ // giga
+ /*
+
+
+--- neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:22:02.981915499 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:21:49.125846789 +0100
+@@ -341,7 +341,7 @@
+ /*
+ pal 
+ 1080i50 
+-720p50 
++720p50 "on Spark7162(Triplex) we must del them otherwise it won't boot!"
+ 576p50 
+ 576i50 
+ 1080i60 
+@@ -352,6 +352,21 @@
+ 1080p50
+ PC
+ */
++#if defined (PLATFORM_SPARK7162)
++	const char *aVideoSystems[][2] = {
++		{"VIDEO_STD_PAL", "pal"},
++		{"VIDEO_STD_576P", "576p50"},
++		{"VIDEO_STD_576I", "576i50"},
++		{"VIDEO_STD_720P60", "720p60"},
++		{"VIDEO_STD_1080I50", "1080i50"},
++		{"VIDEO_STD_1080I60", "1080i60"},
++		{"VIDEO_STD_1080P24", "1080p24"},
++		{"VIDEO_STD_1080P25", "1080p25"},
++		{"VIDEO_STD_1080P30", "1080p30"},
++		{"VIDEO_STD_1080P50", "1080p50"},
++		{"VIDEO_STD_PC", "PC"},
++	};
++#else
+ 	const char *aVideoSystems[][2] = {
+ 		{"VIDEO_STD_PAL", "pal"},
+ 		{"VIDEO_STD_1080I50", "1080i50"},
+@@ -366,6 +381,7 @@
+ 		{"VIDEO_STD_1080P50", "1080p50"},
+ 		{"VIDEO_STD_PC", "PC"},
+ 	};
++#endif
+ #else
+ // giga
+ /*
+
 
 --- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-11-02 01:07:46.913817024 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-11-02 00:57:52.310868565 +0100
