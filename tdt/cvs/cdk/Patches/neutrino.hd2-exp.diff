@@ -2783,67 +2783,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// handle Keys
  	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
  	{
-@@ -4202,8 +4206,7 @@
- 						delete frameBuffer;
- 					
- 					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
--					
--					exit(retcode);
-+					exit(1);
- 				}
- 			}
- 		} 
-@@ -4219,7 +4222,7 @@
- 
- 			dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
- 
--			exit(0);
-+			exit(1);
- 		}
- 	}
- }
-@@ -4908,7 +4911,7 @@
- 		FILE *f = fopen("/tmp/.reboot", "w");
- 		fclose(f);
- 
--		ExitRun();
-+		ExitRun(2);
- 
- 		unlink("/tmp/.reboot");
- 		returnval = menu_return::RETURN_NONE;
-@@ -5324,8 +5327,8 @@
- 	dvbsub_close();
- 
- 	// stop txt
--	tuxtxt_stop();
--	tuxtxt_close();
-+	//tuxtxt_stop();
-+	//tuxtxt_close();
- 	
- #ifdef ENABLE_GRAPHLCD
- 	nGLCD::Exit();
-@@ -5353,7 +5356,7 @@
- 	pthread_join(sections_thread, NULL);
- 	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
- 
--	tuxtx_stop_subtitle();
-+	//tuxtx_stop_subtitle();
- 
- 	// zapit stop	
- 	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
-@@ -5362,10 +5365,10 @@
- 	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
- 
- 	// clear vfd
--	CVFD::getInstance()->Clear();
-+	//CVFD::getInstance()->Clear();
- 
- 	// movieplayerGui
--	delete moviePlayerGui;
-+	//delete moviePlayerGui;
- }
- 
- // load color
+
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
 +++ neutrino-hd2-exp/src/neutrino.h	2012-10-21 15:20:26.180879315 +0200
