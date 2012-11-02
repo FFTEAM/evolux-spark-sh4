@@ -2783,6 +2783,15 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// handle Keys
  	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
  	{
+@@ -4908,7 +4912,7 @@
+ 		FILE *f = fopen("/tmp/.reboot", "w");
+ 		fclose(f);
+ 
+-		ExitRun();
++		ExitRun(2);
+ 
+ 		unlink("/tmp/.reboot");
+ 		returnval = menu_return::RETURN_NONE;
 
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
