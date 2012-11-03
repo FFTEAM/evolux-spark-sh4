@@ -404,7 +404,25 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  miscsettings.bootinfo Infos beim Booten anzeigen
  miscsettings.bootmenu Bootmenü anzeigen
  miscsettings.channellist Kanalliste
-@@ -1544,4 +1546,100 @@
+@@ -809,7 +810,7 @@
+ moviebrowser.foot_filter Filter:
+ moviebrowser.foot_play Film starten
+ moviebrowser.foot_sort Sortieren:
+-moviebrowser.head Moviebrowser
++moviebrowser.head Media Archiv
+ moviebrowser.head_filter Filme nach Kategorie filtern:
+ moviebrowser.head_playlist Zuletzt gesehen:
+ moviebrowser.head_recordlist Zuletzt aufgenommen:
+@@ -903,7 +904,7 @@
+ movieplayer.defplugin Start-Plugin
+ movieplayer.vlcplayback Vlc Player
+ movieplayer.dvdplayback DVD
+-movieplayer.fileplayback Media Archiv
++movieplayer.fileplayback MoviePlayer
+ movieplayer.showtshelp Hilfe
+ movieplayer.goto Springe zu ...
+ movieplayer.goto.h1 = -> absoluter Sprung
+@@ -1545,4 +1546,100 @@
  
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
