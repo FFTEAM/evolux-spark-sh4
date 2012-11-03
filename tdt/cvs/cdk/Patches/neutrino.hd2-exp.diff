@@ -520,7 +520,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,1667 @@
+@@ -0,0 +1,1677 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2088,25 +2088,35 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#else
 +	safe_system("oVersion=`wget -q -O - http://is.gd/reTrI0 | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
-+		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
++		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable;"
++		   "myfree=`df | grep -m1 root | cut -b45-51`; if [ \"$myfree\" -gt 8000 ]; then touch /tmp/freeok;fi");
 +#endif
 +	if(!access("/tmp/EvoluxUpdatevailable", F_OK)) {
-+		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
-+		CheckUpdateBox->paint();
++		if(!access("/tmp/freeok", F_OK)) {
++			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
++			CheckUpdateBox->paint();
 +#if defined (PLATFORM_SPARK)
-+		safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++			safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
 +#else
-+		safe_system("wget -O - -q http://is.gd/DL3IrU | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++			safe_system("wget -O - -q http://is.gd/DL3IrU | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
 +#endif
-+		unlink("/tmp/EvoluxUpdatevailable");
-+		unlink("/tmp/update.tar.gz");
-+		CheckUpdateBox->hide();
-+		delete CheckUpdateBox;
-+		CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
-+		CheckUpdateBox->paint();
-+		sleep(3);
-+		CheckUpdateBox->hide();
-+		delete CheckUpdateBox;
++			unlink("/tmp/EvoluxUpdatevailable");
++			unlink("/tmp/update.tar.gz");
++			CheckUpdateBox->hide();
++			delete CheckUpdateBox;
++			CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
++			CheckUpdateBox->paint();
++			sleep(3);
++			CheckUpdateBox->hide();
++			delete CheckUpdateBox;
++		}
++		else {
++			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "not enough free mem! less than 8mb)!");
++			CheckUpdateBox->paint();
++			sleep(3);
++			CheckUpdateBox->hide();
++			delete CheckUpdateBox;
++		}
 +	}
 +	else {
 +		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");

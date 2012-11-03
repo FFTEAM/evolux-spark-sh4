@@ -13,6 +13,7 @@ $(DEPDIR)/%misc-tools: driver libstdc++-dev libdvdnav libdvdcss libpng jpeg ffmp
 	$(MAKE) -C $(appsdir)/misc/tools all install DESTDIR=$(prefix)/$*cdkroot \
 	CPPFLAGS="\
 	$(if $(SPARK), -DPLATFORM_SPARK) \
+	$(if $(SPARK7162), -DPLATFORM_SPARK7162) \
 	$(if $(PLAYER131), -DPLAYER131) \
 	$(if $(PLAYER179), -DPLAYER179) \
 	$(if $(PLAYER191), -DPLAYER191) \
