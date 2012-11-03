@@ -124,9 +124,9 @@ int proc_avs_0_volume_write(struct file *file, const char __user *buf,
 	char 		*page;
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -148,9 +148,9 @@ int proc_avs_0_volume_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
-
+#endif
 		sscanf(myString, "%d", &volume);
 
 #if defined(CUBEREVO) || defined(CUBEREVO_MINI) || defined(CUBEREVO_MINI2) || defined(CUBEREVO_MINI_FTA) || defined(CUBEREVO_250HD) || defined(CUBEREVO_2000HD) || defined(CUBEREVO_9500HD) || defined(TF7700) || defined(UFS912) || defined(UFS922) || defined(HL101) || defined(VIP1_V2) || defined(VIP2_V1) || defined(HOMECAST5101) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(WHITEBOX) || defined(IPBOX9900) || defined(IPBOX99) || defined(IPBOX55) || defined(ADB_BOX)
@@ -235,8 +235,9 @@ int proc_avs_0_volume_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 		int len = 0;
+#ifdef VERY_VERBOSE
 		printk("%s\n", __FUNCTION__);
-
+#endif
 	   len = sprintf(page, "%d\n", current_e2_volume);
 
       return len;
@@ -246,8 +247,9 @@ int proc_avs_0_input_choices_read (char *page, char **start, off_t off, int coun
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	len = sprintf(page, "encoder scart\n");
         return len;
 }
@@ -274,8 +276,9 @@ int proc_avs_0_input_write(struct file *file, const char __user *buf,
 	outputConfig.caps |= STMFBIO_OUTPUT_CAPS_HDMI_CONFIG;
 #endif
 
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -286,9 +289,9 @@ int proc_avs_0_input_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
-
+#endif
 	    	if(!strncmp("encoder", myString, count - 1))
 	    	{
 			avs_command_kernel(SAAIOSSRCSEL, SAA_SRC_ENC);
@@ -341,8 +344,9 @@ int proc_avs_0_input_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	if(current_input == ENCODER)
     		len = sprintf(page, "encoder\n");
   	else
@@ -358,9 +362,9 @@ int proc_avs_0_fb_write(struct file *file, const char __user *buf,
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
 	/* int		result; */
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -371,8 +375,9 @@ int proc_avs_0_fb_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
+#endif
 		kfree(myString);
 		//result = sscanf(page, "%3s %3s %3s %3s %3s", s1, s2, s3, s4, s5);
 	}
@@ -389,8 +394,9 @@ int proc_avs_0_fb_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	len = sprintf(page, "low\n");
 
         return len;
@@ -402,9 +408,9 @@ int proc_avs_0_colorformat_write(struct file *file, const char __user *buf,
 	char 		*page;
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -424,9 +430,9 @@ int proc_avs_0_colorformat_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
-
+#endif
 		sscanf(myString, "%d", &alpha);
 
 //0rgb 1yuv 2422
@@ -555,8 +561,9 @@ int proc_avs_0_colorformat_read (char *page, char **start, off_t off, int count,
 
 	struct stmfbio_output_configuration outputConfig;
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s %d\n", __FUNCTION__, count);
-
+#endif
 	outputConfig.outputid = 1;
 
 	stmfb_get_output_configuration(&outputConfig,info);
@@ -586,8 +593,9 @@ int proc_avs_0_colorformat_choices_read (char *page, char **start, off_t off, in
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	len = sprintf(page, "rgb cvbs svideo yuv hdmi_rgb hdmi_yuv hdmi_422\n");
 
         return len;
@@ -600,9 +608,9 @@ int proc_avs_0_sb_write(struct file *file, const char __user *buf,
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
 	/* int		result; */
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -613,8 +621,9 @@ int proc_avs_0_sb_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
+#endif
 		kfree(myString);
 		//result = sscanf(page, "%3s %3s %3s %3s %3s", s1, s2, s3, s4, s5);
 	}
@@ -631,8 +640,9 @@ int proc_avs_0_sb_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	len = sprintf(page, "auto\n");
 
         return len;
@@ -645,9 +655,9 @@ int proc_avs_0_standby_write(struct file *file, const char __user *buf,
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
 	/* int		result; */
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -658,9 +668,9 @@ int proc_avs_0_standby_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
-
+#endif
 		if (strncmp("on", page, count - 1) == 0)
 		{
                         current_standby = 1;
@@ -687,8 +697,9 @@ int proc_avs_0_standby_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s\n", __FUNCTION__);
-
+#endif
 	if(current_standby == 0)
 		len = sprintf(page, "off\n");
 	if(current_standby == 1)

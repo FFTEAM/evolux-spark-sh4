@@ -412,7 +412,9 @@ static int ix7306_get_status(struct dvb_frontend *fe, u32 *status)
 	}
 
 	if (result[0] & 0x40) {
+#ifdef VERY_VERBOSE
 		printk("%s: Tuner Phase Locked\n", __func__);
+#endif
 		*status = 1;
 	}
 	else
@@ -466,7 +468,9 @@ int ix7306_get_frequency(struct dvb_frontend *fe, u32 *frequency)
 			return err;
 		}
 		*frequency = t_state.frequency;
+#ifdef VERY_VERBOSE
 		printk("%s: Frequency=%d\n", __func__, t_state.frequency);
+#endif
 	}
 	return 0;
 }
@@ -493,7 +497,9 @@ int ix7306_set_frequency(struct dvb_frontend *fe, u32 frequency)
 			return err;
 		}
 	}
+#ifdef VERY_VERBOSE
 	printk("%s: Frequency=%d\n", __func__, t_state.frequency);
+#endif
 	return 0;
 }
 
@@ -526,7 +532,9 @@ int ix7306_get_bandwidth(struct dvb_frontend *fe, u32 *bandwidth)
 		}
 		*bandwidth = t_state.bandwidth;
 	}
+#ifdef VERY_VERBOSE
 	printk("%s: Bandwidth=%d\n", __func__, t_state.bandwidth);
+#endif
 	return 0;
 }
 

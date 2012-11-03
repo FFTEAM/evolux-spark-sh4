@@ -316,9 +316,9 @@ static int three_d_mode_write(struct file *file, const char __user *buf,
 	ssize_t 	ret = -ENOMEM;
 
 	char* myString = kmalloc(count + 1, GFP_KERNEL);
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -328,8 +328,9 @@ static int three_d_mode_write(struct file *file, const char __user *buf,
 
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
+#endif
 
 		if (strncmp("sbs", myString, 3) == 0 || strncmp("sidebyside", myString, 10) == 0)
 		{
@@ -378,9 +379,9 @@ static int wakeup_time_write(struct file *file, const char __user *buf,
 	ssize_t 	ret = -ENOMEM;
 
 	char* myString = kmalloc(count + 1, GFP_KERNEL);
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld - ", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -390,8 +391,9 @@ static int wakeup_time_write(struct file *file, const char __user *buf,
 
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-
+#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
+#endif
 
 		if(wakeup_time != NULL) kfree(wakeup_time);
 		wakeup_time = myString;
@@ -416,37 +418,37 @@ int proc_misc_12V_output_write(struct file *file, const char __user *buf,
 	char 		*page;
 	ssize_t 	ret = -ENOMEM;
     char        *myString;
-
+#ifdef VERY_VERBOSE
 	printk("%s %ld\n", __FUNCTION__, count);
-
+#endif
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
 		ret = -EFAULT;
-		if (copy_from_user(page, buf, count))
+		if (!buf || !count || copy_from_user(page, buf, count))
 			goto out;
 
-        page[count] = 0;
         //printk("%s", page);
 
 	    myString = (char *) kmalloc(count + 1, GFP_KERNEL);
+		if (!myString)
+			goto out;
+
 	    strncpy(myString, page, count);
-	    myString[count] = '\0';
+	    myString[count] = 0;
 
 	    if(!strncmp("on", myString, count))
 		   _12v_isON=1;
-
-        if(!strncmp("off", myString, count))
+        else if(!strncmp("off", myString, count))
 		   _12v_isON=0;
 
 	    kfree(myString);
 
         ret = count;
+out:
+		free_page((unsigned long)page);
 	}
 
-	ret = count;
-out:
-	free_page((unsigned long)page);
 	return ret;
 }
 
@@ -456,8 +458,9 @@ int proc_misc_12V_output_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
+#ifdef VERY_VERBOSE
 	printk("%s %d\n", __FUNCTION__, count);
-
+#endif
 	if(_12v_isON)
 		len = sprintf(page, "on\n");
 	else
@@ -622,7 +625,7 @@ struct ProcStructure_s e2Proc[] =
 	{cProcEntry, "stb/video/plane/psi_contrast"                                     , NULL, NULL, NULL, NULL, "psi_contrast"},
 	{cProcEntry, "stb/video/plane/psi_tint"                                         , NULL, NULL, NULL, NULL, "psi_tint"},
 	{cProcEntry, "stb/video/plane/psi_apply"                                        , NULL, NULL, NULL, NULL, "psi_apply"},
-#if defined(UFS912) || defined(UFS913) || defined(ATEVIO7500)
+#if defined(UFS912) || defined(UFS913) || defined(ATEVIO7500) || defined(SPARK) || defined(SPARK7162)
 	{cProcDir  , "stb/cec"                                                          , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/cec/state_activesource"                                       , NULL, NULL, NULL, NULL, ""},
 	{cProcEntry, "stb/cec/state_standby"                                            , NULL, NULL, NULL, NULL, ""},
@@ -814,9 +817,9 @@ EXPORT_SYMBOL(install_e2_procs);
 int cpp_install_e2_procs(const char *path, read_proc_t *read_func, write_proc_t *write_func, void* instance)
 {
   int i;
-
+#ifdef VERY_VERBOSE
 printk("%s: %s\n", __func__, path);
-
+#endif
   /* find the entry */
   for(i = 0; i < sizeof(e2Proc) / sizeof(e2Proc[0]); i++)
   {
@@ -917,12 +920,14 @@ int cpp_remove_e2_procs(const char *path, read_proc_t *read_func, write_proc_t *
       }
       else
       {
-				e2Proc[i].instance = NULL;
+		e2Proc[i].instance = NULL;
         if(e2Proc[i].read_proc == read_func)
         {
           e2Proc[i].read_proc = NULL;
+#ifdef VERY_VERBOSE
           printk("%s(): removed '%s, %s' (%p, %p)\n",
                  __func__, path, e2Proc[i].name, e2Proc[i].read_proc, read_func);
+#endif
         }
         else
           printk("%s(): different read_procs '%s, %s' (%p, %p)\n",

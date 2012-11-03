@@ -39,6 +39,8 @@
 #include "stv0367ofdm_drv.h"
 #include "d0367_ter.h"
 
+extern int debug_fe7162;
+#define _DEBUG if (debug_fe7162)
 
 //IOARCH_HandleData_t IOARCH_Handle[TUNER_IOARCH_MAX_HANDLES];
 
@@ -529,11 +531,13 @@ YW_ErrorType_T  demod_d0367ter_Identify(IOARCH_Handle_t   IOHandle, U8  ucID, U8
     //if (TUNER_IOARCH_ReadWrite(IOHandle, TUNER_IO_SA_READ, R367_ID, pucActualID, 1, 50) == YW_NO_ERROR)
     if (YW_NO_ERROR == YW_NO_ERROR)
     {
+_DEBUG
         printk("demod_d0367ter_Identify pucActualID = 0x%x\n", *pucActualID);//question
     	return YW_NO_ERROR;
     }
     else
     {
+_DEBUG
         printk("demod_d0367ter_Identify YWHAL_ERROR_UNKNOWN_DEVICE \n");//question
     	return YWHAL_ERROR_UNKNOWN_DEVICE;
     }
