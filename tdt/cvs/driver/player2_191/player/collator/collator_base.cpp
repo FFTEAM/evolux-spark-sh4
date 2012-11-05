@@ -591,7 +591,6 @@ CollatorStatus_t   Collator_Base_c::AccumulateData(
       report( severity_error, "Collator_Base_c::AccumulateData - Buffer overflow. (%d > %d)\n", (AccumulatedDataSize + Length) , MaximumCodedFrameSize);
       return CollatorBufferOverflow;
     }
-
     memcpy( BufferBase+AccumulatedDataSize, Data, Length );
     AccumulatedDataSize += Length;
     return CollatorNoError;
