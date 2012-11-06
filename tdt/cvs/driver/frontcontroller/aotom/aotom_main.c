@@ -103,6 +103,8 @@ static struct semaphore 	   write_sem;
 static struct semaphore 	   receive_sem;
 static struct semaphore 	   draw_thread_sem;
 
+extern YWPANEL_Version_t panel_version;
+
 unsigned char ASCII[48][2] =
 {
 	{0xF1, 0x38},	//A
@@ -212,10 +214,15 @@ static int draw_thread(void *arg)
 {
   struct vfd_ioctl_data *data = (struct vfd_ioctl_data *) arg;
   char buf[sizeof(data->data) + 2 * DISPLAYWIDTH_MAX];
+  char buf2[sizeof(data->data) + 2 * DISPLAYWIDTH_MAX];
   int len = data->length;
   int off = 0;
+  int saved = 0;
 
-  if (len > YWPANEL_width) {
+  if (panel_version.DisplayInfo == YWPANEL_FP_DISPTYPE_LED && len > 2 && data->data[2] == '.')
+	saved = 1;
+
+  if (len - saved > YWPANEL_width) {
   	memset(buf, ' ', sizeof(buf));
 	off = YWPANEL_width - 1;
   	memcpy(buf + off, data->data, len);
@@ -228,16 +235,24 @@ static int draw_thread(void *arg)
 
   draw_thread_stop = 0;
 
-  if(len > YWPANEL_width) {
+  if (saved) {
+	int i;
+	for (i = 0; i < len; i++)
+		buf2[i] = (buf[i] == '.') ? ' ' : buf[i];
+	buf2[i] = 0;
+  }
+
+  if(len - saved > YWPANEL_width) {
+    char *b = saved ? buf2 : buf;
     int pos;
     for(pos = 0; pos < len; pos++) {
-       int i;
-       if(kthread_should_stop()) {
+	int i;
+	if(kthread_should_stop()) {
     	   draw_thread_stop = 1;
     	   return 0;
-       }
+	}
 
-       YWPANEL_VFD_ShowString(buf + pos);
+	YWPANEL_VFD_ShowString(b + pos);
 
 	// sleep 200 ms
 	for (i = 0; i < 5; i++) {
@@ -375,9 +390,7 @@ int aotomSetTime(char* time)
 	dprintk(5, "%s time: %02d:%02d\n", __func__, time[2], time[3]);
 
 	res = VFD_Show_Time(time[2], time[3]);
-#if defined(SPARK) || defined(SPARK7162)
 	YWPANEL_FP_ControlTimer(true);
-#endif
 	dprintk(5, "%s <\n", __func__);
 	return res;
 }
@@ -564,7 +577,6 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		mode = aotom_data.u.mode.compat;
 		break;
 	case VFDSETLED:
-#if defined(SPARK) || defined(SPARK7162)
 		if (aotom_data.u.led.led_nr > -1 && aotom_data.u.led.led_nr < LED_MAX) {
 			switch (aotom_data.u.led.on) {
 			case LOG_OFF:
@@ -574,9 +586,9 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 				break;
 			default: // toggle (for aotom_data.u.led.on * 10) ms
 				flashLED(aotom_data.u.led.led_nr, aotom_data.u.led.on * 10);
+				res = 0;
 			}
 		}
-#endif
 		break;
 	case VFDBRIGHTNESS:
 		if (aotom_data.u.brightness.level < 0)
@@ -586,46 +598,41 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		res = YWPANEL_VFD_SetBrightness(aotom_data.u.brightness.level);
 		break;
 	case VFDICONDISPLAYONOFF:
-	{
-#if defined(SPARK)
-		switch (aotom_data.u.icon.icon_nr) {
-		case 0:
-			res = YWPANEL_VFD_SetLed(LED_RED, aotom_data.u.icon.on);
-			led_state[LED_RED].state = aotom_data.u.icon.on;
-			break;
-		case 35:
-			res = YWPANEL_VFD_SetLed(LED_GREEN, aotom_data.u.icon.on);
-			led_state[LED_GREEN].state = aotom_data.u.icon.on;
-			break;
-		default:
-			break;
-		}
-#endif
-#if defined(SPARK7162)
-	icon_nr = aotom_data.u.icon.icon_nr;
-	if (icon_nr > 0 && icon_nr <= 45 )
-		res = aotomSetIcon(icon_nr, aotom_data.u.icon.on);
-	if (icon_nr == 46){
-		switch (aotom_data.u.icon.on){
-		case 1:
-			VFD_set_all_icons();
-			res = 0;
-			break;
-		case 0:
-			VFD_clear_all_icons();
-			res = 0;
+		switch (panel_version.DisplayInfo) {
+		case YWPANEL_FP_DISPTYPE_LED:
+			switch (aotom_data.u.icon.icon_nr) {
+			case 0:
+				res = YWPANEL_VFD_SetLed(LED_RED, aotom_data.u.icon.on);
+				led_state[LED_RED].state = aotom_data.u.icon.on;
+				break;
+			case 35:
+				res = YWPANEL_VFD_SetLed(LED_GREEN, aotom_data.u.icon.on);
+				led_state[LED_GREEN].state = aotom_data.u.icon.on;
+				break;
+			}
 			break;
 		default:
-		break;
+			switch (aotom_data.u.icon.icon_nr) {
+			case 46:
+				switch (aotom_data.u.icon.on){
+				case 1:
+					VFD_set_all_icons();
+					res = 0;
+				break;
+				case 0:
+					VFD_clear_all_icons();
+					res = 0;
+					break;
+				}
+				break;
+			default:
+				res = aotomSetIcon(aotom_data.u.icon.icon_nr, aotom_data.u.icon.on);
+			}
 		}
-	}
-#endif
 		mode = 0;
 		break;
-	}
 	case VFDSTANDBY:
 	{
-#if defined(SPARK) || defined(SPARK7162)
 		u32 uTime = 0;
 		//u32 uStandByKey = 0;
 		//u32 uPowerOnTime = 0;
@@ -655,7 +662,6 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		YWPANEL_FP_ControlTimer(true);
 		YWPANEL_FP_SetCpuStatus(YWPANEL_CPUSTATE_STANDBY);
 		res = 0;
-#endif
 	   break;
 	}
 	case VFDSETTIME2:
@@ -674,12 +680,10 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		break;
 	case VFDGETTIME:
 	{
-#if defined(SPARK) || defined(SPARK7162)
 		u32 uTime = 0;
 		uTime = YWPANEL_FP_GetTime();
 		//printk("uTime = %d\n", uTime);
 		res = put_user(uTime, (int *) arg);
-#endif
 		break;
 	}
 	case VFDGETWAKEUPMODE:
@@ -689,8 +693,8 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		{
 		   if (copy_from_user(&vfd_data, (void *) arg, sizeof(vfd_data)))
 			return -EFAULT;
-//		   if (vfd_data.length > sizeof(vfd_data.data))
-//			vfd_data.length = sizeof(vfd_data.data);
+		   if (vfd_data.length > sizeof(vfd_data.data))
+			vfd_data.length = sizeof(vfd_data.data);
 		   while ((vfd_data.length > 0) && (vfd_data.data[vfd_data.length - 1 ] == '\n'))
 			  vfd_data.length--;
 	     	   res = run_draw_thread(&vfd_data);
@@ -703,11 +707,9 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		vfd_data.length = 0;
 	   	res = run_draw_thread(&vfd_data);
 		break;
-#if defined(SPARK)
 	case 0x5305:
 		res = 0;
 		break;
-#endif
 	case 0x5401:
 		res = 0;
 		break;
@@ -903,6 +905,7 @@ static int __init aotom_init_module(void)
 	}
 
 	VFD_clr();
+	
 	if(button_dev_init() != 0)
 		return -1;
 
