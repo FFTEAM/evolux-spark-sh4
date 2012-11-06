@@ -28,60 +28,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	chmod 0755 $(DESTDIR)$(DATADIR)/neutrino/httpd/scripts/Y_*.sh
 
 
---- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:51.357580061 +0200
-+++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:34.977498845 +0200
-@@ -28,8 +28,10 @@
- 
- #include <system/debug.h>
- #include <zapit/client/zapittypes.h>
--
--
-+#if defined (PLATFORM_SPARK7162)
-+#include <zapit/frontend_c.h>
-+extern CFrontend * getFE(int index);
-+#endif
- static const char * FILENAME = "[record_cs.cpp]";
- 
- 
-@@ -46,18 +48,32 @@
- {
- 	dprintf(DEBUG_INFO, "%s:%s\n", FILENAME, __FUNCTION__);
- #if defined (PLATFORM_SPARK7162)
--	switch(num)
--	{
-+	switch(num) {
- 		case 0:
--			demux_num = 1;
-+			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE )
-+			{
-+				demux_num = 0;
-+			}
-+			else
-+				demux_num = 2;
- 			break;
--			
-+		
- 		case 1:
--			demux_num = 0;
-+			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE ))
-+			{
-+				demux_num = 0;
-+			}
-+			else
-+				demux_num = 1;
- 			break;
- 			
- 		case 2:
--			demux_num = 2;
-+			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE ))
-+			{
-+				demux_num = 0;
-+			}
-+			else
-+				demux_num = 1;
- 			break;
- 	}
- #else
+
 
 
 ////////////////////////
@@ -3388,32 +3335,33 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -646,9 +646,10 @@
+@@ -673,8 +673,10 @@
+ 
+ 	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
  	
- 	// cam
- 	cam0->setCaPmt(thischannel, thischannel->getCaPmt());
--	
+-	// ci cam //FIXME: boxes without ci cam
+-	ci->SendCaPMT(thischannel->getCaPmt());	
 +#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
- 	// ci cam //FIXME: boxes without ci cam
- 	ci->SendCaPMT(thischannel->getCaPmt());	
++ 	// ci cam //FIXME: boxes without ci cam
++ 	ci->SendCaPMT(thischannel->getCaPmt());	
 +#endif
  }
  
  // save pids
-@@ -994,10 +995,10 @@
+@@ -1048,8 +1050,10 @@
  	
- 	// cam
- 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), frontend->fenumber );
--	
+ 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
+ 	
+-	// ci cam //FIXME: boxes without ci cam
+-	ci->SendCaPMT(rec_channel->getCaPmt());	
 +#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
- 	// ci cam //FIXME: boxes without ci cam
- 	ci->SendCaPMT(rec_channel->getCaPmt());	
--		
-+#endif		
++ 	// ci cam //FIXME: boxes without ci cam
++ 	ci->SendCaPMT(thischannel->getCaPmt());	
++#endif	
+ 		
  
  	return 0;
- }
-@@ -3444,11 +3445,11 @@
+@@ -3521,11 +3525,11 @@
  	{
  		cam1 = new CCam();
  	}
@@ -3426,6 +3374,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#endif
  	//dvbsub
  	dvbsub_init();
+ 	
  	
  	
 
@@ -3567,3 +3516,60 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
 //	char devname[256];
  
+
+//--- neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:51.357580061 +0200
+//+++ neutrino-hd2-exp/lib/libcoolstream/record_cs.cpp	2012-10-10 10:46:34.977498845 +0200
+//@@ -28,8 +28,10 @@
+ 
+// #include <system/debug.h>
+// #include <zapit/client/zapittypes.h>
+//-
+//-
+//+#if defined (PLATFORM_SPARK7162)
+//+#include <zapit/frontend_c.h>
+//+extern CFrontend * getFE(int index);
+//+#endif
+// static const char * FILENAME = "[record_cs.cpp]";
+ 
+ 
+//@@ -46,18 +48,32 @@
+// {
+// 	dprintf(DEBUG_INFO, "%s:%s\n", FILENAME, __FUNCTION__);
+// #if defined (PLATFORM_SPARK7162)
+//-	switch(num)
+//-	{
+//+	switch(num) {
+// 		case 0:
+//-			demux_num = 1;
+//+			if ( getFE(0)->mode == (fe_mode_t)FE_SINGLE )
+//+			{
+//+				demux_num = 0;
+//+			}
+//+			else
+//+				demux_num = 2;
+// 			break;
+//-			
+//+		
+// 		case 1:
+//-			demux_num = 0;
+//+			if ( getFE(1)->mode == (fe_mode_t)FE_SINGLE && ( getFE(0)->mode != (fe_mode_t)FE_SINGLE ))
+//+			{
+//+				demux_num = 0;
+//+			}
+//+			else
+//+				demux_num = 1;
+// 			break;
+// 			
+// 		case 2:
+//-			demux_num = 2;
+//+			if ( getFE(2)->mode == (fe_mode_t)FE_SINGLE && ( getFE(1)->mode != (fe_mode_t)FE_SINGLE ))
+//+			{
+//+				demux_num = 0;
+//+			}
+//+			else
+//+				demux_num = 1;
+// 			break;
+// 	}
+// #else
+
+
