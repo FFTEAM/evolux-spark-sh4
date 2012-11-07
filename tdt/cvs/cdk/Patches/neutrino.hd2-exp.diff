@@ -2759,6 +2759,15 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		     MediaPlayer);
  
  	// service
+@@ -2727,7 +2731,7 @@
+ 	// lcdsettinsg
+ 	InitLcdSettings(lcdSettings);
+ 
+-#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND)
++#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_SPARK7162)
+ 	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 1)
+ 	{
+ 		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
 @@ -2749,15 +2753,15 @@
  
  	// init shutdown count
@@ -2795,12 +2804,60 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// handle Keys
  	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
  	{
-@@ -4881,7 +4885,7 @@
+@@ -3836,7 +3840,7 @@
+ 	else if( msg == NeutrinoMessages::SLEEPTIMER) 
+ 	{
+ 		if(g_settings.shutdown_real)
+-			ExitRun(1);
++			ExitRun(0);
+ 		else
+ 			standbyMode( true );
+ 		
+@@ -3876,7 +3880,7 @@
+ 	{
+ 		if(!skipShutdownTimer) 
+ 		{
+-			ExitRun(1);
++			ExitRun(0);
+ 		}
+ 		else 
+ 		{
+@@ -4078,10 +4082,10 @@
+ 			
+ 			//CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
+ 		}
+-
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 		// vfd mode shutdown
+ 		CVFD::getInstance()->setMode(CVFD::MODE_SHUTDOWN);
+-		
++#endif		
+ 		// show good bye in VFD
+ #if defined (PLATFORM_GIGABLUE) || defined (PLATFORM_CUBEREVO_250HD)
+ 		CVFD::getInstance()->ShowText((char *) "NHD2");
+@@ -4176,7 +4180,7 @@
+ 					
+ 					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 					
+-					exit(retcode);
++					exit(0);
+ 				}
+ 			}
+ 		} 
+@@ -4874,14 +4878,14 @@
+ 	}
+ 	else if(actionKey=="shutdown") 
+ 	{
+-		ExitRun(1);
++		ExitRun(0);
+ 	}
+ 	else if(actionKey=="reboot")
+ 	{
  		FILE *f = fopen("/tmp/.reboot", "w");
  		fclose(f);
  
 -		ExitRun();
-+		ExitRun(2);
++		ExitRun(1);
  
  		unlink("/tmp/.reboot");
  		returnval = menu_return::RETURN_NONE;
