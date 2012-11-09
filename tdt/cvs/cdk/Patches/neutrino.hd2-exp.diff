@@ -2910,7 +2910,179 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #if ENABLE_RADIOTEXT
  	g_Radiotext     = NULL;
  #endif	
-@@ -2466,11 +2468,11 @@
+@@ -340,7 +342,7 @@
+ 	if(!neutrinoApp) 
+ 	{
+ 		neutrinoApp = new CNeutrinoApp();
+-		dprintf(DEBUG_NORMAL, "NeutrinoApp Instance created\n");
++		//dprintf(DEBUG_NORMAL, "NeutrinoApp Instance created\n");
+ 	}
+ 
+ 	return neutrinoApp;
+@@ -727,7 +729,7 @@
+ // loadSetup, load the application-settings
+ int CNeutrinoApp::loadSetup(const char * fname)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadSetup\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadSetup\n");
+ 	
+ 	char cfg_key[81];
+ 	int erg = 0;
+@@ -858,7 +860,7 @@
+ 	sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
+ 	safe_mkdir(timeshiftDir);
+ 	
+-	dprintf(DEBUG_INFO, "CNeutrinoApp::loadSetup: rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
++	//dprintf(DEBUG_INFO, "CNeutrinoApp::loadSetup: rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
+ 
+ 	if(g_settings.auto_delete) 
+ 	{
+@@ -1233,7 +1235,7 @@
+ // saveSetup, save the application-settings
+ void CNeutrinoApp::saveSetup(const char * fname)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveSetup\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveSetup\n");
+ 	
+ 	char cfg_key[81];
+ 
+@@ -1650,7 +1652,7 @@
+ // CNeutrinoApp -  channelsInit, get the Channellist from zapit
+ void CNeutrinoApp::channelsInit(bool bOnly)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: Creating channels lists...\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: Creating channels lists...\n");
+ 
+ 	const char * fav_bouquetname = g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME);
+ 
+@@ -1742,7 +1744,7 @@
+ 	if(g_settings.make_hd_list)
+ 		hdBouquet->channelList->SortSat();
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d TV (%d is HD) and %d RADIO channels\n", tvi, hi, ri); fflush(stdout);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d TV (%d is HD) and %d RADIO channels\n", tvi, hi, ri); fflush(stdout);
+ 
+ 	CBouquet * tmp;
+ 
+@@ -1824,7 +1826,7 @@
+ 	if(g_settings.make_hd_list)
+ 		TVfavList->Bouquets.push_back(hdBouquet);
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d TV bouquets\n", bnum); fflush(stdout);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d TV bouquets\n", bnum); fflush(stdout);
+ 
+ 	// radio fav list
+ 	bnum = 0;
+@@ -1848,11 +1850,11 @@
+ 		}
+ 	}
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d RADIO bouquets\n", bnum); fflush(stdout);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: got %d RADIO bouquets\n", bnum); fflush(stdout);
+ 
+ 	SetChannelMode( g_settings.channel_mode);
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: All bouquets-channels received\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::channelsInit: All bouquets-channels received\n");
+ }
+ 
+ void CNeutrinoApp::SetChannelMode(int newmode)
+@@ -1865,7 +1867,7 @@
+ 	};
+ 	
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetChannelMode %s\n", aLISTMODE[newmode]);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetChannelMode %s\n", aLISTMODE[newmode]);
+ 
+ 	if(mode == mode_radio)
+ 		channelList = RADIOchannelList;
+@@ -1938,19 +1940,19 @@
+ 		if (((!strcmp(argv[x], "-v")) || (!strcmp(argv[x], "--verbose"))) && (x + 1 < argc)) 
+ 		{
+ 			int dl = atoi(argv[x + 1]);
+-			dprintf(DEBUG_NORMAL, "set debuglevel: %d\n", dl);
++			//dprintf(DEBUG_NORMAL, "set debuglevel: %d\n", dl);
+ 			setDebugLevel(dl);
+ 			x++;
+ 		}
+ 		else if ((!strcmp(argv[x], "-sd"))) 
+ 		{
+-			dprintf(DEBUG_NORMAL, "Sectionsd debug enabled\n");
++			//dprintf(DEBUG_NORMAL, "Sectionsd debug enabled\n");
+ 			sections_debug = 1;
+ 			x++;
+ 		}
+ 		else 
+ 		{
+-			dprintf(DEBUG_NORMAL, "Usage: neutrino [-sd] [-v | --verbose 0..3]\n");
++			//dprintf(DEBUG_NORMAL, "Usage: neutrino [-sd] [-v | --verbose 0..3]\n");
+ 			exit(1);
+ 		}
+ 	}
+@@ -1963,7 +1965,7 @@
+ 	
+ 	if(frameBuffer->setMode() ) 
+ 	{
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetupFrameBuffer: Error while setting framebuffer mode\n");
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetupFrameBuffer: Error while setting framebuffer mode\n");
+ 		exit(-1);
+ 	}	
+ }
+@@ -1981,7 +1983,7 @@
+ 	if(font.filename != NULL)
+ 		free((void *)font.filename);
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetupFonts: settings font file %s\n", g_settings.font_file);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::SetupFonts: settings font file %s\n", g_settings.font_file);
+ 
+ 	if(access(g_settings.font_file, F_OK)) 
+ 	{
+@@ -2008,7 +2010,7 @@
+ 
+ 	font.name = strdup(g_fontRenderer->getFamily(font.filename).c_str());
+ 
+-	dprintf(DEBUG_DEBUG, "CNeutrinoApp::SetupFonts: font family %s\n", font.name);
++	//dprintf(DEBUG_DEBUG, "CNeutrinoApp::SetupFonts: font family %s\n", font.name);
+ 
+ 	style[1] = "Bold Regular";
+ 
+@@ -2069,7 +2071,7 @@
+ 
+ 	eventinfo.apids = TIMERD_APIDS_CONF;
+ 	
+-	dprintf(DEBUG_NORMAL, "startAutoRecord: dir %s\n", timeshiftDir);
++	//dprintf(DEBUG_NORMAL, "startAutoRecord: dir %s\n", timeshiftDir);
+ 
+ 	(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = timeshiftDir;
+ 
+@@ -2100,7 +2102,7 @@
+ {
+ 	if(autoshift && CNeutrinoApp::getInstance()->recordingstatus) 
+ 	{
+-		dprintf(DEBUG_NORMAL, "stopAutoRecord: autoshift, recordingstatus %d, stopping ...\n", CNeutrinoApp::getInstance()->recordingstatus);
++		//dprintf(DEBUG_NORMAL, "stopAutoRecord: autoshift, recordingstatus %d, stopping ...\n", CNeutrinoApp::getInstance()->recordingstatus);
+ 
+ 		CVCRControl::getInstance()->Stop();
+ 		autoshift = false;
+@@ -2172,7 +2174,7 @@
+ 				strcpy(recDir, (preselectedDir != NULL) ? preselectedDir : g_settings.network_nfs_recordingdir);
+ 				
+ 				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = recDir;
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::doGuiRecord: start record to dir %s\n", recDir);
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::doGuiRecord: start record to dir %s\n", recDir);
+ 			}
+ 
+ 			// start to record baby
+@@ -2396,7 +2398,7 @@
+ 	while(!zapit_ready)
+ 		usleep(0);
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: zapit ready\n\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: zapit ready\n\n");
+ 	
+ 	// dvbsub thread
+ 	dvbsub_init();
+@@ -2469,11 +2471,11 @@
  	
  	// volume bar
  	g_volscale = new CProgressBar(200, 15, 50, 100, 80, true);
@@ -2924,7 +3096,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// plugins
  	g_PluginList = new CPlugins;
  	g_PluginList->setPluginDir(PLUGINDIR);
-@@ -2530,6 +2532,7 @@
+@@ -2508,7 +2510,7 @@
+ 	if (g_settings.recording_type != RECORDING_OFF)
+ 		setupRecordingDevice();
+ 
+-	dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: menue setup\n");
++	//dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: menue setup\n");
+ 
+ 	// SMS key input
+ 	c_SMSKeyInput = new SMSKeyInput();	//filebrowser.cpp
+@@ -2533,6 +2535,7 @@
  	CMenuWidget    TunerSetup( LOCALE_SERVICEMENU_SCANTS, NEUTRINO_ICON_SETTINGS);
  	CMenuWidget    bindSettings(LOCALE_KEYBINDINGMENU_HEAD, NEUTRINO_ICON_KEYBINDING );
  	CMenuWidget    MediaPlayer(LOCALE_MAINMENU_MEDIAPLAYER, NEUTRINO_ICON_MOVIE);
@@ -2932,7 +3113,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// main menu
  	InitMainMenu(mainMenu, mainSettings, 
-@@ -2546,7 +2549,8 @@
+@@ -2549,7 +2552,8 @@
  		     service, 
  		     audioplayerSettings, 
  		     PicViewerSettings, 
@@ -2942,7 +3123,25 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		     MediaPlayer);
  
  	// service
-@@ -2727,7 +2731,7 @@
+@@ -2588,7 +2592,7 @@
+ 	//init scan settings
+ 	//CScanSetup scansetup;
+ 
+-	dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: registering as event client\n");
++	//dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: registering as event client\n");
+ 	
+ 	sleep(1);
+ 
+@@ -2700,7 +2704,7 @@
+ 		//if(ret != menu_return::RETURN_EXIT_ALL)
+ 		//	scansetup.exec(NULL, "");
+ 
+-		dprintf(DEBUG_INFO, "config file or options missing\n");
++		//dprintf(DEBUG_INFO, "config file or options missing\n");
+ 
+ 		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, loadSettingsErg ==  1 ? g_Locale->getText(LOCALE_SETTINGS_NOCONFFILE) : g_Locale->getText(LOCALE_SETTINGS_MISSINGOPTIONSCONFFILE));
+ 		
+@@ -2730,17 +2734,17 @@
  	// lcdsettinsg
  	InitLcdSettings(lcdSettings);
  
@@ -2950,8 +3149,20 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_VUPLUS) && !defined (PLATFORM_SPARK7162)
  	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 1)
  	{
- 		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
-@@ -2749,15 +2753,15 @@
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
+ 
+ 		CVFD::getInstance()->setPower(1);
+ 		CVFD::getInstance()->setlcdparameter();
+ 	}
+ 	else if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 0)
+ 	{
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led off\n");
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led off\n");
+ 
+ 		CVFD::getInstance()->setPower(0);
+ 		CVFD::getInstance()->setlcdparameter();
+@@ -2752,10 +2756,10 @@
  
  	// init shutdown count
  	SHTDCNT::getInstance()->init();
@@ -2964,13 +3175,43 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// real run ;-)
  	RealRun(mainMenu);
  
- 	// exitRun
--	ExitRun();
-+	ExitRun();
+@@ -2801,7 +2805,7 @@
+ 	neutrino_msg_t      msg;
+ 	neutrino_msg_data_t data;
  
- 	// never reached
- 	return 0;
-@@ -3361,14 +3365,14 @@
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: initialized everything\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: initialized everything\n");
+ 
+ 	// start plugins
+ 	g_PluginList->startPlugin("startup.cfg");
+@@ -2971,7 +2975,7 @@
+ 			{
+ 			   	if( g_settings.recording_type == RECORDING_FILE )
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift try, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift try, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
+ 					
+ 					if(recordingstatus && msg == (neutrino_msg_t) g_settings.key_timeshift)
+ 						tmode = "ptimeshift"; 	// already recording, pause
+@@ -3018,7 +3022,7 @@
+ 			}
+ 			else if( (msg == CRCInput::RC_play || msg == (neutrino_msg_t)g_settings.mpkey_play) && timeshiftstatus) // play timeshift
+ 			{
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift play, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift play, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
+ 				printf("g_RemoteControl->is_video_started:%d\n\n", g_RemoteControl->is_video_started);
+ 
+ 				if(g_RemoteControl->is_video_started) 
+@@ -3031,7 +3035,7 @@
+ 			}
+ 			else if( msg == CRCInput::RC_record || msg == CRCInput::RC_stop ) 
+ 			{
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun\n");
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun\n");
+ 
+ 				// stop record if recording
+ 				if( recordingstatus ) 
+@@ -3364,14 +3368,14 @@
  
  		return( res & ( 0xFFFFFFFF - messages_return::unhandled ) );
  	}
@@ -2987,22 +3228,365 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// handle Keys
  	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
  	{
-
- 		
-
-@@ -4078,10 +4082,10 @@
+@@ -3384,7 +3388,7 @@
+ 			int old_b = bouquetList->getActiveBouquetNumber();
+ 			int old_mode = g_settings.channel_mode;
  			
- 			//CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: ZAP START: bouquetList %x size %d old_b %d\n", (int) bouquetList, bouquetList->Bouquets.size(), old_b);fflush(stdout);
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: ZAP START: bouquetList %x size %d old_b %d\n", (int) bouquetList, bouquetList->Bouquets.size(), old_b);fflush(stdout);
+ 
+ 			if(bouquetList->Bouquets.size()) 
+ 			{
+@@ -3409,7 +3413,7 @@
+ 				nNewChannel = bouquetList->exec(true);
+ 			}
+ _repeat:
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: ZAP RES: nNewChannel %d\n", nNewChannel);
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: ZAP RES: nNewChannel %d\n", nNewChannel);
+ 			fflush(stdout);
+ 
+ 			if(nNewChannel == -1) 
+@@ -3426,7 +3430,7 @@
+ 			else if(nNewChannel == -3) 
+ 			{ 
+ 				// list mode changed
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: bouquetList %x size %d\n", (int) bouquetList, bouquetList->Bouquets.size());
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: bouquetList %x size %d\n", (int) bouquetList, bouquetList->Bouquets.size());
+ 				fflush(stdout);
+ 				nNewChannel = bouquetList->exec(true);
+ 				goto _repeat;
+@@ -3592,7 +3596,7 @@
+ 	else if( msg == NeutrinoMessages::EVT_RECORDMODE ) 
+ 	{
+ 		// sent by rcinput, then got msg from zapit about record activated/deactivated
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: recordmode %s\n", ( data ) ? "on":"off" );
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: recordmode %s\n", ( data ) ? "on":"off" );
+ 		
+ 		if(!recordingstatus && (!data)) 
+ 		{
+@@ -3785,7 +3789,7 @@
+ 			{
+ 				if (strcmp(g_settings.network_nfs_local_dir[i], recDir) == 0) 
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: waking up %s (%s)\n",g_settings.network_nfs_ip[i].c_str(),recDir);
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: waking up %s (%s)\n",g_settings.network_nfs_ip[i].c_str(),recDir);
+ 					
+ 					std::string command = "etherwake ";
+ 					command += g_settings.network_nfs_mac[i];
+@@ -4090,7 +4094,7 @@
+ 		CVFD::getInstance()->ShowText((char *) "Good Bye");
+ #endif		
+ 
+-		dprintf(DEBUG_INFO, "ExitRun\n");
++		//dprintf(DEBUG_INFO, "ExitRun\n");
+ 
+ 		// stop playback
+ 		g_Zapit->stopPlayBack();
+@@ -4116,7 +4120,7 @@
+ 
+ 		if(retcode)
+ 		{
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
+ 			
+ 			mode = mode_off;
+ 
+@@ -4136,7 +4140,7 @@
+ 				
+ 				if( msg == CRCInput::RC_standby ) 
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
+ 			
+ 					sleep(2);
+ 					
+@@ -4153,7 +4157,7 @@
+ 				} 
+ 				else if( ( msg == NeutrinoMessages::ANNOUNCE_RECORD) || ( msg == NeutrinoMessages::ANNOUNCE_ZAPTO) ) 
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
+ 					
+ 					sleep(2);
+ 					
+@@ -4171,7 +4175,7 @@
+ 				else 
+ 				{
+ 					// no message received.
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
+ 					
+ 					sleep(2);
+ 					
+@@ -4184,7 +4188,7 @@
+ 					// stop all deamons threads
+ 					stop_daemons();
+ 					
+-					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
++					//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 					
+ 					exit(retcode);
+ 				}
+@@ -4200,7 +4204,7 @@
+ 
+ 			stop_daemons();
+ 
+-			dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
++			//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 
+ 			exit(0);
  		}
--
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 		// vfd mode shutdown
- 		CVFD::getInstance()->setMode(CVFD::MODE_SHUTDOWN);
--		
-+#endif		
- 		// show good bye in VFD
- #if defined (PLATFORM_GIGABLUE) || defined (PLATFORM_CUBEREVO_250HD)
- 		CVFD::getInstance()->ShowText((char *) "NHD2");
+@@ -4213,7 +4217,7 @@
+ 	struct stat my_stat;    
+ 	if(stat(g_settings.epg_dir.c_str(), &my_stat) == 0)
+ 	{
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
+ 		neutrino_msg_t      msg;
+ 		neutrino_msg_data_t data;
+ 		
+@@ -4252,7 +4256,7 @@
+ 
+ 	current_muted = newValue;
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, isEvent);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, isEvent);
+ 	
+ 	g_Zapit->muteAudio(current_muted);
+ 
+@@ -4578,7 +4582,7 @@
+ {
+ 	static bool wasshift = false;
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::standbyMode: recordingstatus (%d) timeshiftstatus(%d) bOnOff (%d)\n", recordingstatus, timeshiftstatus, bOnOff);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::standbyMode: recordingstatus (%d) timeshiftstatus(%d) bOnOff (%d)\n", recordingstatus, timeshiftstatus, bOnOff);
+ 
+ 	if( bOnOff ) 
+ 	{
+@@ -4725,7 +4729,7 @@
+ // Radio Mode
+ void CNeutrinoApp::radioMode( bool rezap)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::radioMode: rezap %s\n", rezap ? "yes" : "no");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::radioMode: rezap %s\n", rezap ? "yes" : "no");
+ 
+ 	if(mode == mode_tv ) 
+ 	{
+@@ -4759,7 +4763,7 @@
+ 
+ 	if(autoshift) 
+ 	{
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::radioMode: standby on: autoshift ! stopping ...\n");
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::radioMode: standby on: autoshift ! stopping ...\n");
+ 		stopAutoRecord();
+ 		recordingstatus = 0;
+ 	}
+@@ -4846,7 +4850,7 @@
+ 				}
+ 
+ 				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = std::string(recDir);
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
+ 
+ 				CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
+ 			}
+@@ -4874,7 +4878,7 @@
+ 
+ int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: actionKey: %s\n", actionKey.c_str());
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: actionKey: %s\n", actionKey.c_str());
+ 
+ 	int returnval = menu_return::RETURN_REPAINT;
+ 
+@@ -4888,12 +4892,12 @@
+ 	}
+ 	else if(actionKey=="reboot")
+ 	{
+-		//FILE *f = fopen("/tmp/.reboot", "w");
+-		//fclose(f);
++		FILE *f = fopen("/tmp/.reboot", "w");
++		fclose(f);
+ 
+ 		ExitRun();
+ 
+-		//unlink("/tmp/.reboot");
++		unlink("/tmp/.reboot");
+ 		returnval = menu_return::RETURN_NONE;
+ 	}
+ 	else if(actionKey=="tv") 
+@@ -4920,12 +4924,12 @@
+ 	}
+ 	else if(actionKey=="networktest") 
+ 	{
+-		dprintf(DEBUG_INFO, "CNeutrinoApp::exec: doing network test...\n");
++		//dprintf(DEBUG_INFO, "CNeutrinoApp::exec: doing network test...\n");
+ 		testNetworkSettings(networkConfig.address.c_str(), networkConfig.netmask.c_str(), networkConfig.broadcast.c_str(), networkConfig.gateway.c_str(), networkConfig.nameserver.c_str(), networkConfig.inet_static);
+ 	}
+ 	else if(actionKey=="networkshow") 
+ 	{
+-		dprintf(DEBUG_INFO, "CNeutrinoApp::exec: showing current network settings...\n");
++		//dprintf(DEBUG_INFO, "CNeutrinoApp::exec: showing current network settings...\n");
+ 		showCurrentNetworkSettings();
+ 	}
+ 	else if (actionKey=="theme_neutrino") 
+@@ -5090,7 +5094,7 @@
+ 		if (b.exec(g_settings.network_nfs_recordingdir)) 
+ 		{
+ 			const char * newdir = b.getSelectedFile()->Name.c_str();
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New recordingdir: selected %s\n", newdir);
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New recordingdir: selected %s\n", newdir);
+ 
+ 			if(check_dir(newdir))
+ 				printf("CNeutrinoApp::exec: Wrong/unsupported recording dir %s\n", newdir);
+@@ -5098,12 +5102,12 @@
+ 			{
+ 				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1 );
+ 				
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New recordingdir: %s\n", g_settings.network_nfs_recordingdir);
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New recordingdir: %s\n", g_settings.network_nfs_recordingdir);
+ 				
+ 				sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
+ 					
+ 				safe_mkdir(timeshiftDir);
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New timeshift dir: %s\n", timeshiftDir);
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: New timeshift dir: %s\n", timeshiftDir);
+ 			}
+ 		}
+ 		return menu_return::RETURN_REPAINT;
+@@ -5123,7 +5127,7 @@
+ 			else
+ 			{
+ 				strcpy(g_settings.update_dir, fileBrowser.getSelectedFile()->Name.c_str());
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new update dir %s\n", fileBrowser.getSelectedFile()->Name.c_str());
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new update dir %s\n", fileBrowser.getSelectedFile()->Name.c_str());
+ 			}
+ 		}
+ 		return menu_return::RETURN_REPAINT;
+@@ -5166,7 +5170,7 @@
+ 			{
+ 				g_settings.logos_dir = b.getSelectedFile()->Name;
+ 				//strcpy(g_settings.logos_dir.c_str(), b.getSelectedFile()->Name.c_str());
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
+ 			}
+ 		}
+ 
+@@ -5184,7 +5188,7 @@
+ 		if (fileBrowser.exec("/var/tuxbox/config") == true) 
+ 		{
+ 			loadColors(fileBrowser.getSelectedFile()->Name.c_str());
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new colors: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new colors: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
+ 		}
+ 		
+ 		return menu_return::RETURN_REPAINT;
+@@ -5202,7 +5206,7 @@
+ 			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVECOLORS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
+ 			sms->exec(NULL, "");
+ 			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save colors: %s\n", sname);
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save colors: %s\n", sname);
+ 			saveColors(sname);
+ 			delete sms;
+ 		}
+@@ -5221,7 +5225,7 @@
+ 		if (fileBrowser.exec("/var/tuxbox/config") == true) 
+ 		{
+ 			loadKeys(fileBrowser.getSelectedFile()->Name.c_str());
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new keys: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new keys: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
+ 		}
+ 		
+ 		return menu_return::RETURN_REPAINT;
+@@ -5239,7 +5243,7 @@
+ 			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVEKEYS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
+ 			sms->exec(NULL, "");
+ 			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save keys: %s\n", sname);
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save keys: %s\n", sname);
+ 			saveKeys(sname);
+ 			delete sms;
+ 		}
+@@ -5316,34 +5320,34 @@
+ #endif	
+ 
+ 	// stop nhttpd	
+-	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
+ 	pthread_cancel(nhttpd_thread);
+ 	pthread_join(nhttpd_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
++	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
+ 
+ 	// streamts	
+ 	streamts_stop = 1;
+ 	pthread_join(stream_thread, NULL);	
+ 
+ 	// timerd stop	  
+-	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
+ 	g_Timerd->shutdown();
+ 	pthread_join(timer_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
++	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
+ 
+ 	// sectionsd stop
+ 	sectionsd_stop = 1;
+-	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
+ 	pthread_join(sections_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
+ 
+ 	tuxtx_stop_subtitle();
+ 
+ 	// zapit stop	
+-	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
+ 	g_Zapit->shutdown();
+ 	pthread_join(zapit_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
++	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
+ 
+ 	// clear vfd
+ 	CVFD::getInstance()->Clear();
+@@ -5358,7 +5362,7 @@
+ 	bool res;
+ 	CConfigFile tconfig(',', true);
+ 
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadColors: %s\n", fname);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadColors: %s\n", fname);
+ 
+ 	res = tconfig.loadConfig(fname);
+ 	if(!res) 
+@@ -5423,7 +5427,7 @@
+ {
+ 	CConfigFile tconfig(',', true);
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveColors: %s\n", fname);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveColors: %s\n", fname);
+ 
+ 	//colors
+ 	tconfig.setInt32( "menu_Head_alpha", g_settings.menu_Head_alpha );
+@@ -5485,7 +5489,7 @@
+ 	bool res;
+ 	CConfigFile tconfig(',', true);
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadKeys: %s\n", fname);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadKeys: %s\n", fname);
+ 
+ 	res = tconfig.loadConfig(fname);
+ 	if(!res) 
+@@ -5534,7 +5538,7 @@
+ {
+ 	CConfigFile tconfig(',', true);
+ 	
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveKeys: %s\n", fname);
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveKeys: %s\n", fname);
+ 	
+ 	//rc-key configuration
+ 	tconfig.setInt32( "key_tvradio_mode", g_settings.key_tvradio_mode );
 
 
 
