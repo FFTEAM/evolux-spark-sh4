@@ -2739,7 +2739,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		
  	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE, 550);
 -		
-+#endif		
++
  	// intros
  	updateSettings->addItem(GenericMenuBack);
  	updateSettings->addItem(GenericMenuSeparatorLine);
@@ -2752,15 +2752,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	static CFlashVersionInfo versionInfo(versionString);
  
-@@ -886,7 +941,7 @@
- 	//proxyserver submenu
- 	updateSettings->addItem(GenericMenuSeparatorLine);
- 	updateSettings->addItem(new CMenuForwarder(LOCALE_FLASHUPDATE_PROXYSERVER_SEP, true, NULL, new CProxySetup(LOCALE_MAINSETTINGS_NETWORK), NULL, CRCInput::RC_0, NEUTRINO_ICON_BUTTON_0));
--
-+#ifndef EVOLUX
- 	// check update
- 	//FIXME: allow update only when the rootfs is jffs2/squashfs
- 	updateSettings->addItem(GenericMenuSeparatorLine);
 @@ -897,6 +952,7 @@
  		
  	// updatesettings
