@@ -1548,14 +1548,14 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +int BOOT_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
 +{
 +	int res = menu_return::RETURN_REPAINT;
-+/*	if(actionKey == "reboot") {
++  	if(actionKey == "reboot") {
 +                FILE *f = fopen("/tmp/.reboot", "w");
 +                fclose(f);
-+		CNeutrinoApp::getInstance()->ExitRun(true, 2);
++		CNeutrinoApp::getInstance()->ExitRun(2);
 +		// not reached, hopefully...
 +                unlink("/tmp/.reboot");
 +		return res;
-+	}*/
++	}
 +
 +	if (parent)
 +		parent->hide();
@@ -2763,8 +2763,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// lcdsettinsg
  	InitLcdSettings(lcdSettings);
  
--#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND)
-+#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_SPARK7162)
+-#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_VUPLUS)
++#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_VUPLUS) && !defined (PLATFORM_SPARK7162)
  	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 1)
  	{
  		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
@@ -2783,7 +2783,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// exitRun
 -	ExitRun();
-+	ExitRun(0);
++	ExitRun();
  
  	// never reached
  	return 0;
@@ -2804,24 +2804,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// handle Keys
  	if( msg == CRCInput::RC_ok || msg == CRCInput::RC_sat || msg == CRCInput::RC_favorites)
  	{
-@@ -3836,7 +3840,7 @@
- 	else if( msg == NeutrinoMessages::SLEEPTIMER) 
- 	{
- 		if(g_settings.shutdown_real)
--			ExitRun(1);
-+			ExitRun(0);
- 		else
- 			standbyMode( true );
+
  		
-@@ -3876,7 +3880,7 @@
- 	{
- 		if(!skipShutdownTimer) 
- 		{
--			ExitRun(1);
-+			ExitRun(0);
- 		}
- 		else 
- 		{
+
 @@ -4078,10 +4082,10 @@
  			
  			//CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
@@ -2835,32 +2820,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		// show good bye in VFD
  #if defined (PLATFORM_GIGABLUE) || defined (PLATFORM_CUBEREVO_250HD)
  		CVFD::getInstance()->ShowText((char *) "NHD2");
-@@ -4176,7 +4180,7 @@
- 					
- 					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
- 					
--					exit(retcode);
-+					exit(0);
- 				}
- 			}
- 		} 
-@@ -4874,14 +4878,14 @@
- 	}
- 	else if(actionKey=="shutdown") 
- 	{
--		ExitRun(1);
-+		ExitRun(0);
- 	}
- 	else if(actionKey=="reboot")
- 	{
- 		FILE *f = fopen("/tmp/.reboot", "w");
- 		fclose(f);
- 
--		ExitRun();
-+		ExitRun(1);
- 
- 		unlink("/tmp/.reboot");
- 		returnval = menu_return::RETURN_NONE;
+
 
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
@@ -2921,15 +2881,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  				  CMenuWidget &MediaPlayer);
  
  		void SetupFrameBuffer();
-@@ -240,7 +260,7 @@
- 
- 	public:
- 		CMenuItem * wlanEnable[3];
--		
-+		void ExitRun(const bool write_si = true, int retcode = 0);
- 		void saveSetup(const char * fname);
- 		int loadSetup(const char * fname);
- 		void loadColors(const char * fname);
 @@ -254,7 +274,9 @@
  		CChannelList			*TVchannelList;
  		CChannelList			*RADIOchannelList;
@@ -3392,7 +3343,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -673,8 +673,10 @@
+@@ -659,8 +659,10 @@
  
  	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
  	
@@ -3405,7 +3356,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // save pids
-@@ -1048,8 +1050,10 @@
+@@ -1020,8 +1022,10 @@
  	
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
  	
@@ -3418,19 +3369,21 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		
  
  	return 0;
-@@ -3521,11 +3525,11 @@
- 	{
+@@ -3515,9 +3519,11 @@
  		cam1 = new CCam();
  	}
--
+ 
+-	//CI init
+-	//FIXME: platform without ci cam
+-	ci = cDvbCi::getInstance();
 +#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
- 	//CI init
- 	//FIXME: platform without ci cam
- 	ci = cDvbCi::getInstance();
--
++ 	//CI init
++ 	//FIXME: platform without ci cam
++ 	ci = cDvbCi::getInstance();
 +#endif
- 	//dvbsub
- 	dvbsub_init();
+ 	
+ 	//globals
+ 	scan_runs = 0;
  	
  	
  	
@@ -3628,5 +3581,63 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 // 			break;
 // 	}
 // #else
+
+
+--- neutrino-hd2-exp/src/system/flashtool.cpp	2012-11-09 15:16:40.538893342 +0100
++++ neutrino-hd2-exp/src/system/flashtool.cpp	2012-11-09 15:08:13.812380601 +0100
+@@ -351,7 +351,45 @@
+ 
+ CFlashVersionInfo::CFlashVersionInfo(const std::string & versionString)
+ {
++#ifdef EVOLUX
++	for(int i = 0; i < 20; i++)
++//	releaseCycle[i] = versionString[i];
++	//SBBBBYYYYMMTTHHMM -- formatsting
++
++	// recover type
++	snapshot = versionString[0];
++
++	// recover release cycle version
++	releaseCycle[0] = versionString[1];
++	releaseCycle[1] = '.';
+ 
++	releaseCycle[2] = versionString[2];
++	releaseCycle[3] = versionString[3];
++	releaseCycle[4] = '.';
++	releaseCycle[5] = versionString[4];
++	releaseCycle[6] = '\0';
++
++	// recover date
++	date[0] = versionString[11]; //Day
++	date[1] = versionString[12]; //Day
++	date[2] = '.';
++	date[3] = versionString[9]; //Month
++	date[4] = versionString[10]; //Month
++	date[5] = '.';
++	date[6] = versionString[5]; //Year
++	date[7] = versionString[6]; //Year
++	date[8] = versionString[7]; //Year
++	date[9] = versionString[8]; //Year
++	date[10] = '\0';
++
++	// recover time stamp
++	time[0] = versionString[13]; //Hours
++	time[1] = versionString[14]; //Hours
++	time[2] = ':';
++	time[3] = versionString[15]; //Minutes
++	time[4] = versionString[16]; //Minutes
++	time[5] = '\0';
++#else
+ 	for(int i = 0; i < 20; i++)
+ 	releaseCycle[i] = versionString[i];
+ 	//SBBBYYYYMMTTHHMM -- formatsting
+@@ -396,6 +434,7 @@
+ 	time[3] = versionString[14];
+ 	time[4] = versionString[15];
+ 	time[5] = 0; 
++#endif
+ }
+ 
+ const char * const CFlashVersionInfo::getDate(void) const
 
 
