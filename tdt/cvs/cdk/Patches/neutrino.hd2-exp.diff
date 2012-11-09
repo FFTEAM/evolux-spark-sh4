@@ -2602,7 +2602,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
-@@ -195,7 +195,7 @@
+@@ -195,11 +195,11 @@
  };
  
  // Init Main Menu
@@ -2611,6 +2611,11 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
  	int shortcut = 1;
  
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMainMenu\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMainMenu\n");
+ 
+ 	// tv modus
+ 	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_TVMODE, true, "", this, "tv", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, "tv", LOCALE_HELPTEXT_TVMODE ), true);
 @@ -262,6 +262,42 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
@@ -2679,7 +2684,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
  const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
  {
-@@ -471,6 +524,7 @@
+@@ -471,6 +525,7 @@
  	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
  	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
  };
@@ -2687,7 +2692,165 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #else
  // giga
  /*
-@@ -1924,10 +1978,12 @@
+@@ -558,7 +613,7 @@
+ 
+ void CNeutrinoApp::InitVideoSettings(CMenuWidget &videoSettings, CVideoSetupNotifier * videoSetupNotifier)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitVideoSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitVideoSettings\n");
+ 	
+ 	int shortcutVideo = 1;
+ 	
+@@ -630,7 +685,7 @@
+ 
+ void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier * audioSetupNotifier)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitAudioSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitAudioSettings\n");
+ 	
+ 	int shortcutAudio = 1;
+ 	
+@@ -717,7 +772,7 @@
+ 
+ void CNeutrinoApp::InitParentalLockSettings(CMenuWidget &parentallockSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitParentalLockSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitParentalLockSettings\n");
+ 	
+ 	int shortcutLock = 1;
+ 	
+@@ -750,7 +805,7 @@
+ 
+ void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget & TunerSetup)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings\n");
+ 	
+ 	int shortcutService = 1;
+ 
+@@ -812,12 +867,12 @@
+ 
+ 	// restart neutrino
+ 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_RESTART, true, "", this, "restart", CRCInput::RC_standby, NEUTRINO_ICON_BUTTON_POWER, "shutdown", LOCALE_HELPTEXT_SOFTRESTART ));
+-
++#ifndef EVOLUX
+ 	// softupdate
+ 	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings. init soft-update-stuff\n");
+ 		
+ 	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE, 550);
+-		
++#endif		
+ 	// intros
+ 	updateSettings->addItem(GenericMenuBack);
+ 	updateSettings->addItem(GenericMenuSeparatorLine);
+@@ -866,7 +921,7 @@
+ 
+ 	const char * versionString = (configfile.loadConfig("/var/etc/.version")) ? (configfile.getString( "version", "1200201205091849").c_str()) : "1200201205091849";
+ 
+-	dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
++	//dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
+ 
+ 	static CFlashVersionInfo versionInfo(versionString);
+ 
+@@ -886,7 +941,7 @@
+ 	//proxyserver submenu
+ 	updateSettings->addItem(GenericMenuSeparatorLine);
+ 	updateSettings->addItem(new CMenuForwarder(LOCALE_FLASHUPDATE_PROXYSERVER_SEP, true, NULL, new CProxySetup(LOCALE_MAINSETTINGS_NETWORK), NULL, CRCInput::RC_0, NEUTRINO_ICON_BUTTON_0));
+-
++#ifndef EVOLUX
+ 	// check update
+ 	//FIXME: allow update only when the rootfs is jffs2/squashfs
+ 	updateSettings->addItem(GenericMenuSeparatorLine);
+@@ -897,6 +952,7 @@
+ 		
+ 	// updatesettings
+ 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_UPDATE, true, "", updateSettings, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "service", LOCALE_HELPTEXT_SOFTWAREUPDATE ));
++#endif
+ }
+ 
+ // Init AudioPlayer Settings
+@@ -909,7 +965,7 @@
+ 
+ void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitAudioplayerSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitAudioplayerSettings\n");
+ 	
+ 	int shortcutAudioPlayer = 1;
+ 	
+@@ -961,7 +1017,7 @@
+ 
+ void CNeutrinoApp::InitPicViewerSettings(CMenuWidget &PicViewerSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitPicViewerSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitPicViewerSettings\n");
+ 	
+ 	int shortcutPicViewer = 1;
+ 	
+@@ -1032,7 +1088,7 @@
+ 
+ void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings, CMenuWidget &miscSettingsGeneral, CMenuWidget &miscSettingsChannelList, CMenuWidget &miscSettingsEPG, CMenuWidget &miscSettingsFileBrowser )
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMiscSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMiscSettings\n");
+ 	
+ 	int shortcutMiscSettings = 1;
+ 
+@@ -1243,7 +1299,7 @@
+ // Init Language Settings
+ void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitLanguageSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitLanguageSettings\n");
+ 	
+ 	// intros
+ 	languageSettings.addItem(GenericMenuBack);
+@@ -1311,7 +1367,7 @@
+ 
+ void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitNetworkSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitNetworkSettings\n");
+ 	
+ 	struct dirent **namelist;
+ 
+@@ -1459,7 +1515,7 @@
+ // Init Recording Settings
+ void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitRecordingSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitRecordingSettings\n");
+ 	
+ 	int rec_pre = 0;
+ 	int rec_post = 0;
+@@ -1601,7 +1657,7 @@
+ // init streamingssettings
+ void CNeutrinoApp::InitStreamingSettings(CMenuWidget &streamingSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitStreamingSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitStreamingSettings\n");
+ 	
+ 	// intros
+ 	streamingSettings.addItem(GenericMenuBack);
+@@ -1696,7 +1752,7 @@
+ // Init Color Settings
+ void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitColorSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitColorSettings\n");
+ 	
+ 	// init screensetup objekt
+ 	CScreenSetup  * ScreenSetup = new CScreenSetup();
+@@ -1879,7 +1935,7 @@
+ /* Init LCD Settings */
+ void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitLcdSettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitLcdSettings\n");
+ 	
+ 	int shortcutVFD = 1;
+ 	
+@@ -1924,10 +1980,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -2701,6 +2864,24 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
+@@ -2066,7 +2124,7 @@
+ 
+ void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings, CMenuWidget &bindSettings)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitKeySettings\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitKeySettings\n");
+ 	
+ 	int shortcutkeysettings = 1;
+ 	
+@@ -2398,7 +2456,7 @@
+ // USERMENU
+ bool CNeutrinoApp::showUserMenu(int button)
+ {
+-	dprintf(DEBUG_NORMAL, "CNeutrinoApp::showUserMenu\n");
++	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::showUserMenu\n");
+ 	
+         if(button < 0 || button >= SNeutrinoSettings::BUTTON_MAX)
+                 return false;
 
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
@@ -3639,5 +3820,39 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  const char * const CFlashVersionInfo::getDate(void) const
+
+
+--- neutrino-hd2-exp/src/gui/imageinfo.cpp	2012-11-09 16:12:53.189516186 +0100
++++ neutrino-hd2-exp/src/gui/imageinfo.cpp	2012-11-09 16:11:17.201040196 +0100
+@@ -118,6 +118,21 @@
+ 	return menu_return::RETURN_REPAINT;
+ }
+ 
++#ifdef EVOLUX
++void CImageInfo::hide()
++{
++	//frameBuffer->paintBackgroundBoxRel(0,0, max_width,max_height);
++	frameBuffer->paintBackground();
++	videoDecoder->Pig(-1, -1, -1, -1);
++}
++
++void CImageInfo::paint_pig(int px, int py, int w, int h)
++{
++	//frameBuffer->paintBoxRel(px,py,w,h, COL_BACKGROUND);
++	frameBuffer->paintBackgroundBoxRel(px,py,w,h);
++	videoDecoder->Pig(px, py, w, h, frameBuffer->getScreenWidth(true), frameBuffer->getScreenHeight(true));
++}
++#else
+ void CImageInfo::hide()
+ {
+ 	videoDecoder->Pig(-1, -1, -1, -1);
+@@ -143,6 +158,7 @@
+ 	videoDecoder->Pig( x, y, w, h );
+ #endif	
+ }
++#endif
+ 
+ void CImageInfo::paintLine(int xpos, int font, const char* text)
+ {
 
 
