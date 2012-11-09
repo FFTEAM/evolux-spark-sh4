@@ -525,7 +525,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,1692 @@
+@@ -0,0 +1,1698 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2103,7 +2103,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#if defined (PLATFORM_SPARK)
 +			safe_system("cd /tmp;wget -c -q http://is.gd/IKwL24;mv IKwL24 update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#else
-+			safe_system("cd /tmp;wget -c -q http://is.gd/DL3IrU;mv DL3IrU update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
++			safe_system("cd /tmp;wget -c -q http://is.gd/DL3IrU;mv DL3IrU update.tar.gz;md5check=`wget -q -O - http://is.gd/reTrI0 | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#endif
 +			if(!access("/tmp/md5ok", F_OK)) {
 +				safe_system("tar -xzvf /tmp/update.tar.gz -C /");
@@ -2114,6 +2114,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +				unlink("/tmp/EvoluxUpdatevailable");
 +				unlink("/tmp/update.tar.gz");
 +				unlink("/tmp/freeok");
++				unlink("/tmp/md5ok");
 +				CheckUpdateBox->hide();
 +				delete CheckUpdateBox;
 +				CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
@@ -2123,6 +2124,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +				delete CheckUpdateBox;
 +			}
 +			else {
++				unlink("/tmp/EvoluxUpdatevailable");
++				unlink("/tmp/update.tar.gz");
++				unlink("/tmp/freeok");
 +				CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "md5 Checksum-error! please reboot and try again!");
 +				CheckUpdateBox->paint();
 +				sleep(3);
@@ -2131,6 +2135,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +			}
 +		}
 +		else {
++			unlink("/tmp/EvoluxUpdatevailable");
++			unlink("/tmp/freeok");
 +			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "not enough free mem! less than 8mb)!");
 +			CheckUpdateBox->paint();
 +			sleep(3);
