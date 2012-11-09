@@ -17,7 +17,7 @@ version3=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d 
 BUILDREV=$version1$version2$version3
 #################
 
-version=`git describe --allways`
+version=`git describe --always`
 cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/var/etc/.version.new
 
 #########################################
