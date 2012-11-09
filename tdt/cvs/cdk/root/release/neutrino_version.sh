@@ -17,7 +17,7 @@ version3=`cat $KATIDIR/$MyChangelog | grep -m1 Version= | cut -d = -f2 | cut -d 
 BUILDREV=$version1$version2$version3
 #################
 
-version=`git describe`
+version=`git describe --allways`
 cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/var/etc/.version.new
 
 #########################################
@@ -34,4 +34,7 @@ cat $KATIDIR/cvs/cdk/root/var/etc/.version | head -n 6 > $KATIDIR/cvs/cdk/root/v
 
 echo "version=$SNAPSHOT$BUILDREV$TIMESTAMP" >> $KATIDIR/cvs/cdk/root/var/etc/.version.new
 echo "git=$version" >> $KATIDIR/cvs/cdk/root/var/etc/.version.new
+if [ -e $KATIDIR/cvs/cdk/.spark7162 ]; then
+	sed "s@imagename=.*@imagename=NtrinoHD2 for Spark@g" -i $KATIDIR/cvs/cdk/root/var/etc/.version.new
+fi
 exit
