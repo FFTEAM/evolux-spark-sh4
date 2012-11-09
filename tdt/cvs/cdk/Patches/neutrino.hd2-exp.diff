@@ -525,7 +525,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,1681 @@
+@@ -0,0 +1,1692 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2101,23 +2101,34 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
 +			CheckUpdateBox->paint();
 +#if defined (PLATFORM_SPARK)
-+			safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++			safe_system("cd /tmp;wget -c -q http://is.gd/IKwL24;mv IKwL24 update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#else
-+			safe_system("wget -O - -q http://is.gd/DL3IrU | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
++			safe_system("cd /tmp;wget -c -q http://is.gd/DL3IrU;mv DL3IrU update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#endif
-+			safe_system("[ -e /tmp/uImage ] && dd if=/tmp/uImage of=/dev/mtdblock5");
-+			if(!access("/tmp/uImage", F_OK))
-+				unlink("/tmp/uImage");
-+			unlink("/tmp/EvoluxUpdatevailable");
-+			unlink("/tmp/update.tar.gz");
-+			unlink("/tmp/freeok");
-+			CheckUpdateBox->hide();
-+			delete CheckUpdateBox;
-+			CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
-+			CheckUpdateBox->paint();
-+			sleep(3);
-+			CheckUpdateBox->hide();
-+			delete CheckUpdateBox;
++			if(!access("/tmp/md5ok", F_OK)) {
++				safe_system("tar -xzvf /tmp/update.tar.gz -C /");
++				if(!access("/tmp/uImage", F_OK)) {
++					safe_system("[ -e /tmp/uImage ] && dd if=/tmp/uImage of=/dev/mtdblock5");
++					unlink("/tmp/uImage");
++				}
++				unlink("/tmp/EvoluxUpdatevailable");
++				unlink("/tmp/update.tar.gz");
++				unlink("/tmp/freeok");
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++				CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
++				CheckUpdateBox->paint();
++				sleep(3);
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++			}
++			else {
++				CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "md5 Checksum-error! please reboot and try again!");
++				CheckUpdateBox->paint();
++				sleep(3);
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++			}
 +		}
 +		else {
 +			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "not enough free mem! less than 8mb)!");
@@ -3679,6 +3690,30 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #else
  // giga
  /*
+
+
+--- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.h	2012-11-01 11:40:29.078939490 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/dmx_cs.h	2012-11-09 18:04:45.636936219 +0100
+@@ -27,10 +27,16 @@
+ 
+ 
+ #define DEMUX_POLL_TIMEOUT 0  			// timeout in ms
+-#define DMX_BUFFER_SIZE			8192
++#define MAX_FILTER_LENGTH		16    // maximum number of filters
++
++#ifndef DMX_FILTER_SIZE
++#define DMX_FILTER_SIZE			MAX_FILTER_LENGTH
++#endif
++#define MAX_DMX_UNITS			4
++#define DMX_BUFFER_SIZE			65536
+ #define AUDIO_STREAM_BUFFER_SIZE     	64*1024 	//65536
+ #define VIDEO_STREAM_BUFFER_SIZE     	64*1024 	//65536
+-#define RECORD_STREAM_BUFFER_SIZE	512*1024 	//262144)
++#define RECORD_STREAM_BUFFER_SIZE	1024*1024 	//1048576)
+ 
+ 
+ typedef enum
+
 
 // needed for crypt channels!!!
 //--- neutrino-hd2-exp/lib/libcoolstream/dmx_cs.cpp	2012-11-02 01:07:46.913817024 +0100

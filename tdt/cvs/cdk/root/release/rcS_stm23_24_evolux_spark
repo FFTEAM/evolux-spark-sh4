@@ -634,8 +634,37 @@ if [ ! -e /var/etc/.firstboot ]; then
 				echo "ERROR"
 				# dirty hack to fix shutdown on nhd2 with errors/segfault
 				if [ -e /etc/.nhd2 ]; then
-					echo "SHUTDOWN WITH ERROR"
-					#echo "ERROR" > /dev/vfd
+					if [ -e /tmp/.reboot ]; then # gets created by neutrino
+						echo "rebooting WITH ERROR"
+						init 6
+					else
+						echo "SHUTDOWN WITH ERROR"
+						#echo "ERROR" > /dev/vfd
+						sync
+						[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
+						HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
+						if [ ! -z "$HDDON" ] && [ -e /etc/.fsck ]; then
+							echo "hdd-check"
+							echo "FSCK" > /dev/vfd
+							umount /media/hdd >/dev/null 2>&1
+							umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+							umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+							umount /dev/sda1 >/dev/null 2>&1
+							fsck."$HDDON" -p /dev/sda1
+						fi
+						HDDON2=`mount | grep -m1 sda2 | cut -d " " -f5 | cut -d " " -f1`
+						if [ ! -z "$HDDON2" ] && [ -e /etc/.fsck ]; then
+							echo "hdd-check2"
+							echo "FSCK" > /dev/vfd
+							umount /media/hdd2 >/dev/null 2>&1
+							umount /usr/local/share_nhd/neutrino/icons/logo >/dev/null 2>&1
+							umount /usr/local/share/enigma2/picon >/dev/null 2>&1
+							umount /dev/sda2 >/dev/null 2>&1
+							fsck."$HDDON" -p /dev/sda2
+						fi
+						init 0
+					fi
+				else
 					sync
 					[ -e /etc/.nfsserver ] && (etc/init.d/nfs-common stop;/etc/init.d/nfs-kernel-server stop) &
 					HDDON=`mount | grep -m1 sda1 | cut -d " " -f5 | cut -d " " -f1`
@@ -658,8 +687,6 @@ if [ ! -e /var/etc/.firstboot ]; then
 						umount /dev/sda2 >/dev/null 2>&1
 						fsck."$HDDON" -p /dev/sda2
 					fi
-					init 0
-				else
 					init 6
 				fi;;
 			esac
