@@ -3644,7 +3644,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  		// modes
  		int				mode;
-@@ -224,7 +243,8 @@
+@@ -220,7 +239,8 @@
  				  CMenuWidget &service,
                          	  CMenuWidget &audioplayerSettings, 
  				  CMenuWidget &PicViewerSettings, 
@@ -3654,7 +3654,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  				  CMenuWidget &MediaPlayer);
  
  		void SetupFrameBuffer();
-@@ -254,7 +274,9 @@
+@@ -250,7 +270,9 @@
  		CChannelList			*TVchannelList;
  		CChannelList			*RADIOchannelList;
  		CChannelList			* channelList;
@@ -4116,7 +4116,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -659,8 +659,10 @@
+@@ -664,8 +664,10 @@
  
  	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
  	
@@ -4129,7 +4129,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // save pids
-@@ -1020,8 +1022,10 @@
+@@ -1025,8 +1027,10 @@
  	
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
  	
@@ -4142,7 +4142,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		
  
  	return 0;
-@@ -3515,9 +3519,11 @@
+@@ -3520,9 +3524,11 @@
  		cam1 = new CCam();
  	}
  
@@ -4214,7 +4214,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/video_cs.h	2012-11-02 15:23:34.230367978 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/video_cs.h	2012-11-02 15:23:05.550225757 +0100
-@@ -70,6 +70,22 @@
+@@ -85,6 +85,22 @@
  1080p30 
  PC
  */
@@ -4249,7 +4249,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:22:02.981915499 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:21:49.125846789 +0100
-@@ -352,6 +352,22 @@
+@@ -358,6 +358,22 @@
  1080p50
  PC
  */
@@ -4272,7 +4272,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	const char *aVideoSystems[][2] = {
  		{"VIDEO_STD_PAL", "pal"},
  		{"VIDEO_STD_1080I50", "1080i50"},
-@@ -366,6 +381,7 @@
+@@ -373,6 +388,7 @@
  		{"VIDEO_STD_1080P50", "1080p50"},
  		{"VIDEO_STD_PC", "PC"},
  	};
@@ -4472,3 +4472,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
 
 
+--- neutrino-hd2-exp/lib/libcoolstream/playback_cs.h	2012-11-10 16:13:14.606615324 +0100
++++ neutrino-hd2-exp/lib/libcoolstream/playback_cs.h	2012-11-10 16:11:19.358043844 +0100
+@@ -27,8 +27,8 @@
+ 
+ 
+ #if !defined (ENABLE_GSTREAMER)  // eplayer3 default
+-#include <common.h>
+-#include <subtitle.h>
++#include "../lib/libeplayer3/include/common.h"
++#include "../lib/libeplayer3/include/subtitle.h"
+ #include <linux/fb.h>
+ 
+ 
