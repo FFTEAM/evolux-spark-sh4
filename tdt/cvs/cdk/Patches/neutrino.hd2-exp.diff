@@ -4472,16 +4472,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
 
 
---- neutrino-hd2-exp/lib/libcoolstream/playback_cs.h	2012-11-10 16:13:14.606615324 +0100
-+++ neutrino-hd2-exp/lib/libcoolstream/playback_cs.h	2012-11-10 16:11:19.358043844 +0100
-@@ -27,8 +27,8 @@
- 
- 
- #if !defined (ENABLE_GSTREAMER)  // eplayer3 default
--#include <common.h>
--#include <subtitle.h>
-+#include "../lib/libeplayer3/include/common.h"
-+#include "../lib/libeplayer3/include/subtitle.h"
- #include <linux/fb.h>
+
  
  
