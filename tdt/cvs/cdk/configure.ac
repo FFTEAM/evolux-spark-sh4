@@ -214,6 +214,12 @@ AC_ARG_ENABLE(mediafwgstreamer,
 AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
 AC_SUBST(MEDIAFWGSTREAMER)
 
+AC_ARG_ENABLE(mediafwgstreamernhd2,
+	AS_HELP_STRING(--enable-mediafwgstreamernhd2,	set up the CDK to use mediafw gstreamer for nhd2),
+	,[enable_mediafwgstreamernhd2=no])
+AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMERNHD2,test "$enable_mediafwgstreamernhd2" = "yes")
+AC_SUBST(MEDIAFWGSTREAMERNHD2)
+
 AC_ARG_ENABLE(externallcd,
 	AS_HELP_STRING(--enable-externallcd,	set up the CDK to use graphlcd),
 	,[enable_externallcd=no])
@@ -917,6 +923,17 @@ else
 	MEDIAFW_DEP="ffmpeg"
 fi
 
+AC_SUBST(MEDIAFWNHD2)
+AC_SUBST(MEDIAFWNHD2_DEP)
+
+if test "$enable_mediafwgstreamernhd2" == "yes"; then
+	MEDIAFWNHD2="gstreamer"
+	MEDIAFWNHD2_DEP="gst_plugins_dvbmediasink"
+else
+	MEDIAFWNHD2="eplayer3"
+	MEDIAFWNHD2_DEP="ffmpeg"
+fi
+
 #TUXBOX_RULES_MAKE_EXDIR(binutils)
 #TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
 #TUXBOX_RULES_MAKE_EXDIR(glibc)
@@ -1010,6 +1027,7 @@ TUXBOX_RULES_MAKE(libmad)
 TUXBOX_RULES_MAKE(libid3tag)
 TUXBOX_RULES_MAKE(libvorbisidec)
 TUXBOX_RULES_MAKE(libvorbis)
+TUXBOX_RULES_MAKE(libmodplug)
 TUXBOX_RULES_MAKE(glib2)
 TUXBOX_RULES_MAKE(libiconv)
 TUXBOX_RULES_MAKE(GD)
@@ -1291,6 +1309,11 @@ Multicom324                 : $enable_multicom324
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
+
+MediaFwNhd2 Gstreamer       : $enable_mediafwgstreamernhd2
+MediaFwNhd2                 : $MEDIAFWNHD2
+MediaFwNhd2 Dep             : $MEDIAFWNHD2_DEP
+
 EXTERNALLCD                 : $enable_externallcd
 EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
 MULTI YAFFS2		    : $enable_multi_yaffs2
