@@ -1691,8 +1691,7 @@ $(DEPDIR)/%libflac: $(DEPDIR)/libflac.do_compile
 	[ "x$*" = "x" ] && touch $@ || true
 
 #
-##############################   GSTREAMER + PLUGINS   #########################
-
+# GSTREAMER + PLUGINS  This will become the "libeplayer4"
 #
 # GSTREAMER
 #
@@ -1703,15 +1702,14 @@ $(DEPDIR)/gstreamer.do_prepare: bootstrap glib2 libxml2 @DEPENDS_gstreamer@
 $(DEPDIR)/gstreamer.do_compile: $(DEPDIR)/gstreamer.do_prepare
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_gstreamer@ && \
-	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
+		--disable-docs-build \
 		--disable-dependency-tracking \
-		--disable-check \
-		ac_cv_func_register_printf_function=no && \
-	$(MAKE)
+		--with-check=no \
+		ac_cv_func_register_printf_function=no
 	touch $@
 
 $(DEPDIR)/min-gstreamer $(DEPDIR)/std-gstreamer $(DEPDIR)/max-gstreamer \
@@ -1720,7 +1718,8 @@ $(DEPDIR)/%gstreamer: $(DEPDIR)/gstreamer.do_compile
 	cd @DIR_gstreamer@ && \
 		@INSTALL_gstreamer@
 #	@DISTCLEANUP_gstreamer@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
+	@TUXBOX_YAUD_CUSTOMIZE@
 
 #
 # GST-PLUGINS-BASE
@@ -1732,19 +1731,16 @@ $(DEPDIR)/gst_plugins_base.do_prepare: bootstrap glib2 gstreamer libogg libalsa 
 $(DEPDIR)/gst_plugins_base.do_compile: $(DEPDIR)/gst_plugins_base.do_prepare
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_gst_plugins_base@ && \
-	autoreconf --verbose --force --install -I$(hostprefix)/share/aclocal && \
 	$(BUILDENV) \
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
 		--disable-theora \
-		--disable-gnome_vfs \
 		--disable-pango \
 		--disable-vorbis \
 		--disable-x \
-		--disable-examples \
-		--with-audioresample-format=int && \
-	$(MAKE)
+		--with-audioresample-format=int \
+		--with-check=no
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_base $(DEPDIR)/std-gst_plugins_base $(DEPDIR)/max-gst_plugins_base \
@@ -1771,12 +1767,10 @@ $(DEPDIR)/gst_plugins_good.do_compile: $(DEPDIR)/gst_plugins_good.do_prepare
 		--prefix=/usr \
 		--disable-esd \
 		--disable-esdtest \
-		--disable-aalib \
 		--disable-shout2 \
 		--disable-shout2test \
 		--disable-x \
-		--with-check=no && \
-	$(MAKE)
+		--with-check=no
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_good $(DEPDIR)/std-gst_plugins_good $(DEPDIR)/max-gst_plugins_good \
@@ -1785,12 +1779,12 @@ $(DEPDIR)/%gst_plugins_good: $(DEPDIR)/gst_plugins_good.do_compile
 	cd @DIR_gst_plugins_good@ && \
 		@INSTALL_gst_plugins_good@
 #	@DISTCLEANUP_gst_plugins_good@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-PLUGINS-BAD
 #
-$(DEPDIR)/gst_plugins_bad.do_prepare: bootstrap gstreamer gst_plugins_base libmodplug @DEPENDS_gst_plugins_bad@
+$(DEPDIR)/gst_plugins_bad.do_prepare: bootstrap gstreamer gst_plugins_base @DEPENDS_gst_plugins_bad@
 	@PREPARE_gst_plugins_bad@
 	touch $@
 
@@ -1801,10 +1795,8 @@ $(DEPDIR)/gst_plugins_bad.do_compile: $(DEPDIR)/gst_plugins_bad.do_prepare
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
-		--disable-sdl \
-		--disable-modplug \
-		ac_cv_openssldir=no && \
-	$(MAKE)
+		ac_cv_openssldir=no \
+		--with-check=no
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_bad $(DEPDIR)/std-gst_plugins_bad $(DEPDIR)/max-gst_plugins_bad \
@@ -1813,7 +1805,7 @@ $(DEPDIR)/%gst_plugins_bad: $(DEPDIR)/gst_plugins_bad.do_compile
 	cd @DIR_gst_plugins_bad@ && \
 		@INSTALL_gst_plugins_bad@
 #	@DISTCLEANUP_gst_plugins_bad@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-PLUGINS-UGLY
@@ -1829,8 +1821,7 @@ $(DEPDIR)/gst_plugins_ugly.do_compile: $(DEPDIR)/gst_plugins_ugly.do_prepare
 	./configure \
 		--host=$(target) \
 		--prefix=/usr \
-		--disable-mpeg2dec && \
-	$(MAKE)
+		--with-check=no
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_ugly $(DEPDIR)/std-gst_plugins_ugly $(DEPDIR)/max-gst_plugins_ugly \
@@ -1839,6 +1830,39 @@ $(DEPDIR)/%gst_plugins_ugly: $(DEPDIR)/gst_plugins_ugly.do_compile
 	cd @DIR_gst_plugins_ugly@ && \
 		@INSTALL_gst_plugins_ugly@
 #	@DISTCLEANUP_gst_plugins_ugly@
+	@[ "x$*" = "x" ] && touch $@ || true
+
+#
+# GST-PLUGIN-SUBSINK
+#
+$(DEPDIR)/gst_plugin_subsink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugin_subsink@
+	if [ ! -d $(buildprefix)/gst-plugin-subsink ]; then \
+		git clone git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink gst-plugin-subsink; \
+		cd gst-plugin-subsink && git checkout 8182abe751364f6eb1ed45377b0625102aeb68d5; \
+	fi;
+	@PREPARE_gst_plugin_subsink@
+	touch $@
+
+$(DEPDIR)/gst_plugin_subsink.do_compile: $(DEPDIR)/gst_plugin_subsink.do_prepare
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd gst-plugin-subsink && \
+	aclocal -I $(hostprefix)/share/aclocal -I m4 && \
+	autoheader && \
+	autoconf && \
+	automake --foreign && \
+	libtoolize --force && \
+	$(BUILDENV) \
+	./configure \
+		--host=$(target) \
+		--prefix=/usr
+	touch $@
+
+$(DEPDIR)/min-gst_plugin_subsink $(DEPDIR)/std-gst_plugin_subsink $(DEPDIR)/max-gst_plugin_subsink \
+$(DEPDIR)/gst_plugin_subsink: \
+$(DEPDIR)/%gst_plugin_subsink: $(DEPDIR)/gst_plugin_subsink.do_compile
+	cd gst-plugin-subsink && \
+		@INSTALL_gst_plugin_subsink@
+#	@DISTCLEANUP_gst_plugin_subsink@
 	[ "x$*" = "x" ] && touch $@ || true
 
 #
@@ -1901,7 +1925,7 @@ $(DEPDIR)/%gst_ffmpeg: $(DEPDIR)/gst_ffmpeg.do_compile
 	cd @DIR_gst_ffmpeg@ && \
 		@INSTALL_gst_ffmpeg@
 #	@DISTCLEANUP_gst_ffmpeg@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-PLUGINS-FLUENDO-MPEGDEMUX
@@ -1916,9 +1940,7 @@ $(DEPDIR)/gst_plugins_fluendo_mpegdemux.do_compile: $(DEPDIR)/gst_plugins_fluend
 	$(BUILDENV) \
 	./configure \
 		--host=$(target) \
-		--prefix=/usr \
-		--with-check=no && \
-	$(MAKE)
+		--prefix=/usr --with-check=no
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_fluendo_mpegdemux $(DEPDIR)/std-gst_plugins_fluendo_mpegdemux $(DEPDIR)/max-gst_plugins_fluendo_mpegdemux \
@@ -1927,37 +1949,7 @@ $(DEPDIR)/%gst_plugins_fluendo_mpegdemux: $(DEPDIR)/gst_plugins_fluendo_mpegdemu
 	cd @DIR_gst_plugins_fluendo_mpegdemux@ && \
 		@INSTALL_gst_plugins_fluendo_mpegdemux@
 #	@DISTCLEANUP_gst_ffmpeg@
-	[ "x$*" = "x" ] && touch $@ || true
-
-#
-# GST-PLUGIN-SUBSINK
-#
-$(DEPDIR)/gst_plugin_subsink.do_prepare: bootstrap gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly @DEPENDS_gst_plugin_subsink@
-	@PREPARE_gst_plugin_subsink@
-	touch $@
-
-$(DEPDIR)/gst_plugin_subsink.do_compile: $(DEPDIR)/gst_plugin_subsink.do_prepare
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_gst_plugin_subsink@ && \
-	aclocal -I $(hostprefix)/share/aclocal -I m4 && \
-	autoheader && \
-	autoconf && \
-	automake --foreign && \
-	libtoolize --force && \
-	$(BUILDENV) \
-	./configure \
-		--host=$(target) \
-		--prefix=/usr && \
-	$(MAKE)
-	touch $@
-
-$(DEPDIR)/min-gst_plugin_subsink $(DEPDIR)/std-gst_plugin_subsink $(DEPDIR)/max-gst_plugin_subsink \
-$(DEPDIR)/gst_plugin_subsink: \
-$(DEPDIR)/%gst_plugin_subsink: $(DEPDIR)/gst_plugin_subsink.do_compile
-	cd @DIR_gst_plugin_subsink@ && \
-		@INSTALL_gst_plugin_subsink@
-#	@DISTCLEANUP_gst_plugin_subsink@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
 
 #
 # GST-PLUGINS-DVBMEDIASINK
@@ -1977,8 +1969,7 @@ $(DEPDIR)/gst_plugins_dvbmediasink.do_compile: $(DEPDIR)/gst_plugins_dvbmediasin
 	$(BUILDENV) \
 	./configure \
 		--host=$(target) \
-		--prefix=/usr && \
-	$(MAKE)
+		--prefix=/usr
 	touch $@
 
 $(DEPDIR)/min-gst_plugins_dvbmediasink $(DEPDIR)/std-gst_plugins_dvbmediasink $(DEPDIR)/max-gst_plugins_dvbmediasink \
@@ -1987,31 +1978,7 @@ $(DEPDIR)/%gst_plugins_dvbmediasink: $(DEPDIR)/gst_plugins_dvbmediasink.do_compi
 	cd @DIR_gst_plugins_dvbmediasink@ && \
 		@INSTALL_gst_plugins_dvbmediasink@
 #	@DISTCLEANUP_gst_plugins_dvbmediasink@
-	[ "x$*" = "x" ] && touch $@ || true
-
-# libmodplug
-#
-$(DEPDIR)/libmodplug.do_prepare: bootstrap @DEPENDS_libmodplug@
-	@PREPARE_libmodplug@
-	touch $@
-
-$(DEPDIR)/libmodplug.do_compile: $(DEPDIR)/libmodplug.do_prepare
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	cd @DIR_libmodplug@ && \
-	$(BUILDENV) \
-	./configure \
-		--host=$(target) \
-		--prefix=/usr && \
-	$(MAKE) all
-	touch $@
-
-$(DEPDIR)/min-libmodplug $(DEPDIR)/std-libmodplug $(DEPDIR)/max-libmodplug \
-$(DEPDIR)/libmodplug: \
-$(DEPDIR)/%libmodplug: $(DEPDIR)/libmodplug.do_compile
-	cd @DIR_libmodplug@ && \
-		@INSTALL_libmodplug@
-#	@DISTCLEANUP_libmodplug@
-	[ "x$*" = "x" ] && touch $@ || true
+	@[ "x$*" = "x" ] && touch $@ || true
 
 ################ EXTERNAL_CLD #############################
 
