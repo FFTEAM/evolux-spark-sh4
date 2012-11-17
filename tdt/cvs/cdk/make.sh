@@ -93,7 +93,7 @@ PLAYER="--enable-player191"
           rm stmfb
        fi
        ln -s player2_179 player2
-       ln -s stmfb-3.1_stm24_0102 stmfb
+       ln -s stmfb-3.1_stm24_0104 stmfb
        cd -  >/dev/null 2>&1
 
        cd ../driver/
@@ -108,7 +108,7 @@ PLAYER="--enable-player191"
        if [ -L stmfb ]; then
           rm stmfb
        fi
-       ln -s stmfb-3.1_stm24_0102 stmfb
+       ln -s stmfb-3.1_stm24_0104 stmfb
        cd -  >/dev/null 2>&1
 
 ##############################################
@@ -172,21 +172,22 @@ cd - >/dev/null 2>&1
 
 ##############################################
 
-#echo -e "\nMedia Framework:"
-#echo "   1) eplayer3  (for NHD/NHD2)"
-#echo "   2) gstreamer (for E2-PLI + EVOLUX)"
-#read -p "Select media framwork (1-2)? "
+echo -e "\nMedia Framework-NHD2:"
+echo "   1) eplayer3  (for NHD2, RECOMMENDED!)"
+echo "   2) gstreamer (for NHD2, EXPERIMENTAL)"
+read -p "Select media framework (1-2)? "
+case "$REPLY" in
+	1) MEDIAFWNHD2=""
+	;;
+	2) MEDIAFWNHD2="--enable-mediafwgstreamernhd2"
+	;;
+	*) MEDIAFWNHD2=""
+	;;
+esac
 
-#case "$REPLY" in
-#	1) MEDIAFW=""
-#	;;
-#	2) MEDIAFW="--enable-mediafwgstreamer"
-#	;;
-#	*) MEDIAFW=""
-#	;;
-#esac
+
 MEDIAFW="--enable-mediafwgstreamer"
-CONFIGPARAM="$CONFIGPARAM $MEDIAFW"
+CONFIGPARAM="$CONFIGPARAM $MEDIAFW $MEDIAFWNHD2"
 
 ##############################################
 if [ -z "$MEDIAFW" ]; then

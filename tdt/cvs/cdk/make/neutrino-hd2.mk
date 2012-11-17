@@ -1,4 +1,11 @@
 # tuxbox/neutrino
+if ENABLE_MEDIAFWGSTREAMERNHD2
+GSTREAMER_ON="--enable-gstreamer"
+GST_CFLAGS_NEW="GST_CFLAGS=$(GST_CFLAGS) -I$(targetprefix)/usr/include/gstreamer-0.10 -I$(targetprefix)/usr/include/glib-2.0 -I$(targetprefix)/usr/lib/glib-2.0/include -I$(targetprefix)/usr/include/libxml2"
+else
+GSTREAMER_ON=
+GST_CFLAGS_NEW=
+endif
 
 $(targetprefix)/var/etc/.version:
 	echo "imagename=Ntrino-HD2" > $@
@@ -23,7 +30,7 @@ $(targetprefix)/var/etc/.version:
 #		done; \
 #	fi
  
-$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 graphlcd libdvbsipp
+$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 graphlcd libdvbsipp libxml2 $(MEDIAFWNHD2_DEP)
 	if [ ! -d $(appsdir)/neutrino-hd2-exp ]; then \
 		svn co http://neutrinohd2.googlecode.com/svn/branches/nhd2-exp $(appsdir)/neutrino-hd2-exp; \
 		cd $(appsdir)/neutrino-hd2-exp; \
@@ -66,8 +73,10 @@ else
 			--enable-libeplayer3 \
 			--enable-graphlcd \
 			--enable-libass \
+			$(GSTREAMER_ON) \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
+			$(GST_CFLAGS_NEW) \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK7162 -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 endif
 

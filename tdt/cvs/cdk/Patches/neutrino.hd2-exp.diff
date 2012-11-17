@@ -3683,15 +3683,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
 +++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
-@@ -42,7 +42,6 @@
- #include <math.h>
- #include <system/debug.h>
- 
--
- //konfetti: let us share the device with evremote and fp_control
- //it does currently not support more than one user (see e.g. micom)
- #ifdef __sh__
-@@ -419,14 +418,22 @@
+@@ -426,14 +426,22 @@
  			Clear();
  			showclock = false;
  			break;
@@ -3712,42 +3704,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  						/* "showTime()" clears the whole lcd in MODE_STANDBY */
  			break;
 -		
-+#endif	
++#endif		
  		case MODE_PIC:	  
  			ShowIcon(VFD_ICON_TV, false);			
  			ShowIcon(VFD_ICON_HD, false);
-@@ -572,6 +579,7 @@
- #if defined (PLATFORM_GIGABLUE)
- 	ShowText("    "); // 4 empty digits
- #elif defined __sh__ 
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 	struct vfd_ioctl_data data;
-    
- 	data.start_address = 0;
-@@ -583,6 +591,7 @@
- 	
- 	closeDevice();
- #endif
-+#endif
- }
- 
- void CVFD::ShowIcon(vfd_icon icon, bool show)
-@@ -590,6 +600,7 @@
- 	dprintf(DEBUG_DEBUG, "CVFD::ShowIcon %s %x\n", show ? "show" : "hide", (int) icon);
- 
- #ifdef __sh__
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 	openDevice();
- 
- 	struct vfd_ioctl_data data;
-@@ -602,6 +613,7 @@
- 	
- 	closeDevice();
- #endif
-+#endif
- }
- 
- void* CVFD::ThreadScrollText(void * arg)
 
 --- neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:49.610539471 +0100
 +++ neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:36.446474194 +0100
