@@ -3708,6 +3708,17 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		case MODE_PIC:	  
  			ShowIcon(VFD_ICON_TV, false);			
  			ShowIcon(VFD_ICON_HD, false);
+@@ -590,8 +598,8 @@
+ #else
+ 	data.start_address = 0;
+ 	openDevice();	
+-	if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
+-		perror("VFDDISPLAYCLR");
++	//if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
++	//	perror("VFDDISPLAYCLR");
+ 	closeDevice();
+ #endif
+ #endif
 
 --- neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:49.610539471 +0100
 +++ neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:36.446474194 +0100
