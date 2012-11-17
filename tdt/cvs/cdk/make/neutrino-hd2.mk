@@ -53,8 +53,10 @@ if ENABLE_SPARK
 			--enable-libeplayer3 \
 			--enable-graphlcd \
 			--enable-libass \
+			$(GSTREAMER_ON) \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
+			$(GST_CFLAGS_NEW) \
 			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 else
 	export PATH=$(hostprefix)/bin:$(PATH) && \
