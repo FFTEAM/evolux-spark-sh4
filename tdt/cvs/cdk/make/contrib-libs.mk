@@ -2516,6 +2516,7 @@ $(DEPDIR)/libvorbis: \
 $(DEPDIR)/%libvorbis: $(DEPDIR)/libvorbis.do_compile
 	cd @DIR_libvorbis@ && \
 		@INSTALL_libvorbis@
+	sed "s@\/usr\/lib\/libvorbis.la@$(targetprefix)\/usr\/lib\/libvorbis.la@g" -i $(targetprefix)/usr/lib/libvorbisfile.la
 #	@DISTCLEANUP_libvorbis@
 	[ "x$*" = "x" ] && touch $@ || true
 
