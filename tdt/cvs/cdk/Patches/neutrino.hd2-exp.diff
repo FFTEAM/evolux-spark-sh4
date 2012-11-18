@@ -4087,33 +4087,47 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -664,8 +664,10 @@
+@@ -663,9 +663,11 @@
+ #endif	
  
  	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
- 	
--	// ci cam //FIXME: boxes without ci cam
--	ci->SendCaPMT(thischannel->getCaPmt());	
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
-+ 	// ci cam //FIXME: boxes without ci cam
-+ 	ci->SendCaPMT(thischannel->getCaPmt());	
+-	
++
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)		
+ 	// ci cam //FIXME: boxes without ci cam
+ 	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);	
 +#endif
  }
  
  // save pids
-@@ -1025,8 +1027,10 @@
+@@ -1024,9 +1026,11 @@
+ #endif	
  	
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
- 	
--	// ci cam //FIXME: boxes without ci cam
--	ci->SendCaPMT(rec_channel->getCaPmt());	
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
-+ 	// ci cam //FIXME: boxes without ci cam
-+ 	ci->SendCaPMT(thischannel->getCaPmt());	
-+#endif	
- 		
+-	
++
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)		
+ 	// ci cam //FIXME: boxes without ci cam
+ 	ci->SendCaPMT(rec_channel->getCaPmt(), frontend->fenumber);	
++#endif
  
  	return 0;
-@@ -3520,9 +3524,11 @@
+ }
+@@ -1195,10 +1199,11 @@
+ #endif	
+ 	
+ 	cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask, true); // update
+-	
++
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
+ 	// ci cam
+ 	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);	
+-	
++#endif	
+ 	rec_channel_id = 0;
+ 	rec_channel = NULL;
+ 	
+@@ -3522,9 +3527,11 @@
  		cam1 = new CCam();
  	}
  
