@@ -56,7 +56,7 @@ libstb-hal-update:
 # neutrino-hd
 #
  
-$(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins graphlcd
+$(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins graphlcd
 	if [ ! -d $(appsdir)/neutrino-hd ]; then \
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
 		cd $(appsdir)/neutrino-hd; \
