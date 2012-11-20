@@ -217,12 +217,15 @@ static int draw_thread(void *arg)
   char buf2[sizeof(data->data) + 2 * DISPLAYWIDTH_MAX];
   int len = data->length;
   int off = 0;
+  int doton3 = 0;
+  if (YWPANEL_width == 4 && len == 5 && data->data[2] == '.')
+	doton3 = 1;
   int saved = 0;
 
   if (panel_version.DisplayInfo == YWPANEL_FP_DISPTYPE_LED && len > 2 && data->data[2] == '.')
 	saved = 1;
 
-  if (len - saved > YWPANEL_width) {
+  if (len - saved > YWPANEL_width + doton3) {
   	memset(buf, ' ', sizeof(buf));
 	off = YWPANEL_width - 1;
   	memcpy(buf + off, data->data, len);
@@ -242,7 +245,7 @@ static int draw_thread(void *arg)
 	buf2[i] = 0;
   }
 
-  if(len - saved > YWPANEL_width) {
+  if(len - saved > YWPANEL_width + doton3) {
     char *b = saved ? buf2 : buf;
     int pos;
     for(pos = 0; pos < len; pos++) {
