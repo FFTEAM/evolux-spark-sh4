@@ -13,6 +13,7 @@ fi
 CURDIR=`pwd`
 GMDIR=${CURDIR%/cvs/cdk}
 export PATH=/usr/sbin:/sbin:$PATH
+myGCC=`gcc --version | grep -m1 gcc | cut -d " " -f4 | cut -d . -f2`
 
 CONFIGPARAM=" \
  --enable-maintainer-mode \
@@ -218,6 +219,9 @@ fi
 #	MULTIYAFFS2=""
 #fi
 ##############################################
+if  [ "$myGCC" -gt 5 ]; then
+	CONFIGPARAM="$CONFIGPARAM --enable-gcc472"
+fi
 
 CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $EXTERNAL_LCD $MULTIYAFFS2"
 

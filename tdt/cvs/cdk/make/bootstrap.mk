@@ -744,7 +744,11 @@ CROSS_GCC_KERNELHEADERS = linux-kernel-headers
 CROSS_GCC_INVALIDATE =
 else !STM23
 # if STM24
+if GCC_472
+CROSS_GCC_VERSION = 4.7.2-112
+else
 CROSS_GCC_VERSION = 4.5.2-78
+endif
 CROSS_GCC_RAWVERSION = $(firstword $(subst -, ,$(CROSS_GCC_VERSION)))
 CROSS_GCC_SPEC = stm-$(subst cross-sh4-,cross-,$(CROSS_GCC)).spec
 CROSS_GCC_SPEC_PATCH = $(CROSS_GCC_SPEC).$(CROSS_GCC_VERSION).diff
