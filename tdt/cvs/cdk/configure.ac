@@ -20,16 +20,6 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
-AC_ARG_ENABLE(gcc463,
-	AS_HELP_STRING(--enable-gcc463, compile image stm24 using gcc 4.7.2),
-	,[enable_gcc463=no])
-AM_CONDITIONAL(GCC_463,test "$enable_gcc472" = "yes")
-
-AC_ARG_ENABLE(gcc472,
-	AS_HELP_STRING(--enable-gcc472, compile image stm24 using gcc 4.7.2),
-	,[enable_gcc472=no])
-AM_CONDITIONAL(GCC_472,test "$enable_gcc472" = "yes")
-
 AC_ARG_ENABLE(player131,
 	AS_HELP_STRING(--enable-player131,	set up the CDK to use player131),
 	[case "${enableval}" in
