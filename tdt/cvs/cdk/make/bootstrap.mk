@@ -746,8 +746,12 @@ else !STM23
 # if STM24
 if GCC_472
 CROSS_GCC_VERSION = 4.7.2-112
-else
+else !GCC_472
+if GCC_463
+CROSS_GCC_VERSION = 4.6.3-111
+else !GCC_463
 CROSS_GCC_VERSION = 4.5.2-78
+endif
 endif
 CROSS_GCC_RAWVERSION = $(firstword $(subst -, ,$(CROSS_GCC_VERSION)))
 CROSS_GCC_SPEC = stm-$(subst cross-sh4-,cross-,$(CROSS_GCC)).spec

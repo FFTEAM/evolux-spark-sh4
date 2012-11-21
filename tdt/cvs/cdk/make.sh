@@ -219,8 +219,10 @@ fi
 #	MULTIYAFFS2=""
 #fi
 ##############################################
-if  [ "$myGCC" -gt 5 ]; then
+if  [ "$myGCC" == "7" ]; then
 	CONFIGPARAM="$CONFIGPARAM --enable-gcc472"
+elif  [ "$myGCC" == "6" ]; then
+	CONFIGPARAM="$CONFIGPARAM --enable-gcc463"
 fi
 
 CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $EXTERNAL_LCD $MULTIYAFFS2"
