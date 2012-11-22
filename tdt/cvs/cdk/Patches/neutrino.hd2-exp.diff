@@ -2619,6 +2619,17 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
+@@ -157,8 +157,9 @@
+ //extern bool has_hdd;				// defined in hdd_menu.cpp
+ extern bool parentallocked;			// defined neutrino.cpp
+ extern CRemoteControl * g_RemoteControl;	// defined neutrino.cpp
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ extern CCAMMenuHandler * g_CamHandler;		// defined neutrino.cpp
+-
++#endif
+ static CTimingSettingsNotifier timingsettingsnotifier;
+ 
+ extern int FrontendCount;			// defined in zapit.cpp
 @@ -194,11 +194,11 @@
  };
  
@@ -3306,7 +3317,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			
  			mode = mode_off;
  
-@@ -4136,7 +4140,7 @@
+@@ -4133,7 +4137,7 @@
  				
  				if( msg == CRCInput::RC_standby ) 
  				{
@@ -3315,7 +3326,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			
  					sleep(2);
  					
-@@ -4153,7 +4157,7 @@
+@@ -4150,7 +4154,7 @@
  				} 
  				else if( ( msg == NeutrinoMessages::ANNOUNCE_RECORD) || ( msg == NeutrinoMessages::ANNOUNCE_ZAPTO) ) 
  				{
@@ -3324,7 +3335,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					sleep(2);
  					
-@@ -4171,7 +4175,7 @@
+@@ -4168,7 +4172,7 @@
  				else 
  				{
  					// no message received.
@@ -3333,7 +3344,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					sleep(2);
  					
-@@ -4184,7 +4188,7 @@
+@@ -4181,7 +4185,7 @@
  					// stop all deamons threads
  					stop_daemons();
  					
@@ -3342,7 +3353,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					exit(retcode);
  				}
-@@ -4200,7 +4204,7 @@
+@@ -4197,7 +4201,7 @@
  
  			stop_daemons();
  
@@ -3351,7 +3362,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  			exit(0);
  		}
-@@ -4213,7 +4217,7 @@
+@@ -4210,7 +4214,7 @@
  	struct stat my_stat;    
  	if(stat(g_settings.epg_dir.c_str(), &my_stat) == 0)
  	{
@@ -3360,7 +3371,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		neutrino_msg_t      msg;
  		neutrino_msg_data_t data;
  		
-@@ -4252,7 +4256,7 @@
+@@ -4249,7 +4253,7 @@
  
  	current_muted = newValue;
  
@@ -3369,7 +3380,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	g_Zapit->muteAudio(current_muted);
  
-@@ -4578,7 +4582,7 @@
+@@ -4575,7 +4579,7 @@
  {
  	static bool wasshift = false;
  
@@ -3378,7 +3389,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	if( bOnOff ) 
  	{
-@@ -4725,7 +4729,7 @@
+@@ -4722,7 +4726,7 @@
  // Radio Mode
  void CNeutrinoApp::radioMode( bool rezap)
  {
@@ -3387,7 +3398,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	if(mode == mode_tv ) 
  	{
-@@ -4759,7 +4763,7 @@
+@@ -4756,7 +4760,7 @@
  
  	if(autoshift) 
  	{
@@ -3396,7 +3407,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		stopAutoRecord();
  		recordingstatus = 0;
  	}
-@@ -4846,7 +4850,7 @@
+@@ -4843,7 +4847,7 @@
  				}
  
  				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = std::string(recDir);
@@ -3405,7 +3416,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  				CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
  			}
-@@ -4874,7 +4878,7 @@
+@@ -4871,7 +4875,7 @@
  
  int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
  {
@@ -3414,7 +3425,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	int returnval = menu_return::RETURN_REPAINT;
  
-@@ -4920,12 +4924,12 @@
+@@ -4917,12 +4921,12 @@
  	}
  	else if(actionKey=="networktest") 
  	{
@@ -3429,7 +3440,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		showCurrentNetworkSettings();
  	}
  	else if (actionKey=="theme_neutrino") 
-@@ -5090,7 +5094,7 @@
+@@ -5087,7 +5091,7 @@
  		if (b.exec(g_settings.network_nfs_recordingdir)) 
  		{
  			const char * newdir = b.getSelectedFile()->Name.c_str();
@@ -3438,7 +3449,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  			if(check_dir(newdir))
  				printf("CNeutrinoApp::exec: Wrong/unsupported recording dir %s\n", newdir);
-@@ -5098,12 +5102,12 @@
+@@ -5095,12 +5099,12 @@
  			{
  				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1 );
  				
@@ -3453,7 +3464,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5123,7 +5127,7 @@
+@@ -5120,7 +5124,7 @@
  			else
  			{
  				strcpy(g_settings.update_dir, fileBrowser.getSelectedFile()->Name.c_str());
@@ -3462,7 +3473,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5166,7 +5170,7 @@
+@@ -5163,7 +5167,7 @@
  			{
  				g_settings.logos_dir = b.getSelectedFile()->Name;
  				//strcpy(g_settings.logos_dir.c_str(), b.getSelectedFile()->Name.c_str());
@@ -3471,7 +3482,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  
-@@ -5184,7 +5188,7 @@
+@@ -5181,7 +5185,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
  			loadColors(fileBrowser.getSelectedFile()->Name.c_str());
@@ -3480,7 +3491,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		}
  		
  		return menu_return::RETURN_REPAINT;
-@@ -5202,7 +5206,7 @@
+@@ -5199,7 +5203,7 @@
  			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVECOLORS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
  			sms->exec(NULL, "");
  			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
@@ -3489,7 +3500,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveColors(sname);
  			delete sms;
  		}
-@@ -5221,7 +5225,7 @@
+@@ -5218,7 +5222,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
  			loadKeys(fileBrowser.getSelectedFile()->Name.c_str());
@@ -3498,7 +3509,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		}
  		
  		return menu_return::RETURN_REPAINT;
-@@ -5239,7 +5243,7 @@
+@@ -5236,7 +5240,7 @@
  			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVEKEYS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
  			sms->exec(NULL, "");
  			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
@@ -3507,7 +3518,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveKeys(sname);
  			delete sms;
  		}
-@@ -5316,34 +5320,34 @@
+@@ -5312,34 +5316,34 @@
  #endif	
  
  	// stop nhttpd	
@@ -3550,7 +3561,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// clear vfd
  	CVFD::getInstance()->Clear();
-@@ -5358,7 +5362,7 @@
+@@ -5354,7 +5358,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
  
@@ -3559,7 +3570,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	res = tconfig.loadConfig(fname);
  	if(!res) 
-@@ -5423,7 +5427,7 @@
+@@ -5419,7 +5423,7 @@
  {
  	CConfigFile tconfig(',', true);
  	
@@ -3568,7 +3579,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	//colors
  	tconfig.setInt32( "menu_Head_alpha", g_settings.menu_Head_alpha );
-@@ -5485,7 +5489,7 @@
+@@ -5481,7 +5485,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
  	
@@ -3577,7 +3588,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	res = tconfig.loadConfig(fname);
  	if(!res) 
-@@ -5534,7 +5538,7 @@
+@@ -5530,7 +5534,7 @@
  {
  	CConfigFile tconfig(',', true);
  	
@@ -4026,7 +4037,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:12:51.852248642 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:10:38.555587666 +0100
-@@ -20,10 +20,15 @@
+@@ -18,10 +18,15 @@
  
  libcoolstream_a_SOURCES = audio_cs.cpp dmx_cs.cpp playback_cs.cpp record_cs.cpp \
  	video_cs.cpp
@@ -4048,7 +4059,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:12:37.488177423 +0100
 +++ neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:10:47.007629583 +0100
-@@ -55,7 +55,15 @@
+@@ -53,7 +53,15 @@
  libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
  endif
  
@@ -4080,7 +4091,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -663,9 +663,11 @@
+@@ -647,9 +647,11 @@
  #endif	
  
  	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
@@ -4093,7 +4104,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // save pids
-@@ -1024,9 +1026,11 @@
+@@ -1008,9 +1010,11 @@
  #endif	
  	
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
@@ -4106,7 +4117,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	return 0;
  }
-@@ -1195,10 +1199,11 @@
+@@ -1179,10 +1183,11 @@
  #endif	
  	
  	cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask, true); // update
@@ -4120,7 +4131,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	rec_channel_id = 0;
  	rec_channel = NULL;
  	
-@@ -3522,9 +3527,11 @@
+@@ -3508,9 +3513,11 @@
  		cam1 = new CCam();
  	}
  
@@ -4215,7 +4226,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  enum {
  	VIDEO_STD_PAL,
  	VIDEO_STD_1080I50,
-@@ -84,6 +99,7 @@
+@@ -100,6 +115,7 @@
  	VIDEO_STD_1080P50,
  	VIDEO_STD_PC
  };
@@ -4227,7 +4238,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:22:02.981915499 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:21:49.125846789 +0100
-@@ -358,6 +358,22 @@
+@@ -383,6 +383,22 @@
  1080p50
  PC
  */
@@ -4250,7 +4261,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	const char *aVideoSystems[][2] = {
  		{"VIDEO_STD_PAL", "pal"},
  		{"VIDEO_STD_1080I50", "1080i50"},
-@@ -373,6 +388,7 @@
+@@ -398,6 +413,7 @@
  		{"VIDEO_STD_1080P50", "1080p50"},
  		{"VIDEO_STD_PC", "PC"},
  	};
