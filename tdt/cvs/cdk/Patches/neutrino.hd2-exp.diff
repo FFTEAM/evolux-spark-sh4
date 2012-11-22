@@ -3405,22 +3405,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	int returnval = menu_return::RETURN_REPAINT;
  
-@@ -4888,12 +4892,12 @@
- 	}
- 	else if(actionKey=="reboot")
- 	{
--		//FILE *f = fopen("/tmp/.reboot", "w");
--		//fclose(f);
-+		FILE *f = fopen("/tmp/.reboot", "w");
-+		fclose(f);
- 
- 		ExitRun();
- 
--		//unlink("/tmp/.reboot");
-+		unlink("/tmp/.reboot");
- 		returnval = menu_return::RETURN_NONE;
- 	}
- 	else if(actionKey=="tv") 
 @@ -4920,12 +4924,12 @@
  	}
  	else if(actionKey=="networktest") 
