@@ -100,10 +100,10 @@
  	@$(MAKE) -C glcdgraphics uninstall
 --- graphlcd-base/glcddrivers/port.c	2011-12-07 22:31:41.607561726 +0100
 +++ graphlcd-base/glcddrivers/port.fix	2011-12-07 22:31:47.877565426 +0100
-@@ -16,12 +16,35 @@
- #include <syslog.h>
+@@ -18,12 +18,32 @@
  #include <unistd.h>
  #include <termios.h>
+ #include <pthread.h>
 +#ifndef __sh__
  #include <sys/io.h>
 +#endif
@@ -112,16 +112,14 @@
  #include <linux/parport.h>
  
 +#ifdef __sh__
- 
 +/* konfetti: those are currently only dummy. not tested, not really
 + * thinking on it. it needs revise for the params etc. also we need
 + * to revise the assembler code below. but for now its ok because
 + * I (we) only want the peal lcd to be running ;)
 + */
-+
 +#define __NR_ioperm 101
 +#define __NR_iopl 110
-+
+ 
 +static inline int ioperm(int port, unsigned long int from, unsigned long int num)
 +{
 +	return syscall(__NR_ioperm, port, from, num);
@@ -131,10 +129,10 @@
 +{
 +	return syscall(__NR_iopl, level);
 +}
-+
 +#endif
  
  #include "port.h"
+ 
  
 --- graphlcd-base/graphlcd.conf.orig	2012-03-07 01:52:17.571231592 +0100
 +++ graphlcd-base/graphlcd.conf	2012-03-07 01:54:58.223427153 +0100
