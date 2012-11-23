@@ -311,12 +311,6 @@ release_base:
 	cp $(targetprefix)/etc/tuxbox/terrestrial.xml $(prefix)/release/etc/tuxbox/ && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
-if !ENABLE_SPARK7162
-	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release/etc/init.d/rcS && \
-else
-	cp $(buildprefix)/root/release/rcS_stm23_24_spark7162 $(prefix)/release/etc/init.d/rcS && \
-endif
-	chmod 755 $(prefix)/release/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mme_check $(prefix)/release/etc/init.d/ && \
 	cp $(buildprefix)/root/release/mountall $(prefix)/release/etc/init.d/ && \
@@ -327,6 +321,12 @@ endif
 	mkdir -p $(prefix)/release/var/run/lirc && \
 	cp -rd $(targetprefix)/lib/* $(prefix)/release/lib/ && \
 	$(USERS) chmod 755 -R $(prefix)/release/lib
+if !ENABLE_SPARK7162
+	cp $(buildprefix)/root/release/rcS_stm23_24_spark $(prefix)/release/etc/init.d/rcS
+else
+	cp $(buildprefix)/root/release/rcS_stm23_24_spark7162 $(prefix)/release/etc/init.d/rcS
+endif
+	chmod 755 $(prefix)/release/etc/init.d/rcS
 	find $(prefix)/release/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
