@@ -70,6 +70,8 @@ endif
 	-rm -rf $(prefix)/EvoLux*
 	-rm -rf $(prefix)/uImage*
 	-rm -rf $(prefix)/e2*.img
+	-rm -rf $(prefix)/doku*.tar.gz
+	-rm -rf $(prefix)/info.txt
 	-rm -rf $(buildprefix)/.deps/*tuxtxt*
 	-rm -rf SOURCES SPECS BUILD && install -d SOURCES SPECS BUILD
 	-rm -rf $(prefix)/ccache
