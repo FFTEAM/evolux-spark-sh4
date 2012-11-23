@@ -48,6 +48,11 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
+#ifndef HAVE_GENERIC_HARDWARE
+ #include <dbox/fp.h>
+ #include <dbox/lcd-ks0713.h>
+#endif
+
 #include "tuxtxt_def.h"
 
 

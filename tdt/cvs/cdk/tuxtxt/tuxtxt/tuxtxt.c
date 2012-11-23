@@ -204,11 +204,22 @@ int tuxtxt_run_ui(int pid, int demux)
 	tuxtxt_cache.vtxtpid = pid;
 
 	/* open Framebuffer */
+#if defined(__sh__)
+	if ((renderinfo.fb=open("/dev/fb/0", O_RDWR)) == -1)
+	{
+		if ((renderinfo.fb=open("/dev/fb0", O_RDWR)) == -1)
+		{
+			perror("TuxTxt <open /dev/fb/0 || /dev/fb0>");
+			return 0;
+		}
+	}
+#else
 	if ((renderinfo.fb=open("/dev/fb/0", O_RDWR)) == -1)
 	{
 		perror("TuxTxt <open /dev/fb/0>");
 		return 0;
 	}
+#endif
 	rc[0] = rc[1] =-1;
 	while(rc_num < 2)
 	{
@@ -225,13 +236,21 @@ int tuxtxt_run_ui(int pid, int demux)
 		}
 		if (ioctl(rc[rc_num], EVIOCGNAME(128), tmp) < 0)
 			perror("EVIOCGNAME failed");
+#if defined(__sh__)
+		if (!strstr(tmp, "TDT RC event driver"))
+#else
 		if (!strstr(tmp, "remote control"))
+#endif
 		{
 			close(rc[rc_num]);
 			rc[rc_num] = -1;
 		}
 		else
+#if defined(__sh__)
+			break;
+#else
 			++rc_num;
+#endif
 		++cnt;
 	}
 
@@ -599,7 +618,11 @@ int Init()
 
 	readproc("/proc/stb/avs/0/sb", saved_pin8);
 	writeproc("/proc/stb/avs/0/sb", fncmodes[renderinfo.screen_mode1]);
-
+#ifndef HAVE_GENERIC_HARDWARE
+ 	/* setup rc */
+ 	if (rc[0] >= 0) ioctl(rc[0], RC_IOCTL_BCODES, 1);
+ 	if (rc[1] >= 0) ioctl(rc[1], RC_IOCTL_BCODES, 1);
+#endif
 	gethotlist();
 	tuxtxt_SwitchScreenMode(&renderinfo,renderinfo.screenmode);
 	renderinfo.prevscreenmode = renderinfo.screenmode;
@@ -2926,6 +2949,9 @@ int GetRCCode()
 				case KEY_HELP:		RCCode = RC_HELP;	break;
 				case KEY_MENU:		RCCode = RC_DBOX;	break;
 				case KEY_EXIT:		RCCode = RC_HOME;	break;
+#if defined(__sh__)
+				case KEY_HOME:		RCCode = RC_HOME;	break;
+#endif
 				case KEY_POWER:		RCCode = RC_STANDBY;	break;
 				default:			RCCode = -1;		break;
 				}
