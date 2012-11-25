@@ -71,10 +71,12 @@ read -p "Build for TRIPLEX(SPARK7162) (y/N)? "
 if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 	TARGET="--enable-spark7162"
 	touch "$GMDIR/cvs/cdk/.spark7162"
+	STMFBVERSION="0104"
 #	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark7162 aotom
 #	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
+	STMFBVERSION="0102"
 #	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
 #	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark player2_191
 fi
@@ -93,7 +95,7 @@ PLAYER="--enable-player191"
           rm stmfb
        fi
        ln -s player2_179 player2
-       ln -s stmfb-3.1_stm24_0104 stmfb
+       ln -s stmfb-3.1_stm24_$STMFBVERSION stmfb
        cd -  >/dev/null 2>&1
 
        cd ../driver/
@@ -108,7 +110,7 @@ PLAYER="--enable-player191"
        if [ -L stmfb ]; then
           rm stmfb
        fi
-       ln -s stmfb-3.1_stm24_0104 stmfb
+       ln -s stmfb-3.1_stm24_$STMFBVERSION stmfb
        cd -  >/dev/null 2>&1
 
 ##############################################
