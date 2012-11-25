@@ -76,7 +76,8 @@ if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 #	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark7162 player2_191
 else
 	TARGET="--enable-spark"
-	STMFBVERSION="0102"
+	#STMFBVERSION="0102"
+	STMFBVERSION="0104"
 #	cd "$GMDIR/cvs/driver/frontcontroller" && ln -sf aotom_spark aotom
 #	cd "$GMDIR/cvs/driver" && ln -sf player2_191_spark player2_191
 fi
