@@ -3687,56 +3687,20 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
 +++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
-@@ -419,19 +419,61 @@
+@@ -419,19 +419,26 @@
  			break;
  
  		case MODE_SHUTDOWN:
 -			//ShowIcon(VFD_ICON_TV, false);
--			/* clear all symbols */
-+#if defined (PLATFORM_SPARK7162)
-+			ShowIcon(VFD_ICON_TV, false);			
-+			ShowIcon(VFD_ICON_HD, false);
-+			ShowIcon(VFD_ICON_DOLBY, false);
-+			ShowIcon(VFD_ICON_MP3, false);
-+			ShowIcon(VFD_ICON_USB, false);
-+			ShowIcon(VFD_ICON_LOCK, false);
-+			ShowIcon(VFD_ICON_MUTE, false);
-+			ShowIcon(VFD_ICON_TIMESHIFT, false);
-+			ShowIcon(VFD_ICON_RADIO, false);
-+			ShowIcon(VFD_ICON_1080P, false);
-+			ShowIcon(VFD_ICON_1080I, false);
-+			ShowIcon(VFD_ICON_720P, false);
-+			ShowIcon(VFD_ICON_480P, false);
-+			ShowIcon(VFD_ICON_480I, false);
-+			ShowIcon(VFD_ICON_PLAY, false);
-+			ShowIcon(VFD_ICON_PAUSE, false);
-+			ShowIcon(VFD_ICON_LOCK, false);
-+#endif
-+			/* clear all symbols, doesn't work on spark7162 */
+ 			/* clear all symbols */
  			Clear();
  			showclock = false;
  			break;
 -
 +#if defined (PLATFORM_SPARK7162)
 +		case MODE_STANDBY:
-+			ShowIcon(VFD_ICON_TV, false);			
-+			ShowIcon(VFD_ICON_HD, false);
-+			ShowIcon(VFD_ICON_DOLBY, false);
-+			ShowIcon(VFD_ICON_MP3, false);
-+			ShowIcon(VFD_ICON_USB, false);
-+			ShowIcon(VFD_ICON_LOCK, false);
-+			ShowIcon(VFD_ICON_MUTE, false);
-+			ShowIcon(VFD_ICON_TIMESHIFT, false);
-+			ShowIcon(VFD_ICON_RADIO, false);
-+			ShowIcon(VFD_ICON_1080P, false);
-+			ShowIcon(VFD_ICON_1080I, false);
-+			ShowIcon(VFD_ICON_720P, false);
-+			ShowIcon(VFD_ICON_480P, false);
-+			ShowIcon(VFD_ICON_480I, false);
-+			ShowIcon(VFD_ICON_PLAY, false);
-+			ShowIcon(VFD_ICON_PAUSE, false);
-+			ShowIcon(VFD_ICON_LOCK, false);
 +			showclock = false;
++			Clear();
 +			//showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 +						/* "showTime()" clears the whole lcd in MODE_STANDBY */
 +			ShowText("STANDBY");
@@ -3753,14 +3717,35 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		case MODE_PIC:	  
  			ShowIcon(VFD_ICON_TV, false);			
  			ShowIcon(VFD_ICON_HD, false);
-@@ -588,8 +630,8 @@
+@@ -587,9 +594,30 @@
+ 	closeDevice();
  #else
  	data.start_address = 0;
- 	openDevice();	
--	if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
--		perror("VFDDISPLAYCLR");
-+	//if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
-+	//	perror("VFDDISPLAYCLR");
+-	openDevice();	
++	openDevice();
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK) 
+ 	if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
+ 		perror("VFDDISPLAYCLR");
++#endif
++#if defined (PLATFORM_SPARK7162)
++	ShowIcon(VFD_ICON_TV, false);			
++	ShowIcon(VFD_ICON_HD, false);
++	ShowIcon(VFD_ICON_DOLBY, false);
++	ShowIcon(VFD_ICON_MP3, false);
++	ShowIcon(VFD_ICON_USB, false);
++	ShowIcon(VFD_ICON_LOCK, false);
++	ShowIcon(VFD_ICON_MUTE, false);
++	ShowIcon(VFD_ICON_TIMESHIFT, false);
++	ShowIcon(VFD_ICON_RADIO, false);
++	ShowIcon(VFD_ICON_1080P, false);
++	ShowIcon(VFD_ICON_1080I, false);
++	ShowIcon(VFD_ICON_720P, false);
++	ShowIcon(VFD_ICON_480P, false);
++	ShowIcon(VFD_ICON_480I, false);
++	ShowIcon(VFD_ICON_PLAY, false);
++	ShowIcon(VFD_ICON_PAUSE, false);
++	ShowIcon(VFD_ICON_LOCK, false);
++#endif
  	closeDevice();
  #endif
  #endif
@@ -4132,7 +4117,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  /* audio conf */
  #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -647,9 +647,11 @@
+@@ -650,9 +650,11 @@
  #endif	
  
  	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
@@ -4145,7 +4130,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // save pids
-@@ -1008,9 +1010,11 @@
+@@ -1011,9 +1013,11 @@
  #endif	
  	
  	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
@@ -4158,7 +4143,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	return 0;
  }
-@@ -1179,10 +1183,11 @@
+@@ -1182,10 +1186,11 @@
  #endif	
  	
  	cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask, true); // update
@@ -4172,7 +4157,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	rec_channel_id = 0;
  	rec_channel = NULL;
  	
-@@ -3508,9 +3513,11 @@
+@@ -3511,9 +3516,11 @@
  		cam1 = new CCam();
  	}
  
@@ -4504,18 +4489,20 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:43:15.243494257 +0100
 +++ neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:42:06.931155488 +0100
-@@ -184,7 +184,11 @@
+@@ -184,7 +184,13 @@
  		secSetVoltage(SEC_VOLTAGE_OFF, 0);
  		secSetTone(SEC_TONE_OFF, 15);
  	}
 -
++#if defined (PLATFORM_SPARK7162)
 +// spark7162 artefakt fix on zap. maybe also needed for other boxtypes? please check
 +	else {
 +		secSetVoltage(SEC_VOLTAGE_OFF, 0);
 +		secSetTone(SEC_TONE_OFF, 15);
 +	}
++#endif
  	tuned = false;
  	standby = true;
  	
- 
- 
+
+
