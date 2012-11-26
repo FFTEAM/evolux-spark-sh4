@@ -5,7 +5,7 @@ checkout git by:
 
     cd /evolux-spark-sh4/tdt/cvs/cdk
 
-    ./tdtsetup.sh
+    ./setuptdt.sh
     (that will install all needed packages, take care for newer linux-distris like ubuntu12.04 you must downgrade gcc to 4.5.3, script will ask you to do that)
 
     ./make.sh
