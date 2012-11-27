@@ -34,7 +34,9 @@ nandtest -m /dev/mtd6
 fi
 #cp -RP /storage/c/enigma2/etc/fw_env.config /etc/
 #chmod 755 /etc/fw_env.config
-insmod /root/spark/modules/i2s.ko
+if [ -e /root/spark/modules/i2s.ko ]; then
+	insmod /root/spark/modules/i2s.ko
+fi
 flash_eraseall /dev/mtd5
 nandwrite -a -p -m /dev/mtd5 /storage/c/enigma2/uImage
 
