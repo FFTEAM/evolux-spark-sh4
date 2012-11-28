@@ -4487,22 +4487,22 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
 
 
---- neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:43:15.243494257 +0100
-+++ neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:42:06.931155488 +0100
-@@ -184,7 +184,13 @@
- 		secSetVoltage(SEC_VOLTAGE_OFF, 0);
- 		secSetTone(SEC_TONE_OFF, 15);
- 	}
--
-+#if defined (PLATFORM_SPARK7162)
-+// spark7162 artefakt fix on zap. maybe also needed for other boxtypes? please check
-+	else {
-+		secSetVoltage(SEC_VOLTAGE_OFF, 0);
-+		secSetTone(SEC_TONE_OFF, 15);
-+	}
-+#endif
- 	tuned = false;
- 	standby = true;
+//--- neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:43:15.243494257 +0100
+//+++ neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:42:06.931155488 +0100
+//@@ -184,7 +184,13 @@
+// 		secSetVoltage(SEC_VOLTAGE_OFF, 0);
+// 		secSetTone(SEC_TONE_OFF, 15);
+// 	}
+//-
+//+#if defined (PLATFORM_SPARK7162)
+//+// spark7162 artefakt fix on zap. maybe also needed for other boxtypes? please check
+//+	else {
+//+		secSetVoltage(SEC_VOLTAGE_OFF, 0);
+//+		secSetTone(SEC_TONE_OFF, 15);
+//+	}
+//+#endif
+// 	tuned = false;
+// 	standby = true;
  	
 
 
