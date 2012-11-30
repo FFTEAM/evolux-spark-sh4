@@ -1,3 +1,14 @@
+--- neutrino-hd/acinclude.m4	2012-11-30 17:34:41.007511085 +0100
++++ neutrino-hd/acinclude.m4	2012-11-30 18:24:21.718291609 +0100
+@@ -465,6 +465,7 @@
+ 	AC_DEFINE(HAVE_COOL_HARDWARE, 1, [building for a coolstream])
+ elif test "$BOXTYPE" = "spark"; then
+ 	AC_DEFINE(HAVE_SPARK_HARDWARE, 1, [building for a goldenmedia 990 or edision pingulux])
++	AC_DEFINE(PLATFORM_SPARK, 1, [building for an spark])
+ elif test "$BOXTYPE" = "generic"; then
+ 	AC_DEFINE(HAVE_GENERIC_HARDWARE, 1, [building for a generic device like a standard PC])
+ fi
+
 --- neutrino-hd/src/neutrino.h	2012-11-30 17:34:41.107511564 +0100
 +++ neutrino-hd/src/neutrino.h	2012-11-30 17:52:15.988742442 +0100
 @@ -45,6 +45,9 @@
@@ -615,7 +626,7 @@
 
 --- neutrino-hd/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd/src/gui/extra_menu.cpp	2012-11-30 17:53:50.537211281 +0100
-@@ -0,0 +1,1915 @@
+@@ -0,0 +1,1960 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2506,26 +2517,71 @@
 +{
 +	//EVOLUXUPDATE STARTEN
 +	unlink("/tmp/EvoluxUpdatevailable");
++#if defined (PLATFORM_SPARK)
 +	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
 +		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
-+	CHintBox *hintBox;
++#else
++	safe_system("oVersion=`wget -q -O - http://is.gd/reTrI0 | grep version | cut -d = -f2`;"
++		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
++		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable;"
++		   "myfree=`df | grep -m1 root | cut -b45-51`; if [ \"$myfree\" -gt 8000 ]; then touch /tmp/freeok;fi");
++#endif
 +	if(!access("/tmp/EvoluxUpdatevailable", F_OK)) {
-+		hintBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, g_Locale->getText(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATING));
-+		hintBox->paint();
-+		safe_system("wget -O - -q http://tinyurl.com/7fjrnm3 | tee /tmp/update.tar.gz | tar -tzf - && tar -xpzf /tmp/update.tar.gz -C /");
-+		unlink("/tmp/EvoluxUpdatevailable");
-+		unlink("/tmp/update.tar.gz");
-+		hintBox->hide();
-+		delete hintBox;
-+		hintBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, g_Locale->getText(LOCALE_EXTRAMENU_EVOLUXUPDATE_DONE));
-+	} else
-+		hintBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, g_Locale->getText(LOCALE_EXTRAMENU_EVOLUXUPDATE_NOTFOUND));
-+
-+	hintBox->paint();
-+	sleep(3);
-+	hintBox->hide();
-+	delete hintBox;
++		if(!access("/tmp/freeok", F_OK)) {
++			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
++			CheckUpdateBox->paint();
++#if defined (PLATFORM_SPARK)
++			safe_system("cd /tmp;wget -c -q http://is.gd/IKwL24;mv IKwL24 update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
++#else
++			safe_system("cd /tmp;wget -c -q http://is.gd/DL3IrU;mv DL3IrU update.tar.gz;md5check=`wget -q -O - http://is.gd/reTrI0 | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
++#endif
++			if(!access("/tmp/md5ok", F_OK)) {
++				safe_system("tar -xzvf /tmp/update.tar.gz -C /");
++				if(!access("/tmp/uImage", F_OK)) {
++					safe_system("[ -e /tmp/uImage ] && dd if=/tmp/uImage of=/dev/mtdblock5");
++					unlink("/tmp/uImage");
++				}
++				unlink("/tmp/EvoluxUpdatevailable");
++				unlink("/tmp/update.tar.gz");
++				unlink("/tmp/freeok");
++				unlink("/tmp/md5ok");
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++				CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update done, please reboot now...");
++				CheckUpdateBox->paint();
++				sleep(3);
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++			}
++			else {
++				unlink("/tmp/EvoluxUpdatevailable");
++				unlink("/tmp/update.tar.gz");
++				unlink("/tmp/freeok");
++				CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "md5 Checksum-error! please reboot and try again!");
++				CheckUpdateBox->paint();
++				sleep(3);
++				CheckUpdateBox->hide();
++				delete CheckUpdateBox;
++			}
++		}
++		else {
++			unlink("/tmp/EvoluxUpdatevailable");
++			unlink("/tmp/freeok");
++			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "not enough free mem! less than 8mb)!");
++			CheckUpdateBox->paint();
++			sleep(3);
++			CheckUpdateBox->hide();
++			delete CheckUpdateBox;
++		}
++	}
++	else {
++		CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "no update available!");
++		CheckUpdateBox->paint();
++		sleep(3);
++		CheckUpdateBox->hide();
++		delete CheckUpdateBox;
++	}
 +}
 +//ENDE EVOLUXUPDATE
 +
