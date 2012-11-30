@@ -62,6 +62,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis l
 		cd $(appsdir)/neutrino-hd; \
 		patch -p1 < $(buildprefix)/Patches/neutrino-hd-framebuffer.h.diff; \
 		patch -p1 < $(buildprefix)/Patches/neutrino-hd-tuxtxt.cpp.diff; \
+		patch -p1 < $(buildprefix)/Patches/neutrino-hd-martii.diff; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd && \
