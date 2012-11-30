@@ -1064,8 +1064,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		zc.close();
 +
 +		string cmd = "(" + string(EMU_list[selected].start_command)
-+			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
-+			+ " >/dev/null 2>&1) &";
++			//+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
++			+ " sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
 +		safe_system(cmd.c_str());
 +	}
 +	for (int i = 1; i < EMU_OPTION_COUNT; i++)
