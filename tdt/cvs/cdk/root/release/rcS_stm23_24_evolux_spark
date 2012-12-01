@@ -17,6 +17,8 @@ mknod /dev/rc c 147 1 2>/dev/null
 mknod /dev/sci0 c 169 0 2>/dev/null
 if [ -n "$TRIPLEX" ]; then
 	mknod /dev/sci1 c 169 1 2>/dev/null
+	rm /dev/dvb/adapter0/frontend*
+	mknod /dev/dvb/adapter0/frontend0 c 212 3 2>/dev/null
 	mknod /dev/dvb/adapter0/frontend1 c 212 19 2>/dev/null
 	mknod /dev/dvb/adapter0/frontend2 c 212 35 2>/dev/null
 	mknod /dev/dvb/adapter0/frontend3 c 212 51 2>/dev/null
