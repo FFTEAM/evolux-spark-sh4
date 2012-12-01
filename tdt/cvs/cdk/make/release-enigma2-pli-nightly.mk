@@ -531,7 +531,6 @@ endif
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/JobManager $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/chartsplayer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinguExplorer $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
-	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 #	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/SystemPlugins $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/
 
@@ -544,6 +543,8 @@ endif
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyc' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.pyo' -exec rm -f {} \;
 	find $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
+
+	cp -RP $(buildprefix)/root/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/Extensions/
 
 #	Delete unnecessary plugins #
 	rm -rf $(prefix)/release-enigma2-pli-nightly/usr/lib/enigma2/python/Plugins/DemoPlugins
