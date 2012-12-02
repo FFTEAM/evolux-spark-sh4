@@ -4115,51 +4115,37 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -
 +#endif
  /* audio conf */
- #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
+ #define AUDIO_CONFIG_FILE CONFIGDIR "/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -650,9 +650,11 @@
- #endif	
- 
- 	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
+@@ -726,9 +726,10 @@
+ 	{
+ 		cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
+ 	}
 -	
-+
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)		
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)			
  	// ci cam //FIXME: boxes without ci cam
- 	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);	
-+#endif
+-	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);	
++	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
++#endif	
  }
  
  // save pids
-@@ -1011,9 +1013,11 @@
- #endif	
- 	
- 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
+@@ -1270,10 +1271,10 @@
+ 		cam1->sendMessage(0,0); // stop
+ 		cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask); // update
+ 	}
 -	
-+
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)		
- 	// ci cam //FIXME: boxes without ci cam
- 	ci->SendCaPMT(rec_channel->getCaPmt(), frontend->fenumber);	
-+#endif
- 
- 	return 0;
- }
-@@ -1182,10 +1186,11 @@
- #endif	
- 	
- 	cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask, true); // update
--	
-+
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)				
  	// ci cam
- 	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);	
+ 	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
 -	
 +#endif	
  	rec_channel_id = 0;
  	rec_channel = NULL;
  	
-@@ -3511,9 +3516,11 @@
- 		cam1 = new CCam();
+@@ -3596,9 +3597,11 @@
  	}
+ #endif	
  
 -	//CI init
 -	//FIXME: platform without ci cam
@@ -4171,9 +4157,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#endif
  	
  	//globals
- 	scan_runs = 0;
- 	
- 	
+ 	scan_runs = 0; 	
  	
 
 --- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
