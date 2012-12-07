@@ -1,0 +1,14 @@
+--- libstb-hal/libspark/dmx.cpp	2012-12-07 11:40:50.209470070 +0100
++++ libstb-hal/libspark/dmx.cpp	2012-12-07 11:40:40.509421969 +0100
+@@ -195,7 +195,11 @@
+ 	if (!init[devnum])
+ 	{
+ 		/* this should not change anything... */
++#if defined PLATFORM_SPARK7162
++		int n = DMX_SOURCE_FRONT0 + devnum + 1;
++#else
+ 		int n = DMX_SOURCE_FRONT0 + devnum;
++#endif
+ 		lt_info("%s: setting %s to source %d\n", __func__, devname[devnum], n);
+ 		if (ioctl(fd, DMX_SET_SOURCE, &n) < 0)
+ 			lt_info("%s DMX_SET_SOURCE failed!\n", __func__);

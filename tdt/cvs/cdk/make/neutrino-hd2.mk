@@ -1,4 +1,5 @@
 # tuxbox/neutrino
+# MYBOXTYPE=`cat $(buildprefix)/lastChoice | awk -F '--enable-' '{print $5}' | cut -d ' ' -f 1`
 if ENABLE_MEDIAFWGSTREAMERNHD2
 GSTREAMER_ON="--enable-gstreamer"
 GST_CFLAGS_NEW="GST_CFLAGS=$(GST_CFLAGS) -I$(targetprefix)/usr/include/gstreamer-0.10 -I$(targetprefix)/usr/include/glib-2.0 -I$(targetprefix)/usr/lib/glib-2.0/include -I$(targetprefix)/usr/include/libxml2"

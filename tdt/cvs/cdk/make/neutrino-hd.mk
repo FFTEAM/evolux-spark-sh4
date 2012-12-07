@@ -1,5 +1,9 @@
 # tuxbox/neutrino
-
+if ENABLE_SPARK7162
+TRIPLEX_ON="-DPLATFORM_SPARK7162"
+else
+TRIPLEX_ON=
+endif
 $(targetprefix)/var/etc/.version:
 	echo "imagename=Ntrino-HD" > $@
 	echo "homepage=http://gitorious.org/open-duckbox-project-sh4" >> $@
@@ -28,7 +32,7 @@ $(appsdir)/libstb-hal/config.status: bootstrap
 			--with-boxtype=spark \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -D__KERNEL_STRICT_NAMES -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom $(TRIPLEX_ON)"
 
 $(DEPDIR)/libstb-hal.do_prepare:
 	touch $@
@@ -83,7 +87,7 @@ $(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis l
 			"--with-stb-hal-build=$(appsdir)/libstb-hal" \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem $(TRIPLEX_ON)"
 
 $(DEPDIR)/neutrino-hd.do_prepare:
 	touch $@
