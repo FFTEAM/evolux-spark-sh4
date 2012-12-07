@@ -32,6 +32,10 @@ if [ -n "$TRIPLEX" ]; then
 			mknod /dev/dvb/adapter0/demux3 c 212 52 2>/dev/null
 #		fi
 #	fi
+	if [ -e /etc/.nhd ]; then
+		rm /dev/dvb/adapter0/frontend0
+		( cd /dev/dvb/adapter0 && ln -sf frontend1 frontend0 ) &
+	fi
 fi
 insmod $MODDIR/aotom.ko
 if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
@@ -187,6 +191,7 @@ insmod $MODDIR/e2_proc.ko
 #insmod $MODDIR/autofs4.ko
 
 if [ ! -e /var/etc/.firstboot ]; then
+	insmod /lib/modules/rt3070sta.ko
 
 	echo "Starting DEBUG Interface"
 	/etc/init.d/mountall start
@@ -396,7 +401,9 @@ if [ ! -e /var/etc/.firstboot ]; then
 	echo "init lircd"
 	if [ -n "$TRIPLEX" ]; then
 		if [ ! -e /etc/.start_enigma2 ] && [ ! -e /etc/.start_vdr ] && [ -e /etc/.nhd ]; then
-			/usr/bin/lircd -u /etc/lircd.conf
+			LIRCD_CONF=`sed 's#.*STB_ID=\(..:..:..\).*#/etc/lircd.conf.\1#' < /proc/cmdline`
+			[ -f "$LIRCD_CONF" ] || LICRC_CONF=/etc/lircd.conf
+			/usr/bin/lircd -u $LIRCD_CONF
 		else
 			/usr/bin/lircd /etc/lircd.conf
 
