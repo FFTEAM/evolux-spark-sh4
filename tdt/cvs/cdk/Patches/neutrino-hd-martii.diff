@@ -33,6 +33,54 @@
  	static CNeutrinoApp* getInstance();
  
 
+--- neutrino-hd/src/system/configure_network.cpp	2012-12-09 11:31:08.600601253 +0100
++++ neutrino-hd/src/system/configure_network.cpp	2012-10-06 17:54:31.997136309 +0100
+@@ -275,10 +275,10 @@
+ 
+ }
+ 
+-#ifdef MARTII
++#ifdef EVOLUX
+ void CNetworkConfig::readWpaConfig()
+ {
+-	std::ifstream F("/etc/network/pre-wlan.sh");
++	std::ifstream F("/etc/network/if-pre-up.d/wlan");
+ 	ssid = "";
+ 	key = "";
+ 	encryption = "WPA2";
+@@ -350,10 +350,10 @@
+ #ifdef DEBUG
+ 	printf("CNetworkConfig::saveWpaConfig\n");
+ #endif
+-#ifdef MARTII
+-	std::ofstream F("/etc/network/pre-wlan.sh");
++#ifdef EVOLUX
++	std::ofstream F("/etc/network/if-pre-up.d/wlan");
+ 	if(F.is_open()) {
+-		chmod("/etc/network/pre-wlan.sh", 0755);
++		chmod("/etc/network/if-pre-up.d/wlan", 0755);
+ 		// We don't have this information  --martii
+ 
+ 		std::string authmode = "WPA2PSK"; // WPA2
+@@ -380,7 +380,7 @@
+ 		  << "iwpriv $IFACE set EncrypType=$C\n"
+ 		  << "if ! iwpriv $IFACE set \"WPAPSK=$K\"\n"
+ 		  << "then\n"
+-		  << "\t/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
++		  << "\t/usr/sbin/wpa_supplicant -B -i$IFACE -c/etc/wpa_supplicant.conf\n"
+ 		  << "\tsleep 3\n"
+ 		  << "fi\n";
+ 		F.close();
+@@ -388,6 +388,7 @@
+ 		F.open("/etc/wpa_supplicant.conf");
+ 		if(F.is_open()) {
+ 			F << "# AUTOMATICALLY GENERATED. DO NOT MODIFY.\n"
++			  << "ctrl_interface=/var/run/wpa_supplicant\n\n"
+ 			  << "network={\n"
+ 			  << "\tscan_ssid=1\n"
+ 			  << "\tssid=\"" << ssid << "\"\n"
+
+
 --- neutrino-hd/src/neutrino_menue.cpp	2012-11-30 17:34:41.107511564 +0100
 +++ neutrino-hd/src/neutrino_menue.cpp	2012-11-30 17:50:42.880280737 +0100
 @@ -186,6 +186,11 @@
