@@ -191,7 +191,7 @@ insmod $MODDIR/e2_proc.ko
 #insmod $MODDIR/autofs4.ko
 
 if [ ! -e /var/etc/.firstboot ]; then
-	insmod /lib/modules/rt3070sta.ko
+	#insmod /lib/modules/rt3070sta.ko
 
 	echo "Starting DEBUG Interface"
 	/etc/init.d/mountall start
