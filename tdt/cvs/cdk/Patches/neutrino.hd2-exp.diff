@@ -3473,15 +3473,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5163,7 +5167,7 @@
- 			{
- 				g_settings.logos_dir = b.getSelectedFile()->Name;
- 				//strcpy(g_settings.logos_dir.c_str(), b.getSelectedFile()->Name.c_str());
--				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
-+				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
- 			}
- 		}
- 
 @@ -5181,7 +5185,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
