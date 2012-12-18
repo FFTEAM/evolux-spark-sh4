@@ -61,7 +61,7 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch) \
 		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24_0210.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0210)$(P0211),linux-sh4-lirc_stm24$(PATCH_STR).patch) \
+		$(if $(P0210)$(P0211),linux-sh4-lirc_stm24$_0210.patch) \
 		$(if $(P0211),af901x-NXP-TDA18218.patch) \
 		dvb-as102.patch
 		
