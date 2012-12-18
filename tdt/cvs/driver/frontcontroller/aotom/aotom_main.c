@@ -601,39 +601,81 @@ static int AOTOMdev_ioctl(struct inode *Inode, struct file *File, unsigned int c
 		res = YWPANEL_VFD_SetBrightness(aotom_data.u.brightness.level);
 		break;
 	case VFDICONDISPLAYONOFF:
-		switch (panel_version.DisplayInfo) {
-		case YWPANEL_FP_DISPTYPE_LED:
-			switch (aotom_data.u.icon.icon_nr) {
-			case 0:
-				res = YWPANEL_VFD_SetLed(LED_RED, aotom_data.u.icon.on);
-				led_state[LED_RED].state = aotom_data.u.icon.on;
-				break;
-			case 35:
-				res = YWPANEL_VFD_SetLed(LED_GREEN, aotom_data.u.icon.on);
-				led_state[LED_GREEN].state = aotom_data.u.icon.on;
-				break;
-			}
+	{
+#if defined(SPARK)
+		switch (aotom_data.u.icon.icon_nr) {
+		case 0:
+			res = YWPANEL_VFD_SetLed(LED_RED, aotom_data.u.icon.on);
+			led_state[LED_RED].state = aotom_data.u.icon.on;
+			break;
+		case 35:
+			res = YWPANEL_VFD_SetLed(LED_GREEN, aotom_data.u.icon.on);
+			led_state[LED_GREEN].state = aotom_data.u.icon.on;
 			break;
 		default:
-			switch (aotom_data.u.icon.icon_nr) {
-			case 46:
-				switch (aotom_data.u.icon.on){
-				case 1:
-					VFD_set_all_icons();
-					res = 0;
+			break;
+		}
+#endif
+#if defined(SPARK7162)
+		icon_nr = aotom_data.u.icon.icon_nr;
+		//e2 icons workarround
+		//printk("icon_nr = %d\n", icon_nr);
+		if (icon_nr >= 256) {
+			icon_nr = icon_nr / 256;
+			switch (icon_nr) {
+			case 0x11:
+				icon_nr = 0x0E; //widescreen
 				break;
-				case 0:
-					VFD_clear_all_icons();
-					res = 0;
-					break;
-				}
+			case 0x13:
+				icon_nr = 0x0B; //CA
+				break;
+			case 0x15:
+				icon_nr = 0x19; //mp3
+				break;
+			case 0x17:
+				icon_nr = 0x1A; //ac3
+				break;
+			case 0x1A:
+				icon_nr = 0x03; //play
+				break;
+			case 0x1e:
+				icon_nr = 0x07; //record
+				break;
+			case 38:
+				break; //cd part1
+			case 39:
+				break; //cd part2
+			case 40:
+				break; //cd part3
+			case 41:
+				break; //cd part4
+			default:
+				icon_nr = 0; //no additional symbols at the moment
+				break;
+			}
+		}	  
+		if (aotom_data.u.icon.on != 0)
+			aotom_data.u.icon.on = 1;
+		if (icon_nr > 0 && icon_nr <= 45 )
+			res = aotomSetIcon(icon_nr, aotom_data.u.icon.on);
+		if (icon_nr == 46){
+			switch (aotom_data.u.icon.on){
+			case 1:
+				VFD_set_all_icons();
+				res = 0;
+				break;
+			case 0:
+				VFD_clear_all_icons();
+				res = 0;
 				break;
 			default:
-				res = aotomSetIcon(aotom_data.u.icon.icon_nr, aotom_data.u.icon.on);
+				break;
 			}
 		}
+#endif		
 		mode = 0;
 		break;
+	}
 	case VFDSTANDBY:
 	{
 		u32 uTime = 0;
