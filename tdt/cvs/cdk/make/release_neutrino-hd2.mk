@@ -475,7 +475,8 @@ endif
 	cp -a $(buildprefix)/root/usr/bin/amixer $(prefix)/release_neutrino-hd2/usr/bin/
 	find $(prefix)/release_neutrino-hd2/usr/bin/ -name 'amixer' -exec sh4-linux-strip --strip-unneeded {} \;
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/config/cables.xml $(prefix)/release_neutrino-hd2/usr/local/share/config/
-	cp -RP $(appsdir)/neutrino-hd2-exp/data/config/terrestrial.xml $(prefix)/release_neutrino-hd2/usr/local/share/config/
+#	cp -RP $(appsdir)/neutrino-hd2-exp/data/config/terrestrial.xml $(prefix)/release_neutrino-hd2/usr/local/share/config/
+	cp -dp $(buildprefix)/root/etc/tuxbox/terrestrial.xml $(prefix)/release_neutrino-hd2/usr/local/share/config/
 #	cp -RP $(buildprefix)/root/bin/lcd4linux $(prefix)/release_neutrino-hd2/bin/
 	cp -RP $(buildprefix)/root/usr/lib/libusb* $(prefix)/release_neutrino-hd2/usr/lib/
 #	cp -RP $(buildprefix)/root/usr/lib/libiconv* $(prefix)/release_neutrino-hd2/usr/lib/
