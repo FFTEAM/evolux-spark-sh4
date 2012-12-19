@@ -760,7 +760,7 @@
 
 --- neutrino-hd/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd/src/gui/extra_menu.cpp	2012-11-30 17:53:50.537211281 +0100
-@@ -0,0 +1,1960 @@
+@@ -0,0 +1,1961 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -1401,6 +1401,7 @@
 +	int emu = EMU_OPTION_COUNT;
 +
 +	if(actionKey == "disable") {
++		settings.cam_selected = "disabled";
 +		emu = -1;
 +	} else if (actionKey == "reset") {
 +		doReset = true;
