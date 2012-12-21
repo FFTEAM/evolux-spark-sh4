@@ -28,7 +28,9 @@ stv090x-objs +=	spark/stv090x.o
 stv090x-objs +=	spark/stv6110x.o
 stv090x-objs +=	spark/ix7306.o
 stv090x-objs +=	spark/core.o
+stv090x-objs += spark_dvbapi5/vz7903.o
 obj-m += stv090x.o
+obj-y += lnb/
 else ifdef SPARK7162
 spark7162-objs +=        spark7162/spark7162.o
 
