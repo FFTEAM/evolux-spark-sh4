@@ -3299,69 +3299,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					std::string command = "etherwake ";
  					command += g_settings.network_nfs_mac[i];
-@@ -4090,7 +4094,7 @@
- 		CVFD::getInstance()->ShowText((char *) "Good Bye");
- #endif		
- 
--		dprintf(DEBUG_INFO, "ExitRun\n");
-+		//dprintf(DEBUG_INFO, "ExitRun\n");
- 
- 		// stop playback
- 		g_Zapit->stopPlayBack();
-@@ -4116,7 +4120,7 @@
- 
- 		if(retcode)
- 		{
--			dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
-+			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
- 			
- 			mode = mode_off;
- 
-@@ -4133,7 +4137,7 @@
- 				
- 				if( msg == CRCInput::RC_standby ) 
- 				{
--					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
-+					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
- 			
- 					sleep(2);
- 					
-@@ -4150,7 +4154,7 @@
- 				} 
- 				else if( ( msg == NeutrinoMessages::ANNOUNCE_RECORD) || ( msg == NeutrinoMessages::ANNOUNCE_ZAPTO) ) 
- 				{
--					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
-+					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
- 					
- 					sleep(2);
- 					
-@@ -4168,7 +4172,7 @@
- 				else 
- 				{
- 					// no message received.
--					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
-+					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
- 					
- 					sleep(2);
- 					
-@@ -4181,7 +4185,7 @@
- 					// stop all deamons threads
- 					stop_daemons();
- 					
--					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
-+					//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
- 					
- 					exit(retcode);
- 				}
-@@ -4197,7 +4201,7 @@
- 
- 			stop_daemons();
- 
--			dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
-+			//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
- 
- 			exit(0);
- 		}
 @@ -4210,7 +4214,7 @@
  	struct stat my_stat;    
  	if(stat(g_settings.epg_dir.c_str(), &my_stat) == 0)
@@ -3509,49 +3446,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveKeys(sname);
  			delete sms;
  		}
-@@ -5312,34 +5316,34 @@
- #endif	
- 
- 	// stop nhttpd	
--	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
- 	pthread_cancel(nhttpd_thread);
- 	pthread_join(nhttpd_thread, NULL);
--	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
- 
- 	// streamts	
- 	streamts_stop = 1;
- 	pthread_join(stream_thread, NULL);	
- 
- 	// timerd stop	  
--	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
- 	g_Timerd->shutdown();
- 	pthread_join(timer_thread, NULL);
--	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
- 
- 	// sectionsd stop
- 	sectionsd_stop = 1;
--	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
- 	pthread_join(sections_thread, NULL);
--	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
- 
- 	tuxtx_stop_subtitle();
- 
- 	// zapit stop	
--	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
- 	g_Zapit->shutdown();
- 	pthread_join(zapit_thread, NULL);
--	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
-+	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
- 
- 	// clear vfd
- 	CVFD::getInstance()->Clear();
 @@ -5354,7 +5358,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
@@ -3678,13 +3572,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
 +++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
-@@ -419,19 +419,26 @@
- 			break;
- 
- 		case MODE_SHUTDOWN:
--			//ShowIcon(VFD_ICON_TV, false);
- 			/* clear all symbols */
- 			Clear();
+@@ -427,7 +427,15 @@
+ 			ClearIcons();
  			showclock = false;
  			break;
 -
@@ -3698,8 +3587,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +			break;
 +#else
  		case MODE_STANDBY:
- 			ShowIcon(VFD_ICON_TV, false);			
- 			showclock = true;
+ 			ShowIcon(VFD_ICON_TV, false);
+ 			ClearIcons();
+@@ -435,7 +443,7 @@
  			showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
  						/* "showTime()" clears the whole lcd in MODE_STANDBY */
  			break;
@@ -3708,7 +3598,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		case MODE_PIC:	  
  			ShowIcon(VFD_ICON_TV, false);			
  			ShowIcon(VFD_ICON_HD, false);
-@@ -587,9 +594,30 @@
+@@ -591,9 +599,30 @@
  	closeDevice();
  #else
  	data.start_address = 0;
