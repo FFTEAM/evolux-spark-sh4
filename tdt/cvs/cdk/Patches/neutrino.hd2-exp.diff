@@ -2630,7 +2630,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  static CTimingSettingsNotifier timingsettingsnotifier;
  
  extern int FrontendCount;			// defined in zapit.cpp
-@@ -194,11 +194,11 @@
+@@ -194,11 +195,11 @@
  };
  
  // Init Main Menu
@@ -2644,7 +2644,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// tv modus
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_TVMODE, true, "", this, "tv", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, "tv", LOCALE_HELPTEXT_TVMODE ), true);
-@@ -261,6 +261,42 @@
+@@ -261,6 +262,42 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
@@ -2687,7 +2687,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -454,6 +490,24 @@
+@@ -454,6 +491,24 @@
  1080p50
  PC
  */
@@ -2712,7 +2712,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
  const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
  {
-@@ -470,6 +524,7 @@
+@@ -470,6 +525,7 @@
  	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
  	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
  };
@@ -2720,7 +2720,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #else
  // giga
  /*
-@@ -557,7 +612,7 @@
+@@ -557,7 +613,7 @@
  
  void CNeutrinoApp::InitVideoSettings(CMenuWidget &videoSettings, CVideoSetupNotifier * videoSetupNotifier)
  {
@@ -2729,7 +2729,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVideo = 1;
  	
-@@ -629,7 +684,7 @@
+@@ -629,7 +685,7 @@
  
  void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier * audioSetupNotifier)
  {
@@ -2738,7 +2738,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudio = 1;
  	
-@@ -716,7 +771,7 @@
+@@ -716,7 +772,7 @@
  
  void CNeutrinoApp::InitParentalLockSettings(CMenuWidget &parentallockSettings)
  {
@@ -2747,7 +2747,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutLock = 1;
  	
-@@ -749,7 +804,7 @@
+@@ -749,7 +805,7 @@
  
  void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget & TunerSetup)
  {
@@ -2756,7 +2756,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutService = 1;
  
-@@ -792,7 +847,7 @@
+@@ -792,7 +848,7 @@
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_RESET_CHANNELS, true, NULL, resetNotifier, "channels", CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE, "service", LOCALE_HELPTEXT_DELETECHANNELS ));
  	
  	// CI Cam 	
@@ -2765,7 +2765,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	service.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  	
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_CAM_SETTINGS, true, "", g_CamHandler, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "cam", LOCALE_HELPTEXT_CAM ));
-@@ -811,12 +866,12 @@
+@@ -811,12 +867,12 @@
  
  	// restart neutrino
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_RESTART, true, "", this, "restart", CRCInput::RC_standby, NEUTRINO_ICON_BUTTON_POWER, "shutdown", LOCALE_HELPTEXT_SOFTRESTART ));
@@ -2774,13 +2774,13 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	// softupdate
  	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings. init soft-update-stuff\n");
  		
- 	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE, 550);
+ 	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE);
 -		
-+
++	
  	// intros
  	updateSettings->addItem(GenericMenuBack);
  	updateSettings->addItem(GenericMenuSeparatorLine);
-@@ -865,7 +920,7 @@
+@@ -865,7 +921,7 @@
  
  	const char * versionString = (configfile.loadConfig("/var/etc/.version")) ? (configfile.getString( "version", "1200201205091849").c_str()) : "1200201205091849";
  
@@ -2789,7 +2789,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	static CFlashVersionInfo versionInfo(versionString);
  
-@@ -896,6 +951,7 @@
+@@ -896,6 +952,7 @@
  		
  	// updatesettings
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_UPDATE, true, "", updateSettings, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "service", LOCALE_HELPTEXT_SOFTWAREUPDATE ));
@@ -2797,7 +2797,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init AudioPlayer Settings
-@@ -908,7 +964,7 @@
+@@ -908,7 +965,7 @@
  
  void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
  {
@@ -2806,7 +2806,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudioPlayer = 1;
  	
-@@ -960,7 +1016,7 @@
+@@ -960,7 +1017,7 @@
  
  void CNeutrinoApp::InitPicViewerSettings(CMenuWidget &PicViewerSettings)
  {
@@ -2815,7 +2815,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutPicViewer = 1;
  	
-@@ -1031,7 +1087,7 @@
+@@ -1031,7 +1088,7 @@
  
  void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings, CMenuWidget &miscSettingsGeneral, CMenuWidget &miscSettingsChannelList, CMenuWidget &miscSettingsEPG, CMenuWidget &miscSettingsFileBrowser )
  {
@@ -2824,7 +2824,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutMiscSettings = 1;
  
-@@ -1242,7 +1298,7 @@
+@@ -1242,7 +1299,7 @@
  // Init Language Settings
  void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
  {
@@ -2833,7 +2833,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	languageSettings.addItem(GenericMenuBack);
-@@ -1310,7 +1366,7 @@
+@@ -1310,7 +1367,7 @@
  
  void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
  {
@@ -2842,7 +2842,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	struct dirent **namelist;
  
-@@ -1458,7 +1514,7 @@
+@@ -1458,7 +1515,7 @@
  // Init Recording Settings
  void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
  {
@@ -2851,7 +2851,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int rec_pre = 0;
  	int rec_post = 0;
-@@ -1600,7 +1656,7 @@
+@@ -1600,7 +1657,7 @@
  // init streamingssettings
  void CNeutrinoApp::InitStreamingSettings(CMenuWidget &streamingSettings)
  {
@@ -2860,7 +2860,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	streamingSettings.addItem(GenericMenuBack);
-@@ -1695,7 +1751,7 @@
+@@ -1695,7 +1752,7 @@
  // Init Color Settings
  void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings)
  {
@@ -2869,7 +2869,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// init screensetup objekt
  	CScreenSetup  * ScreenSetup = new CScreenSetup();
-@@ -1878,7 +1934,7 @@
+@@ -1878,7 +1935,7 @@
  /* Init LCD Settings */
  void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
  {
@@ -2878,7 +2878,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVFD = 1;
  	
-@@ -1923,10 +1979,12 @@
+@@ -1923,10 +1980,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -2892,7 +2892,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
-@@ -2065,7 +2123,7 @@
+@@ -2065,7 +2124,7 @@
  
  void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings, CMenuWidget &bindSettings)
  {
@@ -2901,7 +2901,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutkeysettings = 1;
  	
-@@ -2397,7 +2455,7 @@
+@@ -2397,7 +2456,7 @@
  // USERMENU
  bool CNeutrinoApp::showUserMenu(int button)
  {
