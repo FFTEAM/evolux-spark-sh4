@@ -2765,38 +2765,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	service.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  	
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_CAM_SETTINGS, true, "", g_CamHandler, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "cam", LOCALE_HELPTEXT_CAM ));
-@@ -811,12 +867,12 @@
- 
- 	// restart neutrino
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_RESTART, true, "", this, "restart", CRCInput::RC_standby, NEUTRINO_ICON_BUTTON_POWER, "shutdown", LOCALE_HELPTEXT_SOFTRESTART ));
--
-+#ifndef EVOLUX
- 	// softupdate
- 	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings. init soft-update-stuff\n");
- 		
- 	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE);
--		
-+	
- 	// intros
- 	updateSettings->addItem(GenericMenuBack);
- 	updateSettings->addItem(GenericMenuSeparatorLine);
-@@ -865,7 +921,7 @@
- 
- 	const char * versionString = (configfile.loadConfig("/var/etc/.version")) ? (configfile.getString( "version", "1200201205091849").c_str()) : "1200201205091849";
- 
--	dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
-+	//dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
- 
- 	static CFlashVersionInfo versionInfo(versionString);
- 
-@@ -896,6 +952,7 @@
- 		
- 	// updatesettings
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_UPDATE, true, "", updateSettings, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "service", LOCALE_HELPTEXT_SOFTWAREUPDATE ));
-+#endif
- }
- 
- // Init AudioPlayer Settings
 @@ -908,7 +965,7 @@
  
  void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
@@ -3299,15 +3267,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					std::string command = "etherwake ";
  					command += g_settings.network_nfs_mac[i];
-@@ -4210,7 +4214,7 @@
- 	struct stat my_stat;    
- 	if(stat(g_settings.epg_dir.c_str(), &my_stat) == 0)
- 	{
--		dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
-+		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
- 		neutrino_msg_t      msg;
- 		neutrino_msg_data_t data;
- 		
 @@ -4249,7 +4253,7 @@
  
  	current_muted = newValue;
@@ -3653,14 +3612,14 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  typedef struct input_event t_input_event;
  
 
---- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:34.159355427 +0100
-+++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:24.655308297 +0100
-@@ -16,4 +16,4 @@
- Show39 1
- ShowLevel2p5 1
- DumpLevel2p5 0
--UseTTF 0
-+UseTTF 1
+//--- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:34.159355427 +0100
+//+++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:24.655308297 +0100
+//@@ -16,4 +16,4 @@
+// Show39 1
+// ShowLevel2p5 1
+// DumpLevel2p5 0
+//-UseTTF 0
+//+UseTTF 1
 
 
 --- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:14:12.164733979 +0100
@@ -3914,32 +3873,28 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/nhttpd/tuxboxapi/controlapi.cpp	2012-10-31 15:14:12.864737451 +0100
 +++ neutrino-hd2-exp/src/nhttpd/tuxboxapi/controlapi.cpp	2012-10-31 15:22:53.751320385 +0100
-@@ -49,9 +49,11 @@
- extern tallchans allchans;
+@@ -50,6 +50,13 @@
  extern CBouquetManager *g_bouquetManager;
  extern t_channel_id live_channel_id;
--
+ 
 +#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
-+#define EVENTDEV "/dev/input/event1"
++#define NUMBER_OF_EVENT_DEVICES 1
++ 
++const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
++	"/dev/input/event1"
++};
 +#else
- #define EVENTDEV "/dev/input/event0"
--
+ #define NUMBER_OF_EVENT_DEVICES 4
+  
+ const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
+@@ -58,6 +65,7 @@
+ 	"/dev/input/event2", 
+ 	"/dev/input/event3"
+ };
 +#endif
+ 
  //-----------------------------------------------------------------------------
  enum {	// not defined in input.h but used like that, at least in 2.4.22
- 	KEY_RELEASED = 0,
-@@ -774,7 +776,11 @@
- 	int evd = open(EVENTDEV, O_RDWR);
- 	if (evd < 0) {
- 		hh->SendError();
-+#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
-+		perror("opening event1 failed");
-+#else
- 		perror("opening event0 failed");
-+#endif
- 		return;
- 	}
- 	if (rc_send(evd, sendcode, KEY_PRESSED) < 0) {
 
 
 --- neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:12:51.852248642 +0100
