@@ -45,18 +45,18 @@ COMMONPATCHES_24 = \
 		linux-squashfs-lzma_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
 		bpa2_procfs_stm24$(PATCH_STR).patch \
-		$(if $(P0207),xchg_fix_stm24$(PATCH_STR).patch) \
-		$(if $(P0207),mm_cache_update_stm24$(PATCH_STR).patch) \
-		$(if $(P0207),linux-sh4-ehci_stm24$(PATCH_STR).patch) \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
-		linux-tune_stm24.patch
+		linux-tune_stm24.patch \
+		linux-sh4-cifs-unaligned-mem-access-kernel_stm24.patch \
+		$(if $(P0209)$(P0210)$(P0211),linux-sh4-mmap_stm24.patch) \
+		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
+		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
 
 SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-spark_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
-		linux-sh4-cifs-unaligned-mem-access-kernel_stm24.patch \
 		$(if $(P0207),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch) \
 		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24_0210.patch) \
@@ -69,7 +69,7 @@ SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-spark7162_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
-		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24_0210.patch)
+		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch)
 
 KERNELPATCHES_24 =  \
 		$(if $(SPARK),$(SPARK_PATCHES_24)) \
