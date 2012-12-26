@@ -115,7 +115,7 @@ u32 stv6110_commit(struct dvb_frontend* fe)
     ucTemp[0] = RSTV6110_STAT1;
     ucTemp[1] = 0x02; /* Start LPF auto calibration*/
 
-    res = state->equipment.demod_i2c_repeater_send(state, ucTemp, 2);
+    res = state->equipment.demod_i2c_repeater_send(fe->demodulator_priv, ucTemp, 2);
 
     if( AVL2108_OK != res )
     {
