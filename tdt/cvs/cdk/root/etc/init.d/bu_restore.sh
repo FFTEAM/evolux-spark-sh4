@@ -1,4 +1,4 @@
-#!bin/sh
+#!/bin/sh
 case $1 in
 	backup)
 	DESTINATION=`mount | grep "autofs/sda1"`
