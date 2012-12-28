@@ -38,7 +38,7 @@ if ENABLE_SPARK7162
 	fi
 else
 	if [ -e $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt ]; then \
-		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/changelog.txt $(prefix)/release_evolux_triple_with_dev/etc/; \
+		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $(prefix)/release_evolux_triple_with_dev/etc/; \
 	fi
 endif
 if ENABLE_SPARK
