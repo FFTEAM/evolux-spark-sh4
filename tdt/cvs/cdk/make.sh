@@ -133,7 +133,9 @@ echo ""
 echo -e "\nSTB :"
 echo -e "\033[1;37;40m    1) STM24-209 (old)\033[0m"
 echo -e "\033[1;37;42m    2) STM24-210 (standard)\033[0m"
-echo -e "\033[1;37;43m    3) STM24-211 (experimental, jffs2 only!)\033[0m"
+if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+	echo -e "\033[1;37;43m    3) STM24-211 (experimental!)\033[0m"
+fi
 read -p "Select STB (1-3)? "
 case "$REPLY" in
 	1) echo -e "\nSelected STB: $REPLY\n"
