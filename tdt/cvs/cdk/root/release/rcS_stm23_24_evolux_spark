@@ -12,28 +12,29 @@ MODDIR=/lib/modules
 PinkPanelPath=/usr/lib/enigma2/python/Plugins/Extensions/PinkPanel
 echo "init frontpanel"
 #insmod $MODDIR/vfd.ko
-mknod /dev/vfd c 147 0 2>/dev/null
-mknod /dev/rc c 147 1 2>/dev/null
-mknod /dev/sci0 c 169 0 2>/dev/null
+mknod /dev/vfd -m 777 c 147 0 2>/dev/null
+mknod /dev/rc -m 777 c 147 1 2>/dev/null
+mknod /dev/sci0 -m 777 c 169 0 2>/dev/null
 if [ -n "$TRIPLEX" ]; then
-	mknod /dev/sci1 c 169 1 2>/dev/null
-	rm /dev/dvb/adapter0/frontend*
-	mknod /dev/dvb/adapter0/frontend0 c 212 3 2>/dev/null
-	mknod /dev/dvb/adapter0/frontend1 c 212 19 2>/dev/null
-	mknod /dev/dvb/adapter0/frontend2 c 212 35 2>/dev/null
-	mknod /dev/dvb/adapter0/frontend3 c 212 51 2>/dev/null
+	rm /dev/sci1 2>/dev/null
+	mknod /dev/sci1 -m 777 c 169 1 2>/dev/null
+	rm /dev/dvb/adapter0/frontend* 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend0 -m 777 c 212 3 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend1 -m 777 c 212 19 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend2 -m 777 c 212 35 2>/dev/null
+	mknod /dev/dvb/adapter0/frontend3 -m 777 c 212 51 2>/dev/null
 #	if [ -e /etc/.start_enigma2 ]; then
 #		correctDemux=`ls -l /dev/dvb/adapter0 | grep demux2 | grep "36"`
 #		if [ -z "$correctDemux" ]; then
-			rm /dev/dvb/adapter0/demux*
-			mknod /dev/dvb/adapter0/demux0 c 212 4 2>/dev/null
-			mknod /dev/dvb/adapter0/demux1 c 212 20 2>/dev/null
-			mknod /dev/dvb/adapter0/demux2 c 212 36 2>/dev/null
-			mknod /dev/dvb/adapter0/demux3 c 212 52 2>/dev/null
+			rm /dev/dvb/adapter0/demux* 2>/dev/null
+			mknod /dev/dvb/adapter0/demux0 -m 777 c 212 4 2>/dev/null
+			mknod /dev/dvb/adapter0/demux1 -m 777 c 212 20 2>/dev/null
+			mknod /dev/dvb/adapter0/demux2 -m 777 c 212 36 2>/dev/null
+			mknod /dev/dvb/adapter0/demux3 -m 777 c 212 52 2>/dev/null
 #		fi
 #	fi
 	if [ -e /etc/.nhd ]; then
-		rm /dev/dvb/adapter0/frontend0
+		rm /dev/dvb/adapter0/frontend0 2>/dev/null
 		( cd /dev/dvb/adapter0 && ln -sf frontend1 frontend0 ) &
 	fi
 fi
@@ -176,9 +177,9 @@ if [ ! -e /etc/.dualTuner ] && [ -e /dev/dvb/adapter1 ]; then
 fi
 
 if [ -n "$TRIPLEX" ]; then
-	rm /dev/dvb/adapter0/ca1 && mknod -m 660 /dev/dvb/adapter0/ca1 c 212 6 2>/dev/null
-	mknod -m 660 /dev/dvb/adapter0/ca2 c 212 22 2>/dev/null
-	mknod -m 660 /dev/dvb/adapter0/ca3 c 212 38 2>/dev/null
+	rm /dev/dvb/adapter0/ca1 && mknod -m 777 /dev/dvb/adapter0/ca1 c 212 6 2>/dev/null
+	mknod -m 777 /dev/dvb/adapter0/ca2 c 212 22 2>/dev/null
+	mknod -m 777 /dev/dvb/adapter0/ca3 c 212 38 2>/dev/null
 else
 	rm /dev/dvb/adapter0/ca0 && mknod -m 777 /dev/dvb/adapter0/ca0 c 212 6 2>/dev/null
 	#rm /dev/dvb/adapter0/ca1 && mknod -m 777 /dev/dvb/adapter0/ca1 c 212 22 2>/dev/null
