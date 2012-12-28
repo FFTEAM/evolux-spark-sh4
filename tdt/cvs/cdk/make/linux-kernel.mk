@@ -58,18 +58,15 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-spark_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
 		$(if $(P0207),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
-		$(if $(P0209),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch) \
-		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24_0210.patch) \
+		linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0210)$(P0211),linux-sh4-lirc_stm24_0210.patch) \
-		$(if $(P0211),af901x-NXP-TDA18218.patch) \
-		dvb-as102.patch
+		$(if $(P0210)$(P0211),linux-sh4-lirc_stm24_0210.patch)
 		
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-spark7162_setup_stm24$(PATCH_STR)$(FFS2_STR).patch \
-		$(if $(P0210)$(P0211),linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch)
+		linux-sh4-linux_yaffs2_stm24$(PATCH_STR).patch
 
 KERNELPATCHES_24 =  \
 		$(if $(SPARK),$(SPARK_PATCHES_24)) \
