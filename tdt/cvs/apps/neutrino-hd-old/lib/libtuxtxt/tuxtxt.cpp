@@ -1681,8 +1681,8 @@ int tuxtx_main(int _rc, int pid, int page, int source)
 	char cvs_revision[] = "$Revision: 1.95 $";
 
 #ifdef EVOLUX
-	ttx_repeat_blocker = repeat_blocker * 1000;
-	ttx_repeat_genericblocker = repeat_genericblocker * 1000;
+	ttx_repeat_blocker = repeat_blocker * 10000;
+	ttx_repeat_genericblocker = repeat_genericblocker * 10000;
 #endif
 	use_gui = 1;
 	boxed = 0;
