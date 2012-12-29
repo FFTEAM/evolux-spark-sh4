@@ -392,6 +392,7 @@ endif
 	mkdir -p $(prefix)/release_neutrino-hd/usr/local/share/fonts
 	cp $(buildprefix)/root/usr/share/fonts/tuxtxt.ttf $(prefix)/release_neutrino-hd/usr/local/share/fonts/
 	cp $(buildprefix)/root/usr/share/fonts/russian.ttf $(prefix)/release_neutrino-hd/usr/local/share/fonts/
+	cp $(appsdir)/neutrino-hd/data/fonts/DejaVuLGCSansMono-Bold.ttf $(prefix)/release_neutrino-hd/usr/local/share/fonts/
 
 #       Font libass
 	mkdir -p $(prefix)/release_neutrino-hd/usr/share/fonts

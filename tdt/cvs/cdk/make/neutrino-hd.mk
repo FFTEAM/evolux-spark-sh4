@@ -64,8 +64,6 @@ $(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis l
 	if [ ! -d $(appsdir)/neutrino-hd ]; then \
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
 		cd $(appsdir)/neutrino-hd; \
-		patch -p1 < $(buildprefix)/Patches/neutrino-hd-framebuffer.h.diff; \
-		patch -p1 < $(buildprefix)/Patches/neutrino-hd-tuxtxt.cpp.diff; \
 		patch -p1 < $(buildprefix)/Patches/neutrino-hd-martii.diff; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
@@ -93,6 +91,8 @@ $(DEPDIR)/neutrino-hd.do_prepare:
 	touch $@
 
 $(DEPDIR)/neutrino-hd.do_compile: $(appsdir)/neutrino-hd/config.status
+	echo -e "\n/* correct FB_DEVICE for Spark/Spark7162  */\n#define FB_DEVICE \"/dev/fb0\"" >> $(appsdir)/neutrino-hd/config.h; \
+	echo "#define FB_DEVICE \"/dev/fb0\"" >> $(appsdir)/neutrino-hd/config.h; \
 	cd $(appsdir)/neutrino-hd && $(MAKE)
 	touch $@
 
