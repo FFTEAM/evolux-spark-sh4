@@ -65,6 +65,8 @@ $(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis l
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
 		cd $(appsdir)/neutrino-hd; \
 		patch -p1 < $(buildprefix)/Patches/neutrino-hd-martii.diff; \
+		rm -rf $(appsdir)/neutrino-hd/lib/libtuxtxt; \
+		cp -RP $(appsdir)/neutrino-hd-old/lib/libtuxtxt $(appsdir)/neutrino-hd/lib/; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd && \
