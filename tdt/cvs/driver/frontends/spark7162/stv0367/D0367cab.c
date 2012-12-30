@@ -23,9 +23,6 @@
 #include "dvb_frontend.h"
 #include "D0367.h"
 
-extern int debug_fe7162;
-#define _DEBUG if (debug_fe7162)
-
 struct dvb_d0367_fe_qam_state {
 	struct i2c_adapter			*i2c;
 	struct dvb_frontend 		frontend;
@@ -122,7 +119,6 @@ static int dvb_d0367_fe_qam_set_frontend(struct dvb_frontend* fe,
 	{
 		BOOL bIsLocked;
 		bIsLocked = FE_367qam_Status(&state->DeviceMap, state->IOHandle);
-_DEBUG
 		printk("%d:bIsLocked = %d\n", __LINE__, bIsLocked);
     }
 
@@ -172,7 +168,6 @@ static int dvb_d0367_fe_qam_read_status(struct dvb_frontend* fe,
 	#endif  /* 0 */
 	{
 		bIsLocked = FE_367qam_Status(&state->DeviceMap, state->IOHandle);
-_DEBUG
 		printk("bIsLocked = %d\n", bIsLocked);
     }
 	if (bIsLocked)
@@ -195,7 +190,6 @@ _DEBUG
 
 	    FE_STV0367qam_GetSignalInfo(&state->DeviceMap, state->IOHandle,
 	                                &Quality, &Intensity, &Ber,  FirstTimeBER);
-_DEBUG
 	    printk("Quality = %d, Intensity = %d, Ber = %d\n",
 	    		Quality, Intensity, Ber);
 	}
@@ -257,7 +251,7 @@ static int dvb_d0367_fe_qam_get_info(struct dvb_frontend *fe,
 #else
 static int dvb_d0367_fe_qam_get_property(struct dvb_frontend *fe, struct dtv_property* tvp)
 {
-	struct dvb_d0367_fe_qam_state* state = fe->demodulator_priv;
+	//struct dvb_d0367_fe_qam_state* state = fe->demodulator_priv;
 
 	/* get delivery system info */
 	if(tvp->cmd==DTV_DELIVERY_SYSTEM){
@@ -343,7 +337,6 @@ U32	D0367qam_GeSymbolRate(TUNER_IOREG_DeviceMap_t *DeviceMap,
 	    return SymbolRate;
 	}
 
-_DEBUG
 	printk("p->u.qam.symbol_rate = %d\n", p->u.qam.symbol_rate);
 	SymbolRate = p->u.qam.symbol_rate;
 
@@ -738,14 +731,11 @@ YW_ErrorType_T D0367qam_ScanFreq(TUNER_IOREG_DeviceMap_t *DemodDeviceMap,
     pParams.Frequency_kHz  = D0367qam_GeFrequencyKhz(DeviceMap, IOHandle);////
     pParams.AdcClock_Hz    = FE_367qam_GetADCFreq(DeviceMap,IOHandle,pParams.Crystal_Hz);
     pParams.MasterClock_Hz = FE_367qam_GetMclkFreq(DeviceMap,IOHandle,pParams.Crystal_Hz);
-_DEBUG
-{
 	printk("demod_d0367qam_ScanFreq  Frequency === %d\n", pParams.Frequency_kHz);
 	printk("demod_d0367qam_ScanFreq  Modulation === %d\n", pParams.Modulation);
 	printk("SymbolRate_Bds  =========== %d\n", pParams.SymbolRate_Bds);
 //    printk("pParams.AdcClock_Hz  ====== %d\n",pParams.AdcClock_Hz);
 //    printk("pParams.MasterClock_Hz ===== %d\n",pParams.MasterClock_Hz);
-}
 
     #if 0
     if (Inst->DriverParam.Cab.TunerDriver.tuner_SetFreq != NULL)
@@ -791,7 +781,6 @@ _DEBUG
 	if( (pParams.State == FE_367qam_DATAOK) && (!Error))
 	{
 		/* update results */
-_DEBUG
         printk("TUNER_STATUS_LOCKED #######################\n");
 	    //Inst->Status = TUNER_STATUS_LOCKED;
 		//pResult->Frequency_kHz = pIntParams->DemodResult.Frequency_kHz;
@@ -801,7 +790,6 @@ _DEBUG
 	}
 	else
 	{
-_DEBUG
         printk("TUNER_STATUS_UNLOCKED #######################\n");
 		//Inst->Status = TUNER_STATUS_UNLOCKED;
 	}
@@ -844,7 +832,6 @@ struct dvb_frontend* dvb_d0367_fe_qam_attach(struct i2c_adapter* i2c)
 {
     U8 data = 0xFF;
     data = ChipGetField_0367qam(DeviceMap, IOHandle, R367qam_ID);
-_DEBUG
 	printk("set data = 0x%02x\n", data);
 }
 
