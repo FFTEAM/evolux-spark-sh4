@@ -129,7 +129,7 @@ if [ -d $TUFSBOXDIR/release_with_dev ]; then
 	fi
 fi
 if [ -d $TUFSBOXDIR/release-enigma2-pli-nightly_with_dev ]; then
-	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_triple_with_dev ]; then
+	if [ ! -d $TUFSBOXDIR/release_evolux_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_triple_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_neutrino-hd_pli_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux-neutrino-hd_vdr2_with_dev ] && [ ! -d $TUFSBOXDIR/release_evolux_triple_with_dev ]; then
 		echo "   5) Prepare Enigma2-PLI  yaffs2"
 	fi
 fi
