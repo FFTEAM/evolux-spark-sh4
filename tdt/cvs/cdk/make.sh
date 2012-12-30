@@ -204,7 +204,9 @@ fi
 #if [ ! -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	echo ""
 	echo -e "\nFilesystemtype:"
+if [ ! -e "$GMDIR/cvs/cdk/.p0211" ]; then
 	echo -e "\033[1;37;40m   1) JFFS2 (standard)\033[0m"
+fi
 #	if [ ! -e "$GMDIR/cvs/cdk/.p0211" ]; then
 		echo -e "\033[1;37;42m   2) YAFFS2 (not needed changing bootargs)\033[0m"
 #	fi
