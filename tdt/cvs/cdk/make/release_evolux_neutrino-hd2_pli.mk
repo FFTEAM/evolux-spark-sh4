@@ -33,8 +33,10 @@ $(DEPDIR)/%release_evolux_neutrino-hd2_pli:
 	if [ -e $(prefix)/release-enigma2-pli-nightly_with_dev/etc/graphlcd.conf ]; then \
 		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/graphlcd.conf $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/; \
 	fi;
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/bin/mumudvb $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/bin/
-	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/mumudvb $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/
+	if [ -e $(prefix)/release-enigma2-pli-nightly_with_dev/etc/mumudvb ]; then \
+		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/bin/mumudvb $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/bin/; \
+		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/mumudvb $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/; \
+	fi;
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/inetd.conf $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/localtime $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_neutrino-hd2_pli_with_dev/etc/rc.d/
