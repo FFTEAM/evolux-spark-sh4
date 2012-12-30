@@ -99,19 +99,6 @@ release-enigma2-pli-nightly: release-enigma2-pli-nightly_common_utils
 	cp -f $(buildprefix)/root/sbin/nand* $(prefix)/release-enigma2-pli-nightly/sbin
 
 	cp -dp $(buildprefix)/root/etc/lircrc $(prefix)/release-enigma2-pli-nightly/etc/
-if ENABLE_SPARK
-	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
-	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release-enigma2-pli-nightly/etc/
-	( cd $(prefix)/release-enigma2-pli-nightly/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
-	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
-else
-	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
-endif
-	cp -dp $(targetprefix)/bin/evremote2.amiko $(prefix)/release-enigma2-pli-nightly/bin/
-	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release-enigma2-pli-nightly/usr/bin/
-	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release-enigma2-pli-nightly/usr/bin/
-	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release-enigma2-pli-nightly/usr/bin/
-
 	$(INSTALL_DIR) $(prefix)/release-enigma2-pli-nightly/usr/share/fonts
 	cp $(targetprefix)/usr/local/share/fonts/* $(prefix)/release-enigma2-pli-nightly/usr/share/fonts/
 
@@ -138,23 +125,6 @@ endif
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/evremote
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/gotosleep
 	rm -f $(prefix)/release-enigma2-pli-nightly/bin/vdstandby
-if ENABLE_SPARK
-	mv $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7111_mb618.fw $(prefix)/release-enigma2-pli-nightly/lib/firmware/component.fw
-	rm $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7105_pdk7105.fw
-else
-	mv $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7105_pdk7105.fw $(prefix)/release-enigma2-pli-nightly/lib/firmware/component.fw
-	rm $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7111_mb618.fw
-endif
-	cp -RP $(buildprefix)/root/lib/firmware/* $(prefix)/release-enigma2-pli-nightly/lib/firmware/
-
-	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
-	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release-enigma2-pli-nightly/usr/bin/
-	cp -f $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release-enigma2-pli-nightly/sbin/
-if ENABLE_SPARK
-	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
-else
-	( cd $(prefix) && cp -RP ../flash/spark/spark7162_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
-endif
 	cp -RP $(buildprefix)/root/usr/lib/liblzo2.so.2* $(prefix)/release-enigma2-pli-nightly/usr/lib/
 	cp -RP $(buildprefix)/root/lib/libproc* $(prefix)/release-enigma2-pli-nightly/lib/
 	cp -RP $(targetprefix)/usr/lib/libevent*.so* $(prefix)/release-enigma2-pli-nightly/usr/lib/
@@ -395,6 +365,34 @@ else
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
 endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom/aotom.ko $(prefix)/release-enigma2-pli-nightly/lib/modules/
+if ENABLE_SPARK
+	mv $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7111_mb618.fw $(prefix)/release-enigma2-pli-nightly/lib/firmware/component.fw
+	rm $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7105_pdk7105.fw
+	( cd $(prefix) && cp -RP ../flash/spark/spark_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
+else
+	mv $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7105_pdk7105.fw $(prefix)/release-enigma2-pli-nightly/lib/firmware/component.fw
+	rm $(prefix)/release-enigma2-pli-nightly/lib/firmware/component_7111_mb618.fw
+	( cd $(prefix) && cp -RP ../flash/spark/spark7162_oob.img $(prefix)/release-enigma2-pli-nightly/sbin/ )
+endif
+	cp -RP $(buildprefix)/root/lib/firmware/* $(prefix)/release-enigma2-pli-nightly/lib/firmware/
+
+if ENABLE_SPARK
+	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
+	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release-enigma2-pli-nightly/etc/
+	( cd $(prefix)/release-enigma2-pli-nightly/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
+	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
+else
+	cp -dp $(buildprefix)/root/etc/lircd_spark7162.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
+endif
+#	cp -dp $(targetprefix)/bin/evremote2.amiko $(prefix)/release-enigma2-pli-nightly/bin/
+	cp -dp $(buildprefix)/root/usr/bin/functions.sh $(prefix)/release-enigma2-pli-nightly/usr/bin/
+	cp -dp $(targetprefix)/usr/bin/lircd $(prefix)/release-enigma2-pli-nightly/usr/bin/
+	cp -dp $(targetprefix)/usr/bin/irexec $(prefix)/release-enigma2-pli-nightly/usr/bin/
+
+	cp -f $(buildprefix)/root/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo.pingulux $(prefix)/release-enigma2-pli-nightly/usr/local/share/enigma2/po/de/LC_MESSAGES/enigma2.mo
+	cp -f $(buildprefix)/root/usr/bin/mkfs.jffs2 $(prefix)/release-enigma2-pli-nightly/usr/bin/
+	cp -f $(buildprefix)/root/sbin/mkyaffs2 $(prefix)/release-enigma2-pli-nightly/sbin/
+
 	find $(prefix)/release-enigma2-pli-nightly/lib/modules/ -name '*.ko' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	rm -rf $(prefix)/release-enigma2-pli-nightly/lib/autofs
