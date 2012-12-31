@@ -379,6 +379,9 @@ endif
 if ENABLE_SPARK
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf
 	cp -dp $(buildprefix)/root/etc/lircd.conf.0* $(prefix)/release-enigma2-pli-nightly/etc/
+	if [ ! -e $(prefix)/release-enigma2-pli-nightly/etc/lirc ]; then \
+		mkdir -p $(prefix)/release-enigma2-pli-nightly/etc/lirc; \
+	fi
 	( cd $(prefix)/release-enigma2-pli-nightly/etc/lirc && ln -sf /etc/lircd.conf lircd.conf )
 	cp -dp $(buildprefix)/root/etc/lircd_spark.conf.amiko $(prefix)/release-enigma2-pli-nightly/etc/lircd.conf.amiko
 else
