@@ -1,14 +1,15 @@
---- neutrino-hd2-exp/acinclude.m4	2012-12-30 22:16:56.000000000 +0100
-+++ neutrino-hd2-exp/acinclude.m4	2012-12-30 22:22:49.482182353 +0100
+diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/acinclude.m4 neutrino-hd2-exp/acinclude.m4
+--- neutrino-hd2-exp.org/acinclude.m4	2012-08-25 22:02:02.410886888 +0200
++++ neutrino-hd2-exp/acinclude.m4	2012-08-25 22:02:02.586796676 +0200
 @@ -225,10 +225,10 @@
  AC_DEFUN([_TUXBOX_APPS_LIB_PKGCONFIG],[
  AC_REQUIRE([TUXBOX_APPS_PKGCONFIG])
  AC_MSG_CHECKING(for package $2)
--if PKG_CONFIG_PATH="$PKG_CONFIG_PATH" $PKG_CONFIG --exists "$2" ; then
+-if PKG_CONFIG_PATH="${prefix}/lib/pkgconfig" $PKG_CONFIG --exists "$2" ; then
 +if $PKG_CONFIG --exists "$2" ; then
  	AC_MSG_RESULT(yes)
--	$1_CFLAGS=$(PKG_CONFIG_PATH="$PKG_CONFIG_PATH" $PKG_CONFIG --cflags "$2")
--	$1_LIBS=$(PKG_CONFIG_PATH="$PKG_CONFIG_PATH" $PKG_CONFIG --libs "$2")
+-	$1_CFLAGS=$(PKG_CONFIG_PATH="${prefix}/lib/pkgconfig" $PKG_CONFIG --cflags "$2")
+-	$1_LIBS=$(PKG_CONFIG_PATH="${prefix}/lib/pkgconfig" $PKG_CONFIG --libs "$2")
 +	$1_CFLAGS=$($PKG_CONFIG --cflags "$2")
 +	$1_LIBS=$($PKG_CONFIG --libs "$2")
  else
@@ -1063,8 +1064,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		zc.close();
 +
 +		string cmd = "(" + string(EMU_list[selected].start_command)
-+			//+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
-+			+ " sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
++			+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
++			+ " >/dev/null 2>&1) &";
 +		safe_system(cmd.c_str());
 +	}
 +	for (int i = 1; i < EMU_OPTION_COUNT; i++)
@@ -2618,18 +2619,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
-@@ -157,8 +157,9 @@
- //extern bool has_hdd;				// defined in hdd_menu.cpp
- extern bool parentallocked;			// defined neutrino.cpp
- extern CRemoteControl * g_RemoteControl;	// defined neutrino.cpp
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- extern CCAMMenuHandler * g_CamHandler;		// defined neutrino.cpp
--
-+#endif
- static CTimingSettingsNotifier timingsettingsnotifier;
- 
- extern int FrontendCount;			// defined in zapit.cpp
-@@ -194,11 +195,11 @@
+@@ -195,11 +195,11 @@
  };
  
  // Init Main Menu
@@ -2643,7 +2633,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// tv modus
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_TVMODE, true, "", this, "tv", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, "tv", LOCALE_HELPTEXT_TVMODE ), true);
-@@ -261,6 +262,42 @@
+@@ -262,6 +262,42 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
@@ -2686,11 +2676,11 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -454,6 +491,24 @@
+@@ -455,6 +491,24 @@
  1080p50
  PC
  */
-+#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
++#if defined (PLATFORM_SPARK7162)
 +#define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
 +const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
 +{
@@ -2711,7 +2701,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
  const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
  {
-@@ -470,6 +525,7 @@
+@@ -471,6 +525,7 @@
  	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
  	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
  };
@@ -2719,7 +2709,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #else
  // giga
  /*
-@@ -557,7 +613,7 @@
+@@ -558,7 +613,7 @@
  
  void CNeutrinoApp::InitVideoSettings(CMenuWidget &videoSettings, CVideoSetupNotifier * videoSetupNotifier)
  {
@@ -2728,7 +2718,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVideo = 1;
  	
-@@ -629,7 +685,7 @@
+@@ -630,7 +685,7 @@
  
  void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier * audioSetupNotifier)
  {
@@ -2737,7 +2727,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudio = 1;
  	
-@@ -716,7 +772,7 @@
+@@ -717,7 +772,7 @@
  
  void CNeutrinoApp::InitParentalLockSettings(CMenuWidget &parentallockSettings)
  {
@@ -2746,7 +2736,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutLock = 1;
  	
-@@ -749,7 +805,7 @@
+@@ -750,7 +805,7 @@
  
  void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget & TunerSetup)
  {
@@ -2755,16 +2745,39 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutService = 1;
  
-@@ -792,7 +848,7 @@
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_RESET_CHANNELS, true, NULL, resetNotifier, "channels", CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE, "service", LOCALE_HELPTEXT_DELETECHANNELS ));
- 	
- 	// CI Cam 	
--#if !defined (PLATFORM_CUBEREVO_2000HD) && !defined (PLATFORM_CUBEREVO_250HD) && !defined (PLATFORM_CUBEREVO_MINI_FTA) && !defined (PLATFORM_SPARK7162)
-+#if !defined (PLATFORM_CUBEREVO_2000HD) && !defined (PLATFORM_CUBEREVO_250HD) && !defined (PLATFORM_CUBEREVO_MINI_FTA) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
- 	service.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
- 	
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_CAM_SETTINGS, true, "", g_CamHandler, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "cam", LOCALE_HELPTEXT_CAM ));
-@@ -908,7 +965,7 @@
+@@ -812,12 +867,12 @@
+ 
+ 	// restart neutrino
+ 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_RESTART, true, "", this, "restart", CRCInput::RC_standby, NEUTRINO_ICON_BUTTON_POWER, "shutdown", LOCALE_HELPTEXT_SOFTRESTART ));
+-
++#ifndef EVOLUX
+ 	// softupdate
+ 	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings. init soft-update-stuff\n");
+ 		
+ 	CMenuWidget * updateSettings = new CMenuWidget(LOCALE_SERVICEMENU_UPDATE, NEUTRINO_ICON_UPDATE, 550);
+-		
++
+ 	// intros
+ 	updateSettings->addItem(GenericMenuBack);
+ 	updateSettings->addItem(GenericMenuSeparatorLine);
+@@ -866,7 +921,7 @@
+ 
+ 	const char * versionString = (configfile.loadConfig("/var/etc/.version")) ? (configfile.getString( "version", "1200201205091849").c_str()) : "1200201205091849";
+ 
+-	dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
++	//dprintf(DEBUG_INFO, "CNeutrinoApp::InitServiceSettings: current flash-version: %s\n", versionString);
+ 
+ 	static CFlashVersionInfo versionInfo(versionString);
+ 
+@@ -897,6 +952,7 @@
+ 		
+ 	// updatesettings
+ 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_SERVICEMENU_UPDATE, true, "", updateSettings, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "service", LOCALE_HELPTEXT_SOFTWAREUPDATE ));
++#endif
+ }
+ 
+ // Init AudioPlayer Settings
+@@ -909,7 +965,7 @@
  
  void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
  {
@@ -2773,7 +2786,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudioPlayer = 1;
  	
-@@ -960,7 +1017,7 @@
+@@ -961,7 +1017,7 @@
  
  void CNeutrinoApp::InitPicViewerSettings(CMenuWidget &PicViewerSettings)
  {
@@ -2782,7 +2795,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutPicViewer = 1;
  	
-@@ -1031,7 +1088,7 @@
+@@ -1032,7 +1088,7 @@
  
  void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings, CMenuWidget &miscSettingsGeneral, CMenuWidget &miscSettingsChannelList, CMenuWidget &miscSettingsEPG, CMenuWidget &miscSettingsFileBrowser )
  {
@@ -2791,7 +2804,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutMiscSettings = 1;
  
-@@ -1242,7 +1299,7 @@
+@@ -1243,7 +1299,7 @@
  // Init Language Settings
  void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
  {
@@ -2800,7 +2813,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	languageSettings.addItem(GenericMenuBack);
-@@ -1310,7 +1367,7 @@
+@@ -1311,7 +1367,7 @@
  
  void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
  {
@@ -2809,7 +2822,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	struct dirent **namelist;
  
-@@ -1458,7 +1515,7 @@
+@@ -1459,7 +1515,7 @@
  // Init Recording Settings
  void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
  {
@@ -2818,7 +2831,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int rec_pre = 0;
  	int rec_post = 0;
-@@ -1600,7 +1657,7 @@
+@@ -1601,7 +1657,7 @@
  // init streamingssettings
  void CNeutrinoApp::InitStreamingSettings(CMenuWidget &streamingSettings)
  {
@@ -2827,7 +2840,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	streamingSettings.addItem(GenericMenuBack);
-@@ -1695,7 +1752,7 @@
+@@ -1696,7 +1752,7 @@
  // Init Color Settings
  void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings)
  {
@@ -2836,7 +2849,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// init screensetup objekt
  	CScreenSetup  * ScreenSetup = new CScreenSetup();
-@@ -1878,7 +1935,7 @@
+@@ -1879,7 +1935,7 @@
  /* Init LCD Settings */
  void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
  {
@@ -2845,7 +2858,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVFD = 1;
  	
-@@ -1923,10 +1980,12 @@
+@@ -1924,10 +1980,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -2859,7 +2872,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
-@@ -2065,7 +2124,7 @@
+@@ -2066,7 +2124,7 @@
  
  void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings, CMenuWidget &bindSettings)
  {
@@ -2868,7 +2881,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutkeysettings = 1;
  	
-@@ -2397,7 +2456,7 @@
+@@ -2398,7 +2456,7 @@
  // USERMENU
  bool CNeutrinoApp::showUserMenu(int button)
  {
@@ -3266,7 +3279,79 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  					
  					std::string command = "etherwake ";
  					command += g_settings.network_nfs_mac[i];
-@@ -4249,7 +4253,7 @@
+@@ -4090,7 +4094,7 @@
+ 		CVFD::getInstance()->ShowText((char *) "Good Bye");
+ #endif		
+ 
+-		dprintf(DEBUG_INFO, "ExitRun\n");
++		//dprintf(DEBUG_INFO, "ExitRun\n");
+ 
+ 		// stop playback
+ 		g_Zapit->stopPlayBack();
+@@ -4116,7 +4120,7 @@
+ 
+ 		if(retcode)
+ 		{
+-			dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
++			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: [shutdown] entering off state\n");
+ 			
+ 			mode = mode_off;
+ 
+@@ -4136,7 +4140,7 @@
+ 				
+ 				if( msg == CRCInput::RC_standby ) 
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Power key, going to sleep...\n");
+ 			
+ 					sleep(2);
+ 					
+@@ -4153,7 +4157,7 @@
+ 				} 
+ 				else if( ( msg == NeutrinoMessages::ANNOUNCE_RECORD) || ( msg == NeutrinoMessages::ANNOUNCE_ZAPTO) ) 
+ 				{
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: Zap/record timer, going to reboot...\n");
+ 					
+ 					sleep(2);
+ 					
+@@ -4171,7 +4175,7 @@
+ 				else 
+ 				{
+ 					// no message received.
+-					dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
++					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::ExitRun: going to sleep...\n");
+ 					
+ 					sleep(2);
+ 					
+@@ -4184,7 +4188,7 @@
+ 					// stop all deamons threads
+ 					stop_daemons();
+ 					
+-					dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
++					//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 					
+ 					exit(retcode);
+ 				}
+@@ -4200,7 +4204,7 @@
+ 
+ 			stop_daemons();
+ 
+-			dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
++			//dprintf(DEBUG_NORMAL, ">>> CNeutrinoApp::ExitRun: Good bye <<<\n");
+ 
+ 			exit(0);
+ 		}
+@@ -4213,7 +4217,7 @@
+ 	struct stat my_stat;    
+ 	if(stat(g_settings.epg_dir.c_str(), &my_stat) == 0)
+ 	{
+-		dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
++		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveEpg: Saving EPG to %s....\n", g_settings.epg_dir.c_str());
+ 		neutrino_msg_t      msg;
+ 		neutrino_msg_data_t data;
+ 		
+@@ -4252,7 +4256,7 @@
  
  	current_muted = newValue;
  
@@ -3275,7 +3360,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	g_Zapit->muteAudio(current_muted);
  
-@@ -4575,7 +4579,7 @@
+@@ -4578,7 +4582,7 @@
  {
  	static bool wasshift = false;
  
@@ -3284,7 +3369,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	if( bOnOff ) 
  	{
-@@ -4722,7 +4726,7 @@
+@@ -4725,7 +4729,7 @@
  // Radio Mode
  void CNeutrinoApp::radioMode( bool rezap)
  {
@@ -3293,7 +3378,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	if(mode == mode_tv ) 
  	{
-@@ -4756,7 +4760,7 @@
+@@ -4759,7 +4763,7 @@
  
  	if(autoshift) 
  	{
@@ -3302,7 +3387,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		stopAutoRecord();
  		recordingstatus = 0;
  	}
-@@ -4843,7 +4847,7 @@
+@@ -4846,7 +4850,7 @@
  				}
  
  				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = std::string(recDir);
@@ -3311,7 +3396,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  				CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
  			}
-@@ -4871,7 +4875,7 @@
+@@ -4874,7 +4878,7 @@
  
  int CNeutrinoApp::exec(CMenuTarget* parent, const std::string & actionKey)
  {
@@ -3320,7 +3405,23 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	int returnval = menu_return::RETURN_REPAINT;
  
-@@ -4917,12 +4921,12 @@
+@@ -4888,12 +4892,12 @@
+ 	}
+ 	else if(actionKey=="reboot")
+ 	{
+-		//FILE *f = fopen("/tmp/.reboot", "w");
+-		//fclose(f);
++		FILE *f = fopen("/tmp/.reboot", "w");
++		fclose(f);
+ 
+ 		ExitRun();
+ 
+-		//unlink("/tmp/.reboot");
++		unlink("/tmp/.reboot");
+ 		returnval = menu_return::RETURN_NONE;
+ 	}
+ 	else if(actionKey=="tv") 
+@@ -4920,12 +4924,12 @@
  	}
  	else if(actionKey=="networktest") 
  	{
@@ -3335,7 +3436,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		showCurrentNetworkSettings();
  	}
  	else if (actionKey=="theme_neutrino") 
-@@ -5087,7 +5091,7 @@
+@@ -5090,7 +5094,7 @@
  		if (b.exec(g_settings.network_nfs_recordingdir)) 
  		{
  			const char * newdir = b.getSelectedFile()->Name.c_str();
@@ -3344,7 +3445,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  			if(check_dir(newdir))
  				printf("CNeutrinoApp::exec: Wrong/unsupported recording dir %s\n", newdir);
-@@ -5095,12 +5099,12 @@
+@@ -5098,12 +5102,12 @@
  			{
  				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1 );
  				
@@ -3359,7 +3460,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5120,7 +5124,7 @@
+@@ -5123,7 +5127,7 @@
  			else
  			{
  				strcpy(g_settings.update_dir, fileBrowser.getSelectedFile()->Name.c_str());
@@ -3368,7 +3469,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5181,7 +5185,7 @@
+@@ -5166,7 +5170,7 @@
+ 			{
+ 				g_settings.logos_dir = b.getSelectedFile()->Name;
+ 				//strcpy(g_settings.logos_dir.c_str(), b.getSelectedFile()->Name.c_str());
+-				dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
++				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new logos dir %s\n", b.getSelectedFile()->Name.c_str());
+ 			}
+ 		}
+ 
+@@ -5184,7 +5188,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
  			loadColors(fileBrowser.getSelectedFile()->Name.c_str());
@@ -3377,7 +3487,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		}
  		
  		return menu_return::RETURN_REPAINT;
-@@ -5199,7 +5203,7 @@
+@@ -5202,7 +5206,7 @@
  			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVECOLORS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
  			sms->exec(NULL, "");
  			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
@@ -3386,7 +3496,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveColors(sname);
  			delete sms;
  		}
-@@ -5218,7 +5222,7 @@
+@@ -5221,7 +5225,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
  			loadKeys(fileBrowser.getSelectedFile()->Name.c_str());
@@ -3395,7 +3505,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  		}
  		
  		return menu_return::RETURN_REPAINT;
-@@ -5236,7 +5240,7 @@
+@@ -5239,7 +5243,7 @@
  			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVEKEYS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
  			sms->exec(NULL, "");
  			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
@@ -3404,7 +3514,50 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveKeys(sname);
  			delete sms;
  		}
-@@ -5354,7 +5358,7 @@
+@@ -5316,34 +5320,34 @@
+ #endif	
+ 
+ 	// stop nhttpd	
+-	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown\n");
+ 	pthread_cancel(nhttpd_thread);
+ 	pthread_join(nhttpd_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
++	//dprintf(DEBUG_NORMAL, "stop_daemons: httpd shutdown done\n");	
+ 
+ 	// streamts	
+ 	streamts_stop = 1;
+ 	pthread_join(stream_thread, NULL);	
+ 
+ 	// timerd stop	  
+-	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown\n");
+ 	g_Timerd->shutdown();
+ 	pthread_join(timer_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
++	//dprintf(DEBUG_NORMAL, "stop_daemons: timerd shutdown done\n");		
+ 
+ 	// sectionsd stop
+ 	sectionsd_stop = 1;
+-	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown\n");
+ 	pthread_join(sections_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: sectionsd shutdown done\n");
+ 
+ 	tuxtx_stop_subtitle();
+ 
+ 	// zapit stop	
+-	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
++	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown\n");
+ 	g_Zapit->shutdown();
+ 	pthread_join(zapit_thread, NULL);
+-	dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
++	//dprintf(DEBUG_NORMAL, "stop_daemons: zapit shutdown done\n");	
+ 
+ 	// clear vfd
+ 	CVFD::getInstance()->Clear();
+@@ -5358,7 +5362,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
  
@@ -3413,7 +3566,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	res = tconfig.loadConfig(fname);
  	if(!res) 
-@@ -5419,7 +5423,7 @@
+@@ -5423,7 +5427,7 @@
  {
  	CConfigFile tconfig(',', true);
  	
@@ -3422,7 +3575,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	//colors
  	tconfig.setInt32( "menu_Head_alpha", g_settings.menu_Head_alpha );
-@@ -5481,7 +5485,7 @@
+@@ -5485,7 +5489,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
  	
@@ -3431,7 +3584,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	res = tconfig.loadConfig(fname);
  	if(!res) 
-@@ -5530,7 +5534,7 @@
+@@ -5534,7 +5538,7 @@
  {
  	CConfigFile tconfig(',', true);
  	
@@ -3530,64 +3683,71 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:29.757669486 +0200
 +++ neutrino-hd2-exp/src/driver/vfd.cpp	2012-10-26 17:29:14.041591548 +0200
-@@ -427,7 +427,15 @@
- 			ClearIcons();
+@@ -42,7 +42,6 @@
+ #include <math.h>
+ #include <system/debug.h>
+ 
+-
+ //konfetti: let us share the device with evremote and fp_control
+ //it does currently not support more than one user (see e.g. micom)
+ #ifdef __sh__
+@@ -419,14 +418,22 @@
+ 			Clear();
  			showclock = false;
  			break;
 -
-+#if defined (PLATFORM_SPARK7162)
++#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
 +		case MODE_STANDBY:
++			//ShowIcon(VFD_ICON_TV, false);			
 +			showclock = false;
-+			Clear();
 +			//showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
 +						/* "showTime()" clears the whole lcd in MODE_STANDBY */
 +			ShowText("STANDBY");
 +			break;
 +#else
  		case MODE_STANDBY:
- 			ShowIcon(VFD_ICON_TV, false);
- 			ClearIcons();
-@@ -435,7 +443,7 @@
+ 			ShowIcon(VFD_ICON_TV, false);			
+ 			showclock = true;
  			showTime(true);      	/* "showclock = true;" implies that "showTime();" does a "displayUpdate();" */
  						/* "showTime()" clears the whole lcd in MODE_STANDBY */
  			break;
 -		
-+#endif		
++#endif	
  		case MODE_PIC:	  
  			ShowIcon(VFD_ICON_TV, false);			
  			ShowIcon(VFD_ICON_HD, false);
-@@ -591,9 +599,30 @@
- 	closeDevice();
- #else
+@@ -572,6 +579,7 @@
+ #if defined (PLATFORM_GIGABLUE)
+ 	ShowText("    "); // 4 empty digits
+ #elif defined __sh__ 
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	struct vfd_ioctl_data data;
+    
  	data.start_address = 0;
--	openDevice();	
-+	openDevice();
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK) 
- 	if( ioctl(fd, VFDDISPLAYWRITEONOFF, &data) < 0)
- 		perror("VFDDISPLAYCLR");
-+#endif
-+#if defined (PLATFORM_SPARK7162)
-+	ShowIcon(VFD_ICON_TV, false);			
-+	ShowIcon(VFD_ICON_HD, false);
-+	ShowIcon(VFD_ICON_DOLBY, false);
-+	ShowIcon(VFD_ICON_MP3, false);
-+	ShowIcon(VFD_ICON_USB, false);
-+	ShowIcon(VFD_ICON_LOCK, false);
-+	ShowIcon(VFD_ICON_MUTE, false);
-+	ShowIcon(VFD_ICON_TIMESHIFT, false);
-+	ShowIcon(VFD_ICON_RADIO, false);
-+	ShowIcon(VFD_ICON_1080P, false);
-+	ShowIcon(VFD_ICON_1080I, false);
-+	ShowIcon(VFD_ICON_720P, false);
-+	ShowIcon(VFD_ICON_480P, false);
-+	ShowIcon(VFD_ICON_480I, false);
-+	ShowIcon(VFD_ICON_PLAY, false);
-+	ShowIcon(VFD_ICON_PAUSE, false);
-+	ShowIcon(VFD_ICON_LOCK, false);
-+#endif
+@@ -583,6 +591,7 @@
+ 	
  	closeDevice();
  #endif
++#endif
+ }
+ 
+ void CVFD::ShowIcon(vfd_icon icon, bool show)
+@@ -590,6 +600,7 @@
+ 	dprintf(DEBUG_DEBUG, "CVFD::ShowIcon %s %x\n", show ? "show" : "hide", (int) icon);
+ 
+ #ifdef __sh__
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)
+ 	openDevice();
+ 
+ 	struct vfd_ioctl_data data;
+@@ -602,6 +613,7 @@
+ 	
+ 	closeDevice();
  #endif
++#endif
+ }
+ 
+ void* CVFD::ThreadScrollText(void * arg)
 
 --- neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:49.610539471 +0100
 +++ neutrino-hd2-exp/src/driver/rcinput.cpp	2012-10-31 15:06:36.446474194 +0100
@@ -3611,19 +3771,19 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  typedef struct input_event t_input_event;
  
 
-//--- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:34.159355427 +0100
-//+++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:24.655308297 +0100
-//@@ -16,4 +16,4 @@
-// Show39 1
-// ShowLevel2p5 1
-// DumpLevel2p5 0
-//-UseTTF 0
-//+UseTTF 1
+--- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:34.159355427 +0100
++++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt2.conf	2012-10-31 15:09:24.655308297 +0100
+@@ -16,4 +16,4 @@
+ Show39 1
+ ShowLevel2p5 1
+ DumpLevel2p5 0
+-UseTTF 0
++UseTTF 1
 
 
 --- neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:14:12.164733979 +0100
 +++ neutrino-hd2-exp/lib/libtuxtxt/tuxtxt.cpp	2012-10-31 15:15:41.417176564 +0100
-@@ -94,7 +94,7 @@
+@@ -91,7 +91,7 @@
  #define VFD_EXIT	0x0b7
  #define VFD_OK		0x058
  
@@ -3632,7 +3792,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  unsigned short key_0;
  unsigned short key_1;
-@@ -198,148 +198,148 @@
+@@ -195,148 +195,148 @@
  	printf("CRCInput::loadKeymap:\n");
  	
  	/* if keymap.conf not exists load default */
@@ -3716,9 +3876,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	key_blue	= configfileTuxTxt.getInt32("key_blue", KEY_BLUE);
  
  #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
--	key_audio = configfile.getInt32("key_audio", 0x188);
--	key_video = configfile.getInt32("key_video", 0xE2);		
--	key_text = configfile.getInt32("key_text", 0x184);
+-	key_audio = configfile.getInt32("key_audio", /*0x3D*/0x188);
+-	key_video = configfile.getInt32("key_video", /*0x90*/0xE2);		
+-	key_text = configfile.getInt32("key_text", /*0x173*/0x184);
 -#else
 -	key_audio = configfile.getInt32("key_audio", KEY_AUDIO);
 -	key_video = configfile.getInt32("key_video", KEY_VIDEO);		
@@ -3749,7 +3909,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #endif			
  
  #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
--	key_recall = configfile.getInt32("key_recall", 0x19C);
+-	key_recall = configfile.getInt32("key_recall", /*0x3C*/0x19C);
 +	key_recall = configfileTuxTxt.getInt32("key_recall", /*0x3C*/0x19C);
  #else
 -	key_recall = configfile.getInt32("key_recall", KEY_BACK);
@@ -3780,7 +3940,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_mode = configfile.getInt32("key_mode", 0x181);
 +	key_mode = configfileTuxTxt.getInt32("key_mode", 0x181);
  #elif defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
--	key_mode = configfile.getInt32("key_mode", 0x181);
+-	key_mode = configfile.getInt32("key_mode", /*0x3B*/0x181);
 +	key_mode = configfileTuxTxt.getInt32("key_mode", /*0x3B*/0x181);
  #else			
 -	key_mode = configfile.getInt32("key_mode", KEY_MODE);
@@ -3800,13 +3960,13 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #endif			
  
  	/* added from cuberevo3000hd so fix it please */
--	key_music = configfile.getInt32("key_music", 0x3F );
--	key_picture = configfile.getInt32("key_picture", 0x169 );
+-	key_music = configfile.getInt32("key_music", /*KEY_MUSIC*/0x3F );
+-	key_picture = configfile.getInt32("key_picture", /*KEY_PICTURE*/ 0x169 );
 +	key_music = configfileTuxTxt.getInt32("key_music", /*KEY_MUSIC*/0x3F );
 +	key_picture = configfileTuxTxt.getInt32("key_picture", /*KEY_PICTURE*/ 0x169 );
  			
--	key_repeat = configfile.getInt32("key_repeat", 0x81);
--	key_slow = configfile.getInt32("key_slow", 0x199 );
+-	key_repeat = configfile.getInt32("key_repeat", /*KEY_REPEAT*/0x81);
+-	key_slow = configfile.getInt32("key_slow", /*KEY_SLOW*/0x199 );
 +	key_repeat = configfileTuxTxt.getInt32("key_repeat", /*KEY_REPEAT*/0x81);
 +	key_slow = configfileTuxTxt.getInt32("key_slow", /*KEY_SLOW*/0x199 );
  			
@@ -3814,9 +3974,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	key_dvbsub = configfileTuxTxt.getInt32("key_dvbsub", KEY_DVBSUB);
  
 -	key_pip = configfile.getInt32("key_pip", KEY_PIP);
--	key_pippos = configfile.getInt32("key_pippos", 0x175);
--	key_pipswap = configfile.getInt32("key_pipswap", 0X9E);
--	key_pipsubch = configfile.getInt32("key_pipsubch", 0x188);
+-	key_pippos = configfile.getInt32("key_pippos", /*KEY_PIPPOS*/0x175);
+-	key_pipswap = configfile.getInt32("key_pipswap", /*KEY_PIPSWAP*/0X9E);
+-	key_pipsubch = configfile.getInt32("key_pipsubch", /*KEY_PIPSUBCH*/0x188);
 +	key_pip = configfileTuxTxt.getInt32("key_pip", KEY_PIP);
 +	key_pippos = configfileTuxTxt.getInt32("key_pippos", /*KEY_PIPPOS*/0x175);
 +	key_pipswap = configfileTuxTxt.getInt32("key_pipswap", /*KEY_PIPSWAP*/0X9E);
@@ -3825,11 +3985,11 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -	key_net = configfile.getInt32("key_net", KEY_NET);
 +	key_net = configfileTuxTxt.getInt32("key_net", KEY_NET);
  			
--	key_bookmark = configfile.getInt32("key_bookmark", 0x9C);
+-	key_bookmark = configfile.getInt32("key_bookmark", /*KEY_BOOKMARK*/0x9C);
 +	key_bookmark = configfileTuxTxt.getInt32("key_bookmark", /*KEY_BOOKMARK*/0x9C);
  
  #if defined (PLATFORM_CUBEREVO) || defined (PLATFORM_CUBEREVO_MINI) || defined (PLATFORM_CUBEREVO_MINI2) || defined (PLATFORM_CUBEREVO_MINI_FTA) || defined (PLATFORM_CUBEREVO_250HD) || defined (PLATFORM_CUBEREVO_2000HD) || defined (PLATFORM_CUBEREVO_9500HD)
--	key_multifeed = configfile.getInt32("key_multifeed", 0x42);
+-	key_multifeed = configfile.getInt32("key_multifeed", /*KEY_MULTIFEED*/0x42);
 +	key_multifeed = configfileTuxTxt.getInt32("key_multifeed", /*KEY_MULTIFEED*/0x42);
  #else
 -	key_multifeed = configfile.getInt32("key_multifeed", 0x165);
@@ -3872,33 +4032,37 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/nhttpd/tuxboxapi/controlapi.cpp	2012-10-31 15:14:12.864737451 +0100
 +++ neutrino-hd2-exp/src/nhttpd/tuxboxapi/controlapi.cpp	2012-10-31 15:22:53.751320385 +0100
-@@ -50,6 +50,13 @@
+@@ -49,9 +49,11 @@
+ extern tallchans allchans;
  extern CBouquetManager *g_bouquetManager;
  extern t_channel_id live_channel_id;
- 
+-
 +#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
-+#define NUMBER_OF_EVENT_DEVICES 1
-+ 
-+const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
-+	"/dev/input/event1"
-+};
++#define EVENTDEV "/dev/input/event1"
 +#else
- #define NUMBER_OF_EVENT_DEVICES 4
-  
- const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {
-@@ -58,6 +65,7 @@
- 	"/dev/input/event2", 
- 	"/dev/input/event3"
- };
+ #define EVENTDEV "/dev/input/event0"
+-
 +#endif
- 
  //-----------------------------------------------------------------------------
  enum {	// not defined in input.h but used like that, at least in 2.4.22
+ 	KEY_RELEASED = 0,
+@@ -774,7 +776,11 @@
+ 	int evd = open(EVENTDEV, O_RDWR);
+ 	if (evd < 0) {
+ 		hh->SendError();
++#if defined (PLATFORM_SPARK7162) || defined (PLATFORM_SPARK)
++		perror("opening event1 failed");
++#else
+ 		perror("opening event0 failed");
++#endif
+ 		return;
+ 	}
+ 	if (rc_send(evd, sendcode, KEY_PRESSED) < 0) {
 
 
 --- neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:12:51.852248642 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/Makefile.am	2012-11-01 19:10:38.555587666 +0100
-@@ -18,10 +18,15 @@
+@@ -20,10 +20,15 @@
  
  libcoolstream_a_SOURCES = audio_cs.cpp dmx_cs.cpp playback_cs.cpp record_cs.cpp \
  	video_cs.cpp
@@ -3920,7 +4084,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:12:37.488177423 +0100
 +++ neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:10:47.007629583 +0100
-@@ -53,7 +53,15 @@
+@@ -55,7 +55,15 @@
  libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
  endif
  
@@ -3950,37 +4114,37 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 -
 +#endif
  /* audio conf */
- #define AUDIO_CONFIG_FILE CONFIGDIR "/zapit/audio.conf"
+ #define AUDIO_CONFIG_FILE "/var/tuxbox/config/zapit/audio.conf"
  map<t_channel_id, audio_map_set_t> audio_map;
-@@ -726,9 +726,10 @@
- 	{
- 		cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
- 	}
--	
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)			
- 	// ci cam //FIXME: boxes without ci cam
--	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);	
-+	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
-+#endif	
+@@ -664,8 +664,10 @@
+ 
+ 	cam0->setCaPmt(thischannel, thischannel->getCaPmt(), demux_index, ca_mask);
+ 	
+-	// ci cam //FIXME: boxes without ci cam
+-	ci->SendCaPMT(thischannel->getCaPmt());	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
++ 	// ci cam //FIXME: boxes without ci cam
++ 	ci->SendCaPMT(thischannel->getCaPmt());	
++#endif
  }
  
  // save pids
-@@ -1270,10 +1271,10 @@
- 		cam1->sendMessage(0,0); // stop
- 		cam0->setCaPmt(live_channel, live_channel->getCaPmt(), demux_index, ca_mask); // update
- 	}
--	
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)				
- 	// ci cam
- 	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
--	
-+#endif	
- 	rec_channel_id = 0;
- 	rec_channel = NULL;
+@@ -1025,8 +1027,10 @@
  	
-@@ -3596,9 +3597,11 @@
+ 	cam1->setCaPmt(rec_channel, rec_channel->getCaPmt(), demux_index, ca_mask );
+ 	
+-	// ci cam //FIXME: boxes without ci cam
+-	ci->SendCaPMT(rec_channel->getCaPmt());	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK)	
++ 	// ci cam //FIXME: boxes without ci cam
++ 	ci->SendCaPMT(thischannel->getCaPmt());	
++#endif	
+ 		
+ 
+ 	return 0;
+@@ -3520,9 +3524,11 @@
+ 		cam1 = new CCam();
  	}
- #endif	
  
 -	//CI init
 -	//FIXME: platform without ci cam
@@ -3992,7 +4156,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +#endif
  	
  	//globals
- 	scan_runs = 0; 	
+ 	scan_runs = 0;
+ 	
+ 	
  	
 
 --- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
@@ -4071,7 +4237,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  enum {
  	VIDEO_STD_PAL,
  	VIDEO_STD_1080I50,
-@@ -100,6 +115,7 @@
+@@ -84,6 +99,7 @@
  	VIDEO_STD_1080P50,
  	VIDEO_STD_PC
  };
@@ -4083,7 +4249,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:22:02.981915499 +0100
 +++ neutrino-hd2-exp/lib/libcoolstream/video_cs.cpp	2012-11-02 15:21:49.125846789 +0100
-@@ -383,6 +383,22 @@
+@@ -358,6 +358,22 @@
  1080p50
  PC
  */
@@ -4106,7 +4272,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	const char *aVideoSystems[][2] = {
  		{"VIDEO_STD_PAL", "pal"},
  		{"VIDEO_STD_1080I50", "1080i50"},
-@@ -398,6 +413,7 @@
+@@ -373,6 +388,7 @@
  		{"VIDEO_STD_1080P50", "1080p50"},
  		{"VIDEO_STD_PC", "PC"},
  	};
@@ -4306,22 +4472,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  {
 
 
-//--- neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:43:15.243494257 +0100
-//+++ neutrino-hd2-exp/src/zapit/src/frontend.cpp	2012-11-25 19:42:06.931155488 +0100
-//@@ -184,7 +184,13 @@
-// 		secSetVoltage(SEC_VOLTAGE_OFF, 0);
-// 		secSetTone(SEC_TONE_OFF, 15);
-// 	}
-//-
-//+#if defined (PLATFORM_SPARK7162)
-//+// spark7162 artefakt fix on zap. maybe also needed for other boxtypes? please check
-//+	else {
-//+		secSetVoltage(SEC_VOLTAGE_OFF, 0);
-//+		secSetTone(SEC_TONE_OFF, 15);
-//+	}
-//+#endif
-// 	tuned = false;
-// 	standby = true;
- 	
 
-
+ 
+ 
