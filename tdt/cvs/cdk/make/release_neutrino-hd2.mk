@@ -38,6 +38,7 @@ $(DEPDIR)/%release_neutrino-hd2:
 	cp -dp $(targetprefix)/sbin/mke2fs $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/sbin/mkfs.ext2 $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/sbin/mkfs.ext3 $(prefix)/release_neutrino-hd2/sbin/ && \
+	cp -dp $(targetprefix)/sbin/e2fsck $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/sbin/fsck $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/sbin/fsck.ext2 $(prefix)/release_neutrino-hd2/sbin/ && \
 	cp -dp $(targetprefix)/sbin/fsck.ext3 $(prefix)/release_neutrino-hd2/sbin/ && \
