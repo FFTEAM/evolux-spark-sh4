@@ -12,7 +12,7 @@ code_06="\x07"
 code_07="\x08"
 code_08="\x09"
 code_09="\x30"
-
+#
 #ok + 4xPoweroff = not Reboot
 #ok + 2xMute = cam restart
 code_reset=code_ok code_pw code_pw code_pw code_pw
