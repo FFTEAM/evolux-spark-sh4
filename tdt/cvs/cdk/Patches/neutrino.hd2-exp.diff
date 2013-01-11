@@ -3368,24 +3368,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -5181,7 +5185,7 @@
- 		if (fileBrowser.exec("/var/tuxbox/config") == true) 
- 		{
- 			loadColors(fileBrowser.getSelectedFile()->Name.c_str());
--			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new colors: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
-+			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new colors: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
- 		}
- 		
- 		return menu_return::RETURN_REPAINT;
-@@ -5199,7 +5203,7 @@
- 			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVECOLORS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
- 			sms->exec(NULL, "");
- 			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
--			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save colors: %s\n", sname);
-+			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save colors: %s\n", sname);
- 			saveColors(sname);
- 			delete sms;
- 		}
 @@ -5218,7 +5222,7 @@
  		if (fileBrowser.exec("/var/tuxbox/config") == true) 
  		{
@@ -3404,24 +3386,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  			saveKeys(sname);
  			delete sms;
  		}
-@@ -5354,7 +5358,7 @@
- 	bool res;
- 	CConfigFile tconfig(',', true);
- 
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadColors: %s\n", fname);
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadColors: %s\n", fname);
- 
- 	res = tconfig.loadConfig(fname);
- 	if(!res) 
-@@ -5419,7 +5423,7 @@
- {
- 	CConfigFile tconfig(',', true);
- 	
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveColors: %s\n", fname);
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveColors: %s\n", fname);
- 
- 	//colors
- 	tconfig.setInt32( "menu_Head_alpha", g_settings.menu_Head_alpha );
 @@ -5481,7 +5485,7 @@
  	bool res;
  	CConfigFile tconfig(',', true);
