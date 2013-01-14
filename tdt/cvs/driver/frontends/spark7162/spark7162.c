@@ -102,7 +102,6 @@ enum
 
 static int eUnionTunerType = UNION_TUNER_T;
 static char *UnionTunerType = "t";
-int debug_fe7162 = 0;
 
 /*******************************  数据结构*********************************/
 
@@ -386,7 +385,7 @@ int spark_dvb_attach_T2(struct dvb_adapter *dvb_adap,
 		printk (KERN_INFO "%s: error attaching d0367\n", __FUNCTION__);
 		return -1;
 	}
-	printk("%s: d0367 fe ofdm attached\n", __FUNCTION__);
+	printk("%s: d6158 attached\n", __FUNCTION__);
 
 	if(!dvb_attach(mxl301_attach, pFrontend, &mxl301_config, pI2c))
 
@@ -396,7 +395,7 @@ int spark_dvb_attach_T2(struct dvb_adapter *dvb_adap,
 		return -1;
 	}
 
-	printk("%s: SHARP6465 attached\n", __FUNCTION__);
+	printk("%s: mxl301 attached\n", __FUNCTION__);
 
 	(*ppFrontend) = pFrontend;
 	return 0;
@@ -889,9 +888,6 @@ module_exit(spark_cleanup);
 
 module_param(UnionTunerType, charp, 0);
 MODULE_PARM_DESC(UnionTunerType, "Union Tuner Type (t, c)");
-
-module_param(debug_fe7162, int, 0);
-MODULE_PARM_DESC(debug_fe7162, "debug (very noisy!), default 0");
 
 /* EOF------------------------------------------------------------------------*/
 
