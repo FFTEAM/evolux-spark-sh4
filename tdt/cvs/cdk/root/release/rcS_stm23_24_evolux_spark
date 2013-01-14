@@ -262,8 +262,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 	echo "init AVS"
 	# insmod $MODDIR/avs.ko type=spark_avs
 	insmod $MODDIR/avs.ko type=avs_pio
-	player=`cat /proc/stb/player/version`
-	echo "init player $player"
+	#player=`cat /proc/stb/player/version`
+	echo "init player 191"
 
 	insmod $MODDIR/mmelog.ko
 	insmod $MODDIR/ksound.ko
