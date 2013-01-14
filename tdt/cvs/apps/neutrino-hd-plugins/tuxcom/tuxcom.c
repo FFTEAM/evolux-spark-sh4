@@ -700,7 +700,7 @@ int main()
 		close(fb);
 		exit(1);
 	}
-#ifdef EVOLUX
+#ifndef EVOLUX
 	while (GetRCCode() == 1);
 #endif
 
@@ -891,7 +891,9 @@ int main()
 		// hack to ignore the first OK press (from starting the plugin)
 		if (firstentry == 1)
 		{
+#ifndef EVOLUX
 			if (rccode == RC_OK) continue;
+#endif
 
 			// check password
 			if (szPass[0] != 0x00)
