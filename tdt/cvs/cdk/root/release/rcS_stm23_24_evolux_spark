@@ -3,6 +3,11 @@ if [ -e /etc/.spark7162 ]; then
 	TRIPLEX=1
 	DISPLAY=7105
 	SCARTOUT=""
+	if [ -e /etc/.cable ]; then
+		myDVB="c"
+	else
+		myDVB="t"
+	fi
 else
 	DISPLAY=7111
 	SCARTOUT="STi7111Device_scart_output=1"
@@ -273,7 +278,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 	insmod $MODDIR/stmvbi.ko
 	insmod $MODDIR/pseudocard.ko
 	if [ -n "$TRIPLEX" ]; then
-		insmod $MODDIR/spark7162.ko UnionTunerType=t #t=terrestical, c=cable
+		insmod $MODDIR/spark7162.ko UnionTunerType=$myDVB #t=terrestical, c=cable
 	else
 		insmod $MODDIR/stv090x.ko
 	fi
