@@ -63,10 +63,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  class CMenuForwarderItemMenuIcon : public CMenuItem
 
-
---- neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 16:17:29.633855316 +0200
-+++ neutrino-hd2-exp/src/system/locals_intern.h	2012-10-21 15:40:23.854818280 +0200
-@@ -547,6 +547,7 @@
+--- neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:20:39.375728471 +0100
++++ neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:30:45.590734523 +0100
+@@ -565,6 +565,7 @@
  	"messagebox.no",
  	"messagebox.ok",
  	"messagebox.yes",
@@ -74,7 +73,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	"miscsettings.bootinfo",
  	"miscsettings.bootmenu",
  	"miscsettings.channellist",
-@@ -1552,6 +1553,83 @@
+@@ -1574,6 +1575,87 @@
  	"keybinding.key_timelist",
  	"keybinding.key_net",
  	"keybinding.key_video_player",
@@ -131,6 +130,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	"extramenu.fsck.select",
 +	"extramenu.fsck.on",
 +	"extramenu.fsck.off",
++	"extramenu.dvb",
++	"extramenu.dvb.select",
++	"extramenu.dvb.on",
++	"extramenu.dvb.off",
 +	"extramenu.nfsserver",
 +	"extramenu.nfsserver.select",
 +	"extramenu.nfsserver.on",
@@ -159,10 +162,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	"audiomenu.volumebar_audiosteps",
  };
 
-
 --- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
 +++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
-@@ -547,6 +547,7 @@
+@@ -565,6 +565,7 @@
  	LOCALE_MESSAGEBOX_NO,
  	LOCALE_MESSAGEBOX_OK,
  	LOCALE_MESSAGEBOX_YES,
@@ -170,7 +172,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	LOCALE_MISCSETTINGS_BOOTINFO,
  	LOCALE_MISCSETTINGS_BOOTMENU,
  	LOCALE_MISCSETTINGS_CHANNELLIST,
-@@ -1552,6 +1553,82 @@
+@@ -1574,6 +1575,86 @@
  	LOCALE_KEYBINDINGMENU_TIMELIST,
  	LOCALE_KEYBINDINGMENU_NET,
  	LOCALE_KEYBINDINGMENU_VIDEO_PLAYER,
@@ -226,6 +228,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	LOCALE_EXTRAMENU_FSCK_SELECT,
 +	LOCALE_EXTRAMENU_FSCK_ON,
 +	LOCALE_EXTRAMENU_FSCK_OFF,
++	LOCALE_EXTRAMENU_DVB,
++	LOCALE_EXTRAMENU_DVB_SELECT,
++	LOCALE_EXTRAMENU_DVB_ON,
++	LOCALE_EXTRAMENU_DVB_OFF,
 +	LOCALE_EXTRAMENU_NFSSERVER,
 +	LOCALE_EXTRAMENU_NFSSERVER_SELECT,
 +	LOCALE_EXTRAMENU_NFSSERVER_ON,
@@ -256,7 +262,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
-@@ -1542,4 +1543,122 @@
+@@ -1565,4 +1565,126 @@
  
  audiomenu.volumebar_audiosteps Volume Step Size
  
@@ -312,6 +318,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +extramenu.fsck.select FSCK
 +extramenu.fsck.on On
 +extramenu.fsck.off Off
++extramenu.dvb DVB-T/C Menue
++extramenu.dvb.select DVB
++extramenu.dvb.on DVB-C
++extramenu.dvb.off DVB-T
 +extramenu.nfsserver NFSSERVER Menue
 +extramenu.nfsserver.select NFSSERVER
 +extramenu.nfsserver.on On
@@ -382,7 +392,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -705,6 +705,7 @@
+@@ -726,6 +726,7 @@
  messagebox.no Nein
  messagebox.ok OK
  messagebox.yes Ja
@@ -390,7 +400,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  miscsettings.bootinfo Infos beim Booten anzeigen
  miscsettings.bootmenu Bootmenü anzeigen
  miscsettings.channellist Kanalliste
-@@ -809,7 +810,7 @@
+@@ -831,7 +832,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -399,16 +409,16 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -903,7 +904,7 @@
+@@ -925,7 +926,7 @@
  movieplayer.defplugin Start-Plugin
- movieplayer.vlcplayback Vlc Player
+ movieplayer.vlcplayback VLC Player
  movieplayer.dvdplayback DVD
 -movieplayer.fileplayback Media Archiv
 +movieplayer.fileplayback MoviePlayer
  movieplayer.showtshelp Hilfe
  movieplayer.goto Springe zu ...
  movieplayer.goto.h1 = -> absoluter Sprung
-@@ -1545,4 +1546,100 @@
+@@ -1567,4 +1568,104 @@
  
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
@@ -464,6 +474,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +extramenu.fsck.select FSCK
 +extramenu.fsck.on Ein
 +extramenu.fsck.off Aus
++extramenu.dvb DVB-T/C Menue
++extramenu.dvb.select DVB
++extramenu.dvb.on DVB-C
++extramenu.dvb.off DVB-T
 +extramenu.nfsserver NFSSERVER Menue
 +extramenu.nfsserver.select NFSSERVER
 +extramenu.nfsserver.on Ein
@@ -524,7 +538,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,1698 @@
+@@ -0,0 +1,1764 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2221,12 +2235,78 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +}
 +////////////////////////////// NFSSERVER Menu ENDE //////////////////////////////////////
 +
++////////////////////////////// DVB Menu ANFANG ////////////////////////////////////
++#define DVB_OPTION_COUNT 2
++const CMenuOptionChooser::keyval DVB_OPTIONS[DVB_OPTION_COUNT] =
++{
++	{ 0, LOCALE_EXTRAMENU_DVB_OFF },
++	{ 1, LOCALE_EXTRAMENU_DVB_ON }
++};
++
++DVB_Menu::DVB_Menu()
++{
++	frameBuffer = CFrameBuffer::getInstance();
++	width = 600;
++	hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++	mheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++	height = hheight+13*mheight+ 10;
++
++	x=(((g_settings.screen_EndX- g_settings.screen_StartX)-width) / 2) + g_settings.screen_StartX;
++	y=(((g_settings.screen_EndY- g_settings.screen_StartY)-height) / 2) + g_settings.screen_StartY;
++}
++
++int DVB_Menu::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++	int res = menu_return::RETURN_REPAINT;
++
++	if (parent)
++		parent->hide();
++
++	DVBSettings();
++
++	return res;
++}
++
++void DVB_Menu::hide()
++{
++	frameBuffer->paintBackgroundBoxRel(x,y, width,height);
++}
++
++void DVB_Menu::DVBSettings()
++{
++#define DOTFILE_DVB "/etc/.cable"
++	int dvb = access(DOTFILE_DVB, F_OK) ? 0 : 1;
++	int old_dvb=dvb;
++	//MENU AUFBAUEN
++	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_DVB, "settings");
++	menu->addItem(GenericMenuSeparator);
++	menu->addItem(GenericMenuBack);
++	menu->addItem(GenericMenuSeparatorLine);
++	CMenuOptionChooser* oj1 = new CMenuOptionChooser(LOCALE_EXTRAMENU_DVB_SELECT, &dvb, DVB_OPTIONS, DVB_OPTION_COUNT,true);
++	menu->addItem( oj1 );
++	menu->exec (NULL, "");
++	menu->hide ();
++	delete menu;
++	// UEBERPRUEFEN OB SICH WAS GEAENDERT HAT
++	if (old_dvb!=dvb)
++	{
++		if (dvb == 1) {
++			touch(DOTFILE_DVB);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DVB-C Activated, please reboot!", 450, 2); // UTF-8("")
++		} else {
++			unlink(DOTFILE_DVB);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "DVB-T Activated, please reboot!", 450, 2); // UTF-8("")
++		}
++	}
++}
++////////////////////////////// DVB Menu ENDE //////////////////////////////////////
++
 +////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
 +// vim:ts=4--- neutrino-hd2-exp/src/gui/extra_menu.h	1970-01-01 01:00:00.000000000 +0100
 
 
 +++ neutrino-hd2-exp/src/gui/extra_menu.h	2012-10-06 17:54:32.000000000 +0200
-@@ -0,0 +1,387 @@
+@@ -0,0 +1,408 @@
 +/*
 +Neutrino-GUI - DBoxII-Project
 +
@@ -2504,6 +2584,27 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +
 +};
 +
++class DVB_Menu : public CMenuTarget
++{
++	private:
++
++	CFrameBuffer *frameBuffer;
++	int x;
++	int y;
++	int width;
++	int height;
++	int hheight,mheight; // head/menu font height
++
++	public:
++
++	DVB_Menu();
++
++	void hide();
++	int exec(CMenuTarget* parent, const std::string & actionKey);
++	void DVBSettings();
++
++};
++
 +class NFSSERVER_Menu : public CMenuTarget
 +{
 +	private:
@@ -2618,7 +2719,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
-@@ -157,8 +157,9 @@
+@@ -158,8 +158,9 @@
  //extern bool has_hdd;				// defined in hdd_menu.cpp
  extern bool parentallocked;			// defined neutrino.cpp
  extern CRemoteControl * g_RemoteControl;	// defined neutrino.cpp
@@ -2629,7 +2730,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  static CTimingSettingsNotifier timingsettingsnotifier;
  
  extern int FrontendCount;			// defined in zapit.cpp
-@@ -194,11 +195,11 @@
+@@ -195,11 +196,11 @@
  };
  
  // Init Main Menu
@@ -2643,7 +2744,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	// tv modus
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_TVMODE, true, "", this, "tv", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, "tv", LOCALE_HELPTEXT_TVMODE ), true);
-@@ -261,6 +262,42 @@
+@@ -262,6 +263,43 @@
  	//Service
  	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
  
@@ -2666,6 +2767,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FSCK, true, "", new FSCK_Menu(), NULL, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE)); // FSCK Menu
 +	int extrashortcut = 1;
 +	//ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DISPLAYTIME, true, "", new DISPLAYTIME_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DisplayTime Menu
++	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_DVB, true, "", new DVB_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // DVB Menu
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_FRITZCALL, true, "", new FRITZCALL_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // Fritzcall Menu
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_KERNELOPTIONS, true, "", new KernelOptions_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++)));
 +	ExtraMenu.addItem(new CMenuForwarder(LOCALE_EXTRAMENU_NFSSERVER, true, "", new NFSSERVER_Menu(), NULL, CRCInput::convertDigitToKey(extrashortcut++))); // FSCK Menu
@@ -2686,7 +2788,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -454,6 +491,24 @@
+@@ -455,6 +493,24 @@
  1080p50
  PC
  */
@@ -2711,7 +2813,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #define VIDEOMENU_VIDEOMODE_OPTION_COUNT 12
  const CMenuOptionChooser::keyval VIDEOMENU_VIDEOMODE_OPTIONS[VIDEOMENU_VIDEOMODE_OPTION_COUNT] =
  {
-@@ -470,6 +525,7 @@
+@@ -471,6 +527,7 @@
  	{ VIDEO_STD_1080P50, NONEXISTANT_LOCALE, "1080p 50Hz" 	},
  	{ VIDEO_STD_PC, NONEXISTANT_LOCALE, "PC"		}
  };
@@ -2719,7 +2821,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  #else
  // giga
  /*
-@@ -557,7 +613,7 @@
+@@ -558,7 +615,7 @@
  
  void CNeutrinoApp::InitVideoSettings(CMenuWidget &videoSettings, CVideoSetupNotifier * videoSetupNotifier)
  {
@@ -2728,7 +2830,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVideo = 1;
  	
-@@ -629,7 +685,7 @@
+@@ -630,7 +687,7 @@
  
  void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier * audioSetupNotifier)
  {
@@ -2737,7 +2839,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudio = 1;
  	
-@@ -716,7 +772,7 @@
+@@ -717,7 +774,7 @@
  
  void CNeutrinoApp::InitParentalLockSettings(CMenuWidget &parentallockSettings)
  {
@@ -2746,7 +2848,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutLock = 1;
  	
-@@ -749,7 +805,7 @@
+@@ -750,7 +807,7 @@
  
  void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget & TunerSetup)
  {
@@ -2755,7 +2857,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutService = 1;
  
-@@ -792,7 +848,7 @@
+@@ -793,7 +850,7 @@
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_RESET_CHANNELS, true, NULL, resetNotifier, "channels", CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE, "service", LOCALE_HELPTEXT_DELETECHANNELS ));
  	
  	// CI Cam 	
@@ -2764,7 +2866,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	service.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  	
  	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_CAM_SETTINGS, true, "", g_CamHandler, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "cam", LOCALE_HELPTEXT_CAM ));
-@@ -908,7 +965,7 @@
+@@ -913,7 +970,7 @@
  
  void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
  {
@@ -2773,7 +2875,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutAudioPlayer = 1;
  	
-@@ -960,7 +1017,7 @@
+@@ -965,7 +1022,7 @@
  
  void CNeutrinoApp::InitPicViewerSettings(CMenuWidget &PicViewerSettings)
  {
@@ -2782,7 +2884,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutPicViewer = 1;
  	
-@@ -1031,7 +1088,7 @@
+@@ -1036,7 +1093,7 @@
  
  void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings, CMenuWidget &miscSettingsGeneral, CMenuWidget &miscSettingsChannelList, CMenuWidget &miscSettingsEPG, CMenuWidget &miscSettingsFileBrowser )
  {
@@ -2791,7 +2893,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutMiscSettings = 1;
  
-@@ -1242,7 +1299,7 @@
+@@ -1244,7 +1301,7 @@
  // Init Language Settings
  void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
  {
@@ -2800,7 +2902,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	languageSettings.addItem(GenericMenuBack);
-@@ -1310,7 +1367,7 @@
+@@ -1312,7 +1369,7 @@
  
  void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
  {
@@ -2809,7 +2911,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	struct dirent **namelist;
  
-@@ -1458,7 +1515,7 @@
+@@ -1460,7 +1517,7 @@
  // Init Recording Settings
  void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
  {
@@ -2818,7 +2920,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int rec_pre = 0;
  	int rec_post = 0;
-@@ -1600,7 +1657,7 @@
+@@ -1602,7 +1659,7 @@
  // init streamingssettings
  void CNeutrinoApp::InitStreamingSettings(CMenuWidget &streamingSettings)
  {
@@ -2827,7 +2929,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// intros
  	streamingSettings.addItem(GenericMenuBack);
-@@ -1695,7 +1752,7 @@
+@@ -1697,7 +1754,7 @@
  // Init Color Settings
  void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings)
  {
@@ -2836,7 +2938,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	// init screensetup objekt
  	CScreenSetup  * ScreenSetup = new CScreenSetup();
-@@ -1878,7 +1935,7 @@
+@@ -1891,7 +1948,7 @@
  /* Init LCD Settings */
  void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
  {
@@ -2845,7 +2947,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutVFD = 1;
  	
-@@ -1923,10 +1980,12 @@
+@@ -1959,10 +2016,12 @@
  
  	// vfd time
  #ifdef __sh__	
@@ -2859,7 +2961,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  }
  
  // Init Keys Settings
-@@ -2065,7 +2124,7 @@
+@@ -2100,7 +2159,7 @@
  
  void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings, CMenuWidget &bindSettings)
  {
@@ -2868,7 +2970,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  	
  	int shortcutkeysettings = 1;
  	
-@@ -2397,7 +2456,7 @@
+@@ -2432,7 +2491,7 @@
  // USERMENU
  bool CNeutrinoApp::showUserMenu(int button)
  {
