@@ -7,6 +7,9 @@ if [ -e /etc/.spark7162 ]; then
 		myDVB="c"
 	else
 		myDVB="t"
+	if [ -e /etc/.nmp]; then
+		export FE_OFFSET=1
+	fi
 	fi
 else
 	DISPLAY=7111
