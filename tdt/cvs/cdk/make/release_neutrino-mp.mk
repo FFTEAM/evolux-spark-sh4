@@ -504,6 +504,7 @@ endif
 #	( cd $(prefix)/release_neutrino-mp/usr/local/share/neutrino/locale && rm b* c* f* i* ne* p* s* )
 	( cd $(prefix)/release_neutrino-mp/etc && ln -sf /usr/share/zoneinfo/CET localtime )
 	touch $(prefix)/release_neutrino-mp/etc/.EVOfirstboot
+	touch $(prefix)/release_neutrino-mp/etc/.nmp
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino-mp/etc/
 	if [ -e $(targetprefix)/usr/share/alsa ]; then \
 		cp -RP $(targetprefix)/usr/share/alsa $(prefix)/release_neutrino-mp/usr/share/; \
