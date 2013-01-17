@@ -89,7 +89,7 @@ $(DEPDIR)/neutrino-mp.do_prepare:
 	touch $@
 
 $(DEPDIR)/neutrino-mp.do_compile: $(appsdir)/neutrino-mp/config.status
-	echo -e "\n/* correct FB_DEVICE for Spark/Spark7162  */\n#define FB_DEVICE \"/dev/fb0\"" >> $(appsdir)/neutrino-mp/config.h; \
+#	echo -e "\n/* correct FB_DEVICE for Spark/Spark7162  */\n#define FB_DEVICE \"/dev/fb0\"" >> $(appsdir)/neutrino-mp/config.h; \
 	cd $(appsdir)/neutrino-mp && $(MAKE)
 	touch $@
 

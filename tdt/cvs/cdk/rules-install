@@ -51,7 +51,6 @@ imagemagick;rewrite-pkgconfig:magick/ImageMagick.pc:magick/MagickCore.pc:wand/Ma
 #
 # contrib libs
 #
-libopenthreads;make:install:DESTDIR=TARGETS/usr;rewrite-pkgconfig:packaging/pkgconfig/openthreads.pc;rewrite-libtool:TARGETS/usr/lib/libopcodes.la
 libboost;remove:TARGETS/include/boost;move:boost:TARGETS/usr/include/boost
 ncurses;
 libz;make:install:prefix=TARGETS/usr;install:-m644:libz.a:TARGETS/usr/lib

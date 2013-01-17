@@ -1083,8 +1083,6 @@ TUXBOX_RULES_MAKE(pyopenssl)
 TUXBOX_RULES_MAKE(pythonwifi)
 TUXBOX_RULES_MAKE(pythoncheetah)
 TUXBOX_RULES_MAKE(zope_interface)
-# TUXBOX_RULES_MAKE(openthreads)
-TUXBOX_RULES_MAKE(libopenthreads)
 #
 # gstreamer
 #

@@ -14,6 +14,35 @@ $(targetprefix)/var/etc/.version:
 	echo "git =`git describe`" >> $@
 
 #
+# openthreads
+#
+$(appsdir)/openthreads/config.status: bootstrap
+	if [ ! -d $(appsdir)/openthreads ]; then \
+		git clone --recursive git://c00lstreamtech.de/cst-public-libraries-openthreads.git $(appsdir)/openthreads; \
+		cd $(appsdir)/openthreads && patch -p1 < "$(buildprefix)/Patches/libopenthreads.patch"; \
+	fi
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd $(appsdir)/openthreads && \
+	rm CMakeFiles/* -rf CMakeCache.txt cmake_install.cmake && \
+	cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME="Linux" \
+		-DCMAKE_INSTALL_PREFIX="" \
+		-DCMAKE_C_COMPILER="$(target)-gcc" \
+		-DCMAKE_CXX_COMPILER="$(target)-g++" \
+		-D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 && \
+		find . -name cmake_install.cmake -print0 | xargs -0 \
+		sed -i 's@SET(CMAKE_INSTALL_PREFIX "/usr/local")@SET(CMAKE_INSTALL_PREFIX "")@'
+
+$(DEPDIR)/openthreads.do_prepare:
+	touch $@
+
+$(DEPDIR)/openthreads.do_compile: $(appsdir)/openthreads/config.status
+	cd $(appsdir)/openthreads && $(MAKE)
+	touch $@
+
+$(DEPDIR)/openthreads: openthreads.do_prepare openthreads.do_compile 
+	$(MAKE) -C $(appsdir)/openthreads install DESTDIR=$(targetprefix)/usr
+	touch $@
+#
 # libstb-hal
 #
 
@@ -60,7 +89,7 @@ libstb-hal-update:
 # neutrino-hd
 #
  
-$(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 libopenthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins graphlcd
+$(appsdir)/neutrino-hd/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-hd-plugins graphlcd
 	if [ ! -d $(appsdir)/neutrino-hd ]; then \
 		git clone git://gitorious.org/~martii/neutrino-hd/martiis-neutrino-hd-tripledragon.git $(appsdir)/neutrino-hd; \
 		cd $(appsdir)/neutrino-hd; \
