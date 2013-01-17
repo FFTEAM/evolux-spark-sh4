@@ -63,6 +63,8 @@ libstb-hal-update:
 $(appsdir)/neutrino-mp/config.status: bootstrap curl libogg libboost libdvbsipp libvorbis libvorbisidec libungif freetype libpng libid3tag openssl libmad libgif jpeg sdparm nfs-utils libstb-hal libusb2 libopenthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev neutrino-mp-plugins graphlcd
 	if [ ! -d $(appsdir)/neutrino-mp ]; then \
 		git clone git://gitorious.org/neutrino-mp/neutrino-mp.git $(appsdir)/neutrino-mp; \
+		cd $(appsdir)/neutrino-mp; \
+		patch -p1 < $(buildprefix)/Patches/neutrino-mp.diff; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-mp && \
@@ -81,7 +83,7 @@ $(appsdir)/neutrino-mp/config.status: bootstrap curl libogg libboost libdvbsipp 
 			--with-stb-hal-build=$(appsdir)/libstb-hal \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DHAVE_SPARK_HARDWARE -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem $(TRIPLEX_ON)"
+			CPPFLAGS="$(CPPFLAGS) -DHAVE_SPARK_HARDWARE -DUSE_FBPAN -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem $(TRIPLEX_ON)"
 
 $(DEPDIR)/neutrino-mp.do_prepare:
 	touch $@

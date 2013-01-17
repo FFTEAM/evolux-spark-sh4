@@ -1,0 +1,38 @@
+--- neutrino-mp/src/driver/framebuffer_ng.h	2013-01-17 12:35:42.898537648 +0100
++++ neutrino-mp/src/driver/framebuffer_ng.h	2013-01-17 15:24:33.856774361 +0100
+@@ -165,8 +165,11 @@
+ #ifdef USE_NEVIS_GXA
+ 		void setupGXA(void);
+ #endif
+-
++#ifdef EVOLUX
++		void init(const char * const fbDevice = "/dev/fb0");
++#else
+ 		void init(const char * const fbDevice = "/dev/fb/0");
++#endif
+ 		int setMode(unsigned int xRes, unsigned int yRes, unsigned int bpp);
+ 
+ 
+--- neutrino-mp/lib/libtuxtxt/tuxtxt.cpp	2013-01-17 15:20:11.259472213 +0100
++++ neutrino-mp/lib/libtuxtxt/tuxtxt.cpp	2013-01-17 15:24:17.904695263 +0100
+@@ -1657,12 +1657,20 @@
+ 
+ 	fb = -1;
+ #ifdef USE_FBPAN
++#ifdef EVOLUX
++        if ((fb=open("/dev/fb0", O_RDWR)) == -1)
++        {
++                perror("TuxTxt <open /dev/fb0>");
++                return 0;
++        }
++#else
+         if ((fb=open("/dev/fb/0", O_RDWR)) == -1)
+         {
+                 perror("TuxTxt <open /dev/fb/0>");
+                 return 0;
+         }
+ #endif
++#endif
+ 
+ 	rc = _rc;
+ 	CFrameBuffer *fbp = CFrameBuffer::getInstance();
