@@ -133,9 +133,9 @@ echo ""
 echo -e "\nSTB :"
 echo -e "\033[1;37;40m    1) STM24-209 (old)\033[0m"
 echo -e "\033[1;37;42m    2) STM24-210 (standard)\033[0m"
-if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
+#if [ -e "$GMDIR/cvs/cdk/.spark7162" ]; then
 	echo -e "\033[1;37;43m    3) STM24-211 (experimental!)\033[0m"
-fi
+#fi
 read -p "Select STB (1-3)? "
 case "$REPLY" in
 	1) echo -e "\nSelected STB: $REPLY\n"
@@ -270,6 +270,7 @@ echo -e "\033[1;37;43m make evolux-neutrino-hd-vdr2-full (bootstrap + evo-vdr2)\
 echo "--!!!DEFAULT WITHOUT IMG-BUILD!!!--"
 echo -e "\033[1;37;40m make yaud-enigma2-pli-nightly\033[0m"
 echo -e "\033[1;37;40m make yaud-neutrino-hd\033[0m"
+echo -e "\033[1;37;40m make yaud-neutrino-mp\033[0m"
 echo -e "\033[1;37;40m make yaud-neutrino-hd2\033[0m"
 echo "--!!!RECOMMENDED-WITH IMG-BUILD!!!--"
 echo -e "\033[1;37;40m make evolux-neutrino-hd-pli (evo-nhd + evo-e2pli)\033[0m"
