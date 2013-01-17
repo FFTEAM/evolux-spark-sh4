@@ -83,7 +83,7 @@ $(appsdir)/neutrino-mp/config.status: bootstrap curl libogg libboost libdvbsipp 
 			--with-stb-hal-build=$(appsdir)/libstb-hal \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(CPPFLAGS) -DHAVE_SPARK_HARDWARE -DUSE_FBPAN -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem $(TRIPLEX_ON)"
+			CPPFLAGS="$(CPPFLAGS) -DHAVE_SPARK_HARDWARE -DEVOLUX -DMARTII -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem $(TRIPLEX_ON)"
 
 $(DEPDIR)/neutrino-mp.do_prepare:
 	touch $@
