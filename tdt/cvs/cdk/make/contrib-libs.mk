@@ -2495,6 +2495,37 @@ $(DEPDIR)/openthreads: $(DEPDIR)/openthreads.do_compile
 	touch $@
 
 #
+# libopenthreads
+#
+$(DEPDIR)/libopenthreads.do_prepare: bootstrap @DEPENDS_libopenthreads@
+	@PREPARE_libopenthreads@
+	[ ! -d "$(buildprefix)/openthreads" ] && \
+	cd "$(buildprefix)"; \
+	git clone --recursive git://c00lstreamtech.de/cst-public-libraries-openthreads.git openthreads; \
+	cd $(buildprefix)/openthreads && patch -p1 < "$(buildprefix)/Patches/libopenthreads.patch"
+	touch $@
+
+$(DEPDIR)/libopenthreads.do_compile: $(DEPDIR)/libopenthreads.do_prepare
+	cd @DIR_libopenthreads@ && \
+	rm CMakeFiles/* -rf CMakeCache.txt cmake_install.cmake && \
+	cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME="Linux" \
+		-DCMAKE_INSTALL_PREFIX="" \
+		-DCMAKE_C_COMPILER="$(target)-gcc" \
+		-DCMAKE_CXX_COMPILER="$(target)-g++" \
+		-D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 && \
+		find . -name cmake_install.cmake -print0 | xargs -0 \
+		sed -i 's@SET(CMAKE_INSTALL_PREFIX "/usr/local")@SET(CMAKE_INSTALL_PREFIX "")@' && \
+	$(MAKE)
+	touch $@
+
+$(DEPDIR)/libopenthreads: \
+$(DEPDIR)/%libopenthreads: $(DEPDIR)/libopenthreads.do_compile
+	cd @DIR_libopenthreads@ && \
+		@INSTALL_libopenthreads@
+	touch $@
+
+
+#
 # libvorbis
 #
 $(DEPDIR)/libvorbis.do_prepare: bootstrap @DEPENDS_libvorbis@
