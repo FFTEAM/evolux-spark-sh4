@@ -983,7 +983,6 @@ TUXBOX_RULES_MAKE(ath9k)
 #
 TUXBOX_RULES_MAKE(bzip2)
 TUXBOX_RULES_MAKE(grep)
-TUXBOX_RULES_MAKE(libopenthreads)
 TUXBOX_RULES_MAKE(openrdate)
 TUXBOX_RULES_MAKE(e2fsprogs)
 TUXBOX_RULES_MAKE(xfsprogs)
@@ -1084,7 +1083,8 @@ TUXBOX_RULES_MAKE(pyopenssl)
 TUXBOX_RULES_MAKE(pythonwifi)
 TUXBOX_RULES_MAKE(pythoncheetah)
 TUXBOX_RULES_MAKE(zope_interface)
-TUXBOX_RULES_MAKE(openthreads)
+# TUXBOX_RULES_MAKE(openthreads)
+TUXBOX_RULES_MAKE(libopenthreads)
 #
 # gstreamer
 #

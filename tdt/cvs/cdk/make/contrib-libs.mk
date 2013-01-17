@@ -2483,30 +2483,30 @@ $(DEPDIR)/pilimaging: bootstrap python @DEPENDS_pilimaging@
 #
 # OpenThreads
 #
-
-$(DEPDIR)/openthreads.do_compile: @DEPENDS_openthreads@
-	@PREPARE_openthreads@
-	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix)
-	touch $@
-
-$(DEPDIR)/openthreads: $(DEPDIR)/openthreads.do_compile
-	@PREPARE_openthreads@
-	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix) install
-	touch $@
+#
+#$(DEPDIR)/openthreads.do_compile: @DEPENDS_openthreads@
+#	@PREPARE_openthreads@
+#	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix)
+#	touch $@
+#
+#$(DEPDIR)/openthreads: $(DEPDIR)/openthreads.do_compile
+#	@PREPARE_openthreads@
+#	cd @DIR_openthreads@ && make && make PREFIX=$(targetprefix) install
+#	touch $@
 
 #
 # libopenthreads
 #
 $(DEPDIR)/libopenthreads.do_prepare: bootstrap @DEPENDS_libopenthreads@
 	@PREPARE_libopenthreads@
-	[ ! -d "$(buildprefix)/openthreads" ] && \
+	[ ! -d "$(buildprefix)/libopenthreads" ] && \
 	cd "$(buildprefix)"; \
-	git clone --recursive git://c00lstreamtech.de/cst-public-libraries-openthreads.git openthreads; \
-	cd $(buildprefix)/openthreads && patch -p1 < "$(buildprefix)/Patches/libopenthreads.patch"
+	git clone --recursive git://c00lstreamtech.de/cst-public-libraries-openthreads.git libopenthreads; \
+	cd $(buildprefix)/libopenthreads && patch -p1 < "$(buildprefix)/Patches/libopenthreads.patch"
 	touch $@
 
 $(DEPDIR)/libopenthreads.do_compile: $(DEPDIR)/libopenthreads.do_prepare
-	cd @DIR_libopenthreads@ && \
+	cd $(buildprefix)/libopenthreads && \
 	rm CMakeFiles/* -rf CMakeCache.txt cmake_install.cmake && \
 	cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME="Linux" \
 		-DCMAKE_INSTALL_PREFIX="" \
@@ -2520,7 +2520,7 @@ $(DEPDIR)/libopenthreads.do_compile: $(DEPDIR)/libopenthreads.do_prepare
 
 $(DEPDIR)/libopenthreads: \
 $(DEPDIR)/%libopenthreads: $(DEPDIR)/libopenthreads.do_compile
-	cd @DIR_libopenthreads@ && \
+	cd $(buildprefix)/libopenthreads && \
 		@INSTALL_libopenthreads@
 	touch $@
 
