@@ -205,7 +205,7 @@ endif
 #	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino-hd/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino-hd/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release_neutrino-hd/etc/init.d/
-	( cd $(prefix)/release_neutrino-hd/etc/network && ln -s /etc/network/if-pre-up.d/wlan ./pre-wlan.sh )
+	( cd $(prefix)/release_neutrino-hd/etc/network && ln -sf /etc/network/if-pre-up.d/wlan ./pre-wlan.sh )
 
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release_neutrino-hd/lib/modules/
 	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release_neutrino-hd/lib/modules/rt8192cu.ko
