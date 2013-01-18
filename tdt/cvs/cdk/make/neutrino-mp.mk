@@ -49,7 +49,7 @@ $(DEPDIR)/openthreads: openthreads.do_prepare openthreads.do_compile
 
 $(appsdir)/libstb-hal/config.status: bootstrap
 	if [ ! -d $(appsdir)/libstb-hal ]; then \
-		git clone git://gitorious.org/~martii/neutrino-mp/martiis-libstb-hal.git $(appsdir)/libstb-hal; \
+		git clone git://gitorious.org/~martii/neutrino-hd/martiis-libstb-hal.git $(appsdir)/libstb-hal; \
 	fi
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/libstb-hal && \
