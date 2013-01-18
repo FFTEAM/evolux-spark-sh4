@@ -41,12 +41,6 @@ else
 		cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/changelog.txt $(prefix)/release_evolux_triple_with_dev/etc/; \
 	fi
 endif
-if ENABLE_SPARK
-	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/neutrino/httpd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/
-#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/httpd/scripts
-#else
-#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/httpd/scripts
-endif
 	if [ -e $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share ]; then \
 		rm -rf $(prefix)/release_evolux_triple_with_dev/usr/share/fonts/share; \
 	fi
@@ -83,6 +77,12 @@ if ENABLE_SPARK7162
 	rm $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/*
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/deutsch.locale $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/
 	cp -RP $(appsdir)/neutrino-hd2-exp/data/locale/english.locale $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/locale/
+endif
+if ENABLE_SPARK
+	cp -RP $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd/neutrino/httpd $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/
+#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share_nhd2/neutrino/httpd/scripts
+#else
+#	chmod 755 -R $(prefix)/release_evolux_triple_with_dev/usr/local/share/neutrino/httpd/scripts
 endif
 	( cd $(prefix)/release_evolux_triple_with_dev/share && ln -sf /usr/local/share/iso-codes iso-codes )
 	$(USERS) chmod 777 $(prefix)/release_evolux_triple_with_dev/lib/lib*
