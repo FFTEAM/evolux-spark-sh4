@@ -206,6 +206,7 @@ endif
 #	cp -dp $(buildprefix)/root/bin/evremote2.amiko $(prefix)/release_neutrino-hd2/bin/
 	cp -RP $(buildprefix)/root/etc/init.d/setupETH.sh $(prefix)/release_neutrino-hd2/etc/init.d/
 	cp -RP $(buildprefix)/root/etc/init.d/nfs* $(prefix)/release_neutrino-hd2/etc/init.d/
+	( cd $(prefix)/release_neutrino-hd2/etc/network && ln -s /etc/network/if-pre-up.d/wlan ./pre-wlan.sh )
 
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/common/tuners/* $(prefix)/release_neutrino-hd2/lib/modules/
 #	[ -d $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/dvb-usb/* $(prefix)/release_neutrino-hd2/lib/modules/
