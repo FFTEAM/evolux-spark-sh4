@@ -2723,4 +2723,174 @@
 +////////////////////////////// EVOLUXUPDATE Menu ENDE //////////////////////////////////////
 +// vim:ts=4
 
+--- neutrino-hd/src/driver/rcinput.h	2013-01-21 17:20:43.845153488 +0100
++++ neutrino-hd/src/driver/rcinput.h	2013-01-21 17:15:38.239638068 +0100
+@@ -321,7 +321,7 @@
+ 		static std::string getKeyName(const unsigned int key);
+ 
+ 		int addTimer(uint64_t Interval, bool oneshot= true, bool correct_time= true );
+-#ifdef MARTII
++#ifndef MARTII
+ 		int addTimer(struct timespec Timeout);
+ #else
+ 		int addTimer(struct timeval Timeout);
+
+--- neutrino-hd/src/driver/rcinput.cpp	2013-01-21 17:20:58.485226084 +0100
++++ neutrino-hd/src/driver/rcinput.cpp	2013-01-21 17:14:29.635297875 +0100
+@@ -360,7 +360,7 @@
+ 
+ int CRCInput::addTimer(uint64_t Interval, bool oneshot, bool correct_time )
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+ 
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+@@ -397,13 +397,13 @@
+ 	return _newtimer.id;
+ }
+ 
+-#ifdef MARTII
++#ifndef MARTII
+ int CRCInput::addTimer(struct timespec Timeout)
+ #else
+ int CRCInput::addTimer(struct timeval Timeout)
+ #endif
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        uint64_t timesout = (uint64_t) Timeout.tv_nsec / 1000 + (uint64_t)((uint64_t) Timeout.tv_sec * (uint64_t) 1000000);
+ #else
+ 	uint64_t timesout = (uint64_t) Timeout.tv_usec + (uint64_t)((uint64_t) Timeout.tv_sec * (uint64_t) 1000000);
+@@ -434,14 +434,14 @@
+ 
+ int CRCInput::checkTimers()
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+ #else
+ 	struct timeval tv;
+ #endif
+ 	int _id = 0;
+ 
+-#ifdef MARTII
++#ifndef MARTII
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+        uint64_t timeNow = (uint64_t) tv.tv_nsec / 1000 + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+ #else
+@@ -489,7 +489,7 @@
+ 
+ int64_t CRCInput::calcTimeoutEnd(const int timeout_in_seconds)
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+ 
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+@@ -506,7 +506,7 @@
+ 
+ int64_t CRCInput::calcTimeoutEnd_MS(const int timeout_in_milliseconds)
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+ 
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+@@ -526,7 +526,7 @@
+ 
+ void CRCInput::getMsgAbsoluteTimeout(neutrino_msg_t * msg, neutrino_msg_data_t * data, uint64_t *TimeoutEnd, bool bAllowRepeatLR)
+ {
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+ 
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+@@ -593,22 +593,22 @@
+ }
+ #endif
+ 
+-#ifndef MARTII
++#ifdef MARTII
+ #define ENABLE_REPEAT_CHECK
+ #endif
+ void CRCInput::getMsg_us(neutrino_msg_t * msg, neutrino_msg_data_t * data, uint64_t Timeout, bool bAllowRepeatLR)
+ {
+-#ifndef MARTII
++#ifdef MARTII
+ 	static uint64_t last_keypress = 0ULL;
+ #endif
+ 	uint64_t getKeyBegin;
+ 
+ 	//static __u16 rc_last_key =  KEY_MAX;
+-#ifndef MARTII
++#ifdef MARTII
+ 	static __u16 rc_last_repeat_key =  KEY_MAX;
+ #endif
+ 
+-#ifdef MARTII
++#ifndef MARTII
+        struct timespec tv;
+        struct timeval tvselect;
+ #else
+@@ -636,7 +636,7 @@
+ #endif
+ 
+ 	// wiederholung reinmachen - dass wirklich die ganze zeit bis timeout gewartet wird!
+-#ifdef MARTII
++#ifndef MARTII
+        clock_gettime(CLOCK_MONOTONIC, &tv);
+        getKeyBegin = (uint64_t) tv.tv_nsec / 1000 + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+ #else
+@@ -651,7 +651,7 @@
+ 		timer_id = 0;
+ 		if ( timers.size()> 0 )
+ 		{
+-#ifdef MARTII
++#ifndef MARTII
+                        clock_gettime(CLOCK_MONOTONIC, &tv);
+                        uint64_t t_n= (uint64_t) tv.tv_nsec / 1000 + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+ #else
+@@ -1003,7 +1003,7 @@
+ 								p = new unsigned char[sizeof(int64_t)];
+ 								*(int64_t*) p = timeNew - timeOld;
+ 
+-#ifndef MARTII
++#ifdef MARTII
+ 								if ((int64_t)last_keypress > *(int64_t*)p)
+ 								last_keypress += *(int64_t *)p;
+ 
+@@ -1326,12 +1326,12 @@
+ 						}
+ 					}
+ #endif
+-#ifndef MARTII
++#ifdef MARTII
+ 					uint64_t now_pressed;
+ #endif
+ 					bool keyok = true;
+ 
+-#ifndef MARTII
++#ifdef MARTII
+ 					tv = ev.time;
+ 					now_pressed = (uint64_t) tv.tv_usec + (uint64_t)((uint64_t) tv.tv_sec * (uint64_t) 1000000);
+ 					if (ev.code == rc_last_key) {
+@@ -1374,7 +1374,7 @@
+ 								(now_pressed < last_keypress))
+ #endif
+ 						{
+-#ifndef MARTII
++#ifdef MARTII
+ 							last_keypress = now_pressed;
+ #endif
+ 
+@@ -1427,7 +1427,7 @@
+ 		else
+ 		{
+ 			//timeout neu kalkulieren
+-#ifdef MARTII
++#ifndef MARTII
+                        clock_gettime(CLOCK_MONOTONIC, &tv);
+                        int64_t getKeyNow = (int64_t) tv.tv_nsec / 1000 + (int64_t)((int64_t) tv.tv_sec * (int64_t) 1000000);
+ #else
 
