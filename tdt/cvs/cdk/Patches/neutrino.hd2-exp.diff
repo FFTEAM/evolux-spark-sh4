@@ -3091,29 +3091,6 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  
  	if(mode == mode_radio)
  		channelList = RADIOchannelList;
-@@ -1938,19 +1940,19 @@
- 		if (((!strcmp(argv[x], "-v")) || (!strcmp(argv[x], "--verbose"))) && (x + 1 < argc)) 
- 		{
- 			int dl = atoi(argv[x + 1]);
--			dprintf(DEBUG_NORMAL, "set debuglevel: %d\n", dl);
-+			//dprintf(DEBUG_NORMAL, "set debuglevel: %d\n", dl);
- 			setDebugLevel(dl);
- 			x++;
- 		}
- 		else if ((!strcmp(argv[x], "-sd"))) 
- 		{
--			dprintf(DEBUG_NORMAL, "Sectionsd debug enabled\n");
-+			//dprintf(DEBUG_NORMAL, "Sectionsd debug enabled\n");
- 			sections_debug = 1;
- 			x++;
- 		}
- 		else 
- 		{
--			dprintf(DEBUG_NORMAL, "Usage: neutrino [-sd] [-v | --verbose 0..3]\n");
-+			//dprintf(DEBUG_NORMAL, "Usage: neutrino [-sd] [-v | --verbose 0..3]\n");
- 			exit(1);
- 		}
- 	}
 @@ -1963,7 +1965,7 @@
  	
  	if(frameBuffer->setMode() ) 
