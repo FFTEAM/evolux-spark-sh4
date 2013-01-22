@@ -760,7 +760,7 @@
 
 --- neutrino-hd/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd/src/gui/extra_menu.cpp	2012-11-30 17:53:50.537211281 +0100
-@@ -0,0 +1,1975 @@
+@@ -0,0 +1,1976 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -2669,7 +2669,8 @@
 +#if defined (PLATFORM_SPARK)
 +	safe_system("oVersion=`wget -q -O - http://is.gd/ugaaeG | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
-+		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
++		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable;"
++		   "myfree=`df | grep -m1 root | cut -b45-51`; if [ \"$myfree\" -gt 8000 ]; then touch /tmp/freeok;fi");
 +#else
 +	safe_system("oVersion=`wget -q -O - http://is.gd/reTrI0 | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
