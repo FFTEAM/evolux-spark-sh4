@@ -760,7 +760,7 @@
 
 --- neutrino-hd/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd/src/gui/extra_menu.cpp	2012-11-30 17:53:50.537211281 +0100
-@@ -0,0 +1,1961 @@
+@@ -0,0 +1,1975 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -825,21 +825,26 @@
 +	{ 0, LOCALE_OPTIONS_OFF },
 +	{ 1, LOCALE_OPTIONS_ON }
 +};
-+
-+#define BOOT_OPTION_COUNT 5
++#if defined (PLATFORM_SPARK)
++#define BOOT_OPTION_COUNT 4
++#else
++#define BOOT_OPTION_COUNT 3
++#endif
 +const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 +{
 +#define BOOT_NEUTRINO 0
 +#define BOOT_E2       1
 +#define BOOT_NHDTWO   2
++#if defined (PLATFORM_SPARK)
 +#define BOOT_SPARK    3
-+#define BOOT_VDR      4
++//#define BOOT_VDR      4
++#endif
 +
 +	{ BOOT_E2, LOCALE_EXTRAMENU_BOOT_ENIGMA2 },
 +	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 +	{ BOOT_NHDTWO, LOCALE_EXTRAMENU_BOOT_NHDTWO },
 +	{ BOOT_SPARK, LOCALE_EXTRAMENU_BOOT_SPARK },
-+	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR }
++//	{ BOOT_VDR, LOCALE_EXTRAMENU_BOOT_VDR }
 +};
 +
 +#define SWAP_OPTION_COUNT 4
@@ -984,26 +989,30 @@
 +
 +// >> Boot Selection, part 1 of 2
 +#define DOTFILE_BOOT_E2 "/etc/.start_enigma2"
++#if defined (PLATFORM_SPARK)
 +#define DOTFILE_BOOT_SPARK "/etc/.start_spark"
++#endif
 +#define DOTFILE_BOOT_NHDTWO "/etc/.nhd2"
 +#define DOTFILE_BOOT_VDR "/etc/.start_vdr"
 +	int boot = BOOT_NEUTRINO;
-+	if (!access(DOTFILE_BOOT_SPARK, F_OK))
-+		boot = BOOT_SPARK;
-+	else if (!access(DOTFILE_BOOT_E2, F_OK))
++	if (!access(DOTFILE_BOOT_E2, F_OK))
 +		boot = BOOT_E2;
++#if defined (PLATFORM_SPARK)
++	else if (!access(DOTFILE_BOOT_SPARK, F_OK))
++		boot = BOOT_SPARK;
++#endif
 +	else if (!access(DOTFILE_BOOT_NHDTWO, F_OK))
 +		boot = BOOT_NHDTWO;
-+	else if (!access(DOTFILE_BOOT_VDR, F_OK))
-+		boot = BOOT_VDR;
++//	else if (!access(DOTFILE_BOOT_VDR, F_OK))
++//		boot = BOOT_VDR;
 +	int old_boot = boot;
 +
 +	int boot_options_start = 0;
 +	int boot_option_count = BOOT_OPTION_COUNT;
 +	if (access("/usr/local/bin/enigma2", X_OK))
 +		boot_options_start++, boot_option_count--;;
-+	if (access("/usr/local/bin/vdr", X_OK))
-+		boot_option_count--;
++//	if (access("/usr/local/bin/vdr", X_OK))
++//		boot_option_count--;
 +
 +	m->addItem(new CMenuOptionChooser(LOCALE_EXTRAMENU_BOOT_HEAD, &boot,
 +		&BOOT_OPTIONS[boot_options_start], boot_option_count, true, NULL,
@@ -1134,6 +1143,7 @@
 +		char tmp[200];
 +		CHintBox *hintBox;
 +		switch (old_boot) {
++#if defined (PLATFORM_SPARK)
 +		case BOOT_SPARK:
 +			unlink(DOTFILE_BOOT_SPARK);
 +			hintBox = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
@@ -1142,15 +1152,16 @@
 +			hintBox->hide();
 +			delete hintBox;
 +			break;
++#endif
 +		case BOOT_E2:
 +			unlink(DOTFILE_BOOT_E2);
 +			break;
 +		case BOOT_NHDTWO:
 +			unlink(DOTFILE_BOOT_NHDTWO);
 +			break;
-+		case BOOT_VDR:
-+			unlink(DOTFILE_BOOT_VDR);
-+			break;
++//		case BOOT_VDR:
++//			unlink(DOTFILE_BOOT_VDR);
++//			break;
 +		case BOOT_NEUTRINO:
 +			break;
 +		}
@@ -1175,7 +1186,7 @@
 +				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_NHDTWO));
 +			hintText += string(tmp);
 +			break;
-+		case BOOT_VDR:
++/*		case BOOT_VDR:
 +			touch(DOTFILE_BOOT_VDR);
 +			if (hintText.length())
 +				hintText += "\n";
@@ -1183,11 +1194,13 @@
 +				g_Locale->getText(LOCALE_EXTRAMENU_BOOT_VDR));
 +			hintText += string(tmp);
 +			break;
++*/
 +		case BOOT_NEUTRINO:
 +			if (hintText.length())
 +				hintText += "\n";
 +			hintText += string(g_Locale->getText(LOCALE_EXTRAMENU_BOOT_THIS));
 +			break;
++#if defined (PLATFORM_SPARK)
 +		case BOOT_SPARK:
 +			touch(DOTFILE_BOOT_SPARK);
 +			hintBox = new CHintBox(LOCALE_EXTRAMENU_BOOT_BOOTARGS_HEAD, g_Locale->getText(LOCALE_EXTRAMENU_BOOT_BOOTARGS_TEXT));
@@ -1202,6 +1215,7 @@
 +					g_Locale->getText(LOCALE_EXTRAMENU_BOOT_SPARK));
 +			hintText += string(tmp);
 +			break;
++#endif
 +		}
 +	}
 +// << Boot Selection, part 2 of 2
