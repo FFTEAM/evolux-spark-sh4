@@ -46,6 +46,9 @@ if [ -n "$TRIPLEX" ]; then
 		( cd /dev/dvb/adapter0 && ln -sf frontend1 frontend0 ) &
 	fi
 fi
+
+[ -e /etc/.nhd2 ] && rm /etc/.nhd >/dev/null 2>&1
+
 insmod $MODDIR/aotom.ko
 if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
 	insmod $MODDIR/simu_button.ko
