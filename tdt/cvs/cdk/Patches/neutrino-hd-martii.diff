@@ -2653,7 +2653,7 @@
 +	//EVOLUXUPDATE STARTEN
 +	unlink("/tmp/EvoluxUpdatevailable");
 +#if defined (PLATFORM_SPARK)
-+	safe_system("oVersion=`wget -q -O - http://tinyurl.com/7gz7jpo | grep version | cut -d = -f2`;"
++	safe_system("oVersion=`wget -q -O - http://is.gd/ugaaeG | grep version | cut -d = -f2`;"
 +		   "lVersion=`grep version /etc/.version | cut -d = -f2`;"
 +		   "[ \"$lVersion\" != \"$oVersion\" ] && touch /tmp/EvoluxUpdatevailable");
 +#else
@@ -2667,7 +2667,7 @@
 +			CHintBox * CheckUpdateBox = new CHintBox(LOCALE_EXTRAMENU_EVOLUXUPDATE_UPDATE, "update found, performing update now...");
 +			CheckUpdateBox->paint();
 +#if defined (PLATFORM_SPARK)
-+			safe_system("cd /tmp;wget -c -q http://is.gd/IKwL24;mv IKwL24 update.tar.gz;md5check=`wget -q -O - http://is.gd/5CLHjQ | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
++			safe_system("cd /tmp;wget -c -q http://is.gd/HPHazT;mv HPHazT update.tar.gz;md5check=`wget -q -O - http://is.gd/ugaaeG | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#else
 +			safe_system("cd /tmp;wget -c -q http://is.gd/DL3IrU;mv DL3IrU update.tar.gz;md5check=`wget -q -O - http://is.gd/reTrI0 | grep md5 | cut -d = -f2`;md5oline=`md5sum update.tar.gz | cut -d \" \" -f1`;if [ \"$md5oline\" == \"$md5check\" ]; then touch /tmp/md5ok;fi");
 +#endif
