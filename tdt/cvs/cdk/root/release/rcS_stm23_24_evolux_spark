@@ -47,7 +47,9 @@ if [ -n "$TRIPLEX" ]; then
 	fi
 fi
 
-[ -e /etc/.nhd2 ] && rm /etc/.nhd >/dev/null 2>&1
+if [ -e /etc/.nhd2 ] && [ -e /etc/.nhd ]; then
+	rm /etc/.nhd >/dev/null 2>&1
+fi
 
 insmod $MODDIR/aotom.ko
 if [ -e /etc/.start_enigma2 ] || [ -e /etc/.start_vdr ] || [ ! -e /etc/.nhd ]; then
