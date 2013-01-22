@@ -538,7 +538,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
-@@ -0,0 +1,1764 @@
+@@ -0,0 +1,1788 @@
 +#define __USE_FILE_OFFSET64 1
 +#include <gui/filebrowser.h>
 +#include <stdio.h>
@@ -1531,19 +1531,29 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +////////////////////////////// SWAP Menu ENDE //////////////////////////////////////
 +
 +////////////////////////////// BOOT Menu ANFANG ////////////////////////////////////
++#if defined (PLATFORM_SPARK)
++#define BOOT_OPTION_COUNT 4
++#else
 +#define BOOT_OPTION_COUNT 2
++#endif
 +const CMenuOptionChooser::keyval BOOT_OPTIONS[BOOT_OPTION_COUNT] =
 +{
 +#define BOOT_NEUTRINO 0
 +#define BOOT_E2       1
-+//#define BOOT_SPARK    2
++#if defined (PLATFORM_SPARK)
++#define BOOT_SPARK    2
++#define BOOT_NHD      3
++#endif
 +#if 0
 +	{ BOOT_NEUTRINO, NONEXISTANT_LOCALE, "Neutrino" },
 +#else
 +	{ BOOT_NEUTRINO, LOCALE_EXTRAMENU_BOOT_UNCHANGED },
 +#endif
-+	{ BOOT_E2, NONEXISTANT_LOCALE, "E2PLI" }
-+//	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" }
++	{ BOOT_E2, NONEXISTANT_LOCALE, "E2PLI" },
++#if defined (PLATFORM_SPARK)
++	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" },
++	{ BOOT_NHD, NONEXISTANT_LOCALE, "NHD" },
++#endif
 +};
 +
 +BOOT_Menu::BOOT_Menu()
@@ -1587,6 +1597,9 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +{
 +#define DOTFILE_BOOTE2 "/etc/.start_enigma2"
 +#define DOTFILE_BOOTNHD2 "/etc/.nhd2"
++#if defined (PLATFORM_SPARK)
++#define DOTFILE_BOOTNHD "/etc/.nhd"
++#endif
 +/*
 +#define DOTFILE_BOOTSPARK "/etc/.start_spark"
 +	int boot = BOOT_NEUTRINO;
@@ -1599,6 +1612,8 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +	int boot = BOOT_NEUTRINO;
 +	if (!access(DOTFILE_BOOTE2, F_OK))
 +		boot = BOOT_E2;
++	if (!access(DOTFILE_BOOTNHD, F_OK))
++		boot = BOOT_NHD;
 +	int old_boot = boot;
 +	CMenuWidget* menu = new CMenuWidget(LOCALE_EXTRAMENU_BOOT_HEAD, "settings", width);
 +	menu->addItem(GenericMenuSeparator);
@@ -1636,12 +1651,21 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +			delete b;
 +		}
 +*/
++#if defined (PLATFORM_SPARK)
++		if (boot == BOOT_NHD) {
++			touch(DOTFILE_BOOTNHD);
++			unlink(DOTFILE_BOOTNHD2);
++			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NHD activated, please reboot now..!", 450, 2);
++		}
++#endif
 +		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
 +			touch(DOTFILE_BOOTE2);
 +			unlink(DOTFILE_BOOTNHD2);
 +			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "E2 activated, please reboot now..!", 450, 2);
 +		}
-+		else if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
++		if (boot == BOOT_NEUTRINO && old_boot == BOOT_E2)
++			unlink(DOTFILE_BOOTE2);
++		if (boot == BOOT_NHD && old_boot == BOOT_E2)
 +			unlink(DOTFILE_BOOTE2);
 +
 +	}
