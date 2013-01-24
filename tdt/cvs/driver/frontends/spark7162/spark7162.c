@@ -102,6 +102,7 @@ enum
 
 static int eUnionTunerType = UNION_TUNER_T;
 static char *UnionTunerType = "t";
+int debug_fe7162 = 0;
 
 /*******************************  数据结构*********************************/
 
@@ -890,6 +891,9 @@ module_exit(spark_cleanup);
 
 module_param(UnionTunerType, charp, 0);
 MODULE_PARM_DESC(UnionTunerType, "Union Tuner Type (t, c)");
+
+module_param(debug_fe7162, int, 0);
+MODULE_PARM_DESC(debug_fe7162, "debug (very noisy!), default 0");
 
 /* EOF------------------------------------------------------------------------*/
 
