@@ -7,7 +7,6 @@
 #define false 0
 #endif
 
-#ifndef SPARK
 #define VFDGETTIME		0xc0425afa
 #define VFDSETTIME		0xc0425afb
 #define VFDSTANDBY		0xc0425afc
@@ -21,6 +20,8 @@
 #define VFDDISPLAYCLR		0xc0425b00
 /* ufs912, 922, hdbox ->unset compat mode */
 #define VFDSETMODE		0xc0425aff
+/*spark*/
+#define VFDGETSTARTUPSTATE	0xc0425af8
 
 /* ufs912 */
 #define VFDGETVERSION	        0xc0425af7
@@ -32,8 +33,6 @@ struct vfd_ioctl_data {
 	unsigned char data[64];
 	unsigned char length;
 };
-
-#endif
 
 typedef enum {NONE, TIMER} eWakeupReason;
 
@@ -76,38 +75,11 @@ typedef struct Model_s {
     void* private;
 } Model_t;
 
-#if 0
-extern Model_t Ufs910_1W_model;
-extern Model_t Ufs910_14W_model;
-extern Model_t UFS912_model;
-extern Model_t UFS922_model;
-extern Model_t HDBOX_model;
-extern Model_t HL101_model;
-extern Model_t VIP2_model;
-extern Model_t Hs5101_model;
-#endif
 extern Model_t Spark_model;
-#if 0
-extern Model_t Adb_Box_model;
-extern Model_t Cuberevo_model;
-#endif
+
 
 static Model_t * AvailableModels[] = {
-#if 0
-	&Ufs910_1W_model,
-	&Ufs910_14W_model,
-	&UFS922_model,
-	&HDBOX_model,
-	&HL101_model,
-	&VIP2_model,
-	&Hs5101_model,
-	&UFS912_model,
-#endif
 	&Spark_model,
-#if 0
-	&Adb_Box_model,
-	&Cuberevo_model,
-#endif
 	NULL
 };
 

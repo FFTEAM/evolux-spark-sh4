@@ -1,5 +1,5 @@
-#ifndef __Spark__
-#define __Spark__
+#ifndef __vip2__
+#define __vip2__
 
 /* this setups the mode temporarily (for one ioctl)
  * to the desired mode. currently the "normal" mode

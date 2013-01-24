@@ -1,5 +1,5 @@
 /*
- * Vip2.c
+ * Spark.c
  *
  * (c) 2010 duckbox project
  *
@@ -32,7 +32,7 @@
 #include <sys/ioctl.h>
 
 #include "global.h"
-#include "Spark.h"
+#include "Vip2.h"
 
 static int Spark_setText(Context_t* context, char* theText);
 
@@ -102,6 +102,8 @@ static int Spark_init(Context_t* context)
     tSparkPrivate* private = malloc(sizeof(tSparkPrivate));
     int vFd;
 
+    printf("%s\n", __func__);
+
     vFd = open(cVFD_DEVICE, O_RDWR);
 
     if (vFd < 0)
@@ -134,7 +136,7 @@ static int Spark_setTime(Context_t* context, time_t* theGMTTime)
 
    if (ioctl(context->fd, VFDSETTIME, &vData) < 0)
    {
-      perror("settime");
+      perror("settime: ");
       return -1;
    }
    return 0;
@@ -148,7 +150,7 @@ static int Spark_getTime(Context_t* context, time_t* theGMTTime)
    /* front controller time */
    if (ioctl(context->fd, VFDGETTIME, &iTime) < 0)
    {
-      perror("gettime");
+      perror("gettime: ");
       return -1;
    }
 
@@ -195,7 +197,7 @@ static int Spark_setTimer(Context_t* context, time_t* theGMTTime)
        vData.u.standby.time[0] = '\0';
        if (ioctl(context->fd, VFDSTANDBY, &vData) < 0)
        {
-	  perror("standby");
+	  perror("standby: ");
           return -1;
        }
 
@@ -208,7 +210,7 @@ static int Spark_setTimer(Context_t* context, time_t* theGMTTime)
       /* front controller time */
        if (ioctl(context->fd, VFDGETTIME, &iTime) < 0)
        {
-	  	  perror("gettime");
+	  	  perror("gettime: ");
           return -1;
        }
 
@@ -234,7 +236,7 @@ static int Spark_setTimer(Context_t* context, time_t* theGMTTime)
 
        if (ioctl(context->fd, VFDSTANDBY, &wakeupTime) < 0)
        {
-	  perror("standby");
+	  perror("standby: ");
           return -1;
        }
    }
@@ -275,7 +277,6 @@ static int Spark_shutdown(Context_t* context, time_t* shutdownTimeGMT)
 
 static int Spark_reboot(Context_t* context, time_t* rebootTimeGMT)
 {
-#if 0
    time_t                  curTime;
    struct aotom_ioctl_data vData;
 
@@ -287,14 +288,13 @@ static int Spark_reboot(Context_t* context, time_t* rebootTimeGMT)
       {
 	 if (ioctl(context->fd, VFDREBOOT, &vData) < 0)
          {
-	    perror("reboot");
+	    perror("reboot: ");
             return -1;
          }
       }
 
       usleep(100000);
    }
-#endif
    return 0;
 }
 
@@ -382,7 +382,7 @@ static int Spark_setLed(Context_t* context, int which, int on)
 
    if (ioctl(context->fd, VFDSETLED, &vData) < 0)
    {
-      perror("setled");
+      perror("setled: ");
       return -1;
    }
    return 0;
@@ -397,7 +397,7 @@ static int Spark_setIcon (Context_t* context, int which, int on)
 
    if (ioctl(context->fd, VFDICONDISPLAYONOFF, &vData) < 0)
    {
-      perror("seticon");
+      perror("seticon: ");
       return -1;
    }
    return 0;
@@ -412,9 +412,10 @@ static int Spark_setBrightness(Context_t* context, int brightness)
 
    vData.u.brightness.level = brightness;
 
+   printf("%d\n", context->fd);
    if (ioctl(context->fd, VFDBRIGHTNESS, &vData) < 0)
    {
-      perror("setbrightness");
+      perror("setbrightness: ");
       return -1;
    }
    return 0;
@@ -438,24 +439,6 @@ static int Spark_setLight(Context_t* context, int on)
     return 0;
 }
 
-static int Spark_getWakeupReason(Context_t* context, int* reason)
-{
-   int i;
-   char *arr[4] = { "unknown", "electrify", "standby", "timer" };
-   if (ioctl(context->fd, VFDGETSTARTUPSTATE, &i) < 0)
-   {
-      perror("Spark_getWakeupReason");
-      return -1;
-   }
-
-   fprintf(stderr, "VFD startup state is %s\n", arr[i & 0x3]);
-   if (i == 3) // YWPANEL_STARTUPSTATE_TIMER, see oatom_main.h
-	*reason = TIMER;
-   else
-	*reason = 0;
-   return 0;
-}
-
 static int Spark_Exit(Context_t* context)
 {
    tSparkPrivate* private = (tSparkPrivate*)
@@ -475,36 +458,76 @@ static int Spark_Clear(Context_t* context)
 
    if (ioctl(context->fd, VFDDISPLAYCLR, &vData) < 0)
    {
-      perror("clear");
+      perror("clear: ");
       return -1;
    }
 	 return 0;
 }
 
+static int Spark_getWakeupReason(Context_t* context, int *reason)
+{
+    if (ioctl(context->fd, VFDGETSTARTUPSTATE, reason) < 0)
+    {
+	perror("Spark_getWakeupReason: ");
+    
+	return -1;
+    }
+    
+    return 0;
+}
+
+static int Spark_setDisplayTime(Context_t* context, int on)
+{
+    if (on ==1) {
+	    time_t theGMTTime = time(NULL);
+	    struct tm *gmt;
+	    gmt = localtime(&theGMTTime);
+	    
+	    if (gmt->tm_year == 100) {
+		fprintf(stderr, "RTC Time not set.\n");
+	    } else {
+		fprintf(stderr, "Setting Clock to current time: %02d:%02d:%02d %02d-%02d-%04d\n",
+			gmt->tm_hour, gmt->tm_min, gmt->tm_sec, gmt->tm_mday, gmt->tm_mon+1, gmt->tm_year+1900);
+			
+		theGMTTime += gmt->tm_gmtoff;
+		
+		if (ioctl(context->fd, VFDREBOOT, &theGMTTime) < 0)
+		{
+		    perror("settime: ");
+		    return -1;
+		}
+	     }
+	} else {
+		Spark_Clear(context);
+	}
+	return 0;
+}
+
 Model_t Spark_model = {
-	.Name                      = "Edision Spark frontpanel control utility",
-	.Type                      = Spark,
-	.Init                      = Spark_init,
-	.Clear                     = Spark_Clear,
-	.Usage                     = Spark_usage,
-	.SetTime                   = Spark_setTime,
-	.GetTime                   = Spark_getTime,
-	.SetTimer                  = Spark_setTimer,
-	.GetTimer                  = Spark_getTimer,
-	.Shutdown                  = Spark_shutdown,
-	.Reboot                    = Spark_reboot,
-	.Sleep                     = Spark_Sleep,
-	.SetText                   = Spark_setText,
-	.SetLed                    = Spark_setLed,
-	.SetIcon                   = Spark_setIcon,
-	.SetBrightness             = Spark_setBrightness,
-	.SetPwrLed                 = Spark_setPwrLed,
-	.GetWakeupReason           = Spark_getWakeupReason,
-	.SetLight                  = Spark_setLight,
-	.Exit                      = Spark_Exit,
-    .SetLedBrightness          = NULL,
-    .GetVersion                = NULL,
-	.SetRF                     = NULL,
-    .SetFan                    = NULL,
-    .private                   = NULL,
+	.Name			= "Edision Spark frontpanel control utility",
+	.Type			= Spark,
+	.Init			= Spark_init,
+	.Clear			= Spark_Clear,
+	.Usage			= Spark_usage,
+	.SetTime		= Spark_setTime,
+	.GetTime		= Spark_getTime,
+	.SetTimer		= Spark_setTimer,
+	.GetTimer		= Spark_getTimer,
+	.SetDisplayTime		= Spark_setDisplayTime,
+	.Shutdown		= Spark_shutdown,
+	.Reboot			= Spark_reboot,
+	.Sleep			= Spark_Sleep,
+	.SetText		= Spark_setText,
+	.SetLed			= Spark_setLed,
+	.SetIcon		= Spark_setIcon,
+	.SetBrightness		= Spark_setBrightness,
+	.SetPwrLed		= Spark_setPwrLed,
+	.SetLight		= Spark_setLight,
+	.Exit			= Spark_Exit,
+	.SetLedBrightness	= NULL,
+	.GetVersion		= NULL,
+	.SetRF			= NULL,
+	.SetFan			= NULL,
+	.private		= NULL,
+	.GetWakeupReason	= Spark_getWakeupReason
 };

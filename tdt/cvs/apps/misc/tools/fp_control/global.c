@@ -33,7 +33,7 @@
 #define E2TIMERSXML "/etc/enigma2/timers.xml"
 #define E2WAKEUPTIME "/proc/stb/fp/wakeup_time"
 
-#define NEUTRINO_TIMERS "/usr/local/share/config/timerd.conf"
+#define NEUTRINO_TIMERS "/var/tuxbox/config/timerd.conf"
 
 #define CONFIG "/etc/vdstandby.cfg"
 char * sDisplayStd = "%a %d %H:%M:%S";
@@ -139,9 +139,8 @@ static time_t read_neutrino_timers(time_t curTime)
 
 	if (recordTime != LONG_MAX) {
 		int wakeupDecrement = 5*60;
-		int dummyInt;
-		char *dummyChar;
-		checkConfig(&dummyInt, &dummyInt, &dummyChar, &wakeupDecrement);
+		int platzhalter;
+		checkConfig(&platzhalter, &platzhalter, &platzhalter, &wakeupDecrement);
 		recordTime -= wakeupDecrement;
 	}
 
@@ -307,6 +306,8 @@ int checkConfig(int* display, int* display_custom, char** timeFormat, int* wakeu
 	if (fd_config == NULL)
 	{
 		printf("config file (%s) not found, use standard config", CONFIG);
+		printf("configs: DISPLAY = %d, DISPLAYCUSTOM = %d, CUSTOM = %s, WAKEUPDECREMENT  %d\n", 
+			*display, *display_custom, *timeFormat, *wakeup);
 		return -1;
 	}
 	
