@@ -561,7 +561,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			fi
 			if [ -e /etc/.nhd2 ]; then
 				check_nfs_mount
-				(sleep 15;/bin/fp_control -s `date +"%H:%M:%S %d-%m-%Y"`) &
+				(sleep 15;/bin/fp_control -dt 1 #-s `date +"%H:%M:%S %d-%m-%Y"`) &
 #				if [ -e /etc/.fritzcall ]; then
 #					(sleep 12;/var/plugins/fritzcall/fb.sh START) &
 #				fi
