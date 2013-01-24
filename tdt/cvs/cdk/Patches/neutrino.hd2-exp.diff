@@ -392,7 +392,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -726,6 +726,7 @@
+@@ -729,6 +729,7 @@
  messagebox.no Nein
  messagebox.ok OK
  messagebox.yes Ja
@@ -400,7 +400,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  miscsettings.bootinfo Infos beim Booten anzeigen
  miscsettings.bootmenu Bootmenü anzeigen
  miscsettings.channellist Kanalliste
-@@ -831,7 +832,7 @@
+@@ -834,7 +835,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -409,16 +409,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -925,7 +926,7 @@
- movieplayer.defplugin Start-Plugin
- movieplayer.vlcplayback VLC Player
- movieplayer.dvdplayback DVD
--movieplayer.fileplayback Media Archiv
-+movieplayer.fileplayback MoviePlayer
- movieplayer.showtshelp Hilfe
- movieplayer.goto Springe zu ...
- movieplayer.goto.h1 = -> absoluter Sprung
-@@ -1567,4 +1568,104 @@
+@@ -1572,4 +1573,104 @@
  
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
@@ -522,6 +513,7 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +extramenu.glcd.time_in_standby Zeitanzeige in Standby
 +onoff.on Ein
 +onoff.off Aus
+ 
  
 
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-10-21 16:23:08.683536677 +0200
