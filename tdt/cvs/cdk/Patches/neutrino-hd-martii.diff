@@ -1180,7 +1180,7 @@
 +			}
 +			break;
 +		case BOOT_NHDTWO:
-+			if (!access("/usr/local/bin_nhd2/neutrino", X_OK) {
++			if (!access("/usr/local/bin_nhd2/neutrino", X_OK)) {
 +				touch(DOTFILE_BOOT_NHDTWO);
 +				unlink(DOTFILE_BOOT_NHD);
 +				if (hintText.length())
