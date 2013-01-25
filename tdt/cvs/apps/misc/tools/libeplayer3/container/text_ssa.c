@@ -291,13 +291,13 @@ static int SsaGetSubtitle(Context_t  *context, char * Filename) {
 
     copyFilename = strdup(Filename);
 
-    FilenameFolder = dirname(copyFilename);
-
-    if (FilenameFolder == NULL)
+    if (copyFilename == NULL)
     {
-       ssa_err("FilenameFolder NULL\n");
+       ssa_err("copyFilename NULL\n");
        return cERR_SSA_ERROR;
     }
+
+    FilenameFolder = dirname(copyFilename);
 
     ssa_printf(10, "folder: %s\n", FilenameFolder);
 
@@ -306,7 +306,7 @@ static int SsaGetSubtitle(Context_t  *context, char * Filename) {
     if (FilenameExtension == NULL)
     {
        ssa_err("FilenameExtension NULL\n");
-       free(FilenameFolder);
+       free(copyFilename);
        return cERR_SSA_ERROR;
     }
 
@@ -409,6 +409,9 @@ static int SsaOpenSubtitle(Context_t *context, int trackid) {
 
 static int SsaCloseSubtitle(Context_t *context) {
     ssa_printf(10, "\n");
+		int ret = cERR_SSA_NO_ERROR;
+		void* threadstatus;
+		int wait_time = 20;
 
     if(fssa)
         fclose(fssa);
@@ -416,9 +419,23 @@ static int SsaCloseSubtitle(Context_t *context) {
     /* this closes the thread! */
     fssa = NULL;
 
+		while ( (hasThreadStarted != 0) && (--wait_time) > 0 ) {
+        ssa_printf(10, "Waiting for ssa thread to terminate itself, will try another %d times\n", wait_time);
+
+        usleep(100000);
+    }
+
+    if (wait_time == 0) {
+        ssa_err( "Timeout waiting for thread!\n");
+
+        ret = cERR_SSA_ERROR;
+    } else if(thread_sub != '\0') {
+				pthread_join(thread_sub, &threadstatus);
+		}
+
     hasThreadStarted = 0;
 
-    return cERR_SSA_NO_ERROR;
+    return ret;
 }
 
 static int SsaSwitchSubtitle(Context_t *context, int* arg) {

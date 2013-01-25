@@ -1254,6 +1254,18 @@ $(flashprefix)/root-enigma2/usr/lib/python2.6/site-packages/OpenSSL: \
 #
 # ffmpeg
 #
+FFMPEG_CUSTOM_NEU:= \
+		--disable-vfp \
+		--disable-runtime-cpudetect
+
+FFMPEG_CUSTOM_OLD:= \
+		--disable-armvfp \
+		--disable-mmi \
+		--enable-muxer=aac \
+		--enable-encoder=mp3 \
+		--enable-encoder=theora \
+		--enable-decoder=ljpeg
+
 $(DEPDIR)/ffmpeg.do_prepare: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	touch $@
@@ -1262,34 +1274,44 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 	cd @DIR_ffmpeg@ && \
 	$(BUILDENV) \
 	./configure \
+		$(FFMPEG_CUSTOM_NEU) \
 		--disable-static \
 		--enable-shared \
 		--enable-cross-compile \
 		--disable-ffserver \
 		--disable-ffplay \
-		--disable-altivec \
+		--disable-ffprobe \
 		--disable-debug \
 		--disable-asm \
+		--disable-altivec \
 		--disable-amd3dnow \
 		--disable-amd3dnowext \
 		--disable-mmx \
 		--disable-mmxext \
 		--disable-sse \
+		--disable-sse2 \
+		--disable-sse3 \
 		--disable-ssse3 \
+		--disable-sse4 \
+		--disable-sse42 \
+		--disable-avx \
+		--disable-fma4 \
 		--disable-armv5te \
 		--disable-armv6 \
 		--disable-armv6t2 \
-		--disable-armvfp \
-		--disable-mmi \
 		--disable-neon \
 		--disable-vis \
+		--disable-inline-asm \
 		--disable-yasm \
+		--disable-mips32r2 \
+		--disable-mipsdspr1 \
+		--disable-mipsdspr2 \
+		--disable-mipsfpu \
 		--disable-indevs \
 		--disable-outdevs \
 		--disable-muxers \
 		--enable-muxer=ogg \
 		--enable-muxer=flac \
-		--enable-muxer=aac \
 		--enable-muxer=mp3 \
 		--enable-muxer=h261 \
 		--enable-muxer=h263 \
@@ -1299,8 +1321,6 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-muxer=image2 \
 		--disable-encoders \
 		--enable-encoder=aac \
-		--enable-encoder=mp3 \
-		--enable-encoder=theora \
 		--enable-encoder=h261 \
 		--enable-encoder=h263 \
 		--enable-encoder=h263p \
@@ -1320,7 +1340,6 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-decoder=mpeg1video \
 		--enable-decoder=mpeg2video \
 		--enable-decoder=png \
-		--enable-decoder=ljpeg \
 		--enable-decoder=mjpeg \
 		--enable-decoder=vorbis \
 		--enable-decoder=flac \
@@ -1335,11 +1354,11 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-pthreads \
 		--enable-bzlib \
 		--enable-librtmp \
-		--pkg-config=pkg-config \
+		--pkg-config="pkg-config" \
 		--cross-prefix=$(target)- \
 		--target-os=linux \
 		--arch=sh4 \
-		--extra-cflags=-fno-strict-aliasing \
+		--extra-cflags="-fno-strict-aliasing" \
 		--enable-stripping \
 		--prefix=/usr && \
 	$(MAKE)

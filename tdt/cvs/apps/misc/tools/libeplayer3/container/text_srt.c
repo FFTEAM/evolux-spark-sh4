@@ -290,13 +290,13 @@ static int SrtGetSubtitle(Context_t  *context, char * Filename) {
 
     copyFilename = strdup(Filename);
 
-    FilenameFolder = dirname(copyFilename);
-
-    if (FilenameFolder == NULL)
+    if (copyFilename == NULL)
     {
-       srt_err("FilenameFolder NULL\n");
+       srt_err("copyFilename NULL\n");
        return cERR_SRT_ERROR;
     }
+
+    FilenameFolder = dirname(copyFilename);
 
     srt_printf(10, "folder: %s\n", FilenameFolder);
 
@@ -305,7 +305,7 @@ static int SrtGetSubtitle(Context_t  *context, char * Filename) {
     if (FilenameExtension == NULL)
     {
        srt_err("FilenameExtension NULL\n");
-       free(FilenameFolder);
+       free(copyFilename);
        return cERR_SRT_ERROR;
     }
 
@@ -408,6 +408,9 @@ static int SrtOpenSubtitle(Context_t *context, int trackid) {
 
 static int SrtCloseSubtitle(Context_t *context) {
     srt_printf(10, "\n");
+		int ret = cERR_SRT_NO_ERROR;
+		void* threadstatus;
+		int wait_time = 20;
 
     if(fsub)
         fclose(fsub);
@@ -415,9 +418,23 @@ static int SrtCloseSubtitle(Context_t *context) {
     /* this closes the thread! */
     fsub = NULL;
 
+		while ( (hasThreadStarted != 0) && (--wait_time) > 0 ) {
+        srt_printf(10, "Waiting for srt thread to terminate itself, will try another %d times\n", wait_time);
+
+        usleep(100000);
+    }
+
+    if (wait_time == 0) {
+        srt_err( "Timeout waiting for thread!\n");
+
+        ret = cERR_SRT_ERROR;
+    } else if(thread_sub != '\0') {
+				pthread_join(thread_sub, &threadstatus);
+		}
+
     hasThreadStarted = 0;
 
-    return cERR_SRT_NO_ERROR;
+    return ret;
 }
 
 
