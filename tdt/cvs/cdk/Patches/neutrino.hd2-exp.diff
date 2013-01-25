@@ -1646,10 +1646,10 @@ diff -Nur '--exclude-from=neutrino-hd_ignore' neutrino-hd2-exp.org/src/nhttpd/we
 +		}
 +*/
 +#if defined (PLATFORM_SPARK)
-+		if (boot == BOOT_NHD) {
-+			touch(DOTFILE_BOOTNHD);
-+			unlink(DOTFILE_BOOTNHD2);
-+			ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NHD activated, please reboot now..!", 450, 2);
++		if (boot == BOOT_NHD && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin_nhd/neutrino", X_OK)) {
++				touch(DOTFILE_BOOTNHD);
++				unlink(DOTFILE_BOOTNHD2);
++				ShowHintUTF(LOCALE_MESSAGEBOX_INFO, "NHD activated, please reboot now..!", 450, 2);
 +		}
 +#endif
 +		if (boot == BOOT_E2 && old_boot == BOOT_NEUTRINO && !access("/usr/local/bin/enigma2", X_OK)) {
