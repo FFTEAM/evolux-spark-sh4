@@ -1,14 +1,41 @@
-//--- libstb-hal/libspark/dmx.cpp	2012-12-07 11:40:50.209470070 +0100
-//+++ libstb-hal/libspark/dmx.cpp	2012-12-07 11:40:40.509421969 +0100
-//@@ -195,7 +195,11 @@
-// 	if (!init[devnum])
-// 	{
-// 		/* this should not change anything... */
-//+#if defined PLATFORM_SPARK7162
-//+		int n = DMX_SOURCE_FRONT0 + devnum + 1;
-//+#else
-// 		int n = DMX_SOURCE_FRONT0 + devnum;
-//+#endif
-// 		lt_info("%s: setting %s to source %d\n", __func__, devname[devnum], n);
-// 		if (ioctl(fd, DMX_SET_SOURCE, &n) < 0)
-// 			lt_info("%s DMX_SET_SOURCE failed!\n", __func__);
+--- libstb-hal/tools/spark_fp.c	2013-01-30 19:13:45.000000000 +0100
++++ libstb-hal/tools/spark_fp.c	2013-01-16 12:22:22.000000000 +0100
+@@ -41,13 +41,10 @@
+ 	printf("\t-T: get FP display type (1 = VFD, 2 = LCD, 4 = LED, 8 = LBD)\n");
+ 	printf("\t-t: get current FP time\n");
+ 	printf("\t-s <time>: set FP time (time = 0: use current time)\n");
++	printf("\t-w <time>: set FP wakeup time and power down (time = 1: no wakeup)\n");
+ #ifdef MARTII
+-	printf("\t-w <time>: set FP wakeup time (time = 1: no wakeup)\n");
+-	printf("\t-P: power down\n");
+ 	printf("\t-l <n>: set LED <n> on\n");
+ 	printf("\t-L <n>: set LED <n> off\n");
+-#else
+-	printf("\t-w <time>: set FP wakeup time and power down (time = 1: no wakeup)\n");
+ #endif
+ 	printf("times are given in unix time (UTC, seconds since 1970-01-01 00:00:00)\n");
+ 	printf("\n");
+@@ -144,7 +141,7 @@
+ 
+ 	ret = 0;
+ #ifdef MARTII
+-	while ((c = getopt (argc, argv, "gs:tw:Tl:L:P")) != -1)
++	while ((c = getopt (argc, argv, "gs:tw:Tl:L:")) != -1)
+ #else
+ 	while ((c = getopt (argc, argv, "gs:tw:T")) != -1)
+ #endif
+@@ -226,14 +223,7 @@
+ 				tmp = gmtime(&t);
+ 				fprintf(stderr, "wakeup time:  %04d-%02d-%02d %02d:%02d:%02d\n", tmp->tm_year + 1900,
+ 						tmp->tm_mon + 1, tmp->tm_mday, tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
+-#ifdef MARTII
+-				ret = ioctl(fd, VFDSETPOWERONTIME, &t);
+-				break;
+-			case 'P':
+-				ret = ioctl(fd, VFDPOWEROFF, &t);
+-#else
+ 				ret = ioctl(fd, VFDSTANDBY, &t);
+-#endif
+ 				/* driver always returns einval here...
+ 				if (ret < 0)
+ 					perror("ioctl VFDSTANDBY");
