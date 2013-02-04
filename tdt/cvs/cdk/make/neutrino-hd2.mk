@@ -81,6 +81,7 @@ if ENABLE_SPARK
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
 			--with-boxtype=spark \
+			--with-boxmodel=spark7111 \
 			--enable-libeplayer3 \
 			--enable-graphlcd \
 			--enable-libass \
@@ -88,7 +89,7 @@ if ENABLE_SPARK
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(GST_CFLAGS_NEW) \
-			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
+			CPPFLAGS="$(CPPFLAGS) -DEVOLUX -DCPU_FREQ -D__KERNEL_STRICT_NAMES -DNEW_LIBCURL -DPLATFORM_SPARK7111 -I$(driverdir)/frontcontroller/aotom -I$(driverdir)/bpamem -I$(driverdir)"
 else
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(appsdir)/neutrino-hd2-exp && \
@@ -102,7 +103,8 @@ else
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
-			--with-boxtype=spark7162 \
+			--with-boxtype=spark \
+			--with-boxmodel=spark7162 \
 			--enable-libeplayer3 \
 			--enable-graphlcd \
 			--enable-libass \
