@@ -225,7 +225,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			insmod $MODDIR/stmfb.ko display0=1280x720-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 		else
 			MEMSIZE=12m
-			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko "$SCARTOUT"
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko #"$SCARTOUT"
 	        	insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		fi
 	elif [ -e /etc/.start_vdr ]; then
@@ -233,15 +233,15 @@ if [ ! -e /var/etc/.firstboot ]; then
 			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko
 			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 	else	
-		isactive1=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
-		if [ "$isactive1" = 2 ]; then
-			if [ -e /etc/.nhd ]; then
+		isSCART=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
+		if [ "$isSCART" -lt 3 ]; then
+			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
 				MEMSIZE=12m
 			else
 				MEMSIZE=4m
 			fi
 #		        insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:yuv:yuv;#SCART
-			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko "$SCARTOUT"
+			insmod $MODDIR/stmcore-display-sti$DISPLAY.ko #"$SCARTOUT"
 			insmod $MODDIR/stmfb.ko display0=720x576-32@50:$MEMSIZE:pal:cvbs #SCART
 		else
 			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
