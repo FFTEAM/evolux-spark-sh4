@@ -3952,6 +3952,24 @@
 
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:12:37.488177423 +0100
 +++ neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:10:47.007629583 +0100
+@@ -15,6 +15,7 @@
+ 	-I$(top_srcdir)/daemons \
+ 	-I$(top_srcdir)/src \
+ 	-I$(top_srcdir)/src/zapit/include/zapit \
++	-I$(top_srcdir)/src/zapit/include \
+ 	-I$(top_srcdir)/lib \
+ 	-I$(top_srcdir)/lib/libeventserver \
+ 	-I$(top_srcdir)/lib/libnet \
+@@ -24,8 +25,7 @@
+ 	@FREETYPE_CFLAGS@
+ 
+ if BOXTYPE_COOLSTREAM
+-INCLUDES += -I$(top_srcdir)/src/zapit/include \
+-	-I$(top_srcdir)/lib/libcoolstream
++INCLUDES += -I$(top_srcdir)/lib/libcoolstream
+ else
+ INCLUDES += -I$(top_srcdir)/lib/libdvbapi
+ endif
 @@ -47,7 +47,7 @@
  	filebrowser.cpp audioplayer.cpp nfs.cpp pictureviewer.cpp \
  	movieplayer.cpp rc_lock.cpp \
@@ -3977,6 +3995,7 @@
 +endif
  
  libtimerlist_a_SOURCES = timerlist.cpp
+ 
  
 
 --- neutrino-hd2-exp/src/driver/audiodec/Makefile.am	2013-02-04 12:33:08.421901436 +0100
