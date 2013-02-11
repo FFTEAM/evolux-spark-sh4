@@ -3145,15 +3145,6 @@
  
  		CVCRControl::getInstance()->Stop();
  		autoshift = false;
-@@ -1899,7 +1899,7 @@
- 				strcpy(recDir, (preselectedDir != NULL) ? preselectedDir : g_settings.network_nfs_recordingdir);
- 				
- 				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = recDir;
--				dprintf(DEBUG_NORMAL, "CNeutrinoApp::doGuiRecord: start record to dir %s\n", recDir);
-+				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::doGuiRecord: start record to dir %s\n", recDir);
- 			}
- 
- 			// start to record baby
 @@ -2134,7 +2134,7 @@
  	while(!zapit_ready)
  		usleep(0);
@@ -3328,15 +3319,6 @@
  		
  		if(!recordingstatus && (!data)) 
  		{
-@@ -3509,7 +3511,7 @@
- 			{
- 				if (strcmp(g_settings.network_nfs_local_dir[i], recDir) == 0) 
- 				{
--					dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: waking up %s (%s)\n",g_settings.network_nfs_ip[i].c_str(),recDir);
-+					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::handleMsg: waking up %s (%s)\n",g_settings.network_nfs_ip[i].c_str(),recDir);
- 					
- 					std::string command = "etherwake ";
- 					command += g_settings.network_nfs_mac[i];
 @@ -3914,7 +3916,7 @@
  
  	current_muted = newValue;
@@ -3391,21 +3373,6 @@
  
  	int returnval = menu_return::RETURN_REPAINT;
  
-@@ -4621,12 +4623,12 @@
- 	}
- 	else if(actionKey=="networktest") 
- 	{
--		dprintf(DEBUG_INFO, "CNeutrinoApp::exec: doing network test...\n");
-+		//dprintf(DEBUG_INFO, "CNeutrinoApp::exec: doing network test...\n");
- 		testNetworkSettings(networkConfig.address.c_str(), networkConfig.netmask.c_str(), networkConfig.broadcast.c_str(), networkConfig.gateway.c_str(), networkConfig.nameserver.c_str(), networkConfig.inet_static);
- 	}
- 	else if(actionKey=="networkshow") 
- 	{
--		dprintf(DEBUG_INFO, "CNeutrinoApp::exec: showing current network settings...\n");
-+		//dprintf(DEBUG_INFO, "CNeutrinoApp::exec: showing current network settings...\n");
- 		showCurrentNetworkSettings();
- 	}
- 	else if(actionKey=="savesettings") 
 @@ -4761,7 +4763,7 @@
  		if (b.exec(g_settings.network_nfs_recordingdir)) 
  		{
