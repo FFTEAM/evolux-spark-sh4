@@ -234,7 +234,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 			insmod $MODDIR/stmfb.ko display0=1920x1080-32@50:$MEMSIZE:pal:yuv:yuv #HDMI
 	else	
 		isSCART=`cat /usr/local/share/config/neutrino.conf | grep video_Mode= | cut -d = -f2`
-		if [ "$isSCART" -lt 3 ]; then
+		if [ "$isSCART" -lt 4 ]; then
 			if [ -e /etc/.nhd ] || [ -e /etc/.nhd2 ]; then
 				MEMSIZE=12m
 			else
