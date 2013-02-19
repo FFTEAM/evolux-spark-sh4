@@ -1,3 +1,36 @@
+--- neutrino-hd2-exp/src/driver/gif.cpp	2013-02-19 12:04:52.000000000 +0100
++++ neutrino-hd2-exp/src/driver/gif.cpp	2013-02-19 12:06:34.718683946 +0100
+@@ -64,7 +64,7 @@
+ 	ColorMapObject *cmap;
+ 	int cmaps;
+ 
+-#if defined (PLATFORM_COOLSTREAM) || defined (PLATFORM_SPARK)
++#if defined (PLATFORM_COOLSTREAM)
+ 	gft=DGifOpenFileName(name, NULL);
+ #else
+ 	gft=DGifOpenFileName(name);
+@@ -138,7 +138,7 @@
+ 	int extcode;
+ 	GifRecordType rt;
+ 
+-#if defined (PLATFORM_COOLSTREAM) || defined (PLATFORM_SPARK)
++#if defined (PLATFORM_COOLSTREAM)
+ 	gft=DGifOpenFileName(name, NULL);
+ #else	
+ 	gft=DGifOpenFileName(name);
+
+--- neutrino-hd2-exp/configure.ac	2013-02-19 12:04:53.000000000 +0100
++++ neutrino-hd2-exp/configure.ac	2013-02-19 12:04:03.889936027 +0100
+@@ -16,7 +16,7 @@
+ 
+ TUXBOX_APPS_LIB_CONFIG(CURL,curl-config)
+ TUXBOX_APPS_LIB_CONFIG(FREETYPE,freetype-config)
+-if test "$BOXTYPE" = "coolstream" -o "$BOXTYPE" = "spark"; then
++if test "$BOXTYPE" = "coolstream"; then
+ TUXBOX_APPS_LIB_PKGCONFIG_CHECK(ID3TAG,libid3tag)
+ TUXBOX_APPS_LIB_PKGCONFIG(MAD,libmad)
+ else
+
 --- neutrino-hd2-exp/acinclude.m4	2012-12-30 22:16:56.000000000 +0100
 +++ neutrino-hd2-exp/acinclude.m4	2012-12-30 22:22:49.482182353 +0100
 @@ -228,10 +228,10 @@
