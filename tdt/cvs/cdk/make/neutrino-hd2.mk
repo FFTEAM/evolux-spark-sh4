@@ -80,7 +80,7 @@ if ENABLE_SPARK
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
-			--with-boxtype=spark \
+			--with-boxtype=fulan \
 			--with-boxmodel=spark7111 \
 			--enable-libeplayer3 \
 			--enable-graphlcd \
@@ -103,7 +103,7 @@ else
 			--with-fontdir=/usr/local/share/fonts \
 			--with-configdir=/usr/local/share/config \
 			--with-gamesdir=/usr/local/share/games \
-			--with-boxtype=spark \
+			--with-boxtype=fulan \
 			--with-boxmodel=spark7162 \
 			--enable-libeplayer3 \
 			--enable-graphlcd \

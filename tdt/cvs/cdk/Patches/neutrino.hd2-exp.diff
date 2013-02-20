@@ -1,36 +1,3 @@
---- neutrino-hd2-exp/src/driver/gif.cpp	2013-02-19 12:04:52.000000000 +0100
-+++ neutrino-hd2-exp/src/driver/gif.cpp	2013-02-19 12:06:34.718683946 +0100
-@@ -64,7 +64,7 @@
- 	ColorMapObject *cmap;
- 	int cmaps;
- 
--#if defined (PLATFORM_COOLSTREAM) || defined (PLATFORM_SPARK)
-+#if defined (PLATFORM_COOLSTREAM)
- 	gft=DGifOpenFileName(name, NULL);
- #else
- 	gft=DGifOpenFileName(name);
-@@ -138,7 +138,7 @@
- 	int extcode;
- 	GifRecordType rt;
- 
--#if defined (PLATFORM_COOLSTREAM) || defined (PLATFORM_SPARK)
-+#if defined (PLATFORM_COOLSTREAM)
- 	gft=DGifOpenFileName(name, NULL);
- #else	
- 	gft=DGifOpenFileName(name);
-
---- neutrino-hd2-exp/configure.ac	2013-02-19 12:04:53.000000000 +0100
-+++ neutrino-hd2-exp/configure.ac	2013-02-19 12:04:03.889936027 +0100
-@@ -16,7 +16,7 @@
- 
- TUXBOX_APPS_LIB_CONFIG(CURL,curl-config)
- TUXBOX_APPS_LIB_CONFIG(FREETYPE,freetype-config)
--if test "$BOXTYPE" = "coolstream" -o "$BOXTYPE" = "spark"; then
-+if test "$BOXTYPE" = "coolstream"; then
- TUXBOX_APPS_LIB_PKGCONFIG_CHECK(ID3TAG,libid3tag)
- TUXBOX_APPS_LIB_PKGCONFIG(MAD,libmad)
- else
-
 --- neutrino-hd2-exp/acinclude.m4	2012-12-30 22:16:56.000000000 +0100
 +++ neutrino-hd2-exp/acinclude.m4	2012-12-30 22:22:49.482182353 +0100
 @@ -228,10 +228,10 @@
@@ -47,15 +14,24 @@
  else
  	AC_MSG_RESULT(no)
  fi
-@@ -699,7 +699,7 @@
+@@ -575,7 +575,7 @@
+ AM_CONDITIONAL(BOXMODEL_ET6X00,test "$BOXMODEL" = "et6x00")
+ AM_CONDITIONAL(BOXMODEL_ET9X00,test "$BOXMODEL" = "et9x00")
+ 
+-AM_CONDITIONAL(BOXMODEL_SPARK,test "$BOXMODEL" = "spark")
++AM_CONDITIONAL(BOXMODEL_SPARK7111,test "$BOXMODEL" = "spark7111")
+ AM_CONDITIONAL(BOXMODEL_SPARK7162,test "$BOXMODEL" = "spark7162")
+ 
+ AM_CONDITIONAL(BOXMODEL_UFS910, test "$BOXMODEL" = "ufs910")
+@@ -698,7 +698,7 @@
+ elif test "$BOXMODEL" = "et9x00"; then
  	AC_DEFINE(BOXMODEL_ET9X00, 1, [building for xtrend et9x00])
  
- elif test "$BOXMODEL" = "spark7111"; then
--	AC_DEFINE(PLATFORM_SPARK7162, 1, [building for spark 7111])
-+	AC_DEFINE(PLATFORM_SPARK7111, 1, [building for spark 7111])
+-elif test "$BOXMODEL" = "spark"; then
++elif test "$BOXMODEL" = "spark7111"; then
+ 	AC_DEFINE(PLATFORM_SPARK, 1, [building for spark 7111])
  elif test "$BOXMODEL" = "spark7162"; then
  	AC_DEFINE(PLATFORM_SPARK7162, 1, [building for spark 7162])
- 
 
 
 ////////////////////////
