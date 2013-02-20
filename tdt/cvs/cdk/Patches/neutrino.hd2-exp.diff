@@ -14,6 +14,24 @@
  else
  	AC_MSG_RESULT(no)
  fi
+@@ -434,7 +434,7 @@
+ 				valid for gigablue: gbsolo,gb800se,gb800ue,gbquad
+ 				valid for dreambox: dm500, dm500plus, dm600pvr, dm56x0, dm7000, dm7020, dm7025, dm500hd, dm7020hd, dm8000, dm800, dm800se
+ 				valid for xtrend: et4x00,et5x00,et6x00,et9x00
+-				valid for fulan: spark, spark7162
++				valid for fulan: spark7111, spark7162
+ 				valid for kathrein: ufs910, ufs922, ufs912, ufs913
+ 				valid for ipbox: ipbox55, ipbox99, ipbox9900
+ 				valid for atevio: atevio700,atevio7000,atevio7500,atevio7600
+@@ -469,7 +469,7 @@
+ 				AC_MSG_ERROR([unknown model $withval for boxtype $BOXTYPE])
+ 			fi
+ 			;;
+-		spark|spark7162)
++		spark7111|spark7162)
+ 			if test "$BOXTYPE" = "fulan"; then
+ 				BOXMODEL="$withval"
+ 			else
 @@ -575,7 +575,7 @@
  AM_CONDITIONAL(BOXMODEL_ET6X00,test "$BOXMODEL" = "et6x00")
  AM_CONDITIONAL(BOXMODEL_ET9X00,test "$BOXMODEL" = "et9x00")
@@ -23,15 +41,17 @@
  AM_CONDITIONAL(BOXMODEL_SPARK7162,test "$BOXMODEL" = "spark7162")
  
  AM_CONDITIONAL(BOXMODEL_UFS910, test "$BOXMODEL" = "ufs910")
-@@ -698,7 +698,7 @@
+@@ -698,8 +698,8 @@
  elif test "$BOXMODEL" = "et9x00"; then
  	AC_DEFINE(BOXMODEL_ET9X00, 1, [building for xtrend et9x00])
  
 -elif test "$BOXMODEL" = "spark"; then
+-	AC_DEFINE(PLATFORM_SPARK, 1, [building for spark 7111])
 +elif test "$BOXMODEL" = "spark7111"; then
- 	AC_DEFINE(PLATFORM_SPARK, 1, [building for spark 7111])
++	AC_DEFINE(PLATFORM_SPARK7111, 1, [building for spark 7111])
  elif test "$BOXMODEL" = "spark7162"; then
  	AC_DEFINE(PLATFORM_SPARK7162, 1, [building for spark 7162])
+ 
 
 
 ////////////////////////
