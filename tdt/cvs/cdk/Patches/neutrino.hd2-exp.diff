@@ -286,137 +286,117 @@
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
-@@ -1570,4 +1570,126 @@
- 
+@@ -1575,3 +1575,105 @@
  audiomenu.volumebar_audiosteps Volume Step Size
  
+ webtv.head WebTV
++
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
 +extramenu.tunerreset.select Tuner Reset
-+extramenu.tunerreset.on On
-+extramenu.tunerreset.off Off
-+extramenu.tunerreset.restart restart Tuner
++extramenu.tunerreset.on Ein
++extramenu.tunerreset.off Aus
++extramenu.tunerreset.restart Tuner neu starten
 +extramenu.correctvolume Volume Menue Ext.
 +extramenu.correctvolume.select Correct Volume
-+extramenu.correctvolume.on On
-+extramenu.correctvolume.off Off
++extramenu.correctvolume.on Ein
++extramenu.correctvolume.off Aus
 +extramenu.amount Amount Menue
 +extramenu.amount.select Amount
-+extramenu.amount.on On
-+extramenu.amount.off Off
++extramenu.amount.on Ein
++extramenu.amount.off Aus
 +extramenu.displaytime DisplayTime Menue
 +extramenu.displaytime.select DisplayTime
-+extramenu.displaytime.on On
-+extramenu.displaytime.off Off
++extramenu.displaytime.on Ein
++extramenu.displaytime.off Aus
 +extramenu.wwwdate wwwDate Menue
 +extramenu.wwwdate.select wwwDate
 +extramenu.wwwdate.on Ein
 +extramenu.wwwdate.off Aus
 +extramenu.checkfs CheckFS Menue
 +extramenu.checkfs.select CheckFS
-+extramenu.checkfs.on On
-+extramenu.checkfs.off Off
++extramenu.checkfs.on Ein
++extramenu.checkfs.off Aus
 +extramenu.emu Cam Menue
-+extramenu.emu.none not aktiv
++extramenu.emu.none Nicht aktiv
 +extramenu.emu.mgcamd MGCamd
 +extramenu.emu.incubus IncubusCamd
 +extramenu.emu.camd3 Camd3
 +extramenu.emu.mbox Mbox
 +extramenu.emu.oscam Oscam
 +extramenu.emu.spcs Spcs
-+extramenu.emu.select Cam Select
-+extramenu.emu.restart restart Cam
-+extramenu.emu.disable deactivate Cam
++extramenu.emu.select Cam Auswahl
++extramenu.emu.restart Cam neu starten
++extramenu.emu.disable Cam deaktivieren
 +extramenu.swap Swap Menue
 +extramenu.swap.swapram SWAPRAM
 +extramenu.swap.swappart SWAPPART
 +extramenu.swap.swapfile SWAPFILE
-+extramenu.swap.select Swap Select
++extramenu.swap.select Swap Auswahl
 +extramenu.swap.onoff SWAP
-+extramenu.boot.head Boot-Settings
-+extramenu.boot.select Startsystem on Reboot
-+extramenu.boot.unchanged Unchanged
-+extramenu.boot.bootargs.head Change Boot-Parameter now
-+extramenu.boot.bootargs.text Don't turn box off now... wait...!
++extramenu.boot.head Boot-Einstellungen
++extramenu.boot.select Startsystem bei Neustart
++extramenu.boot.unchanged Unverändert
++extramenu.boot.bootargs.head Änderung der Boot-Parameter
++extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
 +extramenu.fsck FSCK Menue
 +extramenu.fsck.select FSCK
-+extramenu.fsck.on On
-+extramenu.fsck.off Off
++extramenu.fsck.on Ein
++extramenu.fsck.off Aus
 +extramenu.dvb DVB-T/C Menue
 +extramenu.dvb.select DVB
 +extramenu.dvb.on DVB-C
 +extramenu.dvb.off DVB-T
 +extramenu.nfsserver NFSSERVER Menue
 +extramenu.nfsserver.select NFSSERVER
-+extramenu.nfsserver.on On
-+extramenu.nfsserver.off Off
++extramenu.nfsserver.on Ein
++extramenu.nfsserver.off Aus
 +extramenu.stmfb STMFB Menue
 +extramenu.stmfb.select STMFB 15m
-+extramenu.stmfb.on On
-+extramenu.stmfb.off Off
++extramenu.stmfb.on Ein
++extramenu.stmfb.off Aus
 +extramenu.fritzcall Fritzcall Menue
 +extramenu.fritzcall.select Fritzcallmonitor
-+extramenu.fritzcall.on On
-+extramenu.fritzcall.off Off
++extramenu.fritzcall.on Ein
++extramenu.fritzcall.off Aus
 +extramenu.evoluxupdate Evolux OnlineUpdate
 +extramenu.evoluxupdate.select OnlineUpdate
 +extramenu.evoluxupdate.on On
 +extramenu.evoluxupdate.off Off
-+extramenu.evoluxupdate.update do OnlineUpdate
-+extramenu.kerneloptions Kernel-Options
-+extramenu.kerneloptions.apply apply Settings
++extramenu.evoluxupdate.update OnlineUpdate ausführen
++extramenu.kerneloptions Kernel-Optionen
++extramenu.kerneloptions.apply Einstellungen anwenden
 +extramenu.kerneloptions.lsmod Status
 +extramenu.kerneloptions.modules Kernel-Module
-+extramenu.kerneloptions.reset reset Settings
-+extramenu.glcd.volume Volume
-+extramenu.glcd.color.black black
-+extramenu.glcd.color.white white
-+extramenu.glcd.color.red red
-+extramenu.glcd.color.green green
-+extramenu.glcd.color.blue blue
-+extramenu.glcd.color.magenta magenta
-+extramenu.glcd.color.cyan bluegreen
-+extramenu.glcd.color.yellow yellow
++extramenu.kerneloptions.reset Einstellungen zurücksetzen
++extramenu.glcd.volume Lautstärke
++extramenu.glcd.color.black Schwarz
++extramenu.glcd.color.white Weiss
++extramenu.glcd.color.red Rot
++extramenu.glcd.color.green Grün
++extramenu.glcd.color.blue Blau
++extramenu.glcd.color.magenta Magenta
++extramenu.glcd.color.cyan Blaugrün
++extramenu.glcd.color.yellow Gelb
 +extramenu.glcd GraphLCD
-+extramenu.glcd.select.fg Foreground-Colour
-+extramenu.glcd.select.bg Background-Colour
-+extramenu.glcd.select.bar Bar-Colour
-+extramenu.glcd.size_channel Chan-Size
-+extramenu.glcd.size_epg EPG-Size
-+extramenu.glcd.size_bar Bar-Size
-+extramenu.glcd.size_time Time-Size
-+extramenu.glcd.restart Research
-+extramenu.glcd.mirror_osd show Menue on GraphLCD
-+extramenu.glcd.time_in_standby show Time on Standby
-+onoff.on On
-+onoff.off Off
-+glcd.color.black black
-+glcd.color.blue blue
-+glcd.color.cyan bluegreen
-+glcd.color.green green
-+glcd.color.magenta magenta
-+glcd.color.red red
-+glcd.color.white white
-+glcd.color.yellow yellow
-+glcd.enable GraphLCD aktive
-+glcd.font Fonts
-+glcd.head GraphLCD
-+glcd.mirror_osd show OSD-Menü on GraphLCD
-+glcd.restart Rescan
-+glcd.select.bar Bar-Colour
-+glcd.select.bg Background-Colour
-+glcd.select.fg Foreground-Colour
-+glcd.size_bar Bar-Size
-+glcd.size_channel Chan-Size
-+glcd.size_epg EPG-Size
-+glcd.size_time Time-Size
-+glcd.time_in_standby show time on standby
-+glcd.volume Volume
++extramenu.glcd.select.fg Vordergrund-Farbe
++extramenu.glcd.select.bg Hintergrund-Farbe
++extramenu.glcd.select.bar Fortschrittsbalken-Farbe
++extramenu.glcd.size_channel Sender-Größe
++extramenu.glcd.size_epg EPG-Größe
++extramenu.glcd.size_bar Fortschrittsbalken-Größe
++extramenu.glcd.size_time Uhrzeit-Größe
++extramenu.glcd.restart Neu erkennen
++extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
++extramenu.glcd.time_in_standby Zeitanzeige in Standby
++onoff.on Ein
++onoff.off Aus
++
  
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -729,6 +729,7 @@
+@@ -733,6 +733,7 @@
  messagebox.no Nein
  messagebox.ok OK
  messagebox.yes Ja
@@ -424,7 +404,7 @@
  miscsettings.bootinfo Infos beim Booten anzeigen
  miscsettings.bootmenu Bootmenü anzeigen
  miscsettings.channellist Kanalliste
-@@ -834,7 +835,7 @@
+@@ -838,7 +839,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -433,10 +413,11 @@
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -1572,4 +1573,104 @@
- 
+@@ -1577,3 +1578,104 @@
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
+ webtv.head WebTV
++
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
 +extramenu.tunerreset.select Tuner Reset
