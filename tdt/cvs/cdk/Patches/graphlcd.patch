@@ -632,20 +632,20 @@
      }
      dh[di]->attached = true;
      struct usb_device *dev = usb_device(dh[di]->dpfh->dev.udev);
---- graphlcd-base/tools/convpic/Makefile.org	2012-01-21 23:04:06.899524642 +0100
+--- graphlcd-base/tools/convpic/Makefile	2012-01-21 23:04:06.899524642 +0100
 +++ graphlcd-base/tools/convpic/Makefile	2012-01-21 23:04:06.847524649 +0100
-@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+@@ -36,7 +36,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/crtfont/Makefile.org	2012-01-21 23:10:38.711524640 +0100
+--- graphlcd-base/tools/crtfont/Makefile	2012-01-21 23:10:38.711524640 +0100
 +++ graphlcd-base/tools/crtfont/Makefile	2012-01-21 23:10:38.663524640 +0100
-@@ -35,7 +35,7 @@ $(PRGNAME): $(OBJS)
+@@ -35,7 +35,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -654,9 +654,9 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/genfont/Makefile.org	2012-01-21 23:13:28.307524643 +0100
+--- graphlcd-base/tools/genfont/Makefile	2012-01-21 23:13:28.307524643 +0100
 +++ graphlcd-base/tools/genfont/Makefile	2012-01-21 23:13:28.255524646 +0100
-@@ -38,7 +38,7 @@ $(PRGNAME): $(OBJS)
+@@ -38,7 +38,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -665,9 +665,9 @@
  	
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/showpic/Makefile.org	2012-01-21 23:15:43.891524641 +0100
+--- graphlcd-base/tools/showpic/Makefile	2012-01-21 23:15:43.891524641 +0100
 +++ graphlcd-base/tools/showpic/Makefile	2012-01-21 23:15:43.843524640 +0100
-@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+@@ -36,7 +36,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -676,9 +676,9 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/showtext/Makefile.org	2012-01-21 23:18:13.715524639 +0100
+--- graphlcd-base/tools/showtext/Makefile	2012-01-21 23:18:13.715524639 +0100
 +++ graphlcd-base/tools/showtext/Makefile	2012-01-21 23:18:13.667524641 +0100
-@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+@@ -36,7 +36,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -687,9 +687,9 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/lcdtestpattern/Makefile.org	2012-01-21 23:19:57.715524641 +0100
+--- graphlcd-base/tools/lcdtestpattern/Makefile	2012-01-21 23:19:57.715524641 +0100
 +++ graphlcd-base/tools/lcdtestpattern/Makefile	2012-01-21 23:19:56.899524641 +0100
-@@ -36,7 +36,7 @@ $(PRGNAME): $(OBJS)
+@@ -36,7 +36,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
