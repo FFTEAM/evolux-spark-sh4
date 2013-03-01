@@ -117,7 +117,7 @@ fribidi-0.10.4.tar.bz2
 libsigc++-1.2.5.tar.gz;http://ftp.gnome.org/pub/GNOME/sources/libsigc++/1.2/
 libmad-0.15.1b.tar.gz;ftp://ftp.mars.org/pub/mpeg
 # libmad-0.15.1b.tar.gz;ftp://ftp.osb.hu/openwrt/sources
-libid3tag-0.15.1b.tar.gz;http://bent.latency.net/bent/darcs/libid3tag-0.15.1b/src
+libid3tag-0.15.1b.tar.gz;http://pkgs.fedoraproject.org/repo/pkgs/libid3tag/libid3tag-0.15.1b.tar.gz/e5808ad997ba32c498803822078748c3
 # libid3tag-0.15.1b.tar.gz;ftp://ftp.osb.hu/openwrt/sources
 libxml2-2.6.30.tar.gz;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6
 libxslt-1.1.24.tar.gz;http://xmlsoft.org/sources
