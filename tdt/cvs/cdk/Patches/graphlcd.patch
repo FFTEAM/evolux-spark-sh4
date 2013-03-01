@@ -649,7 +649,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  
  uninstall:
@@ -660,7 +660,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  	
  uninstall:
@@ -671,7 +671,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  
  uninstall:
@@ -682,7 +682,7 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  
  uninstall:
@@ -693,12 +693,11 @@
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
--	install -m 755 -o root -g root -s $(PRGNAME) $(BINDIR)
+-	install -m 755 -o root -g root $(PRESTRIP) $(PRGNAME) $(BINDIR)
 +	install -m 755 $(PRGNAME) $(BINDIR)
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
-
 --- graphlcd-base/glcdskin/font.h	2012-06-09 00:42:44.000000000 +0200
 +++ graphlcd-base/glcdskin/font.h	2012-06-19 12:22:45.313489161 +0200
 @@ -16,7 +16,7 @@
