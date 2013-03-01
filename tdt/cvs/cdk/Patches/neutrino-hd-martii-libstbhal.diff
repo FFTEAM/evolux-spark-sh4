@@ -1,34 +1,32 @@
 --- libstb-hal/tools/spark_fp.c	2013-01-30 19:13:45.000000000 +0100
 +++ libstb-hal/tools/spark_fp.c	2013-01-16 12:22:22.000000000 +0100
-@@ -41,17 +41,10 @@
+@@ -41,16 +41,7 @@
  	printf("\t-T: get FP display type (1 = VFD, 2 = LCD, 4 = LED, 8 = LBD)\n");
  	printf("\t-t: get current FP time\n");
  	printf("\t-s <time>: set FP time (time = 0: use current time)\n");
-+	printf("\t-w <time>: set FP wakeup time and power down (time = 1: no wakeup)\n");
- #ifdef MARTII
+-#ifdef MARTII
 -	printf("\t-w <time>: set FP wakeup time (time = 1: no wakeup)\n");
 -	printf("\t-P: power down\n");
- 	printf("\t-l <n>: set LED <n> on\n");
- 	printf("\t-L <n>: set LED <n> off\n");
 -	printf("\t-B <n>: show blue RC code (n = 0..4 or \"all\")\n");
 -	printf("\t-S <n>: show standby RC code (n = 0..4 or \"all\")\n");
 -	printf("\t-B <n>:<predata><code>: set blue RC code (n = 0..4)\n");
 -	printf("\t-S <n>:<predata><code>: set standby RC code\n");
 -#else
--	printf("\t-w <time>: set FP wakeup time and power down (time = 1: no wakeup)\n");
- #endif
+ 	printf("\t-w <time>: set FP wakeup time and power down (time = 1: no wakeup)\n");
+-#endif
+ 	printf("\t-l <n>: set LED <n> on\n");
+ 	printf("\t-L <n>: set LED <n> off\n");
  	printf("times are given in unix time (UTC, seconds since 1970-01-01 00:00:00)\n");
- 	printf("\n");
-@@ -148,7 +141,7 @@
+@@ -148,7 +139,7 @@
  
  	ret = 0;
  #ifdef MARTII
 -	while ((c = getopt (argc, argv, "gs:tw:Tl:L:P:S:B:")) != -1)
 +	while ((c = getopt (argc, argv, "gs:tw:Tl:L:")) != -1)
  #else
- 	while ((c = getopt (argc, argv, "gs:tw:T")) != -1)
+ 	while ((c = getopt (argc, argv, "gs:tw:Tl:L:")) != -1)
  #endif
-@@ -230,19 +223,12 @@
+@@ -230,19 +221,12 @@
  				tmp = gmtime(&t);
  				fprintf(stderr, "wakeup time:  %04d-%02d-%02d %02d:%02d:%02d\n", tmp->tm_year + 1900,
  						tmp->tm_mon + 1, tmp->tm_mday, tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
@@ -46,9 +44,9 @@
  				sleep(2); /* not reached... */
 -#endif
  				break;
- #ifdef MARTII
  			case 'l': /* LED on */
-@@ -266,54 +252,6 @@
+ 				aotom.u.led.on = LOG_ON;
+@@ -264,54 +248,6 @@
  					ret = val;
  				}
  				break;
