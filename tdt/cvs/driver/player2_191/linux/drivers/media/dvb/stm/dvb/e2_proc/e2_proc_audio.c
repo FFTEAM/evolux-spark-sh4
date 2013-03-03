@@ -99,9 +99,7 @@ int proc_audio_delay_bitstream_write(struct file *file, const char __user *buf,
     char    *myString;
     ssize_t  ret = -ENOMEM;
 
-#ifdef VERY_VERBOSE
     printk("%s %ld - ", __FUNCTION__, count);
-#endif
 
     page = (char *)__get_free_page(GFP_KERNEL);
     if (page)
@@ -125,9 +123,7 @@ int proc_audio_delay_bitstream_write(struct file *file, const char __user *buf,
         strncpy(myString, page, count);
         myString[count] = '\0';
 
-#ifdef VERY_VERBOSE
         printk("%s\n", myString);
-#endif
         sscanf(myString, "%x", &delay);
 
         if (delay != 0)
@@ -265,9 +261,7 @@ int proc_audio_j1_mute_write(struct file *file, const char __user *buf,
 	ssize_t 	ret = -ENOMEM;
 	unsigned int 	State;
 
-#ifdef VERY_VERBOSE
 	printk("%s %d - ", __FUNCTION__, (int) count);
-#endif
 	mutex_lock (&(ProcDeviceContext->DvbContext->Lock));
 
 	page = (char *)__get_free_page(GFP_KERNEL);
@@ -281,9 +275,7 @@ int proc_audio_j1_mute_write(struct file *file, const char __user *buf,
 		strncpy(myString, page, count);
 		myString[count] = '\0';
 
-#ifdef VERY_VERBOSE
 		printk("%s\n", myString);
-#endif
 		sscanf(myString, "%d", &State);
 
 		if (State == 1) { //MUTE
@@ -427,9 +419,9 @@ int proc_audio_ac3_write(struct file *file, const char __user *buf,
 	char 		*page;
 	char		*myString;
 	ssize_t 	ret = -ENOMEM;
-#ifdef VERY_VERBOSE
+
 	printk("%s %d - ", __FUNCTION__, (int) count);
-#endif
+
 	page = (char *)__get_free_page(GFP_KERNEL);
 	if (page)
 	{
@@ -440,9 +432,9 @@ int proc_audio_ac3_write(struct file *file, const char __user *buf,
 		myString = (char *) kmalloc(count + 1, GFP_KERNEL);
 		strncpy(myString, page, count);
 		myString[count] = '\0';
-#ifdef VERY_VERBOSE
+
 		printk("%s\n", myString);
-#endif
+
 		if (strncmp("passthrough", page, count - 1) == 0)
 		{
 			if(passthrough == 0)
@@ -516,9 +508,8 @@ int proc_audio_ac3_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
-#ifdef VERY_VERBOSE
 	printk("%s %d\n", __FUNCTION__, count);
-#endif
+
 	if (passthrough == 1)
 	{
 		len = sprintf(page, "passthrough\n");
@@ -533,9 +524,8 @@ int proc_audio_ac3_choices_read (char *page, char **start, off_t off, int count,
 			  int *eof, void *data_unused)
 {
 	int len = 0;
-#ifdef VERY_VERBOSE
 	printk("%s %d\n", __FUNCTION__, count);
-#endif
+
 	len = sprintf(page, "downmix passthrough\n");
 
         return len;

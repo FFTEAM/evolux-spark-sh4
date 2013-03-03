@@ -202,7 +202,13 @@ int StartFeed (struct dvb_demux_feed* Feed)
  *              StartFeed is called by the demux device immediately before starting
  *              to demux data.
  ********************************************************************************/
-
+#if defined(ADB_BOX)
+extern int glowica;
+enum{
+    SINGLE,
+	TWIN,
+	    };
+#endif
 extern void stm_tsm_init ( int cfg );
 extern int reset_tsm;
 
@@ -239,14 +245,41 @@ int StartFeed (struct dvb_demux_feed* Feed)
     DVB_DEBUG ("(demux%d)\n", Context->Id);
 
     /* either numRunningFeeds == 0 and reset_tsm == 1 or reset_tsm > 1 */
+
+#ifdef __TDT__
+	// fix recoding freezer on tuner0 and demux1/2 or tuner1 and demux0/2 or tuner2 and demux0/1
+	int tsm_reset = 1;
+	
+	for (i = 0; i < DVB_MAX_DEVICES_PER_ADAPTER; i++)
+	{
+	    struct DeviceContext_s* DeviceContext = &DvbContext->DeviceContext[i];
+	    if(DeviceContext->numRunningFeeds != 0)
+	    	tsm_reset = 0;
+	}
+
+	if (tsm_reset && reset_tsm)
+	{
+	    printk(KERN_WARNING "reset_tsm: %d numRunningFeeds: %d => calling stm_tsm_init(1)\n", reset_tsm, Context->numRunningFeeds);
+	    stm_tsm_init(1);
+	}
+#else
     if (Context->numRunningFeeds == 0 && reset_tsm)
     {
         printk(KERN_WARNING "reset_tsm: %d numRunningFeeds: %d => calling stm_tsm_init(1)\n", reset_tsm, Context->numRunningFeeds);
         stm_tsm_init(1);
     }
+#endif
 
-#if defined(ADB_BOX)
+#if defined(ADB_BOX)//tutaj
+ if (glowica == SINGLE) {
+            
+ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1)&&(StartFeed_!=NULL)) StartFeed_(Feed);
+           
+         }
+         else if (glowica == TWIN) {
 if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL)) StartFeed_(Feed);
+           
+         }
 #endif
 
 #ifdef __TDT__
@@ -373,7 +406,8 @@ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL)) Start
 #ifdef __TDT__
 	        if (Video)
 	        {
-		       Context->numRunningFeeds++;
+
+			Context->numRunningFeeds++;
                        //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
 		       stpti_start_feed (Feed, Context);
@@ -383,6 +417,7 @@ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL)) Start
 	        }
 	        else if (Audio)
 	        {
+
 		        Context->numRunningFeeds++;
 			//printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
@@ -423,6 +458,7 @@ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL)) Start
             //DVB_DEBUG ("feed type = SEC\n");
 
             mutex_lock (&(DvbContext->Lock));
+
 	    Context->numRunningFeeds++;
             //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
@@ -457,8 +493,16 @@ int StopFeed (struct dvb_demux_feed* Feed)
     int i                                       = 0;
 #endif
 
-#if defined(ADB_BOX)
-	if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StopFeed_!=NULL)) StopFeed_(Feed);
+#if defined(ADB_BOX)//tutaj
+	 if (glowica == SINGLE) {
+            
+ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1)&&(StopFeed_!=NULL)) StopFeed_(Feed);
+           
+         }
+         else if (glowica == TWIN) {
+if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StopFeed_!=NULL)) StopFeed_(Feed);
+           
+         }
 #endif
 
 	switch (Feed->type)
@@ -477,11 +521,13 @@ int StopFeed (struct dvb_demux_feed* Feed)
                       AudioIoctlStop (AvContext);
                     }*/
                     stpti_stop_feed(Feed, Context);
+
                     Context->numRunningFeeds--;
                     //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);		
                     mutex_unlock (&(DvbContext->Lock));
                     if (Context->numRunningFeeds < 0)
                         printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
+
                     break;
                 }
                 if (Feed->pes_type == VideoId[i])
@@ -491,12 +537,14 @@ int StopFeed (struct dvb_demux_feed* Feed)
                     if(Feed->ts_type & TS_DECODER)
                       VideoIoctlStop(AvContext, AvContext->VideoState.video_blank);*/
                     stpti_stop_feed(Feed, Context);
+
                     Context->numRunningFeeds--;
                     //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);	
                     mutex_unlock (&(DvbContext->Lock));
                     if (Context->numRunningFeeds < 0)
                         printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
-                    break;
+
+                break;
                 }
                 //videotext & subtitles (other)
                 // FIXME: TTX1, TTX2, TTX3, PCR1 etc.
@@ -505,12 +553,14 @@ int StopFeed (struct dvb_demux_feed* Feed)
                 {
                     mutex_lock (&(DvbContext->Lock));
                     stpti_stop_feed(Feed, Context);
+
                     Context->numRunningFeeds--;
                     //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);	
                     mutex_unlock (&(DvbContext->Lock));
                     if (Context->numRunningFeeds < 0)
                         printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
-                    break;
+
+              break;
                 }
                 else if (Feed->pes_type == DMX_TS_PES_PCR)
                         break;
@@ -565,11 +615,13 @@ int StopFeed (struct dvb_demux_feed* Feed)
 #ifdef __TDT__
             mutex_lock (&(DvbContext->Lock));
             stpti_stop_feed(Feed, Context);
+
             Context->numRunningFeeds--;
             //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);	
             mutex_unlock (&(DvbContext->Lock));
             if (Context->numRunningFeeds < 0)
                 printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
+
 #endif
             break;
         default:

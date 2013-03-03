@@ -54,10 +54,20 @@ static char *TSIS_mode  = "parallel";
 module_param(TSIS_mode,charp,0);
 MODULE_PARM_DESC(TSIS_mode, "TSIS_mode type: serial, parallel (default parallel"); 
 
-    enum{
+int glowica; 
+static char *NIMS  = "single";
+module_param(NIMS,charp,0);
+MODULE_PARM_DESC(NIMS, "NIMS type: single,twin (default single");
+
+enum {
 	SERIAL,
 	PARALLEL,
 	}; 
+
+enum { 
+	SINGLE,
+	TWIN,
+	};
 #endif
 
 #ifdef UFS922
@@ -114,16 +124,14 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
 #if defined(ADB_BOX)
   if (!(((pSession->source >= DMX_SOURCE_FRONT0) &&
          (pSession->source < DMX_SOURCE_FRONT3)) ||
-         ((pSession->source == DMX_SOURCE_DVR0) && swts)))
+        ((pSession->source == DMX_SOURCE_DVR0) && swts)))
     return -1;
 #endif
 
-
-#ifdef VERY_VERBOSE
   printk("start dmx %p, sh %d, pid %d, t %d, pt %d\n", demux,
                pSession->session, dvbdmxfeed->pid, dvbdmxfeed->type,
                dvbdmxfeed->pes_type );
-#endif
+
   switch ( dvbdmxfeed->type )
   {
   case DMX_TYPE_TS:
@@ -162,12 +170,10 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
       return -EINVAL;
     }
   }
-#ifdef VERY_VERBOSE
   else
   {
     dprintk ( "type = %d \n",dvbdmxfeed->type );
   }
-#endif
 
   if (dvbdmxfeed->type == DMX_TYPE_SEC)
   	my_pes_type = 99;
@@ -197,16 +203,13 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
 	       int err;
 	       if ((err = pti_hal_descrambler_link(pSession->session, pSession->descramblers[pSession->descramblerindex[vLoop]], pSession->slots[vLoop])) != 0)
 	         printk("Error linking slot %d to descrambler %d, err = %d\n", pSession->slots[vLoop], pSession->descramblers[pSession->descramblerindex[vLoop]], err);
-#ifdef VERY_VERBOSE
 	       else
              printk("linking slot %d to descrambler %d, session = %d type = %d\n", pSession->slots[vLoop], pSession->descramblers[pSession->descramblerindex[vLoop]], pSession->session, dvbdmxfeed->pes_type);
-#endif
 	     }
       }
-#ifdef VERY_VERBOSE
+
       printk ( "pid %d already collecting. references %d \n",
 	       dvbdmxfeed->pid , pSession->references[vLoop]);
-#endif
       return 0;
     }
   }
@@ -224,9 +227,9 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
 							    pes_type, demux , NULL, NULL);
 
   pSession->descramblerindex[pSession->num_pids]= pSession->descramblerForPid[dvbdmxfeed->pid];
-#ifdef VERY_VERBOSE
+
   printk ( "SlotHandle = %d\n", pSession->slots[pSession->num_pids] );
-#endif
+
   if(pti_hal_slot_link_buffer ( pSession->session,
                              pSession->slots[pSession->num_pids],
 			     bufType) != 0)
@@ -252,10 +255,8 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
 	      printk("Error linking slot %d to descrambler %d, err = %d\n",
                 pSession->slots[pSession->num_pids],
                 pSession->descramblers[pSession->descramblerindex[pSession->num_pids]], err);
-#ifdef VERY_VERBOSE
      else
           printk("linking slot %d to descrambler %d, session = %d type=%d\n", pSession->slots[pSession->num_pids], pSession->descramblers[pSession->descramblerindex[pSession->num_pids]], pSession->session, dvbdmxfeed->pes_type);
-#endif
     }
   }
 
@@ -270,7 +271,7 @@ int stpti_start_feed ( struct dvb_demux_feed *dvbdmxfeed,
   dprintk ( "%s: pid = %d, num_pids = %d \n", __FUNCTION__, dvbdmxfeed->pid,
 	   pSession->num_pids );
 
-#ifdef VERY_VERBOSE
+#if 0
   printk ( "#  pid t pt ref\n");
   for ( vLoop = 0; vLoop < ( pSession->num_pids ); vLoop++ )
   {
@@ -313,9 +314,7 @@ int stpti_stop_feed ( struct dvb_demux_feed *dvbdmxfeed,
     return -1;
 #endif
 
-#ifdef VERY_VERBOSE
   printk ( "stop sh %d, pid %d, pt %d\n", pSession->session, dvbdmxfeed->pid, dvbdmxfeed->pes_type);
-#endif
   //printk ( "%s(): demux = %p, context = %p, sesison = %p, pid = %d, type = %d, pes_type = %d>", __FUNCTION__, dvbdmxfeed->demux, pContext, pSession, dvbdmxfeed->pid, dvbdmxfeed->type, dvbdmxfeed->pes_type );
 
   if (dvbdmxfeed->type == DMX_TYPE_SEC)
@@ -331,9 +330,9 @@ int stpti_stop_feed ( struct dvb_demux_feed *dvbdmxfeed,
     if (( pSession->pidtable[vLoop] == dvbdmxfeed->pid ) )
     {
       pSession->references[vLoop]--;
-#ifdef VERY_VERBOSE
+
       printk("Reference = %d\n", pSession->references[vLoop]);
-#endif
+
       haveFound = 1;
 
       if (pSession->references[vLoop] == 0)
@@ -364,7 +363,7 @@ int stpti_stop_feed ( struct dvb_demux_feed *dvbdmxfeed,
 
 	pSession->num_pids--;
 
-#ifdef VERY_VERBOSE
+#if 0
 	if(dvbdmxfeed->pes_type == DMX_TS_PES_VIDEO)
 	{
           /* reset the DMA threshold to 1 to allow low rate TS
@@ -406,7 +405,16 @@ static int convert_source ( const dmx_source_t source)
 
   case DMX_SOURCE_FRONT1:
 #if defined(ADB_BOX)
-    tag = TSIN0;
+         if (glowica == SINGLE) {
+            
+ tag = SWTS0;
+           
+         }
+         else if (glowica == TWIN) {
+ tag = TSIN0;
+           
+         }
+
 #elif defined(UFS913)
     tag = 3;//TSIN2; //TSIN3
 #else
@@ -429,7 +437,16 @@ static int convert_source ( const dmx_source_t source)
 
 #if defined(ADB_BOX)
   case DMX_SOURCE_FRONT2:
-	tag = SWTS0;	//dvbt
+	 if (glowica == SINGLE) {
+            
+ tag = TSIN0;
+           
+         }
+         else if (glowica == TWIN) {
+ tag = SWTS0;
+           
+         }
+
     break;
   case DMX_SOURCE_DVR0:
     tag = TSIN1;	//fake tsin dla DVR, nie moze byc swts bo jest uzywane w dvbt
@@ -472,6 +489,17 @@ void ptiInit ( struct DeviceContext_s *pContext )
 		{
 		printk("TsinMode = PARALLEL\n");
 		TsinMode = PARALLEL;
+		} 
+	
+	if((TSIS_mode[0] == 0) || (strcmp("single", NIMS) == 0))
+		{
+		printk("NIMS = SINGLE\n");
+		glowica = SINGLE;
+		}
+		else if(strcmp("twin", NIMS) == 0)
+		{
+		printk("NIMS = TWIN\n");
+		glowica = TWIN;
 		} 
 #endif
 
@@ -577,9 +605,9 @@ int SetSource (struct dmx_demux* demux, const dmx_source_t *src)
            __func__, pContext, pContext->pPtiSession, src);
     return -EINVAL;
   }
-#ifdef VERY_VERBOSE
+
   printk("SetSource(%p, %d)\n", pDvbDemux, *src);
-#endif
+
   pContext->pPtiSession->source = *src;
 
   if (((*src >= DMX_SOURCE_FRONT0) && (*src <= DMX_SOURCE_FRONT3)) || (*src == DMX_SOURCE_DVR0))

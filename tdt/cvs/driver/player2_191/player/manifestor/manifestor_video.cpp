@@ -1006,7 +1006,7 @@ ManifestorStatus_t Manifestor_Video_c::SetDisplayWindows (struct VideoDisplayPar
 
     //MANIFESTOR_DEBUG("\n");
 
-    // Before checking if the display parameters have changed, we copy over 
+    // Before checking if the display parameters have changed, we copy over
     // the content frame rate to avoid excess message generation.
     if (VideoParameters->FrameRate != StreamDisplayParameters.FrameRate)
         DisplayEventRequested          |= EventSourceFrameRateChangeManifest;
@@ -1097,16 +1097,16 @@ ManifestorStatus_t Manifestor_Video_c::SetDisplayWindows (struct VideoDisplayPar
 
     if (!Stepping)
     {
-        // Prints have been changed to reduce time taken to do them and lock interrupts for shorter periods as 
+        // Prints have been changed to reduce time taken to do them and lock interrupts for shorter periods as
         // on occasion this has effected our AV sync calculations on startup.
-      
+
         report(severity_info,"Incoming Source %dx%d @ %d,%d\n",
-            VideoParameters->Width, VideoParameters->Height,
-            SourceX, SourceY);
+             VideoParameters->Width, VideoParameters->Height,
+             SourceX, SourceY);
 
         report(severity_info,"Display Size %dx%d @ %d,%d\n",
-            DestWidth, DestHeight,
-            DestX, DestY);
+             DestWidth, DestHeight,
+             DestX, DestY);
 
         report(severity_info,"%s Content, FrameRate %d.%02d, PixelAspectRatio %d.%02d\n",
             VideoParameters->Progressive ? "Progressive" : "Interlaced",
@@ -1166,88 +1166,84 @@ ManifestorStatus_t Manifestor_Video_c::SetDisplayWindows (struct VideoDisplayPar
                 if (PictureAspectRatio > WindowAspectRatio)
                 {
                     // Picture is wider than display surface so must shrink height
-                    Rational_t   NewHeight       = (DestHeight * WindowAspectRatio) / PictureAspectRatio;
 #ifdef __TDT__
-                    //player crash if incoming source width/height not standard (Kernel panic - not syncing: Need true 64-bit/64-bit division)
-//                    if( (VideoParameters->Width == 720 && VideoParameters->Height == 576) || (VideoParameters->Width == 1280 && (VideoParameters->Height == 720 || VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1440 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1920 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1366 && VideoParameters->Height == 768) )
-                    if (VideoParameters->Width != 704)
-                    {
-                        DestHeight               = NewHeight.IntegerPart();
-                    }
-                    else
-                    {
-                        DestHeight = (DestHeight * 4 / 3) * 9 / 16;
-                    }
+                    Rational_t pRatioR = PictureAspectRatio * 1000;
+                    int pRatio = pRatioR.IntegerPart();
+
+                    Rational_t wRatioR = WindowAspectRatio * 1000;
+                    int wRatio = wRatioR.IntegerPart();
+
+                    DestHeight = (DestHeight * wRatio) / pRatio;
 #else
+                    Rational_t   NewHeight       = (DestHeight * WindowAspectRatio) / PictureAspectRatio;
                     DestHeight                   = NewHeight.IntegerPart();
 #endif
                     DestY                        = DestY + ((SurfaceWindow.Height - DestHeight) >> 1);
+
+                    MANIFESTOR_ERROR("check1: DestHeight=%d DestY=%d\n", DestHeight, DestY);
                 }
                 else
                 {
                     // Picture is taller than display surface so must shrink width
-                    Rational_t   NewWidth        = (DestWidth * PictureAspectRatio) / WindowAspectRatio;
 #ifdef __TDT__
-                    //player crash if incoming source width/height not standard (Kernel panic - not syncing: Need true 64-bit/64-bit division)
-//                    if( (VideoParameters->Width == 720 && VideoParameters->Height == 576) || (VideoParameters->Width == 1280 && (VideoParameters->Height == 720 || VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1440 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1920 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1366 && VideoParameters->Height == 768) )
-                    if (VideoParameters->Width != 704)
-                    {
-                        DestWidth                = NewWidth.IntegerPart();
-                    }
-                    else
-                    {
-                        DestWidth = (DestWidth * 4 / 3) * 9 / 16;
-                    }
+                    Rational_t pRatioR = PictureAspectRatio * 1000;
+                    int pRatio = pRatioR.IntegerPart();
+
+                    Rational_t wRatioR = WindowAspectRatio * 1000;
+                    int wRatio = wRatioR.IntegerPart();
+
+                    DestWidth = (DestWidth * pRatio) / wRatio;
 #else
+										Rational_t   NewWidth        = (DestWidth * PictureAspectRatio) / WindowAspectRatio;
                     DestWidth                    = NewWidth.IntegerPart();
 #endif
                     DestX                        = DestX + ((SurfaceWindow.Width - DestWidth) >> 1);
+
+                    MANIFESTOR_ERROR("check2: DestWidth=%d DestX=%d\n", DestWidth, DestX);
                 }
             }
             else
             {
-                if (PictureAspectRatio > WindowAspectRatio)
-                {
-                    // Picture is wider than display surface so must chop off edges
-                    int          OldWidth        = SourceWidth;
-                    Rational_t   NewWidth        = (SourceWidth * WindowAspectRatio) / PictureAspectRatio;
+               if (PictureAspectRatio > WindowAspectRatio)
+               {
+                   // Picture is wider than display surface so must chop off edges
+                   int          OldWidth        = SourceWidth;
 #ifdef __TDT__
-                    //player crash if incoming source width/height not standard (Kernel panic - not syncing: Need true 64-bit/64-bit division)
-//                    if( (VideoParameters->Width == 720 && VideoParameters->Height == 576) || (VideoParameters->Width == 1280 && (VideoParameters->Height == 720 || VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1440 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1920 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1366 && VideoParameters->Height == 768) )
-                    if (VideoParameters->Width != 704)
-                    {
-                        SourceWidth              = NewWidth.IntegerPart();
-                    }
-                    else
-                    {
-                        SourceWidth -= ((SourceWidth * 3 / 4) * 16 / 9) - SourceWidth;
-                    }
+                   Rational_t pRatioR = PictureAspectRatio * 1000;
+                   int pRatio = pRatioR.IntegerPart();
+
+                   Rational_t wRatioR = WindowAspectRatio * 1000;
+                   int wRatio = wRatioR.IntegerPart();
+
+                   SourceWidth = (SourceWidth * wRatio) / pRatio;
 #else
-                    SourceWidth                  = NewWidth.IntegerPart();
+                   Rational_t   NewWidth        = (SourceWidth * WindowAspectRatio) / PictureAspectRatio;
+                   SourceWidth                  = NewWidth.IntegerPart();
 #endif
-                    SourceX                      = SourceX + ((OldWidth - SourceWidth) >> 1);
-                }
-                else
-                {
-                    // Picture is taller than display surface so must chop off top and bottom
-                    int          OldHeight       = SourceHeight;
-                    Rational_t   NewHeight       = (SourceHeight * PictureAspectRatio) / WindowAspectRatio;
+                   SourceX                      = SourceX + ((OldWidth - SourceWidth) >> 1);
+
+                   MANIFESTOR_ERROR("check3: SourceWidth=%d SourceX=%d\n", SourceWidth, SourceX);
+               }
+               else
+               {
+                   // Picture is taller than display surface so must chop off top and bottom
+                   int          OldHeight       = SourceHeight;
 #ifdef __TDT__
-                    //player crash if incoming source width/height not standard (Kernel panic - not syncing: Need true 64-bit/64-bit division)
-//                    if( (VideoParameters->Width == 720 && VideoParameters->Height == 576) || (VideoParameters->Width == 1280 && (VideoParameters->Height == 720 || VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1440 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1920 && (VideoParameters->Height == 1080 || VideoParameters->Height == 1088)) || (VideoParameters->Width == 1366 && VideoParameters->Height == 768) )
-                    if (VideoParameters->Width != 704)
-                    {
-                        SourceHeight             = NewHeight.IntegerPart();
-                    }
-                    else
-                    {
-                        SourceHeight -= ((SourceHeight * 3 / 4) * 16 / 9) - SourceHeight;
-                    }
+                   Rational_t pRatioR = PictureAspectRatio * 1000;
+                   int pRatio = pRatioR.IntegerPart();
+
+                   Rational_t wRatioR = WindowAspectRatio * 1000;
+                   int wRatio = wRatioR.IntegerPart();
+
+                   SourceHeight = (SourceHeight * pRatio) / wRatio;
 #else
-                    SourceHeight                 = NewHeight.IntegerPart();
+                   Rational_t   NewHeight       = (SourceHeight * PictureAspectRatio) / WindowAspectRatio;
+                   SourceHeight                 = NewHeight.IntegerPart();
 #endif
-                    SourceY                      = SourceY + ((OldHeight - SourceHeight) >> 1);
-                }
+                   SourceY                      = SourceY + ((OldHeight - SourceHeight) >> 1);
+
+                   MANIFESTOR_ERROR("check4: SourceHeight=%d SourceY=%d\n", SourceHeight, SourceY);
+               }
             }
         }
     }
@@ -1301,9 +1297,9 @@ ManifestorStatus_t Manifestor_Video_c::SetDisplayWindows (struct VideoDisplayPar
     // Nick added signalling of changes in the output window
     //
 
-    if ((OutputWindow.X      != (unsigned int)DestX) || 
-        (OutputWindow.Y      != (unsigned int)DestY) || 
-        (OutputWindow.Width  != (unsigned int)DestWidth) || 
+    if ((OutputWindow.X      != (unsigned int)DestX) ||
+        (OutputWindow.Y      != (unsigned int)DestY) ||
+        (OutputWindow.Width  != (unsigned int)DestWidth) ||
         (OutputWindow.Height != (unsigned int)DestHeight))
     {
         DisplayEventRequested              |= EventOutputSizeChangeManifest;
@@ -1323,17 +1319,20 @@ ManifestorStatus_t Manifestor_Video_c::SetDisplayWindows (struct VideoDisplayPar
 
     // Decide whether the display requires scaling/cropping or not
     DecimateIfAvailable                 = false;
-    
+
+#if !defined(ADB_BOX) //Lepszy obraz na SD
+
     // Hm why is here not the decimate value used from havana_stream ?
     // Lets set it depending on the value from havana_stream
-    //if(OutputWindow.Height > 576 || OutputWindow.Height < 425)
-    //{
-    int decimate = Player->PolicyValue (Playback, Stream, PolicyDecimateDecoderOutput);
-    if (decimate == PolicyValueDecimateDecoderOutputDisabled)
-        DecimateIfAvailable = false;
-    else
-        DecimateIfAvailable = true;
-    //}
+	if(OutputWindow.Height > 576 || OutputWindow.Height < 425)
+    {
+        int decimate = Player->PolicyValue (Playback, Stream, PolicyDecimateDecoderOutput);
+        if (decimate == PolicyValueDecimateDecoderOutputDisabled)
+            DecimateIfAvailable = false;
+        else
+            DecimateIfAvailable = true;
+    }
+#endif
 
 #if defined (CROP_INPUT_WHEN_DECIMATION_NEEDED_BUT_NOT_AVAILABLE)
     if ((Player->PolicyValue (Playback, Stream, PolicyDecimateDecoderOutput) != PolicyValueDecimateDecoderOutputDisabled) &&
@@ -1615,7 +1614,7 @@ ManifestorStatus_t   Manifestor_Video_c::FillOutBufferStructure( BufferStructure
 
                RequestedStructure->Size                += RequestedStructure->DecimatedSize;
 
-            }       
+            }
             break;
 
         case FormatVideo420_Planar:
@@ -1701,7 +1700,7 @@ ManifestorStatus_t   Manifestor_Video_c::FillOutBufferStructure( BufferStructure
             RequestedStructure->Strides[0][0]           = RequestedStructure->Dimension[0] * 2;
 
             RequestedStructure->Size                    = (RequestedStructure->Dimension[0] * RequestedStructure->Dimension[1] * 2);
-            break;       
+            break;
 
         case FormatVideo422_YUYV:
 
@@ -1714,7 +1713,7 @@ ManifestorStatus_t   Manifestor_Video_c::FillOutBufferStructure( BufferStructure
             RequestedStructure->Strides[0][0]           = RequestedStructure->Dimension[0] * 2;
 
             RequestedStructure->Size                    = (RequestedStructure->Dimension[0] * RequestedStructure->Dimension[1] * 2);
-            break;       
+            break;
 
         default: MANIFESTOR_ERROR("Unsupported buffer format (%d)\n", RequestedStructure->Format );
     }
