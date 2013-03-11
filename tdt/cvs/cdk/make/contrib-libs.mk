@@ -1354,6 +1354,7 @@ $(DEPDIR)/ffmpeg.do_compile: $(DEPDIR)/ffmpeg.do_prepare
 		--enable-pthreads \
 		--enable-bzlib \
 		--enable-librtmp \
+		--enable-avresample \
 		--pkg-config="pkg-config" \
 		--cross-prefix=$(target)- \
 		--target-os=linux \
