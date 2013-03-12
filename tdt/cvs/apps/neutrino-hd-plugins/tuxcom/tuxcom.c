@@ -691,7 +691,7 @@ int main()
 
 	/* open Remote Control */
 #if HAVE_COOL_HARDWARE || HAVE_TRIPLEDRAGON || HAVE_SPARK_HARDWARE
-	rc = open("/dev/input/nevis_ir", O_RDONLY);
+	rc = open("/dev/input/event1", O_RDONLY);
 #else
 #error your hardware is not yet implemented.
 #endif
