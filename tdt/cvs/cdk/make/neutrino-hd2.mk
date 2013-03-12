@@ -61,7 +61,7 @@ $(DEPDIR)/openthreads: openthreads.do_prepare openthreads.do_compile
 #		done; \
 #	fi
  
-$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 graphlcd libdvbsipp libxml2 $(MEDIAFWNHD2_DEP)
+$(appsdir)/neutrino-hd2/config.status: bootstrap curl libogg libboost libvorbis libvorbisidec libungif freetype libpng libid3tag libflac openssl libmad libgif jpeg sdparm nfs-utils openthreads alsa-lib alsa-lib-dev alsa-utils alsaplayer alsaplayer-dev libusb2 neutrino-hd-plugins graphlcd libdvbsipp libxml2 $(MEDIAFWNHD2_DEP)
 	if [ ! -d $(appsdir)/neutrino-hd2-exp ]; then \
 		svn co http://neutrinohd2.googlecode.com/svn/branches/nhd2-exp $(appsdir)/neutrino-hd2-exp; \
 		cd $(appsdir)/neutrino-hd2-exp; \

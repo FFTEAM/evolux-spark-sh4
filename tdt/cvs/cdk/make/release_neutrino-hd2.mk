@@ -495,6 +495,8 @@ endif
 	rm $(prefix)/release_neutrino-hd2/var/plugins/blockad*
 #	rm $(prefix)/release_neutrino-hd2/usr/lib/tuxbox/plugins/blockad*
 	rm $(prefix)/release_neutrino-hd2/usr/local/share/config/blockad*
+	cp -RP $(appsdir)/neutrino-hd-plugins/tuxcom/tuxcom $(prefix)/release_neutrino-hd2/var/plugins/tuxcom.so
+	cp -RP $(appsdir)/neutrino-hd-plugins/tuxcom/tuxcom.cfg $(prefix)/release_neutrino-hd2/var/plugins/
 	cp -f $(buildprefix)/root/usr/local/share/config/zapit/supplemental_pids.conf $(prefix)/release_neutrino-hd2/usr/local/share/config/zapit/
 	touch $(prefix)/release_neutrino-hd2/etc/.EVOfirstboot
 	cp -f $(buildprefix)/root/etc/modules.available $(prefix)/release_neutrino-hd2/etc/
