@@ -89,19 +89,10 @@
 
 --- neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:20:39.375728471 +0100
 +++ neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:30:45.590734523 +0100
-@@ -569,6 +569,7 @@
- 	"messagebox.no",
- 	"messagebox.ok",
- 	"messagebox.yes",
-+	"messagebox.accept",
- 	"miscsettings.bootinfo",
- 	"miscsettings.bootmenu",
- 	"miscsettings.channellist",
-@@ -1580,6 +1581,87 @@
- 	"keybinding.key_timelist",
- 	"keybinding.key_net",
- 	"keybinding.key_video_player",
-+
+@@ -323,6 +323,86 @@
+ 	"eventlistbar.channelswitch",
+ 	"eventlistbar.eventsort",
+ 	"eventlistbar.recordevent",
 +	"mainmenu.extramenu",
 +	"extramenu.tunerreset",
 +	"extramenu.tunerreset.select",
@@ -182,13 +173,21 @@
 +	"extramenu.kerneloptions.reset",
 +	"onoff.on",
 +	"onoff.off",
- 	
- 	"audiomenu.volumebar_audiosteps",
- };
+ 	"favorites.addchannel",
+ 	"favorites.bouquetname",
+ 	"favorites.bqcreated",
+@@ -579,6 +659,7 @@
+ 	"messagebox.no",
+ 	"messagebox.ok",
+ 	"messagebox.yes",
++	"messagebox.accept",
+ 	"miscsettings.bootinfo",
+ 	"miscsettings.bootmenu",
+ 	"miscsettings.channellist",
 
 --- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
 +++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
-@@ -569,6 +569,7 @@
+@@ -579,6 +579,7 @@
  	LOCALE_MESSAGEBOX_NO,
  	LOCALE_MESSAGEBOX_OK,
  	LOCALE_MESSAGEBOX_YES,
@@ -196,10 +195,10 @@
  	LOCALE_MISCSETTINGS_BOOTINFO,
  	LOCALE_MISCSETTINGS_BOOTMENU,
  	LOCALE_MISCSETTINGS_CHANNELLIST,
-@@ -1580,6 +1581,86 @@
- 	LOCALE_KEYBINDINGMENU_TIMELIST,
- 	LOCALE_KEYBINDINGMENU_NET,
- 	LOCALE_KEYBINDINGMENU_VIDEO_PLAYER,
+@@ -1424,6 +1425,86 @@
+ 	LOCALE_EXTRA_AUTO_DELETE,
+ 	LOCALE_EXTRA_AUTO_TO_RECORD,
+ 	LOCALE_EXTRA_RECORD_TIME,
 +	LOCALE_MAINMENU_EXTRAMENU ,
 +	LOCALE_EXTRAMENU_TUNERRESET ,
 +	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
@@ -280,9 +279,9 @@
 +	LOCALE_EXTRAMENU_KERNELOPTIONS_RESET,
 +	LOCALE_ONOFF_ON,
 +	LOCALE_ONOFF_OFF,
- 	
- 	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
- } neutrino_locale_t;
+ 	LOCALE_FEC_S2_QPSK_1_2,
+ 	LOCALE_FEC_S2_QPSK_2_3,
+ 	LOCALE_FEC_S2_QPSK_3_4,
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
