@@ -89,10 +89,11 @@
 
 --- neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:20:39.375728471 +0100
 +++ neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:30:45.590734523 +0100
-@@ -323,6 +323,86 @@
- 	"eventlistbar.channelswitch",
- 	"eventlistbar.eventsort",
- 	"eventlistbar.recordevent",
+@@ -1598,5 +1598,87 @@
+ 	"audiomenu.volumebar_audiosteps",
+ 	
+ 	"webtv.head",
++
 +	"mainmenu.extramenu",
 +	"extramenu.tunerreset",
 +	"extramenu.tunerreset.select",
@@ -173,32 +174,17 @@
 +	"extramenu.kerneloptions.reset",
 +	"onoff.on",
 +	"onoff.off",
- 	"favorites.addchannel",
- 	"favorites.bouquetname",
- 	"favorites.bqcreated",
-@@ -579,6 +659,7 @@
- 	"messagebox.no",
- 	"messagebox.ok",
- 	"messagebox.yes",
 +	"messagebox.accept",
- 	"miscsettings.bootinfo",
- 	"miscsettings.bootmenu",
- 	"miscsettings.channellist",
+ };
+ #endif
 
 --- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
 +++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
-@@ -579,6 +579,7 @@
- 	LOCALE_MESSAGEBOX_NO,
- 	LOCALE_MESSAGEBOX_OK,
- 	LOCALE_MESSAGEBOX_YES,
-+	LOCALE_MESSAGEBOX_ACCEPT,
- 	LOCALE_MISCSETTINGS_BOOTINFO,
- 	LOCALE_MISCSETTINGS_BOOTMENU,
- 	LOCALE_MISCSETTINGS_CHANNELLIST,
-@@ -1424,6 +1425,86 @@
- 	LOCALE_EXTRA_AUTO_DELETE,
- 	LOCALE_EXTRA_AUTO_TO_RECORD,
- 	LOCALE_EXTRA_RECORD_TIME,
+@@ -1598,6 +1598,88 @@
+ 	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
+ 	
+ 	LOCALE_WEBTV_HEAD,
++
 +	LOCALE_MAINMENU_EXTRAMENU ,
 +	LOCALE_EXTRAMENU_TUNERRESET ,
 +	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
@@ -279,13 +265,23 @@
 +	LOCALE_EXTRAMENU_KERNELOPTIONS_RESET,
 +	LOCALE_ONOFF_ON,
 +	LOCALE_ONOFF_OFF,
- 	LOCALE_FEC_S2_QPSK_1_2,
- 	LOCALE_FEC_S2_QPSK_2_3,
- 	LOCALE_FEC_S2_QPSK_3_4,
++	LOCALE_MESSAGEBOX_ACCEPT,
+ } neutrino_locale_t;
+ 
+ #endif
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
-@@ -1575,3 +1575,105 @@
+@@ -843,7 +843,7 @@
+ moviebrowser.foot_filter Filter:
+ moviebrowser.foot_play Start movie
+ moviebrowser.foot_sort Sort:
+-moviebrowser.head Moviebrowser
++moviebrowser.head Media Archiv
+ moviebrowser.head_filter Filter movies by category:
+ moviebrowser.head_playlist Last played:
+ moviebrowser.head_recordlist Last recorded:
+@@ -1585,3 +1585,105 @@
  audiomenu.volumebar_audiosteps Volume Step Size
  
  webtv.head WebTV
@@ -293,117 +289,109 @@
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
 +extramenu.tunerreset.select Tuner Reset
-+extramenu.tunerreset.on Ein
-+extramenu.tunerreset.off Aus
-+extramenu.tunerreset.restart Tuner neu starten
++extramenu.tunerreset.on On
++extramenu.tunerreset.off Off
++extramenu.tunerreset.restart Tuner RESTART
 +extramenu.correctvolume Volume Menue Ext.
 +extramenu.correctvolume.select Correct Volume
-+extramenu.correctvolume.on Ein
-+extramenu.correctvolume.off Aus
++extramenu.correctvolume.on On
++extramenu.correctvolume.off Off
 +extramenu.amount Amount Menue
 +extramenu.amount.select Amount
-+extramenu.amount.on Ein
-+extramenu.amount.off Aus
++extramenu.amount.on On
++extramenu.amount.off Off
 +extramenu.displaytime DisplayTime Menue
 +extramenu.displaytime.select DisplayTime
-+extramenu.displaytime.on Ein
-+extramenu.displaytime.off Aus
++extramenu.displaytime.on On
++extramenu.displaytime.off Off
 +extramenu.wwwdate wwwDate Menue
 +extramenu.wwwdate.select wwwDate
-+extramenu.wwwdate.on Ein
-+extramenu.wwwdate.off Aus
++extramenu.wwwdate.on On
++extramenu.wwwdate.off Off
 +extramenu.checkfs CheckFS Menue
 +extramenu.checkfs.select CheckFS
-+extramenu.checkfs.on Ein
-+extramenu.checkfs.off Aus
++extramenu.checkfs.on On
++extramenu.checkfs.off Off
 +extramenu.emu Cam Menue
-+extramenu.emu.none Nicht aktiv
++extramenu.emu.none Not activ
 +extramenu.emu.mgcamd MGCamd
 +extramenu.emu.incubus IncubusCamd
 +extramenu.emu.camd3 Camd3
 +extramenu.emu.mbox Mbox
 +extramenu.emu.oscam Oscam
 +extramenu.emu.spcs Spcs
-+extramenu.emu.select Cam Auswahl
-+extramenu.emu.restart Cam neu starten
-+extramenu.emu.disable Cam deaktivieren
++extramenu.emu.select Cam Select
++extramenu.emu.restart Cam Retart
++extramenu.emu.disable Cam deactivating
 +extramenu.swap Swap Menue
 +extramenu.swap.swapram SWAPRAM
 +extramenu.swap.swappart SWAPPART
 +extramenu.swap.swapfile SWAPFILE
-+extramenu.swap.select Swap Auswahl
++extramenu.swap.select Swap Select
 +extramenu.swap.onoff SWAP
-+extramenu.boot.head Boot-Einstellungen
-+extramenu.boot.select Startsystem bei Neustart
-+extramenu.boot.unchanged Unverändert
-+extramenu.boot.bootargs.head Änderung der Boot-Parameter
-+extramenu.boot.bootargs.text Bitte den Receiver nicht ausschalten!
++extramenu.boot.head Boot-Settings
++extramenu.boot.select Startsystem after Reboot
++extramenu.boot.unchanged Unchanged
++extramenu.boot.bootargs.head Change Boot-Parameter
++extramenu.boot.bootargs.text do not turn off your box!
 +extramenu.fsck FSCK Menue
 +extramenu.fsck.select FSCK
-+extramenu.fsck.on Ein
-+extramenu.fsck.off Aus
++extramenu.fsck.on On
++extramenu.fsck.off Off
 +extramenu.dvb DVB-T/C Menue
 +extramenu.dvb.select DVB
 +extramenu.dvb.on DVB-C
 +extramenu.dvb.off DVB-T
 +extramenu.nfsserver NFSSERVER Menue
 +extramenu.nfsserver.select NFSSERVER
-+extramenu.nfsserver.on Ein
-+extramenu.nfsserver.off Aus
++extramenu.nfsserver.on On
++extramenu.nfsserver.off Off
 +extramenu.stmfb STMFB Menue
 +extramenu.stmfb.select STMFB 15m
-+extramenu.stmfb.on Ein
-+extramenu.stmfb.off Aus
++extramenu.stmfb.on On
++extramenu.stmfb.off Off
 +extramenu.fritzcall Fritzcall Menue
 +extramenu.fritzcall.select Fritzcallmonitor
-+extramenu.fritzcall.on Ein
-+extramenu.fritzcall.off Aus
++extramenu.fritzcall.on On
++extramenu.fritzcall.off Off
 +extramenu.evoluxupdate Evolux OnlineUpdate
 +extramenu.evoluxupdate.select OnlineUpdate
 +extramenu.evoluxupdate.on On
 +extramenu.evoluxupdate.off Off
-+extramenu.evoluxupdate.update OnlineUpdate ausführen
-+extramenu.kerneloptions Kernel-Optionen
-+extramenu.kerneloptions.apply Einstellungen anwenden
++extramenu.evoluxupdate.update do OnlineUpdate
++extramenu.kerneloptions Kernel-Options
++extramenu.kerneloptions.apply apply Settings
 +extramenu.kerneloptions.lsmod Status
 +extramenu.kerneloptions.modules Kernel-Module
-+extramenu.kerneloptions.reset Einstellungen zurücksetzen
-+extramenu.glcd.volume Lautstärke
-+extramenu.glcd.color.black Schwarz
-+extramenu.glcd.color.white Weiss
-+extramenu.glcd.color.red Rot
-+extramenu.glcd.color.green Grün
-+extramenu.glcd.color.blue Blau
-+extramenu.glcd.color.magenta Magenta
-+extramenu.glcd.color.cyan Blaugrün
-+extramenu.glcd.color.yellow Gelb
++extramenu.kerneloptions.reset Reset Settings
++extramenu.glcd.volume Volume
++extramenu.glcd.color.black black
++extramenu.glcd.color.white white
++extramenu.glcd.color.red red
++extramenu.glcd.color.green green
++extramenu.glcd.color.blue blue
++extramenu.glcd.color.magenta magenta
++extramenu.glcd.color.cyan bluegreen
++extramenu.glcd.color.yellow yellow
 +extramenu.glcd GraphLCD
-+extramenu.glcd.select.fg Vordergrund-Farbe
-+extramenu.glcd.select.bg Hintergrund-Farbe
-+extramenu.glcd.select.bar Fortschrittsbalken-Farbe
-+extramenu.glcd.size_channel Sender-Größe
-+extramenu.glcd.size_epg EPG-Größe
-+extramenu.glcd.size_bar Fortschrittsbalken-Größe
-+extramenu.glcd.size_time Uhrzeit-Größe
-+extramenu.glcd.restart Neu erkennen
-+extramenu.glcd.mirror_osd Menü auf GraphLCD anzeigen
-+extramenu.glcd.time_in_standby Zeitanzeige in Standby
-+onoff.on Ein
-+onoff.off Aus
-+
- 
++extramenu.glcd.select.fg foregroundcolour
++extramenu.glcd.select.bg backgroundcolour
++extramenu.glcd.select.bar bar colour
++extramenu.glcd.size_channel channel size
++extramenu.glcd.size_epg EPG-size
++extramenu.glcd.size_bar bar size
++extramenu.glcd.size_time clock size
++extramenu.glcd.restart Neu rescan
++extramenu.glcd.mirror_osd show Menue on GraphLCD
++extramenu.glcd.time_in_standby show time on Standby
++onoff.on On
++onoff.off Off
++messagebox.accept save changes?
+
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -733,6 +733,7 @@
- messagebox.no Nein
- messagebox.ok OK
- messagebox.yes Ja
-+messagebox.accept Wollen Sie die Änderungen beibehalten?
- miscsettings.bootinfo Infos beim Booten anzeigen
- miscsettings.bootmenu Bootmenü anzeigen
- miscsettings.channellist Kanalliste
-@@ -838,7 +839,7 @@
+@@ -844,7 +844,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -412,7 +400,19 @@
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -1577,3 +1578,104 @@
+@@ -1576,9 +1576,9 @@
+ keybinding.key_recordsbrowser Aufnahmen Browser
+ keybinding.key_audioplayer Audioplayer
+ keybinding.key_pictureviewer PictureViewer
+-keybinding.key_timerlist Timerlist
++keybinding.key_timerlist Timerliste
+ keybinding.key_inetradio Internet Radio
+-keybinding.key_moviebrowser Movies Browser
++keybinding.key_moviebrowser Movie Browser
+ keybinding.key_filebrowser Datei Browser
+ keybinding.key_webtv WebTV
+ keybinding.savekeymap Keymap speichern
+@@ -1587,3 +1587,105 @@
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
  webtv.head WebTV
@@ -517,7 +517,7 @@
 +extramenu.glcd.time_in_standby Zeitanzeige in Standby
 +onoff.on Ein
 +onoff.off Aus
- 
++messagebox.accept Wollen Sie die Änderungen beibehalten? 
  
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
@@ -3433,25 +3433,6 @@
  			saveKeys(sname);
  			delete sms;
  		}
-@@ -4992,7 +4994,7 @@
- 	bool res;
- 	CConfigFile tconfig(',', true);
- 	
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadKeys: %s\n", fname);
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::loadKeys: %s\n", fname);
- 
- 	res = tconfig.loadConfig(fname);
- 	if(!res) 
-@@ -5041,7 +5043,7 @@
- {
- 	CConfigFile tconfig(',', true);
- 	
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveKeys: %s\n", fname);
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::saveKeys: %s\n", fname);
- 	
- 	//rc-key configuration
- 	tconfig.setInt32( "key_tvradio_mode", g_settings.key_tvradio_mode );
-
 
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
