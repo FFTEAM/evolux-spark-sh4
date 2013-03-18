@@ -42,7 +42,6 @@ COMMONPATCHES_24 = \
 		linux-sh4-time_stm24$(PATCH_STR).patch \
 		linux-sh4-init_mm_stm24$(PATCH_STR).patch \
 		linux-sh4-copro_stm24$(PATCH_STR).patch \
-		linux-sh4-strcpy_stm24$(PATCH_STR).patch \
 		linux-squashfs-lzma_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
 		bpa2_procfs_stm24$(PATCH_STR).patch \
@@ -50,6 +49,7 @@ COMMONPATCHES_24 = \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
 		linux-sh4-cifs-unaligned-mem-access-kernel_stm24.patch \
+		$(if $(P0211),linux-sh4-strcpy_stm24$(PATCH_STR).patch) \
 		$(if $(P0209)$(P0210)$(P0211),linux-sh4-mmap_stm24.patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)

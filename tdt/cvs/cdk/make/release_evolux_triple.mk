@@ -115,6 +115,8 @@ endif
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc0.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/etc/rc.d/rc6.d $(prefix)/release_evolux_triple_with_dev/etc/rc.d/
 #	cp -RP $(prefix)/release-enigma2-pli-nightly_with_dev/lib/firmware/dvb-usb* $(prefix)/release_evolux_triple_with_dev/lib/firmware/
+	cp -RP $(appsdir)/neutrino-hd-plugins/tuxcom/tuxcom $(prefix)/release_evolux_triple_with_dev/var/plugins/tuxcom.so
+	cp -RP $(appsdir)/neutrino-hd-plugins/tuxcom/tuxcom.cfg $(prefix)/release_evolux_triple_with_dev/var/plugins/
 if ENABLE_SPARK7162
 	rm -rf $(prefix)/release_evolux_triple_with_dev/usr/lib/enigma2/python/Plugins/Extensions/PPDisplayTime
 endif
