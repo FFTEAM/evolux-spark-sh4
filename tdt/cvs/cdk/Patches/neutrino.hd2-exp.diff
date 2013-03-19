@@ -1516,7 +1516,7 @@
 +
 +////////////////////////////// BOOT Menu ANFANG ////////////////////////////////////
 +#if defined (PLATFORM_SPARK7111)
-+#define BOOT_OPTION_COUNT 4
++#define BOOT_OPTION_COUNT 3
 +#else
 +#define BOOT_OPTION_COUNT 2
 +#endif
@@ -1525,8 +1525,8 @@
 +#define BOOT_NEUTRINO 0
 +#define BOOT_E2       1
 +#if defined (PLATFORM_SPARK7111)
-+#define BOOT_SPARK    2
-+#define BOOT_NHD      3
++//#define BOOT_SPARK    2
++#define BOOT_NHD      2
 +#endif
 +#if 0
 +	{ BOOT_NEUTRINO, NONEXISTANT_LOCALE, "Neutrino" },
@@ -1535,7 +1535,7 @@
 +#endif
 +	{ BOOT_E2, NONEXISTANT_LOCALE, "E2PLI" },
 +#if defined (PLATFORM_SPARK7111)
-+	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" },
++//	{ BOOT_SPARK, NONEXISTANT_LOCALE, "Spark" },
 +	{ BOOT_NHD, NONEXISTANT_LOCALE, "NHD" },
 +#endif
 +};
