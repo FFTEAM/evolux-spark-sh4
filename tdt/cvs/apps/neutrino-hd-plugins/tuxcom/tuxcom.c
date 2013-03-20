@@ -692,6 +692,9 @@ int main()
 	/* open Remote Control */
 #if HAVE_COOL_HARDWARE || HAVE_TRIPLEDRAGON || HAVE_SPARK_HARDWARE
 	rc = open("/dev/input/event1", O_RDONLY);
+	if(access("/dev/input/nevis_ir",F_OK)==0) { // Spark7111 mit nhd
+		rc = open("/dev/input/nevis_ir", O_RDONLY);
+	}
 #else
 #error your hardware is not yet implemented.
 #endif
