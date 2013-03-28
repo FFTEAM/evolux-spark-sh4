@@ -23,7 +23,7 @@ CCFLAGSY += -I$(TREE_ROOT)/frontends/spark7162/tuner
 CCFLAGSY += -I$(TREE_ROOT)/frontends/spark_dvbapi5
 CCFLAGSY += -I$(TREE_ROOT)/frontends/spark_common
 
-CCFLAGSY += -Wall -DCONFIG_DVB_DUMMY_FE #-Werror
+CCFLAGSY += -Wall #-Werror
 endif
 
 ifneq (,$(findstring 2.6.3,$(KERNELVERSION)))
@@ -98,7 +98,6 @@ spark7162-objs +=        spark7162/D3501.o
 
 spark7162-objs +=        spark_dvbapi5/ix7306.o
 spark7162-objs +=        spark_common/vz7903.o
-spark7162-objs +=	 spark_common/dvb_dummy_fe.o
 spark7162-objs +=        base/sharp7803.o
 spark7162-objs +=        base/sharp6465.o
 spark7162-objs +=        base/sharp5469c.o
