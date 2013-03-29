@@ -391,7 +391,16 @@
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -844,7 +844,7 @@
+@@ -259,7 +259,7 @@
+ eventlistbar.channelswitch Umschalten
+ eventlistbar.eventsort Sortieren
+ eventlistbar.recordevent Aufnehmen
+-extra.add_to_bouquet zur den Bouquets hinzufuegen
++extra.add_to_bouquet Sender Bouquets hinzufügen
+ extra.audio_run_player Audio Taste startet Player
+ extra.auto_delete Automatische Löschung
+ extra.auto_timeshift Permanet timeshift, Sek. (0 = deakt.)
+@@ -845,7 +845,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -400,7 +409,7 @@
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -1576,9 +1576,9 @@
+@@ -1577,9 +1577,9 @@
  keybinding.key_recordsbrowser Aufnahmen Browser
  keybinding.key_audioplayer Audioplayer
  keybinding.key_pictureviewer PictureViewer
@@ -412,7 +421,7 @@
  keybinding.key_filebrowser Datei Browser
  keybinding.key_webtv WebTV
  keybinding.savekeymap Keymap speichern
-@@ -1587,3 +1587,105 @@
+@@ -1588,3 +1588,105 @@
  audiomenu.volumebar_audiosteps Lautstärke Schrittweite
  
  webtv.head WebTV
@@ -518,7 +527,6 @@
 +onoff.on Ein
 +onoff.off Aus
 +messagebox.accept Wollen Sie die Änderungen beibehalten? 
- 
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
@@ -4342,5 +4350,71 @@
 // 	tuned = false;
 // 	standby = true;
  	
+
+--- neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:40:08.851683107 +0100
++++ neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:39:55.318385961 +0100
+@@ -200,12 +200,12 @@
+ 	// volume conf
+ 	//FIXME: brocken
+ 	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUST));
+-
++#if 0	
+ 	// setting volume percent to zapit with channel_id/apid = 0 means current channel and pid
+ 	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
+ 	//audioSetupNotifierVolPercent->setChannelId(0);
+ 	//audioSetupNotifierVolPercent->setAPid(0);
+-	
++
+ 	for(count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) 
+ 	{
+ 		g_Zapit->getVolumePercent((unsigned int *) &percent[count], 0, g_RemoteControl->current_PIDs.APIDs[count].pid);
+@@ -220,6 +220,6 @@
+ 		//if (is_active)
+ 		//	g_settings.current_volume_percent = percent[count];
+ 	}
+-
++#endif
+ 	return AudioSelector.exec(NULL, "");
+ }
+
+--- neutrino-hd2-exp/src/gui/channellist.cpp	2013-03-29 18:43:44.661984227 +0100
++++ neutrino-hd2-exp/src/gui/channellist.cpp	2013-03-29 18:47:53.395217626 +0100
+@@ -374,10 +374,10 @@
+ 
+ 	sprintf(cnt, "%d", i);
+ 	menu->addItem(new CMenuForwarder(LOCALE_EXTRA_ADD_TO_BOUQUET, true, NULL, selector, cnt, CRCInput::RC_yellow, NEUTRINO_ICON_BUTTON_YELLOW), old_selected == i++);
+-
++/* not needed as all people using userbouquets and not changeable/saveable by tools!!!
+ 	sprintf(cnt, "%d", i);
+ 	menu->addItem(new CMenuForwarder(LOCALE_FAVORITES_MENUEADD, true, NULL, selector, cnt, CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE), old_selected == i++);
+-
++*/
+ 	ret = menu->exec(NULL, "");
+ 	delete menu;
+ 	delete selector;
+@@ -1937,7 +1937,10 @@
+ void CChannelList::paintHead()
+ {
+ 	// head
+-	frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_TOP);//round
++	if(g_settings.mini_tv)
++		frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0);
++	else
++		frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_TOP);//round
+ 	
+ 	int ButtonWidth = (width - 20) / 4;
+ 
+@@ -1952,7 +1955,10 @@
+ 	}
+ 
+ 	// foot
+-	frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_BOTTOM); //round
++	if(g_settings.mini_tv)
++		frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0); 
++	else
++		frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_BOTTOM); //round
+ 	
+ 	// foot buttons
+ 	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - buttonHeight) + 3, ButtonWidth, vlist ? NUM_VLIST_BUTTONS : NUM_LIST_BUTTONS, vlist ? CChannelVListButtons : CChannelListButtons);
 
 
