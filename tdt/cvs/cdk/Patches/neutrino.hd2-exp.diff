@@ -1070,7 +1070,7 @@
 +
 +		string cmd = "(" + string(EMU_list[selected].start_command)
 +			//+ ( scrambled ? "sleep 2 ; /usr/local/bin/pzapit -rz" : "" )
-+			+ " sleep 2 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
++			+ " sleep 4 ; /usr/local/bin/pzapit -rz >/dev/null 2>&1) &";
 +		safe_system(cmd.c_str());
 +	}
 +	for (int i = 1; i < EMU_OPTION_COUNT; i++)
