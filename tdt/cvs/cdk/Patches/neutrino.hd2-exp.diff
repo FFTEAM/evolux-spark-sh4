@@ -3994,7 +3994,7 @@
  cDvbCi * ci; //FIXME: boxes without ci cam
  #endif
  
-@@ -744,7 +744,7 @@
+@@ -808,7 +808,7 @@
  	}
  	
  	// ci cam //FIXME: boxes without ci cam
@@ -4003,7 +4003,19 @@
  	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
  #endif	
  }
-@@ -1289,7 +1289,7 @@
+@@ -1003,9 +1003,10 @@
+ 	}
+ 
+ 	// set saved volume pro pid
++/*
+ 	int newpercent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
+ 	
+-	setVolumePercent(newpercent);
++	setVolumePercent(newpercent);*/
+ }
+ 
+ // return 0, -1 fails
+@@ -1453,7 +1454,7 @@
  	}
  	
  	// ci cam
@@ -4012,7 +4024,7 @@
  	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
  #endif	
  	
-@@ -3722,7 +3722,7 @@
+@@ -3893,7 +3894,7 @@
  
  	//CI init
  	//FIXME: platform without ci cam
@@ -4392,29 +4404,4 @@
  	ret = menu->exec(NULL, "");
  	delete menu;
  	delete selector;
-@@ -1937,7 +1937,10 @@
- void CChannelList::paintHead()
- {
- 	// head
--	frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_TOP);//round
-+	if(g_settings.mini_tv)
-+		frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0);
-+	else
-+		frameBuffer->paintBoxRel(x, y, width, theight, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_TOP);//round
- 	
- 	int ButtonWidth = (width - 20) / 4;
- 
-@@ -1952,7 +1955,10 @@
- 	}
- 
- 	// foot
--	frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_BOTTOM); //round
-+	if(g_settings.mini_tv)
-+		frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0); 
-+	else
-+		frameBuffer->paintBoxRel(x, y + (height - buttonHeight), width, buttonHeight - 1, COL_MENUHEAD_PLUS_0, RADIUS_MID, CORNER_BOTTOM); //round
- 	
- 	// foot buttons
- 	::paintButtons(frameBuffer, g_Font[SNeutrinoSettings::FONT_TYPE_INFOBAR_SMALL], g_Locale, x + 10, y + (height - buttonHeight) + 3, ButtonWidth, vlist ? NUM_VLIST_BUTTONS : NUM_LIST_BUTTONS, vlist ? CChannelVListButtons : CChannelListButtons);
-
 
