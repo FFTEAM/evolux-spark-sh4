@@ -4003,15 +4003,17 @@
  	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
  #endif	
  }
-@@ -1003,9 +1003,10 @@
+@@ -1001,11 +1001,12 @@
+ 		audio_mode = def_audio_mode;
+ 		tuxtx_set_pid(0, 0, (char *) thischannel->getTeletextLang());
  	}
- 
- 	// set saved volume pro pid
+-
 +/*
- 	int newpercent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
+ 	// set saved volume pro pid
+ 	volume_percent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
  	
--	setVolumePercent(newpercent);
-+	setVolumePercent(newpercent);*/
+ 	setVolumePercent(volume_percent);
++*/
  }
  
  // return 0, -1 fails
