@@ -3423,24 +3423,6 @@
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -4849,7 +4851,7 @@
- 		if (fileBrowser.exec("/var/tuxbox/config") == true) 
- 		{
- 			loadKeys(fileBrowser.getSelectedFile()->Name.c_str());
--			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new keys: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
-+			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: new keys: %s\n", fileBrowser.getSelectedFile()->Name.c_str());
- 		}
- 		
- 		return menu_return::RETURN_REPAINT;
-@@ -4867,7 +4869,7 @@
- 			CStringInputSMS * sms = new CStringInputSMS(LOCALE_EXTRA_SAVEKEYS, fname, 30, NONEXISTANT_LOCALE, NONEXISTANT_LOCALE, "abcdefghijklmnopqrstuvwxyz0123456789. ");
- 			sms->exec(NULL, "");
- 			sprintf(sname, "%s/%s", fileBrowser.getSelectedFile()->Name.c_str(), fname);
--			dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save keys: %s\n", sname);
-+			//dprintf(DEBUG_NORMAL, "CNeutrinoApp::exec: save keys: %s\n", sname);
- 			saveKeys(sname);
- 			delete sms;
- 		}
 
 
 --- neutrino-hd2-exp/src/neutrino.h	2012-10-21 16:32:59.270465135 +0200
