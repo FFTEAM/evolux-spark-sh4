@@ -20,7 +20,7 @@
  				valid for xtrend: et4x00,et5x00,et6x00,et9x00
 -				valid for fulan: spark, spark7162
 +				valid for fulan: spark7111, spark7162
- 				valid for kathrein: ufs910, ufs922, ufs912, ufs913
+ 				valid for kathrein: ufs910, ufs922, ufs912, ufs913, ufc960
  				valid for ipbox: ipbox55, ipbox99, ipbox9900
  				valid for atevio: atevio700,atevio7000,atevio7500,atevio7600
 @@ -469,7 +469,7 @@
@@ -3976,7 +3976,7 @@
  cDvbCi * ci; //FIXME: boxes without ci cam
  #endif
  
-@@ -808,7 +808,7 @@
+@@ -813,7 +813,7 @@
  	}
  	
  	// ci cam //FIXME: boxes without ci cam
@@ -3985,21 +3985,20 @@
  	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
  #endif	
  }
-@@ -1001,11 +1001,12 @@
+@@ -1008,10 +1008,11 @@
  		audio_mode = def_audio_mode;
  		tuxtx_set_pid(0, 0, (char *) thischannel->getTeletextLang());
  	}
 -
-+/*
++#if 0
  	// set saved volume pro pid
  	volume_percent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
- 	
  	setVolumePercent(volume_percent);
-+*/
++#endif
  }
  
  // return 0, -1 fails
-@@ -1453,7 +1454,7 @@
+@@ -1451,7 +1452,7 @@
  	}
  	
  	// ci cam
@@ -4008,7 +4007,7 @@
  	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
  #endif	
  	
-@@ -3893,7 +3894,7 @@
+@@ -3877,7 +3878,7 @@
  
  	//CI init
  	//FIXME: platform without ci cam
@@ -4349,24 +4348,18 @@
 
 --- neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:40:08.851683107 +0100
 +++ neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:39:55.318385961 +0100
-@@ -200,12 +200,12 @@
+@@ -194,7 +194,7 @@
  	// volume conf
  	//FIXME: brocken
  	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUST));
 -
 +#if 0	
- 	// setting volume percent to zapit with channel_id/apid = 0 means current channel and pid
  	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
- 	//audioSetupNotifierVolPercent->setChannelId(0);
- 	//audioSetupNotifierVolPercent->setAPid(0);
--	
-+
+ 	
  	for(count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) 
- 	{
- 		g_Zapit->getVolumePercent((unsigned int *) &percent[count], 0, g_RemoteControl->current_PIDs.APIDs[count].pid);
-@@ -220,6 +220,6 @@
- 		//if (is_active)
- 		//	g_settings.current_volume_percent = percent[count];
+@@ -208,6 +208,6 @@
+ 			0, 100, audioSetupNotifierVolPercent, 0, 0, NONEXISTANT_LOCALE,
+ 			g_RemoteControl->current_PIDs.APIDs[count].desc));
  	}
 -
 +#endif
