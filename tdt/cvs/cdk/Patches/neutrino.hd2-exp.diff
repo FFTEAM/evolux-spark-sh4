@@ -3264,33 +3264,6 @@
  
  	// start plugins
  	g_PluginList->startPlugin("startup.cfg");
-@@ -2692,7 +2694,7 @@
- 			{
- 			   	if( g_settings.recording_type == RECORDING_FILE )
- 				{
--					dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift try, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
-+					//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift try, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
- 					
- 					if(recordingstatus && msg == (neutrino_msg_t) g_settings.key_timeshift)
- 						tmode = "ptimeshift"; 	// already recording, pause
-@@ -2739,7 +2741,7 @@
- 			}
- 			else if( (msg == (neutrino_msg_t)g_settings.mpkey_play) && timeshiftstatus) // play timeshift
- 			{
--				dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift play, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
-+				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: timeshift play, timeshiftstatus %d, rec dir %s, timeshift dir %s temp timeshift %d ...\n", recordingstatus, g_settings.network_nfs_recordingdir, timeshiftDir, g_settings.temp_timeshift);
- 				printf("g_RemoteControl->is_video_started:%d\n\n", g_RemoteControl->is_video_started);
- 
- 				if(g_RemoteControl->is_video_started) 
-@@ -2752,7 +2754,7 @@
- 			}
- 			else if( msg == CRCInput::RC_record || msg == CRCInput::RC_stop ) 
- 			{
--				dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun\n");
-+				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun\n");
- 
- 				// stop record if recording
- 				if( recordingstatus ) 
 @@ -3088,7 +3090,7 @@
  	}
  
@@ -4348,16 +4321,16 @@
 
 --- neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:40:08.851683107 +0100
 +++ neutrino-hd2-exp/src/gui/audio_select.cpp	2013-03-23 11:39:55.318385961 +0100
-@@ -194,7 +194,7 @@
+@@ -191,7 +191,7 @@
+ 	
  	// volume conf
- 	//FIXME: brocken
  	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUST));
--
+-	
 +#if 0	
+ 	// volume percent
  	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
  	
- 	for(count = 0; count < g_RemoteControl->current_PIDs.APIDs.size(); count++ ) 
-@@ -208,6 +208,6 @@
+@@ -205,6 +205,6 @@
  			0, 100, audioSetupNotifierVolPercent, 0, 0, NONEXISTANT_LOCALE,
  			g_RemoteControl->current_PIDs.APIDs[count].desc));
  	}
