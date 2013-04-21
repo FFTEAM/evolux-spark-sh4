@@ -3309,15 +3309,6 @@
  		
  		if(!recordingstatus && (!data)) 
  		{
-@@ -3914,7 +3916,7 @@
- 
- 	current_muted = newValue;
- 
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, isEvent);
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::AudioMute: current %d new %d isEvent: %d\n", current_muted, newValue, isEvent);
- 	
- 	g_Zapit->muteAudio(current_muted);
- 
 @@ -4277,7 +4279,7 @@
  {
  	static bool wasshift = false;
@@ -3949,7 +3940,7 @@
  cDvbCi * ci; //FIXME: boxes without ci cam
  #endif
  
-@@ -813,7 +813,7 @@
+@@ -814,7 +814,7 @@
  	}
  	
  	// ci cam //FIXME: boxes without ci cam
@@ -3958,8 +3949,8 @@
  	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
  #endif	
  }
-@@ -1008,10 +1008,11 @@
- 		audio_mode = def_audio_mode;
+@@ -1012,11 +1012,11 @@
+ 		// set default tuxtxt pid
  		tuxtx_set_pid(0, 0, (char *) thischannel->getTeletextLang());
  	}
 -
@@ -3967,11 +3958,12 @@
  	// set saved volume pro pid
  	volume_percent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
  	setVolumePercent(volume_percent);
-+#endif
- }
- 
- // return 0, -1 fails
-@@ -1451,7 +1452,7 @@
+-	
++#endif	
+ 	//FIXME: is is muted
+ 	if(current_muted)
+ 		audioDecoder->SetMute(true);
+@@ -1457,7 +1457,7 @@
  	}
  	
  	// ci cam
@@ -3980,7 +3972,7 @@
  	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
  #endif	
  	
-@@ -3877,7 +3878,7 @@
+@@ -3889,7 +3889,7 @@
  
  	//CI init
  	//FIXME: platform without ci cam
@@ -3988,7 +3980,7 @@
 +#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
  	ci = cDvbCi::getInstance();
  #endif	
- 	
+ 
 
 --- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
 +++ neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:08.156751073 +0100
