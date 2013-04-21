@@ -3940,6 +3940,15 @@
  cDvbCi * ci; //FIXME: boxes without ci cam
  #endif
  
+@@ -92,7 +92,7 @@
+ /* volume percent conf */
+ #define VOLUME_CONFIG_FILE CONFIGDIR "/zapit/audiovolume.conf"
+ #define VOLUME_DEFAULT_PCM 0
+-#define VOLUME_DEFAULT_AC3 25
++#define VOLUME_DEFAULT_AC3 100
+ typedef std::pair<int, int> pid_pair_t;
+ typedef std::pair<t_channel_id, pid_pair_t> volume_pair_t;
+ typedef std::multimap<t_channel_id, pid_pair_t> volume_map_t;
 @@ -814,7 +814,7 @@
  	}
  	
@@ -3954,7 +3963,7 @@
  		tuxtx_set_pid(0, 0, (char *) thischannel->getTeletextLang());
  	}
 -
-+#if 0
++#if 1
  	// set saved volume pro pid
  	volume_percent = getPidVolume(thischannel->getChannelID(), thischannel->getAudioPid(), thischannel->getAudioChannel()->audioChannelType == CZapitAudioChannel::AC3);
  	setVolumePercent(volume_percent);
@@ -3963,6 +3972,15 @@
  	//FIXME: is is muted
  	if(current_muted)
  		audioDecoder->SetMute(true);
+@@ -1262,7 +1262,7 @@
+ 	if (volume_percent != percent) 
+ 		volume_percent = percent;
+ 		
+-	int vol = current_volume + (current_volume*volume_percent)/100;
++	int vol = current_volume + ((current_volume*volume_percent)+15)/100;
+ 		
+ 	dprintf(DEBUG_NORMAL, "vol %d current_volume %d volume_percent %d\n", vol, current_volume, volume_percent);
+ 		
 @@ -1457,7 +1457,7 @@
  	}
  	
@@ -3980,7 +3998,7 @@
 +#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
  	ci = cDvbCi::getInstance();
  #endif	
- 
+ 	
 
 --- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
 +++ neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:08.156751073 +0100
@@ -4318,7 +4336,7 @@
  	// volume conf
  	AudioSelector.addItem(new CMenuSeparator(CMenuSeparator::LINE | CMenuSeparator::STRING, LOCALE_AUDIOMENU_VOLUME_ADJUST));
 -	
-+#if 0	
++#if 1	
  	// volume percent
  	int percent[g_RemoteControl->current_PIDs.APIDs.size()];
  	
