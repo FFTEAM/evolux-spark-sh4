@@ -3981,16 +3981,16 @@
  		
  	dprintf(DEBUG_NORMAL, "vol %d current_volume %d volume_percent %d\n", vol, current_volume, volume_percent);
  		
-@@ -1457,7 +1457,7 @@
+@@ -1460,7 +1460,7 @@
  	}
  	
  	// ci cam
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
+-#if !defined (PLATFORM_COOLSTREAM)
++#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
+ 	if(live_fe != NULL)
+ 		ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
  #endif	
- 	
-@@ -3889,7 +3889,7 @@
+@@ -3900,7 +3900,7 @@
  
  	//CI init
  	//FIXME: platform without ci cam
