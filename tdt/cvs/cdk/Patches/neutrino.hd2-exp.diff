@@ -3630,7 +3630,7 @@
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
 +++ neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 14:37:46.604187070 +0200
-@@ -264,7 +264,7 @@
+@@ -270,7 +270,7 @@
  SMSKeyInput 		* c_SMSKeyInput;	//defined in filebrowser and used in ChanneList
  CMoviePlayerGui		* moviePlayerGui;
  CPictureViewer 		* g_PicViewer;
@@ -3639,7 +3639,7 @@
  CCAMMenuHandler 	* g_CamHandler;
  #endif
  
-@@ -302,7 +302,7 @@
+@@ -308,7 +308,7 @@
  	g_EventList     = NULL;
  	g_Locale        = new CLocaleManager;
  	g_PluginList    = NULL;
@@ -3648,7 +3648,7 @@
  	g_CamHandler 	= NULL;
  #endif	
  
-@@ -349,7 +349,7 @@
+@@ -355,7 +355,7 @@
  	if(!neutrinoApp) 
  	{
  		neutrinoApp = new CNeutrinoApp();
@@ -3657,7 +3657,7 @@
  	}
  
  	return neutrinoApp;
-@@ -417,7 +417,7 @@
+@@ -423,7 +423,7 @@
  // loadSetup, load the application-settings
  int CNeutrinoApp::loadSetup(const char * fname)
  {
@@ -3666,16 +3666,16 @@
  	
  	char cfg_key[81];
  	int erg = 0;
-@@ -572,7 +572,7 @@
+@@ -579,7 +579,7 @@
  	sprintf(timeshiftDir, "%s/.timeshift", g_settings.network_nfs_recordingdir);
  	safe_mkdir(timeshiftDir);
  	
 -	dprintf(DEBUG_INFO, "CNeutrinoApp::loadSetup: rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
 +	//dprintf(DEBUG_INFO, "CNeutrinoApp::loadSetup: rec dir %s timeshift dir %s\n", g_settings.network_nfs_recordingdir, timeshiftDir);
  
- 	if(g_settings.auto_delete) 
- 	{
-@@ -957,7 +957,7 @@
+ 	g_settings.record_hours = configfile.getInt32( "record_hours", 4 );
+ 	g_settings.recording_audio_pids_default    = configfile.getInt32("recording_audio_pids_default", TIMERD_APIDS_STD | TIMERD_APIDS_AC3);
+@@ -946,7 +946,7 @@
  // saveSetup, save the application-settings
  void CNeutrinoApp::saveSetup(const char * fname)
  {
@@ -3684,7 +3684,7 @@
  	
  	char cfg_key[81];
  
-@@ -1384,7 +1384,7 @@
+@@ -1374,7 +1374,7 @@
  // CNeutrinoApp -  channelsInit, get the Channellist from zapit
  void CNeutrinoApp::channelsInit(bool bOnly)
  {
@@ -3693,7 +3693,7 @@
  
  	const char * fav_bouquetname = g_Locale->getText(LOCALE_FAVORITES_BOUQUETNAME);
  
-@@ -1600,7 +1600,7 @@
+@@ -1590,7 +1590,7 @@
  	};
  	
  	
@@ -3702,7 +3702,7 @@
  
  	if(mode == mode_radio)
  		channelList = RADIOchannelList;
-@@ -1692,7 +1692,7 @@
+@@ -1682,7 +1682,7 @@
  	
  	if(frameBuffer->setMode() ) 
  	{
@@ -3711,7 +3711,7 @@
  		exit(-1);
  	}	
  }
-@@ -1710,7 +1710,7 @@
+@@ -1700,7 +1700,7 @@
  	if(font.filename != NULL)
  		free((void *)font.filename);
  
@@ -3720,7 +3720,7 @@
  
  	if(access(g_settings.font_file, F_OK)) 
  	{
-@@ -1737,7 +1737,7 @@
+@@ -1732,7 +1732,7 @@
  
  	font.name = strdup(g_fontRenderer->getFamily(font.filename).c_str());
  
@@ -3729,7 +3729,7 @@
  
  	style[1] = "Bold Regular";
  
-@@ -1798,7 +1798,7 @@
+@@ -1793,7 +1793,7 @@
  
  	eventinfo.apids = TIMERD_APIDS_CONF;
  	
@@ -3738,7 +3738,7 @@
  
  	(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = timeshiftDir;
  
-@@ -1829,7 +1829,7 @@
+@@ -1826,7 +1826,7 @@
  {
  	if(autoshift && CNeutrinoApp::getInstance()->recordingstatus) 
  	{
@@ -3747,7 +3747,7 @@
  
  		CVCRControl::getInstance()->Stop();
  		autoshift = false;
-@@ -2134,7 +2134,7 @@
+@@ -2126,7 +2126,7 @@
  	while(!zapit_ready)
  		usleep(0);
  	
@@ -3756,7 +3756,7 @@
  	
  	// dvbsub thread
  	dvbsub_init();
-@@ -2209,7 +2209,7 @@
+@@ -2201,7 +2201,7 @@
  	g_volscale = new CProgressBar(200, 15, 50, 100, 80, true);
  
  	// Ci Cam handler
@@ -3765,24 +3765,24 @@
  	g_CamHandler = new CCAMMenuHandler();
  	g_CamHandler->init();	
  #endif	
-@@ -2248,7 +2248,7 @@
- 	if (g_settings.recording_type != RECORDING_OFF)
- 		setupRecordingDevice();
+@@ -2239,7 +2239,7 @@
+ 	// setup recording device
+ 	setupRecordingDevice();
  
 -	dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: menue setup\n");
 +	//dprintf( DEBUG_NORMAL, "CNeutrinoApp::run: menue setup\n");
  
  	// SMS key input
  	c_SMSKeyInput = new SMSKeyInput();	//filebrowser.cpp
-@@ -2273,6 +2273,7 @@
- 	CMenuWidget    TunerSetup( LOCALE_SERVICEMENU_SCANTS, NEUTRINO_ICON_SETTINGS);
- 	CMenuWidget    bindSettings(LOCALE_KEYBINDINGMENU_HEAD, NEUTRINO_ICON_KEYBINDING );
- 	CMenuWidget    MediaPlayer(LOCALE_MAINMENU_MEDIAPLAYER, NEUTRINO_ICON_MOVIE);
-+	CMenuWidget    ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings" );
+@@ -2264,6 +2264,7 @@
+ 	CMenuWidget TunerSetup( LOCALE_SERVICEMENU_SCANTS, NEUTRINO_ICON_SETTINGS);
+ 	CMenuWidget bindSettings(LOCALE_KEYBINDINGMENU_HEAD, NEUTRINO_ICON_KEYBINDING );
+ 	CMenuWidget MediaPlayer(LOCALE_MAINMENU_MEDIAPLAYER, NEUTRINO_ICON_MOVIE);
++	CMenuWidget ExtraMenu (LOCALE_MAINMENU_EXTRAMENU , "settings" );
  
  	// main menu
  	InitMainMenu(mainMenu, mainSettings, 
-@@ -2289,7 +2290,8 @@
+@@ -2280,7 +2281,8 @@
  		     service, 
  		     audioplayerSettings, 
  		     PicViewerSettings, 
@@ -3792,7 +3792,7 @@
  		     MediaPlayer);
  
  	// service
-@@ -2328,7 +2330,7 @@
+@@ -2319,7 +2321,7 @@
  	//init scan settings
  	//CScanSetup scansetup;
  
@@ -3801,7 +3801,7 @@
  	
  	sleep(1);
  
-@@ -2441,7 +2443,7 @@
+@@ -2429,7 +2431,7 @@
  		//if(ret != menu_return::RETURN_EXIT_ALL)
  		//	scansetup.exec(NULL, "");
  
@@ -3810,7 +3810,7 @@
  
  		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, loadSettingsErg ==  1 ? g_Locale->getText(LOCALE_SETTINGS_NOCONFFILE) : g_Locale->getText(LOCALE_SETTINGS_MISSINGOPTIONSCONFFILE));
  		
-@@ -2471,17 +2473,17 @@
+@@ -2457,17 +2459,17 @@
  	// lcdsettinsg
  	InitLcdSettings(lcdSettings);
  
@@ -3831,7 +3831,7 @@
  
  		CVFD::getInstance()->setPower(0);
  		CVFD::getInstance()->setlcdparameter();
-@@ -2495,7 +2497,7 @@
+@@ -2481,7 +2483,7 @@
  	SHTDCNT::getInstance()->init();
  
  	// Cam-Ci
@@ -3840,7 +3840,7 @@
  	cDvbCi::getInstance()->SetHook(CISendMessage);	
  #endif	
  
-@@ -2536,7 +2538,7 @@
+@@ -2522,7 +2524,7 @@
  	neutrino_msg_t      msg;
  	neutrino_msg_data_t data;
  
@@ -3848,8 +3848,8 @@
 +	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::RealRun: initialized everything\n");
  
  	// start plugins
- 	g_PluginList->startPlugin("startup.cfg");
-@@ -3088,7 +3090,7 @@
+ 	g_PluginList->startPlugin("startup.cfg"); //NOTE: startup.cfg not used anymore
+@@ -3126,7 +3128,7 @@
  	}
  
  	// we assume g_CamHandler free/delete data if needed
@@ -3858,7 +3858,7 @@
  	res = g_CamHandler->handleMsg(msg, data);
  	if( res != messages_return::unhandled ) 
  	{
-@@ -3316,7 +3318,7 @@
+@@ -3345,7 +3347,7 @@
  	else if( msg == NeutrinoMessages::EVT_RECORDMODE ) 
  	{
  		// sent by rcinput, then got msg from zapit about record activated/deactivated
@@ -3867,7 +3867,7 @@
  		
  		if(!recordingstatus && (!data)) 
  		{
-@@ -4277,7 +4279,7 @@
+@@ -4301,7 +4303,7 @@
  {
  	static bool wasshift = false;
  
@@ -3876,7 +3876,7 @@
  
  	if( bOnOff ) 
  	{
-@@ -4426,7 +4428,7 @@
+@@ -4452,7 +4454,7 @@
  // Radio Mode
  void CNeutrinoApp::radioMode( bool rezap)
  {
@@ -3885,7 +3885,7 @@
  
  	if(mode == mode_tv ) 
  	{
-@@ -4465,7 +4467,7 @@
+@@ -4491,7 +4493,7 @@
  
  	if(autoshift) 
  	{
@@ -3893,8 +3893,8 @@
 +		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::radioMode: standby on: autoshift ! stopping ...\n");
  		stopAutoRecord();
  		recordingstatus = 0;
- 	}
-@@ -4553,7 +4555,7 @@
+ 		timeshiftstatus = 0;
+@@ -4581,7 +4583,7 @@
  				}
  
  				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = std::string(recDir);
@@ -3903,7 +3903,7 @@
  
  				CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
  			}
-@@ -4579,7 +4581,7 @@
+@@ -4607,7 +4609,7 @@
  // exec, menuitem callback (shutdown)
  int CNeutrinoApp::exec(CMenuTarget * parent, const std::string & actionKey)
  {
@@ -3912,7 +3912,7 @@
  
  	int returnval = menu_return::RETURN_REPAINT;
  
-@@ -4761,7 +4763,7 @@
+@@ -4789,7 +4791,7 @@
  		if (b.exec(g_settings.network_nfs_recordingdir)) 
  		{
  			const char * newdir = b.getSelectedFile()->Name.c_str();
@@ -3921,7 +3921,7 @@
  
  			if(check_dir(newdir))
  				printf("CNeutrinoApp::exec: Wrong/unsupported recording dir %s\n", newdir);
-@@ -4769,12 +4771,12 @@
+@@ -4797,12 +4799,12 @@
  			{
  				strncpy(g_settings.network_nfs_recordingdir, b.getSelectedFile()->Name.c_str(), sizeof(g_settings.network_nfs_recordingdir)-1 );
  				
@@ -3936,7 +3936,7 @@
  			}
  		}
  		return menu_return::RETURN_REPAINT;
-@@ -4794,7 +4796,7 @@
+@@ -4822,7 +4824,7 @@
  			else
  			{
  				strcpy(g_settings.update_dir, fileBrowser.getSelectedFile()->Name.c_str());
