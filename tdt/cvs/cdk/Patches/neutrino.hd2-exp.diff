@@ -59,7 +59,90 @@
 ////////////////////////
 --- neutrino-hd2-exp/src/gui/widget/menue.cpp	2012-10-21 16:09:01.871337465 +0200
 +++ neutrino-hd2-exp/src/gui/widget/menue.cpp	2012-10-21 15:56:08.875504381 +0200
-@@ -826,6 +826,7 @@
+@@ -56,7 +56,6 @@
+ #define LOCAL_OFFSET	8	// offset from painted icon at left border
+ 
+ static int HEIGHT;
+-static int FULL_HEIGHT;
+ 
+ 
+ /* the following generic menu items are integrated into multiple menus at the same time */
+@@ -164,12 +163,11 @@
+ 	page_start.clear();
+ }
+ 
+-void CMenuWidget::addItem(CMenuItem *menuItem, const bool defaultselected)
++void CMenuWidget::addItem(CMenuItem* menuItem, const bool defaultselected)
+ {
+ 	if (defaultselected)
+ 		selected = items.size();
+ 	
+-	//TODO:need marker to skip not needed item (e.g HDD setup when any device is pluged on)
+ 	items.push_back(menuItem);
+ }
+ 
+@@ -196,7 +194,7 @@
+ #endif	
+ 
+ 	int retval = menu_return::RETURN_REPAINT;
+-	unsigned long long int timeoutEnd = CRCInput::calcTimeoutEnd(g_settings.timing[SNeutrinoSettings::TIMING_MENU] == 0 ? 0xFFFF : g_settings.timing[SNeutrinoSettings::TIMING_MENU]);
++	unsigned long long timeoutEnd = CRCInput::calcTimeoutEnd(g_settings.timing[SNeutrinoSettings::TIMING_MENU] == 0 ? 0xFFFF : g_settings.timing[SNeutrinoSettings::TIMING_MENU]);
+ 
+ 	//control loop
+ 	do {
+@@ -554,8 +552,6 @@
+ 	full_width = width + sb_width;
+ 	full_height = height;
+ 	
+-	FULL_HEIGHT = full_height;
+-	
+ 	//
+ 	if(savescreen) 
+ 		saveScreen();
+@@ -576,10 +572,10 @@
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->RenderString(stringstartposX, y + hheight + 1, width - BORDER_RIGHT - (stringstartposX - x), l_name, COL_MENUHEAD, 0, true); // UTF-8
+ 	
+ 	// paint separator
+-	frameBuffer->paintBoxRel(x, y + hheight, width + sb_width, sp_height, COL_MENUCONTENTDARK_PLUS_0);
++	frameBuffer->paintBoxRel(x, y + hheight, width + sb_width, sp_height, COL_MENUCONTENTDARK_PLUS_0 );
+ 	
+ 	//paint foot
+-	frameBuffer->paintBoxRel(x, y + height - fheight, width + sb_width, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
++	frameBuffer->paintBoxRel(x, y + height - fheight, width + sb_width, fheight, COL_MENUFOOT_PLUS_0 );
+ 	
+ 	// all height position (needed to paint itemIcon and help text)
+ 	HEIGHT = y + full_height;
+@@ -775,28 +771,9 @@
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposName,   y + height, dx - (stringstartposName - x), l_optionName, color, 0, true); // UTF-8
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y + height, dx - (stringstartposOption - x), l_option, color, 0, true); // UTF-8
+ 	
++	// menutitle on VFD
+ 	if(selected)
+ 	{
+-		//helpbar
+-		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();	// helpbar
+-		// refresh
+-		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
+-		
+-		// paint help icon
+-		int icon_w = 0;
+-		int icon_h = 0;
+-		
+-		frameBuffer->getIconSize(NEUTRINO_ICON_INFO, &icon_w, &icon_h);
+-			
+-		frameBuffer->paintIcon(NEUTRINO_ICON_INFO, x + BORDER_LEFT - 2, HEIGHT - fheight + (fheight - icon_h)/2);
+-			
+-		// help text locale
+-		const char * help_text = (optionString != NULL) ? optionString : g_Locale->getText(optionName);
+-		int HelpTextHeight = g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->getHeight();
+-			
+-		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->RenderString(x + BORDER_LEFT + icon_w + 5, HEIGHT - HelpTextHeight/3, dx - (x + (offx == 0? 0 : offx) + BORDER_LEFT + icon_w + 5 - x), help_text, COL_MENUFOOT, 0, true); // UTF-8
+-		
+-		// vfd
+ 		char str[256];
+ 		snprintf(str, 255, "%s %s", l_optionName, l_option);
+ 
+@@ -849,6 +826,7 @@
  	return *optionValue;
  }
  
@@ -67,242 +150,104 @@
  int CMenuOptionChooser::exec(CMenuTarget * parent)
  {
  	bool wantsRepaint = false;
-@@ -1422,7 +1423,6 @@
- 	return y + height;
- }
+@@ -1012,28 +990,9 @@
+ 	// option
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y + height, dx - (stringstartposOption - x), l_option, color, 0, true); // UTF-8
  
--/*
- // CMenuForwarderItemMenuIcon
- CMenuForwarderItemMenuIcon::CMenuForwarderItemMenuIcon(const neutrino_locale_t Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon, const neutrino_locale_t HelpText )
- {
-@@ -1530,7 +1530,7 @@
- 		if (!itemIcon.empty())
- 		{
- 			//NOTE: CMenuWidget menues are always centered
--			// get icon size
-+			/* get icon size */
- 			int icon_w = 0;
- 			int icon_h = 0;
- 			
-@@ -1617,6 +1617,7 @@
- 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + BORDER_LEFT + 5, y + height, height, CRCInput::getKeyName(directKey), color, height);
- 	}
- 	
-+	//
- 	//local-text
- 	stringstartposX = x + BORDER_LEFT + ICON_OFFSET + (icon_w? icon_w + LOCAL_OFFSET : 0);
- 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y + height, (dx/3)*2 - (stringstartposX - x), l_text, color, 0, true); // UTF-8
-@@ -1632,7 +1633,6 @@
- 
- 	return y + height;
- }
--*/
- 
- // CMenuForwarderNonLocalized 
- const char * CMenuForwarderNonLocalized::getName(void)
-@@ -1650,7 +1650,6 @@
- 	the_text = Text;
- }
- 
--/*
- // CMenuForwarderNonLocalizedItemMenuIcon
- const char * CMenuForwarderNonLocalizedItemMenuIcon::getName(void)
- {
-@@ -1666,7 +1665,6 @@
- {
- 	the_text = Text;
- }
--*/
- 
- // CMenuSeparator
- CMenuSeparator::CMenuSeparator(const int Type, const neutrino_locale_t Text)
-@@ -1734,7 +1732,6 @@
- 	return y+ height;
- }
- 
--/*
- // CMenuSeparatorMainMenu
- CMenuSeparatorItemMenuIcon::CMenuSeparatorItemMenuIcon(const int Type, const neutrino_locale_t Text)
- {
-@@ -1783,12 +1780,12 @@
- 			const char * l_text = getString();
- 			int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_text, true); // UTF-8
- 
--			// if no alignment is specified, align centered 
-+			/* if no alignment is specified, align centered */
- 			if (type & ALIGN_LEFT)
- 				stringstartposX = x + (BORDER_LEFT + 10) ;
- 			else if (type & ALIGN_RIGHT)
- 				stringstartposX = x + (dx/3)*2 - stringwidth - (BORDER_RIGHT + 10);
--			else // ALIGN_CENTER
-+			else /* ALIGN_CENTER */
- 				stringstartposX = x + ( ((dx/3)*2) >> 1) - (stringwidth >> 1);
- 
- 			frameBuffer->paintBoxRel(stringstartposX - 5, y, stringwidth + 10, height, COL_MENUCONTENT_PLUS_0);
-@@ -1799,7 +1796,6 @@
- 
- 	return y + height;
- }
--*/
- 
- bool CPINProtection::check()
- {
-@@ -1861,7 +1857,6 @@
- 	return CMenuForwarder::exec(parent);
- }
- 
--/*
- int CLockedMenuForwarderItemMenuIcon::exec(CMenuTarget* parent)
- {
- 	Parent = parent;
-@@ -1879,7 +1874,6 @@
- 	
- 	return CMenuForwarderItemMenuIcon::exec(parent);
- }
--*/
- 
- int CMenuSelectorTarget::exec(CMenuTarget* parent, const std::string & actionKey)
- {
-@@ -1891,314 +1885,14 @@
-         return menu_return::RETURN_EXIT;
- }
- 
--// new
--// CMenuForwarderItemMenuIcon
--CMenuForwarderItemMenuIcon::CMenuForwarderItemMenuIcon(const neutrino_locale_t Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon, const neutrino_locale_t HelpText )
-+void CMenuForwarder::setOptionValue(const char * const Option)
- {
- 	option = Option;
- 	option_string = NULL;
--	text = Text;
--	active = Active;
--	jumpTarget = Target;
--	actionKey = ActionKey ? ActionKey : "";
--	directKey = DirectKey;
--	iconName = IconName ? IconName : "";
--	itemIcon = ItemIcon ? ItemIcon : "";
--	helptext = HelpText;
- }
- 
--CMenuForwarderItemMenuIcon::CMenuForwarderItemMenuIcon(const neutrino_locale_t Text, const bool Active, const std::string &Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon, const neutrino_locale_t HelpText)
-+void CMenuForwarder::setOptionValue(const std::string &Option)
- {
- 	option = NULL;
- 	option_string = &Option;
--	text = Text;
--	active = Active;
--	jumpTarget = Target;
--	actionKey = ActionKey ? ActionKey : "";
--	directKey = DirectKey;
--	iconName = IconName ? IconName : "";
--	itemIcon = ItemIcon ? ItemIcon : "";
--	helptext = HelpText;
--}
--
--int CMenuForwarderItemMenuIcon::getHeight(void) const
--{
--	return g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
- }
--
--int CMenuForwarderItemMenuIcon::getWidth(void) const
--{
--	int tw = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(g_Locale->getText(text), true);
--	const char * option_text = NULL;
--
--	if (option)
--		option_text = option;
--	else if (option_string)
--		option_text = option_string->c_str();
--	
--
--        if (option_text != NULL)
--                tw += BORDER_LEFT + g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(option_text, true);
--
--	return tw;
--}
--
--int CMenuForwarderItemMenuIcon::exec(CMenuTarget* parent)
--{
--	if(jumpTarget)
--		return jumpTarget->exec(parent, actionKey);
--	else
--		return menu_return::RETURN_EXIT;
--}
--
--const char * CMenuForwarderItemMenuIcon::getOption(void)
--{
--	if (option)
--		return option;
--	else
--		if (option_string)
--			return option_string->c_str();
--		else
--			return NULL;
--}
--
--const char * CMenuForwarderItemMenuIcon::getName(void)
--{
--	return g_Locale->getText(text);
--}
--
--const char * CMenuForwarderItemMenuIcon::getHelpText(void)
--{
--	return g_Locale->getText(helptext);
--}
--
--int CMenuForwarderItemMenuIcon::paint(bool selected)
--{
--	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
--	int height = getHeight();
--	const char * l_text = getName();
--	int stringstartposX = x + (offx == 0? BORDER_LEFT : offx) + BORDER_LEFT;
--	const char * option_text = getOption();	
--	unsigned char color   = COL_MENUCONTENT;
--	fb_pixel_t    bgcolor = COL_MENUCONTENT_PLUS_0;
--
--	if (selected)
--	{
--		color   = COL_MENUCONTENTSELECTED;
--		bgcolor = COL_MENUCONTENTSELECTED_PLUS_0;
--	}
--	else if (!active)
--	{
--		color   = COL_MENUCONTENTINACTIVE;
--		bgcolor = COL_MENUCONTENTINACTIVE_PLUS_0;
--	}
--	
--	if (selected)
--	{
--		// item icon
--		if (!itemIcon.empty())
--		{
--			//NOTE: CMenuWidget menues are always centered
--			/* get icon size */
--			int icon_w = 0;
--			int icon_h = 0;
--			
--			// check item icon size w/h equal 0 means icons doesnt exist
--			frameBuffer->getIconSize(itemIcon.c_str(), &icon_w, &icon_h);
--			
--			//refresh pic box
--			frameBuffer->paintBoxRel(x + BORDER_LEFT + (dx/3)*2 + (((dx - (dx/3)*2 - BORDER_RIGHT)/2) - ITEM_ICON_W/2), ( frameBuffer->getScreenHeight(true) - ITEM_ICON_H)/2, ITEM_ICON_W, ITEM_ICON_H, COL_MENUCONTENTDARK_PLUS_0 ); // 25 foot height
--		
--			// paint item icon
--			int hheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
--			int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
--			int sp_height = 5;
--	
--			//if(icon_w >= 100 || icon_h >= 100)
--			if( (HEIGHT - hheight -fheight - 2*sp_height) >= 100 && (icon_w >= 100 || icon_h >= 100) )
--				frameBuffer->paintIcon(itemIcon.c_str(), x + BORDER_LEFT + (dx/3)*2 + ((( dx - (dx/3)*2 - BORDER_RIGHT)/2) - ITEM_ICON_W/2), ( frameBuffer->getScreenHeight(true) - ITEM_ICON_H)/2);  //25:foot height
--		}
--		
--		// help bar
--		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
--			
--		//help text
++	// menutitle on VFD
+ 	if (selected)
+ 	{
+-		//helpbar
+-		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();	// helpbar
 -		// refresh
--		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0);
+-		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
+-		
+-		// paint help icon
+-		int icon_w = 0;
+-		int icon_h = 0;
+-		
+-		frameBuffer->getIconSize(NEUTRINO_ICON_INFO, &icon_w, &icon_h);
+-			
+-		frameBuffer->paintIcon(NEUTRINO_ICON_INFO, x + BORDER_LEFT - 2, HEIGHT - fheight + (fheight - icon_h)/2);
+-			
+-		// help text locale
+-		const char * help_text = optionNameString.c_str();
+-		int HelpTextHeight = g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->getHeight();
+-			
+-		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->RenderString(x + BORDER_LEFT + icon_w + 5, HEIGHT - HelpTextHeight/3, dx - (x + (offx == 0? 0 : offx) + BORDER_LEFT + icon_w + 5 - x), help_text, COL_MENUFOOT, 0, true); // UTF-8
+-		
+-		// vfd
+ 		char str[256];
+ 		snprintf(str, 255, "%s %s", optionNameString.c_str(), l_option);
+ 
+@@ -1191,18 +1150,19 @@
+         
+         // locale text
+ 	const char * l_optionName = g_Locale->getText(optionName);
++	int optionwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_optionName, true);
+ 	int stringstartposName = x + BORDER_LEFT + ICON_OFFSET + (icon_w? icon_w + LOCAL_OFFSET : 0);
+ 	
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposName,   y+height, dx- (stringstartposName - x),  l_optionName, color, 0, true); // UTF-8
+ 	
+ 	// option value
+-	int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true) + BORDER_RIGHT;
++	int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(optionValue, true);
+ 	int stringstartposOption = std::max(stringstartposName + g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_optionName, true) + ICON_OFFSET, x + dx - stringwidth - ICON_OFFSET); //+ offx
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y + height, dx - (stringstartposOption - x),  optionValue, color, 0, true);
+ 	
++	// menutitle on VFD
+ 	if (selected)
+ 	{
+-		// vfd
+ 		char str[256];
+ 		snprintf(str, 255, "%s %s", l_optionName, optionValue);
+ 
+@@ -1292,30 +1252,9 @@
+ 	int stringstartposOption = x + BORDER_LEFT + ICON_OFFSET + (icon_w? icon_w + LOCAL_OFFSET: 0);
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y + height,dx- (stringstartposOption - x), optionValue, color);
+ 
++	// menutitle on VFD
+ 	if (selected)
+-	{
+-		//helpbar
+-		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();	// helpbar
+-		// refresh
+-		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
+-		
+-		// paint help icon
+-		int icon_w = 0;
+-		int icon_h = 0;
+-		
+-		frameBuffer->getIconSize(NEUTRINO_ICON_INFO, &icon_w, &icon_h);
+-			
+-		frameBuffer->paintIcon(NEUTRINO_ICON_INFO, x + BORDER_LEFT - 2, HEIGHT - fheight + (fheight - icon_h)/2);
+-			
+-		// help text locale
+-		const char * help_text = optionValue;
+-		int HelpTextHeight = g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->getHeight();
+-			
+-		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->RenderString(x + BORDER_LEFT + icon_w + 5, HEIGHT - HelpTextHeight/3, dx - (x + (offx == 0? 0 : offx) + BORDER_LEFT + icon_w + 5 - x), help_text, COL_MENUFOOT, 0, true); // UTF-8
+-		
+-		// vfd
+ 		CVFD::getInstance()->showMenuText(1, optionValue);
+-	}
+ 
+ 	return y + height;
+ }
+@@ -1404,30 +1343,10 @@
+ 	int stringstartposX = x + (offx == 0 ? BORDER_LEFT : offx) + BORDER_LEFT;
+ 
+ 	const char * option_text = getOption();
+-	
++
++	// menutitle on VFD
+ 	if (selected)
+ 	{
+-		//help bar
+-		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();	// helpbar
+-		
+-		// refresh
+-		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
 -			
 -		// paint help icon
 -		int icon_w = 0;
@@ -312,93 +257,46 @@
 -			
 -		frameBuffer->paintIcon(NEUTRINO_ICON_INFO, x + BORDER_LEFT - 2, HEIGHT - fheight + (fheight - icon_h)/2);
 -			
--		// help text
--		const char * help_text = getHelpText();
+-		// help text locale
+-		const char * help_text = getName();
 -		int HelpTextHeight = g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->getHeight();
 -			
 -		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->RenderString(x + BORDER_LEFT + icon_w + 5, HEIGHT - HelpTextHeight/3, dx - (x + (offx == 0? 0 : offx) + BORDER_LEFT + icon_w + 5 - x), help_text, COL_MENUFOOT, 0, true); // UTF-8
--	
--		// menutitle on VFD
--		char str[256];
--
--		if (option_text != NULL) 
--		{
--			snprintf(str, 255, "%s %s", l_text, option_text);
--
--			CVFD::getInstance()->showMenuText(0, str, -1, true);
--		} 
--		else
--		{
--			CVFD::getInstance()->showMenuText(0, l_text, -1, true);
--		}
--	}
--	
--	// paint item
--	frameBuffer->paintBoxRel(x + BORDER_LEFT, y, (dx/3)*2, height, bgcolor);
--
--	// paint icon/direkt-key
--	int icon_w = 0;
--	int icon_h = 0;
 -		
--	if (!iconName.empty())
--	{
--		frameBuffer->getIconSize(iconName.c_str(), &icon_w, &icon_h);
--		
--		frameBuffer->paintIcon(iconName, x + BORDER_LEFT + ICON_OFFSET, y + ((height - icon_h)/2) );
--	}
--	else if (CRCInput::isNumeric(directKey))
--	{
--		// define icon name depends of numeric value
--		char i_name[6]; 							// X +'\0'
--		snprintf(i_name, 6, "%d", CRCInput::getNumericValue(directKey));
--		i_name[5] = '\0'; 							// even if snprintf truncated the string, ensure termination
--		iconName = i_name;
--		
--		if (!iconName.empty())
--		{
--			frameBuffer->getIconSize(iconName.c_str(), &icon_w, &icon_h);
--			
--			frameBuffer->paintIcon(iconName, x + BORDER_LEFT + 5, y + ((height - icon_h)/2) );
--		}
--		else
--			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + BORDER_LEFT + 5, y + height, height, CRCInput::getKeyName(directKey), color, height);
--	}
--	
--	//
--	//local-text
--	stringstartposX = x + BORDER_LEFT + ICON_OFFSET + (icon_w? icon_w + LOCAL_OFFSET : 0);
--	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y + height, (dx/3)*2 - (stringstartposX - x), l_text, color, 0, true); // UTF-8
--	
--	//option-text
--	if (option_text != NULL)
--	{
--		int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(option_text, true);
--		int stringstartposOption = std::max(stringstartposX + g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_text, true) + BORDER_LEFT + BORDER_LEFT/2, x + (dx/3)*2 - stringwidth - BORDER_RIGHT ); //+ offx
--		
--		g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposOption, y + height, (dx/3)*2 - (stringstartposOption- x),  option_text, color, 0, true);
--	}
--
--	return y + height;
--}
--
--// CMenuForwarderNonLocalizedItemMenuIcon
--const char * CMenuForwarderNonLocalizedItemMenuIcon::getName(void)
+-		// vfd
+ 		char str[256];
+ 
+ 		if (option_text != NULL) 
+@@ -1489,7 +1408,6 @@
+ 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + BORDER_LEFT + 5, y + height, height, CRCInput::getKeyName(directKey), color, height);
+ 	}
+ 	
+-	// locale text
+ 	stringstartposX = x + BORDER_LEFT + ICON_OFFSET + (icon_w?icon_w + LOCAL_OFFSET : 0);
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y + height, dx - BORDER_LEFT - 5 - (stringstartposX - x), l_text, color, 0, true); // UTF-8
+ 
+@@ -1505,159 +1423,6 @@
+ 	return y + height;
+ }
+ 
+-// CMenuForwarderNonLocalized 
+-const char * CMenuForwarderNonLocalized::getName(void)
 -{
 -	return the_text.c_str();
 -}
 -
--CMenuForwarderNonLocalizedItemMenuIcon::CMenuForwarderNonLocalizedItemMenuIcon(const char * const Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon) : CMenuForwarderItemMenuIcon(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName, ItemIcon)
+-CMenuForwarderNonLocalized::CMenuForwarderNonLocalized(const char * const Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName) : CMenuForwarder(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName)
 -{
 -	the_text = Text;
 -}
 -
--CMenuForwarderNonLocalizedItemMenuIcon::CMenuForwarderNonLocalizedItemMenuIcon(const char * const Text, const bool Active, const std::string &Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon) : CMenuForwarderItemMenuIcon(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName, ItemIcon)
+-CMenuForwarderNonLocalized::CMenuForwarderNonLocalized(const char * const Text, const bool Active, const std::string &Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName) : CMenuForwarder(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName)
 -{
 -	the_text = Text;
 -}
 -
--// CMenuSeparatorMainMenu
--CMenuSeparatorItemMenuIcon::CMenuSeparatorItemMenuIcon(const int Type, const neutrino_locale_t Text)
+-// CMenuSeparator
+-CMenuSeparator::CMenuSeparator(const int Type, const neutrino_locale_t Text)
 -{
 -	directKey = CRCInput::RC_nokey;
 -	iconName = "";
@@ -406,33 +304,34 @@
 -	text     = Text;
 -}
 -
--int CMenuSeparatorItemMenuIcon::getHeight(void) const
+-
+-int CMenuSeparator::getHeight(void) const
 -{
 -	return (text == NONEXISTANT_LOCALE) ? BORDER_LEFT : g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
 -}
 -
--int CMenuSeparatorItemMenuIcon::getWidth(void) const
+-int CMenuSeparator::getWidth(void) const
 -{
 -	return 0;
 -}
 -
--const char * CMenuSeparatorItemMenuIcon::getString(void)
+-const char * CMenuSeparator::getString(void)
 -{
 -	return g_Locale->getText(text);
 -}
 -
--int CMenuSeparatorItemMenuIcon::paint(bool selected)
+-int CMenuSeparator::paint(bool /*selected*/)
 -{
 -	int height;
 -	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
 -	height = getHeight();
 -
--	frameBuffer->paintBoxRel(x + BORDER_LEFT, y, (dx/3)*2, height, COL_MENUCONTENT_PLUS_0 );
+-	frameBuffer->paintBoxRel(x + BORDER_LEFT, y, dx - BORDER_LEFT - BORDER_RIGHT, height, COL_MENUCONTENT_PLUS_0);
 -
 -	if ((type & LINE))
 -	{
--		frameBuffer->paintHLineRel(x + BORDER_LEFT, (dx/3)*2, y + (height >> 1), COL_MENUCONTENTDARK_PLUS_0);
--		frameBuffer->paintHLineRel(x + BORDER_LEFT, (dx/3)*2, y + (height >> 1) + 1, COL_MENUCONTENTDARK_PLUS_0);
+-		frameBuffer->paintHLineRel(x + BORDER_LEFT, dx - BORDER_LEFT - BORDER_RIGHT, y + (height >> 1), COL_MENUCONTENTDARK_PLUS_0 );
+-		frameBuffer->paintHLineRel(x + BORDER_LEFT, dx - BORDER_LEFT - BORDER_RIGHT, y + (height >> 1) + 1, COL_MENUCONTENTDARK_PLUS_0 );
 -	}
 -
 -	if ((type & STRING))
@@ -447,22 +346,64 @@
 -
 -			/* if no alignment is specified, align centered */
 -			if (type & ALIGN_LEFT)
--				stringstartposX = x + (BORDER_LEFT + 10) ;
+-				stringstartposX = x + (BORDER_LEFT + 10);
 -			else if (type & ALIGN_RIGHT)
--				stringstartposX = x + (dx/3)*2 - stringwidth - (BORDER_RIGHT + 10);
+-				stringstartposX = x + dx - stringwidth - (BORDER_RIGHT + 10 );
 -			else /* ALIGN_CENTER */
--				stringstartposX = x + ( ((dx/3)*2) >> 1) - (stringwidth >> 1);
+-				stringstartposX = x + (dx >> 1) - (stringwidth >> 1);
 -
 -			frameBuffer->paintBoxRel(stringstartposX - 5, y, stringwidth + 10, height, COL_MENUCONTENT_PLUS_0);
 -
--			g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y + height, (dx/3)*2 - (stringstartposX- x) , l_text, COL_MENUCONTENTINACTIVE, 0, true); // UTF-8
+-			g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y+height,dx- (stringstartposX- x) , l_text, COL_MENUCONTENTINACTIVE, 0, true); // UTF-8
 -		}
 -	}
 -
--	return y + height;
+-	return y+ height;
 -}
 -
--int CLockedMenuForwarderItemMenuIcon::exec(CMenuTarget* parent)
+-bool CPINProtection::check()
+-{
+-	char cPIN[5];
+-	neutrino_locale_t hint = NONEXISTANT_LOCALE;
+-	
+-	do
+-	{
+-		cPIN[0] = 0;
+-		CPINInput * PINInput = new CPINInput(LOCALE_PINPROTECTION_HEAD, cPIN, 4, hint);
+-		PINInput->exec( getParent(), "");
+-		delete PINInput;
+-		hint = LOCALE_PINPROTECTION_WRONGCODE;
+-	} while ((strncmp(cPIN, validPIN, 4) != 0) && (cPIN[0] != 0));
+-	
+-	return ( strncmp(cPIN,validPIN, 4) == 0);
+-}
+-
+-bool CZapProtection::check()
+-{
+-	int res;
+-	char cPIN[5];
+-	neutrino_locale_t hint2 = NONEXISTANT_LOCALE;
+-	
+-	do
+-	{
+-		cPIN[0] = 0;
+-
+-		CPLPINInput* PINInput = new CPLPINInput(LOCALE_PARENTALLOCK_HEAD, cPIN, 4, hint2, fsk);
+-
+-		res = PINInput->exec(getParent(), "");
+-		delete PINInput;
+-
+-		hint2 = LOCALE_PINPROTECTION_WRONGCODE;
+-	} while ( (strncmp(cPIN,validPIN, 4) != 0) &&
+-		  (cPIN[0] != 0) &&
+-		  ( res == menu_return::RETURN_REPAINT ) &&
+-		  ( fsk >= g_settings.parentallock_lockage ) );
+-		  
+-	return ( ( strncmp(cPIN,validPIN, 4) == 0 ) ||
+-			 ( fsk < g_settings.parentallock_lockage ) );
+-}
+-
+-int CLockedMenuForwarder::exec(CMenuTarget * parent)
 -{
 -	Parent = parent;
 -	
@@ -477,9 +418,257 @@
 -
 -	Parent = NULL;
 -	
--	return CMenuForwarderItemMenuIcon::exec(parent);
+-	return CMenuForwarder::exec(parent);
 -}
 -
+-int CMenuSelectorTarget::exec(CMenuTarget*/*parent*/, const std::string & actionKey)
+-{
+-        if (actionKey != "")
+-                *m_select = atoi(actionKey.c_str());
+-        else
+-                *m_select = -1;
+-	
+-        return menu_return::RETURN_EXIT;
+-}
+-
+-// new
+ // CMenuForwarderItemMenuIcon
+ CMenuForwarderItemMenuIcon::CMenuForwarderItemMenuIcon(const neutrino_locale_t Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName, const char * const ItemIcon, const neutrino_locale_t HelpText )
+ {
+@@ -1786,10 +1551,11 @@
+ 		}
+ 		
+ 		// help bar
+-		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();	// helpbar
+-		
++		int fheight = g_Font[SNeutrinoSettings::FONT_TYPE_MENU_TITLE]->getHeight();
++			
++		//help text
+ 		// refresh
+-		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0, RADIUS_MID, CORNER_BOTTOM);
++		frameBuffer->paintBoxRel(x, HEIGHT - fheight, dx, fheight, COL_MENUFOOT_PLUS_0);
+ 			
+ 		// paint help icon
+ 		int icon_w = 0;
+@@ -1799,9 +1565,8 @@
+ 			
+ 		frameBuffer->paintIcon(NEUTRINO_ICON_INFO, x + BORDER_LEFT - 2, HEIGHT - fheight + (fheight - icon_h)/2);
+ 			
+-		// help text locale
+-		//const char * help_text = getHelpText();	// use helptext locale
+-		const char * help_text = getName();
++		// help text
++		const char * help_text = getHelpText();
+ 		int HelpTextHeight = g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->getHeight();
+ 			
+ 		g_Font[SNeutrinoSettings::FONT_TYPE_EPG_INFO1]->RenderString(x + BORDER_LEFT + icon_w + 5, HEIGHT - HelpTextHeight/3, dx - (x + (offx == 0? 0 : offx) + BORDER_LEFT + icon_w + 5 - x), help_text, COL_MENUFOOT, 0, true); // UTF-8
+@@ -1852,6 +1617,7 @@
+ 			g_Font[SNeutrinoSettings::FONT_TYPE_CHANNELLIST_NUMBER]->RenderString(x + BORDER_LEFT + 5, y + height, height, CRCInput::getKeyName(directKey), color, height);
+ 	}
+ 	
++	//
+ 	//local-text
+ 	stringstartposX = x + BORDER_LEFT + ICON_OFFSET + (icon_w? icon_w + LOCAL_OFFSET : 0);
+ 	g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y + height, (dx/3)*2 - (stringstartposX - x), l_text, color, 0, true); // UTF-8
+@@ -1868,6 +1634,22 @@
+ 	return y + height;
+ }
+ 
++// CMenuForwarderNonLocalized 
++const char * CMenuForwarderNonLocalized::getName(void)
++{
++	return the_text.c_str();
++}
++
++CMenuForwarderNonLocalized::CMenuForwarderNonLocalized(const char * const Text, const bool Active, const char * const Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName) : CMenuForwarder(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName)
++{
++	the_text = Text;
++}
++
++CMenuForwarderNonLocalized::CMenuForwarderNonLocalized(const char * const Text, const bool Active, const std::string &Option, CMenuTarget* Target, const char * const ActionKey, neutrino_msg_t DirectKey, const char * const IconName) : CMenuForwarder(NONEXISTANT_LOCALE, Active, Option, Target, ActionKey, DirectKey, IconName)
++{
++	the_text = Text;
++}
++
+ // CMenuForwarderNonLocalizedItemMenuIcon
+ const char * CMenuForwarderNonLocalizedItemMenuIcon::getName(void)
+ {
+@@ -1884,6 +1666,72 @@
+ 	the_text = Text;
+ }
+ 
++// CMenuSeparator
++CMenuSeparator::CMenuSeparator(const int Type, const neutrino_locale_t Text)
++{
++	directKey = CRCInput::RC_nokey;
++	iconName = "";
++	type     = Type;
++	text     = Text;
++}
++
++
++int CMenuSeparator::getHeight(void) const
++{
++	return (text == NONEXISTANT_LOCALE) ? BORDER_LEFT : g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getHeight();
++}
++
++int CMenuSeparator::getWidth(void) const
++{
++	return 0;
++}
++
++const char * CMenuSeparator::getString(void)
++{
++	return g_Locale->getText(text);
++}
++
++int CMenuSeparator::paint(bool selected)
++{
++	int height;
++	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
++	height = getHeight();
++
++	frameBuffer->paintBoxRel(x + BORDER_LEFT, y, dx - BORDER_LEFT - BORDER_RIGHT, height, COL_MENUCONTENT_PLUS_0);
++
++	if ((type & LINE))
++	{
++		frameBuffer->paintHLineRel(x + BORDER_LEFT, dx - BORDER_LEFT - BORDER_RIGHT, y + (height >> 1), COL_MENUCONTENTDARK_PLUS_0 );
++		frameBuffer->paintHLineRel(x + BORDER_LEFT, dx - BORDER_LEFT - BORDER_RIGHT, y + (height >> 1) + 1, COL_MENUCONTENTDARK_PLUS_0 );
++	}
++
++	if ((type & STRING))
++	{
++
++		if (text != NONEXISTANT_LOCALE)
++		{
++			int stringstartposX;
++
++			const char * l_text = getString();
++			int stringwidth = g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->getRenderWidth(l_text, true); // UTF-8
++
++			/* if no alignment is specified, align centered */
++			if (type & ALIGN_LEFT)
++				stringstartposX = x + (BORDER_LEFT + 10);
++			else if (type & ALIGN_RIGHT)
++				stringstartposX = x + dx - stringwidth - (BORDER_RIGHT + 10 );
++			else /* ALIGN_CENTER */
++				stringstartposX = x + (dx >> 1) - (stringwidth >> 1);
++
++			frameBuffer->paintBoxRel(stringstartposX - 5, y, stringwidth + 10, height, COL_MENUCONTENT_PLUS_0);
++
++			g_Font[SNeutrinoSettings::FONT_TYPE_MENU]->RenderString(stringstartposX, y+height,dx- (stringstartposX- x) , l_text, COL_MENUCONTENTINACTIVE, 0, true); // UTF-8
++		}
++	}
++
++	return y+ height;
++}
++
+ // CMenuSeparatorMainMenu
+ CMenuSeparatorItemMenuIcon::CMenuSeparatorItemMenuIcon(const int Type, const neutrino_locale_t Text)
+ {
+@@ -1908,7 +1756,7 @@
+ 	return g_Locale->getText(text);
+ }
+ 
+-int CMenuSeparatorItemMenuIcon::paint(bool /*selected*/)
++int CMenuSeparatorItemMenuIcon::paint(bool selected)
+ {
+ 	int height;
+ 	CFrameBuffer * frameBuffer = CFrameBuffer::getInstance();
+@@ -1949,7 +1797,67 @@
+ 	return y + height;
+ }
+ 
+-int CLockedMenuForwarderItemMenuIcon::exec(CMenuTarget *parent)
++bool CPINProtection::check()
++{
++	char cPIN[5];
++	neutrino_locale_t hint = NONEXISTANT_LOCALE;
++	
++	do
++	{
++		cPIN[0] = 0;
++		CPINInput * PINInput = new CPINInput(LOCALE_PINPROTECTION_HEAD, cPIN, 4, hint);
++		PINInput->exec( getParent(), "");
++		delete PINInput;
++		hint = LOCALE_PINPROTECTION_WRONGCODE;
++	} while ((strncmp(cPIN, validPIN, 4) != 0) && (cPIN[0] != 0));
++	
++	return ( strncmp(cPIN,validPIN, 4) == 0);
++}
++
++bool CZapProtection::check()
++{
++	int res;
++	char cPIN[5];
++	neutrino_locale_t hint2 = NONEXISTANT_LOCALE;
++	
++	do
++	{
++		cPIN[0] = 0;
++
++		CPLPINInput* PINInput = new CPLPINInput(LOCALE_PARENTALLOCK_HEAD, cPIN, 4, hint2, fsk);
++
++		res = PINInput->exec(getParent(), "");
++		delete PINInput;
++
++		hint2 = LOCALE_PINPROTECTION_WRONGCODE;
++	} while ( (strncmp(cPIN,validPIN, 4) != 0) &&
++		  (cPIN[0] != 0) &&
++		  ( res == menu_return::RETURN_REPAINT ) &&
++		  ( fsk >= g_settings.parentallock_lockage ) );
++		  
++	return ( ( strncmp(cPIN,validPIN, 4) == 0 ) ||
++			 ( fsk < g_settings.parentallock_lockage ) );
++}
++
++int CLockedMenuForwarder::exec(CMenuTarget * parent)
++{
++	Parent = parent;
++	
++	if( (g_settings.parentallock_prompt != PARENTALLOCK_PROMPT_NEVER) || AlwaysAsk )
++	{
++		if (!check())
++		{
++			Parent = NULL;
++			return menu_return::RETURN_REPAINT;
++		}
++	}
++
++	Parent = NULL;
++	
++	return CMenuForwarder::exec(parent);
++}
++
++int CLockedMenuForwarderItemMenuIcon::exec(CMenuTarget* parent)
+ {
+ 	Parent = parent;
+ 	
+@@ -1967,3 +1875,24 @@
+ 	return CMenuForwarderItemMenuIcon::exec(parent);
+ }
+ 
++int CMenuSelectorTarget::exec(CMenuTarget* parent, const std::string & actionKey)
++{
++        if (actionKey != "")
++                *m_select = atoi(actionKey.c_str());
++        else
++                *m_select = -1;
++	
++        return menu_return::RETURN_EXIT;
++}
++
++void CMenuForwarder::setOptionValue(const char * const Option)
++{
++	option = Option;
++	option_string = NULL;
++}
++
++void CMenuForwarder::setOptionValue(const std::string &Option)
++{
++	option = NULL;
++	option_string = &Option;
++}
 
 --- neutrino-hd2-exp/src/gui/widget/menue.h	2012-10-21 16:13:02.680531577 +0200
 +++ neutrino-hd2-exp/src/gui/widget/menue.h	2012-10-21 15:03:50.299941019 +0200
@@ -3355,8 +3544,8 @@
 
 --- neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 16:29:13.569345942 +0200
 +++ neutrino-hd2-exp/src/neutrino_menue.cpp	2012-10-21 15:13:49.234910982 +0200
-@@ -160,7 +160,7 @@
- //extern bool has_hdd;				// defined in hdd_menu.cpp
+@@ -159,7 +159,7 @@
+ extern CPlugins       * g_PluginList;		// defined in neutrino.cpp
  extern bool parentallocked;			// defined neutrino.cpp
  extern CRemoteControl * g_RemoteControl;	// defined neutrino.cpp
 -#if !defined (PLATFORM_COOLSTREAM)
@@ -3364,23 +3553,18 @@
  extern CCAMMenuHandler * g_CamHandler;		// defined neutrino.cpp
  #endif
  
-@@ -199,11 +199,11 @@
+@@ -199,7 +199,7 @@
  };
  
  // Init Main Menu
--void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &languageSettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer)
-+void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &languageSettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer, CMenuWidget &ExtraMenu)
+-void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer)
++void CNeutrinoApp::InitMainMenu(CMenuWidget &mainMenu, CMenuWidget &mainSettings, CMenuWidget &videoSettings, CMenuWidget &audioSettings, CMenuWidget &parentallockSettings, CMenuWidget &networkSettings, CMenuWidget &recordingSettings, CMenuWidget &colorSettings, CMenuWidget &lcdSettings, CMenuWidget &keySettings, CMenuWidget &miscSettings, CMenuWidget &service, CMenuWidget &audioplayerSettings, CMenuWidget &PicViewerSettings, CMenuWidget &streamingSettings, CMenuWidget &MediaPlayer, CMenuWidget &ExtraMenu)
  {
  	int shortcut = 1;
  
--	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMainMenu\n");
-+	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitMainMenu\n");
- 
- 	// tv modus
- 	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_TVMODE, true, "", this, "tv", CRCInput::RC_red, NEUTRINO_ICON_BUTTON_RED, "tv", LOCALE_HELPTEXT_TVMODE ), true);
-@@ -269,6 +269,43 @@
- 	//Service
- 	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_SERVICE, true, "", &service, NULL,CRCInput::convertDigitToKey(shortcut++), NULL, "service", LOCALE_HELPTEXT_SERVICE ));
+@@ -280,6 +280,43 @@
+ 	// features
+ 	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_INFOVIEWER_FEATURES, true, NULL, this, "features", CRCInput::convertDigitToKey(shortcut++), NULL, "plugins", LOCALE_HELPTEXT_FEATURES ));
  
 +//***************************************** Extra Menue 
 +	mainMenu.addItem(new CMenuForwarderItemMenuIcon(LOCALE_MAINMENU_EXTRAMENU, true, "", &ExtraMenu, NULL, CRCInput::convertDigitToKey(shortcut++), NULL, "mainsettings", LOCALE_HELPTEXT_SERVICE));
@@ -3422,7 +3606,7 @@
  	//sleep timer
  	mainMenu.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
  
-@@ -490,16 +527,17 @@
+@@ -493,16 +530,17 @@
  1080p50
  PC
  */
@@ -3443,7 +3627,7 @@
  	{ VIDEO_STD_1080P24, NONEXISTANT_LOCALE, "1080p 24Hz"	},
  	{ VIDEO_STD_1080P25, NONEXISTANT_LOCALE, "1080p 25Hz"	},
  	{ VIDEO_STD_1080P30, NONEXISTANT_LOCALE, "1080p 30Hz"	},
-@@ -524,6 +562,24 @@
+@@ -527,6 +565,24 @@
  	{ VIDEO_STD_AUTO,    NONEXISTANT_LOCALE, "Auto"         }
  };
  #else
@@ -3468,7 +3652,7 @@
  // giga
  /*
  pal 
-@@ -612,7 +668,7 @@
+@@ -615,7 +671,7 @@
  
  void CNeutrinoApp::InitVideoSettings(CMenuWidget &videoSettings, CVideoSetupNotifier * videoSetupNotifier)
  {
@@ -3477,7 +3661,7 @@
  	
  	int shortcutVideo = 1;
  	
-@@ -698,7 +754,7 @@
+@@ -701,7 +757,7 @@
  
  void CNeutrinoApp::InitAudioSettings(CMenuWidget &audioSettings, CAudioSetupNotifier * audioSetupNotifier)
  {
@@ -3486,7 +3670,7 @@
  	
  	int shortcutAudio = 1;
  	
-@@ -789,7 +845,7 @@
+@@ -810,7 +866,7 @@
  
  void CNeutrinoApp::InitParentalLockSettings(CMenuWidget &parentallockSettings)
  {
@@ -3495,25 +3679,16 @@
  	
  	int shortcutLock = 1;
  	
-@@ -822,7 +878,7 @@
- 
+@@ -836,7 +892,7 @@
+ // Init Service Settings
  void CNeutrinoApp::InitServiceSettings(CMenuWidget &service, CMenuWidget & TunerSetup)
  {
 -	dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings\n");
 +	//dprintf(DEBUG_NORMAL, "CNeutrinoApp::InitServiceSettings\n");
  	
  	int shortcutService = 1;
- 
-@@ -865,7 +921,7 @@
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_RESET_CHANNELS, true, NULL, resetNotifier, "channels", CRCInput::RC_blue, NEUTRINO_ICON_BUTTON_BLUE, "service", LOCALE_HELPTEXT_DELETECHANNELS ));
  	
- 	// CI Cam 	
--#if !defined (PLATFORM_CUBEREVO_2000HD) && !defined (PLATFORM_CUBEREVO_250HD) && !defined (PLATFORM_CUBEREVO_MINI_FTA) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_COOLSTREAM)
-+#if !defined (PLATFORM_CUBEREVO_2000HD) && !defined (PLATFORM_CUBEREVO_250HD) && !defined (PLATFORM_CUBEREVO_MINI_FTA) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111) && !defined (PLATFORM_COOLSTREAM)
- 	service.addItem( new CMenuSeparatorItemMenuIcon(CMenuSeparatorItemMenuIcon::LINE) );
- 	
- 	service.addItem(new CMenuForwarderItemMenuIcon(LOCALE_CAM_SETTINGS, true, "", g_CamHandler, NULL, CRCInput::convertDigitToKey(shortcutService++), NULL, "cam", LOCALE_HELPTEXT_CAM ));
-@@ -985,7 +1041,7 @@
+@@ -982,7 +1038,7 @@
  
  void CNeutrinoApp::InitAudioplayerSettings(CMenuWidget &audioplayerSettings)
  {
@@ -3522,7 +3697,7 @@
  	
  	int shortcutAudioPlayer = 1;
  	
-@@ -1037,7 +1093,7 @@
+@@ -1034,7 +1090,7 @@
  
  void CNeutrinoApp::InitPicViewerSettings(CMenuWidget &PicViewerSettings)
  {
@@ -3531,7 +3706,7 @@
  	
  	int shortcutPicViewer = 1;
  	
-@@ -1108,7 +1164,7 @@
+@@ -1098,7 +1154,7 @@
  
  void CNeutrinoApp::InitMiscSettings(CMenuWidget &miscSettings, CMenuWidget &miscSettingsGeneral, CMenuWidget &miscSettingsChannelList, CMenuWidget &miscSettingsEPG, CMenuWidget &miscSettingsFileBrowser )
  {
@@ -3540,7 +3715,7 @@
  	
  	int shortcutMiscSettings = 1;
  
-@@ -1316,7 +1372,7 @@
+@@ -1308,7 +1364,7 @@
  // Init Language Settings
  void CNeutrinoApp::InitLanguageSettings(CMenuWidget &languageSettings)
  {
@@ -3549,7 +3724,7 @@
  	
  	// intros
  	languageSettings.addItem(GenericMenuBack);
-@@ -1384,7 +1440,7 @@
+@@ -1376,7 +1432,7 @@
  
  void CNeutrinoApp::InitNetworkSettings(CMenuWidget &networkSettings)
  {
@@ -3558,7 +3733,7 @@
  	
  	struct dirent **namelist;
  
-@@ -1532,7 +1588,7 @@
+@@ -1524,7 +1580,7 @@
  // Init Recording Settings
  void CNeutrinoApp::InitRecordingSettings(CMenuWidget &recordingSettings)
  {
@@ -3567,7 +3742,7 @@
  	
  	int rec_pre = 0;
  	int rec_post = 0;
-@@ -1674,7 +1730,7 @@
+@@ -1653,7 +1709,7 @@
  // init streamingssettings
  void CNeutrinoApp::InitStreamingSettings(CMenuWidget &streamingSettings)
  {
@@ -3576,7 +3751,7 @@
  	
  	// intros
  	streamingSettings.addItem(GenericMenuBack);
-@@ -1769,7 +1825,7 @@
+@@ -1748,7 +1804,7 @@
  // Init Color Settings
  void CNeutrinoApp::InitColorSettings(CMenuWidget &colorSettings)
  {
@@ -3585,7 +3760,7 @@
  	
  	// init screensetup objekt
  	CScreenSetup  * ScreenSetup = new CScreenSetup();
-@@ -1962,7 +2018,7 @@
+@@ -1958,7 +2014,7 @@
  /* Init LCD Settings */
  void CNeutrinoApp::InitLcdSettings(CMenuWidget &lcdSettings)
  {
@@ -3594,21 +3769,16 @@
  	
  	int shortcutVFD = 1;
  	
-@@ -2030,10 +2086,12 @@
+@@ -2028,7 +2084,7 @@
+ #endif
  
- 	// vfd time
- #ifdef __sh__	
-+#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
+ 	// vfd time //FIXME: not working with new driver seems like the ioctl is brocken :-(
+-#if 1	
++#if !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
  	lcdSettings.addItem(GenericMenuSeparatorLine);
  
- 	lcdSettings.addItem( new CMenuForwarder(LOCALE_LCDMENU_SETFPTIME, true, "", this, "setfptime", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
--#endif	
-+#endif
-+#endif
- }
- 
- // Init Keys Settings
-@@ -2171,7 +2229,7 @@
+ 	lcdSettings.addItem( new CMenuForwarder(LOCALE_LCDMENU_SETFPTIME, true, NULL, this, "setfptime", CRCInput::RC_green, NEUTRINO_ICON_BUTTON_GREEN));
+@@ -2176,7 +2232,7 @@
  
  void CNeutrinoApp::InitKeySettings(CMenuWidget &keySettings, CMenuWidget &bindSettings)
  {
@@ -3617,7 +3787,7 @@
  	
  	int shortcutkeysettings = 1;
  	
-@@ -2503,7 +2561,7 @@
+@@ -2505,7 +2561,7 @@
  // USERMENU
  bool CNeutrinoApp::showUserMenu(int button)
  {
@@ -3630,24 +3800,6 @@
 
 --- neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 16:31:19.505970427 +0200
 +++ neutrino-hd2-exp/src/neutrino.cpp	2012-10-21 14:37:46.604187070 +0200
-@@ -270,7 +270,7 @@
- SMSKeyInput 		* c_SMSKeyInput;	//defined in filebrowser and used in ChanneList
- CMoviePlayerGui		* moviePlayerGui;
- CPictureViewer 		* g_PicViewer;
--#if !defined (PLATFORM_COOLSTREAM)
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
- CCAMMenuHandler 	* g_CamHandler;
- #endif
- 
-@@ -308,7 +308,7 @@
- 	g_EventList     = NULL;
- 	g_Locale        = new CLocaleManager;
- 	g_PluginList    = NULL;
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	g_CamHandler 	= NULL;
- #endif	
- 
 @@ -355,7 +355,7 @@
  	if(!neutrinoApp) 
  	{
@@ -3756,15 +3908,6 @@
  	
  	// dvbsub thread
  	dvbsub_init();
-@@ -2201,7 +2201,7 @@
- 	g_volscale = new CProgressBar(200, 15, 50, 100, 80, true);
- 
- 	// Ci Cam handler
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	g_CamHandler = new CCAMMenuHandler();
- 	g_CamHandler->init();	
- #endif	
 @@ -2239,7 +2239,7 @@
  	// setup recording device
  	setupRecordingDevice();
@@ -3810,36 +3953,6 @@
  
  		ShowHintUTF(LOCALE_MESSAGEBOX_INFO, loadSettingsErg ==  1 ? g_Locale->getText(LOCALE_SETTINGS_NOCONFFILE) : g_Locale->getText(LOCALE_SETTINGS_MISSINGOPTIONSCONFFILE));
  		
-@@ -2457,17 +2459,17 @@
- 	// lcdsettinsg
- 	InitLcdSettings(lcdSettings);
- 
--#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_VUPLUS)
-+#if !defined (PLATFORM_GIGABLUE)  && !defined (PLATFORM_DREAMBOX) && !defined (PLATFORM_XTREND) && !defined (PLATFORM_VUPLUS) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
- 	if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 1)
- 	{
--		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
-+		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led on\n");
- 
- 		CVFD::getInstance()->setPower(1);
- 		CVFD::getInstance()->setlcdparameter();
- 	}
- 	else if(g_settings.lcd_setting[SNeutrinoSettings::LCD_POWER] == 0)
- 	{
--		dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led off\n");
-+		//dprintf(DEBUG_NORMAL, "CNeutrinoApp::run: vfd set led off\n");
- 
- 		CVFD::getInstance()->setPower(0);
- 		CVFD::getInstance()->setlcdparameter();
-@@ -2481,7 +2483,7 @@
- 	SHTDCNT::getInstance()->init();
- 
- 	// Cam-Ci
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	cDvbCi::getInstance()->SetHook(CISendMessage);	
- #endif	
- 
 @@ -2522,7 +2524,7 @@
  	neutrino_msg_t      msg;
  	neutrino_msg_data_t data;
@@ -3849,15 +3962,6 @@
  
  	// start plugins
  	g_PluginList->startPlugin("startup.cfg"); //NOTE: startup.cfg not used anymore
-@@ -3126,7 +3128,7 @@
- 	}
- 
- 	// we assume g_CamHandler free/delete data if needed
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	res = g_CamHandler->handleMsg(msg, data);
- 	if( res != messages_return::unhandled ) 
- 	{
 @@ -3345,7 +3347,7 @@
  	else if( msg == NeutrinoMessages::EVT_RECORDMODE ) 
  	{
@@ -3894,15 +3998,6 @@
  		stopAutoRecord();
  		recordingstatus = 0;
  		timeshiftstatus = 0;
-@@ -4581,7 +4583,7 @@
- 				}
- 
- 				(static_cast<CVCRControl::CFileDevice*>(recordingdevice))->Directory = std::string(recDir);
--				dprintf(DEBUG_NORMAL, "CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
-+				//dprintf(DEBUG_NORMAL, "CNeutrinoApp::startNextRecording: start to dir %s\n", recDir);
- 
- 				CVFD::getInstance()->ShowIcon(VFD_ICON_TIMESHIFT, true);
- 			}
 @@ -4607,7 +4609,7 @@
  // exec, menuitem callback (shutdown)
  int CNeutrinoApp::exec(CMenuTarget * parent, const std::string & actionKey)
@@ -4397,28 +4492,6 @@
  enum {	// not defined in input.h but used like that, at least in 2.4.22
 
 
---- neutrino-hd2-exp/lib/libdvbapi/Makefile.am	2012-11-01 19:12:51.852248642 +0100
-+++ neutrino-hd2-exp/lib/libdvbapi/Makefile.am	2012-11-01 19:10:38.555587666 +0100
-@@ -19,10 +19,15 @@
- 
- libdvbapi_a_SOURCES = audio_cs.cpp dmx_cs.cpp playback_cs.cpp record_cs.cpp \
- 	video_cs.cpp
--
-+if BOXMODEL_SPARK7111
-+# no dvb-ci
-+else !BOXMODEL_SPARK7111
-+if BOXMODEL_SPARK7162
-+# no dvb-ci
-+else !BOXMODEL_SPARK7162
- # dvb-ci
- libdvbapi_a_SOURCES += dvb-ci.cpp \
- 	dvbci_session.cpp dvbci_mmi.cpp dvbci_camgr.cpp dvbci_appmgr.cpp dvbci_datetimemgr.cpp dvbci_resmgr.cpp
--
--
-+endif
-+endif
-
-
 --- neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:12:37.488177423 +0100
 +++ neutrino-hd2-exp/src/gui/Makefile.am	2012-11-01 19:10:47.007629583 +0100
 @@ -15,6 +15,7 @@
@@ -4448,36 +4521,9 @@
  	plugins.cpp imageinfo.cpp audio_select.cpp moviebrowser.cpp movieinfo.cpp \
  	scan_setup.cpp zapit_setup.cpp proxyserver_setup.cpp themes.cpp
  
-@@ -59,9 +59,15 @@
- libneutrino_gui2_a_SOURCES += upnpbrowser.cpp
- endif
- 
--if !BOXTYPE_COOLSTREAM
-+if BOXMODEL_SPARK7111
-+# no dvb-ci
-+else !BOXMODEL_SPARK7111
-+if BOXMODEL_SPARK7162
-+# no dvb-ci
-+else !BOXMODEL_SPARK7162
- libneutrino_gui2_a_SOURCES += cam_menu.cpp
- endif
-+endif
- 
- libtimerlist_a_SOURCES = timerlist.cpp
- 
- 
 
 --- neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-11-01 19:17:23.861597478 +0100
 +++ neutrino-hd2-exp/src/zapit/src/zapit.cpp	2012-11-01 19:16:17.329267563 +0100
-@@ -77,7 +77,7 @@
- int abort_zapit;
- 
- /* ci */
--#if !defined (PLATFORM_COOLSTREAM)
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
- cDvbCi * ci; //FIXME: boxes without ci cam
- #endif
- 
 @@ -92,7 +92,7 @@
  /* volume percent conf */
  #define VOLUME_CONFIG_FILE CONFIGDIR "/zapit/audiovolume.conf"
@@ -4487,15 +4533,6 @@
  typedef std::pair<int, int> pid_pair_t;
  typedef std::pair<t_channel_id, pid_pair_t> volume_pair_t;
  typedef std::multimap<t_channel_id, pid_pair_t> volume_map_t;
-@@ -814,7 +814,7 @@
- 	}
- 	
- 	// ci cam //FIXME: boxes without ci cam
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	ci->SendCaPMT(thischannel->getCaPmt(), fe->fenumber);
- #endif	
- }
 @@ -1012,11 +1012,11 @@
  		// set default tuxtxt pid
  		tuxtx_set_pid(0, 0, (char *) thischannel->getTeletextLang());
@@ -4519,24 +4556,7 @@
  		
  	dprintf(DEBUG_NORMAL, "vol %d current_volume %d volume_percent %d\n", vol, current_volume, volume_percent);
  		
-@@ -1460,7 +1460,7 @@
- 	}
- 	
- 	// ci cam
--#if !defined (PLATFORM_COOLSTREAM)
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)
- 	if(live_fe != NULL)
- 		ci->SendCaPMT(live_channel->getCaPmt(), live_fe->fenumber);
- #endif	
-@@ -3900,7 +3900,7 @@
- 
- 	//CI init
- 	//FIXME: platform without ci cam
--#if !defined (PLATFORM_COOLSTREAM)	
-+#if !defined (PLATFORM_COOLSTREAM) && !defined (PLATFORM_SPARK7162) && !defined (PLATFORM_SPARK7111)	
- 	ci = cDvbCi::getInstance();
- #endif	
- 	
+	
 
 --- neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:20.488812206 +0100
 +++ neutrino-hd2-exp/src/zapit/src/pzapit.cpp	2012-11-02 15:18:08.156751073 +0100
