@@ -895,11 +895,10 @@
 
 --- neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:20:39.375728471 +0100
 +++ neutrino-hd2-exp/src/system/locals_intern.h	2013-01-15 18:30:45.590734523 +0100
-@@ -1598,5 +1598,87 @@
- 	"audiomenu.volumebar_audiosteps",
- 	
- 	"webtv.head",
-+
+@@ -1627,5 +1627,86 @@
+ 	"moviebrowser.yt_top_favorites",
+ 	"moviebrowser.yt_top_rated",
+ 	"movieplayer.ytplayback",
 +	"mainmenu.extramenu",
 +	"extramenu.tunerreset",
 +	"extramenu.tunerreset.select",
@@ -986,11 +985,10 @@
 
 --- neutrino-hd2-exp/src/system/locals.h	2012-10-21 16:19:09.050348294 +0200
 +++ neutrino-hd2-exp/src/system/locals.h	2012-10-21 15:40:48.038938204 +0200
-@@ -1598,6 +1598,88 @@
- 	LOCALE_AUDIOMENU_VOLUMEBAR_AUDIOSTEPS,
- 	
- 	LOCALE_WEBTV_HEAD,
-+
+@@ -1627,6 +1627,87 @@
+ 	LOCALE_MOVIEBROWSER_YT_TOP_FAVORITES,
+ 	LOCALE_MOVIEBROWSER_YT_TOP_RATED,
+ 	LOCALE_MOVIEPLAYER_YTPLAYBACK,
 +	LOCALE_MAINMENU_EXTRAMENU ,
 +	LOCALE_EXTRAMENU_TUNERRESET ,
 +	LOCALE_EXTRAMENU_TUNERRESET_SELECT ,
@@ -1078,7 +1076,7 @@
 
 --- neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:16:56.041391617 +0200
 +++ neutrino-hd2-exp/data/locale/english.locale	2012-10-21 18:45:30.769894488 +0200
-@@ -843,7 +843,7 @@
+@@ -846,7 +846,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Start movie
  moviebrowser.foot_sort Sort:
@@ -1087,10 +1085,10 @@
  moviebrowser.head_filter Filter movies by category:
  moviebrowser.head_playlist Last played:
  moviebrowser.head_recordlist Last recorded:
-@@ -1585,3 +1585,105 @@
- audiomenu.volumebar_audiosteps Volume Step Size
- 
- webtv.head WebTV
+@@ -1612,3 +1612,105 @@
+ moviebrowser.yt_top_favorites Top favorites
+ moviebrowser.yt_top_rated Top rated
+ movieplayer.ytplayback Youtube feeds playback
 +
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
@@ -1197,7 +1195,7 @@
 
 --- neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 16:20:41.114804828 +0200
 +++ neutrino-hd2-exp/data/locale/deutsch.locale	2012-10-21 15:41:08.487039606 +0200
-@@ -259,7 +259,7 @@
+@@ -257,7 +257,7 @@
  eventlistbar.channelswitch Umschalten
  eventlistbar.eventsort Sortieren
  eventlistbar.recordevent Aufnehmen
@@ -1205,8 +1203,8 @@
 +extra.add_to_bouquet Sender Bouquets hinzufügen
  extra.audio_run_player Audio Taste startet Player
  extra.auto_delete Automatische Löschung
- extra.auto_timeshift Permanet timeshift, Sek. (0 = deakt.)
-@@ -845,7 +845,7 @@
+ extra.auto_timeshift Permanet timeshift
+@@ -846,7 +846,7 @@
  moviebrowser.foot_filter Filter:
  moviebrowser.foot_play Film starten
  moviebrowser.foot_sort Sortieren:
@@ -1215,7 +1213,7 @@
  moviebrowser.head_filter Filme nach Kategorie filtern:
  moviebrowser.head_playlist Zuletzt gesehen:
  moviebrowser.head_recordlist Zuletzt aufgenommen:
-@@ -1577,9 +1577,9 @@
+@@ -1583,9 +1583,9 @@
  keybinding.key_recordsbrowser Aufnahmen Browser
  keybinding.key_audioplayer Audioplayer
  keybinding.key_pictureviewer PictureViewer
@@ -1227,11 +1225,10 @@
  keybinding.key_filebrowser Datei Browser
  keybinding.key_webtv WebTV
  keybinding.savekeymap Keymap speichern
-@@ -1588,3 +1588,105 @@
- audiomenu.volumebar_audiosteps Lautstärke Schrittweite
+@@ -1614,3 +1614,105 @@
+ moviebrowser.yt_top_rated Top rated
+ movieplayer.ytplayback Youtube feeds playback
  
- webtv.head WebTV
-+
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
 +extramenu.tunerreset.select Tuner Reset
@@ -1333,6 +1330,7 @@
 +onoff.on Ein
 +onoff.off Aus
 +messagebox.accept Wollen Sie die Änderungen beibehalten? 
++extra.add_to_bouquet Sender Bouquets hinzufügen
 
 --- neutrino-hd2-exp/src/gui/extra_menu.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ neutrino-hd2-exp/src/gui/extra_menu.cpp	2012-10-21 17:29:11.135185304 +0200
