@@ -1088,7 +1088,7 @@
 @@ -1612,3 +1612,105 @@
  moviebrowser.yt_top_favorites Top favorites
  moviebrowser.yt_top_rated Top rated
- movieplayer.ytplayback Youtube feeds playback
+ movieplayer.ytplayback Youtube player
 +
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
@@ -1227,7 +1227,7 @@
  keybinding.savekeymap Keymap speichern
 @@ -1614,3 +1614,105 @@
  moviebrowser.yt_top_rated Top rated
- movieplayer.ytplayback Youtube feeds playback
+ movieplayer.ytplayback Youtube player
  
 +mainmenu.extramenu Extras
 +extramenu.tunerreset Tuner Menue
